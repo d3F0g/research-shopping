@@ -1,0 +1,13 @@
+Command: npx --yes npm@11.6.2 explain minimatch
+Checkout: /Users/josiahwong/Documents/research-shopping-shadcn-qa
+Candidate: a3163a20a5398b9f3c3064b7cb87bf4094de6f8d
+minimatch@11.0.9
+node_modules/minimatch
+  overridden minimatch@"^11.0.1" (was "^10.0.1") from @ts-morph/common@0.27.0
+  node_modules/@ts-morph/common
+    @ts-morph/common@"~0.27.0" from ts-morph@26.0.0
+    node_modules/ts-morph
+      ts-morph@"^26.0.0" from shadcn@4.23.0
+      node_modules/shadcn
+        shadcn@"^4.23.0" from the root project
+npm warn Unknown env config "metrics-registry". This will stop working in the next major version of npm.

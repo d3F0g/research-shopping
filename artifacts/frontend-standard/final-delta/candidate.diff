@@ -1,0 +1,272 @@
+diff --git a/.audit/decisions.tsv b/.audit/decisions.tsv
+index 4b5a022..4fd3624 100644
+--- a/.audit/decisions.tsv
++++ b/.audit/decisions.tsv
+@@ -33,3 +33,6 @@ ts	phase	decision	why	evidence	result
+ 2026-11-17T14:22:04.443760+00:00	verification	Check editor typing and category follow-up in a fresh launched browser	A paste-only brand test would not detect comma-draft loss	artifacts/visual/final-editor-probe.json	Both journeys passed; owned4183 and5183 stopped
+ 2026-11-17T14:26:41.984088+00:00	publication	Publish a source-equivalent application snapshot with inactive CI proposal	GitHub rejected active workflow creation because existing OAuth access lacks workflow scope	https://github.com/d3F0g/research-shopping/issues/19	No credentials changed; full local history retained and source identity checked
+ 2026-11-17T14:30:25.526119+00:00	delivery	Publish application PR20 and resolve verified initial defects	The complete local slice and evidence are reviewable without a credential change	https://github.com/d3F0g/research-shopping/pull/20	Open unmerged PR stacked on6; gaps2,3,4,19 remain open; no deployment
++2026-11-17T14:51:31.188136+00:00	ci	Activate the reviewed workflow after user updated permission	Real GitHub execution must prove pull-request triggering and checks	artifacts/ci/activation-pull-request.json	Automatic pull_request and push runs passed; artifact upload verified
++2026-11-17T14:51:31.188303+00:00	frontend	Require official shadcn and AI Elements and split migration ownership	The user made the frontend foundation mandatory	.codex/pstack-runs/frontend-standard/architecture.md	Official-pattern UI owner and typed activity owner work in isolated branches; independent visualQA follows
++2026-11-17T15:14:33.230672+00:00	qa	Use available Sol reviewer after Astra review quota failures	Independent QA remains mandatory; quota does not justify self-certification	.codex/pstack-runs/frontend-standard/plan.md	Sol cleanup pass found no handwritten suppression or workaround issues; runtime visualQA ongoing
+diff --git a/.codex/pstack-runs/frontend-standard/architecture.md b/.codex/pstack-runs/frontend-standard/architecture.md
+new file mode 100644
+index 0000000..bff5752
+--- /dev/null
++++ b/.codex/pstack-runs/frontend-standard/architecture.md
+@@ -0,0 +1,27 @@
++# Official frontend migration
++
++The audit found an821-line custom App, bespoke control/card/disclosure styles, no shadcn registry setup, no compact comparison surface, and JSON-only responses. Current official AI Elements are compositions of shadcn/ui, not the legacy AI SDK Elements package.
++
++## Chosen structure
++
++Use a current request/result exchange composed with official Message Scroller, Message, and Bubble patterns. Preserve the existing revision, cancellation, preference draft, reset, and selection guards. Full transcript history was rejected because it introduces obsolete recommendation and selection semantics outside this migration.
++
++Use one coherent Base UI base-nova preset and current official CLI. The frontend owner reports CLI4.23.0. Record generated component and pattern provenance after implementation. Configure @/* to src/client/* consistently in TypeScript, Vite, and components.json.
++
++Use shadcn Cards, Table, Collapsible, Field, Input, Native Select, Checkbox, Alert, and Sheet for the shopping workspace. Official Prompt Input uses Input Group. Inline Citation uses Hover Card, with touch-accessible references. Official Tool/Sources patterns use Trace. Omit unsupported attachments, model pickers, and fabricated reasoning.
++
++## Honest activity contract
++
++The engine already records request-local provider outcomes. Preserve core TurnResult and expose TurnResponseSchema as its intersection with required toolActivity, bounded to20 events. An event carries only provider and outcome. Clarifications have no events. The response snapshots observed events, not a complete audit of calls still settling after a failure. No SSE or token simulation is introduced. Pending UI represents an actual outstanding request.
++
++## Sources
++
++- https://ui.shadcn.com/docs
++- https://ui.shadcn.com/docs/installation/vite
++- https://ui.shadcn.com/docs/ai-elements
++- https://ui.shadcn.com/docs/ai-elements/base/chat
++- https://ui.shadcn.com/docs/ai-elements/base/message
++- https://ui.shadcn.com/docs/ai-elements/base/prompt-input
++- https://ui.shadcn.com/docs/ai-elements/base/inline-citation
++- https://ui.shadcn.com/docs/ai-elements/base/sources
++- https://ui.shadcn.com/docs/ai-elements/base/tool
+diff --git a/.codex/pstack-runs/initial/resume.md b/.codex/pstack-runs/initial/resume.md
+index a540177..2bad6f7 100644
+--- a/.codex/pstack-runs/initial/resume.md
++++ b/.codex/pstack-runs/initial/resume.md
+@@ -1,13 +1,9 @@
+-# Resume initial build
++# Resume engineering work
+ 
+-The initial fixture-backed research-to-manufacturer-link milestone is implemented. Application source candidate is `2dcfe45ed05bcf476f294c3152c723806f2d6d97`. Independent QA passed 108 unit/API tests, 15 Chromium browser journeys, build/typecheck, the project smoke helper, HTTP/provider probes, and production audit. See `artifacts/security-review/final-proof.json` and `docs/verification.md` for scope and limits.
++The original fixture-backed milestone was implemented and independently verified. Its historical proof is retained under artifacts/security-review/. The user then required an official shadcn/ui and AI Elements frontend migration and retry of GitHub CI publication. Continue from ../frontend-standard/plan.md and ../frontend-standard/architecture.md for the current acceptance scope.
+ 
+-The original checkout `/Users/josiahwong/Documents/research-shopping` contains the published branch `feat/research-shopping-ready` with application source identical to the independently verified owner candidate. Inspect live Git state and PRs on resume. The GitHub repository is private at `https://github.com/d3F0g/research-shopping`. Architecture PR6 and application PR20 are open. No PR has been merged and no production deployment is authorized.
++Current application PR20 is https://github.com/d3F0g/research-shopping/pull/20 on feat/research-shopping-ready, stacked on architecture PR6. Both remain unmerged. The active workflow .github/workflows/ci.yml passed automatic pull_request and push runs on5b3aaa5. Issue19 is closed. No credentials, global Git settings, merge, or deployment were changed.
+ 
+-The project-specific skill is `.agents/skills/verify-research-shopping/SKILL.md`. It launches an isolated fixture app, checks health, drives a real browser journey, saves proof, and cleans its owned processes. Root clean installation, 108 tests, and build passed. GitHub rejected active workflow publication due to missing OAuth workflow scope; the inactive proposal is docs/proposed-ci.yml and issue19. Credentials were not changed. The fully verified local history remains on feat/verified-research-shopping; publication uses a source-equivalent snapshot branch to avoid publishing an active workflow. Root's default-path helper passed on clean merge candidate38e50a1, cleaned its servers, and retained evidence. Character-by-character brand exclusion and ordinary-ambiguity follow-up also passed. Application PR20 is published at https://github.com/d3F0g/research-shopping/pull/20 and stacks on architecture PR6. GitHub-hosted CI did not run. CI activation remains open in issue19; no credential change was made.
++The frontend implementation candidate is804adae in the shadcn worktree. It uses official Base UI Nova primitives and AI Elements patterns, with real recorded provider metadata. Author checks passed110 unit/API and19 browser journeys. Independent visualQA is running under an available Sol reviewer after Astra review agents reached quota. Do not claim final frontend QA until its report exists. Root is integrating the candidate and will reverify final-head hosted checks.
+ 
+-Live research remains unavailable after a single existing-credential request returned HTTP429. Do not retry or change credentials without a concrete reason and appropriate authorization. Prices, stock, and claims are synthetic SG/SGD scenarios, not observations. Model-page links do not prove current stock, exact purchasable configuration, or regional delivery. Parsing is bounded, state is tab-local, and no payment/order/cart action exists.
+-
+-The user authorized autonomous routine implementation, issues, and tested pull requests. They require approval for credential changes, production deployment, destructive operations, and protected-branch merges. Keep `$poteto-mode` for this task. Git pushes use the existing GitHub CLI credential helper per command; global credential configuration was not changed.
+-
+-Owner and independent-review servers were stopped. Do not kill shared host processes by name. The implementation, engine, and review worktrees remain available for inspection. No future monitoring or timed wake is armed. Old agent handles are not durable across a new conversation.
++Synthetic SG/SGD data, bounded parsing, tab-local state, and the historical live-provider HTTP429 remain limitations. The project verification skill is .agents/skills/verify-research-shopping/SKILL.md. Test servers must be cleaned by owned process identity. No future monitoring or timed wake is armed.
+diff --git a/AGENTS.md b/AGENTS.md
+index 38f8d49..c3f7604 100644
+--- a/AGENTS.md
++++ b/AGENTS.md
+@@ -39,4 +39,4 @@ Compose product cards, comparisons, preference controls, dialogs, and progressiv
+ 
+ Keep design tokens centralized, with consistent typography, spacing, contrast, focus indicators, and responsive layouts. Prefer concise answers and compact comparisons with expandable evidence. All essential controls and disclosures stay readable and keyboard-operable on desktop and mobile.
+ 
+-Delegate implementation and independent visual QA through pstack. Verify real browser journeys and desktop/mobile screenshots after frontend changes. Preserve behavioral/security assertions when changing selectors for official component semantics. Update PR20 rather than opening a duplicate feature PR. Do not merge until mandatory frontend acceptance and independent QA pass.
++Delegate implementation and independent visual QA through pstack. Verify real browser journeys and desktop/mobile screenshots after frontend changes. Preserve behavioral/security assertions when changing selectors for official component semantics. For the current architecture migration, update PR20 rather than opening a duplicate feature PR. Do not merge that PR until mandatory frontend acceptance and independent QA pass. Future feature work follows its assigned issue and PR scope.
+diff --git a/artifacts/ci/activation-pull-request.json b/artifacts/ci/activation-pull-request.json
+new file mode 100644
+index 0000000..7b169f8
+--- /dev/null
++++ b/artifacts/ci/activation-pull-request.json
+@@ -0,0 +1 @@
++{"conclusion":"success","databaseId":44106643836,"event":"pull_request","headSha":"5b3aaa59d17a39dff62630c019b24e13812d13b3","jobs":[{"completedAt":"2026-11-17T14:46:50Z","conclusion":"success","databaseId":134120667278,"name":"verify","startedAt":"2026-11-17T14:45:42Z","status":"completed","steps":[{"completedAt":"2026-11-17T14:45:45Z","conclusion":"success","name":"Set up job","number":1,"startedAt":"2026-11-17T14:45:44Z","status":"completed"},{"completedAt":"2026-11-17T14:45:46Z","conclusion":"success","name":"Run actions/checkout@v4","number":2,"startedAt":"2026-11-17T14:45:45Z","status":"completed"},{"completedAt":"2026-11-17T14:45:48Z","conclusion":"success","name":"Run actions/setup-node@v4","number":3,"startedAt":"2026-11-17T14:45:46Z","status":"completed"},{"completedAt":"2026-11-17T14:45:57Z","conclusion":"success","name":"Install with npm 11","number":4,"startedAt":"2026-11-17T14:45:48Z","status":"completed"},{"completedAt":"2026-11-17T14:46:01Z","conclusion":"success","name":"Run npm run typecheck","number":5,"startedAt":"2026-11-17T14:45:57Z","status":"completed"},{"completedAt":"2026-11-17T14:46:02Z","conclusion":"success","name":"Run npm test","number":6,"startedAt":"2026-11-17T14:46:01Z","status":"completed"},{"completedAt":"2026-11-17T14:46:08Z","conclusion":"success","name":"Run npm run build","number":7,"startedAt":"2026-11-17T14:46:02Z","status":"completed"},{"completedAt":"2026-11-17T14:46:25Z","conclusion":"success","name":"Install Chromium","number":8,"startedAt":"2026-11-17T14:46:08Z","status":"completed"},{"completedAt":"2026-11-17T14:46:46Z","conclusion":"success","name":"Run npm run test:e2e","number":9,"startedAt":"2026-11-17T14:46:25Z","status":"completed"},{"completedAt":"2026-11-17T14:46:47Z","conclusion":"success","name":"Run actions/upload-artifact@v4","number":10,"startedAt":"2026-11-17T14:46:46Z","status":"completed"},{"completedAt":"2026-11-17T14:46:48Z","conclusion":"success","name":"Post Run actions/setup-node@v4","number":19,"startedAt":"2026-11-17T14:46:47Z","status":"completed"},{"completedAt":"2026-11-17T14:46:48Z","conclusion":"success","name":"Post Run actions/checkout@v4","number":20,"startedAt":"2026-11-17T14:46:48Z","status":"completed"},{"completedAt":"2026-11-17T14:46:48Z","conclusion":"success","name":"Complete job","number":21,"startedAt":"2026-11-17T14:46:48Z","status":"completed"}],"url":"https://github.com/d3F0g/research-shopping/actions/runs/44106643836/job/134120667278"}],"status":"completed","url":"https://github.com/d3F0g/research-shopping/actions/runs/44106643836"}
+diff --git a/docs/ci.md b/docs/ci.md
+index 7c24bad..4b4b4eb 100644
+--- a/docs/ci.md
++++ b/docs/ci.md
+@@ -7,3 +7,7 @@ The job installs dependencies from the lockfile, runs TypeScript checking, unit/
+ The initial OAuth credential lacked workflow scope and rejected activation. The user subsequently updated permission and authorized retrying publication. No credential or global Git configuration is changed by this task. [Issue19](https://github.com/d3F0g/research-shopping/issues/19) tracks successful hosted activation.
+ 
+ [Application PR20](https://github.com/d3F0g/research-shopping/pull/20) remains unmerged while the mandatory shadcn/ui and AI Elements refactor and independent visual QA are completed.
++
++## Observed activation
++
++The automatic [pull-request run44106643836](https://github.com/d3F0g/research-shopping/actions/runs/44106643836) passed on5b3aaa59d17a39dff62630c019b24e13812d13b3. Install, TypeScript,108 unit/API tests, build, Chromium setup,15 browser journeys, and artifact upload succeeded. The separate push-triggered run also passed. This proves activation on the pre-refactor source; the mandatory frontend update must pass its own final-head checks.
+diff --git a/docs/proposed-ci.yml b/docs/proposed-ci.yml
+deleted file mode 100644
+index 643bc1b..0000000
+--- a/docs/proposed-ci.yml
++++ /dev/null
+@@ -1,35 +0,0 @@
+-name: CI
+-
+-on:
+-  push:
+-  pull_request:
+-
+-permissions:
+-  contents: read
+-
+-jobs:
+-  verify:
+-    runs-on: ubuntu-latest
+-    timeout-minutes: 20
+-    steps:
+-      - uses: actions/checkout@v4
+-      - uses: actions/setup-node@v4
+-        with:
+-          node-version: 22
+-          cache: npm
+-      - name: Install with npm 11
+-        run: npx --yes npm@11.6.2 ci
+-      - run: npm run typecheck
+-      - run: npm test
+-      - run: npm run build
+-      - name: Install Chromium
+-        run: npx playwright install --with-deps chromium
+-      - run: npm run test:e2e
+-      - uses: actions/upload-artifact@v4
+-        if: always()
+-        with:
+-          name: research-shopping-browser-evidence
+-          path: |
+-            artifacts/screenshots/
+-            artifacts/playwright-results/
+-          if-no-files-found: ignore
+diff --git a/docs/verification.md b/docs/verification.md
+index 363b9ee..0d7b379 100644
+--- a/docs/verification.md
++++ b/docs/verification.md
+@@ -1,6 +1,6 @@
+ # Verification evidence
+ 
+-The initial fixture-backed vertical slice passed independent QA at application commit `2dcfe45ed05bcf476f294c3152c723806f2d6d97`. The original checkout contains the same application source, package lock, configuration, and tests. Later assembly changes add documentation, the verification skill, and retained evidence.
++The initial fixture-backed vertical slice passed independent QA at application commit `2dcfe45ed05bcf476f294c3152c723806f2d6d97`. At the initial delivery, the original checkout contained the same application source, package lock, configuration, and tests. Later assembly changes add documentation, the verification skill, and retained evidence.
+ 
+ ## Reproduced checks
+ 
+@@ -44,12 +44,16 @@ The generated skill was validated and executed. Use `$maintain-verification-skil
+ 
+ ## Final source continuity
+ 
+-The root merge candidate `38e50a1c91e0cd875b7cc9d85a51512bcb8282fb` passed the default-path skill from a clean working tree. Its application source, tests, package files, and runtime configuration match independently reviewed `2dcfe45`. Subsequent assembly retains proof and updates documentation. The published application snapshot has the same source, tests, dependencies, and runtime configuration. GitHub rejected the active workflow due to missing OAuth scope, so its definition is published as an inactive proposal. The root verified that comparison with `git diff --name-only 2dcfe45 -- src tests package.json package-lock.json playwright.config.ts tsconfig.json vite.config.ts vitest.config.ts`. No application differences were reported.
++The root merge candidate `38e50a1c91e0cd875b7cc9d85a51512bcb8282fb` passed the default-path skill from a clean working tree. Its application source, tests, package files, and runtime configuration match independently reviewed `2dcfe45`. Subsequent assembly retains proof and updates documentation. The published application snapshot has the same source, tests, dependencies, and runtime configuration. GitHub rejected the active workflow due to missing OAuth scope, so its definition was initially published as an inactive proposal. That historical proposal has since been replaced by the active workflow. The root verified that comparison with `git diff --name-only 2dcfe45 -- src tests package.json package-lock.json playwright.config.ts tsconfig.json vite.config.ts vitest.config.ts`. No application differences were reported.
+ 
+-## GitHub execution limit
++## Initial GitHub execution limit
+ 
+-GitHub-hosted CI did not run. The current OAuth credential rejected active workflow publication, and no credentials or permissions were changed. The tested application is published without an active workflow. [CI activation](ci.md) and issue19 preserve the exact proposed workflow and verification criteria. Local verification results are not presented as GitHub CI results.
++At the initial milestone, GitHub-hosted CI did not run. The then-current OAuth credential rejected active workflow publication, and no credentials or permissions were changed. That initial snapshot had no active workflow. [CI documentation](ci.md) now records successful activation and issue19 resolution. Local verification results are not presented as GitHub CI results.
+ 
+ ## Published review
+ 
+ [Application PR20](https://github.com/d3F0g/research-shopping/pull/20) stacks on [architecture PR6](https://github.com/d3F0g/research-shopping/pull/6). Both are open and unmerged. The initial milestone and reproduced defects are closed with verification links. Live integration, durable personalization, coverage, and CI activation remain assigned backlog items.
++
++## CI activation and mandatory frontend follow-up
++
++The user updated workflow permission and required official shadcn/ui and AI Elements for all frontend development. The active workflow is now under `.github/workflows/ci.yml`. [Automatic pull-request CI](https://github.com/d3F0g/research-shopping/actions/runs/44106643836) passed the pre-refactor source with108 unit/API tests and15 browser journeys. The frontend architecture migration, independent visualQA, and final-head hosted verification remain active work in PR20.
+diff --git a/package-lock.json b/package-lock.json
+index afc6a02..b3e1415 100644
+--- a/package-lock.json
++++ b/package-lock.json
+@@ -1460,6 +1460,12 @@
+         "hono": "^4 || ^5.0.0-0"
+       }
+     },
++    "node_modules/@isaacs/nonrecursive-glob-match": {
++      "version": "1.1.0",
++      "resolved": "https://registry.npmjs.org/@isaacs/nonrecursive-glob-match/-/nonrecursive-glob-match-1.1.0.tgz",
++      "integrity": "sha512-GPm/Dbvk5RLmhRnxXIa7nTpK0xtl4E0wj0MslsuNiJ1FIROU+2+9lgUC/dgF7Ey4QCWhfEsgxilMRMCdHPfDfw==",
++      "license": "BlueOak-1.0.0"
++    },
+     "node_modules/@jridgewell/gen-mapping": {
+       "version": "0.3.13",
+       "resolved": "https://registry.npmjs.org/@jridgewell/gen-mapping/-/gen-mapping-0.3.13.tgz",
+@@ -4717,15 +4723,16 @@
+       }
+     },
+     "node_modules/minimatch": {
+-      "version": "10.2.6",
+-      "resolved": "https://registry.npmjs.org/minimatch/-/minimatch-10.2.6.tgz",
+-      "integrity": "sha512-vpLQEs+VLCr1nU0BXS07maYoFwlDAH0gngQuuttxIwutDFEMHq2blX+8vpgxDdK3J1PwjCJiep77OitTZ4Ll1A==",
++      "version": "11.0.9",
++      "resolved": "https://registry.npmjs.org/minimatch/-/minimatch-11.0.9.tgz",
++      "integrity": "sha512-KCFkfyjqerNlSstjlhIGNXIKZGA/6O4V4RlhZ+Dsr621SPPw0mzlypE9D9ZOoPiVefHID+j7/XuMMlqfD/F60Q==",
+       "license": "BlueOak-1.0.0",
+       "dependencies": {
+-        "brace-expansion": "^5.0.8"
++        "@isaacs/nonrecursive-glob-match": "^1.1.0",
++        "brace-expansion": "^5.0.12"
+       },
+       "engines": {
+-        "node": "18 || 20 || >=22"
++        "node": "20 || >=22"
+       },
+       "funding": {
+         "url": "https://github.com/sponsors/isaacs"
+diff --git a/package.json b/package.json
+index a38da6c..7147c57 100644
+--- a/package.json
++++ b/package.json
+@@ -45,5 +45,10 @@
+     "typescript": "^5.9.3",
+     "vite": "^7.2.2",
+     "vitest": "^4.0.8"
++  },
++  "overrides": {
++    "@ts-morph/common": {
++      "minimatch": "^11.0.1"
++    }
+   }
+ }
+diff --git a/src/client/preference-options.ts b/src/client/preference-options.ts
+index c675700..c81a12a 100644
+--- a/src/client/preference-options.ts
++++ b/src/client/preference-options.ts
+@@ -28,6 +28,7 @@ export const priorityOptions: Record<
+     { value: "sound-quality", label: "Sound" },
+     { value: "noise-cancelling", label: "Noise cancelling" },
+     { value: "battery-life", label: "Battery" },
++    { value: "portability", label: "Portability" },
+     { value: "value", label: "Value" },
+   ],
+   laptops: [
+diff --git a/tests/e2e/research-shopping.spec.ts b/tests/e2e/research-shopping.spec.ts
+index 98e0a85..75e36de 100644
+--- a/tests/e2e/research-shopping.spec.ts
++++ b/tests/e2e/research-shopping.spec.ts
+@@ -89,6 +89,32 @@ test("compares fixture headphones, shows evidence and hands off through the sele
+   await assertNoHorizontalOverflow(page);
+ });
+ 
++test("shows and removes the starter portability priority without changing hard constraints", async ({ page }) => {
++  const payloads: { preferences: { hard: { category: string | null; budget: { amount: number; currency: string } | null; region: string; requiredFeatures: string[] }; soft: { priorities: string[] } } }[] = [];
++  page.on("request", (request) => {
++    if (request.url().endsWith("/api/turn") && request.method() === "POST") payloads.push(request.postDataJSON() as typeof payloads[number]);
++  });
++
++  await page.goto("/");
++  await page.getByRole("button", { name: /Wireless headphones for long flights/ }).click();
++  const portability = page.getByRole("checkbox", { name: "Portability", exact: true });
++  await expect(portability).toBeChecked();
++  const portabilityRow = portability.locator("xpath=ancestor::*[@data-slot='field'][1]");
++  await expect(portabilityRow.getByLabel("Priority 1")).toBeVisible();
++  await mkdir("artifacts/frontend-standard/priority", { recursive: true });
++  await page.screenshot({ path: "artifacts/frontend-standard/priority/headphone-priority.png", fullPage: true, animations: "disabled" });
++
++  await portability.uncheck();
++  await page.getByRole("button", { name: "Update comparison" }).click();
++  await expect.poll(() => payloads.at(-1)?.preferences.soft.priorities).not.toContain("portability");
++  expect(payloads.at(-1)?.preferences.hard).toMatchObject({
++    category: "headphones",
++    budget: { amount: 500, currency: "SGD" },
++    region: "SG",
++    requiredFeatures: ["wireless"],
++  });
++});
++
+ test("shows a visible focus indicator while tabbing to the request field", async ({ page }) => {
+   await page.goto("/");
+   const request = page.getByLabel("Start with the outcome, not a model number.");

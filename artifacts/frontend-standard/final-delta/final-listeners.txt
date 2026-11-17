@@ -1,0 +1,5 @@
+Command: lsof -nP -iTCP:3673 -iTCP:5773 -sTCP:LISTEN
+Output: empty
+Exit code: 1
+Result: no listeners on 3673 or 5773
+Checked UTC: 2026-11-17T15:32:52.496382+00:00

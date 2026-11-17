@@ -1,0 +1,25 @@
+
+> research-shopping@0.1.0 dev
+> concurrently -k -n api,web -c cyan,green "npm:dev:api" "npm:dev:web"
+
+[web] 
+[web] > research-shopping@0.1.0 dev:web
+[web] > vite --host 127.0.0.1
+[web] 
+[api] 
+[api] > research-shopping@0.1.0 dev:api
+[api] > tsx watch src/server/index.ts
+[api] 
+[web] 
+[web]   VITE v7.3.8  ready in 184 ms
+[web] 
+[web]   ➜  Local:   http://127.0.0.1:5773/
+[api] Research + Shopping fixture API listening on http://127.0.0.1:3673
+[api] {"requestId":"ea1be5a4-7df3-4690-8017-a1172c0432f1","route":"/api/health","status":200,"durationMs":1.18,"outcomes":[]}
+[api] {"requestId":"64f97ae6-e422-4b56-a756-f7593f3b04dd","route":"/api/turn","status":200,"durationMs":15.89,"outcomes":[{"provider":"discovery","outcome":"ok"},{"provider":"research","outcome":"ok"},{"provider":"merchant","outcome":"ok"},{"provider":"research","outcome":"ok"},{"provider":"merchant","outcome":"ok"},{"provider":"research","outcome":"ok"},{"provider":"merchant","outcome":"ok"},{"provider":"research","outcome":"ok"},{"provider":"merchant","outcome":"ok"}]}
+[api] {"requestId":"4022c75e-4e00-468f-b988-8d97f8c68438","route":"/api/turn","status":200,"durationMs":2.67,"outcomes":[{"provider":"discovery","outcome":"ok"},{"provider":"research","outcome":"ok"},{"provider":"merchant","outcome":"ok"},{"provider":"research","outcome":"ok"},{"provider":"merchant","outcome":"ok"},{"provider":"research","outcome":"ok"},{"provider":"merchant","outcome":"ok"},{"provider":"research","outcome":"ok"},{"provider":"merchant","outcome":"ok"}]}
+[api] {"requestId":"ee709e37-6a08-4230-af1e-b8ee48ec18a9","route":"/api/turn","status":200,"durationMs":2.53,"outcomes":[{"provider":"discovery","outcome":"ok"},{"provider":"research","outcome":"ok"},{"provider":"merchant","outcome":"ok"},{"provider":"research","outcome":"ok"},{"provider":"merchant","outcome":"ok"},{"provider":"research","outcome":"ok"},{"provider":"merchant","outcome":"ok"},{"provider":"research","outcome":"ok"},{"provider":"merchant","outcome":"ok"}]}
+[api] {"requestId":"866237e0-b3cd-4477-a13e-b05588082b80","route":"/api/turn","status":200,"durationMs":1.93,"outcomes":[{"provider":"discovery","outcome":"ok"},{"provider":"research","outcome":"ok"},{"provider":"merchant","outcome":"ok"},{"provider":"research","outcome":"ok"},{"provider":"merchant","outcome":"ok"},{"provider":"research","outcome":"ok"},{"provider":"merchant","outcome":"ok"},{"provider":"research","outcome":"ok"},{"provider":"merchant","outcome":"ok"}]}
+[api] npm run dev:api exited with code SIGTERM
+--> Sending SIGTERM to other processes..
+[web] npm run dev:web exited with code SIGTERM

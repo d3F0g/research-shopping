@@ -1,0 +1,30 @@
+[WebServer] (node:23499) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:23512) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 19 tests using 1 worker
+
+(node:23561) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   1 [chromium] › ../../../../research-shopping-shadcn-qa/tests/e2e/research-shopping.spec.ts:57:1 › compares fixture headphones, shows evidence and hands off through the selected product ID (1.8s)
+  ✓   2 [chromium] › ../../../../research-shopping-shadcn-qa/tests/e2e/research-shopping.spec.ts:92:1 › shows a visible focus indicator while tabbing to the request field (606ms)
+  ✓   3 [chromium] › ../../../../research-shopping-shadcn-qa/tests/e2e/research-shopping.spec.ts:110:1 › keeps the prior budget while an invalid draft is visible and applies a lower cap without replaying the old request (744ms)
+  ✓   4 [chromium] › ../../../../research-shopping-shadcn-qa/tests/e2e/research-shopping.spec.ts:134:1 › moves a selected flexible priority ahead of price and changes the leading match (834ms)
+  ✓   5 [chromium] › ../../../../research-shopping-shadcn-qa/tests/e2e/research-shopping.spec.ts:143:1 › does not convert a budget across regions, adapts answer length, and honors no budget limit (1.1s)
+  ✓   6 [chromium] › ../../../../research-shopping-shadcn-qa/tests/e2e/research-shopping.spec.ts:165:1 › asks for the product category when the request is ambiguous (563ms)
+  ✓   7 [chromium] › ../../../../research-shopping-shadcn-qa/tests/e2e/research-shopping.spec.ts:175:1 › clears incompatible preferences on category change and holds unsupported hard requirements until dropped (935ms)
+  ✓   8 [chromium] › ../../../../research-shopping-shadcn-qa/tests/e2e/research-shopping.spec.ts:203:1 › keeps browser contexts separate and resets their preferences (568ms)
+  ✓   9 [chromium] › ../../../../research-shopping-shadcn-qa/tests/e2e/research-shopping.spec.ts:221:1 › does not let a late result overwrite a newer request (760ms)
+  ✓  10 [chromium] › ../../../../research-shopping-shadcn-qa/tests/e2e/research-shopping.spec.ts:274:3 › rejects a successful handoff response containing a different product ID with its valid catalog destination (733ms)
+  ✓  11 [chromium] › ../../../../research-shopping-shadcn-qa/tests/e2e/research-shopping.spec.ts:274:3 › rejects a successful handoff response containing the selected product ID with an invented approved-host path (742ms)
+  ✓  12 [chromium] › ../../../../research-shopping-shadcn-qa/tests/e2e/research-shopping.spec.ts:274:3 › rejects a successful handoff response containing the selected product with a mismatched merchant host (728ms)
+  ✓  13 [chromium] › ../../../../research-shopping-shadcn-qa/tests/e2e/research-shopping.spec.ts:274:3 › rejects a successful handoff response containing the selected product ID and URL with a mismatched catalog name (736ms)
+  ✓  14 [chromium] › ../../../../research-shopping-shadcn-qa/tests/e2e/research-shopping.spec.ts:283:1 › cancels a pending selection when the user types a new request or resets (847ms)
+  ✓  15 [chromium] › ../../../../research-shopping-shadcn-qa/tests/e2e/research-shopping.spec.ts:319:1 › recovers from an interrupted request without discarding the typed request (698ms)
+  ✓  16 [chromium] › ../../../../research-shopping-shadcn-qa/tests/e2e/research-shopping.spec.ts:333:1 › opens mobile filters with one labeled editor, traps focus, and returns focus on close (2.1s)
+  ✓  17 [chromium] › ../../../../research-shopping-shadcn-qa/tests/e2e/research-shopping.spec.ts:364:1 › opens comparison and source disclosures with keyboard and touch-sized controls (2.3s)
+  ✓  18 [chromium] › ../../../../research-shopping-shadcn-qa/tests/e2e/research-shopping.spec.ts:393:1 › shows only recorded activity after a response and clears it for clarification (1.1s)
+  ✓  19 [chromium] › ../../../../research-shopping-shadcn-qa/tests/e2e/research-shopping.spec.ts:428:1 › rejects malformed activity metadata at the response boundary (508ms)
+
+  19 passed (20.7s)

@@ -1,0 +1,217 @@
+{
+  "commit": "804adae87c78f2b9cd083ceae301446f1d135379",
+  "checks": [
+    {
+      "label": "desktop initial",
+      "widths": {
+        "viewport": 1440,
+        "document": 1440,
+        "body": 1440
+      }
+    },
+    {
+      "label": "desktop results",
+      "widths": {
+        "viewport": 1440,
+        "document": 1440,
+        "body": 1440
+      }
+    },
+    {
+      "label": "mobile results",
+      "widths": {
+        "viewport": 390,
+        "document": 390,
+        "body": 390
+      }
+    },
+    {
+      "label": "mobile sheet",
+      "widths": {
+        "viewport": 390,
+        "document": 390,
+        "body": 390
+      }
+    },
+    {
+      "label": "mobile handoff",
+      "widths": {
+        "viewport": 390,
+        "document": 390,
+        "body": 390
+      }
+    },
+    {
+      "label": "Injected unapproved source URLs cannot become links",
+      "injection": "POST /api/turn response fixture claims only"
+    },
+    {
+      "label": "mobile injected-source fallback",
+      "widths": {
+        "viewport": 390,
+        "document": 390,
+        "body": 390
+      }
+    },
+    {
+      "label": "Writing artifact HTML does not reload Vite page",
+      "navigations": 1
+    },
+    {
+      "label": "touch reference",
+      "widths": {
+        "viewport": 390,
+        "document": 390,
+        "body": 390
+      }
+    },
+    {
+      "label": "Touch opens evidence with persistent manufacturer reference links; reduced motion enabled"
+    }
+  ],
+  "externalRequests": [],
+  "errors": [],
+  "cleanup": true,
+  "serverPid": 24266,
+  "health": {
+    "status": "ok",
+    "mode": "fixture",
+    "liveIntegrations": false
+  },
+  "activity": [
+    {
+      "provider": "discovery",
+      "outcome": "ok"
+    },
+    {
+      "provider": "research",
+      "outcome": "ok"
+    },
+    {
+      "provider": "merchant",
+      "outcome": "ok"
+    },
+    {
+      "provider": "research",
+      "outcome": "ok"
+    },
+    {
+      "provider": "merchant",
+      "outcome": "ok"
+    },
+    {
+      "provider": "research",
+      "outcome": "ok"
+    },
+    {
+      "provider": "merchant",
+      "outcome": "ok"
+    },
+    {
+      "provider": "research",
+      "outcome": "ok"
+    },
+    {
+      "provider": "merchant",
+      "outcome": "ok"
+    }
+  ],
+  "mobileAnswerY": 593.84375,
+  "mobileTable": {
+    "width": 340,
+    "scrollWidth": 449,
+    "overflowX": "auto"
+  },
+  "registry": [
+    {
+      "name": "alert",
+      "savedHashMatches": true
+    },
+    {
+      "name": "badge",
+      "savedHashMatches": true
+    },
+    {
+      "name": "bubble",
+      "savedHashMatches": true
+    },
+    {
+      "name": "button",
+      "savedHashMatches": true
+    },
+    {
+      "name": "card",
+      "savedHashMatches": true
+    },
+    {
+      "name": "checkbox",
+      "savedHashMatches": true
+    },
+    {
+      "name": "collapsible",
+      "savedHashMatches": true
+    },
+    {
+      "name": "empty",
+      "savedHashMatches": true
+    },
+    {
+      "name": "field",
+      "savedHashMatches": true
+    },
+    {
+      "name": "hover-card",
+      "savedHashMatches": true,
+      "officialCurrentHashMatches": true
+    },
+    {
+      "name": "input",
+      "savedHashMatches": true
+    },
+    {
+      "name": "input-group",
+      "savedHashMatches": true,
+      "officialCurrentHashMatches": true
+    },
+    {
+      "name": "label",
+      "savedHashMatches": true
+    },
+    {
+      "name": "message",
+      "savedHashMatches": true
+    },
+    {
+      "name": "message-scroller",
+      "savedHashMatches": true,
+      "officialCurrentHashMatches": true
+    },
+    {
+      "name": "native-select",
+      "savedHashMatches": true
+    },
+    {
+      "name": "separator",
+      "savedHashMatches": true
+    },
+    {
+      "name": "sheet",
+      "savedHashMatches": true,
+      "officialCurrentHashMatches": true
+    },
+    {
+      "name": "table",
+      "savedHashMatches": true
+    },
+    {
+      "name": "textarea",
+      "savedHashMatches": true
+    },
+    {
+      "name": "trace",
+      "savedHashMatches": true,
+      "officialCurrentHashMatches": true
+    }
+  ],
+  "result": "passed"
+}

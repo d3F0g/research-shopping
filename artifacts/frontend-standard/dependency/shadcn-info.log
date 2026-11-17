@@ -1,0 +1,68 @@
+Project
+  framework         Vite (vite)
+  frameworkVersion  -
+  srcDirectory      Yes
+  rsc               No
+  typescript        Yes
+  tailwindVersion   v4
+  tailwindConfig    -
+  tailwindCss       src/client/styles.css
+  importAlias       @
+
+Configuration
+  style        base-nova
+  base         base
+  rsc          No
+  typescript   Yes
+  iconLibrary  lucide
+  rtl          No
+  menuColor    default
+  menuAccent   subtle
+
+Preset
+  code         b2fA
+  version      b
+  style        nova
+  baseColor    neutral
+  theme        neutral*
+  chartColor   neutral*
+  iconLibrary  lucide
+  font         geist
+  fontHeading  inherit
+  radius       default*
+  menuAccent   subtle
+  menuColor    default
+  url          https://ui.shadcn.com/create?preset=b2fA
+
+  * Uses preset defaults for values not available as options on shadcn/create.
+
+Aliases
+  components  @/components
+  utils       @/lib/utils
+  ui          @/components/ui
+  lib         @/lib
+  hooks       @/hooks
+
+Resolved Paths
+  cwd             /Users/josiahwong/Documents/research-shopping-dependency
+  tailwindConfig  -
+  tailwindCss     /Users/josiahwong/Documents/research-shopping-dependency/src/client/styles.css
+  utils           /Users/josiahwong/Documents/research-shopping-dependency/src/client/lib/utils
+  components      /Users/josiahwong/Documents/research-shopping-dependency/src/client/components
+  lib             /Users/josiahwong/Documents/research-shopping-dependency/src/client/lib
+  hooks           /Users/josiahwong/Documents/research-shopping-dependency/src/client/hooks
+  ui              /Users/josiahwong/Documents/research-shopping-dependency/src/client/components/ui
+
+registries:
+  @shadcn  https://ui.shadcn.com/r/styles/{style}/{name}.json
+
+Installed Components
+  alert, badge, bubble, button, card, checkbox, collapsible, empty, field, hover-card, input-group, input, label, message-scroller, message, native-select, separator, sheet, table, textarea, trace
+
+Links
+  docs        https://ui.shadcn.com/docs
+  components  https://ui.shadcn.com/docs/components/base/[component].md
+  ui          https://ui.shadcn.com/code/apps/v4/registry/bases/base/ui/[component].tsx
+  examples    https://ui.shadcn.com/code/apps/v4/registry/bases/base/examples/[component]-example.tsx
+  schema      https://ui.shadcn.com/schema.json
+

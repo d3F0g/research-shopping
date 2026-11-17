@@ -23,8 +23,9 @@ Browser recipes use Playwright's `page`, `context`, and `expect`. Choose stable 
 | Feature | Existing test-title pattern |
 | --- | --- |
 | Research | `compares fixture headphones\|asks for the product category` |
-| Preferences | `keeps the prior budget\|moves a selected flexible priority\|does not convert a budget\|clears incompatible preferences` |
-| Evidence and selection | `compares fixture headphones` |
+| Preferences | `keeps the prior budget\|moves a selected flexible priority\|does not convert a budget\|clears incompatible preferences\|starter portability priority\|opens mobile filters` |
+| Evidence and selection | `compares fixture headphones\|opens comparison and source disclosures` |
+| Recorded activity | `shows only recorded activity\|rejects malformed activity` |
 | Session and recovery | `keeps browser contexts\|does not let a late result\|cancels a pending selection\|recovers from an interrupted request` |
 
 The API and domain suites in `tests/api/app.test.ts` and `tests/unit/shopping.test.ts` cover boundary and provider failure cases through `npm test`.

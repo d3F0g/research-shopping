@@ -38,3 +38,7 @@ The deterministic parser understands a small set of product categories and const
 ## GitHub Actions CI
 
 The workflow in [`.github/workflows/ci.yml`](.github/workflows/ci.yml) runs automatically on pushes and pull requests. It installs dependencies, checks TypeScript, runs unit/API tests, builds the frontend, runs Chromium journeys, and uploads browser evidence. See [CI documentation](docs/ci.md) and the actual PR checks for execution results.
+
+## Frontend standard
+
+The workspace uses official shadcn/ui and AI Elements patterns with centralized tokens, local Geist typography, responsive filters, concise product cards, expandable comparison, safe citations, and actual recorded provider outcomes. See [frontend architecture and provenance](docs/frontend-standard.md).

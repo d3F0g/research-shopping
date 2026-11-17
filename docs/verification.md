@@ -52,8 +52,8 @@ At the initial milestone, GitHub-hosted CI did not run. The then-current OAuth c
 
 ## Published review
 
-[Application PR20](https://github.com/d3F0g/research-shopping/pull/20) stacks on [architecture PR6](https://github.com/d3F0g/research-shopping/pull/6). Both are open and unmerged. The initial milestone and reproduced defects are closed with verification links. Live integration, durable personalization, coverage, and CI activation remain assigned backlog items.
+[Application PR20](https://github.com/d3F0g/research-shopping/pull/20) stacks on [architecture PR6](https://github.com/d3F0g/research-shopping/pull/6). Both are open and unmerged. The initial milestone and reproduced defects are closed with verification links. Live integration, durable personalization, and broader coverage remain assigned backlog items. CI activation is complete.
 
 ## CI activation and mandatory frontend follow-up
 
-The user updated workflow permission and required official shadcn/ui and AI Elements for all frontend development. The active workflow is now under `.github/workflows/ci.yml`. [Automatic pull-request CI](https://github.com/d3F0g/research-shopping/actions/runs/44106643836) passed the pre-refactor source with108 unit/API tests and15 browser journeys. The frontend architecture migration, independent visualQA, and final-head hosted verification remain active work in PR20.
+The user updated workflow permission and required official shadcn/ui and AI Elements for all frontend development. The active workflow is now under `.github/workflows/ci.yml`. [Automatic pull-request CI](https://github.com/d3F0g/research-shopping/actions/runs/44106643836) passed the pre-refactor source with108 unit/API tests and15 browser journeys. The official frontend migration and independent visualQA are complete at application candidate `a3163a2`:110 unit/API tests,20 browser journeys, desktop/mobile captures, build/typecheck, and zero-vulnerability audits passed. See [frontend evidence](frontend-standard.md) for provenance and review links. The latest PR20 commit must pass the same automatic hosted checks before delivery; the PR remains unmerged.

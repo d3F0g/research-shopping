@@ -21,6 +21,8 @@ Preconditions: Research the first headphone example. Its Sony WH-CH720N fixture 
 - Target the conflict-bearing card with `page.locator('.product-card').filter({ has: page.getByRole('heading', { name: 'Sony WH-CH720N', exact: true }) })`. Open its evidence and require **CONFLICTING SAMPLE CLAIMS**, both battery observations, their source names, and fixed synthetic timestamps. Compare the same card's reason list and require that the conflicting claim is not a confident reason.
 - For an unknown claim, require **UNKNOWN** and its explanatory note. The fixture precondition must actually include an unknown claim.
 - Inspect the links named **Manufacturer reference/model page**. Require HTTPS approved manufacturer destinations and the statement that they do not verify the fixture claims, price, stock, or delivery. Do not open links merely to complete the local journey.
+- Use the card's **Model reference** citation trigger before expanding details. Focus or hover `getByRole('button', { name: /Preview reference/ })` and require contextual source information. On touch, evidence exposes persistent safe source links without relying on hover.
+- Open `page.getByRole('button', { name: /Compare .* sample options/ })` with Enter. Require an actual comparison table. At390px, any horizontal table scrolling must remain inside its container; the document must fit the viewport.
 - Capture the expanded disclosure at 390px width and require readable text with no horizontal clipping.
 
 ## Gotchas

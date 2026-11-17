@@ -1,0 +1,166 @@
+{
+  "commit": "a3163a20a5398b9f3c3064b7cb87bf4094de6f8d",
+  "worktree": "",
+  "checks": [
+    {
+      "label": "desktop results",
+      "widths": {
+        "viewport": 1440,
+        "document": 1440,
+        "body": 1440
+      }
+    },
+    {
+      "label": "desktop priority editor",
+      "widths": {
+        "viewport": 1440,
+        "document": 1440,
+        "body": 1440
+      }
+    },
+    {
+      "label": "desktop edit",
+      "initialPriorities": [
+        "portability",
+        "value"
+      ],
+      "requestHard": {
+        "category": "headphones",
+        "budget": {
+          "amount": 500,
+          "currency": "SGD"
+        },
+        "region": "SG",
+        "excludedBrands": [],
+        "requiredFeatures": [
+          "wireless"
+        ],
+        "pendingConstraint": null
+      },
+      "responseHard": {
+        "category": "headphones",
+        "budget": {
+          "amount": 500,
+          "currency": "SGD"
+        },
+        "region": "SG",
+        "excludedBrands": [],
+        "requiredFeatures": [
+          "wireless"
+        ],
+        "pendingConstraint": null
+      },
+      "updatedPriorities": [
+        "value"
+      ],
+      "focus": {
+        "outlineWidth": "3px",
+        "outlineStyle": "solid",
+        "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, oklab(0.541219 -0.0783809 0.0167055 / 0.5) 0px 0px 0px 3px, rgba(0, 0, 0, 0) 0px 0px 0px 0px",
+        "rect": {
+          "x": 52,
+          "y": 707.4375,
+          "width": 16,
+          "height": 16,
+          "top": 707.4375,
+          "right": 68,
+          "bottom": 723.4375,
+          "left": 52
+        }
+      }
+    },
+    {
+      "label": "desktop updated results",
+      "widths": {
+        "viewport": 1440,
+        "document": 1440,
+        "body": 1440
+      }
+    },
+    {
+      "label": "mobile results",
+      "widths": {
+        "viewport": 390,
+        "document": 390,
+        "body": 390
+      }
+    },
+    {
+      "label": "mobile priority editor",
+      "widths": {
+        "viewport": 390,
+        "document": 390,
+        "body": 390
+      }
+    },
+    {
+      "label": "mobile edit",
+      "initialPriorities": [
+        "portability",
+        "value"
+      ],
+      "requestHard": {
+        "category": "headphones",
+        "budget": {
+          "amount": 500,
+          "currency": "SGD"
+        },
+        "region": "SG",
+        "excludedBrands": [],
+        "requiredFeatures": [
+          "wireless"
+        ],
+        "pendingConstraint": null
+      },
+      "responseHard": {
+        "category": "headphones",
+        "budget": {
+          "amount": 500,
+          "currency": "SGD"
+        },
+        "region": "SG",
+        "excludedBrands": [],
+        "requiredFeatures": [
+          "wireless"
+        ],
+        "pendingConstraint": null
+      },
+      "updatedPriorities": [
+        "value"
+      ],
+      "focus": {
+        "outlineWidth": "3px",
+        "outlineStyle": "solid",
+        "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, oklab(0.541219 -0.0783809 0.0167055 / 0.5) 0px 0px 0px 3px, rgba(0, 0, 0, 0) 0px 0px 0px 0px",
+        "rect": {
+          "x": 41,
+          "y": 682.25,
+          "width": 16,
+          "height": 16,
+          "top": 682.25,
+          "right": 57,
+          "bottom": 698.25,
+          "left": 41
+        }
+      }
+    },
+    {
+      "label": "mobile updated results",
+      "widths": {
+        "viewport": 390,
+        "document": 390,
+        "body": 390
+      }
+    }
+  ],
+  "errors": [],
+  "externalRequests": [],
+  "cleanup": true,
+  "serverPid": 29082,
+  "health": {
+    "status": "ok",
+    "mode": "fixture",
+    "liveIntegrations": false
+  },
+  "result": "passed"
+}

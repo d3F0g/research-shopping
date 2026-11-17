@@ -1,0 +1,23 @@
+
+> research-shopping@0.1.0 dev
+> concurrently -k -n api,web -c cyan,green "npm:dev:api" "npm:dev:web"
+
+[web] 
+[web] > research-shopping@0.1.0 dev:web
+[web] > vite --host 127.0.0.1
+[web] 
+[api] 
+[api] > research-shopping@0.1.0 dev:api
+[api] > tsx watch src/server/index.ts
+[api] 
+[web] 
+[web]   VITE v7.3.8  ready in 231 ms
+[web] 
+[web]   ➜  Local:   http://127.0.0.1:5283/
+[api] Research + Shopping fixture API listening on http://127.0.0.1:3173
+[api] {"requestId":"f06db49c-7c7c-4c59-8dd9-f81da22eb3aa","route":"/api/health","status":200,"durationMs":1.33,"outcomes":[]}
+[api] {"requestId":"eae025a0-d629-40fd-8ee2-460f2e8f9687","route":"/api/turn","status":200,"durationMs":19.13,"outcomes":[{"provider":"discovery","outcome":"ok"},{"provider":"research","outcome":"ok"},{"provider":"merchant","outcome":"ok"},{"provider":"research","outcome":"ok"},{"provider":"merchant","outcome":"ok"},{"provider":"research","outcome":"ok"},{"provider":"merchant","outcome":"ok"},{"provider":"research","outcome":"ok"},{"provider":"merchant","outcome":"ok"}]}
+[api] {"requestId":"079beb8d-2748-4214-ab25-b75fe34c134b","route":"/api/select","status":200,"durationMs":2.57,"outcomes":[{"provider":"discovery","outcome":"ok"},{"provider":"research","outcome":"ok"},{"provider":"merchant","outcome":"ok"}]}
+[web] npm run dev:web exited with code SIGTERM
+--> Sending SIGTERM to other processes..
+[api] npm run dev:api exited with code SIGTERM

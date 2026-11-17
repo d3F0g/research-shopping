@@ -136,3 +136,10 @@ dist
 .pnp.*
 
 artifacts/playwright-results/
+
+artifacts/frontend-standard/early/
+artifacts/frontend-standard/**/attempt*/
+artifacts/frontend-standard/**/suite-results/
+artifacts/frontend-standard/**/local-install-suite-results/
+artifacts/frontend-standard/independent/watch-ignore-probe.html
+artifacts/frontend-standard/independent/08-mobile-before-overflow-check.png

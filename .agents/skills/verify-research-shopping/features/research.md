@@ -11,7 +11,7 @@ Users describe a shopping objective and receive a short fixture shortlist, a rel
 
 ## How to get to it (user POV)
 
-Open the home page. Type in the request box and choose **Research options**, or choose one of the three example buttons. After a result, type a follow-up in the same box.
+Open the home page. Type in the request box and choose **Research options**, or choose one of the three example buttons. After a result, type a follow-up in the same box. Examples then live behind the **Example requests** disclosure; open it before choosing another example.
 
 ## Driving it with Playwright
 
@@ -22,6 +22,10 @@ Preconditions: A fresh context at the web base URL passes doctor.
 - In a fresh session, submit `Something good for work`. Require **One thing to clarify** and no `.product-card`.
 - Choose the example matching `/Noise cancelling headphones under S\$100/`. Require **No sample option meets these limits**, no product cards, and the preserved budget of `100`.
 - Drive the laptop example matching `/A light laptop for writing and travel/`. Require the **Product type** value `laptops` and relevant fixture results or an explicit limitation.
+
+## Recorded activity
+
+The app uses a complete JSON response, with no token stream. Before a response arrives, require no recorded activity. Capture the actual POST `/api/turn` response, open the button named `Recorded activity · ${payload.toolActivity.length} outcomes`, and compare every visible provider/outcome with that payload. A clarification has an empty array and no activity control. Do not assert fabricated stages, durations, or a complete execution audit.
 
 ## Gotchas
 
