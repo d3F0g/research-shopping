@@ -160,6 +160,15 @@ export const TurnResultSchema = z.discriminatedUnion("kind", [
   TurnErrorSchema,
 ]);
 
+export const ProviderEventSchema = z.object({
+  provider: z.enum(["discovery", "research", "merchant"]),
+  outcome: z.enum(["ok", "failed", "timeout"]),
+});
+
+export const TurnResponseSchema = TurnResultSchema.and(z.object({
+  toolActivity: z.array(ProviderEventSchema).max(20),
+}));
+
 export const SelectionResultSchema = z.discriminatedUnion("kind", [
   z.object({ kind: z.literal("handoff"), productId: ProductIdSchema, productName: z.string(), offer: OfferSchema, productUrl: z.string().url(), label: z.string() }),
   TurnErrorSchema,
@@ -180,6 +189,8 @@ export type Offer = z.infer<typeof OfferSchema>;
 export type Candidate = z.infer<typeof CandidateSchema>;
 export type TurnRequest = z.infer<typeof TurnRequestSchema>;
 export type TurnResult = z.infer<typeof TurnResultSchema>;
+export type ProviderEvent = z.infer<typeof ProviderEventSchema>;
+export type TurnResponse = z.infer<typeof TurnResponseSchema>;
 export type SelectionResult = z.infer<typeof SelectionResultSchema>;
 
 export function defaultPreferences(): Preferences {

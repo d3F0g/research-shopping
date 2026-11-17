@@ -67,7 +67,7 @@ test("compares fixture headphones, shows evidence and hands off through the sele
 
   const sony = page.locator(".product-card").filter({ hasText: "Sony WH-CH720N" });
   await sony.getByText("Evidence and limits").click();
-  await expect(sony.getByText("CONFLICTING SAMPLE CLAIMS")).toBeVisible();
+  await expect(sony.getByText("CONFLICTING SAMPLE CLAIMS", { exact: true })).toBeVisible();
   await expect(sony.getByText("Synthetic fixture timestamp · 15 Jan 2025").first()).toBeVisible();
   const sourceLink = sony.getByRole("link", { name: /Manufacturer reference\/model page/ }).first();
   await expect(sourceLink).toHaveAttribute("href", "https://www.sony.com.sg/headphones/products/wh-ch720n");
@@ -75,10 +75,10 @@ test("compares fixture headphones, shows evidence and hands off through the sele
   await expect(sourceLink).toHaveAttribute("rel", /noopener/);
 
   await mkdir("artifacts/screenshots", { recursive: true });
-  await page.screenshot({ path: "artifacts/screenshots/shortlist-desktop.png", fullPage: true });
+  await page.screenshot({ path: "artifacts/screenshots/shortlist-desktop.png", fullPage: true, animations: "disabled" });
   await page.setViewportSize({ width: 390, height: 844 });
   await assertNoHorizontalOverflow(page);
-  await page.screenshot({ path: "artifacts/screenshots/shortlist-mobile.png", fullPage: true });
+  await page.screenshot({ path: "artifacts/screenshots/shortlist-mobile.png", fullPage: true, animations: "disabled" });
 
   await sony.getByRole("button", { name: "Select this product" }).click();
   await expect(page.getByRole("heading", { name: "Sony WH-CH720N" })).toBeVisible();
@@ -135,7 +135,7 @@ test("moves a selected flexible priority ahead of price and changes the leading 
   await researchWithPrompt(page, "Headphones under S$400");
   await expect(page.locator(".product-card").first()).toContainText("Sony WH-CH720N");
   await page.getByRole("checkbox", { name: "Battery", exact: true }).check();
-  await expect(page.getByText("The first selected priority has the most influence.")).toBeVisible();
+  await expect(page.getByText("The most recently selected priority has the most influence.")).toBeVisible();
   await page.getByRole("button", { name: "Update comparison" }).click();
   await expect(page.locator(".product-card").first()).toContainText("MOMENTUM 4 Wireless");
 });
@@ -231,6 +231,7 @@ test("does not let a late result overwrite a newer request", async ({ page }) =>
   await page.goto("/");
   await page.getByRole("button", { name: /Wireless headphones for long flights/ }).click();
   await started.promise;
+  await page.getByRole("button", { name: "Example requests", exact: true }).click();
   await page.getByRole("button", { name: /A light laptop for writing and travel/ }).click();
   await expect(page.getByRole("heading", { name: "Your shortlist" })).toBeVisible();
   await expect(page.locator(".product-card").first()).toContainText("ASUS");
@@ -327,4 +328,113 @@ test("recovers from an interrupted request without discarding the typed request"
   await page.getByRole("button", { name: "Retry" }).click();
   await expect(page.getByRole("heading", { name: "Your shortlist" })).toBeVisible();
   await expect(request).toHaveValue("");
+});
+
+test("opens mobile filters with one labeled editor, traps focus, and returns focus on close", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/");
+  const trigger = page.getByRole("button", { name: /Filters and preferences/ });
+  await trigger.click();
+  const dialog = page.getByRole("dialog", { name: "Your filters" });
+  await expect(dialog).toBeVisible();
+  await expect(page.getByLabel("Product type")).toHaveCount(1);
+  await dialog.getByLabel("Product type").selectOption("headphones");
+  await dialog.getByLabel("Maximum budget amount").fill("400");
+  await dialog.getByRole("checkbox", { name: "Wireless", exact: true }).check();
+  for (let index = 0; index < 25; index += 1) {
+    await page.keyboard.press("Tab");
+    await expect.poll(() => dialog.evaluate((element) => element.contains(document.activeElement))).toBe(true);
+  }
+  await dialog.getByLabel("Maximum budget amount").scrollIntoViewIfNeeded();
+  await assertNoHorizontalOverflow(page);
+  await page.screenshot({ path: "artifacts/screenshots/filters-mobile.png", fullPage: true, animations: "disabled" });
+  await page.keyboard.press("Escape");
+  await expect(dialog).toBeHidden();
+  await expect(trigger).toBeFocused();
+  await page.getByRole("button", { name: "Research options" }).click();
+  await expect(page.locator(".product-card").first()).toContainText("Sony WH-CH720N");
+  await trigger.click();
+  await dialog.getByLabel("Maximum budget amount").fill("100");
+  await dialog.getByRole("button", { name: "Update comparison" }).click();
+  await expect(dialog).toBeHidden();
+  await expect(trigger).toBeFocused();
+  await expect(page.getByRole("heading", { name: "No sample option meets these limits" })).toBeVisible();
+});
+
+test("opens comparison and source disclosures with keyboard and touch-sized controls", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  await researchWithPrompt(page, "Headphones under S$400");
+  const comparison = page.getByRole("button", { name: /Compare .* sample options/ });
+  await comparison.focus();
+  await page.keyboard.press("Enter");
+  await expect(comparison).toHaveAttribute("aria-expanded", "true");
+  await expect(page.getByRole("table")).toContainText("Sony WH-CH720N");
+  await expect(page.getByRole("table")).toContainText("In stock in fixture");
+  const sony = page.getByRole("article", { name: "Sony WH-CH720N", exact: true });
+  await sony.getByRole("button", { name: "Evidence and limits" }).click();
+  await expect(sony.getByText("UNKNOWN", { exact: true }).first()).toBeVisible();
+  await expect(sony.getByText("CONFLICTING SAMPLE CLAIMS", { exact: true })).toBeVisible();
+  await sony.evaluate((element) => Promise.all(element.getAnimations({ subtree: true }).map((animation) => animation.finished)));
+  await sony.getByRole("button", { name: /Preview reference/ }).first().hover();
+  const preview = page.locator('[data-slot="hover-card-content"]');
+  await expect(preview).toContainText("This page does not verify the sample claim");
+  await expect(preview.getByRole("link")).toHaveAttribute("href", "https://www.sony.com.sg/headphones/products/wh-ch720n");
+  await page.screenshot({ path: "artifacts/screenshots/citation-desktop.png", fullPage: true, animations: "disabled" });
+  await page.mouse.move(0, 0);
+  await page.setViewportSize({ width: 390, height: 844 });
+  await expect(sony.getByRole("link", { name: /Manufacturer reference\/model page/ }).first()).toBeVisible();
+  await assertNoHorizontalOverflow(page);
+  await comparison.scrollIntoViewIfNeeded();
+  await page.screenshot({ path: "artifacts/screenshots/comparison-mobile.png", fullPage: true, animations: "disabled" });
+  await comparison.click();
+  await expect(comparison).toHaveAttribute("aria-expanded", "false");
+});
+
+test("shows only recorded activity after a response and clears it for clarification", async ({ page }) => {
+  const started = deferred();
+  const release = deferred();
+  const finished = deferred();
+  await page.route("**/api/turn", (route) => holdResponse(route, started, release, finished));
+  await page.goto("/");
+  await page.getByRole("button", { name: /Wireless headphones for long flights/ }).click();
+  await started.promise;
+  await expect(page.getByRole("status")).toContainText("The sample service has not returned a response yet.");
+  await expect(page.getByRole("button", { name: /Recorded activity/ })).toHaveCount(0);
+  await page.screenshot({ path: "artifacts/screenshots/request-pending.png", fullPage: true, animations: "disabled" });
+  const responsePromise = page.waitForResponse("**/api/turn");
+  release.resolve();
+  await finished.promise;
+  const payload = await (await responsePromise).json() as { toolActivity: { provider: string; outcome: string }[] };
+  expect(payload.toolActivity.length).toBeGreaterThan(0);
+  await page.getByRole("button", { name: `Recorded activity · ${payload.toolActivity.length} outcomes` }).click();
+  const rows = page.locator('.tool-activity [data-slot="trace-collapsible-content"] [data-slot="trace-line"]');
+  await expect(rows).toHaveCount(payload.toolActivity.length);
+  const providerNames: Record<string, string> = { discovery: "Catalog discovery", research: "Fixture research", merchant: "Sample offer check" };
+  const outcomeNames: Record<string, string> = { ok: "Completed", failed: "Failed", timeout: "Timed out" };
+  for (const [index, event] of payload.toolActivity.entries()) {
+    await expect(rows.nth(index)).toHaveText(`${providerNames[event.provider]} · ${outcomeNames[event.outcome]}`);
+  }
+  await page.unroute("**/api/turn");
+  await page.getByRole("button", { name: "Reset session" }).click();
+  await page.getByLabel("Start with the outcome, not a model number.").fill("Something nice");
+  await page.getByRole("button", { name: "Research options" }).click();
+  await expect(page.getByRole("heading", { name: "One thing to clarify" })).toBeVisible();
+  await expect(page.getByRole("button", { name: /Recorded activity/ })).toHaveCount(0);
+  await page.getByLabel("Start with the outcome, not a model number.").fill("Headphones under S$400");
+  await page.getByRole("button", { name: "Research options" }).click();
+  await expect(page.locator(".product-card").first()).toContainText("Sony WH-CH720N");
+});
+
+test("rejects malformed activity metadata at the response boundary", async ({ page }) => {
+  await page.route("**/api/turn", async (route) => {
+    const response = await route.fetch();
+    const payload = await response.json() as { toolActivity: unknown };
+    payload.toolActivity = [{ provider: "fabricated", outcome: "ok" }];
+    await route.fulfill({ response, body: JSON.stringify(payload) });
+  });
+  await page.goto("/");
+  await page.getByRole("button", { name: /Wireless headphones for long flights/ }).click();
+  await expect(page.getByRole("alert")).toContainText("unreadable result");
+  await expect(page.locator(".product-card")).toHaveCount(0);
+  await expect(page.getByRole("button", { name: /Recorded activity/ })).toHaveCount(0);
 });

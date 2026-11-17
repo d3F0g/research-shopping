@@ -1,5 +1,7 @@
 import type { Claim, DiscoveryProduct, Offer, Preferences, ProductId } from "./contracts";
 
+export type { ProviderEvent } from "./contracts";
+
 export type ProviderContext = { signal: AbortSignal };
 
 export interface DiscoveryProvider {
@@ -22,4 +24,3 @@ export type Providers = {
 };
 
 export type ProviderName = keyof Providers;
-export type ProviderEvent = { provider: ProviderName; outcome: "ok" | "failed" | "timeout" };

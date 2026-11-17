@@ -13,7 +13,13 @@ describe("HTTP boundary", () => {
     const logs: RequestLog[] = [];
     const response = await request(createApp({ logger: (event) => logs.push(event) }), body(), { "X-Request-Id": "attacker-controlled" });
     expect(response.status).toBe(200);
-    expect((await response.json()).kind).toBe("recommendations");
+    const result = await response.json();
+    expect(result.kind).toBe("recommendations");
+    expect(result.toolActivity).toHaveLength(9);
+    expect(result.toolActivity).toEqual(logs[0]?.outcomes);
+    expect(result.toolActivity).toContainEqual({ provider: "discovery", outcome: "ok" });
+    expect(result.toolActivity).toContainEqual({ provider: "research", outcome: "ok" });
+    expect(result.toolActivity).toContainEqual({ provider: "merchant", outcome: "ok" });
     expect(response.headers.get("X-Content-Type-Options")).toBe("nosniff");
     expect(response.headers.get("Cache-Control")).toBe("no-store");
     expect(response.headers.get("X-Frame-Options")).toBe("DENY");
@@ -96,6 +102,7 @@ describe("HTTP boundary", () => {
   it("rejects unknown request and preference keys", async () => {
     const app = createApp();
     expect((await request(app, JSON.stringify({ message: "headphones", preferences: defaultPreferences(), command: "pay" }))).status).toBe(400);
+    expect((await request(app, JSON.stringify({ message: "headphones", preferences: defaultPreferences(), toolActivity: [{ provider: "discovery", outcome: "ok" }] }))).status).toBe(400);
     expect((await request(app, JSON.stringify({ message: "headphones", preferences: { ...defaultPreferences(), secret: "x" } }))).status).toBe(400);
     expect((await request(app, JSON.stringify({ message: "headphones", preferences: { ...defaultPreferences(), hard: { ...defaultPreferences().hard, payment: "x" } } }))).status).toBe(400);
   });
@@ -106,27 +113,56 @@ describe("HTTP boundary", () => {
     const app = createApp({ providers: { ...fixture, discovery: { ...fixture.discovery, discover: async () => { throw new Error("secret-token-super-secret"); } } }, logger: (event) => logs.push(event) });
     const response = await request(app);
     expect(response.status).toBe(200);
-    expect(await response.json()).toMatchObject({ kind: "error", code: "provider-failed", retryable: true });
+    expect(await response.json()).toMatchObject({ kind: "error", code: "provider-failed", retryable: true, toolActivity: [{ provider: "discovery", outcome: "failed" }] });
     expect(logs[0].outcomes).toEqual([{ provider: "discovery", outcome: "failed" }]);
     expect(JSON.stringify(logs)).not.toMatch(/secret|headphones|SGD/);
   });
 
+  it("returns an empty activity list when clarification needs no provider", async () => {
+    const response = await request(createApp(), body("Show options"));
+    expect(response.status).toBe(200);
+    expect(await response.json()).toMatchObject({ kind: "clarification", toolActivity: [] });
+  });
+
+  it("returns the actual timeout outcome without provider error details", async () => {
+    const fixture = createFixtureProviders();
+    const app = createApp({
+      providers: { ...fixture, discovery: { ...fixture.discovery, discover: async () => new Promise<never>(() => {}) } },
+      providerTimeoutMs: 5,
+    });
+    const response = await request(app);
+    expect(response.status).toBe(200);
+    const result = await response.json();
+    expect(result).toMatchObject({ kind: "error", code: "provider-failed", toolActivity: [{ provider: "discovery", outcome: "timeout" }] });
+    expect(JSON.stringify(result)).not.toMatch(/Provider unavailable|secret|Error/);
+  });
+
   it("keeps independent stateless requests isolated", async () => {
     const app = createApp();
-    const [first, second] = await Promise.all([request(app, body("headphones under SGD200")), request(app, body("laptops under SGD2000"))]);
+    const [first, second, third] = await Promise.all([
+      request(app, body("headphones under SGD200")),
+      request(app, body("laptops under SGD2000")),
+      request(app, body("Show options")),
+    ]);
     const a = await first.json();
     const b = await second.json();
+    const c = await third.json();
     expect(a.preferences.hard.category).toBe("headphones");
     expect(b.preferences.hard.category).toBe("laptops");
+    expect(a.toolActivity.length).toBeGreaterThan(0);
+    expect(b.toolActivity.length).toBeGreaterThan(0);
+    expect(c).toMatchObject({ kind: "clarification", toolActivity: [] });
     const reset = await request(app, body("Show options"));
-    expect(await reset.json()).toMatchObject({ kind: "clarification", reason: "category" });
+    expect(await reset.json()).toMatchObject({ kind: "clarification", reason: "category", toolActivity: [] });
   });
 
   it("returns validated selection and rejects client-supplied destination overrides", async () => {
     const app = createApp();
     const preferences: Preferences = { ...defaultPreferences(), hard: { ...defaultPreferences().hard, category: "headphones" } };
     const send = (payload: unknown) => app.request(`${url}/api/select`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) });
-    expect(await (await send({ productId: "sony-wh-1000xm5", preferences })).json()).toMatchObject({ kind: "handoff", productName: "Sony WH-1000XM5" });
+    const selected = await (await send({ productId: "sony-wh-1000xm5", preferences })).json();
+    expect(selected).toMatchObject({ kind: "handoff", productName: "Sony WH-1000XM5" });
+    expect(selected).not.toHaveProperty("toolActivity");
     expect((await send({ productId: "sony-wh-1000xm5", preferences, productUrl: "https://evil.test" })).status).toBe(400);
     expect((await send({ productId: "../admin", preferences })).status).toBe(400);
   });
