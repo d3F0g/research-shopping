@@ -4,8 +4,8 @@ import { tmpdir } from "node:os";
 import path from "node:path";
 
 try {
-  const key = process.env.EXA_API_KEY;
-  if (!key?.trim()) throw new Error("Load the private development environment for this local leak check.");
+  const key = process.env.EXA_API_KEY?.trim();
+  if (!key) throw new Error("Load the private development environment for this local leak check.");
   const needles = [...new Set([key, encodeURIComponent(key), Buffer.from(key).toString("base64"), JSON.stringify(key).slice(1, -1)])].map((value) => Buffer.from(value));
   const root = execFileSync("git", ["rev-parse", "--show-toplevel"], { encoding: "utf8" }).trim();
   const git = (args, options = {}) => execFileSync("git", args, { cwd: root, maxBuffer: 256 * 1024 * 1024, ...options });
@@ -24,7 +24,7 @@ try {
       try {
         const archivePath = path.join(directory, "archive.zip");
         writeFileSync(archivePath, data, { mode: 0o600 });
-        const archive = execFileSync("python3", ["-c", "import base64,json,os,sys,urllib.parse,zipfile; key=os.environ['EXA_API_KEY']; variants=[key,urllib.parse.quote(key,safe=\"-_.!~*'()\"),base64.b64encode(key.encode()).decode(),json.dumps(key,ensure_ascii=False)[1:-1]]; needles=[x.encode() for x in variants]; z=zipfile.ZipFile(sys.argv[1]); entries=z.infolist(); assert sum(x.file_size for x in entries)<=67108864, 'Archive exceeds local scan limit'; matched=any(any(needle in content for needle in needles) for content in (z.read(entry) for entry in entries if not entry.is_dir())); print(json.dumps({'matched':matched}))", archivePath], { stdio: ["ignore", "pipe", "pipe"], maxBuffer: 16 * 1024, timeout: 15_000 });
+        const archive = execFileSync("python3", ["-c", "import base64,json,os,sys,urllib.parse,zipfile; key=os.environ['EXA_API_KEY'].strip(); variants=[key,urllib.parse.quote(key,safe=\"-_.!~*'()\"),base64.b64encode(key.encode()).decode(),json.dumps(key,ensure_ascii=False)[1:-1]]; needles=[x.encode() for x in variants]; z=zipfile.ZipFile(sys.argv[1]); entries=z.infolist(); assert sum(x.file_size for x in entries)<=67108864, 'Archive exceeds local scan limit'; matched=any(any(needle in content for needle in needles) for content in (z.read(entry) for entry in entries if not entry.is_dir())); print(json.dumps({'matched':matched}))", archivePath], { stdio: ["ignore", "pipe", "pipe"], maxBuffer: 16 * 1024, timeout: 15_000 });
         const result = JSON.parse(archive.toString());
         if (typeof result.matched !== "boolean") throw new Error("Archive scan did not complete.");
         if (result.matched) matches.push(`${label} (unpacked)`);

@@ -3,6 +3,7 @@
   "results": [
     {
       "mode": "clean",
+      "padded": false,
       "passed": true,
       "reportedMatches": 0,
       "archives": 0,
@@ -10,6 +11,7 @@
     },
     {
       "mode": "plain",
+      "padded": false,
       "passed": true,
       "reportedMatches": 1,
       "archives": 0,
@@ -17,6 +19,31 @@
     },
     {
       "mode": "zip",
+      "padded": false,
+      "passed": true,
+      "reportedMatches": 1,
+      "archives": 1,
+      "controlValuePrinted": false
+    },
+    {
+      "mode": "clean",
+      "padded": true,
+      "passed": true,
+      "reportedMatches": 0,
+      "archives": 0,
+      "controlValuePrinted": false
+    },
+    {
+      "mode": "plain",
+      "padded": true,
+      "passed": true,
+      "reportedMatches": 1,
+      "archives": 0,
+      "controlValuePrinted": false
+    },
+    {
+      "mode": "zip",
+      "padded": true,
       "passed": true,
       "reportedMatches": 1,
       "archives": 1,
