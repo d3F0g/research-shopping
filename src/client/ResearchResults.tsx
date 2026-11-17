@@ -16,6 +16,7 @@ import type {
   TurnResponse,
 } from "../domain/contracts";
 import { isApprovedUrl } from "../domain/merchant-links";
+import { WebResearch } from "./WebResearch";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import { Button, buttonVariants } from "@/components/ui/button";
@@ -543,6 +544,10 @@ export function Results({
             </Alert>
           )}
           <Comparison candidates={outcome.candidates} />
+          <WebResearch
+            productIds={outcome.candidates.map(({ product }) => product.id)}
+            preferences={outcome.preferences}
+          />
         </>
       )}
       {outcome.kind !== "recommendations" && (

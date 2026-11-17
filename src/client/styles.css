@@ -162,6 +162,19 @@
 .comparison-table td:first-child { min-width: 140px; }
 .comparison-table td:nth-child(2) { min-width: 90px; }
 .comparison-table td:nth-child(3) { min-width: 180px; }
+.web-research { min-width: 0; margin-top: 20px; padding: 16px; border: 1px solid var(--border); border-radius: 8px; background: var(--card); }
+.web-research-header { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; }
+.web-research-header h3 { margin-top: 3px; font-size: 18px; font-weight: 600; }
+.web-research-button { min-height: 44px; white-space: normal; }
+.web-research-limit { max-width: 780px; margin-top: 8px; color: var(--muted-foreground); font-size: 12px; line-height: 1.55; }
+.web-research-status { margin-top: 12px; color: var(--muted-foreground); }
+.web-research-retrieved { margin-top: 12px; }
+.web-research-sources { margin-top: 8px; }
+.web-research-list { display: grid; gap: 16px; }
+.web-research-source { min-width: 0; overflow-wrap: anywhere; }
+.web-research-link { font-weight: 550; }
+.web-research-highlights { display: grid; gap: 8px; margin-top: 8px; color: var(--foreground); font-size: 14px; line-height: 1.55; }
+.web-research-highlights li { padding-left: 12px; border-left: 2px solid var(--border); }
 .tool-activity { margin-top: 16px; }
 .message-panel { margin-top: 16px; padding: 20px; }
 .message-panel h3 { font-size: 16px; font-weight: 600; }
@@ -215,6 +228,9 @@
   .product-card h3 { font-size: 20px; }
   .product-card-eyebrow { justify-content: space-between; }
   .comparison-content { padding: 8px; }
+  .web-research { padding: 14px; }
+  .web-research-header { align-items: start; }
+  .web-research-button { width: 100%; }
   .comparison-table td:first-child { min-width: 120px; }
   .handoff-panel { --card-spacing: 20px; }
   .site-footer { display: grid; gap: 8px; }
