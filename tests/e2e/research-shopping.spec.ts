@@ -20,6 +20,20 @@ function deferred() {
   return { promise, resolve: () => resolve() };
 }
 
+function webResearchResponse(overrides: Record<string, unknown> = {}) {
+  return {
+    status: "ready",
+    retrievedAt: "2026-11-18T04:00:00.000Z",
+    results: [{
+      title: "Reference source",
+      url: "https://www.example.org/product-review",
+      highlights: ["A plain text excerpt."],
+    }],
+    truncated: false,
+    ...overrides,
+  };
+}
+
 async function holdResponse(route: Route, started: ReturnType<typeof deferred>, release: ReturnType<typeof deferred>, finished: ReturnType<typeof deferred>) {
   started.resolve();
   try {
@@ -463,4 +477,249 @@ test("rejects malformed activity metadata at the response boundary", async ({ pa
   await expect(page.getByRole("alert")).toContainText("unreadable result");
   await expect(page.locator(".product-card")).toHaveCount(0);
   await expect(page.getByRole("button", { name: /Recorded activity/ })).toHaveCount(0);
+});
+
+test("requests optional web context only after an explicit click, including under StrictMode", async ({ page }) => {
+  let requests = 0;
+  let submitted: { productIds: string[]; preferences: { hard: { budget: { amount: number; currency: string } | null } } } | undefined;
+  await page.route("**/api/research", async (route) => {
+    requests += 1;
+    submitted = route.request().postDataJSON() as typeof submitted;
+    await route.fulfill({ json: webResearchResponse() });
+  });
+  await page.goto("/");
+  await expect(page.getByRole("button", { name: "Search the web for context" })).toHaveCount(0);
+  await expect.poll(() => requests).toBe(0);
+  await researchWithPrompt(page, "Wireless headphones for long flights under S$500");
+  await expect(page.getByRole("button", { name: "Search the web for context" })).toBeVisible();
+  expect(requests).toBe(0);
+  await page.getByRole("button", { name: "Search the web for context" }).click();
+  await expect(page.getByText("1 web source")).toBeVisible();
+  expect(requests).toBe(1);
+  expect(submitted?.productIds).toHaveLength(3);
+  expect(new Set(submitted?.productIds).size).toBe(3);
+  expect(submitted?.preferences.hard.budget).toEqual({ amount: 500, currency: "SGD" });
+});
+
+test("shows safe web excerpts as text with a safe HTTPS source link", async ({ page }) => {
+  await page.route("**/api/research", (route) => route.fulfill({
+    json: webResearchResponse({
+      results: [{
+        title: "<img src=x onerror=alert(1)> source",
+        url: "https://www.example.org/reviews/headphones",
+        highlights: ["<script>window.__exaXss = true</script>", "<b>Text stays text</b>"],
+      }],
+    }),
+  }));
+  await researchWithPrompt(page, "Wireless headphones under S$500");
+  await page.getByRole("button", { name: "Search the web for context" }).click();
+  await page.getByRole("button", { name: "1 web source" }).click();
+  await page.getByRole("button", { name: "Read full excerpt from <img src=x onerror=alert(1)> source" }).click();
+  const source = page.getByRole("link", { name: /<img src=x onerror=alert\(1\)> source/ });
+  await expect(source).toHaveAttribute("href", "https://www.example.org/reviews/headphones");
+  await expect(source).toHaveAttribute("target", "_blank");
+  await expect(source).toHaveAttribute("rel", "noopener noreferrer");
+  await expect(page.getByText("HTTPS · www.example.org")).toBeVisible();
+  await expect(page.getByText("<script>window.__exaXss = true</script>", { exact: true })).toBeVisible();
+  await expect(page.getByText("<b>Text stays text</b>", { exact: true })).toBeVisible();
+  await expect(page.locator(".web-research img, .web-research script, .web-research b")).toHaveCount(0);
+  await expect(page.locator(".web-research")).toContainText("They do not establish the sample price or stock");
+});
+
+test("rejects an unsafe source response before rendering a link", async ({ page }) => {
+  await page.route("**/api/research", (route) => route.fulfill({
+    json: webResearchResponse({
+      results: [{ title: "Private target", url: "https://127.0.0.1/private", highlights: ["untrusted"] }],
+    }),
+  }));
+  await researchWithPrompt(page, "Wireless headphones under S$500");
+  await page.getByRole("button", { name: "Search the web for context" }).click();
+  await expect(page.getByRole("alert")).toContainText("unreadable result");
+  await expect(page.locator(".web-research a")).toHaveCount(0);
+  await expect(page.getByRole("button", { name: "Try web research again" })).toBeVisible();
+});
+
+test("shows empty and disabled web research responses clearly", async ({ page }) => {
+  let requestIndex = 0;
+  await page.route("**/api/research", (route) => {
+    requestIndex += 1;
+    return route.fulfill({
+      json: requestIndex === 1
+        ? webResearchResponse({ results: [] })
+        : { status: "disabled" },
+    });
+  });
+  await researchWithPrompt(page, "Wireless headphones under S$500");
+  await page.getByRole("button", { name: "Search the web for context" }).click();
+  await expect(page.getByText("No safe source excerpts were available for this shortlist.")).toBeVisible();
+  await page.getByRole("button", { name: "Reset session" }).click();
+  await researchWithPrompt(page, "Wireless headphones under S$500");
+  await page.getByRole("button", { name: "Search the web for context" }).click();
+  await expect(page.getByText("Web research is not enabled for this session.")).toBeVisible();
+});
+
+test("suppresses double-click requests and permits an explicit retry", async ({ page }) => {
+  const started = deferred();
+  const release = deferred();
+  let requests = 0;
+  await page.route("**/api/research", async (route) => {
+    requests += 1;
+    if (requests === 1) {
+      started.resolve();
+      await release.promise;
+      await route.fulfill({ json: { status: "unavailable", reason: "provider-error" } }).catch(() => undefined);
+    } else {
+      await route.fulfill({ json: webResearchResponse() });
+    }
+  });
+  await researchWithPrompt(page, "Wireless headphones under S$500");
+  const search = page.getByRole("button", { name: "Search the web for context" });
+  await search.dblclick();
+  await started.promise;
+  expect(requests).toBe(1);
+  release.resolve();
+  await expect(page.getByText("Web research is temporarily unavailable.")).toBeVisible();
+  await page.getByRole("button", { name: "Try web research again" }).click();
+  await expect(page.getByText("1 web source")).toBeVisible();
+  expect(requests).toBe(2);
+});
+
+test("discards pending web sources after an edit", async ({ page }) => {
+  const started = deferred();
+  const release = deferred();
+  let hold = true;
+  await page.route("**/api/research", async (route) => {
+    if (hold) {
+      hold = false;
+      started.resolve();
+      await release.promise;
+      await route.fulfill({ json: webResearchResponse() }).catch(() => undefined);
+      return;
+    }
+    await route.fulfill({ json: webResearchResponse() });
+  });
+  await researchWithPrompt(page, "Wireless headphones under S$500");
+  await page.getByRole("button", { name: "Search the web for context" }).click();
+  await started.promise;
+  await page.getByLabel("Start with the outcome, not a model number.").fill("A laptop under S$2,000");
+  await page.getByRole("button", { name: "Research options" }).click();
+  await expect(page.locator(".product-card").first()).toContainText("ASUS");
+  release.resolve();
+  await expect(page.getByText("1 web source")).toHaveCount(0);
+  await expect(page.locator(".web-research")).toHaveCount(1);
+});
+
+test("discards pending web sources after reset and product handoff", async ({ page }) => {
+  const holds = Array.from({ length: 2 }, () => ({ started: deferred(), release: deferred() }));
+  let requestIndex = 0;
+  await page.route("**/api/research", async (route) => {
+    const hold = holds[requestIndex++];
+    hold.started.resolve();
+    await hold.release.promise;
+    await route.fulfill({ json: webResearchResponse() }).catch(() => undefined);
+  });
+  await researchWithPrompt(page, "Wireless headphones under S$500");
+  await page.getByRole("button", { name: "Search the web for context" }).click();
+  await holds[0].started.promise;
+  await page.getByRole("button", { name: "Reset session" }).click();
+  holds[0].release.resolve();
+  await expect(page.locator(".web-research")).toHaveCount(0);
+
+  await researchWithPrompt(page, "Wireless headphones under S$500");
+  await page.getByRole("button", { name: "Search the web for context" }).click();
+  await holds[1].started.promise;
+  await page.getByRole("button", { name: "Select this product" }).first().click();
+  await expect(page.getByRole("heading", { name: "Sony WH-CH720N" })).toBeVisible();
+  holds[1].release.resolve();
+  await expect(page.locator(".web-research")).toHaveCount(0);
+});
+
+test("keeps web source disclosure readable without mobile overflow", async ({ page }) => {
+  await page.route("**/api/research", (route) => route.fulfill({
+    json: webResearchResponse({
+      results: Array.from({ length: 3 }, (_, index) => ({
+        title: `Long source title ${index} ${"headphone context ".repeat(8)}`,
+        url: `https://www.example.org/research/${index}`,
+        highlights: [`Excerpt with a very long source phrase ${"plain language evidence ".repeat(12)}`],
+      })),
+    }),
+  }));
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  await researchWithPrompt(page, "Wireless headphones under S$500");
+  await page.getByRole("button", { name: "Search the web for context" }).click();
+  await page.getByRole("button", { name: "3 web sources" }).click();
+  await page.screenshot({ path: "artifacts/screenshots/web-research-desktop.png", fullPage: true, animations: "disabled" });
+  await page.setViewportSize({ width: 390, height: 844 });
+  await assertNoHorizontalOverflow(page);
+  await expect(page.getByRole("button", { name: "3 web sources" })).toBeVisible();
+  await page.screenshot({ path: "artifacts/screenshots/web-research-mobile.png", fullPage: true, animations: "disabled" });
+});
+
+test("keeps long web excerpts compact and reveals sources by request on desktop and mobile", async ({ page, browser }) => {
+  const results = Array.from({ length: 10 }, (_, index) => ({
+    title: `Long source ${index + 1}`,
+    url: `https://www.example.org/research/${index + 1}`,
+    highlights: [`Excerpt ${index + 1}: ${"Plain source text remains available when requested. ".repeat(12)}`],
+  }));
+  await page.route("**/api/research", (route) => route.fulfill({
+    json: webResearchResponse({ results }),
+  }));
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  await researchWithPrompt(page, "Wireless headphones under S$500");
+  await page.getByRole("button", { name: "Search the web for context" }).click();
+  await page.getByRole("button", { name: "10 web sources" }).click();
+  await assertNoHorizontalOverflow(page);
+
+  const sources = page.locator(".web-research-source");
+  await expect(sources).toHaveCount(3);
+  await expect(page.locator(".product-card")).toHaveCount(3);
+  const firstSource = sources.nth(0);
+  const firstExcerpt = results[0]!.highlights[0]!;
+  await expect(firstSource).toContainText("Excerpt 1:");
+  const previewText = await firstSource.locator(".web-research-preview").textContent();
+  expect(Array.from(previewText ?? "")).toHaveLength(161);
+  expect(previewText?.endsWith("…")).toBe(true);
+  await expect(firstSource.getByText(firstExcerpt, { exact: true })).not.toBeVisible();
+  await expect(firstSource.getByRole("button", { name: "Read full excerpt from Long source 1" })).toHaveAttribute("aria-expanded", "false");
+
+  await mkdir("artifacts/exa-ui-regression", { recursive: true });
+  await page.screenshot({ path: "artifacts/exa-ui-regression/desktop-compact.png", fullPage: true, animations: "disabled" });
+  const fullExcerpt = firstSource.getByRole("button", { name: "Read full excerpt from Long source 1" });
+  await fullExcerpt.focus();
+  await page.keyboard.press("Enter");
+  await expect(fullExcerpt).toHaveAttribute("aria-expanded", "true");
+  await expect(firstSource).toContainText(firstExcerpt);
+
+  const moreSources = page.getByRole("button", { name: "Show 7 more sources" });
+  await moreSources.focus();
+  await page.keyboard.press("Enter");
+  await expect(sources).toHaveCount(10);
+
+  const mobileContext = await browser.newContext({
+    viewport: { width: 390, height: 844 },
+    isMobile: true,
+    hasTouch: true,
+  });
+  try {
+    const mobilePage = await mobileContext.newPage();
+    await mobilePage.route("**/api/research", (route) => route.fulfill({
+      json: webResearchResponse({ results }),
+    }));
+    await researchWithPrompt(mobilePage, "Wireless headphones under S$500");
+    await mobilePage.getByRole("button", { name: "Search the web for context" }).tap();
+    await mobilePage.getByRole("button", { name: "10 web sources" }).tap();
+    await expect(mobilePage.locator(".web-research-source")).toHaveCount(3);
+    await assertNoHorizontalOverflow(mobilePage);
+    await mobilePage.screenshot({ path: "artifacts/exa-ui-regression/mobile-compact.png", fullPage: true, animations: "disabled" });
+    const mobileExcerpt = mobilePage.getByRole("button", { name: "Read full excerpt from Long source 2" });
+    await mobileExcerpt.tap();
+    await expect(mobileExcerpt).toHaveAttribute("aria-expanded", "true");
+    await expect(mobilePage.locator(".web-research-source").nth(1)).toContainText(results[1]!.highlights[0]!);
+    const mobileMore = mobilePage.getByRole("button", { name: "Show 7 more sources" });
+    await mobileMore.tap();
+    await expect(mobilePage.locator(".web-research-source")).toHaveCount(10);
+    await assertNoHorizontalOverflow(mobilePage);
+  } finally {
+    await mobileContext.close();
+  }
 });

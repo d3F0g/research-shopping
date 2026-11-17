@@ -1,0 +1,55 @@
+{
+  "repo": "/Users/josiahwong/Documents/research-shopping-exa",
+  "apiPort": 3974,
+  "webPort": 6074,
+  "artifacts": "/Users/josiahwong/Documents/research-shopping-exa/artifacts/exa-owner/skill-smoke-final",
+  "commit": "5d99c3423462b5616a3055775f2baa1c868d03f5",
+  "worktreeStatus": "M AGENTS.md\n M README.md\n?? .codex/pstack-runs/exa-integration/architecture.md\n?? .codex/pstack-runs/exa-integration/judgment.md\n?? .codex/pstack-runs/exa-integration/verify-no-secret.mjs\n?? artifacts/exa-owner/\n?? artifacts/screenshots/citation-desktop.png\n?? artifacts/screenshots/comparison-mobile.png\n?? artifacts/screenshots/filters-mobile.png\n?? artifacts/screenshots/request-pending.png\n?? artifacts/screenshots/web-research-desktop.png\n?? artifacts/screenshots/web-research-mobile.png\n?? docs/exa-research.md",
+  "feature": "research-request",
+  "actions": [
+    "Doctor confirmed owned fresh ports, fixture health, and research workspace.",
+    "Clicked the first example request. Received headphones within the displayed SGD 500 hard budget and visible sample disclosures.",
+    "Opened the first product evidence disclosure and checked its clickable manufacturer reference against the product URL.",
+    "Selected the first product. The displayed manufacturer link equals the API handoff URL. Did not open the merchant page."
+  ],
+  "result": "passed",
+  "cleanup": true,
+  "serverPid": 55244,
+  "health": {
+    "status": "ok",
+    "mode": "fixture",
+    "liveIntegrations": false,
+    "webResearch": "disabled"
+  },
+  "candidates": [
+    {
+      "id": "sony-wh-ch720n",
+      "price": {
+        "amount": 149,
+        "currency": "SGD"
+      },
+      "dataKind": "fixture"
+    },
+    {
+      "id": "sony-wh-1000xm5",
+      "price": {
+        "amount": 399,
+        "currency": "SGD"
+      },
+      "dataKind": "fixture"
+    },
+    {
+      "id": "sennheiser-momentum-4",
+      "price": {
+        "amount": 329,
+        "currency": "SGD"
+      },
+      "dataKind": "fixture"
+    }
+  ],
+  "handoff": {
+    "productId": "sony-wh-ch720n",
+    "destination": "https://www.sony.com.sg/headphones/products/wh-ch720n"
+  },
+  "externalRequests": []
+}

@@ -5,6 +5,10 @@ import {
   type ProductId,
 } from "../domain/contracts";
 import { isSafeCatalogHandoff } from "../domain/merchant-links";
+import {
+  WebResearchResponseSchema,
+  type ShortlistResearchRequest,
+} from "../domain/web-research";
 
 export async function runTurn(
   message: string,
@@ -53,5 +57,33 @@ export async function selectProduct(
     result.data.productId !== productId
     || !isSafeCatalogHandoff(result.data.productId, result.data.productName, result.data.productUrl, result.data.offer)
   )) throw new Error("The selection service returned an unsafe product link.");
+  return result.data;
+}
+
+export async function researchShortlist(
+  request: ShortlistResearchRequest,
+  signal: AbortSignal,
+) {
+  let response: Response;
+  try {
+    response = await fetch("/api/research", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify(request),
+      signal,
+    });
+  } catch (error) {
+    if (signal.aborted) throw error;
+    throw new Error("Web research could not finish. Check the connection and try again.");
+  }
+  if (!response.ok) throw new Error("Web research could not finish. Try again.");
+  let payload: unknown;
+  try {
+    payload = await response.json();
+  } catch {
+    throw new Error("Web research returned an unreadable result.");
+  }
+  const result = WebResearchResponseSchema.safeParse(payload);
+  if (!result.success) throw new Error("Web research returned an unreadable result.");
   return result.data;
 }

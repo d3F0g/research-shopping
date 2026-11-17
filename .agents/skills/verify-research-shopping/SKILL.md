@@ -15,13 +15,13 @@ Run from the project checkout with Node.js 22.12 or newer. Install dependencies 
 .agents/skills/verify-research-shopping/scripts/smoke.mjs
 ```
 
-The helper finds the checkout from its own path. It refuses occupied ports, then launches the repository's `npm run dev` with API port 3173 and web port 5283. It needs no credentials, database, migrations, or seed command. The checked-in fixture catalog supplies the initial data. Set `VERIFY_API_PORT` and `VERIFY_WEB_PORT` to two unused ports when necessary.
+The helper finds the checkout from its own path. It refuses occupied ports, then launches the repository's `npm run dev` with API port 3173 and web port 5283. It needs no credentials, database, migrations, or seed command. The checked-in fixture catalog supplies the initial data. The helper explicitly sets `EXA_RESEARCH_ENABLED=false`, so a local development key never activates Exa during this fixture run. Set `VERIFY_API_PORT` and `VERIFY_WEB_PORT` to two unused ports when necessary.
 
 For a separate worktree, pass `--project-dir /absolute/checkout`. The helper loads Playwright from that checkout's installed modules. Set `VERIFY_ARTIFACT_DIR` to place its evidence outside that worktree.
 
 ## Doctor
 
-The helper performs a read-only `GET /api/health` through the web proxy. Require `status` equal to `ok`, `mode` equal to `fixture`, and `liveIntegrations` equal to `false`. It then requires the visible `FIXTURE MODE` marker and the `Product research workspace` region. A listening socket alone is insufficient.
+The helper performs a read-only `GET /api/health` through the web proxy. Require `status` equal to `ok`, `mode` equal to `fixture`, and `liveIntegrations` equal to `false`, and `webResearch` equal to `disabled`. It then requires the visible `FIXTURE MODE` marker and the `Product research workspace` region. A listening socket alone is insufficient.
 
 For an already owned helper instance, inspect its health without changing state.
 
@@ -61,3 +61,5 @@ The helper closes its browser and terminates only the process group it created. 
 After any failed run, inspect `proof.json` and `server.log`. If the helper itself was forcibly terminated before cleanup, verify the recorded `serverPid` still identifies that run before terminating its process group. Never kill by process name or remove evidence to free a port.
 
 Keep this map aligned with controls and tests as the app changes. Use `$maintain-verification-skill` when that installed workflow is available.
+
+For the optional live Exa capability, follow [web-context verification](features/web-research.md). A fixture smoke pass does not establish actual Exa retrieval. Never supply a private key to CI or a browser.

@@ -56,3 +56,9 @@ Root owns merge decisions and GitHub mutations. Delegated implementation and rev
 Merge dependent PRs from the lowest unmerged dependency upward. Confirm each PR targets the intended trunk before landing it. After its parent lands, update the child's base through a supported mechanism and revalidate its patch, reviews, and CI. Preserve reviewed ancestry where possible. Do not force-push shared branches or rewrite unrelated work. Stop and report genuine blockers without weakening safeguards.
 
 Confirm GitHub reports the PR merged; enabling auto-merge or entering a queue is not completion. Fetch and fast-forward the local trunk after landing. Verify its exact commit and final CI status. Record the outcome and any remaining capability gaps. The detailed procedure is in [Engineering workflow](docs/engineering-workflow.md).
+
+## Exa API integration
+
+Use the canonical build-with-exa skill for Exa work. Run the command in [Exa setup](docs/exa-research.md), read its complete output, and resolve supporting references from the directory that run prints. Do not guess request fields or rely on remembered API behavior.
+
+Keep the key server-only in the ignored local development environment. Tests and CI use local substitutes and explicitly disable live composition. Production remains disabled for this integration. Live web excerpts have a separate contract and UI from synthetic commerce claims and offers. Preserve actual request cancellation, safe source navigation, fixture honesty, and explicit paid actions. If an LLM tool loop is added, follow the skill's required objective and system-prompt guidance.

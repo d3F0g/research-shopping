@@ -1,6 +1,6 @@
 # Research + Shopping
 
-Fieldnote is a fixture-backed product comparison demo. It supports headphones and laptops in the Singapore sample catalog. Prices, availability, and product claims are labeled as synthetic data. The app does not read live inventory or place orders.
+Fieldnote combines a fixture-backed product comparison demo with optional development-only Exa web context. It supports headphones and laptops in the Singapore sample catalog. Prices, availability, and product claims are labeled as synthetic data. The app does not read live inventory or place orders.
 
 ## Run the app
 
@@ -33,7 +33,7 @@ Set `API_PORT` to change the Hono port. `PORT` is the API fallback. Set `WEB_POR
 
 ## Limits
 
-The deterministic parser understands a small set of product categories and constraints. The fixture catalog covers headphones and laptops in SGD for Singapore. US requests return an explicit limitation. The demo has no live web research, current merchant offers, shipping checks, saved account profile, payment, or order placement.
+The deterministic parser understands a small set of product categories and constraints. The fixture catalog covers headphones and laptops in SGD for Singapore. US requests return an explicit limitation. Optional Exa web research returns source context separately from the sample catalog. The demo has no current merchant offers, shipping checks, saved account profile, payment, or order placement.
 
 ## GitHub Actions CI
 
@@ -42,3 +42,7 @@ The workflow in [`.github/workflows/ci.yml`](.github/workflows/ci.yml) runs auto
 ## Frontend standard
 
 The workspace uses official shadcn/ui and AI Elements patterns with centralized tokens, local Geist typography, responsive filters, concise product cards, expandable comparison, safe citations, and actual recorded provider outcomes. See [frontend architecture and provenance](docs/frontend-standard.md).
+
+## Exa web context
+
+The API development process can read `EXA_API_KEY` from the ignored root `.env`. Use the explicit web-context action after a sample shortlist appears. Exa sources never change synthetic prices, stock, ranking, or merchant handoff. Production composition stays disabled. See [Exa setup and verification](docs/exa-research.md).

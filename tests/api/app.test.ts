@@ -34,10 +34,10 @@ describe("HTTP boundary", () => {
     expect(JSON.stringify(logs)).not.toMatch(/headphones under|SGD500|attacker-controlled/);
   });
 
-  it("exposes fixture-only health", async () => {
+  it("exposes fixture-only health with web research disabled", async () => {
     const response = await createApp().request(`${url}/api/health`);
     expect(response.status).toBe(200);
-    expect(await response.json()).toEqual({ status: "ok", mode: "fixture", liveIntegrations: false });
+    expect(await response.json()).toEqual({ status: "ok", mode: "fixture", liveIntegrations: false, webResearch: "disabled" });
   });
 
   it.each(["https://evil.test", "null", "http://127.0.0.1:9999", "http://localhost:5173.evil.test"]) ("rejects foreign Origin %s", async (Origin) => {

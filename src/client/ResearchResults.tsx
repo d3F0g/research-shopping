@@ -16,6 +16,7 @@ import type {
   TurnResponse,
 } from "../domain/contracts";
 import { isApprovedUrl } from "../domain/merchant-links";
+import { WebResearch } from "./WebResearch";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import { Button, buttonVariants } from "@/components/ui/button";
@@ -519,6 +520,10 @@ export function Results({
         <>
           <p className="answer-first">{outcome.answer}</p>
           <PreferenceNotes notes={outcome.notes} />
+          <WebResearch
+            productIds={outcome.candidates.map(({ product }) => product.id)}
+            preferences={outcome.preferences}
+          />
           <div className="shortlist-heading">
             <h3>{outcome.candidates.length} options that fit</h3>
             <span className="metadata">

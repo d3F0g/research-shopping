@@ -1,0 +1,82 @@
+{
+  "commit": "509ad2e46fc8acfe628f41ac2b04c84a00e9b417",
+  "worktreeStatus": " M .agents/skills/verify-research-shopping/SKILL.md\n M .agents/skills/verify-research-shopping/features/README.md\n M .audit/decisions.tsv\n M AGENTS.md\n M README.md\n M artifacts/frontend-standard/priority/headphone-priority.png\n M artifacts/screenshots/shortlist-desktop.png\n M artifacts/screenshots/shortlist-mobile.png\n?? .agents/skills/verify-research-shopping/features/web-research.md\n?? .codex/pstack-runs/exa-integration/architecture.md\n?? .codex/pstack-runs/exa-integration/judgment.md\n?? .codex/pstack-runs/exa-integration/verify-no-secret.mjs\n?? artifacts/exa-owner/\n?? artifacts/exa-ui-regression/\n?? artifacts/screenshots/citation-desktop.png\n?? artifacts/screenshots/comparison-mobile.png\n?? artifacts/screenshots/filters-mobile.png\n?? artifacts/screenshots/request-pending.png\n?? artifacts/screenshots/web-research-desktop.png\n?? artifacts/screenshots/web-research-mobile.png\n?? docs/exa-research.md\n",
+  "result": "passed",
+  "health": {
+    "status": "ok",
+    "mode": "fixture",
+    "liveIntegrations": true,
+    "webResearch": "enabled"
+  },
+  "searchCalls": 1,
+  "externalBrowserRequests": [],
+  "pageErrors": [],
+  "cleanup": true,
+  "stage": "completed",
+  "webStatus": "ready",
+  "sources": [
+    {
+      "title": "Best noise canceling headphones for airplanes in 2026 - SoundGuys",
+      "url": "https://www.soundguys.com/best-noise-cancelling-headphones-for-airplane-84923/",
+      "highlightCount": 1
+    },
+    {
+      "title": "Sennheiser MOMENTUM 4 Wireless vs Sony WH-1000XM5 - SoundGuys",
+      "url": "https://www.soundguys.com/sennheiser-momentum-4-wireless-vs-sony-wh-1000xm5-77658/",
+      "highlightCount": 1
+    },
+    {
+      "title": "Sennheiser Momentum 4 Wireless review: better than the Sony WH-1000XM5 | TechRadar",
+      "url": "https://www.techradar.com/reviews/sennheiser-momentum-4-wireless",
+      "highlightCount": 1
+    },
+    {
+      "title": "Deals: Sony WH-CH720N and Sennheiser MOMENTUM 4 Wireless",
+      "url": "https://www.soundguys.com/sony-wh-ch720n-sennheiser-momentum-4-wireless-deals-123866/",
+      "highlightCount": 1
+    },
+    {
+      "title": "Sennheiser Momentum 4 Wireless vs. Sony WH-1000XM5: Which noise-canceling headphones are right for you?",
+      "url": "https://www.xda-developers.com/sennheiser-momentum-4-wireless-vs-sony-wh-1000xm5/",
+      "highlightCount": 1
+    },
+    {
+      "title": "Best wireless headphones in 2024",
+      "url": "https://www.pocket-lint.com/best-wireless-headphones/",
+      "highlightCount": 1
+    },
+    {
+      "title": "These lesser-known five-star headphones have hit their lowest price ever – but are the Sonys the better buy? | What Hi-Fi?",
+      "url": "https://www.whathifi.com/headphones/wireless-headphones/these-lesser-known-five-star-headphones-have-hit-their-lowest-price-ever-but-are-the-sonys-the-better-buy",
+      "highlightCount": 1
+    },
+    {
+      "title": "Sony WH-CH720N Wireless",
+      "url": "https://www.acciyo.com/sony-wh-ch720n-wireless/",
+      "highlightCount": 1
+    },
+    {
+      "title": "Why Pay AirPods Max Prices When Sony WH-CH720N Headphones Are Now More Than 6 Times Cheaper? - Kotaku",
+      "url": "https://kotaku.com/why-pay-airpods-max-prices-when-sony-wh-ch720n-headphones-are-now-more-than-6-times-cheaper-2000755691",
+      "highlightCount": 1
+    },
+    {
+      "title": "Deal Alert: Top Travel Noise Canceling Headphones Up to 51% Off - TravelUpdate",
+      "url": "https://travelupdate.com/deal-sony-noise-canceling-headphones/",
+      "highlightCount": 1
+    }
+  ],
+  "retrievedAt": "2026-11-17T17:34:11.686Z",
+  "truncated": true,
+  "visibleSourcePreviews": 3,
+  "fixtureCardsUnchanged": true,
+  "mobileWidths": {
+    "viewport": 390,
+    "document": 390,
+    "body": 390
+  },
+  "handoff": {
+    "productId": "sony-wh-ch720n",
+    "destination": "https://www.sony.com.sg/headphones/products/wh-ch720n"
+  }
+}

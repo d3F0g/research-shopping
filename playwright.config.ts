@@ -28,6 +28,7 @@ export default defineConfig({
       API_PORT: apiPort,
       VITE_API_PORT: apiPort,
       WEB_PORT: webPort,
+      EXA_RESEARCH_ENABLED: "false",
     },
   },
 });
