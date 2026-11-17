@@ -1,0 +1,99 @@
+
+> research-shopping@0.1.0 test:e2e
+> EXA_RESEARCH_ENABLED=false playwright test
+
+[WebServer] (node:84514) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:84533) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 2 tests using 1 worker
+
+(node:84612) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  1 [chromium] › tests/e2e/chat-first.spec.ts:3:1 › opens a minimal dark chat even when the system prefers light (7.6s)
+(node:84662) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  2 [chromium] › tests/e2e/chat-first.spec.ts:14:1 › keeps both exchanges when a natural followup changes the budget (32.1s)
+
+
+  1) [chromium] › tests/e2e/chat-first.spec.ts:3:1 › opens a minimal dark chat even when the system prefers light
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByRole('heading', { name: 'What are you looking for?' })
+    Expected: visible
+    Timeout: 6000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" getByRole('heading', { name: 'What are you looking for?' }) with timeout 6000ms
+      - waiting for getByRole('heading', { name: 'What are you looking for?' })
+
+
+       5 |   await page.goto('/');
+       6 |   await expect(page.locator('html')).toHaveClass(/dark/);
+    >  7 |   await expect(page.getByRole('heading', { name: 'What are you looking for?' })).toBeVisible();
+         |                                                                                  ^
+       8 |   await expect(page.getByRole('complementary')).toHaveCount(0);
+       9 |   await expect(page.locator('.product-card')).toHaveCount(0);
+      10 |   await expect(page.getByLabel('Message', { exact: true })).toBeVisible();
+        at /Users/josiahwong/Documents/research-shopping-chat-app/tests/e2e/chat-first.spec.ts:7:82
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    artifacts/playwright-results/chat-first-opens-a-minimal-28691-en-the-system-prefers-light-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    artifacts/playwright-results/chat-first-opens-a-minimal-28691-en-the-system-prefers-light-chromium/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: artifacts/playwright-results/chat-first-opens-a-minimal-28691-en-the-system-prefers-light-chromium/error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    artifacts/playwright-results/chat-first-opens-a-minimal-28691-en-the-system-prefers-light-chromium/trace.zip
+    Usage:
+
+        npx playwright show-trace artifacts/playwright-results/chat-first-opens-a-minimal-28691-en-the-system-prefers-light-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2) [chromium] › tests/e2e/chat-first.spec.ts:14:1 › keeps both exchanges when a natural followup changes the budget
+
+    Test timeout of 30000ms exceeded.
+
+    Error: locator.fill: Test timeout of 30000ms exceeded.
+    Call log:
+      - waiting for getByLabel('Message', { exact: true })
+
+
+      15 |   await page.goto('/');
+      16 |   const composer = page.getByLabel('Message', { exact: true });
+    > 17 |   await composer.fill('Headphones under SGD500');
+         |                  ^
+      18 |   await page.getByRole('button', { name: 'Send message', exact: true }).click();
+      19 |   await expect(page.locator('[data-active="true"] .product-card')).toHaveCount(3);
+      20 |   await composer.fill('under SGD200');
+        at /Users/josiahwong/Documents/research-shopping-chat-app/tests/e2e/chat-first.spec.ts:17:18
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    artifacts/playwright-results/chat-first-keeps-both-exch-f13fb-followup-changes-the-budget-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    artifacts/playwright-results/chat-first-keeps-both-exch-f13fb-followup-changes-the-budget-chromium/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: artifacts/playwright-results/chat-first-keeps-both-exch-f13fb-followup-changes-the-budget-chromium/error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    artifacts/playwright-results/chat-first-keeps-both-exch-f13fb-followup-changes-the-budget-chromium/trace.zip
+    Usage:
+
+        npx playwright show-trace artifacts/playwright-results/chat-first-keeps-both-exch-f13fb-followup-changes-the-budget-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2 failed
+    [chromium] › tests/e2e/chat-first.spec.ts:3:1 › opens a minimal dark chat even when the system prefers light
+    [chromium] › tests/e2e/chat-first.spec.ts:14:1 › keeps both exchanges when a natural followup changes the budget

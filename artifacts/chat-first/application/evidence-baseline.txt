@@ -1,0 +1,52 @@
+
+> research-shopping@0.1.0 test:e2e
+> EXA_RESEARCH_ENABLED=false playwright test
+
+[WebServer] (node:90563) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:90586) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 1 test using 1 worker
+
+(node:90649) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  1 [chromium] › tests/e2e/chat-first.spec.ts:387:1 › expands current product evidence across the mobile card with usable touch targets (1.2s)
+
+
+  1) [chromium] › tests/e2e/chat-first.spec.ts:387:1 › expands current product evidence across the mobile card with usable touch targets
+
+    Error: expect(received).toBeGreaterThan(expected)
+
+    Expected: > 286.40000000000003
+    Received:   190
+
+      399 |   await test.info().attach('evidence-widths', { body: JSON.stringify(metrics), contentType: 'application/json' });
+      400 |   await page.screenshot({ path: '/tmp/research-shopping-chat/application-owner/evidence-mobile-measured.png', animations: 'disabled' });
+    > 401 |   expect(metrics.evidenceWidth).toBeGreaterThan(metrics.cardWidth * 0.8);
+          |                                 ^
+      402 |   expect(metrics.documentWidth).toBe(metrics.viewportWidth);
+      403 |   for (const target of [card.getByRole('button', { name: /Preview reference/ }).first(), card.getByRole('link', { name: /Manufacturer reference/ }).first()]) {
+      404 |     const box = await target.boundingBox();
+        at /Users/josiahwong/Documents/research-shopping-chat-app/tests/e2e/chat-first.spec.ts:401:33
+
+    attachment #2: screenshot (image/png) ──────────────────────────────────────────────────────────
+    artifacts/playwright-results/chat-first-expands-current-cd8de-d-with-usable-touch-targets-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #3: video (video/webm) ──────────────────────────────────────────────────────────────
+    artifacts/playwright-results/chat-first-expands-current-cd8de-d-with-usable-touch-targets-chromium/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: artifacts/playwright-results/chat-first-expands-current-cd8de-d-with-usable-touch-targets-chromium/error-context.md
+
+    attachment #5: trace (application/zip) ─────────────────────────────────────────────────────────
+    artifacts/playwright-results/chat-first-expands-current-cd8de-d-with-usable-touch-targets-chromium/trace.zip
+    Usage:
+
+        npx playwright show-trace artifacts/playwright-results/chat-first-expands-current-cd8de-d-with-usable-touch-targets-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  1 failed
+    [chromium] › tests/e2e/chat-first.spec.ts:387:1 › expands current product evidence across the mobile card with usable touch targets

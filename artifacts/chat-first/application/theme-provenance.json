@@ -1,0 +1,14 @@
+{
+  "source": "https://ui.shadcn.com/docs/dark-mode/vite",
+  "accessed": "2026-11-18",
+  "implementation": "src/client/theme-provider.tsx",
+  "pattern": "Official Vite ThemeProvider context, persisted state, root theme class, useTheme consumer.",
+  "adaptations": [
+    "Dark initial default and dark root tokens.",
+    "Only validated dark and light values are supported.",
+    "Theme selection remains usable when browser storage is unavailable.",
+    "The theme-color meta value follows the selected palette."
+  ],
+  "components": "Existing official shadcn/ui and AI Elements registry components are reused unchanged. Prior registry provenance remains in artifacts/frontend-standard/provenance.",
+  "font": "Existing local @fontsource-variable/geist package."
+}
