@@ -15,9 +15,23 @@ The installed pstack role settings in `~/.codex/pstack-models.md` guide this run
 5. Independently review the candidate commit.
 6. Create issues for reproducible defects and capability gaps.
 7. Resolve defects in scope and reverify the changed behavior.
-8. Open a tested pull request for human review.
+8. Open a tested pull request and apply the autonomous merge gates in AGENTS.md.
+9. Merge eligible PRs in dependency order, synchronize trunk, and verify final CI.
 
-The repository is private. Issues are assigned to its owner because ephemeral Codex workers have no durable GitHub identity. Issue bodies and the run ledger record worker responsibility. No automatic merge or deployment is armed. Credentials stay outside source control.
+The repository is private. Issues are assigned to its owner because ephemeral Codex workers have no durable GitHub identity. Issue bodies and the run ledger record worker responsibility. The orchestrator has standing authorization to merge completed PRs when every gate in AGENTS.md passes. Production deployment, destructive operations, sensitive credential changes, and security-critical permission changes require separate authorization. Credentials stay outside source control.
+
+## Land a verified PR or stack
+
+1. Resolve the repository, trunk, current PR heads, and dependency order. Inspect branch protection, rulesets, required checks, required reviews, and unresolved threads. Do not treat admin access as permission to bypass a gate.
+2. Obtain separate independent QA and security verdicts for each PR's patch. Reviewers name the base and head commits and the checks they actually ran. A passing build or bot approval cannot replace runtime QA. For docs-only changes, verify the affected documents and configuration without claiming nonexistent runtime checks.
+3. Reconcile verdicts with the current candidate. If the patch changes, rerun affected review and tests. Documentation-only drift still requires review and configured CI. No unresolved blocking defect can be deferred to enable merging.
+4. Merge the lowest verified PR targeting trunk. Use native auto-merge or the repository's supported stack mechanism when appropriate. Arm it only after independent reviews and non-CI gates pass. Use an expected head SHA where supported. Preserve ancestry for dependent PRs when possible. Never pass an admin-bypass flag or fabricate a GitHub review.
+5. Read GitHub back to confirm the merge and resulting trunk commit. Retarget the next dependent PR to trunk after its parent lands. Compare its patch and recheck mergeability, review policies, and CI before landing it. An auto-merge request or queue entry is not a completed merge.
+6. Fetch trunk and fast-forward the local branch. Do not discard a dirty working tree or unrelated local commits. Verify final trunk CI on its exact SHA and report merged PRs, independent verdicts, and any blocker.
+
+When required approval cannot be obtained through the available legitimate reviewers, report the blocker. Independent agent verdicts are engineering evidence; they do not impersonate another GitHub account or satisfy a platform-required approval by themselves. Do not change access, branch protections, token scopes, or workflow permissions to unblock a merge.
+
+The standing policy is repository-scoped. Historical run plans retain the authorization boundary at the time they were written; AGENTS.md governs future tasks. Root owns GitHub mutations so only one coordinator controls a stack.
 
 ## Initial tracking
 

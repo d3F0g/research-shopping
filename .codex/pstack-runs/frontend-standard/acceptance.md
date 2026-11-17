@@ -1,5 +1,7 @@
 # Frontend acceptance
 
+Historical run record. The later user-authorized merge policy in AGENTS.md supersedes this record's no-merge boundary. Current shipping work is tracked in .codex/pstack-runs/autonomous-merge/plan.md.
+
 Application candidate `a3163a20a5398b9f3c3064b7cb87bf4094de6f8d` passed independent final QA. The UI owner implemented official shadcn/ui and current AI Elements patterns; a separate metadata owner preserved the core result union and exposed bounded actual outcomes. Independent Sol review replaced unavailable Astra review after quota exhaustion; no acceptance requirement was dropped.
 
 - Official registry manifest: artifacts/frontend-standard/provenance/registry-manifest.json; all21 hashes checked,5 independently refreshed.

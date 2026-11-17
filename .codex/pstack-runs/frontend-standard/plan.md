@@ -1,5 +1,7 @@
 # Mandatory frontend standard and CI activation
 
+Historical run record. The later user-authorized merge policy in AGENTS.md supersedes this record's no-merge boundary. Current shipping work is tracked in .codex/pstack-runs/autonomous-merge/plan.md.
+
 ## Exit condition
 
 PR20 contains active pull-request CI, official shadcn/ui primitives and appropriate official AI Elements, a documented frontend standard, concise product comparisons and safe citations, responsive accessible interactions, and independent desktop/mobile Playwright proof. All final-head hosted checks pass. No merge or deployment.

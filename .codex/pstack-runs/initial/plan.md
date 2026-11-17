@@ -1,5 +1,7 @@
 # Research + Shopping engineering run
 
+Historical run record. The later user-authorized merge policy in AGENTS.md supersedes this record's no-merge boundary. Current shipping work is tracked in .codex/pstack-runs/autonomous-merge/plan.md.
+
 ## Exit condition
 
 A clean installation builds and launches a complete request-to-merchant vertical slice. Unit and integration tests and Playwright acceptance scenarios pass. Independent QA and security reviewers verify the final implementation. Architecture, capability gaps, agent configuration, reproducible verification skill, issue backlog, and a tested pull request are delivered. Fixture evidence remains explicitly synthetic. No production deployment, payment, order placement, credential changes, or protected-branch merge.
