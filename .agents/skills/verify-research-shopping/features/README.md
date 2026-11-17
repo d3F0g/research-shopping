@@ -1,8 +1,10 @@
 # Fieldnote verification map
 
-Use a fresh browser context and the fixture app for each independent journey. The [skill entrypoint](../SKILL.md) owns launch, doctor, evidence, and cleanup. `scripts/smoke.mjs` proves the starter request and product-link journey. The other paths need their own browser checks or matching tests in `tests/e2e`.
+Use a fresh browser context and the fixture app for each independent journey. The [skill entrypoint](../SKILL.md) owns launch, doctor, evidence, and cleanup. `scripts/smoke.mjs` records its driven chat and product-link subset. It does not replace independent visual judgment. The other paths need their own browser checks or matching tests in `tests/e2e`.
 
 ## Features
+
+- [Conversation and theme](chat.md) covers dark first visit, persisted theme, retained messages, contextual questions and the scrolling composer.
 
 - [Research requests](research.md) covers typed requests, example buttons, ambiguity, and no matches.
 - [Hard limits and preferences](preferences.md) covers editable constraints, category changes, priorities, and answer length.
@@ -16,18 +18,10 @@ Use a fresh browser context and the fixture app for each independent journey. Th
 
 Record the commit, worktree state, feature, entry point, actions, and observed results. Keep screenshots and traces with the report. Every fixture claim, price, and stock state must stay visibly labeled. An API result alone does not prove its UI rendering. A screenshot alone does not prove the action or boundary behavior.
 
-Browser recipes use Playwright's `page`, `context`, and `expect`. Choose stable roles and labels first. `.product-card` is the existing result-card selector when the card has no accessible name. Do not treat an untested entry point as covered by a different path.
+Browser recipes use Playwright's `page`, `context`, and `expect`. Choose stable roles and labels first. Scope `.product-card` and repeated controls to their assistant turn. Global first-card selectors can select a historical result. Do not treat an untested entry point as covered by a different path.
 
-## Existing browser tests
+## Package checks
 
-`tests/e2e/research-shopping.spec.ts` contains the following focused groups. Pass the pattern to `npm run test:e2e -- --grep 'pattern'`. These commands select tests, not every action listed in each feature file.
+Run `npm test` for domain, API and SDK boundaries. Run `npm run test:e2e` for the real Chromium journeys. Read the current test titles in `tests/e2e/research-shopping.spec.ts` before choosing a focused `--grep` pattern. A focused selection does not prove all mapped paths.
 
-| Feature | Existing test-title pattern |
-| --- | --- |
-| Research | `compares fixture headphones\|asks for the product category` |
-| Preferences | `keeps the prior budget\|moves a selected flexible priority\|does not convert a budget\|clears incompatible preferences\|starter portability priority\|opens mobile filters` |
-| Evidence and selection | `compares fixture headphones\|opens comparison and source disclosures` |
-| Recorded activity | `shows only recorded activity\|rejects malformed activity` |
-| Session and recovery | `keeps browser contexts\|does not let a late result\|cancels a pending selection\|recovers from an interrupted request` |
-
-The API and domain suites in `tests/api/app.test.ts` and `tests/unit/shopping.test.ts` cover boundary and provider failure cases through `npm test`.
+The browser suite covers fixture recommendations, hard limits, priorities, unknown requirements, exact handoff rejection, session isolation, stale requests, recovery, evidence, comparisons, recorded activity and optional source behavior. Chat changes also need dark-default/theme persistence, ordinary messages, contextual questions/skip, retained turns, obsolete actions and mobile scrolling/composer evidence. Confirm the named tests actually exercise these behaviors on the reviewed candidate instead of inheriting a previous candidate's counts.
