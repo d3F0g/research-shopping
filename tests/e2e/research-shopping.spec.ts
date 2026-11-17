@@ -514,13 +514,14 @@ test("shows safe web excerpts as text with a safe HTTPS source link", async ({ p
   await researchWithPrompt(page, "Wireless headphones under S$500");
   await page.getByRole("button", { name: "Search the web for context" }).click();
   await page.getByRole("button", { name: "1 web source" }).click();
+  await page.getByRole("button", { name: "Read full excerpt from <img src=x onerror=alert(1)> source" }).click();
   const source = page.getByRole("link", { name: /<img src=x onerror=alert\(1\)> source/ });
   await expect(source).toHaveAttribute("href", "https://www.example.org/reviews/headphones");
   await expect(source).toHaveAttribute("target", "_blank");
   await expect(source).toHaveAttribute("rel", "noopener noreferrer");
   await expect(page.getByText("HTTPS · www.example.org")).toBeVisible();
-  await expect(page.getByText("<script>window.__exaXss = true</script>")).toBeVisible();
-  await expect(page.getByText("<b>Text stays text</b>")).toBeVisible();
+  await expect(page.getByText("<script>window.__exaXss = true</script>", { exact: true })).toBeVisible();
+  await expect(page.getByText("<b>Text stays text</b>", { exact: true })).toBeVisible();
   await expect(page.locator(".web-research img, .web-research script, .web-research b")).toHaveCount(0);
   await expect(page.locator(".web-research")).toContainText("They do not establish the sample price or stock");
 });
@@ -652,4 +653,73 @@ test("keeps web source disclosure readable without mobile overflow", async ({ pa
   await assertNoHorizontalOverflow(page);
   await expect(page.getByRole("button", { name: "3 web sources" })).toBeVisible();
   await page.screenshot({ path: "artifacts/screenshots/web-research-mobile.png", fullPage: true, animations: "disabled" });
+});
+
+test("keeps long web excerpts compact and reveals sources by request on desktop and mobile", async ({ page, browser }) => {
+  const results = Array.from({ length: 10 }, (_, index) => ({
+    title: `Long source ${index + 1}`,
+    url: `https://www.example.org/research/${index + 1}`,
+    highlights: [`Excerpt ${index + 1}: ${"Plain source text remains available when requested. ".repeat(12)}`],
+  }));
+  await page.route("**/api/research", (route) => route.fulfill({
+    json: webResearchResponse({ results }),
+  }));
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  await researchWithPrompt(page, "Wireless headphones under S$500");
+  await page.getByRole("button", { name: "Search the web for context" }).click();
+  await page.getByRole("button", { name: "10 web sources" }).click();
+  await assertNoHorizontalOverflow(page);
+
+  const sources = page.locator(".web-research-source");
+  await expect(sources).toHaveCount(3);
+  await expect(page.locator(".product-card")).toHaveCount(3);
+  const firstSource = sources.nth(0);
+  const firstExcerpt = results[0]!.highlights[0]!;
+  await expect(firstSource).toContainText("Excerpt 1:");
+  const previewText = await firstSource.locator(".web-research-preview").textContent();
+  expect(Array.from(previewText ?? "")).toHaveLength(161);
+  expect(previewText?.endsWith("…")).toBe(true);
+  await expect(firstSource.getByText(firstExcerpt, { exact: true })).not.toBeVisible();
+  await expect(firstSource.getByRole("button", { name: "Read full excerpt from Long source 1" })).toHaveAttribute("aria-expanded", "false");
+
+  await mkdir("artifacts/exa-ui-regression", { recursive: true });
+  await page.screenshot({ path: "artifacts/exa-ui-regression/desktop-compact.png", fullPage: true, animations: "disabled" });
+  const fullExcerpt = firstSource.getByRole("button", { name: "Read full excerpt from Long source 1" });
+  await fullExcerpt.focus();
+  await page.keyboard.press("Enter");
+  await expect(fullExcerpt).toHaveAttribute("aria-expanded", "true");
+  await expect(firstSource).toContainText(firstExcerpt);
+
+  const moreSources = page.getByRole("button", { name: "Show 7 more sources" });
+  await moreSources.focus();
+  await page.keyboard.press("Enter");
+  await expect(sources).toHaveCount(10);
+
+  const mobileContext = await browser.newContext({
+    viewport: { width: 390, height: 844 },
+    isMobile: true,
+    hasTouch: true,
+  });
+  try {
+    const mobilePage = await mobileContext.newPage();
+    await mobilePage.route("**/api/research", (route) => route.fulfill({
+      json: webResearchResponse({ results }),
+    }));
+    await researchWithPrompt(mobilePage, "Wireless headphones under S$500");
+    await mobilePage.getByRole("button", { name: "Search the web for context" }).tap();
+    await mobilePage.getByRole("button", { name: "10 web sources" }).tap();
+    await expect(mobilePage.locator(".web-research-source")).toHaveCount(3);
+    await assertNoHorizontalOverflow(mobilePage);
+    await mobilePage.screenshot({ path: "artifacts/exa-ui-regression/mobile-compact.png", fullPage: true, animations: "disabled" });
+    const mobileExcerpt = mobilePage.getByRole("button", { name: "Read full excerpt from Long source 2" });
+    await mobileExcerpt.tap();
+    await expect(mobileExcerpt).toHaveAttribute("aria-expanded", "true");
+    await expect(mobilePage.locator(".web-research-source").nth(1)).toContainText(results[1]!.highlights[0]!);
+    const mobileMore = mobilePage.getByRole("button", { name: "Show 7 more sources" });
+    await mobileMore.tap();
+    await expect(mobilePage.locator(".web-research-source")).toHaveCount(10);
+    await assertNoHorizontalOverflow(mobilePage);
+  } finally {
+    await mobileContext.close();
+  }
 });

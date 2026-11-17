@@ -173,6 +173,9 @@
 .web-research-list { display: grid; gap: 16px; }
 .web-research-source { min-width: 0; overflow-wrap: anywhere; }
 .web-research-link { font-weight: 550; }
+.web-research-preview { margin-top: 8px; color: var(--foreground); font-size: 14px; line-height: 1.55; }
+.web-research-excerpt-trigger { display: flex; min-height: 44px; max-width: 100%; align-items: center; padding: 0 4px; color: var(--primary); font-size: 13px; text-align: left; text-decoration: underline; text-underline-offset: 3px; }
+.web-research-more { min-height: 44px; margin-top: 12px; }
 .web-research-highlights { display: grid; gap: 8px; margin-top: 8px; color: var(--foreground); font-size: 14px; line-height: 1.55; }
 .web-research-highlights li { padding-left: 12px; border-left: 2px solid var(--border); }
 .tool-activity { margin-top: 16px; }

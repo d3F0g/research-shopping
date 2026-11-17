@@ -5,6 +5,11 @@ import type { WebResearchResponse } from "../domain/web-research";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
+import {
   Trace,
   TraceCollapsible,
   TraceCollapsibleContent,
@@ -21,6 +26,11 @@ type ResearchState =
   | { status: "response"; response: WebResearchResponse }
   | { status: "connection-error"; message: string };
 
+function excerptPreview(highlights: string[]) {
+  const first = Array.from(highlights[0] ?? "");
+  return `${first.slice(0, 160).join("")}${first.length > 160 || highlights.length > 1 ? "…" : ""}`;
+}
+
 export function WebResearch({
   productIds,
   preferences,
@@ -29,6 +39,7 @@ export function WebResearch({
   preferences: Preferences;
 }) {
   const [state, setState] = useState<ResearchState>({ status: "idle" });
+  const [showMoreSources, setShowMoreSources] = useState(false);
   const controllerRef = useRef<AbortController | null>(null);
   const generationRef = useRef(0);
 
@@ -40,6 +51,7 @@ export function WebResearch({
 
   async function requestResearch() {
     if (controllerRef.current) return;
+    setShowMoreSources(false);
     const controller = new AbortController();
     const generation = ++generationRef.current;
     controllerRef.current = controller;
@@ -157,8 +169,9 @@ export function WebResearch({
                 </TraceCollapsibleTrigger>
                 <TraceCollapsibleContent>
                   <ul className="web-research-list">
-                    {state.response.results.map((source) => {
+                    {state.response.results.slice(0, showMoreSources ? undefined : 3).map((source) => {
                       const host = new URL(source.url).hostname;
+                      const hasExcerpt = source.highlights.length > 0;
                       return (
                         <li className="web-research-source" key={source.url}>
                           <a
@@ -171,12 +184,25 @@ export function WebResearch({
                             <span className="sr-only"> (opens in a new tab)</span>
                           </a>
                           <p className="metadata">HTTPS · {host}</p>
-                          {source.highlights.length > 0 ? (
-                            <ul className="web-research-highlights">
-                              {source.highlights.map((highlight, index) => (
-                                <li key={`${index}-${highlight}`}>{highlight}</li>
-                              ))}
-                            </ul>
+                          {hasExcerpt ? (
+                            <>
+                              <p className="web-research-preview">{excerptPreview(source.highlights)}</p>
+                              <Collapsible className="web-research-excerpt">
+                                <CollapsibleTrigger
+                                  className="web-research-excerpt-trigger"
+                                  aria-label={`Read full excerpt from ${source.title}`}
+                                >
+                                  Read full excerpt
+                                </CollapsibleTrigger>
+                                <CollapsibleContent>
+                                  <ul className="web-research-highlights">
+                                    {source.highlights.map((highlight, index) => (
+                                      <li key={`${index}-${highlight}`}>{highlight}</li>
+                                    ))}
+                                  </ul>
+                                </CollapsibleContent>
+                              </Collapsible>
+                            </>
                           ) : (
                             <p className="metadata">No excerpt was provided.</p>
                           )}
@@ -184,6 +210,15 @@ export function WebResearch({
                       );
                     })}
                   </ul>
+                  {!showMoreSources && state.response.results.length > 3 && (
+                    <Button
+                      variant="outline"
+                      className="web-research-more"
+                      onClick={() => setShowMoreSources(true)}
+                    >
+                      Show {state.response.results.length - 3} more sources
+                    </Button>
+                  )}
                 </TraceCollapsibleContent>
               </TraceCollapsible>
             </Trace>
