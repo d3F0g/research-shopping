@@ -1,0 +1,9 @@
+{
+  "tool": "codex doctor --json",
+  "version": "0.169.0",
+  "check": "config.load",
+  "status": "ok",
+  "summary": "config loaded",
+  "scope": "configuration load only",
+  "custom_roles_spawned": false
+}

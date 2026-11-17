@@ -45,3 +45,10 @@ Evaluate candidates on evidence honesty, complete user journey, replaceable inte
 ## Runtime and resumption
 
 This active turn uses bounded tool waits. No future monitoring or timed automation is armed. Resume from this directory and live GitHub state. Agent handles do not survive a new conversation.
+
+## Implementation phase throughput checkpoint
+
+- Blocking first steps. Shared schemas and the scaffold build passed at 7fe3284 before code fan-out.
+- Independent workstreams. UI, package/config, and browser tests belong to application_owner. Backend, pure core, and unit/API tests belong to shopping_engine in a separate worktree.
+- Shared mutable state. Both consume the committed contracts file. Only the integration owner can change it after coordinating a required deviation. Root owns docs, tracker, and trail.
+- Smallest safe decomposition. Two writers now have disjoint paths. The application owner merges the tested engine branch before end-to-end verification. Verification skill authoring waits for real controls and harness.
