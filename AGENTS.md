@@ -33,6 +33,10 @@ GitHub Issues are the durable defect tracker. Resolve a defect only after reprod
 
 ## Mandatory frontend architecture
 
+Fieldnote is a chat-first shopping assistant. Keep a minimal header, a centered conversation and a compact bottom composer. First visits start in dark mode. A working light/dark toggle persists the user's selection. Do not restore a research dashboard, permanent filter sidebar, large prechat form, empty-results panel or introductory scrolling.
+
+Preserve genuine user and assistant messages across turns. Keep current structured shopping preferences separate from historical response snapshots. Extract preferences already expressed in a message, ask only for missing information that affects the result, and show compact inline preference cards only when useful. Offer quick choices and skip controls for optional questions. Natural follow-ups update relevant preferences without erasing earlier messages or silently relaxing hard constraints. Ordinary replies remain ordinary messages.
+
 All frontend development uses official [shadcn/ui](https://ui.shadcn.com/docs) and the appropriate official [AI Elements](https://ui.shadcn.com/docs/ai-elements). This is an architectural requirement. Use the official registry/CLI and documented patterns, with provenance recorded in the repository. Do not replace the primitives with handmade lookalikes.
 
 Compose product cards, comparisons, preference controls, dialogs, and progressive disclosure from shadcn/ui. Use official AI Elements for conversational messages, prompt input, citations, and tool activity. Streaming displays must reflect actual transport events; do not simulate streaming, reasoning, or tool progress. Source references remain safe manufacturer links for synthetic fixture claims.
@@ -41,9 +45,13 @@ Keep design tokens centralized, with consistent typography, spacing, contrast, f
 
 Delegate implementation and independent visual QA through pstack. Verify real browser journeys and desktop/mobile screenshots after frontend changes. Preserve behavioral/security assertions when changing selectors for official component semantics. Frontend changes require mandatory frontend acceptance and independent visual QA before merging. Future feature work follows its assigned issue and PR scope.
 
+Chat acceptance includes first-visit dark mode, light/dark persistence after refresh, minimal empty state, ordinary messages, contextual preference cards, multi-turn preference changes, recommendations within assistant messages, and mobile scrolling with an accessible bottom composer. Inspect the actual screenshots against these criteria. A passing test suite cannot approve the old dashboard layout. Retained history must not leave stale selection or web-search actions active or allow abandoned requests to publish late results.
+
 ## Autonomous development and merging
 
 The user authorizes fully autonomous routine development and GitHub PR merging for this repository. The orchestrator may merge completed PRs without asking for approval when every gate below passes. This standing authorization supersedes earlier project run notes that prohibited merging.
+
+Exception for the chat-first redesign tracked in issue #30. Open a new PR with passing checks and desktop/mobile screenshots, then wait for the user to review those screenshots and confirm the design direction. Do not merge or enable auto-merge before that explicit confirmation. After visual approval, the normal merge gates below apply.
 
 1. All required CI checks pass on the current candidate. Inspect actual workflow results and required status checks. A missing required check is a blocker. A docs-only PR with no configured required checks must record that fact rather than claim CI ran.
 2. Independent QA and security reviews pass for each PR. Reviewers must not have authored the change. Record the reviewed base, head, scope, commands, and verdict. Application changes require actual runtime verification; frontend changes also require desktop and mobile visual QA.

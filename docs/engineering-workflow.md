@@ -8,6 +8,8 @@ The installed pstack role settings in `~/.codex/pstack-models.md` guide this run
 
 ## Loop
 
+The chat-first redesign in issue #30 has an explicit user visual-approval gate. Deliver a new PR with passing CI, independent reviews and inspected desktop/mobile screenshots. Keep the PR open and auto-merge disabled until the user confirms the design direction after reviewing those screenshots. This task-specific gate takes precedence over routine autonomous merging. Normal merge rules resume after that confirmation.
+
 1. Plan a checkable behavior and name its data shape.
 2. Delegate to an owner with exact worktree, branch, paths, and success evidence.
 3. Implement the smallest complete behavior and commit verified units.
