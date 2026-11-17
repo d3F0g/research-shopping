@@ -13,6 +13,8 @@ npm run dev
 
 Submit a supported shopping request. After the sample shortlist appears, choose its web-context search action. The request sends catalog model names and the accepted shopping preferences to Exa. Source titles, public HTTPS links, and plain highlights appear separately from fixture evidence. Open a disclosure for more context. No source page opens automatically.
 
+Restart the API after changing the private environment file.
+
 Only explicit `NODE_ENV=development` or `test` can compose Exa. The API development command sets development mode; an unset environment or production mode keeps the adapter disabled even if a key exists. Set `EXA_RESEARCH_ENABLED=false` to disable it explicitly. Tests and the fixture verification helper set this override and inject local substitutes. They never require the real key or call Exa.
 
 Health keeps `mode: fixture` for commerce and reports whether the separate web capability is configured. `liveIntegrations` is true when Exa is enabled. Configuration is not proof that a search succeeded; use an actual response to establish that.

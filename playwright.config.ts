@@ -1,7 +1,7 @@
 import { defineConfig, devices } from "@playwright/test";
 
-const apiPort = process.env.PLAYWRIGHT_API_PORT ?? "3973";
-const webPort = process.env.PLAYWRIGHT_WEB_PORT ?? "6073";
+const apiPort = process.env.PLAYWRIGHT_API_PORT ?? "3163";
+const webPort = process.env.PLAYWRIGHT_WEB_PORT ?? "5273";
 const baseURL = `http://127.0.0.1:${webPort}`;
 
 export default defineConfig({

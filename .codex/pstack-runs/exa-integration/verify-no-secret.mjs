@@ -1,5 +1,6 @@
 import { execFileSync } from "node:child_process";
-import { existsSync, readFileSync, readdirSync } from "node:fs";
+import { existsSync, mkdtempSync, readFileSync, readdirSync, rmSync, writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
 import path from "node:path";
 
 try {
@@ -19,8 +20,17 @@ try {
     if (hasKey(data)) matches.push(label);
     if (data.subarray(0, 4).equals(Buffer.from([0x50, 0x4b, 0x03, 0x04]))) {
       archives += 1;
-      const unpacked = execFileSync("python3", ["-c", "import io,sys,zipfile; z=zipfile.ZipFile(io.BytesIO(sys.stdin.buffer.read())); entries=z.infolist(); assert sum(x.file_size for x in entries)<=67108864, 'Archive exceeds local scan limit'; [sys.stdout.buffer.write(z.read(x)) for x in entries if not x.is_dir()]"], { input: data, maxBuffer: 64 * 1024 * 1024 });
-      if (hasKey(unpacked)) matches.push(`${label} (unpacked)`);
+      const directory = mkdtempSync(path.join(tmpdir(), "exa-archive-scan-"));
+      try {
+        const archivePath = path.join(directory, "archive.zip");
+        writeFileSync(archivePath, data, { mode: 0o600 });
+        const archive = execFileSync("python3", ["-c", "import base64,json,os,sys,urllib.parse,zipfile; key=os.environ['EXA_API_KEY']; variants=[key,urllib.parse.quote(key,safe=\"-_.!~*'()\"),base64.b64encode(key.encode()).decode(),json.dumps(key,ensure_ascii=False)[1:-1]]; needles=[x.encode() for x in variants]; z=zipfile.ZipFile(sys.argv[1]); entries=z.infolist(); assert sum(x.file_size for x in entries)<=67108864, 'Archive exceeds local scan limit'; matched=any(any(needle in content for needle in needles) for content in (z.read(entry) for entry in entries if not entry.is_dir())); print(json.dumps({'matched':matched}))", archivePath], { stdio: ["ignore", "pipe", "pipe"], maxBuffer: 16 * 1024, timeout: 15_000 });
+        const result = JSON.parse(archive.toString());
+        if (typeof result.matched !== "boolean") throw new Error("Archive scan did not complete.");
+        if (result.matched) matches.push(`${label} (unpacked)`);
+      } finally {
+        rmSync(directory, { recursive: true, force: true });
+      }
     }
   };
   let offset = 0;
