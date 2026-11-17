@@ -10,6 +10,8 @@ Use a fresh browser context and the fixture app for each independent journey. Th
 - [Product selection](selection.md) covers exact product identity and safe manufacturer-link handoff.
 - [Session and recovery](session-recovery.md) covers reset, independent contexts, failed requests, and stale responses.
 
+- [Optional Exa web context](web-research.md) covers explicit retrieval, source disclosures, live-versus-stubbed evidence, safe links, and cancellation.
+
 ## Proof standard
 
 Record the commit, worktree state, feature, entry point, actions, and observed results. Keep screenshots and traces with the report. Every fixture claim, price, and stock state must stay visibly labeled. An API result alone does not prove its UI rendering. A screenshot alone does not prove the action or boundary behavior.

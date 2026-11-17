@@ -143,3 +143,12 @@ artifacts/frontend-standard/**/suite-results/
 artifacts/frontend-standard/**/local-install-suite-results/
 artifacts/frontend-standard/independent/watch-ignore-probe.html
 artifacts/frontend-standard/independent/08-mobile-before-overflow-check.png
+
+artifacts/exa-owner/
+artifacts/exa-ui-regression/
+artifacts/screenshots/citation-desktop.png
+artifacts/screenshots/comparison-mobile.png
+artifacts/screenshots/filters-mobile.png
+artifacts/screenshots/request-pending.png
+artifacts/screenshots/web-research-desktop.png
+artifacts/screenshots/web-research-mobile.png

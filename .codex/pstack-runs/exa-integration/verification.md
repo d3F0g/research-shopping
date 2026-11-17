@@ -1,0 +1,13 @@
+# Exa verification record
+
+Application candidate509ad2e includes the compact-excerpt fix. Parent implementation passed153 unit/API tests and28 browser journeys. The UI regression first failed with10 source cards visible, then passed with3 previews; the full suite passed29 browser journeys after the fix. See issue26 for the concrete defect.
+
+Root live project verification at509ad2e used the existing private root .env in an explicit development API process. It made one Exa search invocation in the final run, returned10 actual sources with highlights, rendered3 previews on desktop/mobile, preserved the entire sample-card text, and produced the exact selected-ID manufacturer handoff. No external browser request or page error occurred; owned ports4073/6173 were free after cleanup. Evidence is artifacts/exa/live/proof.json and its PNG/trace files. That proof records root-owned documentation/evidence worktree changes; application source matches its named commit.
+
+The initial live attempt at5d99c34 also returned10 real sources but exposed full-excerpt density and stopped at an exact handoff locator that omitted its accessibility suffix. It is retained locally under /tmp/research-shopping-exa/live-attempt1. No app handoff defect was found; the final run uses the correct accessible label. Failed harness attempts are not counted as full journey passes.
+
+The final offline helper passed with fixture mode, liveIntegrations:false and webResearch:disabled, no external requests and cleanup:true. Curated proof is artifacts/exa/fixture-smoke/proof.json. The existing110 tests were retained; new contract/API/SDK tests bring the unit/API total to153, and the existing20 journeys plus new Exa cases and the density regression bring browser coverage to29.
+
+The no-secret scanner passed fake clean/plain-Git/compressed-ZIP positive and negative controls without printing control values. Root then built the frontend with the actual private environment present and ran the scanner across706 reachable Git objects,79 compressed archives,8 built assets and8 live evidence files. It passed with no tracked private environment file or secret match. After committing evidence, repeat the private scan against the final candidate before pushing; record that result in the PR rather than creating a circular proof commit. Independent QA/security and hosted checks remain separate gates.
+
+Fresh audit now reports12 high inherited findings propagated from picomatch GHSA-fc5q-39xc-vjpf. Both base and candidate match. The upstream advisory has no patched version. Issue27 records the actual risk assessment; this is not a zero-audit claim and is not automatically acceptable merely because inherited.

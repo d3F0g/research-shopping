@@ -1,0 +1,26 @@
+{
+  "result": "passed",
+  "results": [
+    {
+      "mode": "clean",
+      "passed": true,
+      "reportedMatches": 0,
+      "archives": 0,
+      "controlValuePrinted": false
+    },
+    {
+      "mode": "plain",
+      "passed": true,
+      "reportedMatches": 1,
+      "archives": 0,
+      "controlValuePrinted": false
+    },
+    {
+      "mode": "zip",
+      "passed": true,
+      "reportedMatches": 1,
+      "archives": 1,
+      "controlValuePrinted": false
+    }
+  ]
+}
