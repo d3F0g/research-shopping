@@ -89,6 +89,32 @@ test("compares fixture headphones, shows evidence and hands off through the sele
   await assertNoHorizontalOverflow(page);
 });
 
+test("shows and removes the starter portability priority without changing hard constraints", async ({ page }) => {
+  const payloads: { preferences: { hard: { category: string | null; budget: { amount: number; currency: string } | null; region: string; requiredFeatures: string[] }; soft: { priorities: string[] } } }[] = [];
+  page.on("request", (request) => {
+    if (request.url().endsWith("/api/turn") && request.method() === "POST") payloads.push(request.postDataJSON() as typeof payloads[number]);
+  });
+
+  await page.goto("/");
+  await page.getByRole("button", { name: /Wireless headphones for long flights/ }).click();
+  const portability = page.getByRole("checkbox", { name: "Portability", exact: true });
+  await expect(portability).toBeChecked();
+  const portabilityRow = portability.locator("xpath=ancestor::*[@data-slot='field'][1]");
+  await expect(portabilityRow.getByLabel("Priority 1")).toBeVisible();
+  await mkdir("artifacts/frontend-standard/priority", { recursive: true });
+  await page.screenshot({ path: "artifacts/frontend-standard/priority/headphone-priority.png", fullPage: true, animations: "disabled" });
+
+  await portability.uncheck();
+  await page.getByRole("button", { name: "Update comparison" }).click();
+  await expect.poll(() => payloads.at(-1)?.preferences.soft.priorities).not.toContain("portability");
+  expect(payloads.at(-1)?.preferences.hard).toMatchObject({
+    category: "headphones",
+    budget: { amount: 500, currency: "SGD" },
+    region: "SG",
+    requiredFeatures: ["wireless"],
+  });
+});
+
 test("shows a visible focus indicator while tabbing to the request field", async ({ page }) => {
   await page.goto("/");
   const request = page.getByLabel("Start with the outcome, not a model number.");

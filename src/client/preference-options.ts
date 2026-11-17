@@ -28,6 +28,7 @@ export const priorityOptions: Record<
     { value: "sound-quality", label: "Sound" },
     { value: "noise-cancelling", label: "Noise cancelling" },
     { value: "battery-life", label: "Battery" },
+    { value: "portability", label: "Portability" },
     { value: "value", label: "Value" },
   ],
   laptops: [
