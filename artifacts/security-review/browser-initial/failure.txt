@@ -1,0 +1,16 @@
+Error: expect(locator).toBeVisible() failed
+
+Locator: locator('.product-card').first().getByText('CONFLICTING SAMPLE CLAIMS')
+Expected: visible
+Error: strict mode violation: locator('.product-card').first().getByText('CONFLICTING SAMPLE CLAIMS') resolved to 2 elements:
+    1) <li>…</li> aka getByText('✓Tradeoff. Conflicting sample')
+    2) <span class="claim-state conflict">CONFLICTING SAMPLE CLAIMS</span> aka getByText('CONFLICTING SAMPLE CLAIMS', { exact: true })
+
+Call log:
+  - Expect "toBeVisible" locator('.product-card').first().getByText('CONFLICTING SAMPLE CLAIMS') with timeout 5000ms
+  - waiting for locator('.product-card').first().getByText('CONFLICTING SAMPLE CLAIMS')
+
+    at captureRawStack (/Users/josiahwong/Documents/research-shopping-implementation/node_modules/playwright-core/lib/coreBundle.js:9551:17)
+    at callMatcherAsStep (/Users/josiahwong/Documents/research-shopping-implementation/node_modules/playwright/lib/matchers/expect.js:13342:57)
+    at Object.toBeVisible (/Users/josiahwong/Documents/research-shopping-implementation/node_modules/playwright/lib/matchers/expect.js:13334:23)
+    at /Users/josiahwong/Documents/research-shopping/artifacts/security-review/browser-probe.cjs:34:161

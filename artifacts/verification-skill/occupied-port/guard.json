@@ -1,0 +1,7 @@
+{
+  "exitCode": 1,
+  "occupiedPort": 53945,
+  "preexistingListenerPreserved": true,
+  "noServerSpawned": true,
+  "output": "{\"result\":\"failed\",\"cleanup\":true,\"artifacts\":\"/Users/josiahwong/Documents/research-shopping/artifacts/verification-skill/occupied-port\",\"commit\":\"106d5729d80b75d30fc21ab331c665b263b98f36\"}\n"
+}

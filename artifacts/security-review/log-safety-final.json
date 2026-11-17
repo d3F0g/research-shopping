@@ -1,0 +1,6 @@
+{
+  "result": "passed",
+  "requests": 55,
+  "fields": "durationMs,outcomes,requestId,route,status",
+  "boundedOutcomes": true
+}

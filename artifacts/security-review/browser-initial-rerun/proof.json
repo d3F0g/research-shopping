@@ -1,0 +1,26 @@
+{
+  "result": "passed",
+  "commit": "106d5729d80b75d30fc21ab331c665b263b98f36",
+  "observations": [
+    "Actionable dissatisfaction reprioritizes battery and retains hard SGD500 budget",
+    "Generic dissatisfaction asks targeted clarification",
+    "Pending unsupported hard constraint survives neutral update and prevents cards",
+    "Actually overlapping responses preserve newer laptop turn when older headphones response is released",
+    "Reset during outstanding turn blocks late results and preferences",
+    {
+      "responsiveWidths": {
+        "viewport": 390,
+        "doc": 390,
+        "body": 390
+      }
+    },
+    {
+      "selection": "sony-wh-ch720n",
+      "url": "https://www.sony.com.sg/headphones/products/wh-ch720n"
+    },
+    "Independent browser contexts keep preference changes and reset isolated",
+    "Input script is displayed as inert pending text"
+  ],
+  "external": [],
+  "errors": []
+}

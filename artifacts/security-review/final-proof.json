@@ -1,0 +1,105 @@
+{
+  "result": "PASS",
+  "commit": "2dcfe45ed05bcf476f294c3152c723806f2d6d97",
+  "checkout": "/Users/josiahwong/Documents/research-shopping-review",
+  "worktreeStatus": "?? node_modules",
+  "commands": [
+    {
+      "command": "npm test",
+      "result": "108 tests passed",
+      "evidence": "tests-final.log"
+    },
+    {
+      "command": "npm run build",
+      "result": "Typecheck and Vite build passed",
+      "evidence": "build-final.log"
+    },
+    {
+      "command": "npm audit --omit=dev --json",
+      "result": "0 vulnerabilities",
+      "evidence": "audit-final.json"
+    },
+    {
+      "command": "PLAYWRIGHT_API_PORT=3193 PLAYWRIGHT_WEB_PORT=5293 npm run test:e2e -- --trace on --output=/Users/josiahwong/Documents/research-shopping/artifacts/security-review/e2e-final",
+      "result": "15 browser tests passed",
+      "evidence": "e2e-final.log"
+    },
+    {
+      "command": "VERIFY_API_PORT=3193 VERIFY_WEB_PORT=5293 VERIFY_ARTIFACT_DIR=/Users/josiahwong/Documents/research-shopping/artifacts/security-review/skill-final node /Users/josiahwong/Documents/research-shopping/.agents/skills/verify-research-shopping/scripts/smoke.mjs --project-dir /Users/josiahwong/Documents/research-shopping-review",
+      "result": "passed; cleanup true",
+      "evidence": "skill-final/proof.json"
+    },
+    {
+      "command": "node /Users/josiahwong/Documents/research-shopping/artifacts/security-review/http-probe.mjs final",
+      "result": "30 real HTTP observations passed",
+      "evidence": "http-final.json"
+    },
+    {
+      "command": "node --import tsx /Users/josiahwong/Documents/research-shopping/artifacts/security-review/provider-probe.mts final",
+      "result": "19 injected-provider real HTTP observations passed",
+      "evidence": "provider-http-final.json"
+    },
+    {
+      "command": "node /Users/josiahwong/Documents/research-shopping/artifacts/security-review/browser-probe.cjs /Users/josiahwong/Documents/research-shopping/artifacts/security-review/browser-final",
+      "result": "9 browser observations passed",
+      "evidence": "browser-final/proof.json"
+    },
+    {
+      "command": "node /Users/josiahwong/Documents/research-shopping/artifacts/security-review/handoff-probe.cjs final",
+      "result": "5 malformed handoffs rejected",
+      "evidence": "handoff-final/proof.json"
+    },
+    {
+      "command": "node /Users/josiahwong/Documents/research-shopping/artifacts/security-review/inert-keyboard-probe.cjs",
+      "result": "3 keyboard/source injection observations passed",
+      "evidence": "inert-keyboard-final/proof.json"
+    },
+    {
+      "command": "node /Users/josiahwong/Documents/research-shopping/artifacts/security-review/focus-probe.cjs",
+      "result": "keyboard focus outline is solid 3px",
+      "evidence": "textarea-focus-final.json"
+    }
+  ],
+  "reviewerApplicationEdits": false,
+  "screenshotsInspected": [
+    "browser-final/desktop-evidence.png",
+    "browser-final/mobile-evidence.png",
+    "browser-final/mobile-handoff.png",
+    "textarea-focus-final.png",
+    "inert-keyboard-final/inert-source-text.png"
+  ],
+  "fixedFindings": [
+    "Malformed client handoff accepted unsafe host/path/wrong identity/name/merchantHost at106d572; all five rejected at candidate",
+    "Keyboard request textarea lacked visible outline at106d572; solid3px outline at candidate"
+  ],
+  "cleanup": {
+    "ports": [
+      3193,
+      5293,
+      3194
+    ],
+    "free": true,
+    "terminatedOwnedPids": [
+      2563,
+      2909,
+      6903,
+      6904
+    ],
+    "skillCleanup": true
+  },
+  "gaps": [
+    "Synthetic SG/SGD fixtures only, deterministic bounded parser",
+    "No live merchant page reachability, prices, stock, delivery, reviews or variants verified",
+    "No live LLM/provider success established; no credential used or retried",
+    "No public deployment/authenticated multitenant, load or general fetch security claim",
+    "Chromium only; not Firefox/WebKit or assistive technology audit"
+  ],
+  "principleDecisions": {
+    "Prove It Works": "Real HTTP, sockets, logs and browser evidence against exact candidate",
+    "Boundary Discipline": "Attack JSON/provider/source/handoff boundaries independently",
+    "Test Behavior, Not Implementation": "Observe rejection, visible state and true request overlap",
+    "Build the Lever": "Preserve rerunnable independent probes",
+    "Separate Before Serializing Shared State": "Use detached checkout, separate ports and reviewer artifact directory"
+  },
+  "commandWorkingDirectory": "/Users/josiahwong/Documents/research-shopping-review"
+}

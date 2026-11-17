@@ -1,0 +1,9 @@
+{
+  "result": "passed",
+  "commit": "106d5729d80b75d30fc21ab331c665b263b98f36",
+  "observations": [
+    "Tab-only request entry, submission, evidence focus and Enter disclosure work",
+    "Keyboard can select the exact first product and reach its handoff",
+    "Injected provider source instructions render as plain text; unsafe source URL never becomes an anchor"
+  ]
+}

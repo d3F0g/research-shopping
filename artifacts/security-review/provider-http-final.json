@@ -1,0 +1,1291 @@
+{
+  "commit": "2dcfe45ed05bcf476f294c3152c723806f2d6d97",
+  "records": [
+    {
+      "provider": "discovery",
+      "mode": "error",
+      "result": {
+        "kind": "error",
+        "code": "provider-failed",
+        "message": "The sample provider could not complete the request. Your preferences are retained. Try again.",
+        "retryable": true,
+        "preferences": {
+          "hard": {
+            "category": "headphones",
+            "budget": {
+              "amount": 500,
+              "currency": "SGD"
+            },
+            "region": "SG",
+            "excludedBrands": [],
+            "requiredFeatures": [],
+            "pendingConstraint": null
+          },
+          "soft": {
+            "useCase": "",
+            "priorities": [
+              "value"
+            ],
+            "responseLength": "concise"
+          }
+        },
+        "notes": [
+          "Synthetic development samples. Scenario timestamp 15 Jan 2025, not observed prices, stock or specification research."
+        ]
+      }
+    },
+    {
+      "provider": "discovery",
+      "mode": "timeout",
+      "result": {
+        "kind": "error",
+        "code": "provider-failed",
+        "message": "The sample provider could not complete the request. Your preferences are retained. Try again.",
+        "retryable": true,
+        "preferences": {
+          "hard": {
+            "category": "headphones",
+            "budget": {
+              "amount": 500,
+              "currency": "SGD"
+            },
+            "region": "SG",
+            "excludedBrands": [],
+            "requiredFeatures": [],
+            "pendingConstraint": null
+          },
+          "soft": {
+            "useCase": "",
+            "priorities": [
+              "value"
+            ],
+            "responseLength": "concise"
+          }
+        },
+        "notes": [
+          "Synthetic development samples. Scenario timestamp 15 Jan 2025, not observed prices, stock or specification research."
+        ]
+      }
+    },
+    {
+      "provider": "discovery",
+      "mode": "malformed",
+      "result": {
+        "kind": "error",
+        "code": "provider-failed",
+        "message": "The sample provider could not complete the request. Your preferences are retained. Try again.",
+        "retryable": true,
+        "preferences": {
+          "hard": {
+            "category": "headphones",
+            "budget": {
+              "amount": 500,
+              "currency": "SGD"
+            },
+            "region": "SG",
+            "excludedBrands": [],
+            "requiredFeatures": [],
+            "pendingConstraint": null
+          },
+          "soft": {
+            "useCase": "",
+            "priorities": [
+              "value"
+            ],
+            "responseLength": "concise"
+          }
+        },
+        "notes": [
+          "Synthetic development samples. Scenario timestamp 15 Jan 2025, not observed prices, stock or specification research."
+        ]
+      }
+    },
+    {
+      "provider": "research",
+      "mode": "error",
+      "result": {
+        "kind": "error",
+        "code": "provider-failed",
+        "message": "The sample provider could not complete the request. Your preferences are retained. Try again.",
+        "retryable": true,
+        "preferences": {
+          "hard": {
+            "category": "headphones",
+            "budget": {
+              "amount": 500,
+              "currency": "SGD"
+            },
+            "region": "SG",
+            "excludedBrands": [],
+            "requiredFeatures": [],
+            "pendingConstraint": null
+          },
+          "soft": {
+            "useCase": "",
+            "priorities": [
+              "value"
+            ],
+            "responseLength": "concise"
+          }
+        },
+        "notes": [
+          "Synthetic development samples. Scenario timestamp 15 Jan 2025, not observed prices, stock or specification research."
+        ]
+      }
+    },
+    {
+      "provider": "research",
+      "mode": "timeout",
+      "result": {
+        "kind": "error",
+        "code": "provider-failed",
+        "message": "The sample provider could not complete the request. Your preferences are retained. Try again.",
+        "retryable": true,
+        "preferences": {
+          "hard": {
+            "category": "headphones",
+            "budget": {
+              "amount": 500,
+              "currency": "SGD"
+            },
+            "region": "SG",
+            "excludedBrands": [],
+            "requiredFeatures": [],
+            "pendingConstraint": null
+          },
+          "soft": {
+            "useCase": "",
+            "priorities": [
+              "value"
+            ],
+            "responseLength": "concise"
+          }
+        },
+        "notes": [
+          "Synthetic development samples. Scenario timestamp 15 Jan 2025, not observed prices, stock or specification research."
+        ]
+      }
+    },
+    {
+      "provider": "research",
+      "mode": "malformed",
+      "result": {
+        "kind": "error",
+        "code": "provider-failed",
+        "message": "The sample provider could not complete the request. Your preferences are retained. Try again.",
+        "retryable": true,
+        "preferences": {
+          "hard": {
+            "category": "headphones",
+            "budget": {
+              "amount": 500,
+              "currency": "SGD"
+            },
+            "region": "SG",
+            "excludedBrands": [],
+            "requiredFeatures": [],
+            "pendingConstraint": null
+          },
+          "soft": {
+            "useCase": "",
+            "priorities": [
+              "value"
+            ],
+            "responseLength": "concise"
+          }
+        },
+        "notes": [
+          "Synthetic development samples. Scenario timestamp 15 Jan 2025, not observed prices, stock or specification research."
+        ]
+      }
+    },
+    {
+      "provider": "merchant",
+      "mode": "error",
+      "result": {
+        "kind": "error",
+        "code": "provider-failed",
+        "message": "The sample provider could not complete the request. Your preferences are retained. Try again.",
+        "retryable": true,
+        "preferences": {
+          "hard": {
+            "category": "headphones",
+            "budget": {
+              "amount": 500,
+              "currency": "SGD"
+            },
+            "region": "SG",
+            "excludedBrands": [],
+            "requiredFeatures": [],
+            "pendingConstraint": null
+          },
+          "soft": {
+            "useCase": "",
+            "priorities": [
+              "value"
+            ],
+            "responseLength": "concise"
+          }
+        },
+        "notes": [
+          "Synthetic development samples. Scenario timestamp 15 Jan 2025, not observed prices, stock or specification research."
+        ]
+      }
+    },
+    {
+      "provider": "merchant",
+      "mode": "timeout",
+      "result": {
+        "kind": "error",
+        "code": "provider-failed",
+        "message": "The sample provider could not complete the request. Your preferences are retained. Try again.",
+        "retryable": true,
+        "preferences": {
+          "hard": {
+            "category": "headphones",
+            "budget": {
+              "amount": 500,
+              "currency": "SGD"
+            },
+            "region": "SG",
+            "excludedBrands": [],
+            "requiredFeatures": [],
+            "pendingConstraint": null
+          },
+          "soft": {
+            "useCase": "",
+            "priorities": [
+              "value"
+            ],
+            "responseLength": "concise"
+          }
+        },
+        "notes": [
+          "Synthetic development samples. Scenario timestamp 15 Jan 2025, not observed prices, stock or specification research."
+        ]
+      }
+    },
+    {
+      "provider": "merchant",
+      "mode": "malformed",
+      "result": {
+        "kind": "error",
+        "code": "provider-failed",
+        "message": "The sample provider could not complete the request. Your preferences are retained. Try again.",
+        "retryable": true,
+        "preferences": {
+          "hard": {
+            "category": "headphones",
+            "budget": {
+              "amount": 500,
+              "currency": "SGD"
+            },
+            "region": "SG",
+            "excludedBrands": [],
+            "requiredFeatures": [],
+            "pendingConstraint": null
+          },
+          "soft": {
+            "useCase": "",
+            "priorities": [
+              "value"
+            ],
+            "responseLength": "concise"
+          }
+        },
+        "notes": [
+          "Synthetic development samples. Scenario timestamp 15 Jan 2025, not observed prices, stock or specification research."
+        ]
+      }
+    },
+    {
+      "sourceUrl": "javascript:alert(1)",
+      "result": {
+        "kind": "error",
+        "code": "provider-failed",
+        "message": "The sample provider could not complete the request. Your preferences are retained. Try again.",
+        "retryable": true,
+        "preferences": {
+          "hard": {
+            "category": "headphones",
+            "budget": {
+              "amount": 500,
+              "currency": "SGD"
+            },
+            "region": "SG",
+            "excludedBrands": [],
+            "requiredFeatures": [],
+            "pendingConstraint": null
+          },
+          "soft": {
+            "useCase": "",
+            "priorities": [
+              "value"
+            ],
+            "responseLength": "concise"
+          }
+        },
+        "notes": [
+          "Synthetic development samples. Scenario timestamp 15 Jan 2025, not observed prices, stock or specification research."
+        ]
+      }
+    },
+    {
+      "sourceUrl": "https://www.sony.com.sg/redirect",
+      "result": {
+        "kind": "error",
+        "code": "provider-failed",
+        "message": "The sample provider could not complete the request. Your preferences are retained. Try again.",
+        "retryable": true,
+        "preferences": {
+          "hard": {
+            "category": "headphones",
+            "budget": {
+              "amount": 500,
+              "currency": "SGD"
+            },
+            "region": "SG",
+            "excludedBrands": [],
+            "requiredFeatures": [],
+            "pendingConstraint": null
+          },
+          "soft": {
+            "useCase": "",
+            "priorities": [
+              "value"
+            ],
+            "responseLength": "concise"
+          }
+        },
+        "notes": [
+          "Synthetic development samples. Scenario timestamp 15 Jan 2025, not observed prices, stock or specification research."
+        ]
+      }
+    },
+    {
+      "sourceUrl": "https://www.sony.com.sg/electronics/headband-headphones/wh-1000xm5?redirect=https://evil.test",
+      "result": {
+        "kind": "error",
+        "code": "provider-failed",
+        "message": "The sample provider could not complete the request. Your preferences are retained. Try again.",
+        "retryable": true,
+        "preferences": {
+          "hard": {
+            "category": "headphones",
+            "budget": {
+              "amount": 500,
+              "currency": "SGD"
+            },
+            "region": "SG",
+            "excludedBrands": [],
+            "requiredFeatures": [],
+            "pendingConstraint": null
+          },
+          "soft": {
+            "useCase": "",
+            "priorities": [
+              "value"
+            ],
+            "responseLength": "concise"
+          }
+        },
+        "notes": [
+          "Synthetic development samples. Scenario timestamp 15 Jan 2025, not observed prices, stock or specification research."
+        ]
+      }
+    },
+    {
+      "sourceUrl": "https://www.sony.com.sg.evil.test/test",
+      "result": {
+        "kind": "error",
+        "code": "provider-failed",
+        "message": "The sample provider could not complete the request. Your preferences are retained. Try again.",
+        "retryable": true,
+        "preferences": {
+          "hard": {
+            "category": "headphones",
+            "budget": {
+              "amount": 500,
+              "currency": "SGD"
+            },
+            "region": "SG",
+            "excludedBrands": [],
+            "requiredFeatures": [],
+            "pendingConstraint": null
+          },
+          "soft": {
+            "useCase": "",
+            "priorities": [
+              "value"
+            ],
+            "responseLength": "concise"
+          }
+        },
+        "notes": [
+          "Synthetic development samples. Scenario timestamp 15 Jan 2025, not observed prices, stock or specification research."
+        ]
+      }
+    },
+    {
+      "sourceUrl": "https://user@www.sony.com.sg/headphones/products/wh-ch720n",
+      "result": {
+        "kind": "error",
+        "code": "provider-failed",
+        "message": "The sample provider could not complete the request. Your preferences are retained. Try again.",
+        "retryable": true,
+        "preferences": {
+          "hard": {
+            "category": "headphones",
+            "budget": {
+              "amount": 500,
+              "currency": "SGD"
+            },
+            "region": "SG",
+            "excludedBrands": [],
+            "requiredFeatures": [],
+            "pendingConstraint": null
+          },
+          "soft": {
+            "useCase": "",
+            "priorities": [
+              "value"
+            ],
+            "responseLength": "concise"
+          }
+        },
+        "notes": [
+          "Synthetic development samples. Scenario timestamp 15 Jan 2025, not observed prices, stock or specification research."
+        ]
+      }
+    },
+    {
+      "offerPatch": {
+        "productId": "sennheiser-momentum-4"
+      },
+      "result": {
+        "kind": "error",
+        "code": "provider-failed",
+        "message": "The sample provider could not complete the request. Your preferences are retained. Try again.",
+        "retryable": true,
+        "preferences": {
+          "hard": {
+            "category": "headphones",
+            "budget": {
+              "amount": 500,
+              "currency": "SGD"
+            },
+            "region": "SG",
+            "excludedBrands": [],
+            "requiredFeatures": [],
+            "pendingConstraint": null
+          },
+          "soft": {
+            "useCase": "",
+            "priorities": [
+              "value"
+            ],
+            "responseLength": "concise"
+          }
+        },
+        "notes": [
+          "Synthetic development samples. Scenario timestamp 15 Jan 2025, not observed prices, stock or specification research."
+        ]
+      }
+    },
+    {
+      "offerPatch": {
+        "merchantHost": "evil.test"
+      },
+      "result": {
+        "kind": "error",
+        "code": "provider-failed",
+        "message": "The sample provider could not complete the request. Your preferences are retained. Try again.",
+        "retryable": true,
+        "preferences": {
+          "hard": {
+            "category": "headphones",
+            "budget": {
+              "amount": 500,
+              "currency": "SGD"
+            },
+            "region": "SG",
+            "excludedBrands": [],
+            "requiredFeatures": [],
+            "pendingConstraint": null
+          },
+          "soft": {
+            "useCase": "",
+            "priorities": [
+              "value"
+            ],
+            "responseLength": "concise"
+          }
+        },
+        "notes": [
+          "Synthetic development samples. Scenario timestamp 15 Jan 2025, not observed prices, stock or specification research."
+        ]
+      }
+    },
+    {
+      "offerPatch": {
+        "price": {
+          "amount": null,
+          "currency": "SGD"
+        }
+      },
+      "result": {
+        "kind": "error",
+        "code": "provider-failed",
+        "message": "The sample provider could not complete the request. Your preferences are retained. Try again.",
+        "retryable": true,
+        "preferences": {
+          "hard": {
+            "category": "headphones",
+            "budget": {
+              "amount": 500,
+              "currency": "SGD"
+            },
+            "region": "SG",
+            "excludedBrands": [],
+            "requiredFeatures": [],
+            "pendingConstraint": null
+          },
+          "soft": {
+            "useCase": "",
+            "priorities": [
+              "value"
+            ],
+            "responseLength": "concise"
+          }
+        },
+        "notes": [
+          "Synthetic development samples. Scenario timestamp 15 Jan 2025, not observed prices, stock or specification research."
+        ]
+      }
+    },
+    {
+      "offerPatch": {
+        "productUrl": "https://www.sony.com.sg/arbitrary"
+      },
+      "result": {
+        "kind": "error",
+        "code": "provider-failed",
+        "message": "The sample provider could not complete the request. Your preferences are retained. Try again.",
+        "retryable": true,
+        "preferences": {
+          "hard": {
+            "category": "headphones",
+            "budget": {
+              "amount": 500,
+              "currency": "SGD"
+            },
+            "region": "SG",
+            "excludedBrands": [],
+            "requiredFeatures": [],
+            "pendingConstraint": null
+          },
+          "soft": {
+            "useCase": "",
+            "priorities": [
+              "value"
+            ],
+            "responseLength": "concise"
+          }
+        },
+        "notes": [
+          "Synthetic development samples. Scenario timestamp 15 Jan 2025, not observed prices, stock or specification research."
+        ]
+      }
+    },
+    {
+      "logging": "Safe bounded request and provider outcome fields only",
+      "logCount": 19
+    }
+  ],
+  "logs": [
+    {
+      "requestId": "7493d3d3-66b1-412d-8e4b-3de3d016a334",
+      "route": "/api/turn",
+      "status": 200,
+      "durationMs": 10.09,
+      "outcomes": [
+        {
+          "provider": "discovery",
+          "outcome": "failed"
+        }
+      ]
+    },
+    {
+      "requestId": "7cd9557f-e218-41cb-85a4-e52d419b9fbf",
+      "route": "/api/turn",
+      "status": 200,
+      "durationMs": 28.24,
+      "outcomes": [
+        {
+          "provider": "discovery",
+          "outcome": "timeout"
+        }
+      ]
+    },
+    {
+      "requestId": "6a6207a0-a41a-4f0c-9d0f-60dd04e81ab2",
+      "route": "/api/turn",
+      "status": 200,
+      "durationMs": 1.89,
+      "outcomes": [
+        {
+          "provider": "discovery",
+          "outcome": "failed"
+        }
+      ]
+    },
+    {
+      "requestId": "bdf3eda3-a2f4-4b4b-9893-c3fe767b9d05",
+      "route": "/api/turn",
+      "status": 200,
+      "durationMs": 2.56,
+      "outcomes": [
+        {
+          "provider": "discovery",
+          "outcome": "ok"
+        },
+        {
+          "provider": "research",
+          "outcome": "failed"
+        },
+        {
+          "provider": "merchant",
+          "outcome": "ok"
+        },
+        {
+          "provider": "research",
+          "outcome": "failed"
+        },
+        {
+          "provider": "merchant",
+          "outcome": "ok"
+        },
+        {
+          "provider": "research",
+          "outcome": "failed"
+        },
+        {
+          "provider": "merchant",
+          "outcome": "ok"
+        },
+        {
+          "provider": "research",
+          "outcome": "failed"
+        },
+        {
+          "provider": "merchant",
+          "outcome": "ok"
+        }
+      ]
+    },
+    {
+      "requestId": "f1eeff98-aa10-4748-96b2-088e3804f7de",
+      "route": "/api/turn",
+      "status": 200,
+      "durationMs": 27.97,
+      "outcomes": [
+        {
+          "provider": "discovery",
+          "outcome": "ok"
+        },
+        {
+          "provider": "merchant",
+          "outcome": "ok"
+        },
+        {
+          "provider": "merchant",
+          "outcome": "ok"
+        },
+        {
+          "provider": "merchant",
+          "outcome": "ok"
+        },
+        {
+          "provider": "merchant",
+          "outcome": "ok"
+        },
+        {
+          "provider": "research",
+          "outcome": "timeout"
+        }
+      ]
+    },
+    {
+      "requestId": "65c9ff69-b7fc-4589-b8a9-9cbd78b8a348",
+      "route": "/api/turn",
+      "status": 200,
+      "durationMs": 1.65,
+      "outcomes": [
+        {
+          "provider": "discovery",
+          "outcome": "ok"
+        },
+        {
+          "provider": "research",
+          "outcome": "failed"
+        },
+        {
+          "provider": "merchant",
+          "outcome": "ok"
+        },
+        {
+          "provider": "research",
+          "outcome": "failed"
+        },
+        {
+          "provider": "merchant",
+          "outcome": "ok"
+        },
+        {
+          "provider": "research",
+          "outcome": "failed"
+        },
+        {
+          "provider": "merchant",
+          "outcome": "ok"
+        },
+        {
+          "provider": "research",
+          "outcome": "failed"
+        },
+        {
+          "provider": "merchant",
+          "outcome": "ok"
+        }
+      ]
+    },
+    {
+      "requestId": "5af050b2-a17c-4ad0-80bd-092268a6c3ab",
+      "route": "/api/turn",
+      "status": 200,
+      "durationMs": 1.96,
+      "outcomes": [
+        {
+          "provider": "discovery",
+          "outcome": "ok"
+        },
+        {
+          "provider": "research",
+          "outcome": "ok"
+        },
+        {
+          "provider": "merchant",
+          "outcome": "failed"
+        },
+        {
+          "provider": "research",
+          "outcome": "ok"
+        },
+        {
+          "provider": "merchant",
+          "outcome": "failed"
+        },
+        {
+          "provider": "research",
+          "outcome": "ok"
+        },
+        {
+          "provider": "merchant",
+          "outcome": "failed"
+        },
+        {
+          "provider": "research",
+          "outcome": "ok"
+        },
+        {
+          "provider": "merchant",
+          "outcome": "failed"
+        }
+      ]
+    },
+    {
+      "requestId": "13ad1fbb-5b11-4808-83ba-c3a08bdd157f",
+      "route": "/api/turn",
+      "status": 200,
+      "durationMs": 26.35,
+      "outcomes": [
+        {
+          "provider": "discovery",
+          "outcome": "ok"
+        },
+        {
+          "provider": "research",
+          "outcome": "ok"
+        },
+        {
+          "provider": "research",
+          "outcome": "ok"
+        },
+        {
+          "provider": "research",
+          "outcome": "ok"
+        },
+        {
+          "provider": "research",
+          "outcome": "ok"
+        },
+        {
+          "provider": "merchant",
+          "outcome": "timeout"
+        }
+      ]
+    },
+    {
+      "requestId": "d9c146a0-46b6-479e-aed0-95ae405d6ced",
+      "route": "/api/turn",
+      "status": 200,
+      "durationMs": 2.48,
+      "outcomes": [
+        {
+          "provider": "discovery",
+          "outcome": "ok"
+        },
+        {
+          "provider": "research",
+          "outcome": "ok"
+        },
+        {
+          "provider": "merchant",
+          "outcome": "failed"
+        },
+        {
+          "provider": "research",
+          "outcome": "ok"
+        },
+        {
+          "provider": "merchant",
+          "outcome": "failed"
+        },
+        {
+          "provider": "research",
+          "outcome": "ok"
+        },
+        {
+          "provider": "merchant",
+          "outcome": "failed"
+        },
+        {
+          "provider": "research",
+          "outcome": "ok"
+        },
+        {
+          "provider": "merchant",
+          "outcome": "failed"
+        }
+      ]
+    },
+    {
+      "requestId": "cb920bf2-d4bc-4e0f-978b-eab7f110dae6",
+      "route": "/api/turn",
+      "status": 200,
+      "durationMs": 0.89,
+      "outcomes": [
+        {
+          "provider": "discovery",
+          "outcome": "ok"
+        },
+        {
+          "provider": "merchant",
+          "outcome": "ok"
+        },
+        {
+          "provider": "merchant",
+          "outcome": "ok"
+        },
+        {
+          "provider": "merchant",
+          "outcome": "ok"
+        },
+        {
+          "provider": "merchant",
+          "outcome": "ok"
+        },
+        {
+          "provider": "research",
+          "outcome": "failed"
+        },
+        {
+          "provider": "research",
+          "outcome": "failed"
+        },
+        {
+          "provider": "research",
+          "outcome": "failed"
+        },
+        {
+          "provider": "research",
+          "outcome": "failed"
+        }
+      ]
+    },
+    {
+      "requestId": "e5f0b5b9-b994-4dc1-b752-f2f797323a44",
+      "route": "/api/turn",
+      "status": 200,
+      "durationMs": 0.79,
+      "outcomes": [
+        {
+          "provider": "discovery",
+          "outcome": "ok"
+        },
+        {
+          "provider": "merchant",
+          "outcome": "ok"
+        },
+        {
+          "provider": "merchant",
+          "outcome": "ok"
+        },
+        {
+          "provider": "merchant",
+          "outcome": "ok"
+        },
+        {
+          "provider": "merchant",
+          "outcome": "ok"
+        },
+        {
+          "provider": "research",
+          "outcome": "failed"
+        },
+        {
+          "provider": "research",
+          "outcome": "failed"
+        },
+        {
+          "provider": "research",
+          "outcome": "failed"
+        },
+        {
+          "provider": "research",
+          "outcome": "failed"
+        }
+      ]
+    },
+    {
+      "requestId": "fa53a914-ed03-4b44-a5b3-33b4a3a3f1a2",
+      "route": "/api/turn",
+      "status": 200,
+      "durationMs": 0.75,
+      "outcomes": [
+        {
+          "provider": "discovery",
+          "outcome": "ok"
+        },
+        {
+          "provider": "merchant",
+          "outcome": "ok"
+        },
+        {
+          "provider": "merchant",
+          "outcome": "ok"
+        },
+        {
+          "provider": "merchant",
+          "outcome": "ok"
+        },
+        {
+          "provider": "merchant",
+          "outcome": "ok"
+        },
+        {
+          "provider": "research",
+          "outcome": "failed"
+        },
+        {
+          "provider": "research",
+          "outcome": "failed"
+        },
+        {
+          "provider": "research",
+          "outcome": "failed"
+        },
+        {
+          "provider": "research",
+          "outcome": "failed"
+        }
+      ]
+    },
+    {
+      "requestId": "323d8aac-c418-49c4-9959-64eaf89a2aa9",
+      "route": "/api/turn",
+      "status": 200,
+      "durationMs": 0.66,
+      "outcomes": [
+        {
+          "provider": "discovery",
+          "outcome": "ok"
+        },
+        {
+          "provider": "merchant",
+          "outcome": "ok"
+        },
+        {
+          "provider": "merchant",
+          "outcome": "ok"
+        },
+        {
+          "provider": "merchant",
+          "outcome": "ok"
+        },
+        {
+          "provider": "merchant",
+          "outcome": "ok"
+        },
+        {
+          "provider": "research",
+          "outcome": "failed"
+        },
+        {
+          "provider": "research",
+          "outcome": "failed"
+        },
+        {
+          "provider": "research",
+          "outcome": "failed"
+        },
+        {
+          "provider": "research",
+          "outcome": "failed"
+        }
+      ]
+    },
+    {
+      "requestId": "65fa3265-bb30-44a0-8ce5-ee0b9e3afcdf",
+      "route": "/api/turn",
+      "status": 200,
+      "durationMs": 0.62,
+      "outcomes": [
+        {
+          "provider": "discovery",
+          "outcome": "ok"
+        },
+        {
+          "provider": "merchant",
+          "outcome": "ok"
+        },
+        {
+          "provider": "merchant",
+          "outcome": "ok"
+        },
+        {
+          "provider": "merchant",
+          "outcome": "ok"
+        },
+        {
+          "provider": "merchant",
+          "outcome": "ok"
+        },
+        {
+          "provider": "research",
+          "outcome": "failed"
+        },
+        {
+          "provider": "research",
+          "outcome": "failed"
+        },
+        {
+          "provider": "research",
+          "outcome": "failed"
+        },
+        {
+          "provider": "research",
+          "outcome": "failed"
+        }
+      ]
+    },
+    {
+      "requestId": "49607051-50a8-4394-9188-2edd917fe1d5",
+      "route": "/api/turn",
+      "status": 200,
+      "durationMs": 0.86,
+      "outcomes": [
+        {
+          "provider": "discovery",
+          "outcome": "ok"
+        },
+        {
+          "provider": "research",
+          "outcome": "ok"
+        },
+        {
+          "provider": "research",
+          "outcome": "ok"
+        },
+        {
+          "provider": "research",
+          "outcome": "ok"
+        },
+        {
+          "provider": "research",
+          "outcome": "ok"
+        },
+        {
+          "provider": "merchant",
+          "outcome": "ok"
+        },
+        {
+          "provider": "merchant",
+          "outcome": "ok"
+        },
+        {
+          "provider": "merchant",
+          "outcome": "ok"
+        },
+        {
+          "provider": "merchant",
+          "outcome": "ok"
+        }
+      ]
+    },
+    {
+      "requestId": "ed93791e-5916-4926-9656-1c8d5b5658f5",
+      "route": "/api/turn",
+      "status": 200,
+      "durationMs": 0.67,
+      "outcomes": [
+        {
+          "provider": "discovery",
+          "outcome": "ok"
+        },
+        {
+          "provider": "research",
+          "outcome": "ok"
+        },
+        {
+          "provider": "research",
+          "outcome": "ok"
+        },
+        {
+          "provider": "research",
+          "outcome": "ok"
+        },
+        {
+          "provider": "research",
+          "outcome": "ok"
+        },
+        {
+          "provider": "merchant",
+          "outcome": "ok"
+        },
+        {
+          "provider": "merchant",
+          "outcome": "ok"
+        },
+        {
+          "provider": "merchant",
+          "outcome": "ok"
+        },
+        {
+          "provider": "merchant",
+          "outcome": "ok"
+        }
+      ]
+    },
+    {
+      "requestId": "ea9a28b0-3c63-4b1e-a603-c5c8a150aac0",
+      "route": "/api/turn",
+      "status": 200,
+      "durationMs": 0.71,
+      "outcomes": [
+        {
+          "provider": "discovery",
+          "outcome": "ok"
+        },
+        {
+          "provider": "research",
+          "outcome": "ok"
+        },
+        {
+          "provider": "research",
+          "outcome": "ok"
+        },
+        {
+          "provider": "research",
+          "outcome": "ok"
+        },
+        {
+          "provider": "research",
+          "outcome": "ok"
+        },
+        {
+          "provider": "merchant",
+          "outcome": "failed"
+        },
+        {
+          "provider": "merchant",
+          "outcome": "failed"
+        },
+        {
+          "provider": "merchant",
+          "outcome": "failed"
+        },
+        {
+          "provider": "merchant",
+          "outcome": "failed"
+        }
+      ]
+    },
+    {
+      "requestId": "c60bdc04-cdcb-44ff-800f-0694d54cef07",
+      "route": "/api/turn",
+      "status": 200,
+      "durationMs": 0.71,
+      "outcomes": [
+        {
+          "provider": "discovery",
+          "outcome": "ok"
+        },
+        {
+          "provider": "research",
+          "outcome": "ok"
+        },
+        {
+          "provider": "research",
+          "outcome": "ok"
+        },
+        {
+          "provider": "research",
+          "outcome": "ok"
+        },
+        {
+          "provider": "research",
+          "outcome": "ok"
+        },
+        {
+          "provider": "merchant",
+          "outcome": "ok"
+        },
+        {
+          "provider": "merchant",
+          "outcome": "ok"
+        },
+        {
+          "provider": "merchant",
+          "outcome": "ok"
+        },
+        {
+          "provider": "merchant",
+          "outcome": "ok"
+        }
+      ]
+    },
+    {
+      "requestId": "00ebb4c9-2f7a-41b3-9ecd-d89df8103574",
+      "route": "/api/turn",
+      "status": 200,
+      "durationMs": 0.3,
+      "outcomes": [
+        {
+          "provider": "discovery",
+          "outcome": "failed"
+        }
+      ]
+    }
+  ]
+}
