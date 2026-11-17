@@ -1,0 +1,17 @@
+npm warn Unknown env config "metrics-registry". This will stop working in the next major version of npm.
+research-shopping@0.1.0 /Users/josiahwong/Documents/research-shopping-chat-security
+├─┬ shadcn@4.23.0
+│ ├─┬ @dotenvx/dotenvx@1.75.1
+│ │ └── picomatch@4.0.7 deduped
+│ └─┬ fast-glob@3.3.3
+│   └─┬ micromatch@4.0.8
+│     └── picomatch@2.3.2
+├─┬ vite@7.3.8
+│ ├─┬ fdir@6.5.0
+│ │ └── picomatch@4.0.7 deduped
+│ ├── picomatch@4.0.7
+│ └─┬ tinyglobby@0.2.17
+│   └── picomatch@4.0.7 deduped
+└─┬ vitest@4.1.12
+  └── picomatch@4.0.7 deduped
+

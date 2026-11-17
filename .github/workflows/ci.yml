@@ -33,5 +33,6 @@ jobs:
           name: research-shopping-browser-evidence
           path: |
             artifacts/screenshots/
+            artifacts/chat-first/application/
             artifacts/playwright-results/
           if-no-files-found: ignore

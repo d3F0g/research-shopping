@@ -1,0 +1,32 @@
+[
+  {
+    "name": "retry",
+    "result": "pass",
+    "detail": {
+      "retainedTurn": true
+    }
+  },
+  {
+    "name": "reset-race",
+    "result": "pass",
+    "detail": {
+      "staleResultDidNotReturn": true
+    }
+  },
+  {
+    "name": "touch-and-handoff",
+    "result": "pass",
+    "detail": {
+      "touchAfter": 197,
+      "link": "https://www.sony.com.sg/headphones/products/wh-ch720n",
+      "externalNavigation": false
+    }
+  },
+  {
+    "name": "contexts",
+    "result": "pass",
+    "detail": {
+      "independentContexts": true
+    }
+  }
+]

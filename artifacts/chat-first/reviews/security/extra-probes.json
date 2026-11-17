@@ -1,0 +1,11 @@
+{
+  "head": "38f75c271ba5396950b1fe37892350497ac15709",
+  "probes": [
+    "User message markup stayed inert text",
+    "New assistant message response markup stayed inert text",
+    "Oversized new message variant rejected at response boundary",
+    "Blocked localStorage preserved dark default and usable theme toggle"
+  ],
+  "cleanup": true,
+  "result": "passed"
+}

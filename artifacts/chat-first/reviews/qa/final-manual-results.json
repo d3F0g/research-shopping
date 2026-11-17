@@ -1,0 +1,109 @@
+[
+  {
+    "name": "theme",
+    "result": "pass",
+    "details": {
+      "dark": "rgb(24, 24, 24)",
+      "light": "rgb(250, 250, 250)",
+      "persistedBoth": true
+    }
+  },
+  {
+    "name": "questions",
+    "result": "pass",
+    "details": {
+      "turns": 5,
+      "requests": 4,
+      "last": {
+        "message": "Show options",
+        "preferences": {
+          "hard": {
+            "category": "headphones",
+            "budget": null,
+            "region": "SG",
+            "excludedBrands": [],
+            "requiredFeatures": [],
+            "pendingConstraint": null
+          },
+          "soft": {
+            "useCase": "",
+            "priorities": [
+              "value"
+            ],
+            "responseLength": "concise"
+          }
+        }
+      }
+    }
+  },
+  {
+    "name": "multi-turn-mobile",
+    "result": "pass",
+    "details": {
+      "turns": 4,
+      "scrollBefore": 0,
+      "scrollAfter": 450,
+      "composerY": 755.40625,
+      "preferences": {
+        "hard": {
+          "category": "laptops",
+          "budget": {
+            "amount": 2000,
+            "currency": "SGD"
+          },
+          "region": "SG",
+          "excludedBrands": [],
+          "requiredFeatures": [],
+          "pendingConstraint": null
+        },
+        "soft": {
+          "useCase": "",
+          "priorities": [
+            "value"
+          ],
+          "responseLength": "concise"
+        }
+      }
+    }
+  },
+  {
+    "name": "editor",
+    "result": "pass",
+    "details": {
+      "budgetPreserved": true,
+      "lastRequest": {
+        "message": "Show options",
+        "preferences": {
+          "hard": {
+            "category": "headphones",
+            "budget": {
+              "amount": 100,
+              "currency": "SGD"
+            },
+            "region": "SG",
+            "excludedBrands": [],
+            "requiredFeatures": [],
+            "pendingConstraint": null
+          },
+          "soft": {
+            "useCase": "",
+            "priorities": [
+              "value"
+            ],
+            "responseLength": "concise"
+          }
+        }
+      }
+    }
+  },
+  {
+    "name": "mobile-empty-keyboard",
+    "result": "pass",
+    "details": {
+      "focus": {
+        "width": "3px",
+        "style": "solid"
+      }
+    }
+  }
+]

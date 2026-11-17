@@ -1,0 +1,35 @@
+npm warn Unknown env config "metrics-registry". This will stop working in the next major version of npm.
+
+> research-shopping@0.1.0 test:e2e
+> EXA_RESEARCH_ENABLED=false playwright test tests/e2e/research-shopping.spec.ts tests/e2e/chat-first.spec.ts --grep unsupported requirements|stops an actual|revokes historical|aborts source|late result|successful handoff|pending selection|browser contexts|activity|web context|safe web excerpts|unsafe source|discards pending web|double-click --trace on --output=/tmp/research-shopping-chat/security/playwright
+
+[WebServer] npm warn Unknown env config "metrics-registry". This will stop working in the next major version of npm.
+[WebServer] (node:94162) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 20 tests using 1 worker
+
+(node:94237) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   1 [chromium] › tests/e2e/chat-first.spec.ts:73:1 › shows ordinary replies and contextual questions without inventing activity (1.6s)
+  ✓   2 [chromium] › tests/e2e/chat-first.spec.ts:146:1 › keeps unsupported requirements through acknowledgments and category changes (699ms)
+  ✓   3 [chromium] › tests/e2e/chat-first.spec.ts:178:1 › stops an actual pending response and retries the same user turn (624ms)
+  ✓   4 [chromium] › tests/e2e/chat-first.spec.ts:220:1 › revokes historical merchant links when a draft changes (553ms)
+  ✓   5 [chromium] › tests/e2e/chat-first.spec.ts:340:1 › aborts source transport on a draft edit and selection transport on reset (669ms)
+  ✓   6 [chromium] › tests/e2e/research-shopping.spec.ts:262:1 › keeps browser contexts separate and resets their preferences (1.2s)
+  ✓   7 [chromium] › tests/e2e/research-shopping.spec.ts:287:1 › does not let a late result overwrite a newer request (605ms)
+  ✓   8 [chromium] › tests/e2e/research-shopping.spec.ts:340:3 › rejects a successful handoff response containing a different product ID with its valid catalog destination (590ms)
+  ✓   9 [chromium] › tests/e2e/research-shopping.spec.ts:340:3 › rejects a successful handoff response containing the selected product ID with an invented approved-host path (588ms)
+  ✓  10 [chromium] › tests/e2e/research-shopping.spec.ts:340:3 › rejects a successful handoff response containing the selected product with a mismatched merchant host (587ms)
+  ✓  11 [chromium] › tests/e2e/research-shopping.spec.ts:340:3 › rejects a successful handoff response containing the selected product ID and URL with a mismatched catalog name (585ms)
+  ✓  12 [chromium] › tests/e2e/research-shopping.spec.ts:349:1 › cancels a pending selection when the user types a new request or resets (737ms)
+  ✓  13 [chromium] › tests/e2e/research-shopping.spec.ts:452:1 › shows only recorded activity after a response and clears it for clarification (838ms)
+  ✓  14 [chromium] › tests/e2e/research-shopping.spec.ts:487:1 › rejects malformed activity metadata at the response boundary (441ms)
+  ✓  15 [chromium] › tests/e2e/research-shopping.spec.ts:501:1 › requests optional web context only after an explicit click, including under StrictMode (751ms)
+  ✓  16 [chromium] › tests/e2e/research-shopping.spec.ts:523:1 › shows safe web excerpts as text with a safe HTTPS source link (874ms)
+  ✓  17 [chromium] › tests/e2e/research-shopping.spec.ts:548:1 › rejects an unsafe source response before rendering a link (590ms)
+  ✓  18 [chromium] › tests/e2e/research-shopping.spec.ts:580:1 › suppresses double-click requests and permits an explicit retry (634ms)
+  ✓  19 [chromium] › tests/e2e/research-shopping.spec.ts:606:1 › discards pending web sources after an edit (737ms)
+  ✓  20 [chromium] › tests/e2e/research-shopping.spec.ts:632:1 › discards pending web sources after reset and product handoff (954ms)
+
+  20 passed (17.1s)

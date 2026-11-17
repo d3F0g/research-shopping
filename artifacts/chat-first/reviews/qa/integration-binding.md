@@ -1,0 +1,17 @@
+# Exact integration verdict
+
+The user wants a minimal chat assistant with contextual preferences and retained research capabilities. Independent visual and runtime verdict is PASS WITH NOTES on final integration head 99a09138de9df3b09766160ea60ad9220e5776d9 against base 151fa506f58f4171add9f5efd684da809ee3248f.
+
+The complete source review is source-report.md. The source and tests reviewed with 167 passing unit/API tests, typecheck/build and 43 passing browser tests were commit db4d80011a60b14b4045125d21c6765d86f0a004. After clean checkout of final integration head, git diff --exit-code db4d80011a60b14b4045125d21c6765d86f0a004..HEAD -- src tests package.json package-lock.json index.html vite.config.ts playwright.config.ts tsconfig.json components.json returned zero. The integration delta contains verification skill, documentation, evidence, audit and orchestration records. No application or test delta invalidates the source review.
+
+Read the updated verification skill, feature map, conversation/theme guide and smoke implementation. Ran the actual updated helper from the final clean worktree with VERIFY_API_PORT=7373 VERIFY_WEB_PORT=5373 VERIFY_ARTIFACT_DIR=/tmp/research-shopping-chat/independent-qa/integration-smoke EXA_RESEARCH_ENABLED=false node .agents/skills/verify-research-shopping/scripts/smoke.mjs. It exited zero. Its proof records exact final commit, empty worktreeStatus, result passed and cleanup true. Health is fixture with liveIntegrations false and webResearch disabled. It records seven retained user and assistant exchanges, skipped optional budget, persisted themes, budget 500 to 200, exact safe handoff, stable mobile composer and no external requests, page errors or web-research requests.
+
+Inspected fresh helper screenshots of desktop/mobile dark empty chat and mobile expanded evidence. The final integrated UI preserves the accepted minimal conversational structure and readable full-width evidence. The source review also inspected desktop1440x900, mobile390x844 and narrow320x844 states with actual wheel and touch scrolling, keyboard disclosures and 44-pixel controls. Final helper desktop captures use1440x1000 and mobile390x844.
+
+No unresolved blocking visual or runtime defect remains. The checkpoint mobile evidence defect was reproduced before the fix and reverified afterward at328/358px on390px viewport and258/288px on320px viewport. Source/citation keyboard focus, jump-to-latest actual bottom, retries, reset races, context isolation, historical action ownership and fixture honesty passed.
+
+The QA checkout remains clean and both reserved ports are free after owned-process cleanup. No application edits, external navigation, live Exa requests, credential-file reads/copies or GitHub mutations were performed.
+
+Notes remain the Vite bundle warning, inherited audit findings for independent security assessment, fixture-only evidence and the absence of iOS Safari/real virtual-keyboard or exhaustive accessibility verification. User screenshot approval remains required before merge. This verdict does not substitute for that approval.
+
+Prove It Works required direct rendered inspection, source-delta comparison, actual API outcomes, measured colors/scrolling/geometry and durable proof on the exact integration head. Experience First required rejecting the earlier half-width mobile evidence despite passing broad tests, then inspecting its repaired layout before passing.
