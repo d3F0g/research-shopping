@@ -7,3 +7,7 @@ The job installs dependencies from the lockfile, runs TypeScript checking, unit/
 The initial OAuth credential lacked workflow scope and rejected activation. The user subsequently updated permission and authorized retrying publication. No credential or global Git configuration is changed by this task. [Issue19](https://github.com/d3F0g/research-shopping/issues/19) tracks successful hosted activation.
 
 [Application PR20](https://github.com/d3F0g/research-shopping/pull/20) remains unmerged while the mandatory shadcn/ui and AI Elements refactor and independent visual QA are completed.
+
+## Observed activation
+
+The automatic [pull-request run44106643836](https://github.com/d3F0g/research-shopping/actions/runs/44106643836) passed on5b3aaa59d17a39dff62630c019b24e13812d13b3. Install, TypeScript,108 unit/API tests, build, Chromium setup,15 browser journeys, and artifact upload succeeded. The separate push-triggered run also passed. This proves activation on the pre-refactor source; the mandatory frontend update must pass its own final-head checks.

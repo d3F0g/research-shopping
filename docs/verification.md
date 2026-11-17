@@ -1,6 +1,6 @@
 # Verification evidence
 
-The initial fixture-backed vertical slice passed independent QA at application commit `2dcfe45ed05bcf476f294c3152c723806f2d6d97`. The original checkout contains the same application source, package lock, configuration, and tests. Later assembly changes add documentation, the verification skill, and retained evidence.
+The initial fixture-backed vertical slice passed independent QA at application commit `2dcfe45ed05bcf476f294c3152c723806f2d6d97`. At the initial delivery, the original checkout contained the same application source, package lock, configuration, and tests. Later assembly changes add documentation, the verification skill, and retained evidence.
 
 ## Reproduced checks
 
@@ -44,12 +44,16 @@ The generated skill was validated and executed. Use `$maintain-verification-skil
 
 ## Final source continuity
 
-The root merge candidate `38e50a1c91e0cd875b7cc9d85a51512bcb8282fb` passed the default-path skill from a clean working tree. Its application source, tests, package files, and runtime configuration match independently reviewed `2dcfe45`. Subsequent assembly retains proof and updates documentation. The published application snapshot has the same source, tests, dependencies, and runtime configuration. GitHub rejected the active workflow due to missing OAuth scope, so its definition is published as an inactive proposal. The root verified that comparison with `git diff --name-only 2dcfe45 -- src tests package.json package-lock.json playwright.config.ts tsconfig.json vite.config.ts vitest.config.ts`. No application differences were reported.
+The root merge candidate `38e50a1c91e0cd875b7cc9d85a51512bcb8282fb` passed the default-path skill from a clean working tree. Its application source, tests, package files, and runtime configuration match independently reviewed `2dcfe45`. Subsequent assembly retains proof and updates documentation. The published application snapshot has the same source, tests, dependencies, and runtime configuration. GitHub rejected the active workflow due to missing OAuth scope, so its definition was initially published as an inactive proposal. That historical proposal has since been replaced by the active workflow. The root verified that comparison with `git diff --name-only 2dcfe45 -- src tests package.json package-lock.json playwright.config.ts tsconfig.json vite.config.ts vitest.config.ts`. No application differences were reported.
 
-## GitHub execution limit
+## Initial GitHub execution limit
 
-GitHub-hosted CI did not run. The current OAuth credential rejected active workflow publication, and no credentials or permissions were changed. The tested application is published without an active workflow. [CI activation](ci.md) and issue19 preserve the exact proposed workflow and verification criteria. Local verification results are not presented as GitHub CI results.
+At the initial milestone, GitHub-hosted CI did not run. The then-current OAuth credential rejected active workflow publication, and no credentials or permissions were changed. That initial snapshot had no active workflow. [CI documentation](ci.md) now records successful activation and issue19 resolution. Local verification results are not presented as GitHub CI results.
 
 ## Published review
 
 [Application PR20](https://github.com/d3F0g/research-shopping/pull/20) stacks on [architecture PR6](https://github.com/d3F0g/research-shopping/pull/6). Both are open and unmerged. The initial milestone and reproduced defects are closed with verification links. Live integration, durable personalization, coverage, and CI activation remain assigned backlog items.
+
+## CI activation and mandatory frontend follow-up
+
+The user updated workflow permission and required official shadcn/ui and AI Elements for all frontend development. The active workflow is now under `.github/workflows/ci.yml`. [Automatic pull-request CI](https://github.com/d3F0g/research-shopping/actions/runs/44106643836) passed the pre-refactor source with108 unit/API tests and15 browser journeys. The frontend architecture migration, independent visualQA, and final-head hosted verification remain active work in PR20.
