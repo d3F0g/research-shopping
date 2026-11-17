@@ -2,7 +2,7 @@ import { randomUUID } from "node:crypto";
 import { Hono } from "hono";
 import {
   BudgetSchema, PreferencesSchema, SelectionRequestSchema, SelectionResultSchema,
-  TurnRequestSchema, TurnResultSchema,
+  TurnRequestSchema, TurnResponseSchema,
 } from "../domain/contracts";
 import type { ProviderEvent, Providers } from "../domain/providers";
 import { validBudgetAmount } from "../domain/preferences";
@@ -113,7 +113,8 @@ export function createApp(dependencies: AppDependencies = {}, configuration: Par
       onProviderEvent: (event) => { if (context.get("outcomes").length < 20) context.get("outcomes").push(event); },
     });
     const result = await engine.turn(parsed.data.message, parsed.data.preferences);
-    return context.json(TurnResultSchema.parse(result));
+    const toolActivity = context.get("outcomes").slice(0, 20);
+    return context.json(TurnResponseSchema.parse({ ...result, toolActivity }));
   });
   app.post("/api/select", async (context) => {
     const parsed = SelectionInput.safeParse(context.get("payload"));
