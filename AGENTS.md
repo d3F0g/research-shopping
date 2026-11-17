@@ -30,3 +30,13 @@ Every sample claim, price, and availability status must remain visibly labeled a
 Use package scripts and the project verification skill once created. Require real browser journeys and responsive screenshots, plus boundary and core-behavior tests. Cover budget changes, ambiguity, unavailable products, conflicting sources, dissatisfaction, provider errors, merchant-link policy, and session isolation. Keep evidence under `artifacts/` and document what the tests did not establish.
 
 GitHub Issues are the durable defect tracker. Resolve a defect only after reproducing, fixing, and reverifying it. Opening a PR does not authorize merging it.
+
+## Mandatory frontend architecture
+
+All frontend development uses official [shadcn/ui](https://ui.shadcn.com/docs) and the appropriate official [AI Elements](https://ui.shadcn.com/docs/ai-elements). This is an architectural requirement. Use the official registry/CLI and documented patterns, with provenance recorded in the repository. Do not replace the primitives with handmade lookalikes.
+
+Compose product cards, comparisons, preference controls, dialogs, and progressive disclosure from shadcn/ui. Use official AI Elements for conversational messages, prompt input, citations, and tool activity. Streaming displays must reflect actual transport events; do not simulate streaming, reasoning, or tool progress. Source references remain safe manufacturer links for synthetic fixture claims.
+
+Keep design tokens centralized, with consistent typography, spacing, contrast, focus indicators, and responsive layouts. Prefer concise answers and compact comparisons with expandable evidence. All essential controls and disclosures stay readable and keyboard-operable on desktop and mobile.
+
+Delegate implementation and independent visual QA through pstack. Verify real browser journeys and desktop/mobile screenshots after frontend changes. Preserve behavioral/security assertions when changing selectors for official component semantics. Update PR20 rather than opening a duplicate feature PR. Do not merge until mandatory frontend acceptance and independent QA pass.

@@ -35,6 +35,6 @@ Set `API_PORT` to change the Hono port. `PORT` is the API fallback. Set `WEB_POR
 
 The deterministic parser understands a small set of product categories and constraints. The fixture catalog covers headphones and laptops in SGD for Singapore. US requests return an explicit limitation. The demo has no live web research, current merchant offers, shipping checks, saved account profile, payment, or order placement.
 
-## CI proposal
+## GitHub Actions CI
 
-The inactive workflow is documented in [docs/ci.md](docs/ci.md). GitHub rejected active workflow publication because the existing OAuth credential lacks `workflow` scope. All reported checks ran locally or in the independent review checkout. No credential or permission was changed.
+The workflow in [`.github/workflows/ci.yml`](.github/workflows/ci.yml) runs automatically on pushes and pull requests. It installs dependencies, checks TypeScript, runs unit/API tests, builds the frontend, runs Chromium journeys, and uploads browser evidence. See [CI documentation](docs/ci.md) and the actual PR checks for execution results.
