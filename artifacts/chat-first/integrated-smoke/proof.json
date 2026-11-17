@@ -1,0 +1,84 @@
+{
+  "repo": "/Users/josiahwong/Documents/research-shopping-chat",
+  "apiPort": 5673,
+  "webPort": 7673,
+  "artifacts": "/tmp/research-shopping-chat/integrated-smoke",
+  "commit": "99a09138de9df3b09766160ea60ad9220e5776d9",
+  "worktreeStatus": "",
+  "feature": "chat-first-shopping",
+  "actions": [
+    "Doctor confirmed owned ports, offline fixture health, minimal empty chat and dark mode despite light OS preference.",
+    "Changed the actual theme control to light and dark and confirmed each selection after refresh.",
+    "Submitted an ordinary greeting, chose an inline missing-category answer, skipped an optional budget question and confirmed it was not repeated on a relevant follow-up.",
+    "Submitted a complete request without repeated category/budget questions, then changed the cap naturally while retaining earlier exchanges and making obsolete selection actions unavailable.",
+    "Scrolled older and newer mobile history with an anchored visible composer, then checked current product evidence against its exact manufacturer reference.",
+    "Selected from the current turn and compared the safe displayed handoff link with the actual API response without opening the destination."
+  ],
+  "result": "passed",
+  "cleanup": true,
+  "serverPid": 95287,
+  "health": {
+    "status": "ok",
+    "mode": "fixture",
+    "liveIntegrations": false,
+    "webResearch": "disabled"
+  },
+  "theme": {
+    "firstVisit": "dark",
+    "osPreference": "light",
+    "lightPersistedAfterRefresh": true,
+    "darkPersistedAfterRefresh": true
+  },
+  "optionalBudget": {
+    "skipped": true,
+    "budgetRemainedUnknown": true,
+    "notAskedAgainInSameContext": true
+  },
+  "history": {
+    "firstTurnId": "turn-6",
+    "firstBudget": 500,
+    "currentBudget": 200,
+    "earlierExchangeRetained": true,
+    "historicalSelectionActions": 0,
+    "obsoleteSelectionActionsUnavailable": true,
+    "userMessages": 7,
+    "assistantMessages": 7
+  },
+  "candidates": [
+    {
+      "id": "sony-wh-ch720n",
+      "price": {
+        "amount": 149,
+        "currency": "SGD"
+      },
+      "dataKind": "fixture"
+    }
+  ],
+  "composer": {
+    "desktop": {
+      "top": 907.40625,
+      "bottom": 955.40625,
+      "viewportHeight": 1000
+    },
+    "mobile": {
+      "olderHistory": {
+        "top": 755.40625,
+        "bottom": 803.40625,
+        "viewportHeight": 844
+      },
+      "latestHistory": {
+        "top": 755.40625,
+        "bottom": 803.40625,
+        "viewportHeight": 844
+      },
+      "stableWhileScrolling": true
+    }
+  },
+  "handoff": {
+    "productId": "sony-wh-ch720n",
+    "destination": "https://www.sony.com.sg/headphones/products/wh-ch720n"
+  },
+  "externalRequests": [],
+  "pageErrors": [],
+  "webResearchRequests": 0
+}

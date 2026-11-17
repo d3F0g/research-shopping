@@ -11,7 +11,7 @@ Base151fa506f58f4171add9f5efd684da809ee3248f. Worktree /Users/josiahwong/Documen
 - [x] Read the Principles section of the poteto-mode skill.
 - [x] Phase A: Frame
 - [x] Phase B: Design the workflow
-- [ ] Phase C: Run the loop
+- [x] Phase C: Run the loop
 - [ ] Phase D: Keep the audit trail
 - [ ] Phase E: Verify and hand back
 
