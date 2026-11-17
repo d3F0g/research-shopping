@@ -1,3 +1,4 @@
 ts	phase	decision	why	evidence	result
 2026-11-17T18:36:20Z	frame	Started a fresh chat-first redesign from latest main	The user rejected dashboard architecture and requires screenshot approval before merge	.codex/pstack-runs/chat-first/plan.md	open
 2026-11-17T18:36:20Z	baseline	Captured actual desktop and mobile dashboard baseline	Use rendered evidence to distinguish architecture changes from styling	/tmp/research-shopping-chat/baseline/proof.json	VERIFIED
+2026-11-17T18:45:46Z	design	Selected the typed turn ledger after independent design comparison	Explicit source and selection ownership resolves risks omitted by the simpler proposal	.codex/pstack-runs/chat-first/architecture.md	VERIFIED
