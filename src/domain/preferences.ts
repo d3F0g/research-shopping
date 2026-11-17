@@ -33,10 +33,23 @@ export function validBudgetAmount(amount: number): boolean {
     && Number(amount.toFixed(2)) === amount;
 }
 
+export function conversationalReply(message: string, preferences: Preferences): string | null {
+  const text = message.trim().toLowerCase().replace(/[.!?]+$/, "");
+  if (/^(hi|hello|hey)$/.test(text)) return "Hi. What are you looking for? I can compare sample headphones and laptops.";
+  if (/^(thanks|thank you|thank you very much)$/.test(text)) return "You're welcome. Tell me if you'd like to change the budget or compare another option.";
+  if (/^(yes|ok|okay)$/.test(text)) return preferences.hard.pendingConstraint
+    ? "Your unresolved requirement is still active. Rephrase it, or explicitly ask to clear the pending constraint."
+    : "Tell me what you'd like to change, or choose an option from the latest shortlist.";
+  if (text === "why") return preferences.hard.pendingConstraint
+    ? "I cannot verify your unresolved requirement with this sample catalog, so it still blocks recommendations."
+    : "I compare sample products against your hard limits, then rank them by supported priorities and sample price. These fixtures do not establish current price or stock.";
+  return null;
+}
+
 export function updatePreferences(message: string, previous: Preferences): PreferenceUpdate {
   const preferences = structuredClone(previous);
   const notes: string[] = [];
-  let remaining = message.normalize("NFKC").replace(/[\u2018\u2019]/g, "'").replace(/[\u2010-\u2014]/g, "-").trim();
+  let remaining = message.replace(/^\s*(?:what about|how about|can you show me)\s+(?=(?:a |some )?(?:headphones?|headsets?|laptops?|notebooks?)\b)/i, "").normalize("NFKC").replace(/[\u2018\u2019]/g, "'").replace(/[\u2010-\u2014]/g, "-").trim();
   let actionable = false;
   let issue: PreferenceUpdate["clarification"];
   const fail = (reason: Clarification["reason"], explanation: string) => {

@@ -5,7 +5,7 @@ import {
   type Offer, type Preferences, type Priority, type Product, type ProductId, type SelectionResult, type TurnResult,
 } from "./contracts";
 import { isApprovedUrl, isSafeMerchantOffer, matchesCatalogIdentity } from "./merchant-links";
-import { updatePreferences } from "./preferences";
+import { conversationalReply, updatePreferences } from "./preferences";
 import type { ProviderEvent, ProviderName, Providers } from "./providers";
 
 const ProductBoundary = DiscoveryProductSchema.extend({ features: DiscoveryProductSchema.shape.features.max(12) });
@@ -122,6 +122,8 @@ export function createShoppingEngine(providers: Providers, options: EngineOption
   }
 
   async function turn(message: string, previous: Preferences): Promise<TurnResult> {
+    const reply = conversationalReply(message, previous);
+    if (reply) return { kind: "message", message: reply, preferences: structuredClone(previous), notes: [] };
     const update = updatePreferences(message, previous);
     const { preferences } = update;
     const notes = [FIXTURE_NOTICE, ...update.notes];

@@ -138,6 +138,12 @@ export const TurnErrorSchema = z.object({
 
 export const TurnResultSchema = z.discriminatedUnion("kind", [
   z.object({
+    kind: z.literal("message"),
+    message: z.string().min(1).max(400),
+    preferences: PreferencesSchema,
+    notes: z.array(z.string().max(240)),
+  }),
+  z.object({
     kind: z.literal("clarification"),
     reason: z.enum(["category", "constraint", "feedback", "currency"]),
     message: z.string().min(1).max(400),
