@@ -5,6 +5,7 @@ type Clarification = Extract<TurnResult, { kind: "clarification" }>;
 export type PreferenceUpdate = {
   preferences: Preferences;
   notes: string[];
+  budgetRemoved: boolean;
   clarification?: Pick<Clarification, "reason" | "message">;
 };
 
@@ -39,7 +40,7 @@ export function conversationalReply(message: string, preferences: Preferences): 
   if (/^(thanks|thank you|thank you very much)$/.test(text)) return "You're welcome. Tell me if you'd like to change the budget or compare another option.";
   if (/^(yes|ok|okay)$/.test(text)) return preferences.hard.pendingConstraint
     ? "Your unresolved requirement is still active. Rephrase it, or explicitly ask to clear the pending constraint."
-    : "Tell me what you'd like to change, or choose an option from the latest shortlist.";
+    : "Tell me what you'd like to change, or ask to refresh the shortlist.";
   if (text === "why") return preferences.hard.pendingConstraint
     ? "I cannot verify your unresolved requirement with this sample catalog, so it still blocks recommendations."
     : "I compare sample products against your hard limits, then rank them by supported priorities and sample price. These fixtures do not establish current price or stock.";
@@ -51,6 +52,7 @@ export function updatePreferences(message: string, previous: Preferences): Prefe
   const notes: string[] = [];
   let remaining = message.replace(/^\s*(?:what about|how about|can you show me)\s+(?=(?:a |some )?(?:headphones?|headsets?|laptops?|notebooks?)\b)/i, "").normalize("NFKC").replace(/[\u2018\u2019]/g, "'").replace(/[\u2010-\u2014]/g, "-").trim();
   let actionable = false;
+  let budgetRemoved = false;
   let issue: PreferenceUpdate["clarification"];
   const fail = (reason: Clarification["reason"], explanation: string) => {
     issue ??= { reason, message: explanation };
@@ -100,6 +102,7 @@ export function updatePreferences(message: string, previous: Preferences): Prefe
   consume(/\b(?:in |to |region |market |based in )?(Singapore|SG)\b/g, () => { preferences.hard.region = "SG"; actionable = true; });
   consume(/\b(?:no budget limit|no limit on (?:the |my )?budget|unlimited budget|remove (?:the |my )?budget(?: limit)?|drop (?:the |my )?budget(?: limit)?|clear (?:the |my )?budget(?: limit)?)\b/gi, () => {
     preferences.hard.budget = null;
+    budgetRemoved = true;
     notes.push("The budget limit was removed.");
     actionable = true;
   });
@@ -194,11 +197,11 @@ export function updatePreferences(message: string, previous: Preferences): Prefe
   if (preferences.hard.pendingConstraint && !issue) {
     issue = { reason: "constraint", message: "An unresolved requirement is still active. I will not recommend products until you explicitly clear the pending constraint or reset this session." };
   }
-  if (issue) return { preferences, notes, clarification: issue };
-  if (!preferences.hard.category) return { preferences, notes, clarification: { reason: "category", message: "Are you looking for headphones or a laptop? Those are the two categories in this sample catalog." } };
+  if (issue) return { preferences, notes, budgetRemoved, clarification: issue };
+  if (!preferences.hard.category) return { preferences, notes, budgetRemoved, clarification: { reason: "category", message: "Are you looking for headphones or a laptop? Those are the two categories in this sample catalog." } };
   if (preferences.hard.requiredFeatures.some((feature) => !categoryFeatures[preferences.hard.category!].includes(feature))) {
-    return { preferences, notes, clarification: { reason: "constraint", message: "A required feature does not apply to this category. Remove it or change the category before comparing products." } };
+    return { preferences, notes, budgetRemoved, clarification: { reason: "constraint", message: "A required feature does not apply to this category. Remove it or change the category before comparing products." } };
   }
-  if (rejected && !actionable) return { preferences, notes, clarification: { reason: "feedback", message: "What should improve first: price, battery life, or portability?" } };
-  return { preferences, notes };
+  if (rejected && !actionable) return { preferences, notes, budgetRemoved, clarification: { reason: "feedback", message: "What should improve first: price, battery life, or portability?" } };
+  return { preferences, notes, budgetRemoved };
 }

@@ -18,11 +18,7 @@ import { isApprovedUrl } from "../domain/merchant-links";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import { Button, buttonVariants } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import {
   Collapsible,
   CollapsibleContent,
@@ -220,7 +216,13 @@ function ClaimDetails({ candidate }: { candidate: Candidate }) {
   );
 }
 
-function ProductCard({ candidate, index, onSelect, selecting, active }: {
+function ProductCard({
+  candidate,
+  index,
+  onSelect,
+  selecting,
+  active,
+}: {
   candidate: Candidate;
   index: number;
   onSelect: () => void;
@@ -229,29 +231,71 @@ function ProductCard({ candidate, index, onSelect, selecting, active }: {
 }) {
   const { offer, product } = candidate;
   return (
-    <Card className={`product-card ${index === 0 ? "top-pick" : ""}`} role="article" aria-label={product.name}>
+    <Card
+      className={`product-card ${index === 0 ? "top-pick" : ""}`}
+      role="article"
+      aria-label={product.name}
+    >
       <CardContent>
         <div className="product-row">
-          <span className="product-rank" aria-hidden="true">{String(index + 1).padStart(2, "0")}</span>
+          <span className="product-rank" aria-hidden="true">
+            {String(index + 1).padStart(2, "0")}
+          </span>
           <div className="product-identity">
             <h3>{product.name}</h3>
-            <p className="metadata">{index === 0 ? "Leading sample match" : "Sample option"} · Fixture data</p>
+            <p className="metadata">
+              {index === 0 ? "Leading sample match" : "Sample option"} · Fixture
+              data
+            </p>
           </div>
           <div className="product-price">
-            <strong>{currencySymbol(offer.price.currency)}{offer.price.amount.toLocaleString("en-SG")}</strong>
+            <strong>
+              {currencySymbol(offer.price.currency)}
+              {offer.price.amount.toLocaleString("en-SG")}
+            </strong>
             <p className="metadata">Sample price · fixture only</p>
           </div>
         </div>
         <div className="product-context">
-          <p>{candidate.reasons.filter((reason) => !reason.startsWith("Sample price") && !reason.startsWith("Tradeoff.")).slice(0, 1).join(" ") || "Sample price meets your stated limits."}</p>
-          <p className="metadata">{offer.availability === "sample-in-stock" ? "Sample says in stock" : offer.availability === "sample-unavailable" ? "Sample says unavailable" : "Sample stock unknown"} · Fixture snapshot · {fixtureDate(offer.observedAt)} · {offer.region}</p>
-          <p className="tradeoff">{candidate.reasons.find((reason) => reason.startsWith("Tradeoff.")) ?? "Tradeoff. Sample evidence does not establish real-world quality, current price or stock."}</p>
+          <p>
+            {candidate.reasons
+              .filter(
+                (reason) =>
+                  !reason.startsWith("Sample price") &&
+                  !reason.startsWith("Tradeoff."),
+              )
+              .slice(0, 1)
+              .join(" ") || "Sample price meets your stated limits."}
+          </p>
+          <p className="metadata">
+            {offer.availability === "sample-in-stock"
+              ? "Sample says in stock"
+              : offer.availability === "sample-unavailable"
+                ? "Sample says unavailable"
+                : "Sample stock unknown"}{" "}
+            · Fixture snapshot · {fixtureDate(offer.observedAt)} ·{" "}
+            {offer.region}
+          </p>
+          <p className="tradeoff">
+            {candidate.reasons.find((reason) =>
+              reason.startsWith("Tradeoff."),
+            ) ??
+              "Tradeoff. Sample evidence does not establish real-world quality, current price or stock."}
+          </p>
         </div>
         <div className="product-actions">
           <ClaimDetails candidate={candidate} />
-          {active && <Button className="select-product" variant="ghost" onClick={onSelect} disabled={selecting}>
-            {selecting ? "Checking sample link…" : "Select this product"}<ArrowUpRight aria-hidden="true" />
-          </Button>}
+          {active && (
+            <Button
+              className="select-product"
+              variant="ghost"
+              onClick={onSelect}
+              disabled={selecting}
+            >
+              {selecting ? "Checking sample link…" : "Select this product"}
+              <ArrowUpRight aria-hidden="true" />
+            </Button>
+          )}
         </div>
       </CardContent>
     </Card>
@@ -376,7 +420,14 @@ function PreferenceNotes({ notes }: { notes: string[] }) {
   );
 }
 
-export function Results({ outcome, onSelect, onRetry, selectingId, selectionError, active }: {
+export function Results({
+  outcome,
+  onSelect,
+  onRetry,
+  selectingId,
+  selectionError,
+  active,
+}: {
   outcome: TurnResponse;
   onSelect: (candidate: Candidate) => void;
   onRetry: () => void;
@@ -384,26 +435,73 @@ export function Results({ outcome, onSelect, onRetry, selectingId, selectionErro
   selectionError: string | null;
   active: boolean;
 }) {
-  if (outcome.kind === "message") return <p className="ordinary-message">{outcome.message}</p>;
+  if (outcome.kind === "message")
+    return <p className="ordinary-message">{outcome.message}</p>;
   return (
     <section className="results-area" aria-label="Research response">
-      {outcome.kind === "recommendations" ? <>
-        <p className="answer-first">{outcome.answer}</p>
-        <div className="shortlist-heading"><h2>Your shortlist</h2><span className="metadata">{outcome.candidates.length} sample options</span></div>
-        <div className="product-grid">
-          {outcome.candidates.map((candidate, index) => <ProductCard key={candidate.product.id} candidate={candidate} index={index} onSelect={() => onSelect(candidate)} selecting={selectingId === candidate.product.id} active={active} />)}
+      {outcome.kind === "recommendations" ? (
+        <>
+          <p className="answer-first">{outcome.answer}</p>
+          <div className="shortlist-heading">
+            <h2>Your shortlist</h2>
+            <span className="metadata">
+              {outcome.candidates.length} sample{" "}
+              {outcome.candidates.length === 1 ? "option" : "options"}
+            </span>
+          </div>
+          <div className="product-grid">
+            {outcome.candidates.map((candidate, index) => (
+              <ProductCard
+                key={candidate.product.id}
+                candidate={candidate}
+                index={index}
+                onSelect={() => onSelect(candidate)}
+                selecting={selectingId === candidate.product.id}
+                active={active}
+              />
+            ))}
+          </div>
+          {selectionError && (
+            <Alert variant="destructive" className="selection-error">
+              <AlertDescription>{selectionError}</AlertDescription>
+            </Alert>
+          )}
+          {outcome.candidates.length > 1 && (
+            <Comparison candidates={outcome.candidates} />
+          )}
+          {!active && (
+            <p className="metadata historical-note">
+              Earlier shortlist. Send a message to refresh these options.
+            </p>
+          )}
+        </>
+      ) : (
+        <div
+          className={`message-panel ${outcome.kind === "clarification" ? "clarification-panel" : outcome.kind === "no-match" ? "no-match-panel" : "error-panel"}`}
+          role={outcome.kind === "error" ? "alert" : undefined}
+        >
+          <h2>
+            {outcome.kind === "clarification"
+              ? "One thing to clarify"
+              : outcome.kind === "no-match"
+                ? "No sample option meets these limits"
+                : "Research paused"}
+          </h2>
+          <p>{outcome.message}</p>
+          {outcome.kind === "error" && active && outcome.retryable && (
+            <Button variant="outline" onClick={onRetry}>
+              Try again
+            </Button>
+          )}
         </div>
-        {selectionError && <Alert variant="destructive" className="selection-error"><AlertDescription>{selectionError}</AlertDescription></Alert>}
-        <Comparison candidates={outcome.candidates} />
-        {!active && <p className="metadata historical-note">Earlier shortlist. Send a message to refresh these options.</p>}
-      </> : <div className={`message-panel ${outcome.kind === "clarification" ? "clarification-panel" : outcome.kind === "no-match" ? "no-match-panel" : "error-panel"}`} role={outcome.kind === "error" ? "alert" : undefined}>
-        <h2>{outcome.kind === "clarification" ? "One thing to clarify" : outcome.kind === "no-match" ? "No sample option meets these limits" : "Research paused"}</h2>
-        <p>{outcome.message}</p>
-        {outcome.kind === "error" && active && outcome.retryable && <Button variant="outline" onClick={onRetry}>Try again</Button>}
-      </div>}
+      )}
       <Collapsible className="response-details">
-        <CollapsibleTrigger render={<Button variant="ghost" />}>Response notes <ChevronDown aria-hidden="true" /></CollapsibleTrigger>
-        <CollapsibleContent><PreferenceNotes notes={outcome.notes} /></CollapsibleContent>
+        <CollapsibleTrigger render={<Button variant="ghost" />}>
+          Response notes <ChevronDown aria-hidden="true" />
+        </CollapsibleTrigger>
+        <CollapsibleContent>
+          <PreferenceNotes notes={outcome.notes} />
+        </CollapsibleContent>
       </Collapsible>
       <ToolActivity events={outcome.toolActivity} />
     </section>
@@ -428,7 +526,7 @@ export function Handoff({
         <Badge className="w-fit" variant="secondary">
           Product page handoff
         </Badge>
-        <h2 >{result.productName}</h2>
+        <h2>{result.productName}</h2>
         <p className="text-muted-foreground">{result.label}</p>
       </CardHeader>
       <CardContent className="space-y-4">
@@ -442,23 +540,28 @@ export function Handoff({
         <p className="handoff-domain">
           Merchant host <code>{new URL(result.productUrl).hostname}</code>
         </p>
-        {active ? <a
-          href={result.productUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          className={buttonVariants({
-            className: "merchant-link h-auto min-h-11 whitespace-normal py-2",
-          })}
-        >
-          Open manufacturer product page <ArrowUpRight aria-hidden="true" />
-          <span className="sr-only"> (opens in a new tab)</span>
-        </a> : <p className="metadata">Earlier product destination · {result.productUrl}</p>}
+        {active ? (
+          <a
+            href={result.productUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={buttonVariants({
+              className: "merchant-link h-auto min-h-11 whitespace-normal py-2",
+            })}
+          >
+            Open manufacturer product page <ArrowUpRight aria-hidden="true" />
+            <span className="sr-only"> (opens in a new tab)</span>
+          </a>
+        ) : (
+          <p className="metadata">
+            Earlier product destination · {result.productUrl}
+          </p>
+        )}
         <p className="metadata">
           The link passed the demo's HTTPS and approved-host checks. The sample
           price and stock were not checked live.
         </p>
       </CardContent>
-
     </Card>
   );
 }
