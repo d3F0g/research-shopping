@@ -1,0 +1,3 @@
+ts	phase	decision	why	evidence	result
+2026-11-17T13:10:00Z	start	Start the initial vertical-slice run	The user requested a working application with independent verification	.codex/pstack-runs/initial/plan.md	open
+2026-11-17T13:10:01Z	assessment	Compare two architectures before writing the application	The repository contains no existing application and integration contracts need evidence	.git	Two read-only candidate agents running
