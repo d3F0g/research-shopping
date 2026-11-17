@@ -49,3 +49,7 @@ The root merge candidate `38e50a1c91e0cd875b7cc9d85a51512bcb8282fb` passed the d
 ## GitHub execution limit
 
 GitHub-hosted CI did not run. The current OAuth credential rejected active workflow publication, and no credentials or permissions were changed. The tested application is published without an active workflow. [CI activation](ci.md) and issue19 preserve the exact proposed workflow and verification criteria. Local verification results are not presented as GitHub CI results.
+
+## Published review
+
+[Application PR20](https://github.com/d3F0g/research-shopping/pull/20) stacks on [architecture PR6](https://github.com/d3F0g/research-shopping/pull/6). Both are open and unmerged. The initial milestone and reproduced defects are closed with verification links. Live integration, durable personalization, coverage, and CI activation remain assigned backlog items.
