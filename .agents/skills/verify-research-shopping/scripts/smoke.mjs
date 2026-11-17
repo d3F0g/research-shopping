@@ -45,7 +45,7 @@ try {
     cwd: repo,
     detached: true,
     stdio: ['ignore', 'pipe', 'pipe'],
-    env: { ...process.env, API_PORT: String(run.apiPort), VITE_API_PORT: String(run.apiPort), WEB_PORT: String(run.webPort) },
+    env: { ...process.env, EXA_RESEARCH_ENABLED: 'false', API_PORT: String(run.apiPort), VITE_API_PORT: String(run.apiPort), WEB_PORT: String(run.webPort) },
   });
   server.stdout.pipe(log, { end: false });
   server.stderr.pipe(log, { end: false });
@@ -64,6 +64,7 @@ try {
         assert.equal(health.status, 'ok');
         assert.equal(health.mode, 'fixture');
         assert.equal(health.liveIntegrations, false);
+        assert.equal(health.webResearch, 'disabled');
         proof.health = health;
         break;
       }
