@@ -10,3 +10,5 @@ Application candidate `a3163a20a5398b9f3c3064b7cb87bf4094de6f8d` passed independ
 - Portability omission reproduced before fix; real editor now exposes and removes it without relaxing hard constraints.
 
 The active workflow runs automatically on push and pull_request. Root alone publishes to the existing PR20 and inspects final-head CI jobs and uploaded evidence. No merge, deployment, credential changes, or stack retargeting. Fixture/live-provider limits remain in docs/verification.md.
+
+Hosted frontend publication `cba0d46` passed automatic PR run44115694396 and push run44115677362, each110 unit/API plus20 browser tests. Evidence upload is confirmed. Metadata is retained under artifacts/ci/frontend-*.json. Later documentation-only heads still receive the automatic gate; latest PR20 checks are authoritative.
