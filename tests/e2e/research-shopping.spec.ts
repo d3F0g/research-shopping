@@ -494,7 +494,7 @@ test("requests optional web context only after an explicit click, including unde
   await expect(page.getByRole("button", { name: "Search the web for context" })).toBeVisible();
   expect(requests).toBe(0);
   await page.getByRole("button", { name: "Search the web for context" }).click();
-  await expect(page.getByText("1 web sources")).toBeVisible();
+  await expect(page.getByText("1 web source")).toBeVisible();
   expect(requests).toBe(1);
   expect(submitted?.productIds).toHaveLength(3);
   expect(new Set(submitted?.productIds).size).toBe(3);
@@ -513,7 +513,7 @@ test("shows safe web excerpts as text with a safe HTTPS source link", async ({ p
   }));
   await researchWithPrompt(page, "Wireless headphones under S$500");
   await page.getByRole("button", { name: "Search the web for context" }).click();
-  await page.getByRole("button", { name: "1 web sources" }).click();
+  await page.getByRole("button", { name: "1 web source" }).click();
   const source = page.getByRole("link", { name: /<img src=x onerror=alert\(1\)> source/ });
   await expect(source).toHaveAttribute("href", "https://www.example.org/reviews/headphones");
   await expect(source).toHaveAttribute("target", "_blank");
@@ -579,7 +579,7 @@ test("suppresses double-click requests and permits an explicit retry", async ({ 
   release.resolve();
   await expect(page.getByText("Web research is temporarily unavailable.")).toBeVisible();
   await page.getByRole("button", { name: "Try web research again" }).click();
-  await expect(page.getByText("1 web sources")).toBeVisible();
+  await expect(page.getByText("1 web source")).toBeVisible();
   expect(requests).toBe(2);
 });
 
@@ -604,7 +604,7 @@ test("discards pending web sources after an edit", async ({ page }) => {
   await page.getByRole("button", { name: "Research options" }).click();
   await expect(page.locator(".product-card").first()).toContainText("ASUS");
   release.resolve();
-  await expect(page.getByText("1 web sources")).toHaveCount(0);
+  await expect(page.getByText("1 web source")).toHaveCount(0);
   await expect(page.locator(".web-research")).toHaveCount(1);
 });
 

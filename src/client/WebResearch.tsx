@@ -140,7 +140,7 @@ export function WebResearch({
               timeStyle: "short",
               timeZone: "UTC",
             })} UTC
-            {state.response.truncated ? " · Some sources were omitted" : ""}
+            {state.response.truncated ? " · Some source details were shortened or omitted" : ""}
           </p>
           {state.response.results.length === 0 ? (
             <p className="web-research-status" role="status">
@@ -152,7 +152,7 @@ export function WebResearch({
                 <TraceCollapsibleTrigger className="min-h-11">
                   <TraceLine>
                     <TraceIcon><BookOpen /></TraceIcon>
-                    <TraceTitle>{state.response.results.length} web sources</TraceTitle>
+                    <TraceTitle>{state.response.results.length} web source{state.response.results.length === 1 ? "" : "s"}</TraceTitle>
                   </TraceLine>
                 </TraceCollapsibleTrigger>
                 <TraceCollapsibleContent>

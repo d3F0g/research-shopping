@@ -520,6 +520,10 @@ export function Results({
         <>
           <p className="answer-first">{outcome.answer}</p>
           <PreferenceNotes notes={outcome.notes} />
+          <WebResearch
+            productIds={outcome.candidates.map(({ product }) => product.id)}
+            preferences={outcome.preferences}
+          />
           <div className="shortlist-heading">
             <h3>{outcome.candidates.length} options that fit</h3>
             <span className="metadata">
@@ -544,10 +548,6 @@ export function Results({
             </Alert>
           )}
           <Comparison candidates={outcome.candidates} />
-          <WebResearch
-            productIds={outcome.candidates.map(({ product }) => product.id)}
-            preferences={outcome.preferences}
-          />
         </>
       )}
       {outcome.kind !== "recommendations" && (
