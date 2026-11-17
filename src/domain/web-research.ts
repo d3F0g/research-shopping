@@ -3,6 +3,40 @@ import { PreferencesSchema, ProductIdSchema } from "./contracts";
 
 const MAX_WEB_RESEARCH_RESULTS = 10;
 const MAX_WEB_RESEARCH_HIGHLIGHTS = 8_192;
+const NON_PUBLIC_HOST_SUFFIXES = [
+  ".localhost",
+  ".local",
+  ".internal",
+  ".test",
+  ".example",
+  ".invalid",
+  ".onion",
+];
+
+export function isSafeWebResearchUrl(raw: string): boolean {
+  try {
+    const url = new URL(raw);
+    const hostname = url.hostname.toLowerCase();
+    const labels = hostname.split(".");
+    const ipLiteral = hostname.startsWith("[") || hostname.includes(":")
+      || /^(?:\d{1,3}\.){3}\d{1,3}$/.test(hostname);
+    const reservedHost = hostname === "localhost"
+      || NON_PUBLIC_HOST_SUFFIXES.some((suffix) => hostname.endsWith(suffix));
+
+    return url.protocol === "https:"
+      && !url.username
+      && !url.password
+      && !url.port
+      && !ipLiteral
+      && !reservedHost
+      && hostname.length <= 253
+      && labels.length > 1
+      && labels.every((label) => /^[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?$/.test(label))
+      && /^(?:[a-z]{2,}|xn--[a-z0-9-]+)$/.test(labels.at(-1) ?? "");
+  } catch {
+    return false;
+  }
+}
 
 export const ShortlistResearchRequestSchema = z.object({
   productIds: z.array(ProductIdSchema).min(1).max(5).refine(
@@ -13,7 +47,7 @@ export const ShortlistResearchRequestSchema = z.object({
 
 export const WebResearchSourceSchema = z.object({
   title: z.string().min(1).max(180),
-  url: z.string().url().max(2_048),
+  url: z.string().url().max(2_048).refine(isSafeWebResearchUrl),
   highlights: z.array(z.string().max(640)).max(3),
 });
 
