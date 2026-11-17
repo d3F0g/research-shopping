@@ -1,0 +1,30 @@
+
+> research-shopping@0.1.0 test:e2e
+> playwright test
+
+[WebServer] (node:6338) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:6357) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 15 tests using 1 worker
+
+(node:6442) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   1 [chromium] › tests/e2e/research-shopping.spec.ts:57:1 › compares fixture headphones, shows evidence and hands off through the selected product ID (1.4s)
+  ✓   2 [chromium] › tests/e2e/research-shopping.spec.ts:92:1 › shows a visible focus indicator while tabbing to the request field (495ms)
+  ✓   3 [chromium] › tests/e2e/research-shopping.spec.ts:110:1 › keeps the prior budget while an invalid draft is visible and applies a lower cap without replaying the old request (577ms)
+  ✓   4 [chromium] › tests/e2e/research-shopping.spec.ts:134:1 › moves a selected flexible priority ahead of price and changes the leading match (642ms)
+  ✓   5 [chromium] › tests/e2e/research-shopping.spec.ts:143:1 › does not convert a budget across regions, adapts answer length, and honors no budget limit (868ms)
+  ✓   6 [chromium] › tests/e2e/research-shopping.spec.ts:165:1 › asks for the product category when the request is ambiguous (509ms)
+  ✓   7 [chromium] › tests/e2e/research-shopping.spec.ts:175:1 › clears incompatible preferences on category change and holds unsupported hard requirements until dropped (740ms)
+  ✓   8 [chromium] › tests/e2e/research-shopping.spec.ts:203:1 › keeps browser contexts separate and resets their preferences (446ms)
+  ✓   9 [chromium] › tests/e2e/research-shopping.spec.ts:221:1 › does not let a late result overwrite a newer request (571ms)
+  ✓  10 [chromium] › tests/e2e/research-shopping.spec.ts:273:3 › rejects a successful handoff response containing a different product ID with its valid catalog destination (600ms)
+  ✓  11 [chromium] › tests/e2e/research-shopping.spec.ts:273:3 › rejects a successful handoff response containing the selected product ID with an invented approved-host path (646ms)
+  ✓  12 [chromium] › tests/e2e/research-shopping.spec.ts:273:3 › rejects a successful handoff response containing the selected product with a mismatched merchant host (622ms)
+  ✓  13 [chromium] › tests/e2e/research-shopping.spec.ts:273:3 › rejects a successful handoff response containing the selected product ID and URL with a mismatched catalog name (638ms)
+  ✓  14 [chromium] › tests/e2e/research-shopping.spec.ts:282:1 › cancels a pending selection when the user types a new request or resets (768ms)
+  ✓  15 [chromium] › tests/e2e/research-shopping.spec.ts:318:1 › recovers from an interrupted request without discarding the typed request (643ms)
+
+  15 passed (13.1s)

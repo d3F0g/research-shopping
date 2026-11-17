@@ -1,0 +1,177 @@
+{
+  "cli": "4.23.0",
+  "preset": "nova",
+  "base": "base",
+  "style": "base-nova",
+  "npm": "11.6.2",
+  "registry": [
+    {
+      "name": "alert",
+      "url": "https://ui.shadcn.com/r/styles/base-nova/alert.json",
+      "sha256": "0799cfc29a481568f6e9b48e96518a446032350dec576bfe31b7f67b4b262028",
+      "files": [
+        "registry/base-nova/ui/alert.tsx"
+      ]
+    },
+    {
+      "name": "badge",
+      "url": "https://ui.shadcn.com/r/styles/base-nova/badge.json",
+      "sha256": "ccc20021cdcbf0fb23c0d4d28f1da4adde8e51ba59f4b11dd2722ed97a5ee3a4",
+      "files": [
+        "registry/base-nova/ui/badge.tsx"
+      ]
+    },
+    {
+      "name": "bubble",
+      "url": "https://ui.shadcn.com/r/styles/base-nova/bubble.json",
+      "sha256": "be11ab3fa78ec7bd4736f4ab98c16a2d5a230536206d5a4fd06259422b55cb14",
+      "files": [
+        "registry/base-nova/ui/bubble.tsx"
+      ]
+    },
+    {
+      "name": "button",
+      "url": "https://ui.shadcn.com/r/styles/base-nova/button.json",
+      "sha256": "9ba7e870178813f0552b818a913a2792fb500c779e36395740b4973e3025d427",
+      "files": [
+        "registry/base-nova/ui/button.tsx"
+      ]
+    },
+    {
+      "name": "card",
+      "url": "https://ui.shadcn.com/r/styles/base-nova/card.json",
+      "sha256": "e73e3fe00ab2e14c4db1dccb1ff5c67041a94c0926ac3216c1dc6dd6dee9d7e0",
+      "files": [
+        "registry/base-nova/ui/card.tsx"
+      ]
+    },
+    {
+      "name": "checkbox",
+      "url": "https://ui.shadcn.com/r/styles/base-nova/checkbox.json",
+      "sha256": "e6df7b595f25a7ee97c3fb94e0ddc35998f74c98b990d3030e485905ec677178",
+      "files": [
+        "registry/base-nova/ui/checkbox.tsx"
+      ]
+    },
+    {
+      "name": "collapsible",
+      "url": "https://ui.shadcn.com/r/styles/base-nova/collapsible.json",
+      "sha256": "74f78cd88a30185243847968977cf1de9ffbf576547f2ec1f14b5ef55505b90d",
+      "files": [
+        "registry/base-nova/ui/collapsible.tsx"
+      ]
+    },
+    {
+      "name": "empty",
+      "url": "https://ui.shadcn.com/r/styles/base-nova/empty.json",
+      "sha256": "e89ffe0fc2969956f6e1d601bd3f00b068600ac08e31590f65344e79ff242230",
+      "files": [
+        "registry/base-nova/ui/empty.tsx"
+      ]
+    },
+    {
+      "name": "field",
+      "url": "https://ui.shadcn.com/r/styles/base-nova/field.json",
+      "sha256": "586110f5563cbb5dc0929207ee34361f1349cf2f816465799c60b98821e4cedc",
+      "files": [
+        "registry/base-nova/ui/field.tsx"
+      ]
+    },
+    {
+      "name": "hover-card",
+      "url": "https://ui.shadcn.com/r/styles/base-nova/hover-card.json",
+      "sha256": "d5588ff6c235f25578739d9402e2577fe436814301403f228d42b65e1cdf8e48",
+      "files": [
+        "registry/base-nova/ui/hover-card.tsx"
+      ]
+    },
+    {
+      "name": "input",
+      "url": "https://ui.shadcn.com/r/styles/base-nova/input.json",
+      "sha256": "bbad1bba130ac9750a61844eeb8f043e8a710846e07689fa85398b80a46c2741",
+      "files": [
+        "registry/base-nova/ui/input.tsx"
+      ]
+    },
+    {
+      "name": "input-group",
+      "url": "https://ui.shadcn.com/r/styles/base-nova/input-group.json",
+      "sha256": "acf9c5497a6c844dee87fbd4afefb6cd8be9ce50d050d14d58a340d955e517a1",
+      "files": [
+        "registry/base-nova/ui/input-group.tsx"
+      ]
+    },
+    {
+      "name": "label",
+      "url": "https://ui.shadcn.com/r/styles/base-nova/label.json",
+      "sha256": "89b01e14fd39dceece9fa421e71e78ea83286bd43a2ca1c2f55d2e8d3958fff2",
+      "files": [
+        "registry/base-nova/ui/label.tsx"
+      ]
+    },
+    {
+      "name": "message",
+      "url": "https://ui.shadcn.com/r/styles/base-nova/message.json",
+      "sha256": "6a484395f7ed32d3b254619cc542aeed6ce77a5628d1e9a04d4b5baaf7de0c41",
+      "files": [
+        "registry/base-nova/ui/message.tsx"
+      ]
+    },
+    {
+      "name": "message-scroller",
+      "url": "https://ui.shadcn.com/r/styles/base-nova/message-scroller.json",
+      "sha256": "4893726e4c327b2964ba71b2ea8ca8be73a989c6cdfc567657416eacac8bcfe9",
+      "files": [
+        "registry/base-nova/ui/message-scroller.tsx"
+      ]
+    },
+    {
+      "name": "native-select",
+      "url": "https://ui.shadcn.com/r/styles/base-nova/native-select.json",
+      "sha256": "743d128b09f67c1921e3c302e778834639e5be92c454205cabfb61eed34b4ff1",
+      "files": [
+        "registry/base-nova/ui/native-select.tsx"
+      ]
+    },
+    {
+      "name": "separator",
+      "url": "https://ui.shadcn.com/r/styles/base-nova/separator.json",
+      "sha256": "3ad65962485f464592201cb90017b3d52a5c9fe272ce41ee049485b4c42e0d76",
+      "files": [
+        "registry/base-nova/ui/separator.tsx"
+      ]
+    },
+    {
+      "name": "sheet",
+      "url": "https://ui.shadcn.com/r/styles/base-nova/sheet.json",
+      "sha256": "72b36d92af7fcbc9bd2d1d4ef0cbc65f4fc8178f7bb2bedaf657460f15011cf4",
+      "files": [
+        "registry/base-nova/ui/sheet.tsx"
+      ]
+    },
+    {
+      "name": "table",
+      "url": "https://ui.shadcn.com/r/styles/base-nova/table.json",
+      "sha256": "054c89df40058a96723c9ed8cde6308e738f3a303fd19301ce94ade032306b60",
+      "files": [
+        "registry/base-nova/ui/table.tsx"
+      ]
+    },
+    {
+      "name": "textarea",
+      "url": "https://ui.shadcn.com/r/styles/base-nova/textarea.json",
+      "sha256": "8f01f6bc4ee556263bae7644e8b527022fa77ff203f33a258bb47142ef7d9c81",
+      "files": [
+        "registry/base-nova/ui/textarea.tsx"
+      ]
+    },
+    {
+      "name": "trace",
+      "url": "https://ui.shadcn.com/r/styles/base-nova/trace.json",
+      "sha256": "8533d800f5216797578f0954bf917aed6b8cd48016f73975c6a4caaf7ab539d4",
+      "files": [
+        "registry/base-nova/ui/trace.tsx"
+      ]
+    }
+  ]
+}

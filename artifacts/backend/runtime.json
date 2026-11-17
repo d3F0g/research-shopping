@@ -1,0 +1,59 @@
+{
+  "commit": "e4ce5176cda66820a69925054e3709c482457f6b",
+  "health": {
+    "status": "ok",
+    "mode": "fixture",
+    "liveIntegrations": false
+  },
+  "starter_results": [
+    "recommendations",
+    "recommendations",
+    "no-match"
+  ],
+  "budget_ids": [
+    "sony-wh-ch720n"
+  ],
+  "handoff": {
+    "kind": "handoff",
+    "productId": "sony-wh-ch720n",
+    "productName": "Sony WH-CH720N",
+    "offer": {
+      "productId": "sony-wh-ch720n",
+      "merchant": "Sony model page",
+      "merchantHost": "www.sony.com.sg",
+      "productUrl": "https://www.sony.com.sg/headphones/products/wh-ch720n",
+      "region": "SG",
+      "price": {
+        "amount": 149,
+        "currency": "SGD"
+      },
+      "availability": "sample-in-stock",
+      "observedAt": "2025-01-15T00:00:00.000Z",
+      "dataKind": "fixture"
+    },
+    "productUrl": "https://www.sony.com.sg/headphones/products/wh-ch720n",
+    "label": "Open manufacturer model reference. Synthetic sample price and stock only. Regional pricing, configuration, availability and page redirects are unverified. No purchase is placed."
+  },
+  "boundary_statuses": {
+    "foreign_origin": 403,
+    "malformed_json": 400,
+    "oversized_body": 413,
+    "wrong_media_type": 415
+  },
+  "unsupported_followup": "clarification",
+  "headers": {
+    "access-control-allow-origin": "http://127.0.0.1:5381",
+    "cache-control": "no-store",
+    "content-security-policy": "default-src 'none'; frame-ancestors 'none'",
+    "content-type": "application/json",
+    "referrer-policy": "no-referrer",
+    "vary": "Origin",
+    "x-content-type-options": "nosniff",
+    "x-frame-options": "DENY",
+    "x-request-id": "c5a3e51d-6abc-408a-a864-f2847d8ab164",
+    "Content-Length": "8650",
+    "Date": "Tue, 17 Nov 2026 13:43:20 GMT",
+    "Connection": "close"
+  },
+  "listeners": "COMMAND   PID       USER   FD   TYPE             DEVICE SIZE/OFF NODE NAME\nnode    98796 josiahwong   22u  IPv4 0xacfef8c09b6eaa0c      0t0  TCP 127.0.0.1:4381 (LISTEN)\n"
+}

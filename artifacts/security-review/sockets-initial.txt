@@ -1,0 +1,3 @@
+COMMAND  PID       USER   FD   TYPE             DEVICE SIZE/OFF NODE NAME
+node    2563 josiahwong   13u  IPv4 0x366dd423e42b3c10      0t0  TCP 127.0.0.1:3193 (LISTEN)
+node    2909 josiahwong   25u  IPv4 0xedae0d32e53a6079      0t0  TCP 127.0.0.1:5293 (LISTEN)

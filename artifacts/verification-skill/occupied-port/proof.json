@@ -1,0 +1,13 @@
+{
+  "repo": "/Users/josiahwong/Documents/research-shopping-implementation",
+  "apiPort": 53945,
+  "webPort": 5284,
+  "artifacts": "/Users/josiahwong/Documents/research-shopping/artifacts/verification-skill/occupied-port",
+  "commit": "106d5729d80b75d30fc21ab331c665b263b98f36",
+  "worktreeStatus": "M src/client/App.tsx\n M src/client/api.ts\n?? .github/\n?? README.md\n?? tests/e2e/",
+  "feature": "research-request",
+  "actions": [],
+  "result": "failed",
+  "cleanup": true,
+  "error": "Error: listen EADDRINUSE: address already in use 127.0.0.1:53945\n    at Server.setupListenHandle [as _listen2] (node:net:1940:16)\n    at listenInCluster (node:net:1997:12)\n    at node:net:2206:7\n    at process.processTicksAndRejections (node:internal/process/task_queues:90:21)"
+}

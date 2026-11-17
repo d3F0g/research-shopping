@@ -1,0 +1,16 @@
+{
+  "commit": "106d572",
+  "checks": [
+    {
+      "journey": "headphones -> lower budget -> exact product link",
+      "passed": true,
+      "overflow": false,
+      "pageErrors": []
+    },
+    {
+      "journey": "mobile laptop -> evidence disclosure",
+      "passed": true,
+      "overflow": false
+    }
+  ]
+}

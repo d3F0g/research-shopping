@@ -1,0 +1,13 @@
+
+> research-shopping@0.1.0 test
+> vitest run
+
+
+ RUN  v4.1.12 /Users/josiahwong/Documents/research-shopping-shadcn-qa
+
+
+ Test Files  2 passed (2)
+      Tests  110 passed (110)
+   Start at  23:20:53
+   Duration  365ms (transform 175ms, setup 0ms, import 299ms, tests 186ms, environment 0ms)
+

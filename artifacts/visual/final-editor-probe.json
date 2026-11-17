@@ -1,0 +1,20 @@
+{
+  "commit": "38e50a1c91e0cd875b7cc9d85a51512bcb8282fb",
+  "checks": [
+    {
+      "name": "character-by-character brand exclusions survive comma entry and filter results",
+      "passed": true
+    },
+    {
+      "name": "ordinary ambiguity followed by category reaches results without false hard constraint",
+      "passed": true
+    }
+  ],
+  "cleanup": {
+    "ports": [
+      4183,
+      5183
+    ],
+    "free": true
+  }
+}

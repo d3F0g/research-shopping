@@ -1,0 +1,135 @@
+{
+  "mode": "initial",
+  "records": [
+    {
+      "name": "external-host",
+      "injected": {
+        "kind": "handoff",
+        "productId": "sony-wh-ch720n",
+        "productName": "Sony WH-CH720N",
+        "offer": {
+          "productId": "sony-wh-ch720n",
+          "merchant": "Sony model page",
+          "merchantHost": "evil.test",
+          "productUrl": "https://evil.test/product",
+          "region": "SG",
+          "price": {
+            "amount": 149,
+            "currency": "SGD"
+          },
+          "availability": "sample-in-stock",
+          "observedAt": "2025-01-15T00:00:00.000Z",
+          "dataKind": "fixture"
+        },
+        "productUrl": "https://evil.test/product",
+        "label": "Open manufacturer model reference. Synthetic sample price and stock only. Regional pricing, configuration, availability and page redirects are unverified. No purchase is placed."
+      },
+      "href": "https://evil.test/product",
+      "error": null
+    },
+    {
+      "name": "arbitrary-approved-path",
+      "injected": {
+        "kind": "handoff",
+        "productId": "sony-wh-ch720n",
+        "productName": "Sony WH-CH720N",
+        "offer": {
+          "productId": "sony-wh-ch720n",
+          "merchant": "Sony model page",
+          "merchantHost": "www.sony.com.sg",
+          "productUrl": "https://www.sony.com.sg/arbitrary",
+          "region": "SG",
+          "price": {
+            "amount": 149,
+            "currency": "SGD"
+          },
+          "availability": "sample-in-stock",
+          "observedAt": "2025-01-15T00:00:00.000Z",
+          "dataKind": "fixture"
+        },
+        "productUrl": "https://www.sony.com.sg/arbitrary",
+        "label": "Open manufacturer model reference. Synthetic sample price and stock only. Regional pricing, configuration, availability and page redirects are unverified. No purchase is placed."
+      },
+      "href": "https://www.sony.com.sg/arbitrary",
+      "error": null
+    },
+    {
+      "name": "different-product",
+      "injected": {
+        "kind": "handoff",
+        "productId": "sennheiser-momentum-4",
+        "productName": "Sennheiser MOMENTUM 4 Wireless",
+        "offer": {
+          "productId": "sennheiser-momentum-4",
+          "merchant": "Sony model page",
+          "merchantHost": "global.sennheiser-hearing.com",
+          "productUrl": "https://global.sennheiser-hearing.com/products/momentum-4-wireless",
+          "region": "SG",
+          "price": {
+            "amount": 149,
+            "currency": "SGD"
+          },
+          "availability": "sample-in-stock",
+          "observedAt": "2025-01-15T00:00:00.000Z",
+          "dataKind": "fixture"
+        },
+        "productUrl": "https://global.sennheiser-hearing.com/products/momentum-4-wireless",
+        "label": "Open manufacturer model reference. Synthetic sample price and stock only. Regional pricing, configuration, availability and page redirects are unverified. No purchase is placed."
+      },
+      "href": "https://global.sennheiser-hearing.com/products/momentum-4-wireless",
+      "error": null
+    },
+    {
+      "name": "wrong-name",
+      "injected": {
+        "kind": "handoff",
+        "productId": "sony-wh-ch720n",
+        "productName": "Unrelated fraudulent product",
+        "offer": {
+          "productId": "sony-wh-ch720n",
+          "merchant": "Sony model page",
+          "merchantHost": "www.sony.com.sg",
+          "productUrl": "https://www.sony.com.sg/headphones/products/wh-ch720n",
+          "region": "SG",
+          "price": {
+            "amount": 149,
+            "currency": "SGD"
+          },
+          "availability": "sample-in-stock",
+          "observedAt": "2025-01-15T00:00:00.000Z",
+          "dataKind": "fixture"
+        },
+        "productUrl": "https://www.sony.com.sg/headphones/products/wh-ch720n",
+        "label": "Open manufacturer model reference. Synthetic sample price and stock only. Regional pricing, configuration, availability and page redirects are unverified. No purchase is placed."
+      },
+      "href": "https://www.sony.com.sg/headphones/products/wh-ch720n",
+      "error": null
+    },
+    {
+      "name": "wrong-merchant-host",
+      "injected": {
+        "kind": "handoff",
+        "productId": "sony-wh-ch720n",
+        "productName": "Sony WH-CH720N",
+        "offer": {
+          "productId": "sony-wh-ch720n",
+          "merchant": "Sony model page",
+          "merchantHost": "evil.test",
+          "productUrl": "https://www.sony.com.sg/headphones/products/wh-ch720n",
+          "region": "SG",
+          "price": {
+            "amount": 149,
+            "currency": "SGD"
+          },
+          "availability": "sample-in-stock",
+          "observedAt": "2025-01-15T00:00:00.000Z",
+          "dataKind": "fixture"
+        },
+        "productUrl": "https://www.sony.com.sg/headphones/products/wh-ch720n",
+        "label": "Open manufacturer model reference. Synthetic sample price and stock only. Regional pricing, configuration, availability and page redirects are unverified. No purchase is placed."
+      },
+      "href": "https://www.sony.com.sg/headphones/products/wh-ch720n",
+      "error": null
+    }
+  ]
+}

@@ -1,0 +1,101 @@
+{
+  "scope": "Initial local research-to-merchant vertical slice",
+  "durable_handles": false,
+  "roles": [
+    {
+      "task": "architecture_a",
+      "model": "gpt-6-astra",
+      "effort": "high",
+      "ownership": "read-only functional-pipeline and integration assessment",
+      "status": "complete"
+    },
+    {
+      "task": "architecture_b",
+      "model": "gpt-6-luna",
+      "effort": "xhigh",
+      "ownership": "read-only competing state-machine, UX, personalization and testing assessment",
+      "status": "complete"
+    },
+    {
+      "task": "security_capabilities",
+      "model": "gpt-6.1-sol",
+      "effort": "high",
+      "ownership": "read-only security and observability capability assessment",
+      "status": "complete"
+    },
+    {
+      "task": "design_judge",
+      "model": "gpt-6-astra",
+      "effort": "high",
+      "ownership": "independent design comparison",
+      "status": "complete",
+      "evidence": "design-review.md"
+    },
+    {
+      "task": "application_owner",
+      "model": "gpt-6-luna",
+      "effort": "xhigh",
+      "ownership": "isolated UI, package, configuration, browser tests and integration branch",
+      "status": "complete",
+      "result": "2dcfe45;108 unit/API and15 browser tests, build/typecheck and audit0; owned default servers stopped"
+    },
+    {
+      "task": "docs_review",
+      "model": "gpt-6-astra",
+      "effort": "high",
+      "ownership": "read-only initial configuration review",
+      "status": "complete",
+      "result": "model override and audit evidence findings"
+    },
+    {
+      "task": "docs_final_review",
+      "model": "gpt-6-astra",
+      "effort": "high",
+      "ownership": "comment-sicko docs/config recheck",
+      "status": "complete",
+      "result": "PASS at468bed6, no role activation claim"
+    },
+    {
+      "task": "live_ai_probe",
+      "model": "gpt-6.1-sol",
+      "effort": "high",
+      "ownership": "one bounded existing-credential capability probe",
+      "status": "complete",
+      "evidence": "live-provider-probe.md",
+      "result": "HTTP429, no retry"
+    },
+    {
+      "task": "shopping_engine",
+      "model": "gpt-6-astra",
+      "effort": "xhigh",
+      "ownership": "isolated backend, pure domain engine, unit/API tests",
+      "status": "complete",
+      "result": "107 tests and exact-commit server checks passed at e4ce517"
+    },
+    {
+      "task": "verification_skill",
+      "model": "gpt-6.1-sol",
+      "effort": "high",
+      "ownership": "project verification skill and owned smoke-helper proof",
+      "status": "complete",
+      "result": "initial proof and validation passed; finalized helper final-head rerun remains with root"
+    },
+    {
+      "task": "independent_qa_security",
+      "model": "gpt-6.1-sol",
+      "effort": "high",
+      "ownership": "isolated independent HTTP, provider, browser and security review",
+      "status": "complete",
+      "result": "PASS at2dcfe45;108 unit/API15 browser and independent boundary/provider/browser probes; cleanup confirmed"
+    },
+    {
+      "task": "final_cleanup_audit",
+      "model": "gpt-6-astra",
+      "effort": "high",
+      "ownership": "read-only cleanup and current-root decision trail audit",
+      "status": "complete",
+      "result": "Three minor cleanup/docs findings accepted and fixed; no MUST KILL targets or fabrication flags"
+    }
+  ],
+  "capacity_note": "An extra spawn was rejected at the active host thread limit. Dependent skill authoring was paused, backend work ran, then the same skill task resumed. No future wake or monitoring is armed."
+}

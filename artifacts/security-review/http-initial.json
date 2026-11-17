@@ -1,0 +1,338 @@
+{
+  "commit": "106d5729d80b75d30fc21ab331c665b263b98f36",
+  "findings": [
+    {
+      "name": "good",
+      "status": 200,
+      "requestId": "7c9c3d74-4de6-428c-85db-486f0bf7fb25",
+      "body": "{\"kind\":\"recommendations\",\"answer\":\"Sony WH-CH720N is the leading sample match. Sample price SGD 149.00 meets your budget. Check the tradeoffs before choosing.\",\"preferences\":{\"hard\":{\"category\":\"headphones\",\"budget\":{\"amount\":500,\"currency\":\"SGD\"},\"region\":\"SG\",\"excludedBrands\":[],\"requiredFeatures\":[],\"pendingConstraint\":null},\"soft\":{\"useCase\":\"\",\"priorities\":[\"value\"],\"responseLength\":\"concise\"}},\"notes\":[\"Synthetic development samples. Scenario timestamp 15 Jan 2025, not observed prices, stock or specification research.\"],\"candidates\":[{\"product\":{\"id\":\"sony-wh-ch720n\",\"category\":\"headphones\",\"brand\":\"Sony\",\"name\":\"Sony WH-CH720N\",\"summary\":\"Sample lower-price wireless ANC profile. Battery evidence conflicts in this fixture.\",\"features\":[\"wireless\",\"active-noise-cancelling\",\"multipoint\",\"lightweight\"],\"manufacturer\":\"Sony\",\"productUrl\":\"https://www.sony.com.sg/headphones/products/wh-ch720n\",\"claims\":[{\"status\":\"supported\",\"key\":\"wireless\",\"value\":\"Sample fixture. wireless.\",\"sources\":[{\"id\":\"sony-wh-ch720n-reference\",\"name\":\"Synthetic fixture reference. Sony model reference\",\"url\":\"https://www.sony.com.sg/headphones/products/wh-ch720n\",\"kind\":\"fixture-observation\",\"capturedAt\":\"2025-01-15T00:00:00.000Z\"}]},{\"status\":\"supported\",\"key\":\"active-noise-cancelling\",\"value\":\"Sample fixture. active noise cancelling.\",\"sources\":[{\"id\":\"sony-wh-ch720n-reference\",\"name\":\"Synthetic fixture reference. Sony model reference\",\"url\":\"https://www.sony.com.sg/headphones/products/wh-ch720n\",\"kind\":\"fixture-observation\",\"capturedAt\":\"2025-01-15T00:00:00.000Z\"}]},{\"status\":\"supported\",\"key\":\"multipoint\",\"value\":\"Sample fixture. multipoint.\",\"sources\":[{\"id\":\"sony-wh-ch720n-reference\",\"name\":\"Synthetic fixture reference. Sony model reference\",\"url\":\"https://www.sony.com.sg/headphones/products/wh-ch720n\",\"kind\":\"fixture-observation\",\"capturedAt\":\"2025-01-15T00:00:00.000Z\"}]},{\"status\":\"supported\",\"key\":\"lightweight\",\"value\":\"Sample fixture. lightweight.\",\"sources\":[{\"id\":\"sony-wh-ch720n-reference\",\"name\":\"Synthetic fixture reference. Sony model reference\",\"url\":\"https://www.sony.com.sg/headphones/products/wh-ch720n\",\"kind\":\"fixture-observation\",\"capturedAt\":\"2025-01-15T00:00:00.000Z\"}]},{\"status\":\"unknown\",\"key\":\"delivery\",\"note\":\"Unknown. This fixture does not establish shipping, delivery time or warranty.\"},{\"status\":\"conflict\",\"key\":\"long-battery-life\",\"observations\":[{\"value\":\"Sample fixture A. 35 hours with ANC.\",\"source\":{\"id\":\"sony-wh-ch720n-observation-a\",\"name\":\"Synthetic fixture observation-a. Sony model reference\",\"url\":\"https://www.sony.com.sg/headphones/products/wh-ch720n\",\"kind\":\"fixture-observation\",\"capturedAt\":\"2025-01-15T00:00:00.000Z\"}},{\"value\":\"Sample fixture B. 50 hours, mode unspecified.\",\"source\":{\"id\":\"sony-wh-ch720n-observation-b\",\"name\":\"Synthetic fixture observation-b. Sony model reference\",\"url\":\"https://www.sony.com.sg/headphones/products/wh-ch720n\",\"kind\":\"fixture-observation\",\"capturedAt\":\"2025-01-15T00:00:00.000Z\"}}]},{\"status\":\"unknown\",\"key\":\"sound-quality\",\"note\":\"Unknown. No independent comparative measurement exists in this fixture.\"}]},\"offer\":{\"productId\":\"sony-wh-ch720n\",\"merchant\":\"Sony model page\",\"merchantHost\":\"www.sony.com.sg\",\"productUrl\":\"https://www.sony.com.sg/headphones/products/wh-ch720n\",\"region\":\"SG\",\"price\":{\"amount\":149,\"currency\":\"SGD\"},\"availability\":\"sample-in-stock\",\"observedAt\":\"2025-01-15T00:00:00.000Z\",\"dataKind\":\"fixture\"},\"reasons\":[\"Sample price SGD 149.00 meets your budget.\",\"Tradeoff. Conflicting sample claims are excluded from ranking; inspect the evidence.\"]},{\"product\":{\"id\":\"sennheiser-momentum-4\",\"category\":\"headphones\",\"brand\":\"Sennheiser\",\"name\":\"Sennheiser MOMENTUM 4 Wireless\",\"summary\":\"Sample long-battery wireless ANC profile. Weight may be a tradeoff.\",\"features\":[\"wireless\",\"active-noise-cancelling\",\"multipoint\",\"long-battery-life\"],\"manufacturer\":\"Sennheiser\",\"productUrl\":\"https://global.sennheiser-hearing.com/products/momentum-4-wireless\",\"claims\":[{\"status\":\"supported\",\"key\":\"wireless\",\"value\":\"Sample fixture. wireless.\",\"sources\":[{\"id\":\"sennheiser-momentum-4-reference\",\"name\":\"Synthetic fixture reference. Sennheiser model reference\",\"url\":\"https://global.sennheiser-hearing.com/products/momentum-4-wireless\",\"kind\":\"fixture-observation\",\"capturedAt\":\"2025-01-15T00:00:00.000Z\"}]},{\"status\":\"supported\",\"key\":\"active-noise-cancelling\",\"value\":\"Sample fixture. active noise cancelling.\",\"sources\":[{\"id\":\"sennheiser-momentum-4-reference\",\"name\":\"Synthetic fixture reference. Sennheiser model reference\",\"url\":\"https://global.sennheiser-hearing.com/products/momentum-4-wireless\",\"kind\":\"fixture-observation\",\"capturedAt\":\"2025-01-15T00:00:00.000Z\"}]},{\"status\":\"supported\",\"key\":\"multipoint\",\"value\":\"Sample fixture. multipoint.\",\"sources\":[{\"id\":\"sennheiser-momentum-4-reference\",\"name\":\"Synthetic fixture reference. Sennheiser model reference\",\"url\":\"https://global.sennheiser-hearing.com/products/momentum-4-wireless\",\"kind\":\"fixture-observation\",\"capturedAt\":\"2025-01-15T00:00:00.000Z\"}]},{\"status\":\"supported\",\"key\":\"long-battery-life\",\"value\":\"Sample fixture. long battery life.\",\"sources\":[{\"id\":\"sennheiser-momentum-4-reference\",\"name\":\"Synthetic fixture reference. Sennheiser model reference\",\"url\":\"https://global.sennheiser-hearing.com/products/momentum-4-wireless\",\"kind\":\"fixture-observation\",\"capturedAt\":\"2025-01-15T00:00:00.000Z\"}]},{\"status\":\"unknown\",\"key\":\"delivery\",\"note\":\"Unknown. This fixture does not establish shipping, delivery time or warranty.\"},{\"status\":\"unknown\",\"key\":\"sound-quality\",\"note\":\"Unknown. No independent comparative measurement exists in this fixture.\"}]},\"offer\":{\"productId\":\"sennheiser-momentum-4\",\"merchant\":\"Sennheiser model page\",\"merchantHost\":\"global.sennheiser-hearing.com\",\"productUrl\":\"https://global.sennheiser-hearing.com/products/momentum-4-wireless\",\"region\":\"SG\",\"price\":{\"amount\":329,\"currency\":\"SGD\"},\"availability\":\"sample-in-stock\",\"observedAt\":\"2025-01-15T00:00:00.000Z\",\"dataKind\":\"fixture\"},\"reasons\":[\"Sample price SGD 329.00 meets your budget.\",\"Tradeoff. Sample evidence does not establish real-world quality, current price or stock.\"]},{\"product\":{\"id\":\"sony-wh-1000xm5\",\"category\":\"headphones\",\"brand\":\"Sony\",\"name\":\"Sony WH-1000XM5\",\"summary\":\"Sample profile with wireless listening, ANC and multipoint. Comfort is personal.\",\"features\":[\"wireless\",\"active-noise-cancelling\",\"multipoint\",\"lightweight\"],\"manufacturer\":\"Sony\",\"productUrl\":\"https://www.sony.com.sg/electronics/headband-headphones/wh-1000xm5\",\"claims\":[{\"status\":\"supported\",\"key\":\"wireless\",\"value\":\"Sample fixture. wireless.\",\"sources\":[{\"id\":\"sony-wh-1000xm5-reference\",\"name\":\"Synthetic fixture reference. Sony model reference\",\"url\":\"https://www.sony.com.sg/electronics/headband-headphones/wh-1000xm5\",\"kind\":\"fixture-observation\",\"capturedAt\":\"2025-01-15T00:00:00.000Z\"}]},{\"status\":\"supported\",\"key\":\"active-noise-cancelling\",\"value\":\"Sample fixture. active noise cancelling.\",\"sources\":[{\"id\":\"sony-wh-1000xm5-reference\",\"name\":\"Synthetic fixture reference. Sony model reference\",\"url\":\"https://www.sony.com.sg/electronics/headband-headphones/wh-1000xm5\",\"kind\":\"fixture-observation\",\"capturedAt\":\"2025-01-15T00:00:00.000Z\"}]},{\"status\":\"supported\",\"key\":\"multipoint\",\"value\":\"Sample fixture. multipoint.\",\"sources\":[{\"id\":\"sony-wh-1000xm5-reference\",\"name\":\"Synthetic fixture reference. Sony model reference\",\"url\":\"https://www.sony.com.sg/electronics/headband-headphones/wh-1000xm5\",\"kind\":\"fixture-observation\",\"capturedAt\":\"2025-01-15T00:00:00.000Z\"}]},{\"status\":\"supported\",\"key\":\"lightweight\",\"value\":\"Sample fixture. lightweight.\",\"sources\":[{\"id\":\"sony-wh-1000xm5-reference\",\"name\":\"Synthetic fixture reference. Sony model reference\",\"url\":\"https://www.sony.com.sg/electronics/headband-headphones/wh-1000xm5\",\"kind\":\"fixture-observation\",\"capturedAt\":\"2025-01-15T00:00:00.000Z\"}]},{\"status\":\"unknown\",\"key\":\"delivery\",\"note\":\"Unknown. This fixture does not establish shipping, delivery time or warranty.\"},{\"status\":\"unknown\",\"key\":\"sound-quality\",\"note\":\"Unknown. No independent comparative measurement exists in this fixture.\"}]},\"offer\":{\"productId\":\"sony-wh-1000xm5\",\"merchant\":\"Sony model page\",\"merchantHost\":\"www.sony.com.sg\",\"productUrl\":\"https://www.sony.com.sg/electronics/headband-headphones/wh-1000xm5\",\"region\":\"SG\",\"price\":{\"amount\":399,\"currency\":\"SGD\"},\"availability\":\"sample-in-stock\",\"observedAt\":\"2025-01-15T00:00:00.000Z\",\"dataKind\":\"fixture\"},\"reasons\":[\"Sample price SGD 399.00 meets your budget.\",\"Tradeoff. Sample evidence does not establish real-world quality, current price or stock.\"]}]}"
+    },
+    {
+      "name": "same-origin",
+      "status": 200,
+      "requestId": "c917ba5f-14cc-4f32-b611-aab439135576",
+      "body": "{\"kind\":\"recommendations\",\"answer\":\"Sony WH-CH720N is the leading sample match. Sample price SGD 149.00 meets your budget. Check the tradeoffs before choosing.\",\"preferences\":{\"hard\":{\"category\":\"headphones\",\"budget\":{\"amount\":500,\"currency\":\"SGD\"},\"region\":\"SG\",\"excludedBrands\":[],\"requiredFeatures\":[],\"pendingConstraint\":null},\"soft\":{\"useCase\":\"\",\"priorities\":[\"value\"],\"responseLength\":\"concise\"}},\"notes\":[\"Synthetic development samples. Scenario timestamp 15 Jan 2025, not observed prices, stock or specification research.\"],\"candidates\":[{\"product\":{\"id\":\"sony-wh-ch720n\",\"category\":\"headphones\",\"brand\":\"Sony\",\"name\":\"Sony WH-CH720N\",\"summary\":\"Sample lower-price wireless ANC profile. Battery evidence conflicts in this fixture.\",\"features\":[\"wireless\",\"active-noise-cancelling\",\"multipoint\",\"lightweight\"],\"manufacturer\":\"Sony\",\"productUrl\":\"https://www.sony.com.sg/headphones/products/wh-ch720n\",\"claims\":[{\"status\":\"supported\",\"key\":\"wireless\",\"value\":\"Sample fixture. wireless.\",\"sources\":[{\"id\":\"sony-wh-ch720n-reference\",\"name\":\"Synthetic fixture reference. Sony model reference\",\"url\":\"https://www.sony.com.sg/headphones/products/wh-ch720n\",\"kind\":\"fixture-observation\",\"capturedAt\":\"2025-01-15T00:00:00.000Z\"}]},{\"status\":\"supported\",\"key\":\"active-noise-cancelling\",\"value\":\"Sample fixture. active noise cancelling.\",\"sources\":[{\"id\":\"sony-wh-ch720n-reference\",\"name\":\"Synthetic fixture reference. Sony model reference\",\"url\":\"https://www.sony.com.sg/headphones/products/wh-ch720n\",\"kind\":\"fixture-observation\",\"capturedAt\":\"2025-01-15T00:00:00.000Z\"}]},{\"status\":\"supported\",\"key\":\"multipoint\",\"value\":\"Sample fixture. multipoint.\",\"sources\":[{\"id\":\"sony-wh-ch720n-reference\",\"name\":\"Synthetic fixture reference. Sony model reference\",\"url\":\"https://www.sony.com.sg/headphones/products/wh-ch720n\",\"kind\":\"fixture-observation\",\"capturedAt\":\"2025-01-15T00:00:00.000Z\"}]},{\"status\":\"supported\",\"key\":\"lightweight\",\"value\":\"Sample fixture. lightweight.\",\"sources\":[{\"id\":\"sony-wh-ch720n-reference\",\"name\":\"Synthetic fixture reference. Sony model reference\",\"url\":\"https://www.sony.com.sg/headphones/products/wh-ch720n\",\"kind\":\"fixture-observation\",\"capturedAt\":\"2025-01-15T00:00:00.000Z\"}]},{\"status\":\"unknown\",\"key\":\"delivery\",\"note\":\"Unknown. This fixture does not establish shipping, delivery time or warranty.\"},{\"status\":\"conflict\",\"key\":\"long-battery-life\",\"observations\":[{\"value\":\"Sample fixture A. 35 hours with ANC.\",\"source\":{\"id\":\"sony-wh-ch720n-observation-a\",\"name\":\"Synthetic fixture observation-a. Sony model reference\",\"url\":\"https://www.sony.com.sg/headphones/products/wh-ch720n\",\"kind\":\"fixture-observation\",\"capturedAt\":\"2025-01-15T00:00:00.000Z\"}},{\"value\":\"Sample fixture B. 50 hours, mode unspecified.\",\"source\":{\"id\":\"sony-wh-ch720n-observation-b\",\"name\":\"Synthetic fixture observation-b. Sony model reference\",\"url\":\"https://www.sony.com.sg/headphones/products/wh-ch720n\",\"kind\":\"fixture-observation\",\"capturedAt\":\"2025-01-15T00:00:00.000Z\"}}]},{\"status\":\"unknown\",\"key\":\"sound-quality\",\"note\":\"Unknown. No independent comparative measurement exists in this fixture.\"}]},\"offer\":{\"productId\":\"sony-wh-ch720n\",\"merchant\":\"Sony model page\",\"merchantHost\":\"www.sony.com.sg\",\"productUrl\":\"https://www.sony.com.sg/headphones/products/wh-ch720n\",\"region\":\"SG\",\"price\":{\"amount\":149,\"currency\":\"SGD\"},\"availability\":\"sample-in-stock\",\"observedAt\":\"2025-01-15T00:00:00.000Z\",\"dataKind\":\"fixture\"},\"reasons\":[\"Sample price SGD 149.00 meets your budget.\",\"Tradeoff. Conflicting sample claims are excluded from ranking; inspect the evidence.\"]},{\"product\":{\"id\":\"sennheiser-momentum-4\",\"category\":\"headphones\",\"brand\":\"Sennheiser\",\"name\":\"Sennheiser MOMENTUM 4 Wireless\",\"summary\":\"Sample long-battery wireless ANC profile. Weight may be a tradeoff.\",\"features\":[\"wireless\",\"active-noise-cancelling\",\"multipoint\",\"long-battery-life\"],\"manufacturer\":\"Sennheiser\",\"productUrl\":\"https://global.sennheiser-hearing.com/products/momentum-4-wireless\",\"claims\":[{\"status\":\"supported\",\"key\":\"wireless\",\"value\":\"Sample fixture. wireless.\",\"sources\":[{\"id\":\"sennheiser-momentum-4-reference\",\"name\":\"Synthetic fixture reference. Sennheiser model reference\",\"url\":\"https://global.sennheiser-hearing.com/products/momentum-4-wireless\",\"kind\":\"fixture-observation\",\"capturedAt\":\"2025-01-15T00:00:00.000Z\"}]},{\"status\":\"supported\",\"key\":\"active-noise-cancelling\",\"value\":\"Sample fixture. active noise cancelling.\",\"sources\":[{\"id\":\"sennheiser-momentum-4-reference\",\"name\":\"Synthetic fixture reference. Sennheiser model reference\",\"url\":\"https://global.sennheiser-hearing.com/products/momentum-4-wireless\",\"kind\":\"fixture-observation\",\"capturedAt\":\"2025-01-15T00:00:00.000Z\"}]},{\"status\":\"supported\",\"key\":\"multipoint\",\"value\":\"Sample fixture. multipoint.\",\"sources\":[{\"id\":\"sennheiser-momentum-4-reference\",\"name\":\"Synthetic fixture reference. Sennheiser model reference\",\"url\":\"https://global.sennheiser-hearing.com/products/momentum-4-wireless\",\"kind\":\"fixture-observation\",\"capturedAt\":\"2025-01-15T00:00:00.000Z\"}]},{\"status\":\"supported\",\"key\":\"long-battery-life\",\"value\":\"Sample fixture. long battery life.\",\"sources\":[{\"id\":\"sennheiser-momentum-4-reference\",\"name\":\"Synthetic fixture reference. Sennheiser model reference\",\"url\":\"https://global.sennheiser-hearing.com/products/momentum-4-wireless\",\"kind\":\"fixture-observation\",\"capturedAt\":\"2025-01-15T00:00:00.000Z\"}]},{\"status\":\"unknown\",\"key\":\"delivery\",\"note\":\"Unknown. This fixture does not establish shipping, delivery time or warranty.\"},{\"status\":\"unknown\",\"key\":\"sound-quality\",\"note\":\"Unknown. No independent comparative measurement exists in this fixture.\"}]},\"offer\":{\"productId\":\"sennheiser-momentum-4\",\"merchant\":\"Sennheiser model page\",\"merchantHost\":\"global.sennheiser-hearing.com\",\"productUrl\":\"https://global.sennheiser-hearing.com/products/momentum-4-wireless\",\"region\":\"SG\",\"price\":{\"amount\":329,\"currency\":\"SGD\"},\"availability\":\"sample-in-stock\",\"observedAt\":\"2025-01-15T00:00:00.000Z\",\"dataKind\":\"fixture\"},\"reasons\":[\"Sample price SGD 329.00 meets your budget.\",\"Tradeoff. Sample evidence does not establish real-world quality, current price or stock.\"]},{\"product\":{\"id\":\"sony-wh-1000xm5\",\"category\":\"headphones\",\"brand\":\"Sony\",\"name\":\"Sony WH-1000XM5\",\"summary\":\"Sample profile with wireless listening, ANC and multipoint. Comfort is personal.\",\"features\":[\"wireless\",\"active-noise-cancelling\",\"multipoint\",\"lightweight\"],\"manufacturer\":\"Sony\",\"productUrl\":\"https://www.sony.com.sg/electronics/headband-headphones/wh-1000xm5\",\"claims\":[{\"status\":\"supported\",\"key\":\"wireless\",\"value\":\"Sample fixture. wireless.\",\"sources\":[{\"id\":\"sony-wh-1000xm5-reference\",\"name\":\"Synthetic fixture reference. Sony model reference\",\"url\":\"https://www.sony.com.sg/electronics/headband-headphones/wh-1000xm5\",\"kind\":\"fixture-observation\",\"capturedAt\":\"2025-01-15T00:00:00.000Z\"}]},{\"status\":\"supported\",\"key\":\"active-noise-cancelling\",\"value\":\"Sample fixture. active noise cancelling.\",\"sources\":[{\"id\":\"sony-wh-1000xm5-reference\",\"name\":\"Synthetic fixture reference. Sony model reference\",\"url\":\"https://www.sony.com.sg/electronics/headband-headphones/wh-1000xm5\",\"kind\":\"fixture-observation\",\"capturedAt\":\"2025-01-15T00:00:00.000Z\"}]},{\"status\":\"supported\",\"key\":\"multipoint\",\"value\":\"Sample fixture. multipoint.\",\"sources\":[{\"id\":\"sony-wh-1000xm5-reference\",\"name\":\"Synthetic fixture reference. Sony model reference\",\"url\":\"https://www.sony.com.sg/electronics/headband-headphones/wh-1000xm5\",\"kind\":\"fixture-observation\",\"capturedAt\":\"2025-01-15T00:00:00.000Z\"}]},{\"status\":\"supported\",\"key\":\"lightweight\",\"value\":\"Sample fixture. lightweight.\",\"sources\":[{\"id\":\"sony-wh-1000xm5-reference\",\"name\":\"Synthetic fixture reference. Sony model reference\",\"url\":\"https://www.sony.com.sg/electronics/headband-headphones/wh-1000xm5\",\"kind\":\"fixture-observation\",\"capturedAt\":\"2025-01-15T00:00:00.000Z\"}]},{\"status\":\"unknown\",\"key\":\"delivery\",\"note\":\"Unknown. This fixture does not establish shipping, delivery time or warranty.\"},{\"status\":\"unknown\",\"key\":\"sound-quality\",\"note\":\"Unknown. No independent comparative measurement exists in this fixture.\"}]},\"offer\":{\"productId\":\"sony-wh-1000xm5\",\"merchant\":\"Sony model page\",\"merchantHost\":\"www.sony.com.sg\",\"productUrl\":\"https://www.sony.com.sg/electronics/headband-headphones/wh-1000xm5\",\"region\":\"SG\",\"price\":{\"amount\":399,\"currency\":\"SGD\"},\"availability\":\"sample-in-stock\",\"observedAt\":\"2025-01-15T00:00:00.000Z\",\"dataKind\":\"fixture\"},\"reasons\":[\"Sample price SGD 399.00 meets your budget.\",\"Tradeoff. Sample evidence does not establish real-world quality, current price or stock.\"]}]}"
+    },
+    {
+      "name": "foreign-origin",
+      "status": 403,
+      "requestId": "5c6140ee-beb9-4f3d-b2e0-788eee683be8",
+      "body": "{\"error\":\"Origin is not allowed\",\"requestId\":\"5c6140ee-beb9-4f3d-b2e0-788eee683be8\"}"
+    },
+    {
+      "name": "null-origin",
+      "status": 403,
+      "requestId": "3e6e103e-ff6a-4660-962a-ce04a705900b",
+      "body": "{\"error\":\"Origin is not allowed\",\"requestId\":\"3e6e103e-ff6a-4660-962a-ce04a705900b\"}"
+    },
+    {
+      "name": "foreign-host",
+      "status": 403,
+      "requestId": "200564ef-6781-42bf-a7ed-60fc79978ed3",
+      "body": "{\"error\":\"Host is not allowed\",\"requestId\":\"200564ef-6781-42bf-a7ed-60fc79978ed3\"}"
+    },
+    {
+      "name": "host-suffix",
+      "status": 403,
+      "requestId": "5248a35b-f8ee-4bc8-ab27-6515f7791d3d",
+      "body": "{\"error\":\"Host is not allowed\",\"requestId\":\"5248a35b-f8ee-4bc8-ab27-6515f7791d3d\"}"
+    },
+    {
+      "name": "wrong-port",
+      "status": 403,
+      "requestId": "58ca4ec2-f7e4-4422-a3bc-c07ff94d5ffd",
+      "body": "{\"error\":\"Host is not allowed\",\"requestId\":\"58ca4ec2-f7e4-4422-a3bc-c07ff94d5ffd\"}"
+    },
+    {
+      "name": "malformed-json",
+      "status": 400,
+      "requestId": "d12d16d7-4c67-4c7e-acd2-61bcde53b538",
+      "body": "{\"error\":\"Invalid JSON or request fields\",\"requestId\":\"d12d16d7-4c67-4c7e-acd2-61bcde53b538\"}"
+    },
+    {
+      "name": "wrong-media",
+      "status": 415,
+      "requestId": "aec445f8-cd2f-4aaf-a7ec-1ecb054cd719",
+      "body": "{\"error\":\"Use application/json\",\"requestId\":\"aec445f8-cd2f-4aaf-a7ec-1ecb054cd719\"}"
+    },
+    {
+      "name": "no-media",
+      "status": 415,
+      "requestId": "b342bc22-773b-4139-8882-46ef797e8872",
+      "body": "{\"error\":\"Use application/json\",\"requestId\":\"b342bc22-773b-4139-8882-46ef797e8872\"}"
+    },
+    {
+      "name": "json-utf8",
+      "status": 200,
+      "requestId": "34d5348b-5458-470d-a5fe-f4b2b63bd62d",
+      "body": "{\"kind\":\"recommendations\",\"answer\":\"Sony WH-CH720N is the leading sample match. Sample price SGD 149.00 meets your budget. Check the tradeoffs before choosing.\",\"preferences\":{\"hard\":{\"category\":\"headphones\",\"budget\":{\"amount\":500,\"currency\":\"SGD\"},\"region\":\"SG\",\"excludedBrands\":[],\"requiredFeatures\":[],\"pendingConstraint\":null},\"soft\":{\"useCase\":\"\",\"priorities\":[\"value\"],\"responseLength\":\"concise\"}},\"notes\":[\"Synthetic development samples. Scenario timestamp 15 Jan 2025, not observed prices, stock or specification research.\"],\"candidates\":[{\"product\":{\"id\":\"sony-wh-ch720n\",\"category\":\"headphones\",\"brand\":\"Sony\",\"name\":\"Sony WH-CH720N\",\"summary\":\"Sample lower-price wireless ANC profile. Battery evidence conflicts in this fixture.\",\"features\":[\"wireless\",\"active-noise-cancelling\",\"multipoint\",\"lightweight\"],\"manufacturer\":\"Sony\",\"productUrl\":\"https://www.sony.com.sg/headphones/products/wh-ch720n\",\"claims\":[{\"status\":\"supported\",\"key\":\"wireless\",\"value\":\"Sample fixture. wireless.\",\"sources\":[{\"id\":\"sony-wh-ch720n-reference\",\"name\":\"Synthetic fixture reference. Sony model reference\",\"url\":\"https://www.sony.com.sg/headphones/products/wh-ch720n\",\"kind\":\"fixture-observation\",\"capturedAt\":\"2025-01-15T00:00:00.000Z\"}]},{\"status\":\"supported\",\"key\":\"active-noise-cancelling\",\"value\":\"Sample fixture. active noise cancelling.\",\"sources\":[{\"id\":\"sony-wh-ch720n-reference\",\"name\":\"Synthetic fixture reference. Sony model reference\",\"url\":\"https://www.sony.com.sg/headphones/products/wh-ch720n\",\"kind\":\"fixture-observation\",\"capturedAt\":\"2025-01-15T00:00:00.000Z\"}]},{\"status\":\"supported\",\"key\":\"multipoint\",\"value\":\"Sample fixture. multipoint.\",\"sources\":[{\"id\":\"sony-wh-ch720n-reference\",\"name\":\"Synthetic fixture reference. Sony model reference\",\"url\":\"https://www.sony.com.sg/headphones/products/wh-ch720n\",\"kind\":\"fixture-observation\",\"capturedAt\":\"2025-01-15T00:00:00.000Z\"}]},{\"status\":\"supported\",\"key\":\"lightweight\",\"value\":\"Sample fixture. lightweight.\",\"sources\":[{\"id\":\"sony-wh-ch720n-reference\",\"name\":\"Synthetic fixture reference. Sony model reference\",\"url\":\"https://www.sony.com.sg/headphones/products/wh-ch720n\",\"kind\":\"fixture-observation\",\"capturedAt\":\"2025-01-15T00:00:00.000Z\"}]},{\"status\":\"unknown\",\"key\":\"delivery\",\"note\":\"Unknown. This fixture does not establish shipping, delivery time or warranty.\"},{\"status\":\"conflict\",\"key\":\"long-battery-life\",\"observations\":[{\"value\":\"Sample fixture A. 35 hours with ANC.\",\"source\":{\"id\":\"sony-wh-ch720n-observation-a\",\"name\":\"Synthetic fixture observation-a. Sony model reference\",\"url\":\"https://www.sony.com.sg/headphones/products/wh-ch720n\",\"kind\":\"fixture-observation\",\"capturedAt\":\"2025-01-15T00:00:00.000Z\"}},{\"value\":\"Sample fixture B. 50 hours, mode unspecified.\",\"source\":{\"id\":\"sony-wh-ch720n-observation-b\",\"name\":\"Synthetic fixture observation-b. Sony model reference\",\"url\":\"https://www.sony.com.sg/headphones/products/wh-ch720n\",\"kind\":\"fixture-observation\",\"capturedAt\":\"2025-01-15T00:00:00.000Z\"}}]},{\"status\":\"unknown\",\"key\":\"sound-quality\",\"note\":\"Unknown. No independent comparative measurement exists in this fixture.\"}]},\"offer\":{\"productId\":\"sony-wh-ch720n\",\"merchant\":\"Sony model page\",\"merchantHost\":\"www.sony.com.sg\",\"productUrl\":\"https://www.sony.com.sg/headphones/products/wh-ch720n\",\"region\":\"SG\",\"price\":{\"amount\":149,\"currency\":\"SGD\"},\"availability\":\"sample-in-stock\",\"observedAt\":\"2025-01-15T00:00:00.000Z\",\"dataKind\":\"fixture\"},\"reasons\":[\"Sample price SGD 149.00 meets your budget.\",\"Tradeoff. Conflicting sample claims are excluded from ranking; inspect the evidence.\"]},{\"product\":{\"id\":\"sennheiser-momentum-4\",\"category\":\"headphones\",\"brand\":\"Sennheiser\",\"name\":\"Sennheiser MOMENTUM 4 Wireless\",\"summary\":\"Sample long-battery wireless ANC profile. Weight may be a tradeoff.\",\"features\":[\"wireless\",\"active-noise-cancelling\",\"multipoint\",\"long-battery-life\"],\"manufacturer\":\"Sennheiser\",\"productUrl\":\"https://global.sennheiser-hearing.com/products/momentum-4-wireless\",\"claims\":[{\"status\":\"supported\",\"key\":\"wireless\",\"value\":\"Sample fixture. wireless.\",\"sources\":[{\"id\":\"sennheiser-momentum-4-reference\",\"name\":\"Synthetic fixture reference. Sennheiser model reference\",\"url\":\"https://global.sennheiser-hearing.com/products/momentum-4-wireless\",\"kind\":\"fixture-observation\",\"capturedAt\":\"2025-01-15T00:00:00.000Z\"}]},{\"status\":\"supported\",\"key\":\"active-noise-cancelling\",\"value\":\"Sample fixture. active noise cancelling.\",\"sources\":[{\"id\":\"sennheiser-momentum-4-reference\",\"name\":\"Synthetic fixture reference. Sennheiser model reference\",\"url\":\"https://global.sennheiser-hearing.com/products/momentum-4-wireless\",\"kind\":\"fixture-observation\",\"capturedAt\":\"2025-01-15T00:00:00.000Z\"}]},{\"status\":\"supported\",\"key\":\"multipoint\",\"value\":\"Sample fixture. multipoint.\",\"sources\":[{\"id\":\"sennheiser-momentum-4-reference\",\"name\":\"Synthetic fixture reference. Sennheiser model reference\",\"url\":\"https://global.sennheiser-hearing.com/products/momentum-4-wireless\",\"kind\":\"fixture-observation\",\"capturedAt\":\"2025-01-15T00:00:00.000Z\"}]},{\"status\":\"supported\",\"key\":\"long-battery-life\",\"value\":\"Sample fixture. long battery life.\",\"sources\":[{\"id\":\"sennheiser-momentum-4-reference\",\"name\":\"Synthetic fixture reference. Sennheiser model reference\",\"url\":\"https://global.sennheiser-hearing.com/products/momentum-4-wireless\",\"kind\":\"fixture-observation\",\"capturedAt\":\"2025-01-15T00:00:00.000Z\"}]},{\"status\":\"unknown\",\"key\":\"delivery\",\"note\":\"Unknown. This fixture does not establish shipping, delivery time or warranty.\"},{\"status\":\"unknown\",\"key\":\"sound-quality\",\"note\":\"Unknown. No independent comparative measurement exists in this fixture.\"}]},\"offer\":{\"productId\":\"sennheiser-momentum-4\",\"merchant\":\"Sennheiser model page\",\"merchantHost\":\"global.sennheiser-hearing.com\",\"productUrl\":\"https://global.sennheiser-hearing.com/products/momentum-4-wireless\",\"region\":\"SG\",\"price\":{\"amount\":329,\"currency\":\"SGD\"},\"availability\":\"sample-in-stock\",\"observedAt\":\"2025-01-15T00:00:00.000Z\",\"dataKind\":\"fixture\"},\"reasons\":[\"Sample price SGD 329.00 meets your budget.\",\"Tradeoff. Sample evidence does not establish real-world quality, current price or stock.\"]},{\"product\":{\"id\":\"sony-wh-1000xm5\",\"category\":\"headphones\",\"brand\":\"Sony\",\"name\":\"Sony WH-1000XM5\",\"summary\":\"Sample profile with wireless listening, ANC and multipoint. Comfort is personal.\",\"features\":[\"wireless\",\"active-noise-cancelling\",\"multipoint\",\"lightweight\"],\"manufacturer\":\"Sony\",\"productUrl\":\"https://www.sony.com.sg/electronics/headband-headphones/wh-1000xm5\",\"claims\":[{\"status\":\"supported\",\"key\":\"wireless\",\"value\":\"Sample fixture. wireless.\",\"sources\":[{\"id\":\"sony-wh-1000xm5-reference\",\"name\":\"Synthetic fixture reference. Sony model reference\",\"url\":\"https://www.sony.com.sg/electronics/headband-headphones/wh-1000xm5\",\"kind\":\"fixture-observation\",\"capturedAt\":\"2025-01-15T00:00:00.000Z\"}]},{\"status\":\"supported\",\"key\":\"active-noise-cancelling\",\"value\":\"Sample fixture. active noise cancelling.\",\"sources\":[{\"id\":\"sony-wh-1000xm5-reference\",\"name\":\"Synthetic fixture reference. Sony model reference\",\"url\":\"https://www.sony.com.sg/electronics/headband-headphones/wh-1000xm5\",\"kind\":\"fixture-observation\",\"capturedAt\":\"2025-01-15T00:00:00.000Z\"}]},{\"status\":\"supported\",\"key\":\"multipoint\",\"value\":\"Sample fixture. multipoint.\",\"sources\":[{\"id\":\"sony-wh-1000xm5-reference\",\"name\":\"Synthetic fixture reference. Sony model reference\",\"url\":\"https://www.sony.com.sg/electronics/headband-headphones/wh-1000xm5\",\"kind\":\"fixture-observation\",\"capturedAt\":\"2025-01-15T00:00:00.000Z\"}]},{\"status\":\"supported\",\"key\":\"lightweight\",\"value\":\"Sample fixture. lightweight.\",\"sources\":[{\"id\":\"sony-wh-1000xm5-reference\",\"name\":\"Synthetic fixture reference. Sony model reference\",\"url\":\"https://www.sony.com.sg/electronics/headband-headphones/wh-1000xm5\",\"kind\":\"fixture-observation\",\"capturedAt\":\"2025-01-15T00:00:00.000Z\"}]},{\"status\":\"unknown\",\"key\":\"delivery\",\"note\":\"Unknown. This fixture does not establish shipping, delivery time or warranty.\"},{\"status\":\"unknown\",\"key\":\"sound-quality\",\"note\":\"Unknown. No independent comparative measurement exists in this fixture.\"}]},\"offer\":{\"productId\":\"sony-wh-1000xm5\",\"merchant\":\"Sony model page\",\"merchantHost\":\"www.sony.com.sg\",\"productUrl\":\"https://www.sony.com.sg/electronics/headband-headphones/wh-1000xm5\",\"region\":\"SG\",\"price\":{\"amount\":399,\"currency\":\"SGD\"},\"availability\":\"sample-in-stock\",\"observedAt\":\"2025-01-15T00:00:00.000Z\",\"dataKind\":\"fixture\"},\"reasons\":[\"Sample price SGD 399.00 meets your budget.\",\"Tradeoff. Sample evidence does not establish real-world quality, current price or stock.\"]}]}"
+    },
+    {
+      "name": "encoded",
+      "status": 415,
+      "requestId": "fee5da7f-45a0-4c73-b31a-f1dee4506881",
+      "body": "{\"error\":\"Encoded request bodies are unsupported\",\"requestId\":\"fee5da7f-45a0-4c73-b31a-f1dee4506881\"}"
+    },
+    {
+      "name": "overlarge",
+      "status": 413,
+      "requestId": "0f6ae29e-3147-4a5c-acf6-fb50497e0d3d",
+      "body": "{\"error\":\"Request body is too large\",\"requestId\":\"0f6ae29e-3147-4a5c-acf6-fb50497e0d3d\"}"
+    },
+    {
+      "name": "multibyte-overlarge",
+      "status": 413,
+      "requestId": "b5ab6e71-141f-4344-8fa9-11f40f57a949",
+      "body": "{\"error\":\"Request body is too large\",\"requestId\":\"b5ab6e71-141f-4344-8fa9-11f40f57a949\"}"
+    },
+    {
+      "name": "streamed-overlarge",
+      "status": 413,
+      "requestId": "e05456da-62e0-44cf-8e13-57637338fb19",
+      "body": "{\"error\":\"Request body is too large\",\"requestId\":\"e05456da-62e0-44cf-8e13-57637338fb19\"}"
+    },
+    {
+      "name": "invalid-utf8",
+      "status": 400,
+      "requestId": "452cdb97-e396-4c79-b075-58d257235a4a",
+      "body": "{\"error\":\"Invalid JSON or request fields\",\"requestId\":\"452cdb97-e396-4c79-b075-58d257235a4a\"}"
+    },
+    {
+      "name": "extra-top-field",
+      "status": 400,
+      "requestId": "267ee3bc-1b8a-449b-91b2-e0ef4609e5df",
+      "body": "{\"error\":\"Invalid JSON or request fields\",\"requestId\":\"267ee3bc-1b8a-449b-91b2-e0ef4609e5df\"}"
+    },
+    {
+      "name": "long-message",
+      "status": 400,
+      "requestId": "85bcd7c7-1945-467d-8fda-d1537d8f5d06",
+      "body": "{\"error\":\"Invalid JSON or request fields\",\"requestId\":\"85bcd7c7-1945-467d-8fda-d1537d8f5d06\"}"
+    },
+    {
+      "name": "invalid-budget-0",
+      "status": 400
+    },
+    {
+      "name": "invalid-budget--1",
+      "status": 400
+    },
+    {
+      "name": "invalid-budget-12.345",
+      "status": 400
+    },
+    {
+      "name": "invalid-budget-1000001",
+      "status": 400
+    },
+    {
+      "name": "invalid-budget-1e+100",
+      "status": 400
+    },
+    {
+      "name": "headphones under SGD500 with flibberty support",
+      "status": 200,
+      "result": {
+        "kind": "clarification",
+        "reason": "constraint",
+        "message": "I cannot reliably apply part of that request. Supported constraints are category, budget, region, brand exclusions and the listed features. Rephrase it, or explicitly clear the pending constraint.",
+        "preferences": {
+          "hard": {
+            "category": "headphones",
+            "budget": {
+              "amount": 500,
+              "currency": "SGD"
+            },
+            "region": "SG",
+            "excludedBrands": [],
+            "requiredFeatures": [],
+            "pendingConstraint": "headphones under SGD500 with flibberty support"
+          },
+          "soft": {
+            "useCase": "",
+            "priorities": [
+              "value"
+            ],
+            "responseLength": "concise"
+          }
+        },
+        "notes": [
+          "Synthetic development samples. Scenario timestamp 15 Jan 2025, not observed prices, stock or specification research."
+        ]
+      }
+    },
+    {
+      "name": "Show options",
+      "status": 200,
+      "result": {
+        "kind": "clarification",
+        "reason": "constraint",
+        "message": "An unresolved requirement is still active. I will not recommend products until you explicitly clear the pending constraint or reset this session.",
+        "preferences": {
+          "hard": {
+            "category": "headphones",
+            "budget": {
+              "amount": 500,
+              "currency": "SGD"
+            },
+            "region": "SG",
+            "excludedBrands": [],
+            "requiredFeatures": [],
+            "pendingConstraint": "headphones under SGD500 with flibberty support"
+          },
+          "soft": {
+            "useCase": "",
+            "priorities": [
+              "value"
+            ],
+            "responseLength": "concise"
+          }
+        },
+        "notes": [
+          "Synthetic development samples. Scenario timestamp 15 Jan 2025, not observed prices, stock or specification research."
+        ]
+      }
+    },
+    {
+      "name": "under SGD200",
+      "status": 200,
+      "result": {
+        "kind": "clarification",
+        "reason": "constraint",
+        "message": "An unresolved requirement is still active. I will not recommend products until you explicitly clear the pending constraint or reset this session.",
+        "preferences": {
+          "hard": {
+            "category": "headphones",
+            "budget": {
+              "amount": 200,
+              "currency": "SGD"
+            },
+            "region": "SG",
+            "excludedBrands": [],
+            "requiredFeatures": [],
+            "pendingConstraint": "headphones under SGD500 with flibberty support"
+          },
+          "soft": {
+            "useCase": "",
+            "priorities": [
+              "value"
+            ],
+            "responseLength": "concise"
+          }
+        },
+        "notes": [
+          "Synthetic development samples. Scenario timestamp 15 Jan 2025, not observed prices, stock or specification research."
+        ]
+      }
+    },
+    {
+      "name": "inert-input",
+      "status": 200,
+      "headers": {
+        "cache-control": "no-store",
+        "content-security-policy": "default-src 'none'; frame-ancestors 'none'",
+        "content-type": "application/json",
+        "referrer-policy": "no-referrer",
+        "x-content-type-options": "nosniff",
+        "x-frame-options": "DENY",
+        "x-request-id": "7e2239df-68d0-4743-b61f-667b5e5c0f68",
+        "content-length": "682",
+        "date": "Tue, 17 Nov 2026 13:59:22 GMT",
+        "connection": "keep-alive",
+        "keep-alive": "timeout=5"
+      },
+      "body": "{\"kind\":\"clarification\",\"reason\":\"constraint\",\"message\":\"I cannot reliably apply part of that request. Supported constraints are category, budget, region, brand exclusions and the listed features. Rephrase it, or explicitly clear the pending constraint.\",\"preferences\":{\"hard\":{\"category\":\"headphones\",\"budget\":null,\"region\":\"SG\",\"excludedBrands\":[],\"requiredFeatures\":[],\"pendingConstraint\":\"headphones <script>globalThis.secretMarker=1</script> fetch http://127.0.0.1/private\"},\"soft\":{\"useCase\":\"\",\"priorities\":[\"value\"],\"responseLength\":\"concise\"}},\"notes\":[\"Synthetic development samples. Scenario timestamp 15 Jan 2025, not observed prices, stock or specification research.\"]}"
+    },
+    {
+      "name": "select-sony-wh-1000xm5",
+      "status": 200,
+      "result": {
+        "kind": "handoff",
+        "productId": "sony-wh-1000xm5",
+        "productName": "Sony WH-1000XM5",
+        "offer": {
+          "productId": "sony-wh-1000xm5",
+          "merchant": "Sony model page",
+          "merchantHost": "www.sony.com.sg",
+          "productUrl": "https://www.sony.com.sg/electronics/headband-headphones/wh-1000xm5",
+          "region": "SG",
+          "price": {
+            "amount": 399,
+            "currency": "SGD"
+          },
+          "availability": "sample-in-stock",
+          "observedAt": "2025-01-15T00:00:00.000Z",
+          "dataKind": "fixture"
+        },
+        "productUrl": "https://www.sony.com.sg/electronics/headband-headphones/wh-1000xm5",
+        "label": "Open manufacturer model reference. Synthetic sample price and stock only. Regional pricing, configuration, availability and page redirects are unverified. No purchase is placed."
+      }
+    },
+    {
+      "name": "select-audio-technica-ath-m50xbt2",
+      "status": 200,
+      "result": {
+        "kind": "error",
+        "code": "not-eligible",
+        "message": "This product does not meet all current hard constraints or has unavailable or unknown sample stock.",
+        "retryable": false,
+        "preferences": {
+          "hard": {
+            "category": "headphones",
+            "budget": {
+              "amount": 500,
+              "currency": "SGD"
+            },
+            "region": "SG",
+            "excludedBrands": [],
+            "requiredFeatures": [],
+            "pendingConstraint": null
+          },
+          "soft": {
+            "useCase": "",
+            "priorities": [
+              "value"
+            ],
+            "responseLength": "concise"
+          }
+        },
+        "notes": [
+          "Synthetic development samples. Scenario timestamp 15 Jan 2025, not observed prices, stock or specification research."
+        ]
+      }
+    },
+    {
+      "name": "select-missing",
+      "status": 200,
+      "result": {
+        "kind": "error",
+        "code": "invalid-selection",
+        "message": "That product ID is not in this catalog.",
+        "retryable": false,
+        "preferences": {
+          "hard": {
+            "category": "headphones",
+            "budget": {
+              "amount": 500,
+              "currency": "SGD"
+            },
+            "region": "SG",
+            "excludedBrands": [],
+            "requiredFeatures": [],
+            "pendingConstraint": null
+          },
+          "soft": {
+            "useCase": "",
+            "priorities": [
+              "value"
+            ],
+            "responseLength": "concise"
+          }
+        },
+        "notes": [
+          "Synthetic development samples. Scenario timestamp 15 Jan 2025, not observed prices, stock or specification research."
+        ]
+      }
+    }
+  ]
+}
