@@ -16,7 +16,7 @@ Retain earlier user and assistant messages. A historical response records the pr
 
 The original shadcn CLI 4.23.0 setup uses the base-nova registry and Lucide icons. The source snapshots and SHA256 values remain in [the provenance manifest](../artifacts/frontend-standard/provenance/registry-manifest.json). Reuse these generated components. Fetch new components from the official registry rather than writing substitutes.
 
-Current official documentation defines AI Elements as compositions of shadcn/ui components. A separate model or legacy AI SDK Elements package is unnecessary for this deterministic application. The [Chat pattern](https://ui.shadcn.com/docs/ai-elements/base/chat) composes Message Scroller, Message, Bubble and Input Group. The [Prompt Input pattern](https://ui.shadcn.com/docs/ai-elements/base/prompt-input) supplies the textarea and send action.
+Current official documentation defines AI Elements as compositions of shadcn/ui components. A separate model or legacy AI SDK Elements package is unnecessary for this deterministic application. The [Chat pattern](https://ui.shadcn.com/docs/ai-elements/base/chat) composes Message Scroller, Message, Bubble and Input Group. The [Prompt Input pattern](https://ui.shadcn.com/docs/ai-elements/base/prompt-input) supplies the textarea and send action. Source previews follow [Inline Citation](https://ui.shadcn.com/docs/ai-elements/base/inline-citation), composed from the installed Hover Card and Button. Source and completed tool disclosures follow [Sources](https://ui.shadcn.com/docs/ai-elements/base/sources) and [Tool](https://ui.shadcn.com/docs/ai-elements/base/tool) on the installed Trace components. These official patterns were checked against the current documentation during the Exa-primary work.
 
 Use the [official Vite theme-provider pattern](https://ui.shadcn.com/docs/dark-mode/vite), with dark as the application default. Keep theme tokens centralized. Use local Geist, readable functional type, consistent spacing, contrast and visible focus. Respect reduced motion. Mobile controls, disclosures and composer must remain usable while history scrolls.
 
@@ -24,7 +24,7 @@ Use the [official Vite theme-provider pattern](https://ui.shadcn.com/docs/dark-m
 
 The backend returns complete JSON. Show pending state only while actual work is pending. Do not simulate streaming tokens, reasoning or intermediate tool activity. Recorded provider outcomes appear only after the server returns them.
 
-Every sample price, claim and stock status remains visibly fixture data. Manufacturer references provide context, not verification of sample claims or current offers. Optional Exa source excerpts retain their separate contract and explicit paid action. They do not establish inventory or merchant identity.
+Normal development uses Exa research observations. Product cards show exact supporting quotations, observed and unverified price text, and explicit uncertainty. Source links do not establish stock, delivery or merchant authorization. Synthetic catalogs and exact manufacturer handoffs remain confined to automated fixture regression, where every sample price, claim and stock state keeps its fixture label.
 
 Preserve budget drafts, accepted hard limits, unknown constraints, preference cleanup, safe exact-product handoff, cancellation and stale-response guards. Repeated messages need unique accessible IDs and message-scoped selectors. A successful historical response must not authorize an action under obsolete preferences.
 

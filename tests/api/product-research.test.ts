@@ -44,6 +44,28 @@ async function research(payload: unknown, requiredFeatures: Feature[] = []) {
 }
 
 describe("real SDK product research against local HTTP", () => {
+  it.each([
+    { id: "price-difference", quote: "Aster Wave 2 costs SGD 99 less than its competitors.", price: true },
+    { id: "monthly-price", quote: "Aster Wave 2 costs SGD 99/month.", price: true },
+    { id: "other-variant-price", quote: "Aster Wave 2 costs SGD 99 for the Pro edition.", price: true },
+    { id: "wrong-category", quote: "Aster Wave 2 is a cotton sweater.", price: false },
+  ])("keeps the independent QA $id reproduction as source context", async ({ quote, price }) => {
+    const result = await research({
+      requestId: "adversarial-fixture", costDollars: { total: 0.007 },
+      results: [{ title: "Synthetic fixture", url: "https://reviews.example.com/aster-wave-2", highlights: [quote] }],
+      output: {
+        content: { observations: [{
+          name: "Aster Wave 2", url: "https://reviews.example.com/aster-wave-2",
+          quotedFacts: price ? [] : [quote], priceQuote: price ? quote : null,
+        }] }, grounding: [],
+      },
+    });
+    expect(result.status).toBe("ready");
+    if (result.status !== "ready") return;
+    expect(result.research.products).toEqual([]);
+    expect(result.research.sources[0].highlights).toContain(quote);
+  });
+
   it("makes one compact canonical search and returns exact source-scoped products and unverified prices", async () => {
     let calls = 0;
     let requestBody: Record<string, unknown> = {};
@@ -150,7 +172,7 @@ describe("real SDK product research against local HTTP", () => {
         {
           title: "Comparison",
           url: "https://reviews.example.com/aster-wave-2",
-          highlights: ["Aster Wave 2 is wireless. Orbit Quiet costs SGD 999."],
+          highlights: ["Aster Wave 2 is wireless. Aster Wave 2 is a pair of headphones. Orbit Quiet costs SGD 999."],
         },
       ],
       output: {
@@ -159,7 +181,7 @@ describe("real SDK product research against local HTTP", () => {
             {
               name: "Aster Wave 2",
               url: "https://reviews.example.com/aster-wave-2",
-              quotedFacts: ["Aster Wave 2 is wireless."],
+              quotedFacts: ["Aster Wave 2 is wireless.", "Aster Wave 2 is a pair of headphones."],
               priceQuote: "Orbit Quiet costs SGD 999.",
             },
           ],
@@ -209,6 +231,7 @@ describe("real SDK product research against local HTTP", () => {
   );
   it("does not turn a negative feature quote into a lead for that required feature", async () => {
     const quote = "Aster Wave 2 does not support wireless audio.";
+    const category = "Aster Wave 2 is a pair of headphones.";
     const result = await research(
       {
         ...productResearchResponse,
@@ -216,7 +239,7 @@ describe("real SDK product research against local HTTP", () => {
           {
             title: "Aster Wave 2",
             url: "https://reviews.example.com/aster-wave-2",
-            highlights: [quote],
+            highlights: [quote, category],
           },
         ],
         output: {
@@ -225,7 +248,7 @@ describe("real SDK product research against local HTTP", () => {
               {
                 name: "Aster Wave 2",
                 url: "https://reviews.example.com/aster-wave-2",
-                quotedFacts: [quote],
+                quotedFacts: [quote, category],
                 priceQuote: null,
               },
             ],
@@ -241,13 +264,14 @@ describe("real SDK product research against local HTTP", () => {
   it("matches an exact named variant containing punctuation without treating its name as regex syntax", async () => {
     const name = "Aster (2026)+";
     const quote = `${name} supports wireless audio.`;
+    const category = `${name} is a pair of headphones.`;
     const result = await research({
       ...productResearchResponse,
       results: [
         {
           title: name,
           url: "https://reviews.example.com/aster-wave-2",
-          highlights: [quote],
+          highlights: [quote, category],
         },
       ],
       output: {
@@ -256,7 +280,7 @@ describe("real SDK product research against local HTTP", () => {
             {
               name,
               url: "https://reviews.example.com/aster-wave-2",
-              quotedFacts: [quote],
+              quotedFacts: [quote, category],
               priceQuote: null,
             },
           ],
@@ -296,6 +320,20 @@ describe("real SDK product research against local HTTP", () => {
         "Aster Wave 2 uses Bluetooth wireless audio and active noise cancelling.",
       );
   });
+  it("keeps the base model and its explicitly named Pro variant separate on their own sources", async () => {
+    const payload = JSON.parse(
+      JSON.stringify(productResearchResponse).replaceAll("Orbit Quiet", "Aster Wave 2 Pro"),
+    );
+    const result = await research(payload);
+    expect(result.status).toBe("ready");
+    if (result.status !== "ready") return;
+    expect(result.research.products.map((product) => product.name)).toEqual([
+      "Aster Wave 2", "Aster Wave 2 Pro",
+    ]);
+    expect(result.research.products[1].price?.quote).toBe(
+      "Aster Wave 2 Pro was listed at USD 179.00 when reviewed.",
+    );
+  });
   it("degrades malformed extraction to sources and discloses relaxed retrieval without changing constraints", async () => {
     const result = await research({
       ...productResearchResponse,
@@ -322,7 +360,7 @@ describe("real SDK product research against local HTTP", () => {
         {
           title: "Aster Wave 2",
           url: "https://reviews.example.com/aster-wave-2",
-          highlights: ["Aster Wave 2 does not support wireless audio."],
+          highlights: ["Aster Wave 2 does not support wireless audio.", "Aster Wave 2 is a pair of headphones."],
         },
       ],
       output: {
@@ -331,7 +369,7 @@ describe("real SDK product research against local HTTP", () => {
             {
               name: "Aster Wave 2",
               url: "https://reviews.example.com/aster-wave-2",
-              quotedFacts: ["Aster Wave 2 does not support wireless audio."],
+              quotedFacts: ["Aster Wave 2 does not support wireless audio.", "Aster Wave 2 is a pair of headphones."],
               priceQuote: null,
             },
           ],
