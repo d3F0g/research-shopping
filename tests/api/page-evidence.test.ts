@@ -99,7 +99,9 @@ describe("normalized historical application capture with test-authored extractio
     expect(flattened.products).toEqual([]);
     const source = { ...historicalSources[2], highlights: ["# Sennheiser Momentum 4 Wireless Headphones\nSGD 349.00 SGD 599.00 42% off"] };
     const intact = await replay({ ...historicalReplay, results: [source], output: undefined });
-    expect(intact.products[0]).toMatchObject({ name: "Sennheiser Momentum 4 Wireless Headphones", price: null, facts: [] });
+    expect(intact.products).toEqual([]);
+    const matchedTitle = await replay({ ...historicalReplay, results: [{ ...source, title: "Sennheiser Momentum 4 Wireless Headphones" }], output: undefined });
+    expect(matchedTitle.products[0]).toMatchObject({ name: "Sennheiser Momentum 4 Wireless Headphones", price: null, facts: [] });
   });
 });
 

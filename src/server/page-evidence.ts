@@ -13,7 +13,7 @@ export type EvidenceDecision = {
   start?: number;
   end?: number;
 };
-type Scope = { name: string; identity: string; text: string; highlight: number; start: number; end: number; boundary: string };
+type Scope = { name: string; identity: string; text: string; highlight: number; start: number; identityEnd: number; end: number; boundary: string };
 
 function cleanText(raw: string): string {
   return raw.replace(/[\u0000-\u001f\u007f-\u009f]/g, " ").replace(/\s+/g, " ").trim();
@@ -88,7 +88,7 @@ function headingScope(input: Source, preferences: Preferences, decisions: Eviden
       const intactName = newline >= 0 ? cleanText(rest.slice(0, newline).replace(/\s+#+$/, "")) : null;
       const flattened = rest.startsWith(titleName) && /\s|$/.test(rest.charAt(titleName.length));
       const name = intactName && intactName.length <= 160 && !intactName.includes(" #") ? intactName : flattened ? titleName : null;
-      if (!name || !input.title.includes(name)) { record("variant-mismatch", { highlight, start }); continue; }
+      if (!name || titleName !== name) { record("variant-mismatch", { highlight, start }); continue; }
       if (/^(?:Premium|New|Wireless|Wired|Bluetooth|Over-ear|On-ear|In-ear|Gaming|Business)(?:\s+(?:wireless|wired|Bluetooth|over-ear|on-ear|in-ear|noise cancell?ing|gaming|business))*\s+(?:headphones|earbuds|headset|laptop|notebook)$/i.test(name)) { record("missing-identity", { highlight, start }); continue; }
       if (name.length < 3 || name.split(/\s+/).length < 2 || forbiddenIdentity.test(name)) { record("ambiguous-scope", { highlight, start }); continue; }
       const designationEnd = contentStart + (intactName === name ? rest.indexOf("\n") : name.length);
@@ -117,33 +117,102 @@ function headingScope(input: Source, preferences: Preferences, decisions: Eviden
       if (identity.length > 640 || name.length > 160) { record("packing-failure", { highlight, start, end: identityEnd }); continue; }
       if (/\bearbuds?\b/i.test(text) && /\b(?:over-ear|on-ear)\b/i.test(text)) { record("contradiction", { highlight, start, end }); continue; }
       record("admitted", { highlight, start, end: identityEnd });
-      return { name, identity, text, highlight, start, end, boundary: boundaryCode };
+      return { name, identity, text, highlight, start, identityEnd, end, boundary: boundaryCode };
     }
   }
   if (!decisions.some((decision) => decision.sourceIndex === input.sourceIndex)) record("missing-identity");
   return null;
 }
 
+type Passage = { text: string; start: number; end: number; kind: "content" | "section" };
+const sectionLabels = "Description|Specifications|Key Features|Features|Highlights";
+const scalarAmount = "(?:0|[1-9]\\d{0,2}(?:,\\d{3})+|[1-9]\\d*)(?:\\.\\d{2})?";
+const money = `(?:SGD|USD|EUR|GBP|AUD|JPY|(?:S|US)\\$|[€£¥])\\s*${scalarAmount}`;
+const contextPrice = new RegExp(`^(?:Sale price:?\\s*)?${money}\\s+(?:was|regular price:?|list price:?)\\s+${money}(?:\\s+(?:SGD|USD|EUR|GBP|AUD|JPY))?(?:\\s+(?:You Save|Save|Savings:?)\\s+${money})?$`, "i");
+const singlePrice = new RegExp(`^(?:Price:?\\s*)?${money}$`, "i");
+
+function passages(raw: string, start = 0, end = raw.length): Passage[] {
+  const result: Passage[] = [];
+  const separator = new RegExp(`\\n+|(?<=[.!?])\\s+(?=[A-Z0-9])|(?<!\\S)#{1,6}[ \\t]+(?:${sectionLabels})(?=\\s|$)`, "gi");
+  let cursor = start;
+  const append = (from: number, to: number, kind: Passage["kind"]) => {
+    const text = cleanText(raw.slice(from, to)).replace(/^[-*]\s+/, "");
+    if (text) result.push({ text, start: from, end: to, kind });
+  };
+  for (const match of raw.slice(start, end).matchAll(separator)) {
+    const position = start + match.index!;
+    append(cursor, position, "content");
+    if (match[0].includes("#")) append(position, position + match[0].length, "section");
+    cursor = position + match[0].length;
+  }
+  append(cursor, end, "content");
+  return result;
+}
+
+const featurePhrase = `(?:${Object.values(featureTerms).join("|")})(?: (?:audio|support|display|memory))?`;
+const booleanFeature = new RegExp(`^(?:${Object.values(featureTerms).join("|")}|Connectivity):\\s*(?:yes|no|true|false|supported|not supported|available|unavailable|wired[- ]only|wireless)$`, "i");
+const runtime = "(?:up to )?\\d+(?:\\.\\d+)? (?:hours?|hrs?)(?: of (?:playback|music|battery life))?(?: on a full charge| per charge)?(?: with (?:ANC|noise cancelling) (?:on|off))?";
+const scopedPredicates = [
+  new RegExp(`^(?:Battery(?: life| runtime)?|Runtime):\\s*${runtime}$`, "i"),
+  /^(?:Driver(?: size)?|Transducer(?: size)?):\s*\d+(?:\.\d+)?\s*mm$/i,
+  /^(?:Weight:\s*|Weighs?\s+)\d+(?:\.\d+)?\s*(?:g|kg|grams?|kilograms?)$/i,
+  /^(?:Memory:\s*)\d+\s*GB(?: RAM)?$/i,
+  new RegExp(`^(?:supports?|offers?|features?|provides?|includes?|has|have) (?:an? )?${featurePhrase}(?: and ${featurePhrase})*$`, "i"),
+  new RegExp(`^(?:does not|doesn't|do not|don't|cannot|can't|can) (?:support|have|include|offer|provide|use) (?:an? )?${featurePhrase}$`, "i"),
+  new RegExp(`^(?:is|are) (?:not |no longer )?${featurePhrase}$`, "i"),
+  new RegExp(`^(?:isn't|aren't) ${featurePhrase}$`, "i"),
+  new RegExp(`^(?:lacks?|without|no) (?:an? )?${featurePhrase}$`, "i"),
+  new RegExp(`^(?:Has|Have|You get) ${runtime}$`, "i"),
+];
+
+function scopedFact(text: string, name: string): boolean {
+  const subject = new RegExp(`^(?:(?:The )?${escapeRegex(name)}|These (?:headphones|earbuds|laptops)|The (?:headphones|earbuds|laptop))\\s+`, "i");
+  const predicate = text.replace(subject, "").replace(/[‘’]/g, "'").replace(/[.!]$/, "");
+  return booleanFeature.test(predicate) || scopedPredicates.some((pattern) => pattern.test(predicate)) || exclusiveWired.test(predicate);
+}
+
 function scopedProduct(scope: Scope, input: Source, sourceId: string, observations: NativeObservation[], preferences: Preferences, decisions: EvidenceDecision[]): ResearchProduct | null {
   const record = (code: string, field: string) => decisions.push({ sourceIndex: input.sourceIndex, path: "native-field", code, field, highlight: scope.highlight, start: scope.start, end: scope.end });
-  const body = scope.text.slice(scope.identity.length).trim();
-  const segments = input.highlights[scope.highlight].replace(/\r/g, " ")
-    .slice(scope.start, scope.end).split(/\n+|(?<=[.!?])\s+(?=[A-Z0-9])/)
-    .map((line) => cleanText(line).replace(/^[-*]\s+/, ""));
-  const ownStatement = new RegExp(`^(?:The )?${escapeRegex(scope.name)}\\s+(?:is|are|has|supports?|uses?|offers?|features?|provides?|weighs?|includes?|does|can|lacks?)\\b`, "i");
-  const label = /^(?:Lightweight|Long battery life|Long battery|High memory|Portable|32 GB|Battery(?: life| runtime)?|Weight|Memory|Display|Wireless|Bluetooth|Multipoint|ANC|Active noise cancell?ing|OLED|Portability|Runtime|Driver(?: size)?|Transducer|Codec support|Connectivity)\s*:/i;
-  const attribute = /^(?:Supports?|Offers?|Features?|Provides?|Includes?|Weighs?|Boasting|Up to|These (?:headphones|earbuds|laptops)|The (?:headphones|earbuds|laptop)|You get)\b/i;
-  const ambiguous = /\b(?:and|while|but|whereas|or)\s+[A-Z][a-z]+\s+[A-Z0-9]|\b(?:versus|compared (?:with|to)|unlike|variant|edition|replacement|accessory|case for|cable for)\b|\bvs\.?\s/i;
-  const relatedNames = observations.filter((item) => item.name !== scope.name).map((item) => item.name.toLowerCase());
-  const attributable = (quote: string) => !ambiguous.test(quote)
-    && !relatedNames.some((name) => quote.toLowerCase().includes(name))
-    && (ownStatement.test(quote) || label.test(quote) || attribute.test(quote));
-  const scopedStatements = segments.filter(attributable);
-  const negativeDescriptions = [...scopedStatements, ...(attributable(body) ? [body] : [])];
-  const excluded = preferences.hard.excludedBrands.some((brand) => new RegExp(`^(?:The )?${escapeRegex(brand)}\\b`, "i").test(scope.name)
-    || scopedStatements.some((text) => new RegExp(`\\b(?:made|manufactured) by ${escapeRegex(brand)}\\b`, "i").test(text)));
-  const labelNegative = preferences.hard.requiredFeatures.some((feature) => negativeDescriptions.some((description) => new RegExp(`^(?:${featureTerms[feature]})\\s*:\\s*(?:no|false|not supported|unavailable)\\b`, "i").test(description)));
-  if (excluded || labelNegative || (preferences.hard.requiredFeatures.includes("wireless") && negativeDescriptions.some((text) => /^Connectivity:\s*wired[- ]only[.!]?$/i.test(text))) || contradictsRequiredFeature(negativeDescriptions, preferences, scope.name)) {
+  const raw = input.highlights[scope.highlight].replace(/\r/g, " ");
+  const sections = passages(raw, scope.identityEnd, scope.end);
+  const pricePart = new RegExp(`^(?:(?:Price|Sale price|Regular price|List price|Savings):?\\s*|was\\s+|You Save\\s+|Save\\s+)?${money}(?:\\s+(?:SGD|USD|EUR|GBP|AUD|JPY))?$`, "i");
+  let attributable = true;
+  const factsInScope: string[] = [];
+  const priceBlocks: string[] = [];
+  let priceStart: number | null = null;
+  let priceEnd = 0;
+  const finishPrice = () => {
+    if (priceStart !== null) priceBlocks.push(cleanText(raw.slice(priceStart, priceEnd)));
+    priceStart = null;
+  };
+  for (const passage of sections) {
+    if (passage.kind === "section") { finishPrice(); continue; }
+    if (attributable && scopedFact(passage.text, scope.name)) {
+      finishPrice();
+      factsInScope.push(passage.text);
+    } else if (attributable && (singlePrice.test(passage.text) || contextPrice.test(passage.text) || pricePart.test(passage.text))) {
+      priceStart ??= passage.start;
+      priceEnd = passage.end;
+    } else {
+      attributable = false;
+      finishPrice();
+      record("ambiguous-scope", "section");
+    }
+  }
+  finishPrice();
+  const exactSubject = new RegExp(`^(?:The )?${escapeRegex(scope.name)}\\s+`, "i");
+  const conditionedPrice = new RegExp(`^costs ${money} without ${featurePhrase}[.!]?$`, "i");
+  const adverse = input.highlights.flatMap((highlight, index) => passages(highlight).map((passage) => ({ ...passage, highlight: index })))
+    .find((passage) => passage.kind === "content" && exactSubject.test(passage.text)
+      && (scopedFact(passage.text, scope.name) || conditionedPrice.test(passage.text.replace(exactSubject, "")))
+      && contradictsRequiredFeature([passage.text], preferences, scope.name));
+  if (adverse) {
+    decisions.push({ sourceIndex: input.sourceIndex, path: "source-identity", code: "contradiction", field: "constraints", highlight: adverse.highlight, start: adverse.start, end: adverse.end });
+    return null;
+  }
+  const excluded = preferences.hard.excludedBrands.some((brand) => new RegExp(`^(?:The )?${escapeRegex(brand)}\\b`, "i").test(scope.name));
+  const labelNegative = preferences.hard.requiredFeatures.some((feature) => factsInScope.some((description) => new RegExp(`^(?:${featureTerms[feature]})\\s*:\\s*(?:no|false|not supported|unavailable)\\b`, "i").test(description)));
+  if (excluded || labelNegative || (preferences.hard.requiredFeatures.includes("wireless") && factsInScope.some((text) => /^Connectivity:\s*wired[- ]only[.!]?$/i.test(text))) || contradictsRequiredFeature(factsInScope, preferences, scope.name)) {
     record("contradiction", "constraints");
     return null;
   }
@@ -158,21 +227,15 @@ function scopedProduct(scope: Scope, input: Source, sourceId: string, observatio
       const offset = scope.text.indexOf(quote);
       if (offset < 0) { record(input.highlights.some((text) => cleanText(text).includes(quote)) ? scope.boundary : "quote-absence", "quotedFacts"); continue; }
       if (offset + quote.length > 640) { record("packing-failure", "quotedFacts"); continue; }
-      if (!segments.includes(quote) || !attributable(quote)) { record("ambiguous-scope", "quotedFacts"); continue; }
+      if (!factsInScope.includes(quote)) { record("ambiguous-scope", "quotedFacts"); continue; }
       if (facts.length < 3 && !facts.some((fact) => fact.quote === quote)) facts.push({ sourceId, quote });
       record("admitted", "quotedFacts");
     }
     if (observation.priceQuote) {
       const quote = cleanText(observation.priceQuote);
       const offset = scope.text.indexOf(quote);
-      const amount = "(?:0|[1-9]\\d{0,2}(?:,\\d{3})+|[1-9]\\d*)(?:\\.\\d{2})?";
-      const money = `(?:SGD|USD|EUR|GBP|AUD|JPY|(?:S|US)\\$|[€£¥])\\s*${amount}`;
-      const contextPrice = new RegExp(`^(?:Sale price:?\\s*)?${money}\\s+(?:was|regular price:?|list price:?)\\s+${money}(?:\\s+(?:SGD|USD|EUR|GBP|AUD|JPY))?(?:\\s+(?:You Save|Save|Savings:?)\\s+${money})?$`, "i");
-      const singlePrice = new RegExp(`^(?:Price:?\\s*)?${money}$`, "i");
-      const remaining = body.replace(/^#{1,6}\s+(?:Description|Specifications|Features)\s*/i, "");
-      const fullBlock = remaining === quote || segments.includes(quote) && !/(?:\bwas\b|\bsav(?:e|ings)\b|\bregular price\b|\blist price\b|[$€£¥]|\b(?:SGD|USD|EUR|GBP|AUD|JPY)\b)/i.test(remaining.replace(quote, ""));
-      if (offset < 0 || !fullBlock || !(contextPrice.test(quote) || singlePrice.test(quote))) { record("price-rejection", "priceQuote"); continue; }
-      if (offset + quote.length > 640) { record("packing-failure", "priceQuote"); continue; }
+      if (!attributable || priceBlocks.length !== 1 || priceBlocks[0] !== quote || !(contextPrice.test(quote) || singlePrice.test(quote))) { record("price-rejection", "priceQuote"); continue; }
+      if (offset < 0 || offset + quote.length > 640) { record("packing-failure", "priceQuote"); continue; }
       price = { sourceId, quote, kind: contextPrice.test(quote) ? "page-price-context-unverified" : "page-observed-unverified" };
       record("admitted", "priceQuote");
     }
@@ -229,15 +292,21 @@ export function projectPageEvidence(inputs: Source[], observations: NativeObserv
         record(evidence ? "admitted" : "quote-absence", "quotedFacts");
         return evidence ? [evidence] : [];
       });
-      const priceEvidence = observation.priceQuote ? attributableQuote(observation.priceQuote) : null;
-      const scalarAmount = "(?:0|[1-9]\\d{0,2}(?:,\\d{3})+|[1-9]\\d*)(?:\\.\\d{2})?";
-      const directPrice = new RegExp(`^(?:The )?${escapedName}\\s+(?:costs|retails for|(?:is|was) (?:listed|priced) at)\\s+(?:SGD|USD|EUR|GBP|AUD|JPY|(?:S|US)\\$|[€£¥])\\s*${scalarAmount}(?: on this page| when reviewed)?\\.?$`, "i");
-      const price = priceEvidence && directPrice.test(priceEvidence.quote)
-        ? { ...priceEvidence, kind: "page-observed-unverified" as const } : null;
-      if (observation.priceQuote) record(price ? "admitted" : "price-rejection", "priceQuote");
       const category = preferences.hard.category;
       if (!category) continue;
       const categoryStatement = new RegExp(`^(?:The )?${escapedName} (?:is|are) ${categoryStatements[category]}(?: with [^.!?]+)?[.!]?$`, "i");
+      const priceEvidence = observation.priceQuote ? attributableQuote(observation.priceQuote) : null;
+      const scalarAmount = "(?:0|[1-9]\\d{0,2}(?:,\\d{3})+|[1-9]\\d*)(?:\\.\\d{2})?";
+      const directPrice = new RegExp(`^(?:The )?${escapedName}\\s+(?:costs|retails for|(?:is|was) (?:listed|priced) at)\\s+(?:SGD|USD|EUR|GBP|AUD|JPY|(?:S|US)\\$|[€£¥])\\s*${scalarAmount}(?: on this page| when reviewed)?\\.?$`, "i");
+      const completePriceContext = priceEvidence && input.highlights.some((highlight) => {
+        const parts = passages(highlight).filter((part) => part.kind === "content");
+        return parts.some((part, index) => part.text === priceEvidence.quote && [parts[index - 1], parts[index + 1]].every((adjacent) =>
+          !adjacent || (attributableQuote(adjacent.text) !== null && (scopedFact(adjacent.text, name) || categoryStatement.test(adjacent.text))),
+        ));
+      });
+      const price = priceEvidence && completePriceContext && directPrice.test(priceEvidence.quote)
+        ? { ...priceEvidence, kind: "page-observed-unverified" as const } : null;
+      if (observation.priceQuote) record(price ? "admitted" : "price-rejection", "priceQuote");
       const categoryEvidence = attributedFacts.find((fact) => categoryStatement.test(fact.quote));
       if (!categoryEvidence) { record("missing-class", "identity"); continue; }
       const supportingFacts = attributedFacts.filter((fact) => fact !== categoryEvidence).slice(0, price ? 1 : 2);

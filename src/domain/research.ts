@@ -1,6 +1,7 @@
 import { z } from "zod";
 import {
   PreferencesSchema,
+  BudgetSchema,
   TurnResponseSchema,
   type Preferences,
   type Region,
@@ -8,10 +9,15 @@ import {
 } from "./contracts";
 import { WebResearchSourceSchema } from "./web-research";
 
+const CurrentPreferencesSchema = PreferencesSchema.extend({
+  hard: PreferencesSchema.shape.hard.extend({ budget: BudgetSchema.strict().nullable() }).strict(),
+  soft: PreferencesSchema.shape.soft.strict(),
+}).strict();
+
 const ResearchCitationSchema = z.object({
   sourceId: z.string().min(1).max(80),
   quote: z.string().min(1).max(640),
-});
+}).strict();
 export const ResearchProductSchema = z.object({
   id: z.string().min(1).max(80),
   name: z.string().min(2).max(160),
@@ -24,7 +30,7 @@ export const ResearchProductSchema = z.object({
   }).nullable(),
   stock: z.literal("unverified"),
   unresolvedConstraints: z.array(z.string().min(1).max(180)).max(16),
-});
+}).strict();
 export const ResearchSnapshotSchema = z
   .object({
     dataKind: z.literal("web-research"),
@@ -32,7 +38,7 @@ export const ResearchSnapshotSchema = z
     retrievedAt: z.string().datetime(),
     products: z.array(ResearchProductSchema).max(5),
     sources: z
-      .array(WebResearchSourceSchema.extend({ id: z.string().min(1).max(80) }))
+      .array(WebResearchSourceSchema.extend({ id: z.string().min(1).max(80) }).strict())
       .max(5),
     limitations: z.array(z.string().min(1).max(300)).max(12),
     requestId: z.string().max(180),
@@ -42,10 +48,11 @@ export const ResearchSnapshotSchema = z
         z.object({
           field: z.string().max(240),
           sourceIds: z.array(z.string().max(80)).max(5),
-        }),
+        }).strict(),
       )
       .max(30),
   })
+  .strict()
   .superRefine((snapshot, context) => {
     const sources = new Map(
       snapshot.sources.map((source) => [source.id, source]),
@@ -97,17 +104,17 @@ export const ResearchTurnResponseSchema = z.discriminatedUnion("kind", [
   z.object({
     kind: z.literal("research"),
     answer: z.string().min(1).max(400),
-    preferences: PreferencesSchema,
+    preferences: CurrentPreferencesSchema,
     notes: z.array(z.string().max(300)).max(12),
     research: ResearchSnapshotSchema,
-  }),
+  }).strict(),
   z.object({
     kind: z.literal("research-unavailable"),
     message: z.string().min(1).max(400),
     reason: ResearchUnavailableReasonSchema,
-    preferences: PreferencesSchema,
+    preferences: CurrentPreferencesSchema,
     notes: z.array(z.string().max(300)).max(12),
-  }),
+  }).strict(),
 ]);
 export const ApplicationTurnResponseSchema = z.union([
   ResearchTurnResponseSchema,
