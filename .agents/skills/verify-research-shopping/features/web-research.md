@@ -16,7 +16,7 @@ Test no paid invocation for ordinary replies, presentation changes, disclosures,
 
 A real check uses an owned fresh API/web instance, explicit development mode and the existing original root `.env`. Never print the key, put it in command arguments, copy it to another checkout, load it into the browser or upload it to GitHub. Configure one shared absolute `EXA_RESEARCH_LEDGER_PATH`; do not create a fresh allowance for another worktree.
 
-Use the live allowance recorded by the orchestrator. The current initial proof permits at most two actual calls. There are no automatic retries. Stop on unexpected provider errors or charges. Do not spend another live call to prove cancellation when local SDK/HTTP tests establish it.
+Use the active live allowance explicitly recorded by the orchestrator before dispatch. Earlier proof allowances are historical and do not replenish themselves. Record the permitted calls, conservative reservation, shared ledger, candidate and stop conditions. There are no automatic retries. Stop on unexpected provider errors or charges. Do not spend another live call to prove cancellation when local SDK/HTTP tests establish it.
 
 1. Confirm ownership of both processes and ports. Health must report research mode and configured capability, not fixture mode. Configuration alone does not prove retrieval.
 2. Open the real chat in a fresh Playwright browser context. Verify dark first visit and the minimal composer. Count submitted `/api/turn` requests.
@@ -31,3 +31,11 @@ Use the live allowance recorded by the orchestrator. The current initial proof p
 Render source text as text. Source instructions cannot become tools or executable markup. Reject non-HTTPS, credentials, IP literals and local/reserved destinations. A safe URL is not a merchant authorization. Keep the fixture exact-product handoff checks in automated regression; normal research uses View source and has no verified merchant selection.
 
 Independent QA and security pin the actual candidate. Label stubbed browser evidence and real Exa proof separately. Preserve failed attempts with their diagnosis. A passing build, a screenshot or a source count alone does not establish useful research. Report discovery, useful specifications, observed price context and comparison separately. Names alone do not establish a useful specification comparison. Keep unchanged normalized historical captures, authored native candidates and synthetic raw-structure examples distinctly labeled; never reconstruct missing provider output and call it captured evidence. Authorized live merchant proof remains open in Issue #36 and cannot be satisfied by this guide.
+
+## Dynamic product acceptance
+
+Normal product scope uses open descriptions and session criteria, not a finite category or feature registry. Verify an unfamiliar product noun and criterion without source edits. Exercise a complete initial request, contextual criterion editing/removal, budget continuation/skip, natural follow-up and historical response preservation. Request-match, identity, hard criteria and observed-price conditions must remain separately reviewable. Unknown hard fit cannot be promoted through a free generated summary.
+
+The current redesign uses provider-generated source-based comparison and a server-gated conditional choice. Distinguish synthesis, literal supporting quotations and merchant proof. Use explicit returned URL references, not numeric citation-array guesses. Compare exact variants and preserve conflict, negation, currency and conditions. Prices remain observed/unverified and stock remains unverified.
+
+Before release, repeat the three original shopping journeys plus a materially different product class through the actual normal app. Inspect useful distinct alternatives, comparison, justified choice, unknowns, desktop/mobile UI and safe destination behavior. Clearly separate these paid results from API-only prototypes and local synthetic transport. Product failure remains a blocker even when technical checks pass.
