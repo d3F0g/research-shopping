@@ -93,6 +93,8 @@ const featureDescriptors: Record<Feature, FeatureDescriptor> = {
   portable: featureDescriptor("portable|portability"),
 };
 const attributeLabel = new RegExp(`^(?:${Object.values(featureDescriptors).map((descriptor) => descriptor.terms).join("|")}|Connectivity|Battery(?: life| runtime)?|Runtime|Driver(?: size)?|Transducer(?: size)?|Weight|Memory|Price|Sale price|Regular price|List price|Savings):\\s*\\S`, "i");
+const fieldRecord = /^[\p{L}\p{N}][\p{L}\p{N} ()/-]*:[ \t]*\S/u;
+const scopedSubject = /^(?:These (?:headphones|earbuds|laptops)|The (?:headphones|earbuds|laptop)|It|They)\s+/i;
 
 const forbiddenIdentity = /\b(?:not|replacement|accessor(?:y|ies)|cables?|cases?|covers?|pads?|stands?|best|guide|comparison|versus|for)\b|[?/:]/i;
 const classPhrases: Record<NonNullable<Preferences["hard"]["category"]>, string> = {
@@ -162,7 +164,7 @@ function headingScopes(input: Source, highlights: readonly HighlightContext[], p
       const lineEnd = /\n|[.!?](?=\s|$)/.exec(raw.slice(identityEnd));
       const recordEnd = Math.min(end, lineEnd ? identityEnd + lineEnd.index + (lineEnd[0] === "\n" ? 0 : 1) : raw.length);
       const identityRecordEnd = priceRecordStart.test(raw.slice(identityEnd).trimStart()) ? identityEnd : recordEnd;
-      if (completion(context, start, identityRecordEnd, "heading").completion !== "complete") { record("ambiguous-scope", { highlight, start, end: identityRecordEnd }); continue; }
+      if (completion(context, start, identityRecordEnd, "identity", name).completion !== "complete") { record("ambiguous-scope", { highlight, start, end: identityRecordEnd }); continue; }
       const text = cleanText(raw.slice(start, end));
       const identity = cleanText(raw.slice(start, identityEnd));
 
@@ -205,23 +207,28 @@ function headingKind(text: string): "section" | "context-heading" | "boundary" |
   return isModelLabel(label) ? "boundary" : "context-heading";
 }
 
-function completion(context: HighlightContext, start: number, end: number, role: "heading" | "content"): Completion {
+function completion(context: HighlightContext, start: number, end: number, role: "identity" | "heading" | "content", name: string | null): Completion {
   const text = cleanText(context.item.text.slice(start, end));
+  if (/[.!?]$/.test(text)) return { completion: "complete" };
   const rest = context.item.text.slice(end);
   const next = rest.trimStart();
-  if (/[.!?]$/.test(text)) return { completion: "complete" };
-  if (!next && !context.item.clipped) return { completion: "complete" };
+  if (!next) return { completion: context.item.clipped ? "open" : "complete" };
   const nextStart = end + rest.length - next.length;
+  const lineEnd = context.item.text.indexOf("\n", nextStart);
+  const nextLine = context.item.text.slice(nextStart, lineEnd < 0 ? context.item.text.length : lineEnd);
   const boundary = context.boundaries.find((candidate) => candidate.start === nextStart);
   const newline = /^[ \t]*\n/.test(rest);
-  if (role === "heading") {
-    if (boundary?.kind === "selector" || priceRecordStart.test(next)) return { completion: "complete" };
-    if (boundary?.kind === "heading" || newline && (boundary || !next || /^[A-Z0-9]/.test(next))) return { completion: "complete" };
+  const namedRecord = name !== null && (namedPredicate(name, nextLine) !== null
+    || new RegExp(`^(?:The )?${escapeRegex(name)}\\s+.+[.!?]$`, "i").test(nextLine));
+  const scopedRecord = scopedSubject.test(nextLine) && /[.!?]$/.test(nextLine)
+    && new RegExp(`^${clauseVerb}`, "i").test(nextLine.replace(scopedSubject, ""));
+  const nextRecord = fieldRecord.test(nextLine) || pricePart.test(nextLine) || namedRecord || scopedRecord;
+  if (role !== "content") {
+    if (boundary?.kind === "selector" || priceRecordStart.test(nextLine)) return { completion: "complete" };
+    if (boundary?.kind === "heading" || newline && (role === "heading" || boundary || nextRecord)) return { completion: "complete" };
   }
   if (contextPrice.test(text) && boundary?.kind === "gap") return { completion: "complete" };
   const structured = attributeLabel.test(text) || pricePart.test(text) || contextPrice.test(text);
-  const nextRecord = attributeLabel.test(next) || pricePart.test(next.split("\n")[0])
-    || new RegExp(`^(?:The )?[A-Z][\\p{L}\\p{N} .()-]+?\\s+${clauseVerb}`, "u").test(next);
   if (structured && newline && (boundary || nextRecord)) return { completion: "complete" };
   return { completion: "open" };
 }
@@ -238,7 +245,7 @@ function ownership(context: SourceContext, subject: SubjectProof, passage: Compl
   if (passage.kind !== "content" && passage.kind !== "context-heading") return { kind: "unresolved" };
   const text = passage.text.replace(/^#{1,6}\s+/, "").replace(/[‘’]/g, "'");
   const exact = namedPredicate(subject.name, text);
-  const predicate = exact ?? text.replace(/^(?:These (?:headphones|earbuds|laptops)|The (?:headphones|earbuds|laptop)|It|They)\s+/i, "");
+  const predicate = exact ?? text.replace(scopedSubject, "");
   const compound = /[.!?]\s+[A-Z0-9]|;|[,;]\s+[A-Z][a-z]+\s+[A-Z0-9]|\b(?:and|while|but|whereas|or)\s+[A-Z][a-z]+\s+[A-Z0-9]/.test(text);
   const comparison = /\b(?:versus|compared (?:with|to)|unlike)\b|\bvs\.?\s/i.test(text);
   const foreignTarget = /\b(?:for|on|with|to)\s+(?:(?:the|a|an)\s+)?(?:[A-Z][a-z]+\s+[A-Z0-9][\p{L}\p{N}-]*|(?:Pro|Plus|Max|Ultra|Black|Teal|White)\s+variant)\b/u.test(predicate)
@@ -290,15 +297,16 @@ function sourceContext(source: Source, sourceId: string, native: readonly Native
       const text = cleanText(raw.slice(start, end)).replace(/^[-*]\s+/, "");
       if (!text) continue;
       const identity = local.find((scope) => start === scope.start && end === scope.identityEnd);
+      const scope = local.find((scope) => start >= scope.identityEnd && end <= scope.end) ?? null;
       const heading = headingKind(text);
       const model = !heading && !pricePart.test(text) && !priceCondition.test(text) && isModelLabel(text);
-      const state: Completion = identity ? { completion: "complete" } : completion(highlightContext, start, end, heading || model ? "heading" : "content");
+      const state: Completion = identity ? { completion: "complete" } : completion(highlightContext, start, end, heading || model ? "heading" : "content", scope?.name ?? null);
       const marker = boundaries.find((boundary) => boundary.start === start && boundary.kind !== "heading");
       const isBoundary = marker && (marker.kind === "gap" || marker.kind === "selector" || state.completion === "complete")
         || !identity && state.completion === "complete" && (model || heading === "boundary");
       const kind = identity ? "identity" : isBoundary ? "boundary" : heading === "boundary" ? "context-heading" : heading ?? "content";
       if (isBoundary || identity && entries.some((entry) => entry.highlight === highlight && entry.kind === "identity")) region++;
-      entries.push({ highlight, start, end, text, kind, ...state, region, scope: local.find((scope) => start >= scope.identityEnd && end <= scope.end) ?? null });
+      entries.push({ highlight, start, end, text, kind, ...state, region, scope });
       if (isBoundary) region++;
     }
   }

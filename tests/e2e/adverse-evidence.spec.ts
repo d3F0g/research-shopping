@@ -7,7 +7,7 @@ import { createExaProductResearch } from "../../src/server/exa-research";
 import { createResearchTurns } from "../../src/server/research-turns";
 import { adverseHeading, adversePayload } from "../fixtures/adverse-evidence";
 
-const scenarios = [
+const scenarios: { name: string; cut: string | null; suffix: string; conditional: boolean; wireless: boolean; text?: string; noIdentity?: boolean }[] = [
   { name: "unverified observed price", cut: null, suffix: "", conditional: false, wireless: false },
   { name: "withheld conditional price", cut: null, suffix: "\nWith trade-in of a qualifying device.", conditional: true, wireless: false },
   { name: "withheld condition heading", cut: null, suffix: "\n## With trade-in of a qualifying device", conditional: true, wireless: false },
@@ -16,15 +16,18 @@ const scenarios = [
   { name: "unknown negated absence", cut: null, suffix: "\nAster Wave 2 is not without Bluetooth.", conditional: false, wireless: true },
   { name: "unknown scan-cut property", cut: "Aster Wave 2 does not have wireless", suffix: " charging.", conditional: true, wireless: true },
   { name: "withheld scan-cut amount", cut: "Price: SGD 349", suffix: " with trade-in.", conditional: true, wireless: false },
+  { name: "unknown wrapped property", cut: null, suffix: "\nWireless: No\nCharging support.", conditional: true, wireless: true },
+  { name: "unproven clipped identity", cut: null, suffix: "", conditional: true, wireless: false, noIdentity: true, text: " ".repeat(16384 - adverseHeading.length - 1) + adverseHeading + "\ncases." },
+  { name: "unproven wrapped category", cut: null, suffix: "", conditional: true, wireless: false, noIdentity: true, text: adverseHeading + "\nFor replacement pads." },
 ];
 for (const scenario of scenarios) {
   test(`shows ${scenario.name} through the SDK and Hono with responsive uncertainty`, async ({ page }, testInfo) => {
     const price = "Price: SGD 349";
     const base = `${adverseHeading}\n${price}\nAster Wave 2 supports Bluetooth.`;
     const cutPrefix = scenario.wireless ? base + "\n" : adverseHeading + "\n";
-    const text = scenario.cut !== null
+    const text = scenario.text ?? (scenario.cut !== null
       ? cutPrefix + " ".repeat(16384 - cutPrefix.length - scenario.cut.length) + scenario.cut + scenario.suffix
-      : base + scenario.suffix;
+      : base + scenario.suffix);
     const payload = adversePayload("heading", [text], { price });
     let calls = 0;
     let settlements = 0;
@@ -56,25 +59,33 @@ for (const scenario of scenarios) {
       await page.getByLabel("Message", { exact: true }).fill(scenario.wireless ? "Wireless headphones under SGD400" : "Headphones under SGD400");
       await page.getByRole("button", { name: "Send message" }).click();
       const card = page.getByRole("article", { name: "Aster Wave 2", exact: true });
-      await expect(card).toBeVisible();
       await expect(page.getByText(/Automated synthetic fixture/)).toBeVisible();
-      await expect(card).toContainText("Specifications not established by this source");
-      await expect(card).toContainText("Stock and delivery unverified");
-      if (scenario.conditional) {
-        await expect(card).not.toContainText("Price: SGD 349");
-        await expect(card).not.toContainText("Page-observed price");
+      if (scenario.noIdentity) {
+        await expect(card).toHaveCount(0);
+        await page.getByRole("button", { name: "1 research sources" }).click();
+        await page.getByRole("button", { name: "Research limits" }).click();
+        await expect(page.getByText("No product had sufficiently attributable model, category and constraint evidence")).toBeVisible();
+        await expect(page.getByRole("button", { name: "Compare research leads" })).toHaveCount(0);
       } else {
-        await expect(card).toContainText("Price: SGD 349");
-        await expect(card).toContainText("Page-observed price · Unverified");
+        await expect(card).toBeVisible();
+        await expect(card).toContainText("Specifications not established by this source");
+        await expect(card).toContainText("Stock and delivery unverified");
+        if (scenario.conditional) {
+          await expect(card).not.toContainText("Price: SGD 349");
+          await expect(card).not.toContainText("Page-observed price");
+        } else {
+          await expect(card).toContainText("Price: SGD 349");
+          await expect(card).toContainText("Page-observed price · Unverified");
+        }
+        await card.getByRole("button", { name: "Evidence and limits" }).click();
+        await expect(card).toContainText("Current affordability within SGD 400 is unverified");
+        if (scenario.wireless) await expect(card).toContainText("wireless needs independent verification");
+        for (const link of await card.getByRole("link", { name: /View source/ }).all()) await expect(link).toHaveAttribute("href", payload.results[0].url);
       }
-      await card.getByRole("button", { name: "Evidence and limits" }).click();
-      await expect(card).toContainText("Current affordability within SGD 400 is unverified");
-      if (scenario.wireless) await expect(card).toContainText("wireless needs independent verification");
-      for (const link of await card.getByRole("link", { name: /View source/ }).all()) await expect(link).toHaveAttribute("href", payload.results[0].url);
       await expect(page.getByRole("button", { name: "Select this product" })).toHaveCount(0);
       await page.screenshot({ path: testInfo.outputPath("adverse-desktop.png"), fullPage: true, animations: "disabled" });
       await page.setViewportSize({ width: 390, height: 844 });
-      await card.scrollIntoViewIfNeeded();
+      if (!scenario.noIdentity) await card.scrollIntoViewIfNeeded();
       await expect(page.getByLabel("Message", { exact: true })).toBeInViewport();
       expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBe(390);
       await page.screenshot({ path: testInfo.outputPath("adverse-mobile.png"), fullPage: true, animations: "disabled" });
