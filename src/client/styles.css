@@ -199,6 +199,13 @@ button {
   border-radius: 50%;
   margin-bottom: 2px;
 }
+.prompt-input .composer-scroll-button {
+  position: static;
+  translate: none;
+}
+.prompt-input .composer-scroll-button[data-active="false"] {
+  display: none;
+}
 .composer-note {
   text-align: center;
   color: var(--muted-foreground);

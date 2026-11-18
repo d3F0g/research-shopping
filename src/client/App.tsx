@@ -72,6 +72,14 @@ export function App() {
           }}
         />
         <InputGroupAddon align="inline-end">
+          {!empty && (
+            <MessageScrollerButton
+              aria-label="Scroll to latest message"
+              title="Scroll to latest message"
+              type="button"
+              className="composer-scroll-button"
+            />
+          )}
           {chat.pending ? (
             <InputGroupButton
               size="icon-sm"
@@ -442,10 +450,9 @@ export function App() {
                     })}
                   </MessageScrollerContent>
                 </MessageScrollerViewport>
-                <MessageScrollerButton aria-label="Scroll to latest message" />
               </MessageScroller>
+              <div className="composer-dock">{composer}</div>
             </MessageScrollerProvider>
-            <div className="composer-dock">{composer}</div>
           </>
         )}
       </main>
