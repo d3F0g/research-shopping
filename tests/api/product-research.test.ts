@@ -44,6 +44,28 @@ async function research(payload: unknown, requiredFeatures: Feature[] = []) {
 }
 
 describe("real SDK product research against local HTTP", () => {
+  it.each([
+    { id: "price-difference", quote: "Aster Wave 2 costs SGD 99 less than its competitors.", price: true },
+    { id: "monthly-price", quote: "Aster Wave 2 costs SGD 99/month.", price: true },
+    { id: "other-variant-price", quote: "Aster Wave 2 costs SGD 99 for the Pro edition.", price: true },
+    { id: "wrong-category", quote: "Aster Wave 2 is a cotton sweater.", price: false },
+  ])("keeps the independent QA $id reproduction as source context", async ({ quote, price }) => {
+    const result = await research({
+      requestId: "adversarial-fixture", costDollars: { total: 0.007 },
+      results: [{ title: "Synthetic fixture", url: "https://reviews.example.com/aster-wave-2", highlights: [quote] }],
+      output: {
+        content: { observations: [{
+          name: "Aster Wave 2", url: "https://reviews.example.com/aster-wave-2",
+          quotedFacts: price ? [] : [quote], priceQuote: price ? quote : null,
+        }] }, grounding: [],
+      },
+    });
+    expect(result.status).toBe("ready");
+    if (result.status !== "ready") return;
+    expect(result.research.products).toEqual([]);
+    expect(result.research.sources[0].highlights).toContain(quote);
+  });
+
   it("makes one compact canonical search and returns exact source-scoped products and unverified prices", async () => {
     let calls = 0;
     let requestBody: Record<string, unknown> = {};
