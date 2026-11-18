@@ -43,6 +43,18 @@ export const adversePriceConditions = [
   "After cashback.", "For replacement pads.", "Terms to be determined.",
 ];
 
+export const featurePropertyFixtures = {
+  "active-noise-cancelling": { whole: "ANC", narrower: ["ANC microphone", "active noise cancellation during calls", "ANC adjustment"] },
+  wireless: { whole: "Bluetooth", narrower: ["wireless charging", "Bluetooth LE Audio", "Bluetooth 5.4", "wireless microphone support"] },
+  multipoint: { whole: "multipoint", narrower: ["multipoint device switching", "multipoint pairing to three devices", "multipoint in gaming mode"] },
+  "long-battery-life": { whole: "long battery life", narrower: ["long battery life indicator", "long battery life during gaming", "long battery life mode"] },
+  lightweight: { whole: "lightweight", narrower: ["lightweight charger", "lightweight support", "lightweight cable"] },
+  "oled-display": { whole: "OLED", narrower: ["OLED touch display", "OLED secondary screen", "OLED panel at 120 Hz"] },
+  "high-memory": { whole: "32 GB", narrower: ["32 GB graphics memory", "32 GB storage", "32 GB memory expansion"] },
+  "long-battery": { whole: "long battery life", narrower: ["long battery indicator", "long battery life when gaming", "long battery charging mode"] },
+  portable: { whole: "portability", narrower: ["portable charging", "portability accessories", "portability kit"] },
+} satisfies Record<Feature, { whole: string; narrower: string[] }>;
+
 export function adversePayload(path: "heading" | "direct", highlights: string[], changes: { facts?: string[]; price?: string | null; name?: string; title?: string } = {}) {
   const url = "https://reviews.example.com/adverse-fixture";
   return {

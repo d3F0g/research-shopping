@@ -8,7 +8,7 @@ import { ApplicationTurnResponseSchema } from "../../src/domain/research";
 import { createApp } from "../../src/server/app";
 import { createExaProductResearch } from "../../src/server/exa-research";
 import { createResearchTurns } from "../../src/server/research-turns";
-import { adverseClass, adverseFeatures, adverseHeading, adverseName, adversePayload, adversePriceConditions, wirelessNegatives } from "../fixtures/adverse-evidence";
+import { adverseClass, adverseFeatures, adverseHeading, adverseName, adversePayload, adversePriceConditions, featurePropertyFixtures, wirelessNegatives } from "../fixtures/adverse-evidence";
 
 async function research(payload: ReturnType<typeof adversePayload>, feature?: Feature, brands: string[] = []) {
   const requests: { path: string | undefined; body: Record<string, unknown> }[] = [];
@@ -199,4 +199,90 @@ describe("full retained price applicability", () => {
     expect((await research(adversePayload(path, [base, adverseClass + "\nWith trade-in of a qualifying device."], { price }))).products[0].price).toBeNull();
     expect((await research(adversePayload(path, [base + "\nUnknown applicability."], { price }))).products[0].price).toBeNull();
   });
+});
+
+describe("whole feature propositions and outer polarity", () => {
+  it("has independent whole-property and narrower-property fixtures for every feature", () => {
+    expect(Object.keys(featurePropertyFixtures).sort()).toEqual([...FeatureSchema.options].sort());
+  });
+  for (const feature of FeatureSchema.options) for (const path of paths) {
+    const { whole, narrower } = featurePropertyFixtures[feature];
+    it(`${feature} ${path} excludes complete absence and leaves narrower or qualified absence unknown`, async () => {
+      for (const predicate of [`does not have ${whole}.`, `is without ${whole}.`, `lacks ${whole}.`]) {
+        expect((await research(featurePayload(feature, path, [identity(path), `${adverseName} ${predicate}`]), feature)).products).toEqual([]);
+      }
+      for (const property of [...narrower, `${whole} during calls`, `${whole} in one mode`, `${whole} and a carrying case`]) {
+        for (const highlights of [[`${identity(path)}\n${adverseName} does not have ${property}.`], [identity(path), `${adverseName} does not have ${property}.`]]) {
+          const result = await research(featurePayload(feature, path, highlights), feature);
+          expect(result.products, property).toHaveLength(1);
+          expect(result.products[0].facts).toHaveLength(path === "heading" ? 0 : 1);
+          expect(result.products[0].unresolvedConstraints).toContain(`${feature.replaceAll("-", " ")} needs independent verification`);
+        }
+      }
+    });
+    it(`${feature} ${path} never turns an outer negation into an absence or affirmative support`, async () => {
+      for (const predicate of [`is not without ${whole}.`, `isn't without ${whole}.`, `does not lack ${whole}.`, `has no lack of ${whole}.`, `does not have no ${whole}.`, `is no longer without ${whole}.`, `might not support ${whole}.`, `does not have ${whole}?`]) {
+        const result = await research(featurePayload(feature, path, [`${identity(path)}\n${adverseName} ${predicate}`]), feature);
+        expect(result.products, predicate).toHaveLength(1);
+        expect(result.products[0].facts).toHaveLength(path === "heading" ? 0 : 1);
+        expect(result.products[0].unresolvedConstraints).toContain(`${feature.replaceAll("-", " ")} needs independent verification`);
+      }
+    });
+  }
+  it.each(["wireless audio", "wireless connectivity", "wireless support", "a wireless connection", "any Bluetooth", "Bluetooth support"])("retains complete generic wireless-absence wording: %s", async (property) => {
+    for (const path of paths) expect((await research(adversePayload(path, [identity(path), `${adverseName} does not have ${property}.`]), "wireless")).products).toEqual([]);
+  });
+  it("keeps scoped negated absence and narrower labels unknown", async () => {
+    for (const text of ["These headphones are not without Bluetooth.", "Wireless charging: No", "Bluetooth LE Audio: No", "Wireless: Not unavailable"]) {
+      const result = await research(adversePayload("heading", [`${adverseHeading}\n${text}`]), "wireless");
+      expect(result.products).toHaveLength(1);
+      expect(result.products[0].facts).toEqual([]);
+      expect(result.products[0].unresolvedConstraints).toContain("wireless needs independent verification");
+    }
+  });
+  it("does not complete a property proposition across an explicit source gap", async () => {
+    for (const path of paths) {
+      const payload = adversePayload(path, [`${identity(path)}\n${adverseName} does not have wireless ... charging.`]);
+      expect((await research(payload, "wireless")).products).toHaveLength(1);
+      payload.results[0].highlights = [`${identity(path)}\n${adverseName} does not have wireless. ... Other context.`];
+      expect((await research(payload, "wireless")).products).toEqual([]);
+    }
+  });
+  it("preserves the full source variant and does not apply a different variant's absence", async () => {
+    const name = "Aster Wave 2 Pro - Teal (800073)";
+    const payload = adversePayload("heading", [`# ${name}\nWireless over-ear headphones\n${name} does not have wireless charging.\nAster Wave 2 is not wireless.`], { name, title: `${name} | Synthetic fixture` });
+    const result = await research(payload, "wireless");
+    expect(result.products.map((product) => product.name)).toEqual([name]);
+    payload.results[0].title = "Aster Wave 2 Pro - Black (800073) | Synthetic fixture";
+    expect((await research(payload, "wireless")).products).toEqual([]);
+  });
+});
+
+describe("price applicability across semantic heading roles", () => {
+  for (const path of paths) {
+    const amount = path === "heading" ? "Price: SGD 349" : "Aster Wave 2 costs SGD 349.";
+    for (const heading of ["## With trade-in of a qualifying device", "# Terms", "###### Payment Details", "## Additional Information", "## Offer Conditions", "## limited purchase program"]) {
+      it(`${path} preserves ${heading} before and after the amount`, async () => {
+        for (const text of [`${identity(path)}\n${amount}\n${heading}\nWith trade-in of a qualifying device.`, `${identity(path)}\n${heading}\nWith trade-in of a qualifying device.\nAster Wave 2 supports Bluetooth.\n${amount}`, `${identity(path)}\n${amount}\n${heading}\nAster Wave 2 supports Bluetooth.\nWith trade-in of a qualifying device.`]) {
+          const result = await research(adversePayload(path, [text], { price: amount }));
+          expect(result.products).toHaveLength(1);
+          expect(result.products[0].price).toBeNull();
+          expect(result.sources[0].highlights.some((quote) => quote.includes(heading))).toBe(true);
+        }
+      });
+    }
+    it(`${path} keeps markdown condition headings themselves in the assessment`, async () => {
+      for (const marker of ["#", "##", "######"]) {
+        const text = `${identity(path)}\n${amount}\n${marker} With trade-in of a qualifying device`;
+        expect((await research(adversePayload(path, [text], { price: amount }))).products[0].price).toBeNull();
+      }
+    });
+    it(`${path} retains unconditional prices and isolates foreign headings, gaps and unrelated highlights`, async () => {
+      const base = `${identity(path)}\n${amount}`;
+      for (const highlights of [[base], [`${base}\n## Orbit Quiet\nWith trade-in of a qualifying device.`], [`${base}\n## Related products\nWith trade-in of a qualifying device.`], [`${base}\n## Aster Wave 2 Pro\nWith trade-in of a qualifying device.`], [`${base}\n## Aster Wave 2 - Teal (800073)\nWith trade-in of a qualifying device.`], [`${base}\n...\n## Terms\nWith trade-in of a qualifying device.`], [base, "## Terms\nWith trade-in of a qualifying device."], [`${base}\n## Orbit Quiet requires trade-in.`]]) {
+        expect((await research(adversePayload(path, highlights, { price: amount }))).products[0].price?.quote, highlights.join("\n")).toBe(amount);
+      }
+      expect((await research(adversePayload(path, [base, "## Aster Wave 2 requires trade-in."], { price: amount }))).products[0].price).toBeNull();
+    });
+  }
 });

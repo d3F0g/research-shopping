@@ -7,10 +7,18 @@ import { createExaProductResearch } from "../../src/server/exa-research";
 import { createResearchTurns } from "../../src/server/research-turns";
 import { adverseHeading, adversePayload } from "../fixtures/adverse-evidence";
 
-for (const conditional of [false, true]) {
-  test(`shows ${conditional ? "withheld conditional" : "unverified observed"} price through the SDK and Hono with responsive uncertainty`, async ({ page }, testInfo) => {
+const scenarios = [
+  { name: "unverified observed price", suffix: "", conditional: false, wireless: false },
+  { name: "withheld conditional price", suffix: "\nWith trade-in of a qualifying device.", conditional: true, wireless: false },
+  { name: "withheld condition heading", suffix: "\n## With trade-in of a qualifying device", conditional: true, wireless: false },
+  { name: "withheld payment section", suffix: "\n## Terms\nWith trade-in of a qualifying device.", conditional: true, wireless: false },
+  { name: "unknown narrower property", suffix: "\nAster Wave 2 does not have wireless charging.", conditional: false, wireless: true },
+  { name: "unknown negated absence", suffix: "\nAster Wave 2 is not without Bluetooth.", conditional: false, wireless: true },
+];
+for (const scenario of scenarios) {
+  test(`shows ${scenario.name} through the SDK and Hono with responsive uncertainty`, async ({ page }, testInfo) => {
     const price = "Price: SGD 349";
-    const text = `${adverseHeading}\n${price}\nAster Wave 2 supports Bluetooth.${conditional ? "\nWith trade-in of a qualifying device." : ""}`;
+    const text = `${adverseHeading}\n${price}\nAster Wave 2 supports Bluetooth.${scenario.suffix}`;
     const payload = adversePayload("heading", [text], { price });
     let calls = 0;
     let settlements = 0;
@@ -39,14 +47,14 @@ for (const conditional of [false, true]) {
       await page.setViewportSize({ width: 1440, height: 1000 });
       await page.goto("/");
       await expect(page.locator("html")).toHaveClass(/dark/);
-      await page.getByLabel("Message", { exact: true }).fill("Headphones under SGD400");
+      await page.getByLabel("Message", { exact: true }).fill(scenario.wireless ? "Wireless headphones under SGD400" : "Headphones under SGD400");
       await page.getByRole("button", { name: "Send message" }).click();
       const card = page.getByRole("article", { name: "Aster Wave 2", exact: true });
       await expect(card).toBeVisible();
       await expect(page.getByText(/Automated synthetic fixture/)).toBeVisible();
       await expect(card).toContainText("Specifications not established by this source");
       await expect(card).toContainText("Stock and delivery unverified");
-      if (conditional) {
+      if (scenario.conditional) {
         await expect(card).not.toContainText("Price: SGD 349");
         await expect(card).not.toContainText("Page-observed price");
       } else {
@@ -55,6 +63,7 @@ for (const conditional of [false, true]) {
       }
       await card.getByRole("button", { name: "Evidence and limits" }).click();
       await expect(card).toContainText("Current affordability within SGD 400 is unverified");
+      if (scenario.wireless) await expect(card).toContainText("wireless needs independent verification");
       for (const link of await card.getByRole("link", { name: /View source/ }).all()) await expect(link).toHaveAttribute("href", payload.results[0].url);
       await expect(page.getByRole("button", { name: "Select this product" })).toHaveCount(0);
       await page.screenshot({ path: testInfo.outputPath("adverse-desktop.png"), fullPage: true, animations: "disabled" });
