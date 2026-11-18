@@ -21,3 +21,7 @@ Root favors A as the smaller correction to the already selected pure reducer/ope
 ## Verification
 
 Retain the independent exact payloads and reproduce the red cases before fixing. Add focused prepare/execute, pending correction/explicit discard, Stop/new-turn, price-context, cut-paragraph and raw-version pairs. Replay them through actual SDK/Hono/Chromium locally with fake keys. Preserve original captures and raw red artifacts. Root then requests focused independent recheck on an immutable combined head before the existing four-call application allowance. No automatic paid retry or ledger reset.
+
+## Selected acknowledgement seam
+
+Both existing owners independently confirmed A against their actual server/client seams. The server's reducer and JSON response boundary already exist; a prepare/research split adds one local round trip while avoiding a new streaming media type, frame parser and error protocol. Research has no message/edit fields and never reparses prepared text. A transport-only prepared value is separate from completed application/historical response schemas. The client commits prepared intent only under the live generation, then issues one research request. Ordinary replies, edits and questions finish in preparation. Stop preserves acknowledged intent; reset is explicit. No second provider or client interpreter is added.
