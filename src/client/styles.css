@@ -774,3 +774,9 @@ button {
 .live-research .research-sources {
   margin-top: 16px;
 }
+
+.account-dialog { max-height: calc(100dvh - 2rem); overflow-y: auto; }
+.account-form, .account-actions { display: grid; gap: 14px; }
+.account-retention { color: var(--muted-foreground); font-size: 12px; line-height: 1.6; }
+.account-email { overflow-wrap: anywhere; }
+.account-banner { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 8px; padding: 8px 16px; font-size: 13px; }

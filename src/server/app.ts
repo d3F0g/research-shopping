@@ -1,10 +1,14 @@
+import type { HttpBindings } from "@hono/node-server";
+import { AccountError } from "./workspace-store";
+import type { Accounts } from "./accounts";
+import { PreferenceInput, WorkspaceCommandSchema } from "../domain/workspace";
 import { randomUUID } from "node:crypto";
 import { z } from "zod";
 import { ApplicationTurnResponseSchema, type ResearchTurns } from "../domain/research";
 import { createResearchTurns } from "./research-turns";
 import { Hono } from "hono";
 import {
-  BudgetSchema, PreferencesSchema, SelectionRequestSchema, SelectionResultSchema,
+  SelectionRequestSchema, SelectionResultSchema,
   TurnRequestSchema, TurnResponseSchema,
 } from "../domain/contracts";
 import {
@@ -14,14 +18,9 @@ import {
 } from "../domain/web-research";
 import type { ProviderEvent, Providers } from "../domain/providers";
 import { catalog } from "../domain/catalog";
-import { validBudgetAmount } from "../domain/preferences";
 import { createShoppingEngine } from "../domain/shopping";
 import { resolveServerConfig, type ServerConfig } from "./config";
 
-const PreferenceInput = PreferencesSchema.extend({
-  hard: PreferencesSchema.shape.hard.extend({ budget: BudgetSchema.strict().refine((budget) => validBudgetAmount(budget.amount)).nullable() }).strict(),
-  soft: PreferencesSchema.shape.soft.strict(),
-}).strict();
 const TurnInput = TurnRequestSchema.extend({ preferences: PreferenceInput, operationId: z.string().uuid().optional() }).strict();
 const SelectionInput = SelectionRequestSchema.extend({ preferences: PreferenceInput }).strict();
 const WebResearchInput = ShortlistResearchRequestSchema.extend({ preferences: PreferenceInput }).strict();
@@ -35,6 +34,8 @@ export type RequestLog = {
   outcomes: ProviderEvent[];
 };
 export type AppDependencies = {
+  accounts?: Accounts;
+  accountCapability?: "guest-only" | "unavailable" | "configured";
   mode?: "research" | "test-fixture";
   researchTurns?: ResearchTurns;
   researchAvailable?: boolean;
@@ -52,7 +53,7 @@ export function createApp(dependencies: AppDependencies = {}, configuration: Par
   const researchTurns = dependencies.researchTurns ?? createResearchTurns({});
   const hosts = new Set([config.apiPort, config.webPort].flatMap((port) => [`127.0.0.1:${port}`, `localhost:${port}`]));
   const origins = new Set([...hosts].map((host) => `http://${host}`));
-  const app = new Hono<{ Variables: { requestId: string; outcomes: ProviderEvent[]; payload: unknown } }>();
+  const app = new Hono<{ Bindings: HttpBindings; Variables: { requestId: string; outcomes: ProviderEvent[]; payload: unknown; rawBody: Uint8Array } }>();
 
   app.use("*", async (context, next) => {
     const startedAt = performance.now();
@@ -85,6 +86,8 @@ export function createApp(dependencies: AppDependencies = {}, configuration: Par
       context.header("Access-Control-Allow-Origin", origin);
       context.header("Vary", "Origin");
     }
+    const accountRoute = url.pathname.startsWith("/api/auth/") || url.pathname === "/api/workspace";
+    if (accountRoute && context.req.method === "POST" && origin !== dependencies.accounts?.origin) return context.json({ error: "Account requests require the canonical Origin", requestId }, 403);
     if (context.req.method === "OPTIONS") {
       context.header("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
       context.header("Access-Control-Allow-Headers", "Content-Type");
@@ -114,6 +117,7 @@ export function createApp(dependencies: AppDependencies = {}, configuration: Par
           }
           bytes.set(value, length - value.length);
         }
+        context.set("rawBody", bytes.slice(0, length));
         context.set("payload", JSON.parse(new TextDecoder("utf-8", { fatal: true }).decode(bytes.subarray(0, length))));
       } catch {
         return context.json({ error: "Invalid JSON or request fields", requestId: context.get("requestId") }, 400);
@@ -124,6 +128,31 @@ export function createApp(dependencies: AppDependencies = {}, configuration: Par
     await next();
   });
 
+  app.get("/api/account", async (context) => {
+    if (!dependencies.accounts) return context.json({ status: dependencies.accountCapability === "unavailable" ? "unavailable" : "guest-only" });
+    try { return context.json(await dependencies.accounts.state(context.req.raw.headers)); }
+    catch { return context.json({ status: "unavailable" }, 503); }
+  });
+  app.on(["GET", "POST"], "/api/auth/*", async (context) => {
+    const supported = new Set(["POST /api/auth/sign-up/email", "POST /api/auth/sign-in/email", "POST /api/auth/sign-out", "GET /api/auth/get-session"]);
+    if (!supported.has(`${context.req.method} ${context.req.path}`)) return context.json({ error: "Not found" }, 404);
+    if (!dependencies.accounts) return context.json({ error: "Account persistence is unavailable" }, 503);
+    const headers = new Headers(context.req.raw.headers);
+    headers.set("x-fieldnote-connection-ip", context.env?.incoming?.socket.remoteAddress ?? "127.0.0.1");
+    headers.delete("content-length");
+    const request = new Request(context.req.url, { method: context.req.method, headers, signal: context.req.raw.signal,
+      ...(context.req.method === "POST" ? { body: context.get("rawBody") as BodyInit } : {}),
+    });
+    try { return await dependencies.accounts.handle(request); }
+    catch { return context.json({ error: "Account request could not complete" }, 503); }
+  });
+  app.post("/api/workspace", async (context) => {
+    const parsed = WorkspaceCommandSchema.safeParse(context.get("payload"));
+    if (!parsed.success) return context.json({ error: "Invalid saved-conversation command" }, 400);
+    if (!dependencies.accounts) return context.json({ error: "Account persistence is unavailable" }, 503);
+    try { return context.json(await dependencies.accounts.command(context.req.raw.headers, parsed.data, context.req.raw.signal)); }
+    catch (error) { return context.json({ error: error instanceof AccountError ? error.message : "Account persistence is unavailable. Your request was not retried." }, error instanceof AccountError ? error.status : 503); }
+  });
   app.get("/api/health", (context) => context.json({
     status: "ok",
     mode: fixtureMode ? "fixture" : "research",
@@ -132,6 +161,7 @@ export function createApp(dependencies: AppDependencies = {}, configuration: Par
     ...(!fixtureMode ? { merchantVerification: "unavailable" } : {}),
   }));
   app.post("/api/turn", async (context) => {
+    if (context.req.header("cookie")?.includes("fieldnote.session_token=")) return context.json({ error: "Use the saved-conversation command for account research" }, 409);
     const parsed = TurnInput.safeParse(context.get("payload"));
     if (!parsed.success) return context.json({ error: "Invalid JSON or request fields", requestId: context.get("requestId") }, 400);
     if (!fixtureMode || !providers) {

@@ -1,3 +1,8 @@
+import type {
+  AccountState,
+  WorkspaceAction,
+  WorkspaceSnapshot,
+} from "../domain/workspace";
 import { useEffect, useRef, useState } from "react";
 import {
   defaultPreferences,
@@ -7,14 +12,21 @@ import {
   type ProductId,
   type SelectionResult,
 } from "../domain/contracts";
+import { validBudgetAmount } from "../domain/preferences";
 import {
-  conversationalReply,
-  updatePreferences,
-  validBudgetAmount,
-} from "../domain/preferences";
+  conversationPolicy,
+  preferenceDisplay,
+} from "../domain/conversation-policy";
 import type { ApplicationTurnResponse as TurnResponse } from "../domain/research";
 import type { WebResearchResponse } from "../domain/web-research";
-import { researchShortlist, runTurn, selectProduct } from "./api";
+import {
+  accountAction,
+  loadAccount,
+  workspaceCommand,
+  researchShortlist,
+  runTurn,
+  selectProduct,
+} from "./api";
 import { featureOptions, priorityOptions } from "./preference-options";
 
 export type TaskState<T> =
@@ -46,7 +58,7 @@ type PreferenceDraft = {
   error: string | null;
   note: string | null;
 };
-type BudgetContext = `${Category}:${Preferences["hard"]["region"]}`;
+type BudgetContext = string;
 type ConversationState = {
   turns: ConversationTurn[];
   preferences: Preferences;
@@ -87,6 +99,14 @@ function initialState(): ConversationState {
 
 export function useConversation() {
   const [state, setState] = useState(initialState);
+  const [account, setAccount] = useState<AccountState | { status: "loading" }>({
+    status: "loading",
+  });
+  const accountRef = useRef(account);
+  const accountGeneration = useRef(0);
+  const hydration = useRef<AbortController | null>(null);
+  const [accountError, setAccountError] = useState<string | null>(null);
+  const savedOperation = useRef<string | null>(null);
   const current = useRef(state);
   const sequence = useRef(0);
   const task = useRef<{ key: number; controller: AbortController } | null>(
@@ -152,6 +172,255 @@ export function useConversation() {
     [],
   );
 
+  function setIdentity(value: AccountState | { status: "loading" }) {
+    accountRef.current = value;
+    setAccount(value);
+  }
+  function invalidateAccount() {
+    accountGeneration.current++;
+    hydration.current?.abort();
+    hydration.current = null;
+    savedOperation.current = null;
+    cancel();
+  }
+  function restore(workspace: WorkspaceSnapshot, active = false) {
+    const turns: ConversationTurn[] = workspace.turns.map((turn) => ({
+      id: turn.id,
+      request: turn.request,
+      message: turn.message,
+      body:
+        turn.body.status === "pending"
+          ? { status: "cancelled" }
+          : turn.body.status === "interrupted"
+            ? {
+                status: "failed",
+                message:
+                  turn.body.reason === "too-large"
+                    ? "This response exceeded the saved-history limit. Ask for a narrower result."
+                    : "This response was interrupted. Send a new message to continue.",
+              }
+            : turn.body,
+      selection: { status: "idle" },
+      selectingId: null,
+      sources: { status: "idle" },
+    }));
+    commit({
+      ...initialState(),
+      preferences: workspace.preferences,
+      budgetQuestions: workspace.budgetQuestions,
+      turns,
+      activeTurnId: active ? (turns.at(-1)?.id ?? null) : null,
+    });
+    const identity = accountRef.current;
+    if (identity.status === "signed-in")
+      setIdentity({ ...identity, workspace });
+  }
+  async function refreshAccount(clear = false) {
+    const previous = accountRef.current;
+    if (clear) {
+      invalidateAccount();
+      commit(initialState());
+    }
+    const generation = accountGeneration.current;
+    hydration.current?.abort();
+    const controller = new AbortController();
+    hydration.current = controller;
+    try {
+      const value = await loadAccount(controller.signal);
+      if (controller.signal.aborted || generation !== accountGeneration.current)
+        return;
+      if (value.status === "signed-in") {
+        if (
+          previous.status !== "signed-in" ||
+          previous.user.id !== value.user.id ||
+          previous.workspace.revision !== value.workspace.revision ||
+          clear
+        ) {
+          cancel();
+          setIdentity(value);
+          restore(value.workspace);
+        } else setIdentity(value);
+      } else {
+        if (previous.status === "signed-in" || previous.status === "loading") {
+          cancel();
+          commit(initialState());
+        }
+        if (previous.status === "signed-in" && value.status === "guest")
+          setAccountError(
+            "Your session ended. Sign in to save future messages. New messages stay only in this guest tab.",
+          );
+        if (value.status === "unavailable")
+          setAccountError(
+            "Account persistence is unavailable. Reload before continuing.",
+          );
+        setIdentity(value);
+      }
+    } catch {
+      if (
+        !controller.signal.aborted &&
+        generation === accountGeneration.current
+      ) {
+        setIdentity({ status: "unavailable" });
+        setAccountError(
+          "Account connection is unavailable. Reload before continuing.",
+        );
+      }
+    }
+  }
+  function notifyAccountChange() {
+    try {
+      localStorage.setItem("fieldnote-account-change", crypto.randomUUID());
+    } catch {}
+  }
+  useEffect(() => {
+    void refreshAccount();
+    const focus = () => {
+      if (!savedOperation.current) void refreshAccount();
+    };
+    const storage = (event: StorageEvent) => {
+      if (event.key === "fieldnote-account-change") void refreshAccount(true);
+    };
+    window.addEventListener("focus", focus);
+    window.addEventListener("storage", storage);
+    return () => {
+      hydration.current?.abort();
+      window.removeEventListener("focus", focus);
+      window.removeEventListener("storage", storage);
+    };
+  }, []);
+
+  async function authenticate(
+    action: "sign-in/email" | "sign-up/email" | "sign-out",
+    body: Record<string, string> = {},
+  ) {
+    const previous = accountRef.current;
+    invalidateAccount();
+    commit(initialState());
+    setAccountError(null);
+    setIdentity({ status: "loading" });
+    const generation = accountGeneration.current;
+    const controller = new AbortController();
+    hydration.current = controller;
+    try {
+      await accountAction(action, body, controller.signal);
+      if (generation !== accountGeneration.current) return false;
+      notifyAccountChange();
+      await refreshAccount(true);
+      return true;
+    } catch (error) {
+      if (generation !== accountGeneration.current) return false;
+      setIdentity(previous);
+      setAccountError(
+        error instanceof Error
+          ? error.message
+          : "Account request did not complete.",
+      );
+      return false;
+    }
+  }
+  async function savedCommand(command: WorkspaceAction) {
+    const identity = accountRef.current;
+    if (identity.status !== "signed-in") return;
+    invalidateAccount();
+    const generation = accountGeneration.current;
+    const operationId = crypto.randomUUID();
+    savedOperation.current =
+      command.kind === "cancel" ||
+      command.kind === "new-chat" ||
+      command.kind === "delete-saved-data"
+        ? null
+        : operationId;
+    const pending = begin();
+    setAccountError(null);
+    if (command.kind === "new-chat" || command.kind === "delete-saved-data")
+      commit(initialState());
+    else if (command.kind !== "cancel") {
+      const message =
+        command.kind === "message"
+          ? command.text
+          : command.kind === "skip-budget"
+            ? "Skip the budget for now"
+            : preferenceDisplay(command.preferences);
+      commit({
+        ...current.current,
+        draft: "",
+        editor: null,
+        activeTurnId: null,
+        turns: [
+          ...current.current.turns,
+          {
+            id: operationId,
+            message,
+            request: { message, preferences: current.current.preferences },
+            body: { status: "pending", key: pending.key },
+            selection: { status: "idle" },
+            selectingId: null,
+            sources: { status: "idle" },
+          },
+        ],
+      });
+    }
+    try {
+      let revision = identity.workspace.revision;
+      if (
+        command.kind === "new-chat" ||
+        command.kind === "delete-saved-data" ||
+        command.kind === "cancel" ||
+        command.kind === "apply-preferences"
+      ) {
+        const latest = await loadAccount(pending.controller.signal);
+        if (generation !== accountGeneration.current) return;
+        if (
+          latest.status !== "signed-in" ||
+          latest.user.id !== identity.user.id
+        )
+          throw new Error("Your account changed. Reload before continuing.");
+        revision = latest.workspace.revision;
+        if (
+          command.kind === "cancel" &&
+          latest.workspace.pendingOperationId !== command.target
+        ) {
+          restore(latest.workspace);
+          return;
+        }
+      }
+      const result = await workspaceCommand(
+        { revision, operationId, command },
+        pending.controller.signal,
+      );
+      if (!accepts(pending.key) || generation !== accountGeneration.current)
+        return;
+      task.current = null;
+      restore(result.workspace, true);
+      notifyAccountChange();
+    } catch (error) {
+      if (!accepts(pending.key) || generation !== accountGeneration.current)
+        return;
+      task.current = null;
+      cancel();
+      setAccountError(
+        error instanceof Error
+          ? error.message
+          : "Saved conversation could not be updated.",
+      );
+      await refreshAccount();
+    } finally {
+      if (generation === accountGeneration.current) {
+        savedOperation.current = null;
+        task.current = null;
+      }
+    }
+  }
+  function stopSaved() {
+    const target =
+      savedOperation.current ??
+      (accountRef.current.status === "signed-in"
+        ? accountRef.current.workspace.pendingOperationId
+        : null);
+    if (target) void savedCommand({ kind: "cancel", target });
+    else cancel();
+  }
+
   async function performTurn(id: string, request: RequestSnapshot) {
     const pending = begin();
     updateTurn(id, (turn) => ({
@@ -199,6 +468,15 @@ export function useConversation() {
     askBudget = true,
   ) {
     if (!message.trim() || current.current.editor?.error) return;
+    if (accountRef.current.status === "signed-in") {
+      void savedCommand({ kind: "message", text: message.trim() });
+      return;
+    }
+    if (
+      accountRef.current.status === "loading" ||
+      accountRef.current.status === "unavailable"
+    )
+      return;
     cancel();
     const request = {
       message: message.trim(),
@@ -221,19 +499,12 @@ export function useConversation() {
       editor: null,
       retryTurnId: id,
     });
-    const parsed = updatePreferences(request.message, request.preferences);
-    const category = parsed.preferences.hard.category;
-    const context: BudgetContext | null = category
-      ? `${category}:${parsed.preferences.hard.region}`
-      : null;
+    const parsed = conversationPolicy(request.message, request.preferences);
+    const context = parsed.budgetContext;
     if (
       askBudget &&
-      !conversationalReply(request.message, request.preferences) &&
-      !parsed.clarification &&
       context &&
-      !parsed.preferences.hard.budget &&
-      !current.current.budgetQuestions.includes(context) &&
-      !parsed.budgetRemoved
+      !current.current.budgetQuestions.includes(context)
     ) {
       updateTurn(id, (item) => ({
         ...item,
@@ -387,7 +658,8 @@ export function useConversation() {
     const snapshot = current.current;
     switch (command.type) {
       case "draft":
-        cancel();
+        if (savedOperation.current) stopSaved();
+        else if (accountRef.current.status !== "signed-in") cancel();
         commit({ ...current.current, draft: command.value, retryTurnId: null });
         return;
       case "submit":
@@ -396,9 +668,22 @@ export function useConversation() {
         if (snapshot.activeTurnId === command.origin) submit(command.message);
         return;
       case "stop":
+        if (accountRef.current.status === "signed-in") {
+          stopSaved();
+          return;
+        }
         cancel();
         return;
       case "reset":
+        if (accountRef.current.status === "signed-in") {
+          void savedCommand({ kind: "new-chat" });
+          return;
+        }
+        if (
+          accountRef.current.status === "loading" ||
+          accountRef.current.status === "unavailable"
+        )
+          return;
         cancel();
         commit(initialState());
         return;
@@ -417,6 +702,11 @@ export function useConversation() {
         void sources(command.origin);
         return;
       case "skip-budget":
+        if (accountRef.current.status === "signed-in") {
+          if (snapshot.activeTurnId === command.origin)
+            void savedCommand({ kind: "skip-budget" });
+          return;
+        }
         if (snapshot.activeTurnId === command.origin)
           submit(
             "Show options",
@@ -508,11 +798,14 @@ export function useConversation() {
               .filter(Boolean),
           },
         };
-        const budget = preferences.hard.budget;
+        if (accountRef.current.status === "signed-in") {
+          void savedCommand({ kind: "apply-preferences", preferences });
+          return;
+        }
         submit(
           "Show options",
           preferences,
-          `Update preferences. ${preferences.hard.category ?? "Choose a category"}${budget ? `, under ${budget.currency} ${budget.amount}` : ", no budget cap"}.`,
+          preferenceDisplay(preferences),
           false,
         );
       }
@@ -521,6 +814,16 @@ export function useConversation() {
 
   return {
     ...state,
+    account,
+    accountError,
+    authenticate,
+    reloadAccount: () => {
+      setAccountError(null);
+      return refreshAccount(true);
+    },
+    deleteSaved: () => savedCommand({ kind: "delete-saved-data" }),
+    accountBlocked:
+      account.status === "loading" || account.status === "unavailable",
     send,
     pending: state.turns.some((turn) => turn.body.status === "pending"),
   };

@@ -1,6 +1,5 @@
 import { createHash } from "node:crypto";
-import type { Preferences } from "../domain/contracts";
-import { conversationalReply, updatePreferences } from "../domain/preferences";
+import { conversationPolicy } from "../domain/conversation-policy";
 import type {
   ResearchOperation,
   ResearchTurns,
@@ -36,45 +35,8 @@ export function createResearchTurns(dependencies: {
   return {
     async turn(request, signal) {
       signal.throwIfAborted();
-      const ordinary = conversationalReply(
-        request.message,
-        request.preferences,
-      );
-      if (ordinary)
-        return {
-          kind: "message",
-          message: ordinary,
-          preferences: structuredClone(request.preferences),
-          notes: [],
-          toolActivity: [],
-        };
-      const update = updatePreferences(request.message, request.preferences);
-      const preferences: Preferences = update.preferences;
-      const notes = update.notes;
-      if (update.clarification)
-        return {
-          kind: "clarification",
-          ...update.clarification,
-          preferences,
-          notes,
-          toolActivity: [],
-        };
-      if (
-        /^(?:(?:please )?(?:shorter|concise|brief|briefly|less detail|keep it short|more details?|detailed|expanded|explain more|in depth))[.!?]*$/i.test(
-          request.message.trim(),
-        )
-      ) {
-        return {
-          kind: "message",
-          message:
-            preferences.soft.responseLength === "expanded"
-              ? "I’ll keep more detail in future responses. Open the evidence on the existing research cards to inspect their source quotations."
-              : "I’ll keep future responses concise. Your existing research and source links remain above.",
-          preferences,
-          notes,
-          toolActivity: [],
-        };
-      }
+      const { reply, preferences, notes } = conversationPolicy(request.message, request.preferences);
+      if (reply) return reply;
       const unavailable = (reason: ResearchUnavailableReason) => ({
         kind: "research-unavailable" as const,
         reason,
