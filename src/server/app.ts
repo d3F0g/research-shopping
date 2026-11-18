@@ -1,4 +1,5 @@
 import { randomUUID } from "node:crypto";
+import { TurnRequestSchema as CurrentTurnRequestSchema } from "../domain/contracts";
 import { z } from "zod";
 import { ApplicationTurnResponseSchema, type ResearchTurns } from "../domain/research";
 import { createResearchTurns } from "./research-turns";
@@ -6,7 +7,7 @@ import { Hono } from "hono";
 import {
   BudgetSchema, PreferencesSchema, SelectionRequestSchema, SelectionResultSchema,
   TurnRequestSchema, TurnResponseSchema,
-} from "../domain/contracts";
+} from "../domain/legacy-contracts";
 import {
   ShortlistResearchRequestSchema,
   WebResearchResponseSchema,
@@ -14,7 +15,7 @@ import {
 } from "../domain/web-research";
 import type { ProviderEvent, Providers } from "../domain/providers";
 import { catalog } from "../domain/catalog";
-import { validBudgetAmount } from "../domain/preferences";
+import { validBudgetAmount } from "../domain/fixture-preferences";
 import { createShoppingEngine } from "../domain/shopping";
 import { resolveServerConfig, type ServerConfig } from "./config";
 
@@ -132,13 +133,14 @@ export function createApp(dependencies: AppDependencies = {}, configuration: Par
     ...(!fixtureMode ? { merchantVerification: "unavailable" } : {}),
   }));
   app.post("/api/turn", async (context) => {
-    const parsed = TurnInput.safeParse(context.get("payload"));
-    if (!parsed.success) return context.json({ error: "Invalid JSON or request fields", requestId: context.get("requestId") }, 400);
     if (!fixtureMode || !providers) {
-      if (!parsed.data.operationId) return context.json({ error: "A research operation ID is required", requestId: context.get("requestId") }, 400);
-      const result = await researchTurns.turn({ ...parsed.data, operationId: parsed.data.operationId }, context.req.raw.signal);
+      const parsed = CurrentTurnRequestSchema.safeParse(context.get("payload"));
+      if (!parsed.success) return context.json({ error: "Invalid JSON or request fields", requestId: context.get("requestId") }, 400);
+      const result = await researchTurns.turn(parsed.data, context.req.raw.signal);
       return context.json(ApplicationTurnResponseSchema.parse(result));
     }
+    const parsed = TurnInput.safeParse(context.get("payload"));
+    if (!parsed.success) return context.json({ error: "Invalid JSON or request fields", requestId: context.get("requestId") }, 400);
     const engine = createShoppingEngine(providers, {
       providerTimeoutMs: dependencies.providerTimeoutMs,
       onProviderEvent: (event) => { if (context.get("outcomes").length < 20) context.get("outcomes").push(event); },

@@ -1,7 +1,7 @@
 import { describe, expect, it, vi } from "vitest";
 import { randomUUID } from "node:crypto";
-import { defaultPreferences } from "../../src/domain/contracts";
-import { updatePreferences } from "../../src/domain/preferences";
+import { defaultPreferences } from "../../src/domain/legacy-contracts";
+import { updatePreferences } from "../../src/domain/fixture-preferences";
 import { createShoppingEngine } from "../../src/domain/shopping";
 import { createFixtureProviders } from "../../src/server/fixtures";
 import { createApp } from "../../src/server/app";

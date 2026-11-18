@@ -3,7 +3,7 @@ import { createServer, type Server } from "node:http";
 import type { AddressInfo } from "node:net";
 import { serve } from "@hono/node-server";
 import { describe, expect, it } from "vitest";
-import { defaultPreferences, ProductIdSchema } from "../../src/domain/contracts";
+import { defaultPreferences, ProductIdSchema } from "../../src/domain/legacy-contracts";
 import type { ProviderContext, Providers } from "../../src/domain/providers";
 import { createFixtureApp } from "../../src/server/test-fixture-app";
 import type { AppDependencies, RequestLog } from "../../src/server/app";

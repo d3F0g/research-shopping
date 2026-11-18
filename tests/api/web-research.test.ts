@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
-import { defaultPreferences } from "../../src/domain/contracts";
+import { defaultPreferences } from "../../src/domain/legacy-contracts";
 import type { WebResearchOperation, WebResearchResponse } from "../../src/domain/web-research";
 import { createFixtureApp } from "../../src/server/test-fixture-app";
 import type { RequestLog } from "../../src/server/app";

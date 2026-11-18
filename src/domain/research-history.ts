@@ -20,7 +20,7 @@ export const HistoricalApplicationTurnResponseSchema = z.unknown().transform((ra
   const versioned = typeof raw === "object" && raw !== null && Object.hasOwn(raw, "responseVersion");
   const parsed = (versioned ? ApplicationTurnResponseSchema : LegacyApplicationTurnResponseSchema).safeParse(raw);
   if (!parsed.success) {
-    for (const issue of parsed.error.issues) context.addIssue(issue);
+    for (const issue of parsed.error.issues) context.addIssue({ ...issue });
     return z.NEVER;
   }
   return parsed.data;

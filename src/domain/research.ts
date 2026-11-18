@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { ShoppingIntentSchema, type ShoppingIntent, type TurnRequest } from "./contracts";
+import { BudgetSchema, ShoppingIntentSchema, type ShoppingIntent, type TurnRequest } from "./contracts";
 import { isSafeWebResearchUrl } from "./web-research";
 
 const Id = z.string().regex(/^[a-z0-9-]+$/).max(80);
@@ -19,14 +19,14 @@ export const ResearchSourceSchema = z.strictObject({
   text: z.string().max(24000), textTruncated: z.boolean(),
 });
 export const ObservedPriceSchema = z.strictObject({
-  amount: z.number().finite().positive().max(1_000_000), currency: z.enum(["SGD", "USD"]),
+  amount: BudgetSchema.shape.amount, currency: z.enum(["SGD", "USD"]),
   conditions: z.array(z.string().min(1).max(300)).max(6),
   conditionsResolved: z.boolean(), variant: z.string().min(1).max(160),
   assessment: AssessmentSchema,
 });
 export const ResearchProductSchema = z.strictObject({
   id: Id, name: z.string().min(1).max(160), variant: z.string().min(1).max(160).nullable(),
-  identity: AssessmentSchema,
+  identity: AssessmentSchema, requestMatch: AssessmentSchema,
   criteria: z.array(z.strictObject({ criterionId: z.string().max(40), assessment: AssessmentSchema })).max(12),
   attributes: z.array(z.strictObject({ name: z.string().min(1).max(80), assessment: AssessmentSchema })).max(4),
   price: ObservedPriceSchema.nullable(), budget: AssessmentSchema.nullable(),
@@ -49,7 +49,7 @@ export const ResearchSnapshotSchema = z.strictObject({
   if (sources.size !== snapshot.sources.length || new Set(snapshot.sources.map((source) => source.url)).size !== snapshot.sources.length) context.addIssue({ code: "custom", message: "Sources must be distinct" });
   if (new Set(snapshot.products.map((product) => product.id)).size !== snapshot.products.length) context.addIssue({ code: "custom", message: "Products must be distinct" });
   for (const product of snapshot.products) {
-    const assessments = [product.identity, ...product.criteria.map((item) => item.assessment), ...product.attributes.map((item) => item.assessment), ...(product.price ? [product.price.assessment] : []), ...(product.budget ? [product.budget] : [])];
+    const assessments = [product.identity, product.requestMatch, ...product.criteria.map((item) => item.assessment), ...product.attributes.map((item) => item.assessment), ...(product.price ? [product.price.assessment] : []), ...(product.budget ? [product.budget] : [])];
     for (const assessment of assessments) for (const span of assessment.support) {
       if (sources.get(span.sourceId)?.text.slice(span.start, span.end) !== span.quote) context.addIssue({ code: "custom", message: "Evidence must be an exact retained source passage" });
     }
@@ -82,11 +82,12 @@ export type ResearchOperation = (request: { message: string; preferences: Shoppi
 export type ResearchTurns = { turn(request: TurnRequest, signal: AbortSignal): Promise<ApplicationTurnResponse> };
 export function choiceAssessment(product: ResearchProduct, id: string): Assessment | undefined {
   if (id === "identity") return product.identity;
+  if (id === "request-match") return product.requestMatch;
   if (id === "budget") return product.budget ?? undefined;
   if (id === "price") return product.price?.assessment;
   return product.criteria.find((row) => row.criterionId === id)?.assessment ?? product.attributes.find((row) => `attribute:${row.name}` === id)?.assessment;
 }
 export function eligibleForChoice(product: ResearchProduct, intent: ShoppingIntent): boolean {
   const supported = (assessment: Assessment | undefined | null) => assessment?.status === "supported" && assessment.scope === "exact-variant";
-  return Boolean(product.variant && supported(product.identity) && intent.criteria.filter((item) => item.strength === "hard").every((criterion) => supported(product.criteria.find((row) => row.criterionId === criterion.id)?.assessment)) && (!intent.budget || (supported(product.budget) && product.price && supported(product.price.assessment) && product.price.conditionsResolved && product.price.variant === product.variant && product.price.currency === intent.budget.currency && product.price.amount <= intent.budget.amount)));
+  return Boolean(product.variant && supported(product.identity) && supported(product.requestMatch) && intent.criteria.filter((item) => item.strength === "hard").every((criterion) => supported(product.criteria.find((row) => row.criterionId === criterion.id)?.assessment)) && (!intent.budget || (supported(product.budget) && product.price && supported(product.price.assessment) && product.price.conditionsResolved && product.price.variant === product.variant && product.price.currency === intent.budget.currency && product.price.amount <= intent.budget.amount)));
 }

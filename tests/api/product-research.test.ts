@@ -1,386 +1,120 @@
 import { once } from "node:events";
-import {
-  createServer,
-  type IncomingMessage,
-  type ServerResponse,
-} from "node:http";
+import { createServer, type IncomingMessage, type ServerResponse } from "node:http";
 import type { AddressInfo } from "node:net";
 import { describe, expect, it } from "vitest";
-import { defaultPreferences, type Feature } from "../../src/domain/contracts";
 import { createExaProductResearch } from "../../src/server/exa-research";
-import { productResearchResponse } from "../fixtures/exa-research";
+import { createResearchTurns } from "../../src/server/research-turns";
+import { createApp } from "../../src/server/app";
+import { syntheticAnswer, syntheticAssessment, syntheticIntent } from "../fixtures/dynamic-research";
 
-async function api(
-  handler: (incoming: IncomingMessage, response: ServerResponse) => void,
-) {
+export async function localProvider(handler: (incoming: IncomingMessage, response: ServerResponse) => void) {
   const server = createServer(handler);
   server.listen(0, "127.0.0.1");
   await once(server, "listening");
-  return {
-    baseUrl: `http://127.0.0.1:${(server.address() as AddressInfo).port}`,
-    close: async () => {
-      server.closeAllConnections();
-      await new Promise<void>((resolve, reject) =>
-        server.close((error) => (error ? reject(error) : resolve())),
-      );
-    },
-  };
+  return { server, baseUrl: `http://127.0.0.1:${(server.address() as AddressInfo).port}`, close: async () => { server.closeAllConnections(); await new Promise<void>((resolve) => server.close(() => resolve())); } };
 }
-async function research(payload: unknown, requiredFeatures: Feature[] = []) {
-  const server = await api((_request, response) => {
-    response.writeHead(200, { "Content-Type": "application/json" });
-    response.end(JSON.stringify(payload));
-  });
-  const preferences = defaultPreferences();
-  preferences.hard.category = "headphones";
-  preferences.hard.requiredFeatures = requiredFeatures;
-  try {
-    return await createExaProductResearch("fake-test-key", {
-      baseUrl: server.baseUrl,
-    })({ message: "Headphones", preferences }, new AbortController().signal);
-  } finally {
-    await server.close();
-  }
+export async function research(payload: unknown, preferences = syntheticIntent()) {
+  const server = await localProvider((_request, response) => { response.writeHead(200, { "Content-Type": "application/json" }); response.end(JSON.stringify(payload)); });
+  try { return await createExaProductResearch("fake-test-key", { baseUrl: server.baseUrl })({ message: preferences.productDescription, preferences }, new AbortController().signal); }
+  finally { await server.close(); }
 }
 
-describe("real SDK product research against local HTTP", () => {
-  it.each([
-    { id: "price-difference", quote: "Aster Wave 2 costs SGD 99 less than its competitors.", price: true },
-    { id: "monthly-price", quote: "Aster Wave 2 costs SGD 99/month.", price: true },
-    { id: "other-variant-price", quote: "Aster Wave 2 costs SGD 99 for the Pro edition.", price: true },
-    { id: "wrong-category", quote: "Aster Wave 2 is a cotton sweater.", price: false },
-  ])("keeps the independent QA $id reproduction as source context", async ({ quote, price }) => {
-    const result = await research({
-      requestId: "adversarial-fixture", costDollars: { total: 0.007 },
-      results: [{ title: "Synthetic fixture", url: "https://reviews.example.com/aster-wave-2", highlights: [quote] }],
-      output: {
-        content: { observations: [{
-          name: "Aster Wave 2", url: "https://reviews.example.com/aster-wave-2",
-          identityQuote: null, quotedFacts: price ? [] : [quote], priceQuote: price ? quote : null,
-        }] }, grounding: [],
-      },
-    });
-    expect(result.status).toBe("ready");
-    if (result.status !== "ready") return;
-    expect(result.research.products).toEqual([]);
-    expect(result.research.sources[0].highlights).toContain(quote);
-  });
-
-  it("makes one compact canonical search and returns exact source-scoped products and unverified prices", async () => {
-    let calls = 0;
-    let requestBody: Record<string, unknown> = {};
-    const server = await api((incoming, response) => {
-      calls++;
+describe("dynamic source assessments through actual local SDK transport", () => {
+  it("publishes one answer through the normal Hono path with exact sources and conditional choice", async () => {
+    const calls: { path: string; body: Record<string, unknown> }[] = [];
+    const provider = await localProvider((incoming, response) => {
       const chunks: Buffer[] = [];
       incoming.on("data", (chunk: Buffer) => chunks.push(chunk));
-      incoming.on("end", () => {
-        requestBody = JSON.parse(Buffer.concat(chunks).toString());
-        response.writeHead(200, { "Content-Type": "application/json" });
-        response.end(JSON.stringify(productResearchResponse));
-      });
+      incoming.on("end", () => { calls.push({ path: incoming.url!, body: JSON.parse(Buffer.concat(chunks).toString()) }); response.writeHead(200, { "Content-Type": "application/json" }); response.end(JSON.stringify(syntheticAnswer())); });
     });
-    const preferences = defaultPreferences();
-    preferences.hard.category = "headphones";
-    preferences.hard.budget = { amount: 300, currency: "SGD" };
+    const settlements: unknown[] = [];
     try {
-      const result = await createExaProductResearch("fake-test-key", {
-        baseUrl: server.baseUrl,
-      })(
-        { message: "Headphones under SGD300", preferences },
-        new AbortController().signal,
-      );
-      expect(calls).toBe(1);
-      expect(requestBody).toMatchObject({
-        numResults: 5,
-        contents: { highlights: true },
-      });
-      expect(requestBody.objective).toBeTypeOf("string");
-      expect(requestBody.outputSchema).toBeTypeOf("object");
-      expect(requestBody.systemPrompt).toBeTypeOf("string");
-      expect(requestBody).not.toHaveProperty("category");
-      expect(requestBody).not.toHaveProperty("includeDomains");
-      expect(result.status).toBe("ready");
-      if (result.status !== "ready") return;
-      expect(result.research.products).toHaveLength(2);
-      expect(result.research.products[0]).toMatchObject({
-        name: "Aster Wave 2",
-        stock: "unverified",
-        price: {
-          kind: "page-observed-unverified",
-          quote: "Aster Wave 2 is listed at SGD 229.00 on this page.",
-        },
-      });
-      expect(result.research.products[0].unresolvedConstraints).toContain(
-        "Current affordability within SGD 300 is unverified",
-      );
-      expect(result.research.grounding[0]).toEqual({
-        field: "provider specific field syntax",
-        sourceIds: ["source-1"],
-      });
-      for (const product of result.research.products)
-        for (const citation of [
-          ...product.facts,
-          ...(product.price ? [product.price] : []),
-        ])
-          expect(
-            result.research.sources.find(
-              (source) => source.id === citation.sourceId,
-            )?.highlights,
-          ).toContain(citation.quote);
-    } finally {
-      await server.close();
-    }
+      const app = createApp({ researchTurns: createResearchTurns({ research: createExaProductResearch("fake-test-key", { baseUrl: provider.baseUrl }), quota: { async reserve() { return "admitted"; }, async settle(...args) { settlements.push(args); } } }) });
+      const response = await app.request("http://127.0.0.1:3000/api/turn", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ message: "Compare options", preferences: syntheticIntent(), operationId: "00000000-0000-4000-8000-000000000001" }) });
+      expect(response.status).toBe(200);
+      const result = await response.json();
+      expect(result).toMatchObject({ kind: "research", responseVersion: 3, research: { evidenceVersion: 3, choice: { productId: "aster-pure" }, products: [{ stock: "unverified", price: { amount: 249, currency: "SGD" } }] } });
+      expect(result.answer).toContain("washable prefilter");
+      expect(result.research.sources[0].text).toBe(syntheticAnswer().citations[0]!.text);
+      expect(calls).toHaveLength(1);
+      expect(calls[0]!.path).toBe("/answer");
+      expect(calls[0]!.body).toMatchObject({ text: true, userLocation: "SG", query: syntheticIntent().productDescription });
+      expect(calls[0]!.body).not.toHaveProperty("objective");
+      expect(calls[0]!.body).not.toHaveProperty("contents");
+      expect(calls[0]!.body.outputSchema).toBeTypeOf("object");
+      expect(settlements).toEqual([["00000000-0000-4000-8000-000000000001", 0.005, true]]);
+      expect(JSON.stringify(result)).not.toContain("fake-test-key");
+    } finally { await provider.close(); }
   });
-  it.each([
-    {
-      name: "Invented Model",
-      url: "https://reviews.example.com/aster-wave-2",
-      identityQuote: null, quotedFacts: ["Invented Model has 200 hours of battery."],
-      priceQuote: null,
-    },
-    {
-      name: "Aster Wave 2",
-      url: "https://attacker.example.org/new-destination",
-      identityQuote: null, quotedFacts: [
-        "Aster Wave 2 uses Bluetooth wireless audio and active noise cancelling.",
-      ],
-      priceQuote: null,
-    },
-    {
-      name: "Aster Wave 2",
-      url: "https://reviews.example.com/aster-wave-2",
-      identityQuote: null, quotedFacts: ["Orbit Quiet supports wireless audio and multipoint."],
-      priceQuote: "Aster Wave 2 costs SGD 1.",
-    },
-  ])(
-    "drops unsupported names, destinations and wrong-model quotations",
-    async (observation) => {
-      const result = await research({
-        ...productResearchResponse,
-        output: { content: { observations: [observation] }, grounding: [] },
-      });
-      expect(result.status).toBe("ready");
-      if (result.status !== "ready") return;
-      expect(result.research.products).toEqual([]);
-      expect(result.research.sources).toHaveLength(2);
-    },
-  );
-  it("does not bind one comparison-page model's price to another model", async () => {
-    const result = await research({
-      ...productResearchResponse,
-      results: [
-        {
-          title: "Comparison",
-          url: "https://reviews.example.com/aster-wave-2",
-          highlights: ["Aster Wave 2 is wireless. Aster Wave 2 is a pair of headphones. Orbit Quiet costs SGD 999."],
-        },
-      ],
-      output: {
-        content: {
-          observations: [
-            {
-              name: "Aster Wave 2",
-              url: "https://reviews.example.com/aster-wave-2",
-              identityQuote: null, quotedFacts: ["Aster Wave 2 is wireless.", "Aster Wave 2 is a pair of headphones."],
-              priceQuote: "Orbit Quiet costs SGD 999.",
-            },
-          ],
-        },
-        grounding: [],
-      },
-    });
-    expect(result.status).toBe("ready");
-    if (result.status === "ready")
-      expect(result.research.products[0].price).toBeNull();
-  });
-  it.each([
-    "Aster Wave 2 has long battery life. Beta Two costs SGD 99.",
-    "Aster Wave 2 Pro costs SGD 99.",
-    "It costs SGD 99 for Aster Wave 2.",
-    "Aster Wave 2 has long battery life, Beta Two costs SGD 99.",
-  ])(
-    "keeps ambiguous model or variant price text out of product observations: %s",
-    async (quote) => {
-      const result = await research({
-        ...productResearchResponse,
-        results: [
-          {
-            title: "Comparison",
-            url: "https://reviews.example.com/aster-wave-2",
-            highlights: [quote],
-          },
-        ],
-        output: {
-          content: {
-            observations: [
-              {
-                name: "Aster Wave 2",
-                url: "https://reviews.example.com/aster-wave-2",
-                identityQuote: null, quotedFacts: [],
-                priceQuote: quote,
-              },
-            ],
-          },
-          grounding: [],
-        },
-      });
-      expect(result.status).toBe("ready");
-      if (result.status === "ready")
-        expect(result.research.products).toEqual([]);
-    },
-  );
-  it("does not turn a negative feature quote into a lead for that required feature", async () => {
-    const quote = "Aster Wave 2 does not support wireless audio.";
-    const category = "Aster Wave 2 is a pair of headphones.";
-    const result = await research(
-      {
-        ...productResearchResponse,
-        results: [
-          {
-            title: "Aster Wave 2",
-            url: "https://reviews.example.com/aster-wave-2",
-            highlights: [quote, category],
-          },
-        ],
-        output: {
-          content: {
-            observations: [
-              {
-                name: "Aster Wave 2",
-                url: "https://reviews.example.com/aster-wave-2",
-                identityQuote: null, quotedFacts: [quote, category],
-                priceQuote: null,
-              },
-            ],
-          },
-          grounding: [],
-        },
-      },
-      ["wireless"],
-    );
-    expect(result.status).toBe("ready");
-    if (result.status === "ready") expect(result.research.products).toEqual([]);
-  });
-  it("matches an exact named variant containing punctuation without treating its name as regex syntax", async () => {
-    const name = "Aster (2026)+";
-    const quote = `${name} supports wireless audio.`;
-    const category = `${name} is a pair of headphones.`;
-    const result = await research({
-      ...productResearchResponse,
-      results: [
-        {
-          title: name,
-          url: "https://reviews.example.com/aster-wave-2",
-          highlights: [quote, category],
-        },
-      ],
-      output: {
-        content: {
-          observations: [
-            {
-              name,
-              url: "https://reviews.example.com/aster-wave-2",
-              identityQuote: null, quotedFacts: [quote, category],
-              priceQuote: null,
-            },
-          ],
-        },
-        grounding: [],
-      },
-    });
-    expect(result.status).toBe("ready");
-    if (result.status === "ready")
-      expect(result.research.products[0]?.name).toBe(name);
-  });
-  it.each([
-    "http://reviews.example.com/page",
-    "https://127.0.0.1/private",
-    "https://user:pass@reviews.example.com/page",
-    "javascript:alert(1)",
-  ])(
-    "never publishes an unsafe returned source destination %s",
-    async (url) => {
-      const result = await research({
-        ...productResearchResponse,
-        results: [{ title: "Untrusted", url, highlights: [] }],
-        output: undefined,
-      });
-      expect(result).toMatchObject({ status: "unavailable", reason: "empty" });
-    },
-  );
-  it("retains attributable evidence after an overlong source prefix rather than displaying unrelated text", async () => {
-    const response = structuredClone(productResearchResponse);
-    response.results[0].highlights[0] =
-      "Unrelated introduction. ".repeat(100) +
-      response.results[0].highlights[0];
-    const result = await research(response);
-    expect(result.status).toBe("ready");
-    if (result.status === "ready")
-      expect(result.research.sources[0].highlights[0]).toBe(
-        "Aster Wave 2 uses Bluetooth wireless audio and active noise cancelling.",
-      );
-  });
-  it("keeps the base model and its explicitly named Pro variant separate on their own sources", async () => {
-    const payload = JSON.parse(
-      JSON.stringify(productResearchResponse).replaceAll("Orbit Quiet", "Aster Wave 2 Pro"),
-    );
+  it.each(["unknown", "contradicted", "conflict"] as const)("keeps %s hard evidence visible and refuses a choice", async (status) => {
+    const payload = syntheticAnswer();
+    const negative = "Aster Pure 30 white does not have a washable prefilter.";
+    payload.citations[0]!.text += `\n${negative}`;
+    const assessment = payload.answer.products[0]!.criteria[0]!.assessment;
+    assessment.status = status;
+    assessment.rationale = status === "conflict" ? "The retained sources disagree about the washable prefilter." : "The hard requirement is not established.";
+    assessment.support = status === "conflict" ? [...assessment.support, { url: payload.citations[0]!.url, quote: negative }] : status === "unknown" ? [] : [{ url: payload.citations[0]!.url, quote: negative }];
     const result = await research(payload);
     expect(result.status).toBe("ready");
     if (result.status !== "ready") return;
-    expect(result.research.products.map((product) => product.name)).toEqual([
-      "Aster Wave 2", "Aster Wave 2 Pro",
-    ]);
-    expect(result.research.products[1].price?.quote).toBe(
-      "Aster Wave 2 Pro was listed at USD 179.00 when reviewed.",
-    );
+    expect(result.research.choice).toBeNull();
+    expect(result.research.summary).toContain("could not establish");
+    expect(result.research.products[0]!.criteria[0]!.assessment.status).toBe(status);
+    expect(result.research.sources[0]!.text).toContain(negative);
   });
-  it("degrades malformed extraction to sources and discloses relaxed retrieval without changing constraints", async () => {
-    const result = await research({
-      ...productResearchResponse,
-      output: { content: "invalid JSON", grounding: [] },
-      notices: [
-        {
-          code: "RESTRICTIONS_RELAXED",
-          message: "restriction removed",
-          path: "/query",
-        },
-      ],
-    });
+  it.each(["missing-criterion", "missing-relevance", "wrong-product", "family-scope", "different-price-variant", "membership", "bare-dollar", "wrong-currency", "fractional-cent", "over-budget", "missing-price", "unsupported-manufacturer"])("does not promote %s into a compliant choice", async (kind) => {
+    const payload = syntheticAnswer(); const product = payload.answer.products[0]!;
+    if (kind === "missing-criterion") product.criteria = [];
+    if (kind === "missing-relevance") delete (product as Partial<typeof product>).requestMatch;
+    if (kind === "wrong-product") { product.requestMatch.status = "contradicted"; product.requestMatch.rationale = "This is a sweater, not the requested purifier."; }
+    if (kind === "family-scope") product.criteria[0]!.assessment.scope = "product-family";
+    if (kind === "different-price-variant") product.price.variant = "Pro";
+    if (kind === "membership") { product.price.conditionsResolved = false; product.price.conditions = ["Membership required"]; }
+    if (kind === "bare-dollar") { payload.citations[0]!.text = payload.citations[0]!.text.replaceAll("SGD ", "$"); product.price.assessment.support[0]!.quote = product.price.assessment.support[0]!.quote.replace("SGD ", "$"); }
+    if (kind === "wrong-currency") product.price.currency = "USD";
+    if (kind === "fractional-cent") product.price.amount = 249.001;
+    if (kind === "over-budget") { product.price.amount = 499; payload.citations[0]!.text = payload.citations[0]!.text.replace("249.00", "499.00"); product.price.assessment.support[0]!.quote = product.price.assessment.support[0]!.quote.replace("249.00", "499.00"); }
+    if (kind === "missing-price") Object.assign(product, { price: null });
+    if (kind === "unsupported-manufacturer") { product.criteria[0]!.assessment.support[0]!.quote = "https://sony.example.com"; product.criteria[0]!.assessment.rationale = "Seller hostname is not manufacturer evidence."; }
+    const result = await research(payload);
+    expect(result.status).toBe("ready");
+    if (result.status === "ready") { expect(result.research.choice).toBeNull(); expect(result.research.summary).not.toMatch(/My conditional choice/); }
+  });
+  it.each(["unreturned-url", "numeric-reference", "rewritten-quote", "ambiguous-url", "clipped-qualifier"])("keeps %s out of admitted quotation support", async (kind) => {
+    const payload = syntheticAnswer(); const product = payload.answer.products[0]!;
+    const citation = product.criteria[0]!.assessment.support[0]!;
+    if (kind === "unreturned-url") citation.url = "https://unreturned.example.com/pure";
+    if (kind === "numeric-reference") citation.url = "[1]";
+    if (kind === "rewritten-quote") citation.quote = "The prefilter is washable.";
+    if (kind === "ambiguous-url") payload.citations.push({ ...payload.citations[0]!, text: "Contradictory duplicate" });
+    if (kind === "clipped-qualifier") { const prefix = "x".repeat(24000 - citation.quote.length); payload.citations[0]!.text = prefix + citation.quote + " Only the Pro variant, not the selected model."; }
+    const result = await research(payload);
+    if (kind === "ambiguous-url") expect(result).toMatchObject({ status: "unavailable", reason: "empty", reportedCostUsd: 0.005 });
+    else { expect(result.status).toBe("ready"); if (result.status === "ready") { expect(result.research.choice).toBeNull(); expect(result.research.products[0]!.criteria[0]!.assessment).toMatchObject({ status: "unknown", support: [] }); } }
+  });
+  it.each(["http://reviews.example.com/pure", "https://127.0.0.1/private", "https://user:pass@reviews.example.com/pure", "javascript:alert(1)"])("rejects unsafe citation %s", async (url) => {
+    const payload = syntheticAnswer(); payload.citations[0]!.url = url;
+    expect(await research(payload)).toMatchObject({ status: "unavailable", reason: "empty" });
+  });
+  it("accepts an unfamiliar product and requirement without registry edits", async () => {
+    const payload = syntheticAnswer();
+    const intent = syntheticIntent(); intent.productDescription = "A reversible ceramic fermentation crock"; intent.criteria[0]!.wording = "water-seal lid";
+    const sentence = "The Koru Crock 2L is a ceramic fermentation crock with a water-seal lid.";
+    payload.citations[0]!.text += `\n${sentence}`;
+    const product = payload.answer.products[0]!; product.name = "Koru Crock 2L"; product.identity = syntheticAssessment(sentence); product.requestMatch = syntheticAssessment(sentence); product.criteria[0]!.assessment = syntheticAssessment(sentence);
+    const result = await research(payload, intent);
+    expect(result.status).toBe("ready");
+    if (result.status === "ready") expect(result.research.choice?.productId).toBe("aster-pure");
+  });
+  it("preserves exact paragraph context, sale conditions and raw source whitespace", async () => {
+    const payload = syntheticAnswer(); const quote = "Aster Pure 30 white costs SGD 199.00 for members only. Sale ends Friday.";
+    payload.citations[0]!.text += `\n\n${quote}\n  Shipping is charged separately.\n`;
+    payload.answer.products[0]!.price = { ...payload.answer.products[0]!.price, amount: 199, conditions: ["Members only", "Sale ends Friday", "Shipping separate"], conditionsResolved: false, assessment: syntheticAssessment(quote) };
+    const result = await research(payload);
     expect(result.status).toBe("ready");
     if (result.status !== "ready") return;
-    expect(result.research.products).toEqual([]);
-    expect(result.research.limitations.join(" ")).toContain(
-      "hard requirements remain unchanged",
-    );
-  });
-  it("preserves negation exactly rather than claiming a supported feature", async () => {
-    const result = await research({
-      ...productResearchResponse,
-      results: [
-        {
-          title: "Aster Wave 2",
-          url: "https://reviews.example.com/aster-wave-2",
-          highlights: ["Aster Wave 2 does not support wireless audio.", "Aster Wave 2 is a pair of headphones."],
-        },
-      ],
-      output: {
-        content: {
-          observations: [
-            {
-              name: "Aster Wave 2",
-              url: "https://reviews.example.com/aster-wave-2",
-              identityQuote: null, quotedFacts: ["Aster Wave 2 does not support wireless audio.", "Aster Wave 2 is a pair of headphones."],
-              priceQuote: null,
-            },
-          ],
-        },
-        grounding: [],
-      },
-    });
-    expect(result.status).toBe("ready");
-    if (result.status === "ready")
-      expect(result.research.products[0].facts[0].quote).toContain(
-        "does not support",
-      );
+    expect(result.research.choice).toBeNull();
+    expect(result.research.products[0]!.price?.conditions).toEqual(["Members only", "Sale ends Friday", "Shipping separate"]);
+    expect(result.research.sources[0]!.text).toBe(payload.citations[0]!.text);
   });
 });

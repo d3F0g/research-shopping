@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { defaultPreferences, type Preferences } from "../../src/domain/contracts";
+import { defaultPreferences, type Preferences } from "../../src/domain/legacy-contracts";
 import { createFixtureApp } from "../../src/server/test-fixture-app";
 import type { RequestLog } from "../../src/server/app";
 import { configFromEnvironment } from "../../src/server/config";
