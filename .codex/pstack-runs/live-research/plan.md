@@ -49,3 +49,9 @@ Root appended only the nonsecret absolute `EXA_RESEARCH_LEDGER_PATH` to the exis
 ## Verification skill alignment
 
 Root is the verification owner for this unit's skill alignment. The offline helper now forces test mode and explicit fixture composition, even when invoked directly. The feature guide separates simulated research-mode browser tests from the two-call real proof. The skill validator passed in a temporary Python environment after installing its missing PyYAML dependency. The changed helper passed against exact research candidate 1c24a93 with cleanup true; evidence is under /tmp/research-shopping-live/skill-update-proof. No external or Exa request occurred. Independent candidate QA must still run the integrated skill and review its desktop/mobile images.
+
+## Independent Exa checkpoint
+
+Application source candidate1c24a93 passed213tests, build,46browser journeys and offline smoke. Root integrated policy/verification documents as4968bb3 and published PR38. Independent QA repeated those passing checks and inspected desktop/mobile screenshots. It still rejected the candidate for reproducible attribution and relevance defects tracked in Issue39. Differences, monthly payments and another edition could become base-model prices, while an unrelated cotton sweater could become a headphone lead. Independent security additionally reproduced clear hard-wireless contradictions surviving projection and observed that a named-model request loses its original message in query construction. These findings block merging and live verification.
+
+A fresh boundary-fix owner is reproducing these failures before changing the supported observation contract. Unsupported prose must remain source context. The semantic gate is not satisfied by the existing green regression counts. The real Exa verification allowance remains unused at zero calls.
