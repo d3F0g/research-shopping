@@ -16,6 +16,9 @@ async function observe({
   highlights = [...facts, ...(price ? [price] : [])],
   category = "headphones",
   requiredFeatures = [],
+  excludedBrands = [],
+  sourceTitle = "Automated fixture evidence",
+  duplicates = false,
   message = "Headphones under SGD300",
 }: {
   model?: string;
@@ -24,6 +27,9 @@ async function observe({
   highlights?: string[];
   category?: Preferences["hard"]["category"];
   requiredFeatures?: Preferences["hard"]["requiredFeatures"];
+  excludedBrands?: string[];
+  sourceTitle?: string;
+  duplicates?: boolean;
   message?: string;
 }) {
   const requests: Record<string, unknown>[] = [];
@@ -33,9 +39,10 @@ async function observe({
     incoming.on("end", () => {
       requests.push(JSON.parse(Buffer.concat(chunks).toString()));
       outgoing.writeHead(200, { "Content-Type": "application/json" });
+      const observation = { name: model, url, quotedFacts: facts, priceQuote: price };
       outgoing.end(JSON.stringify({
-        results: [{ title: "Automated fixture evidence", url, highlights }],
-        output: { content: { observations: [{ name: model, url, quotedFacts: facts, priceQuote: price }] }, grounding: [] },
+        results: [{ title: sourceTitle, url, highlights }],
+        output: { content: { observations: duplicates ? [observation, observation] : [observation] }, grounding: [] },
         costDollars: { total: 0.007 },
       }));
     });
@@ -45,6 +52,7 @@ async function observe({
   const preferences = defaultPreferences();
   preferences.hard.category = category;
   preferences.hard.requiredFeatures = requiredFeatures;
+  preferences.hard.excludedBrands = excludedBrands;
   preferences.hard.budget = { currency: "SGD", amount: 300 };
   try {
     const result = await createExaProductResearch("fake-test-key", {
@@ -177,5 +185,24 @@ describe("supported product evidence through the actual SDK", () => {
     expect(request.query).toContain("SGD 300");
     expect(request).toMatchObject({ numResults: 5, contents: { highlights: true } });
     expect(request.type ?? "auto").toBe("auto");
+  });
+
+  it("rejects an excluded manufacturer explicitly attached to the exact model in the source title", async () => {
+    const { snapshot } = await observe({
+      model: "WH-1000XM6", facts: ["WH-1000XM6 is a pair of wireless headphones."],
+      sourceTitle: "Sony WH-1000XM6 wireless headphones", excludedBrands: ["Sony"],
+    });
+    expect(snapshot.products).toEqual([]);
+  });
+
+  it("does not infer a model's brand from an unrelated comparison mention", async () => {
+    const { snapshot } = await observe({ sourceTitle: "Sony WH-1000XM6 versus Aster Wave 2", excludedBrands: ["Sony"] });
+    expect(snapshot.products).toHaveLength(1);
+    expect(snapshot.products[0].unresolvedConstraints.join(" ")).toMatch(/brand exclusions.*verification/i);
+  });
+
+  it("publishes one identity when the provider repeats an observation", async () => {
+    const { snapshot } = await observe({ duplicates: true });
+    expect(snapshot.products).toHaveLength(1);
   });
 });
