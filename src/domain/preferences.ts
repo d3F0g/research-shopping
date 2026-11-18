@@ -143,6 +143,29 @@ function interpretMessage(
   previous: ShoppingIntent,
 ): IntentUpdate {
   const text = message.trim();
+  const help = normalized(text);
+  if (
+    /^(?:how (?:does (?:this|fieldnote|this app) work|do i use (?:this|fieldnote|this app))|what can (?:you|fieldnote|this app) do|help(?: me use (?:this|fieldnote|this app))?|can you (?:place an order|buy (?:it|something) for me))$/.test(
+      help,
+    )
+  )
+    return {
+      preferences: previous,
+      notes: [],
+      reply:
+        "Describe what you are shopping for, your hard requirements and any flexible preferences. I compare source-based product evidence and explain unresolved tradeoffs. You can edit preferences or ask for a shorter reply. I provide source links; I do not place orders or verify merchant stock.",
+    };
+  if (
+    /^(?:does (?:this|fieldnote|this app|a search|research) cost (?:money|anything)|is (?:this|fieldnote|this app|a search|research) free|how much does (?:this|fieldnote|this app|a search|research) cost|(?:do i|will i) (?:pay|be charged)(?: for (?:this|a search|research))?)$/.test(
+      help,
+    )
+  )
+    return {
+      preferences: previous,
+      notes: [],
+      reply:
+        "Shopping requests may use one paid Exa call, charged to the configured research account. I cannot quote a fixed cost here. App help, viewing saved evidence and changing display preferences do not start another search.",
+    };
   if (
     /^(?:(?:no )?thanks?(?: you)?|thank you(?: very much)?|ok(?:ay)?|great|got it|hello|hi|hey)[.!]*$/i.test(
       text,

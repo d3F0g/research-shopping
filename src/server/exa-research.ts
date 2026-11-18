@@ -7,7 +7,8 @@ import {
 } from "../domain/contracts";
 import {
   choiceAssessment,
-  eligibleForChoice,
+  assessResearch,
+  qualifyingPrice,
   ResearchSnapshotSchema,
   type Assessment,
   type ResearchOperation,
@@ -414,12 +415,12 @@ function bindProduct(
     : null;
   const applicablePrice = Boolean(
     intent.budget &&
-    price &&
-    price.currency === intent.budget.currency &&
-    price.conditionsResolved &&
-    price.variant === value.variant &&
-    price.assessment.status === "supported" &&
-    price.assessment.scope === "exact-variant",
+      price &&
+      price.currency === intent.budget.currency &&
+      price.conditionsResolved &&
+      price.variant === value.variant &&
+      price.assessment.status === "supported" &&
+      price.assessment.scope === "exact-variant",
   );
   if (intent.budget && !applicablePrice)
     budget = unknownAssessment(
@@ -533,16 +534,14 @@ function projectAnswer(raw: unknown, intent: ShoppingIntent) {
           return id &&
             assessment?.status === "supported" &&
             assessment.scope === "exact-variant" &&
-            assessment.support.length
+            assessment.support.length &&
+            (id !== "price" || qualifyingPrice(chosen, intent))
             ? [{ assessmentId: id, explanation: assessment.rationale }]
             : [];
         })
       : [];
-  const choice =
-    chosen &&
-    proposed &&
-    eligibleForChoice(chosen, intent) &&
-    reasons.length === proposed.reasons.length
+  const validHint =
+    chosen && proposed && reasons.length === proposed.reasons.length
       ? {
           productId: chosen.id,
           reasons,
@@ -550,21 +549,21 @@ function projectAnswer(raw: unknown, intent: ShoppingIntent) {
             "Source-based AI interpretation. Confirm the exact variant, all price conditions and current merchant stock before buying.",
         }
       : null;
-  const summary =
-    choice && chosen
-      ? `My conditional choice is ${chosen.name}. ${choice.reasons.map((reason) => reason.explanation).join(" ")}`.slice(
-          0,
-          1200,
-        )
-      : "I could not establish an option that meets every hard requirement. Compare the sourced assessments below and check the unresolved details before choosing.";
+  const assessment = assessResearch(
+    products,
+    intent,
+    !proposed
+      ? { status: "absent" }
+      : validHint
+        ? { status: "valid", choice: validHint }
+        : { status: "invalid" },
+  );
   const snapshot = ResearchSnapshotSchema.safeParse({
     dataKind: "web-research",
     evidenceVersion: 4,
     retrievedAt: new Date().toISOString(),
     intent,
-    summary,
-    products,
-    choice,
+    ...assessment,
     sources,
     limitations: [
       "Assessments are source-based AI interpretations. Literal quotations establish provenance, not semantic verification. Prices are page observations; current stock, delivery and merchant offers remain unverified.",

@@ -78,6 +78,12 @@ export const ResearchProductSchema = z.strictObject({
   price: ObservedPriceSchema.nullable(),
   budget: AssessmentSchema.nullable(),
   stock: z.literal("unverified"),
+  explanation: z
+    .strictObject({
+      reasons: z.array(z.string().min(1).max(100)).max(20),
+      tradeoffs: z.array(z.string().min(1).max(100)).max(20),
+    })
+    .optional(),
 });
 export const ConditionalChoiceSchema = z.strictObject({
   productId: Id,
@@ -162,6 +168,30 @@ export const ResearchSnapshotSchema = z
           code: "custom",
           message: "Budget assessment must follow the intent",
         });
+      if (product.explanation) {
+        for (const [kind, ids] of Object.entries(product.explanation)) {
+          if (new Set(ids).size !== ids.length)
+            context.addIssue({
+              code: "custom",
+              message: "Explanation references must be distinct",
+            });
+          for (const id of ids) {
+            const assessment = choiceAssessment(product, id);
+            if (
+              !assessment ||
+              supportedExactly(assessment) !== (kind === "reasons") ||
+              (kind === "reasons" &&
+                id === "price" &&
+                !qualifyingPrice(product, snapshot.intent))
+            )
+              context.addIssue({
+                code: "custom",
+                message:
+                  "Explanation references must match supported reasons or unresolved assessments",
+              });
+          }
+        }
+      }
     }
     if (snapshot.choice) {
       const product = snapshot.products.find(
@@ -179,7 +209,9 @@ export const ResearchSnapshotSchema = z
           choiceAssessment(product, reason.assessmentId)?.status !==
             "supported" ||
           choiceAssessment(product, reason.assessmentId)?.scope !==
-            "exact-variant"
+            "exact-variant" ||
+          (reason.assessmentId === "price" &&
+            !qualifyingPrice(product, snapshot.intent))
         )
           context.addIssue({
             code: "custom",
@@ -287,36 +319,171 @@ export function choiceAssessment(
   if (id === "request-match") return product.requestMatch;
   if (id === "budget") return product.budget ?? undefined;
   if (id === "price") return product.price?.assessment;
+  const criterion = product.criteria.find((row) => row.criterionId === id);
+  if (criterion) return criterion.assessment;
+  const attributes = product.attributes.filter(
+    (row) => `attribute:${row.name}` === id,
+  );
+  return attributes.length === 1 ? attributes[0]!.assessment : undefined;
+}
+function supportedExactly(assessment: Assessment | undefined | null): boolean {
   return (
-    product.criteria.find((row) => row.criterionId === id)?.assessment ??
-    product.attributes.find((row) => `attribute:${row.name}` === id)?.assessment
+    assessment?.status === "supported" && assessment.scope === "exact-variant"
+  );
+}
+export function qualifyingPrice(
+  product: ResearchProduct,
+  intent: ShoppingIntent,
+): boolean {
+  const price = product.price;
+  return Boolean(
+    price &&
+      supportedExactly(price.assessment) &&
+      price.conditionsResolved &&
+      price.variant === product.variant &&
+      (!intent.budget ||
+        (price.currency === intent.budget.currency &&
+          isWithinBudget(price.amount, intent.budget))),
   );
 }
 export function eligibleForChoice(
   product: ResearchProduct,
   intent: ShoppingIntent,
 ): boolean {
-  const supported = (assessment: Assessment | undefined | null) =>
-    assessment?.status === "supported" && assessment.scope === "exact-variant";
   return Boolean(
     product.variant &&
-    supported(product.identity) &&
-    supported(product.requestMatch) &&
-    intent.criteria
-      .filter((item) => item.strength === "hard")
-      .every((criterion) =>
-        supported(
-          product.criteria.find((row) => row.criterionId === criterion.id)
-            ?.assessment,
-        ),
-      ) &&
-    (!intent.budget ||
-      (supported(product.budget) &&
-        product.price &&
-        supported(product.price.assessment) &&
-        product.price.conditionsResolved &&
-        product.price.variant === product.variant &&
-        product.price.currency === intent.budget.currency &&
-        isWithinBudget(product.price.amount, intent.budget))),
+      supportedExactly(product.identity) &&
+      supportedExactly(product.requestMatch) &&
+      intent.criteria
+        .filter((item) => item.strength === "hard")
+        .every((criterion) =>
+          supportedExactly(
+            product.criteria.find((row) => row.criterionId === criterion.id)
+              ?.assessment,
+          ),
+        ) &&
+      (!intent.budget ||
+        (supportedExactly(product.budget) && qualifyingPrice(product, intent))),
   );
+}
+
+export type ChoiceHint =
+  | { status: "absent" | "invalid" }
+  | { status: "valid"; choice: z.infer<typeof ConditionalChoiceSchema> };
+
+export function assessResearch(
+  products: ResearchProduct[],
+  intent: ShoppingIntent,
+  hint: ChoiceHint,
+): Pick<ResearchSnapshot, "products" | "choice" | "summary"> {
+  const candidates = products.map((product) => {
+    const flexible = new Set(
+      intent.criteria
+        .filter(
+          (criterion) =>
+            criterion.strength === "flexible" &&
+            supportedExactly(choiceAssessment(product, criterion.id)),
+        )
+        .map((criterion) => criterion.id),
+    );
+    const ids = [
+      ...flexible,
+      "request-match",
+      ...intent.criteria
+        .filter((criterion) => criterion.strength === "hard")
+        .map((criterion) => criterion.id),
+      "budget",
+      "identity",
+      "price",
+      ...product.attributes.map((attribute) => `attribute:${attribute.name}`),
+      ...intent.criteria
+        .filter(
+          (criterion) =>
+            criterion.strength === "flexible" && !flexible.has(criterion.id),
+        )
+        .map((criterion) => criterion.id),
+    ];
+    const explanation: NonNullable<ResearchProduct["explanation"]> = {
+      reasons: [],
+      tradeoffs: [],
+    };
+    for (const id of new Set(ids)) {
+      const assessment = choiceAssessment(product, id);
+      if (!assessment) continue;
+      if (!supportedExactly(assessment)) explanation.tradeoffs.push(id);
+      else if (id !== "price" || qualifyingPrice(product, intent))
+        explanation.reasons.push(id);
+    }
+    return {
+      product: { ...product, explanation },
+      eligible: eligibleForChoice(product, intent),
+      relevant: supportedExactly(product.requestMatch),
+      flexible,
+    };
+  });
+  type Candidate = (typeof candidates)[number];
+  const dominates = (left: Candidate, right: Candidate) => {
+    if (left.eligible !== right.eligible) return left.eligible;
+    if (left.relevant !== right.relevant) return left.relevant;
+    return (
+      left.flexible.size > right.flexible.size &&
+      [...right.flexible].every((id) => left.flexible.has(id))
+    );
+  };
+  const tiers: Candidate[][] = [];
+  let remaining = candidates;
+  while (remaining.length) {
+    const tier = remaining.filter(
+      (candidate) => !remaining.some((other) => dominates(other, candidate)),
+    );
+    tiers.push(tier);
+    remaining = remaining.filter((candidate) => !tier.includes(candidate));
+  }
+  const strongest = (tiers[0] ?? []).filter((candidate) => candidate.eligible);
+  const selected =
+    hint.status === "invalid"
+      ? undefined
+      : strongest.length === 1
+        ? strongest[0]
+        : hint.status === "valid"
+          ? strongest.find(
+              (candidate) => candidate.product.id === hint.choice.productId,
+            )
+          : undefined;
+  const choice = selected
+    ? hint.status === "valid" && hint.choice.productId === selected.product.id
+      ? hint.choice
+      : {
+          productId: selected.product.id,
+          reasons: selected.product.explanation.reasons
+            .slice(0, 4)
+            .map((id) => ({
+              assessmentId: id,
+              explanation: choiceAssessment(
+                selected.product,
+                id,
+              )!.rationale.slice(0, 400),
+            })),
+          caveat:
+            "Source-based AI interpretation. Confirm the exact variant, all price conditions and current merchant stock before buying.",
+        }
+    : null;
+  const ordering =
+    "Order reflects hard eligibility, exact request match and source-supported preferences. Original order within tied evidence tiers does not imply superiority.";
+  const summary =
+    choice && selected
+      ? `My conditional choice is ${selected.product.name}. ${strongest.length > 1 ? "The strongest options are tied on preference evidence; this choice uses the source-based research suggestion. " : ""}${choice.reasons.map((reason) => reason.explanation).join(" ")}`.slice(
+          0,
+          900,
+        )
+      : !strongest.length
+        ? "I could not establish an option that meets every hard requirement. Compare the sourced assessments and check the unresolved details before choosing."
+        : hint.status === "invalid"
+          ? "Eligible options are available, but the research suggestion contained an unresolved evidence reference. No conditional choice is established."
+          : "Eligible options are tied or have incomplete preference evidence. Compare their tradeoffs before choosing; the evidence does not establish one strongest option.";
+  return {
+    products: tiers.flat().map((candidate) => candidate.product),
+    choice,
+    summary: `${summary} ${ordering}`,
+  };
 }

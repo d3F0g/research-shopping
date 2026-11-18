@@ -158,7 +158,7 @@ export function App() {
       <p className="composer-note">
         {fixtureMode
           ? "Automated fixture service. Sample claims are synthetic."
-          : "Source-based AI research. Confirm price and stock with the merchant."}
+          : "Shopping requests may use one paid Exa call. Viewing saved evidence does not start another search."}
       </p>
     </form>
   );

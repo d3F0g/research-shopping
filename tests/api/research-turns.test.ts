@@ -113,6 +113,9 @@ describe("normal research composition", () => {
     for (const message of [
       "Hi",
       "Thanks",
+      "How does this work?",
+      "What can you do?",
+      "Does this cost money?",
       "More detail",
       "Shorter",
       "Remove that requirement",

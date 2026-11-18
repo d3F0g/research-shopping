@@ -1,6 +1,7 @@
 import { ArrowUpRight, BookOpen, ChevronDown, Search } from "lucide-react";
 import {
   choiceAssessment,
+  eligibleForChoice,
   type ApplicationTurnResponse,
   type Assessment,
   type ResearchProduct,
@@ -131,21 +132,39 @@ function assessments(
   snapshot: { intent: Pick<ResearchSnapshot["intent"], "criteria"> },
 ) {
   return [
-    { label: "Product identity", assessment: product.identity },
-    { label: "Match to your request", assessment: product.requestMatch },
+    { id: "identity", label: "Product identity", assessment: product.identity },
+    {
+      id: "request-match",
+      label: "Match to your request",
+      assessment: product.requestMatch,
+    },
     ...product.criteria.map((row) => ({
+      id: row.criterionId,
       label: `${snapshot.intent.criteria.find((criterion) => criterion.id === row.criterionId)!.strength === "hard" ? "Required" : "Flexible"} · ${snapshot.intent.criteria.find((criterion) => criterion.id === row.criterionId)!.wording}`,
       assessment: row.assessment,
     })),
     ...product.attributes.map((attribute) => ({
+      id: `attribute:${attribute.name}`,
       label: attribute.name,
       assessment: attribute.assessment,
     })),
     ...(product.price
-      ? [{ label: "Observed price", assessment: product.price.assessment }]
+      ? [
+          {
+            id: "price",
+            label: "Observed price",
+            assessment: product.price.assessment,
+          },
+        ]
       : []),
     ...(product.budget
-      ? [{ label: "Observed budget comparison", assessment: product.budget }]
+      ? [
+          {
+            id: "budget",
+            label: "Observed budget comparison",
+            assessment: product.budget,
+          },
+        ]
       : []),
   ];
 }
@@ -207,8 +226,12 @@ export function LiveResearchResults({
         </div>
       ) : (
         <p className="assessment-summary" role="status">
-          No confirmed fit. The evidence below supports comparison, but does not
-          establish a recommendation that meets every hard requirement.
+          {research.evidenceVersion === 4 &&
+          research.products.some((product) =>
+            eligibleForChoice(product, research.intent),
+          )
+            ? "No conditional choice. Review the tied or unresolved evidence below."
+            : "No confirmed fit. The evidence below supports comparison, but does not establish a recommendation that meets every hard requirement."}
         </p>
       )}
       <p className="metadata">
@@ -283,65 +306,97 @@ export function LiveResearchResults({
                   )}
                   <p className="metadata">Stock and delivery unverified</p>
                 </div>
-                <dl className="assessment-summary compact-assessments">
-                  {(product.identity.status !== "supported" ||
-                    product.identity.scope !== "exact-variant") && (
-                    <div>
-                      <dt>Product identity</dt>
-                      <dd>
-                        <Status assessment={product.identity} />
-                      </dd>
-                    </div>
-                  )}
-                  {(product.requestMatch.status !== "supported" ||
-                    product.requestMatch.scope !== "exact-variant") && (
-                    <div>
-                      <dt>Match to your request</dt>
-                      <dd>
-                        <Status assessment={product.requestMatch} />
-                      </dd>
-                    </div>
-                  )}
-                  {product.budget && (
-                    <div>
-                      <dt>Observed budget comparison</dt>
-                      <dd>
-                        <Status assessment={product.budget} />
-                      </dd>
-                    </div>
-                  )}
-                  {product.criteria.map((row) => {
-                    const criterion = research.intent.criteria.find(
-                      (item) => item.id === row.criterionId,
-                    )!;
-                    return (
-                      <div key={row.criterionId}>
-                        <dt>
-                          {criterion.strength === "hard"
-                            ? "Required"
-                            : "Flexible"}{" "}
-                          · {criterion.wording}
-                        </dt>
+                {"explanation" in product && product.explanation ? (
+                  <div className="assessment-summary">
+                    {(["reasons", "tradeoffs"] as const).map((kind) => {
+                      const ids = product.explanation![kind];
+                      if (!ids.length) return null;
+                      const rows = assessments(product, research);
+                      return (
+                        <div key={kind}>
+                          <p className="font-medium">
+                            {kind === "reasons"
+                              ? "Supported fit"
+                              : "Tradeoffs and unknowns"}
+                          </p>
+                          <dl className="compact-assessments">
+                            {ids.map((id) => {
+                              const row = rows.find((row) => row.id === id)!;
+                              return (
+                                <div key={id}>
+                                  <dt>{row.label}</dt>
+                                  <dd>
+                                    <Status assessment={row.assessment} />
+                                  </dd>
+                                </div>
+                              );
+                            })}
+                          </dl>
+                        </div>
+                      );
+                    })}
+                  </div>
+                ) : (
+                  <dl className="assessment-summary compact-assessments">
+                    {(product.identity.status !== "supported" ||
+                      product.identity.scope !== "exact-variant") && (
+                      <div>
+                        <dt>Product identity</dt>
                         <dd>
-                          <Status assessment={row.assessment} />
+                          <Status assessment={product.identity} />
                         </dd>
                       </div>
-                    );
-                  })}
-                  {product.attributes.map((attribute) => (
-                    <div className="attribute-preview" key={attribute.name}>
-                      <dt>{attribute.name}</dt>
-                      <dd>
-                        <Status assessment={attribute.assessment} />
-                        {attribute.assessment.status === "supported" && (
-                          <span className="assessment-preview">
-                            {attribute.assessment.rationale}
-                          </span>
-                        )}
-                      </dd>
-                    </div>
-                  ))}
-                </dl>
+                    )}
+                    {(product.requestMatch.status !== "supported" ||
+                      product.requestMatch.scope !== "exact-variant") && (
+                      <div>
+                        <dt>Match to your request</dt>
+                        <dd>
+                          <Status assessment={product.requestMatch} />
+                        </dd>
+                      </div>
+                    )}
+                    {product.budget && (
+                      <div>
+                        <dt>Observed budget comparison</dt>
+                        <dd>
+                          <Status assessment={product.budget} />
+                        </dd>
+                      </div>
+                    )}
+                    {product.criteria.map((row) => {
+                      const criterion = research.intent.criteria.find(
+                        (item) => item.id === row.criterionId,
+                      )!;
+                      return (
+                        <div key={row.criterionId}>
+                          <dt>
+                            {criterion.strength === "hard"
+                              ? "Required"
+                              : "Flexible"}{" "}
+                            · {criterion.wording}
+                          </dt>
+                          <dd>
+                            <Status assessment={row.assessment} />
+                          </dd>
+                        </div>
+                      );
+                    })}
+                    {product.attributes.map((attribute) => (
+                      <div className="attribute-preview" key={attribute.name}>
+                        <dt>{attribute.name}</dt>
+                        <dd>
+                          <Status assessment={attribute.assessment} />
+                          {attribute.assessment.status === "supported" && (
+                            <span className="assessment-preview">
+                              {attribute.assessment.rationale}
+                            </span>
+                          )}
+                        </dd>
+                      </div>
+                    ))}
+                  </dl>
+                )}
                 <Trace>
                   <TraceCollapsible>
                     <TraceCollapsibleTrigger className="min-h-11">
