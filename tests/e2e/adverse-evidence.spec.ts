@@ -1,0 +1,73 @@
+import { once } from "node:events";
+import { createServer } from "node:http";
+import type { AddressInfo } from "node:net";
+import { expect, test } from "@playwright/test";
+import { createApp } from "../../src/server/app";
+import { createExaProductResearch } from "../../src/server/exa-research";
+import { createResearchTurns } from "../../src/server/research-turns";
+import { adverseHeading, adversePayload } from "../fixtures/adverse-evidence";
+
+for (const conditional of [false, true]) {
+  test(`shows ${conditional ? "withheld conditional" : "unverified observed"} price through the SDK and Hono with responsive uncertainty`, async ({ page }, testInfo) => {
+    const price = "Price: SGD 349";
+    const text = `${adverseHeading}\n${price}\nAster Wave 2 supports Bluetooth.${conditional ? "\nWith trade-in of a qualifying device." : ""}`;
+    const payload = adversePayload("heading", [text], { price });
+    let calls = 0;
+    let settlements = 0;
+    const server = createServer((incoming, outgoing) => {
+      incoming.resume();
+      incoming.on("end", () => {
+        calls++;
+        outgoing.writeHead(200, { "Content-Type": "application/json" });
+        outgoing.end(JSON.stringify(payload));
+      });
+    });
+    server.listen(0, "127.0.0.1");
+    await once(server, "listening");
+    try {
+      const app = createApp({ researchTurns: createResearchTurns({
+        research: createExaProductResearch("fake-key-local-only", { baseUrl: `http://127.0.0.1:${(server.address() as AddressInfo).port}` }),
+        quota: { async reserve() { return "admitted"; }, async settle() { settlements++; } },
+      }) }, { apiPort: 6397, webPort: 6398 });
+      await page.route("**/api/turn", async (route) => {
+        const response = await app.request("http://127.0.0.1:6397/api/turn", { method: "POST", headers: { "Content-Type": "application/json" }, body: route.request().postData() });
+        const result = await response.json();
+        result.answer = `Automated synthetic fixture. No live products, prices or stock. ${result.answer}`;
+        await route.fulfill({ status: response.status, json: result });
+      });
+      await page.emulateMedia({ reducedMotion: "reduce" });
+      await page.setViewportSize({ width: 1440, height: 1000 });
+      await page.goto("/");
+      await expect(page.locator("html")).toHaveClass(/dark/);
+      await page.getByLabel("Message", { exact: true }).fill("Headphones under SGD400");
+      await page.getByRole("button", { name: "Send message" }).click();
+      const card = page.getByRole("article", { name: "Aster Wave 2", exact: true });
+      await expect(card).toBeVisible();
+      await expect(page.getByText(/Automated synthetic fixture/)).toBeVisible();
+      await expect(card).toContainText("Specifications not established by this source");
+      await expect(card).toContainText("Stock and delivery unverified");
+      if (conditional) {
+        await expect(card).not.toContainText("Price: SGD 349");
+        await expect(card).not.toContainText("Page-observed price");
+      } else {
+        await expect(card).toContainText("Price: SGD 349");
+        await expect(card).toContainText("Page-observed price · Unverified");
+      }
+      await card.getByRole("button", { name: "Evidence and limits" }).click();
+      await expect(card).toContainText("Current affordability within SGD 400 is unverified");
+      for (const link of await card.getByRole("link", { name: /View source/ }).all()) await expect(link).toHaveAttribute("href", payload.results[0].url);
+      await expect(page.getByRole("button", { name: "Select this product" })).toHaveCount(0);
+      await page.screenshot({ path: testInfo.outputPath("adverse-desktop.png"), fullPage: true, animations: "disabled" });
+      await page.setViewportSize({ width: 390, height: 844 });
+      await card.scrollIntoViewIfNeeded();
+      await expect(page.getByLabel("Message", { exact: true })).toBeInViewport();
+      expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBe(390);
+      await page.screenshot({ path: testInfo.outputPath("adverse-mobile.png"), fullPage: true, animations: "disabled" });
+      expect(calls).toBe(1);
+      expect(settlements).toBe(1);
+    } finally {
+      server.closeAllConnections();
+      await new Promise<void>((resolve) => server.close(() => resolve()));
+    }
+  });
+}
