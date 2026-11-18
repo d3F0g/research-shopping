@@ -329,9 +329,11 @@ export function LiveResearchResults({
                       <dt>{attribute.name}</dt>
                       <dd>
                         <Status assessment={attribute.assessment} />
-                        <span className="assessment-preview">
-                          {attribute.assessment.rationale}
-                        </span>
+                        {attribute.assessment.status === "supported" && (
+                          <span className="assessment-preview">
+                            {attribute.assessment.rationale}
+                          </span>
+                        )}
                       </dd>
                     </div>
                   ))}
