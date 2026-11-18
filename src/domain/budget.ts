@@ -106,7 +106,13 @@ export function parseBudget(
       "This research supports SGD and USD budgets. Specify one of those currencies, or continue without a budget.",
     );
 
-  const ranges: { lower: string; upper: string; tokens: string[] }[] = [];
+  const ranges: {
+    lower: string;
+    upper: string;
+    tokens: string[];
+    clause: string;
+  }[] = [];
+  const uncuedRangeClauses = new Set<string>();
   let measurementRange = false;
   let negatedRange = false;
   remaining = remaining.replace(
@@ -135,6 +141,14 @@ export function parseBudget(
         return whole;
       }
       if (/^[A-Za-z_]/.test(after)) return whole;
+      const start = offset + whole.length - whole.trimStart().length;
+      const before = source.slice(0, start);
+      if (
+        !cue &&
+        !tokens.length &&
+        (/[\p{L}\p{N}_-]$/u.test(before) || /\bmodel\s+$/i.test(before))
+      )
+        return whole;
       const clause =
         (source.slice(0, offset).split(clauseBoundary).at(-1) ?? "") +
         whole +
@@ -144,8 +158,11 @@ export function parseBudget(
         (cue || tokens.length || financialContext.test(clause))
       )
         negatedRange = true;
-      if (!cue && !tokens.length) return whole;
-      ranges.push({ lower, upper, tokens });
+      if (!cue && !tokens.length) {
+        uncuedRangeClauses.add(clause);
+        return whole;
+      }
+      ranges.push({ lower, upper, tokens, clause });
       return " ";
     },
   );
@@ -195,6 +212,7 @@ export function parseBudget(
   );
   if (
     ranges.length > 1 ||
+    ranges.some((range) => uncuedRangeClauses.has(range.clause)) ||
     amounts.length > 1 ||
     (ranges.length && amounts.length)
   )

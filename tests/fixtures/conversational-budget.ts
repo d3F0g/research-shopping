@@ -11,6 +11,9 @@ export const conversationalRanges = [
   "A phone costs500-600 with model700-800",
   "Phone model700-800 costs500-600",
   "A phone costs500-600 with256-512GB of storage",
+  "A phone costs 500-600 with model 700-800",
+  "Phone model 700-800 costs 500-600",
+  "A phone costs 500-600 with 256-512 GB of storage",
 ];
 
 export const ambiguousConversationalRanges = [
