@@ -441,6 +441,7 @@ test("opens comparison and source disclosures with keyboard and touch-sized cont
   await page.screenshot({ path: "artifacts/playwright-results/legacy-journeys/citation-desktop.png", fullPage: true, animations: "disabled" });
   await page.mouse.move(0, 0);
   await page.setViewportSize({ width: 390, height: 844 });
+  await page.evaluate(() => new Promise<void>((resolve) => requestAnimationFrame(() => resolve())));
   await expect(sony.getByRole("link", { name: /Manufacturer reference\/model page/ }).first()).toBeVisible();
   await assertNoHorizontalOverflow(page);
   await comparison.scrollIntoViewIfNeeded();

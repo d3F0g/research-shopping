@@ -129,7 +129,7 @@ export function createApp(dependencies: AppDependencies = {}, configuration: Par
       providerTimeoutMs: dependencies.providerTimeoutMs,
       onProviderEvent: (event) => { if (context.get("outcomes").length < 20) context.get("outcomes").push(event); },
     });
-    const result = await engine.turn(parsed.data.message, parsed.data.preferences);
+    const result = await engine.turn(parsed.data.message, parsed.data.preferences, { signal: context.req.raw.signal });
     const toolActivity = context.get("outcomes").slice(0, 20);
     return context.json(TurnResponseSchema.parse({ ...result, toolActivity }));
   });
@@ -140,7 +140,7 @@ export function createApp(dependencies: AppDependencies = {}, configuration: Par
       providerTimeoutMs: dependencies.providerTimeoutMs,
       onProviderEvent: (event) => { if (context.get("outcomes").length < 20) context.get("outcomes").push(event); },
     });
-    const result = await engine.select(parsed.data.productId, parsed.data.preferences);
+    const result = await engine.select(parsed.data.productId, parsed.data.preferences, { signal: context.req.raw.signal });
     return context.json(SelectionResultSchema.parse(result));
   });
   app.post("/api/research", async (context) => {
