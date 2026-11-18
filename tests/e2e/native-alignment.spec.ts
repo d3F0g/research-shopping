@@ -7,6 +7,8 @@ import { createExaProductResearch } from "../../src/server/exa-research";
 import { createResearchTurns } from "../../src/server/research-turns";
 import { ath, captureLabel, capturedReplay } from "../fixtures/native-alignment";
 
+test.use({ hasTouch: true });
+
 test("shows useful exact captured research with complete support and responsive comparison", async ({ page }, testInfo) => {
   let calls = 0;
   let settlements = 0;
@@ -74,20 +76,61 @@ test("shows useful exact captured research with complete support and responsive 
     const compare = page.getByRole("button", { name: "Compare research leads" });
     await compare.focus();
     await page.keyboard.press("Enter");
-    const table = page.getByRole("table");
-    await expect(table).toContainText(ath.driver);
-    await expect(table).toContainText(ath.battery);
-    await expect(table).toContainText("Titanium-coated 40mm drivers deliver powerful, balanced sound.");
-    await expect(table).not.toContainText("80 hours");
-    await table.scrollIntoViewIfNeeded();
+    const comparison = page.getByRole("region", { name: "Research lead comparison", exact: true });
+    const athComparison = comparison.getByRole("group", { name: ath.name, exact: true });
+    const edifierComparison = comparison.getByRole("group", { name: "Edifier WH950NB (2025 edition) Wireless Noise Cancelling Headphone", exact: true });
+    await expect(comparison).toBeVisible();
+    await expect(athComparison).toContainText("2 quoted specifications");
+    await expect(athComparison.getByRole("blockquote")).toHaveCount(0);
+    await expect(comparison).toContainText("S$ 349 was S$ 499 SGD You Save S$ 150");
+    await athComparison.getByRole("button", { name: `Evidence for ${ath.name}`, exact: true }).focus();
+    await page.keyboard.press("Enter");
+    await edifierComparison.getByRole("button", { name: /Evidence for/ }).click();
+    await expect(athComparison).toContainText(ath.driver);
+    await expect(athComparison).toContainText(ath.battery);
+    await expect(edifierComparison).toContainText("Titanium-coated 40mm drivers deliver powerful, balanced sound.");
+    await expect(comparison).not.toContainText("80 hours");
+    await expect(athComparison).toContainText("Current affordability within SGD 400 is unverified");
+    await athComparison.getByRole("button", { name: `Evidence for ${ath.name}`, exact: true }).focus();
+    await page.keyboard.press("Tab");
+    await expect(athComparison.getByRole("link", { name: /View source/ })).toBeFocused();
+    await page.keyboard.press("Tab");
+    await expect(athComparison.getByRole("button", { name: /Preview source/ }).first()).toBeFocused();
+    const citationPreview = page.locator(".citation-preview");
+    await expect(citationPreview.getByRole("link", { name: /View source/ })).toBeVisible();
+    await expect(citationPreview.getByRole("link", { name: /View source/ })).toHaveAttribute("href", capturedReplay.results[0].url);
+    await page.keyboard.press("Escape");
+    await expect(citationPreview).not.toBeVisible();
+    await comparison.scrollIntoViewIfNeeded();
     await page.screenshot({ path: testInfo.outputPath("captured-desktop-comparison.png"), fullPage: true, animations: "disabled" });
     await page.setViewportSize({ width: 390, height: 844 });
-    for (const [name, locator] of [["ath", athCard], ["edifier", edifier], ["price", hn], ["comparison", table]] as const) {
+    await expect.poll(() => page.evaluate(() => innerWidth)).toBe(390);
+    const mobileEvidence = athComparison.getByRole("button", { name: `Evidence for ${ath.name}`, exact: true });
+    await mobileEvidence.tap();
+    await expect(mobileEvidence).toHaveAttribute("aria-expanded", "false");
+    await mobileEvidence.tap();
+    await expect(mobileEvidence).toHaveAttribute("aria-expanded", "true");
+    await expect(athComparison).toContainText(ath.battery);
+    for (const quote of await athComparison.getByRole("blockquote").all()) {
+      expect((await quote.boundingBox())!.width).toBeGreaterThan(280);
+    }
+    await expect(athComparison.getByRole("link", { name: /View source/ })).toHaveAttribute("href", capturedReplay.results[0].url);
+    for (const [name, locator] of [["ath", athCard], ["edifier", edifier], ["price", hn], ["comparison", athComparison]] as const) {
       await locator.scrollIntoViewIfNeeded();
       await expect(page.getByLabel("Message", { exact: true })).toBeInViewport();
       expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBe(390);
       await page.screenshot({ path: testInfo.outputPath(`captured-mobile-${name}.png`), fullPage: true, animations: "disabled" });
     }
+    await page.setViewportSize({ width: 390, height: 600 });
+    await expect(page.getByLabel("Message", { exact: true })).toBeInViewport();
+    const composer = await page.getByLabel("Message", { exact: true }).boundingBox();
+    expect(composer).not.toBeNull();
+    expect(await page.evaluate(({ x, y }) => {
+      const hit = document.elementFromPoint(x, y);
+      return hit?.getAttribute("aria-label") === "Message";
+    }, { x: composer!.x + composer!.width / 2, y: composer!.y + composer!.height / 2 })).toBe(true);
+    await page.screenshot({ path: testInfo.outputPath("captured-mobile-short-composer.png"), animations: "disabled" });
+    await page.setViewportSize({ width: 390, height: 844 });
     await page.getByRole("button", { name: "5 research sources" }).click();
     const support = page.locator(".web-research-highlights > li").filter({ hasText: ath.microphone });
     await expect(support).toContainText(ath.controls);

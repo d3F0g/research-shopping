@@ -17,15 +17,6 @@ import {
   HoverCardTrigger,
 } from "@/components/ui/hover-card";
 import {
-  Table,
-  TableBody,
-  TableCaption,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import {
   Trace,
   TraceCollapsible,
   TraceCollapsibleContent,
@@ -193,33 +184,73 @@ export function LiveResearchResults({
               >
                 Compare research leads <ChevronDown aria-hidden="true" />
               </CollapsibleTrigger>
-              <CollapsibleContent className="comparison-content">
-                <Table className="comparison-table">
-                  <TableCaption>
-                    Page observations are unverified. Stock, delivery and
-                    current affordability remain unknown.
-                  </TableCaption>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>Product</TableHead>
-                      <TableHead>Source specifications</TableHead>
-                      <TableHead>Observed price</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {research.products.map((product) => (
-                      <TableRow key={product.id}>
-                        <TableCell>{product.name}</TableCell>
-                        <TableCell>
-                          {product.facts.map((fact) => fact.quote).join(" ") || "Not established by this source"}
-                        </TableCell>
-                        <TableCell>
-                          {product.price?.quote ?? "Not observed"}
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
+              <CollapsibleContent
+                className="comparison-content"
+                role="region"
+                aria-label="Research lead comparison"
+              >
+                <p className="metadata comparison-notice">
+                  Page observations are unverified. Stock, delivery and current affordability remain unknown.
+                </p>
+                <ul className="comparison-leads">
+                  {research.products.map((product) => (
+                    <li key={product.id}>
+                      <Card
+                        className="comparison-lead"
+                        size="sm"
+                        role="group"
+                        aria-label={product.name}
+                      >
+                        <CardContent>
+                          <h3>{product.name}</h3>
+                          <dl className="comparison-overview">
+                            <div>
+                              <dt>Source specifications</dt>
+                              <dd>
+                                {product.facts.length
+                                  ? `${product.facts.length} quoted specification${product.facts.length === 1 ? "" : "s"}`
+                                  : "Not established by this source"}
+                              </dd>
+                            </div>
+                            <div>
+                              <dt>Observed price · Unverified</dt>
+                              <dd>{product.price?.quote ?? "Not observed"}</dd>
+                            </div>
+                          </dl>
+                          <Collapsible className="comparison-evidence">
+                            <div className="comparison-actions">
+                              <CollapsibleTrigger
+                                render={<Button variant="ghost" size="sm" />}
+                                aria-label={`Evidence for ${product.name}`}
+                              >
+                                Evidence and limits <ChevronDown aria-hidden="true" />
+                              </CollapsibleTrigger>
+                              <SourceLink
+                                source={sourceById.get(product.identity.sourceId)!}
+                              />
+                            </div>
+                            <CollapsibleContent>
+                              <ul className="claim-list">
+                                {product.facts.map((fact, index) => (
+                                  <li key={index}>
+                                    <blockquote>{fact.quote}</blockquote>
+                                    <Citation source={sourceById.get(fact.sourceId)!} />
+                                  </li>
+                                ))}
+                              </ul>
+                              <p className="metadata">Needs verification</p>
+                              <ul className="preference-notes">
+                                {product.unresolvedConstraints.map((constraint) => (
+                                  <li key={constraint}>{constraint}</li>
+                                ))}
+                              </ul>
+                            </CollapsibleContent>
+                          </Collapsible>
+                        </CardContent>
+                      </Card>
+                    </li>
+                  ))}
+                </ul>
               </CollapsibleContent>
             </Collapsible>
           )}
