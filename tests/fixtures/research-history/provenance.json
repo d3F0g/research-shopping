@@ -1,0 +1,15 @@
+{
+  "contractCommit": "657e8831fdfeb564df30c1c842e0e0d32bd3c88c",
+  "records": [
+    {
+      "file": "unversioned-application-response.json",
+      "provenance": "Normalized historical application capture. Recorded earlier; not current product evidence. Copied without byte changes.",
+      "sha256": "306a624d0069a6d73a45279a6a4b8544b99c5d37e38d2495c2e91175215a7923"
+    },
+    {
+      "file": "unversioned-browser-snapshot.json",
+      "provenance": "Automated synthetic browser fixture serialized from tests/personalization-e2e/server.ts at the contract commit. No provider call.",
+      "sha256": "3b8cb7a8f69a1f3b5bdff813b8a9dd2600860344feb07e362d4cb8b85b14ae88"
+    }
+  ]
+}
