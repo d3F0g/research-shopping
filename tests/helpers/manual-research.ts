@@ -8,7 +8,9 @@ export const sha256 = (value: string) =>
   createHash("sha256").update(value).digest("hex");
 
 export async function manualResearchFiles(count = 8) {
-  const directory = await realpath(await mkdtemp(join(tmpdir(), "fieldnote-manual-")));
+  const directory = await realpath(
+    await mkdtemp(join(tmpdir(), "fieldnote-manual-")),
+  );
   const ledgerPath = join(directory, "usage.json");
   const grantPath = join(directory, "manual-grant.json");
   const baseline = {
