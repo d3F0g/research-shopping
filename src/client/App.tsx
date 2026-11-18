@@ -1,3 +1,4 @@
+import { AccountControl } from "./AccountControl";
 import { useEffect, useState } from "react";
 import { LiveResearchResults } from "./LiveResearchResults";
 import { ArrowUp, Moon, Plus, Square, Sun } from "lucide-react";
@@ -29,12 +30,22 @@ import { useConversation } from "./useConversation";
 
 export function App() {
   const chat = useConversation();
+  const [accountOpen, setAccountOpen] = useState(false);
   const [fixtureMode, setFixtureMode] = useState(false);
   useEffect(() => {
     const controller = new AbortController();
-    void fetch("/api/health", { signal: controller.signal }).then((response) => response.json()).then((health: unknown) => {
-      if (!controller.signal.aborted && typeof health === "object" && health !== null && "mode" in health) setFixtureMode(health.mode === "fixture");
-    }).catch(() => undefined);
+    void fetch("/api/health", { signal: controller.signal })
+      .then((response) => response.json())
+      .then((health: unknown) => {
+        if (
+          !controller.signal.aborted &&
+          typeof health === "object" &&
+          health !== null &&
+          "mode" in health
+        )
+          setFixtureMode(health.mode === "fixture");
+      })
+      .catch(() => undefined);
     return () => controller.abort();
   }, []);
   const { theme, setTheme } = useTheme();
@@ -52,6 +63,7 @@ export function App() {
         <InputGroupTextarea
           aria-label="Message"
           value={chat.draft}
+          disabled={chat.accountBlocked}
           maxLength={2000}
           rows={1}
           placeholder={
@@ -94,7 +106,11 @@ export function App() {
               type="submit"
               variant="default"
               aria-label="Send message"
-              disabled={!chat.draft.trim() || Boolean(editor?.error)}
+              disabled={
+                chat.accountBlocked ||
+                !chat.draft.trim() ||
+                Boolean(editor?.error)
+              }
             >
               <ArrowUp aria-hidden="true" />
             </InputGroupButton>
@@ -102,7 +118,9 @@ export function App() {
         </InputGroupAddon>
       </InputGroup>
       <p className="composer-note">
-        {fixtureMode ? "Sample catalog. Prices and stock are fixture data." : "Source-backed research. Prices and stock need verification."}
+        {fixtureMode
+          ? "Sample catalog. Prices and stock are fixture data."
+          : "Source-backed research. Prices and stock need verification."}
       </p>
     </form>
   );
@@ -111,9 +129,17 @@ export function App() {
     <div className="app-shell">
       <header className="topbar">
         <span className="brand-lockup">
-          fieldnote<span className="fixture-marker">{fixtureMode ? "Fixture data" : "Web research"}</span>
+          fieldnote
+          <span className="fixture-marker">
+            {fixtureMode ? "Fixture data" : "Web research"}
+          </span>
         </span>
         <div className="topbar-right">
+          <AccountControl
+            chat={chat}
+            open={accountOpen}
+            setOpen={setAccountOpen}
+          />
           <Button
             variant="ghost"
             size="icon"
@@ -128,7 +154,12 @@ export function App() {
             variant="ghost"
             className="new-chat"
             aria-label="New chat"
-            title="Start a new chat. Conversation stays in this tab until refresh."
+            title={
+              chat.account.status === "signed-in"
+                ? "Clear saved conversation and preferences."
+                : "Start a new chat. Conversation stays in this tab until refresh."
+            }
+            disabled={chat.accountBlocked}
             onClick={() => chat.send({ type: "reset" })}
           >
             <Plus aria-hidden="true" />
@@ -136,6 +167,14 @@ export function App() {
           </Button>
         </div>
       </header>
+      {chat.accountError && !accountOpen && (
+        <div className="account-banner" role="alert">
+          <span>{chat.accountError}</span>
+          <Button variant="ghost" onClick={() => void chat.reloadAccount()}>
+            Reload account
+          </Button>
+        </div>
+      )}
       <main
         className={`chat-main ${empty ? "empty-chat" : "has-conversation"}`}
         aria-label="Shopping conversation"
@@ -224,9 +263,13 @@ export function App() {
                                 </span>
                                 {turn.body.status === "pending" && (
                                   <p role="status" className="pending-message">
-                                    {fixtureMode ? "Waiting for the sample service…" : "Researching sources…"}
+                                    {fixtureMode
+                                      ? "Waiting for the sample service…"
+                                      : "Researching sources…"}
                                     <span className="sr-only">
-                                      {fixtureMode ? "The sample service has not returned a response yet." : "No research response has returned yet."}
+                                      {fixtureMode
+                                        ? "The sample service has not returned a response yet."
+                                        : "No research response has returned yet."}
                                     </span>
                                   </p>
                                 )}
@@ -276,28 +319,34 @@ export function App() {
                                     }
                                   />
                                 )}
-                                {(response?.kind === "research" || response?.kind === "research-unavailable") && <LiveResearchResults outcome={response} />}
-                                {response && response.kind !== "research" && response.kind !== "research-unavailable" && (
-                                  <Results
-                                    outcome={response}
-                                    active={active}
-                                    onSelect={(candidate) =>
-                                      chat.send({
-                                        type: "select",
-                                        origin: turn.id,
-                                        productId: candidate.product.id,
-                                      })
-                                    }
-                                    onRetry={() =>
-                                      chat.send({
-                                        type: "retry",
-                                        origin: turn.id,
-                                      })
-                                    }
-                                    selectingId={turn.selectingId}
-                                    selectionError={selectionError}
-                                  />
+                                {(response?.kind === "research" ||
+                                  response?.kind ===
+                                    "research-unavailable") && (
+                                  <LiveResearchResults outcome={response} />
                                 )}
+                                {response &&
+                                  response.kind !== "research" &&
+                                  response.kind !== "research-unavailable" && (
+                                    <Results
+                                      outcome={response}
+                                      active={active}
+                                      onSelect={(candidate) =>
+                                        chat.send({
+                                          type: "select",
+                                          origin: turn.id,
+                                          productId: candidate.product.id,
+                                        })
+                                      }
+                                      onRetry={() =>
+                                        chat.send({
+                                          type: "retry",
+                                          origin: turn.id,
+                                        })
+                                      }
+                                      selectingId={turn.selectingId}
+                                      selectionError={selectionError}
+                                    />
+                                  )}
                                 {response?.kind === "clarification" &&
                                   response.reason === "category" &&
                                   !response.preferences.hard.category &&

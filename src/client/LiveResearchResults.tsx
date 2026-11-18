@@ -1,8 +1,6 @@
 import { ArrowUpRight, BookOpen, ChevronDown, Search } from "lucide-react";
-import type {
-  ApplicationTurnResponse,
-  ResearchSnapshot,
-} from "../domain/research";
+import type { ResearchSnapshot } from "../domain/research";
+import type { HistoricalApplicationTurnResponse } from "../domain/research-history";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -74,7 +72,7 @@ export function LiveResearchResults({
   outcome,
 }: {
   outcome: Extract<
-    ApplicationTurnResponse,
+    HistoricalApplicationTurnResponse,
     { kind: "research" | "research-unavailable" }
   >;
 }) {
@@ -135,7 +133,9 @@ export function LiveResearchResults({
                     </p>
                   )}
                   {!product.facts.length && (
-                    <p className="metadata">Specifications not established by this source.</p>
+                    <p className="metadata">
+                      Specifications not established by this source.
+                    </p>
                   )}
                   {product.facts[0] && (
                     <p className="product-summary research-preview">
@@ -157,7 +157,9 @@ export function LiveResearchResults({
                       <TraceCollapsibleContent>
                         <ul className="claim-list">
                           {[
-                            product.identity,
+                            ...("identity" in product
+                              ? [product.identity]
+                              : []),
                             ...product.facts,
                             ...(product.price ? [product.price] : []),
                           ].map((citation, index) => {
@@ -180,7 +182,14 @@ export function LiveResearchResults({
                       </TraceCollapsibleContent>
                     </TraceCollapsible>
                   </Trace>
-                  <SourceLink source={sourceById.get(product.identity.sourceId)!} />
+                  <SourceLink
+                    source={sourceById.get(
+                      ("identity" in product
+                        ? product.identity
+                        : (product.facts[0] ?? product.price!)
+                      ).sourceId,
+                    )!}
+                  />
                 </CardContent>
               </Card>
             ))}
@@ -211,7 +220,8 @@ export function LiveResearchResults({
                       <TableRow key={product.id}>
                         <TableCell>{product.name}</TableCell>
                         <TableCell>
-                          {product.facts.map((fact) => fact.quote).join(" ") || "Not established by this source"}
+                          {product.facts.map((fact) => fact.quote).join(" ") ||
+                            "Not established by this source"}
                         </TableCell>
                         <TableCell>
                           {product.price?.quote ?? "Not observed"}

@@ -1,0 +1,13 @@
+{
+  "checks": [
+    "Account and saved research-unavailable turn created through actual HTTP cookies with live providers disabled.",
+    "Actual API process restart restored the same account, preferences and immutable turn.",
+    "Actual PostgreSQL 17 stop/start and API restart preserved the same workspace.",
+    "A lost-response retry after both restarts returned the existing operation without rerunning research.",
+    "Deletion remained empty with an advanced revision and epoch after both actual restarts.",
+    "Captured process logs contain no fixture password, transcript text, or session cookie."
+  ],
+  "liveProviders": false,
+  "processRestart": true,
+  "postgresRestart": true
+}

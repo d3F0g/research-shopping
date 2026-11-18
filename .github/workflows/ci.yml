@@ -11,6 +11,20 @@ jobs:
   verify:
     runs-on: ubuntu-latest
     timeout-minutes: 20
+    services:
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_USER: fieldnote_fixture
+          POSTGRES_PASSWORD: fixture-ci-password
+          POSTGRES_DB: fieldnote_fixture
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U fieldnote_fixture -d fieldnote_fixture"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -21,12 +35,21 @@ jobs:
         run: npx --yes npm@11.6.2 ci
       - run: npm run typecheck
       - run: npm test
+      - run: npm run test:postgres
+        env:
+          FIELDNOTE_TEST_DATABASE_URL: postgresql://fieldnote_fixture:fixture-ci-password@127.0.0.1:5432/fieldnote_fixture
+      - run: npm run verify:personalization-crash
+        env:
+          FIELDNOTE_TEST_DATABASE_URL: postgresql://fieldnote_fixture:fixture-ci-password@127.0.0.1:5432/fieldnote_fixture
       - run: npm run build
       - name: Install Chromium
         run: npx playwright install --with-deps chromium
       - run: npm run test:e2e
         env:
           DEBUG: pw:webserver
+      - run: npm run test:personalization-browser
+        env:
+          FIELDNOTE_TEST_DATABASE_URL: postgresql://fieldnote_fixture:fixture-ci-password@127.0.0.1:5432/fieldnote_fixture
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -35,4 +58,5 @@ jobs:
             artifacts/screenshots/
             artifacts/chat-first/application/
             artifacts/playwright-results/
+            artifacts/personalization/
           if-no-files-found: ignore

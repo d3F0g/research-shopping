@@ -15,7 +15,7 @@ Keep `EXA_API_KEY` in the ignored root `.env` and configure one absolute `EXA_RE
 
 Open `http://127.0.0.1:5173`. The API listens on `http://127.0.0.1:3000`.
 
-First visits use dark mode. Use the theme toggle to persist light or dark mode. Messages and shopping preferences stay in this tab until refresh. Select **New chat** to clear the conversation and preferences; the theme remains selected.
+First visits use dark mode. Use the theme toggle to persist light or dark mode. Guest messages and preferences stay in this tab until refresh. Optional local accounts restore private saved history and preferences. Select **New chat** to clear the conversation and preferences; the theme remains selected. See [saved conversations](docs/personalization.md) for account setup, deletion and retention.
 
 ## Verify changes
 
@@ -35,7 +35,7 @@ Set `API_PORT` to change the Hono port. `PORT` is the API fallback. Set `WEB_POR
 
 ## Limits
 
-The deterministic preference parser currently supports headphones and laptops with bounded constraints. Unsupported requirements remain explicit. Exa can return cached content; retrieval time does not establish page freshness or a current price. No authorized merchant API is configured, so live merchant verification remains open in [Issue #36](https://github.com/d3F0g/research-shopping/issues/36). The app has no current merchant offers, shipping checks, saved account profile, payment or order placement. Synthetic catalogs are restricted to automated tests.
+The deterministic preference parser currently supports headphones and laptops with bounded constraints. Unsupported requirements remain explicit. Exa can return cached content; retrieval time does not establish page freshness or a current price. No authorized merchant API is configured, so live merchant verification remains open in [Issue #36](https://github.com/d3F0g/research-shopping/issues/36). The app has no verified merchant offers, shipping checks, payment or order placement. Optional authenticated history uses an explicitly configured local PostgreSQL database. Synthetic catalogs are restricted to automated tests.
 
 ## GitHub Actions CI
 

@@ -1,0 +1,11 @@
+{
+  "checks": [
+    "Killed the actual API at accepted. Accepted input survived and retry did not dispatch another provider request.",
+    "Killed the actual API at dispatched. Accepted input survived and retry did not dispatch another provider request.",
+    "Killed the actual API at provider-returned. Accepted input survived and retry did not dispatch another provider request.",
+    "Killed the actual API at committed. Accepted input survived and retry did not dispatch another provider request."
+  ],
+  "liveProviders": false,
+  "actualProcessKills": 4,
+  "exactlyOnceBillingClaimed": false
+}

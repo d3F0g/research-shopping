@@ -1,0 +1,10 @@
+{
+  "component": "dialog",
+  "source": "https://ui.shadcn.com/r/styles/base-nova/dialog.json",
+  "command": "npx shadcn add dialog --yes",
+  "cliVersion": "4.23.0",
+  "style": "base-nova",
+  "registrySha256": "40fc321d25eb9590d07db54b00d9bc1a74274a549aa06d5915a34ba302ed8b94",
+  "installedFile": "src/client/components/ui/dialog.tsx",
+  "installedSha256": "8081cc14ab4d744b75925706523192f60cc75863e05cb986aaf6a08677c83304"
+}
