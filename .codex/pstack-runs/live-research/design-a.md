@@ -8,15 +8,11 @@ Workflow: Ground complete from the supplied audits plus code; Sketch complete he
 
 ## Usage: caller's view first
 ```ts
-// Normal development startup: no implicit fixture provider; production stays disabled.
 const research = createResearchTurns({ exa: composeExa(environment), quota: openLocalQuota(config) });
 const app = createApp({ mode: "research", research, logger }, config);
-// HTTP route: transport objects stop here; one operation owns parsing, spend and evidence.
 const reply = await research.turn(parsedRequest, context.req.raw.signal);
 return context.json(ResearchTurnSchema.parse(reply));
-// Browser: history retains this response; only the active generation may publish it.
 if (reply.kind === "research") appendAssistant(<ResearchResults result={reply.research} />);
-// Existing tests explicitly compose the old engine, with live composition forcibly disabled.
 const fixtureApp = createApp({ mode: "test-fixture", engine: createShoppingEngine(fixtures) });
 ```
 

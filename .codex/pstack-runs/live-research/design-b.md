@@ -5,14 +5,10 @@ Normal chat must discover real products through Exa without forcing them through
 
 ## Usage (caller first)
 ```ts
-// Composition: live research is the normal development app; no key => unavailable.
 const turns = createResearchTurns({ research: createExaResearchFromEnvironment(process.env), quota });
-const app = createApp({ turns }); // no implicit createFixtureProviders()
-// Mounted /api/turn: preference parsing, intent, research, projection happen behind one call.
+const app = createApp({ turns });
 const reply = await turns.respond(parsedRequest, { signal: context.req.raw.signal, sessionId });
-// Automated suites deliberately opt into fixture behavior, regardless of any developer key.
 const testApp = createApp({ turns: createFixtureTurns(createFixtureProviders()) });
-// Client preserves the returned snapshot in the existing owned turn, guarded by generation.
 if (accepts(generation)) completeTurn(turnId, reply);
 ```
 
@@ -42,7 +38,6 @@ type ResearchTurn =
 type TurnService = { respond(request: ResearchRequest, context: { signal: AbortSignal; sessionId: string }): Promise<ResearchTurn> };
 type ResearchOperation = (input: { message: string; preferences: Preferences }, signal: AbortSignal)
   => Promise<ResearchSnapshot | { unavailable: ResearchTurnUnavailableReason }>;
-// Future integration boundary only. No merchant scraping or dormant concrete API adapters.
 type MerchantVerificationProvider = {
   verify(product: ResearchProduct, context: { region: Region; currency: Currency }, signal: AbortSignal)
     : Promise<{ state: "unavailable" } | { state: "unverified"; reason: string }
