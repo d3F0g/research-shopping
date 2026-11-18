@@ -6,6 +6,10 @@ import {
   type IntentEdit,
   type ShoppingIntent,
 } from "./contracts";
+import {
+  ShoppingIntentSchema as Version3ShoppingIntentSchema,
+  type ShoppingIntent as Version3ShoppingIntent,
+} from "./research-intent-v3";
 import type { Preferences as LegacyPreferences } from "./legacy-contracts";
 
 export type IntentUpdate = {
@@ -177,12 +181,22 @@ function interpretMessage(
       },
     };
   const removal =
-    /^(?:please )?(?:remove|drop|forget) (?:the )?(?:requirement (?:for )?)?(.+?)[.!]*$/i.exec(
+    /^(?:please )?(?:remove|drop|forget|clear) (?:the |my )?(?:requirement (?:for )?)?(.+?)[.!]*$/i.exec(
       text,
     );
   if (removal) {
     if (/^(?:budget|budget limit)$/i.test(removal[1]!))
       return editIntent(previous, { kind: "set-budget", value: null }, text);
+    if (
+      /^(?:minimum(?: budget| price)?|lower (?:budget )?(?:bound|limit)|price floor)$/i.test(
+        removal[1]!,
+      )
+    ) {
+      const budget = previous.budget
+        ? { amount: previous.budget.amount, currency: previous.budget.currency }
+        : null;
+      return editIntent(previous, { kind: "set-budget", value: budget }, text);
+    }
     const matches = previous.criteria.filter(
       (item) =>
         normalized(item.wording) === normalized(removal[1]!) ||
@@ -411,4 +425,13 @@ export function migrateLegacyPreferences(previous: LegacyPreferences):
         message:
           "The saved preferences exceed the current request limits. Review them before starting new research. No historical requirement was removed.",
       };
+}
+
+export function migrateVersion3Intent(
+  previous: Version3ShoppingIntent,
+): ShoppingIntent {
+  return ShoppingIntentSchema.parse({
+    ...Version3ShoppingIntentSchema.parse(previous),
+    version: 4,
+  });
 }

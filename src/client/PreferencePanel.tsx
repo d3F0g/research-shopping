@@ -20,6 +20,7 @@ type DraftFields = Pick<
   | "description"
   | "criteria"
   | "budget"
+  | "minimumBudget"
   | "currency"
   | "region"
   | "responseLength"
@@ -103,8 +104,7 @@ export function PreferencePanel({
                           ? {
                               ...item,
                               strength: event.target.value as
-                                | "hard"
-                                | "flexible",
+                                "hard" | "flexible",
                             }
                           : item,
                       ),
@@ -154,18 +154,35 @@ export function PreferencePanel({
           )}
         </div>
         <Field>
-          <FieldLabel htmlFor="budget-amount">Maximum budget</FieldLabel>
-          <div className="budget-row">
-            <NativeSelect
-              aria-label="Budget currency"
-              value={draft.currency}
+          <FieldLabel htmlFor="budget-currency">Budget currency</FieldLabel>
+          <NativeSelect
+            id="budget-currency"
+            aria-label="Budget currency"
+            value={draft.currency}
+            onChange={(event) =>
+              onChange({ currency: event.target.value as "SGD" | "USD" })
+            }
+          >
+            <NativeSelectOption value="SGD">SGD</NativeSelectOption>
+            <NativeSelectOption value="USD">USD</NativeSelectOption>
+          </NativeSelect>
+        </Field>
+        <div className="budget-row">
+          <Field>
+            <FieldLabel htmlFor="budget-minimum">Minimum budget</FieldLabel>
+            <Input
+              id="budget-minimum"
+              aria-label="Minimum budget amount"
+              inputMode="decimal"
+              value={draft.minimumBudget}
+              placeholder="No minimum"
               onChange={(event) =>
-                onChange({ currency: event.target.value as "SGD" | "USD" })
+                onChange({ minimumBudget: event.target.value })
               }
-            >
-              <NativeSelectOption value="SGD">SGD</NativeSelectOption>
-              <NativeSelectOption value="USD">USD</NativeSelectOption>
-            </NativeSelect>
+            />
+          </Field>
+          <Field>
+            <FieldLabel htmlFor="budget-amount">Maximum budget</FieldLabel>
             <Input
               id="budget-amount"
               aria-label="Maximum budget amount"
@@ -174,12 +191,12 @@ export function PreferencePanel({
               placeholder="No cap"
               onChange={(event) => onChange({ budget: event.target.value })}
             />
-          </div>
-          <FieldDescription>
-            Clear the amount for no cap. Market changes do not convert your
-            budget.
-          </FieldDescription>
-        </Field>
+          </Field>
+        </div>
+        <p className="metadata">
+          Clear Minimum to remove the floor. Clear both amounts to remove the
+          budget. Market changes do not convert your budget.
+        </p>
         <Field>
           <FieldLabel htmlFor="region">Research market</FieldLabel>
           <NativeSelect

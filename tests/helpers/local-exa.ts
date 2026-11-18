@@ -6,6 +6,7 @@ import {
 } from "node:http";
 import type { AddressInfo } from "node:net";
 import { createExaProductResearch } from "../../src/server/exa-research";
+import type { ShoppingIntent } from "../../src/domain/contracts";
 import { syntheticIntent } from "../fixtures/dynamic-research";
 
 export async function localProvider(
@@ -25,7 +26,7 @@ export async function localProvider(
 }
 export async function research(
   payload: unknown,
-  preferences = syntheticIntent(),
+  preferences: ShoppingIntent = syntheticIntent(),
 ) {
   const server = await localProvider((_request, response) => {
     response.writeHead(200, { "Content-Type": "application/json" });

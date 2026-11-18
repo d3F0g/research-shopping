@@ -37,6 +37,7 @@ export type PreferenceDraft = {
   description: string;
   criteria: CriterionDraft[];
   budget: string;
+  minimumBudget: string;
   currency: Currency;
   region: ShoppingIntent["region"];
   responseLength: ShoppingIntent["responseLength"];
@@ -68,6 +69,7 @@ export type ConversationCommand =
           | "description"
           | "criteria"
           | "budget"
+          | "minimumBudget"
           | "currency"
           | "region"
           | "responseLength"
@@ -296,6 +298,7 @@ export function useConversation() {
               strength,
             })),
             budget: intent.budget?.amount.toString() ?? "",
+            minimumBudget: intent.budget?.minimum?.toString() ?? "",
             currency:
               intent.budget?.currency ??
               (intent.region === "SG" ? "SGD" : "USD"),
@@ -326,10 +329,14 @@ export function useConversation() {
           ? BudgetSchema.safeParse({
               amount: Number(editor.budget),
               currency: editor.currency,
+              ...(editor.minimumBudget.trim()
+                ? { minimum: Number(editor.minimumBudget) }
+                : {}),
             })
           : { success: true as const, data: null };
         if (
           !budget.success ||
+          (!editor.budget.trim() && Boolean(editor.minimumBudget.trim())) ||
           !editor.description.trim() ||
           editor.criteria.some((item) => !item.wording.trim())
         ) {
@@ -337,9 +344,11 @@ export function useConversation() {
             ...snapshot,
             editor: {
               ...editor,
-              error: !budget.success
-                ? "Use a positive budget up to 1,000,000 with at most two decimal places, or clear the cap."
-                : "Give the product description and each criterion some wording.",
+              error:
+                !budget.success ||
+                (!editor.budget.trim() && Boolean(editor.minimumBudget.trim()))
+                  ? "Use positive budget amounts up to 1,000,000 with at most two decimal places. The minimum cannot exceed the maximum. Clear both fields to remove the budget."
+                  : "Give the product description and each criterion some wording.",
             },
           });
           return;

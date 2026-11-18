@@ -1,6 +1,7 @@
 import { z } from "zod";
 import {
   BudgetSchema,
+  isWithinBudget,
   ShoppingIntentSchema,
   type ShoppingIntent,
   type TurnRequest,
@@ -94,7 +95,7 @@ export const ConditionalChoiceSchema = z.strictObject({
 export const ResearchSnapshotSchema = z
   .strictObject({
     dataKind: z.literal("web-research"),
-    evidenceVersion: z.literal(3),
+    evidenceVersion: z.literal(4),
     retrievedAt: z.string().datetime(),
     intent: ShoppingIntentSchema,
     summary: z.string().min(1).max(1200),
@@ -198,7 +199,7 @@ export const ResearchUnavailableReasonSchema = z.enum([
   "empty",
 ]);
 const ResponseBase = {
-  responseVersion: z.literal(3),
+  responseVersion: z.literal(4),
   preferences: ShoppingIntentSchema,
   notes: z.array(z.string().max(600)).max(12),
 };
@@ -316,6 +317,6 @@ export function eligibleForChoice(
         product.price.conditionsResolved &&
         product.price.variant === product.variant &&
         product.price.currency === intent.budget.currency &&
-        product.price.amount <= intent.budget.amount)),
+        isWithinBudget(product.price.amount, intent.budget))),
   );
 }

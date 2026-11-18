@@ -3,17 +3,31 @@ import { z } from "zod";
 export const CurrencySchema = z.enum(["SGD", "USD"]);
 export const RegionSchema = z.enum(["SG", "US"]);
 export const DetailModeSchema = z.enum(["concise", "expanded"]);
-export const BudgetSchema = z.strictObject({
-  amount: z
-    .number()
-    .finite()
-    .positive()
-    .max(1_000_000)
-    .refine(
-      (amount) => Math.abs(amount * 100 - Math.round(amount * 100)) < 1e-7,
-    ),
-  currency: CurrencySchema,
-});
+export const MoneyAmountSchema = z
+  .number()
+  .finite()
+  .positive()
+  .max(1_000_000)
+  .refine((amount) => Math.abs(amount * 100 - Math.round(amount * 100)) < 1e-7);
+export const BudgetSchema = z
+  .strictObject({
+    amount: MoneyAmountSchema,
+    currency: CurrencySchema,
+    minimum: MoneyAmountSchema.optional(),
+  })
+  .refine(
+    (budget) => budget.minimum === undefined || budget.minimum <= budget.amount,
+    {
+      message: "Minimum budget cannot exceed maximum budget",
+    },
+  );
+export type Budget = z.infer<typeof BudgetSchema>;
+export function isWithinBudget(amount: number, budget: Budget): boolean {
+  return (
+    amount <= budget.amount &&
+    (budget.minimum === undefined || amount >= budget.minimum)
+  );
+}
 export const CriterionSchema = z.strictObject({
   id: z
     .string()
@@ -33,7 +47,7 @@ export const PendingChangeSchema = z.strictObject({
   explanation: z.string().min(1).max(600),
 });
 export const ShoppingIntentSchema = z.strictObject({
-  version: z.literal(3),
+  version: z.literal(4),
   productDescription: z.string().max(4000),
   criteria: z
     .array(CriterionSchema)
@@ -113,7 +127,7 @@ export type Criterion = z.infer<typeof CriterionSchema>;
 export type TurnRequest = z.infer<typeof TurnRequestSchema>;
 export function defaultIntent(): ShoppingIntent {
   return {
-    version: 3,
+    version: 4,
     productDescription: "",
     criteria: [],
     budget: null,

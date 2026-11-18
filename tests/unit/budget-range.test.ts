@@ -126,15 +126,29 @@ describe("range wording and retained constraints", () => {
   });
 });
 
-it.each(["Do not clear minimum budget", "Do not clear budget", "Clear minimum and under SGD500"])("does not remove a hard floor through negated or compound wording: %s", (message) => {
-  const previous = updateIntent("Necklaces between 1k and 2k", defaultIntent()).preferences;
-  const result = updateIntent(message, previous);
-  expect(result.preferences.budget).toEqual(previous.budget);
-  if (message.startsWith("Clear minimum and")) expect(result.clarification).toBeDefined();
-});
+it.each([
+  "Do not clear minimum budget",
+  "Do not clear budget",
+  "Clear minimum and under SGD500",
+])(
+  "does not remove a hard floor through negated or compound wording: %s",
+  (message) => {
+    const previous = updateIntent(
+      "Necklaces between 1k and 2k",
+      defaultIntent(),
+    ).preferences;
+    const result = updateIntent(message, previous);
+    expect(result.preferences.budget).toEqual(previous.budget);
+    if (message.startsWith("Clear minimum and"))
+      expect(result.clarification).toBeDefined();
+  },
+);
 
 it("clears only the floor through an explicit standalone command", () => {
-  const previous = updateIntent("Necklaces between 1k and 2k", defaultIntent()).preferences;
+  const previous = updateIntent(
+    "Necklaces between 1k and 2k",
+    defaultIntent(),
+  ).preferences;
   const result = updateIntent("Clear minimum budget", previous);
   expect(result.clarification).toBeUndefined();
   expect(result.preferences.budget).toEqual({ amount: 2000, currency: "SGD" });

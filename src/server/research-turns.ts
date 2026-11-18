@@ -13,7 +13,7 @@ const unavailableMessages: Record<ResearchUnavailableReason, string> = {
   disabled:
     "Live research is disabled in this environment. No product results are available.",
   quota:
-    "Research is paused by the local usage limit. Your preferences are retained.",
+    "Live web research is paused by its usage limit. Your request and preferences are retained.",
   busy: "Another research request is still active or needs review. No additional search was started.",
   duplicate:
     "This research request was already submitted. No additional search was started.",
@@ -57,7 +57,7 @@ export function createResearchTurns(dependencies: {
           : { preferences: request.preferences, notes: [] };
       const preferences = update.preferences;
       const notes = update.notes;
-      const base = { responseVersion: 3 as const, preferences, notes };
+      const base = { responseVersion: 4 as const, preferences, notes };
       if ("clarification" in update && update.clarification)
         return { ...base, kind: "clarification", ...update.clarification };
       if ("reply" in update && update.reply)

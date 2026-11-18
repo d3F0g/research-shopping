@@ -7,6 +7,7 @@ import {
   type ResearchSnapshot,
   type ResearchSource,
 } from "../domain/research";
+import type { ApplicationTurnResponse as Version3ApplicationTurnResponse } from "../domain/research-evidence-v3";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -125,7 +126,10 @@ function AssessmentEvidence({
     </li>
   );
 }
-function assessments(product: ResearchProduct, snapshot: ResearchSnapshot) {
+function assessments(
+  product: ResearchProduct,
+  snapshot: { intent: Pick<ResearchSnapshot["intent"], "criteria"> },
+) {
   return [
     { label: "Product identity", assessment: product.identity },
     { label: "Match to your request", assessment: product.requestMatch },
@@ -149,7 +153,7 @@ export function LiveResearchResults({
   outcome,
 }: {
   outcome: Extract<
-    ApplicationTurnResponse,
+    ApplicationTurnResponse | Version3ApplicationTurnResponse,
     { kind: "research" | "research-unavailable" }
   >;
 }) {

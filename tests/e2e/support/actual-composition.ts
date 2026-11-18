@@ -10,19 +10,26 @@ import { createExaProductResearch } from "../../../src/server/exa-research";
 import { createResearchTurns } from "../../../src/server/research-turns";
 import { syntheticAnswer } from "../../fixtures/dynamic-research";
 
-export async function actualComposition(page: Page, testInfo: TestInfo) {
+export async function actualComposition(
+  page: Page,
+  testInfo: TestInfo,
+  payload?: unknown,
+) {
   const sdkRequests: Record<string, unknown>[] = [];
   const requests: Record<string, unknown>[] = [];
   const responses: unknown[] = [];
   let deferred = false;
   let release: (() => void) | undefined;
   let aborts = 0;
-  const native = JSON.parse(
-    JSON.stringify(syntheticAnswer()).replaceAll(
-      "Aster Pure 30",
-      "Synthetic Aster Pure 30",
-    ),
-  );
+  let admission: "admitted" | "quota" = "admitted";
+  const native =
+    payload ??
+    JSON.parse(
+      JSON.stringify(syntheticAnswer()).replaceAll(
+        "Aster Pure 30",
+        "Synthetic Aster Pure 30",
+      ),
+    );
   const provider = createServer((request, response) => {
     let body = "";
     request.on("data", (chunk) => {
@@ -72,7 +79,7 @@ export async function actualComposition(page: Page, testInfo: TestInfo) {
         }),
         quota: {
           async reserve() {
-            return "admitted";
+            return admission;
           },
           async settle() {},
         },
@@ -141,6 +148,9 @@ export async function actualComposition(page: Page, testInfo: TestInfo) {
     sdkRequests,
     requests,
     responses,
+    pauseResearch() {
+      admission = "quota";
+    },
     deferNext() {
       deferred = true;
     },

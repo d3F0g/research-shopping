@@ -51,9 +51,9 @@ describe("dynamic source assessments through actual local SDK transport", () => 
       const result = await response.json();
       expect(result).toMatchObject({
         kind: "research",
-        responseVersion: 3,
+        responseVersion: 4,
         research: {
-          evidenceVersion: 3,
+          evidenceVersion: 4,
           choice: { productId: "aster-pure" },
           products: [
             { stock: "unverified", price: { amount: 249, currency: "SGD" } },

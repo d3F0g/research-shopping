@@ -1,6 +1,6 @@
 # Dynamic browser behavior mapping
 
-The dynamic responseVersion 3 app replaces the fixture shortlist and page-grammar UI. Captured source data under `tests/fixtures/research-corpus/` remains unchanged. Synthetic model responses are test-authored evidence and do not establish real shopping outcomes.
+The dynamic responseVersion 4 app replaces the fixture shortlist and page-grammar UI. Captured source data under `tests/fixtures/research-corpus/` remains unchanged. Synthetic model responses are test-authored evidence and do not establish real shopping outcomes.
 
 | Earlier browser assertion | Current evidence |
 | --- | --- |
@@ -23,3 +23,5 @@ The dynamic responseVersion 3 app replaces the fixture shortlist and page-gramma
 Browser route-injection tests establish client behavior. The separate SDK/Hono tests exercise the normal composition with a fake key and loopback provider. Neither proves real Exa extraction, semantic accuracy, current merchant pricing, stock or destinations. Root owns bounded live acceptance and independent review.
 
 The correction round preserves unresolved invalid hard changes across ordinary messages and refresh. The current composer shows the server-owned pending change with explicit correction and discard controls. Preparing intent is a separate zero-provider JSON phase; its intermediate object never becomes a completed historical response. Research receives accepted intent without reinterpreting the message. Actual HTTP lifecycle regressions cover the independent QA reproductions and the valid correction and explicit discard counterparts.
+
+Budget ranges preserve minimum and maximum in the current intent and editor. Version 3 intent, requests and evidence are frozen independently and render read-only. Current native/source captures are unchanged; current synthetic response/evidence literals migrate from 3 to 4. The unknown-version browser oracle uses 99 instead of formerly unsupported 4. The earlier unsupported `SGD200k` case becomes a supported explicit-thousands cap; `SGD200m`, scientific notation and invalid precision remain rejected.

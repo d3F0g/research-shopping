@@ -134,7 +134,7 @@ describe("one current intent reducer", () => {
     "under ₹200",
     "under 200 euros",
     "under SGD2e3",
-    "under SGD200k",
+    "under SGD200m",
     "under SGD100.001",
   ])("does not reuse a prior currency for %s", (budgetText) => {
     const previous = updateIntent(

@@ -337,6 +337,15 @@ export function App() {
                                   {response.message}
                                 </p>
                               )}
+                              {turn.prepared?.notes
+                                .filter(
+                                  (note) => !response?.notes.includes(note),
+                                )
+                                .map((note) => (
+                                  <p className="metadata" key={note}>
+                                    {note}
+                                  </p>
+                                ))}
                               {response?.notes.length ? (
                                 <Collapsible className="response-details">
                                   <CollapsibleTrigger
@@ -362,6 +371,15 @@ export function App() {
                                   intentChanged) &&
                                 !editor && (
                                   <div className="intent-summary">
+                                    {response.preferences.budget && (
+                                      <p className="metadata">
+                                        {response.preferences.budget.currency}{" "}
+                                        {response.preferences.budget.minimum !==
+                                        undefined
+                                          ? `${response.preferences.budget.minimum.toLocaleString("en-SG")}–${response.preferences.budget.amount.toLocaleString("en-SG")}`
+                                          : `${response.preferences.budget.amount.toLocaleString("en-SG")} maximum`}
+                                      </p>
+                                    )}
                                     <Collapsible>
                                       <CollapsibleTrigger
                                         render={<Button variant="ghost" />}
@@ -381,7 +399,10 @@ export function App() {
                                             : "United States"}{" "}
                                           ·{" "}
                                           {response.preferences.budget
-                                            ? `${response.preferences.budget.currency} ${response.preferences.budget.amount} maximum`
+                                            ? response.preferences.budget
+                                                .minimum !== undefined
+                                              ? `${response.preferences.budget.currency} ${response.preferences.budget.minimum.toLocaleString("en-SG")}–${response.preferences.budget.amount.toLocaleString("en-SG")}`
+                                              : `${response.preferences.budget.currency} ${response.preferences.budget.amount} maximum`
                                             : "No budget cap"}
                                         </p>
                                         <ul>

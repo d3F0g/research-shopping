@@ -547,7 +547,7 @@ button {
 }
 .budget-row {
   display: grid;
-  grid-template-columns: 90px minmax(0, 1fr);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 8px;
 }
 .preference-edit-note {
@@ -725,7 +725,8 @@ button {
 .live-research .research-preview {
   margin-block: 12px;
 }
-.live-research :is(blockquote, .observed-price p, .web-research-highlights, td) {
+.live-research
+  :is(blockquote, .observed-price p, .web-research-highlights, td) {
   overflow-wrap: anywhere;
 }
 .live-research .research-card > [data-slot="card-content"] > .source-link {
