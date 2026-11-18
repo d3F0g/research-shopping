@@ -28,17 +28,19 @@ const currencyToken = String.raw`SGD|USD|US\$|S\$|\$`;
 const budgetMutation = String.raw`(?:increase|raise|change|adjust|set|update|make|reduce|lower|decrease|remove|drop|clear|forget|relax|lift)`;
 const budgetSubject = String.raw`(?:(?:my|the|our|current|existing)\s+)*(?:budget(?:\s+(?:range|limit|minimum|maximum))?|(?:minimum|maximum|min|max)(?:\s+(?:budget|price))?|(?:lower|upper)\s+(?:budget\s+)?(?:bound|limit)|price\s+(?:floor|cap|ceiling)|spending\s+(?:cap|limit))`;
 const money = String.raw`(?:(?:${currencyToken})\s*)?${amountToken}(?:\s*(?:SGD|USD))?`;
+const currencyAmount = String.raw`(?:(?:${currencyToken})\s*${amountToken}|${amountToken}\s*(?:SGD|USD)\b)`;
+const clauseText = String.raw`(?:[^,;.!?\n]|(?<=\d)[,.](?=\d))*`;
 const negation = String.raw`(?:not|never|no\s+need\s+to|(?:don|doesn|didn|won|wouldn|shouldn|couldn|can|isn|aren)'t)`;
 const negatedCommand = new RegExp(
   String.raw`^(?:please\s+)?(?:do\s+not|don't|never)\s+${budgetMutation}\s+${budgetSubject}(?:\s+(?:to|at|by)\s+(?:(?:between|from)\s+)?${money}(?:\s*(?:to|and|[-–—])\s*${money})?)?[.!]*$`,
   "i",
 );
 const negatedMutation = new RegExp(
-  String.raw`\b${negation}\s+(?:(?:want|need|wish|intend|plan|you|us|me|to|ever|please|just|really)\s+)*${budgetMutation}\s+(?:${budgetSubject}\b|(?:it\s+)?(?:to\s+)?${money})`,
+  String.raw`\b${negation}\s+(?:(?:want|need|wish|intend|plan|you|us|me|to|ever|please|just|really)\s+)*${budgetMutation}\s+(?:${budgetSubject}\b|(?:it\s+)?(?:to\s+)?${money}|${clauseText}${currencyAmount})`,
   "i",
 );
 const negatedMoney = new RegExp(
-  String.raw`\b${negation}\s+(?:(?:want|need|be|have|use|spend|pay|a|the|to|at)\s+)*(?:${budgetSubject}\s+(?:(?:of|to|at|is)\s+)?)?(?:(?:${currencyToken})\s*${amountToken}|${amountToken}\s*(?:SGD|USD)\b)`,
+  String.raw`\b${negation}\s+(?:(?:want|need|be|have|use|spend|pay|a|the|to|at)\s+)*(?:${budgetSubject}\s+(?:(?:of|to|at|is)\s+)?)?${currencyAmount}`,
   "i",
 );
 const rangePattern = new RegExp(

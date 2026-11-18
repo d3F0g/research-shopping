@@ -113,14 +113,17 @@ describe("negated hard budget changes", () => {
     "Increase my spending to SGD3000",
     "Change the amount to SGD3000",
     "Raise my discretionary allocation to SGD3000",
-  ])("keeps positive money separate from non-money negation in %s", (message) => {
-    const result = updateIntent(message, priorIntent());
-    expect(result.clarification).toBeUndefined();
-    expect(result.reply).toBeUndefined();
-    expect(result.preferences.budget).toEqual({
-      minimum: 1000,
-      amount: 3000,
-      currency: "SGD",
-    });
-  });
+  ])(
+    "keeps positive money separate from non-money negation in %s",
+    (message) => {
+      const result = updateIntent(message, priorIntent());
+      expect(result.clarification).toBeUndefined();
+      expect(result.reply).toBeUndefined();
+      expect(result.preferences.budget).toEqual({
+        minimum: 1000,
+        amount: 3000,
+        currency: "SGD",
+      });
+    },
+  );
 });
