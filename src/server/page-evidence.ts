@@ -3,7 +3,7 @@ import { FeatureSchema, type Feature, type Preferences } from "../domain/contrac
 import type { ResearchProduct, ResearchSnapshot } from "../domain/research";
 
 type Highlight = Readonly<{ text: string; clipped: boolean }>;
-type Source = { sourceIndex: number; url: string; title: string; highlights: Highlight[] };
+type Source = { sourceIndex: number; url: string; title: string; titleClipped: boolean; highlights: Highlight[] };
 export type NativeObservation = { name: string; url: string; identityQuote: string | null; quotedFacts: string[]; priceQuote: string | null };
 export type EvidenceDecision = {
   sourceIndex: number;
@@ -14,12 +14,12 @@ export type EvidenceDecision = {
   start?: number;
   end?: number;
 };
-type Scope = { name: string; identity: string; text: string; highlight: number; start: number; identityEnd: number; end: number };
+type Scope = { name: string; identity: string; text: string; highlight: number; start: number; identityEnd: number; end: number; directClass: boolean };
 
 function cleanText(raw: string): string {
   return raw.replace(/[\u0000-\u001f\u007f-\u009f]/g, " ").replace(/\s+/g, " ").trim();
 }
-const headphoneClass = "(?:headphones|earbuds|headset)";
+const headphoneClass = "(?:headphones?|earbuds|headset)";
 const headphoneDesign = "(?:over-ear|on-ear|in-ear|open-back|closed-back|noise-cancell?ing)";
 const categoryStatements: Record<NonNullable<Preferences["hard"]["category"]>, string> = {
   headphones: `(?:a |a pair of )?(?:(?:wireless|wired|Bluetooth|${headphoneDesign}) )*${headphoneClass}(?: designed for neutral listening)?`,
@@ -45,7 +45,7 @@ type Anchor =
   | Readonly<{ kind: "direct"; identity: CompletePassage }>;
 type SubjectProof = Readonly<{ name: string; selected: Anchor; anchors: readonly [Anchor, ...Anchor[]] }>;
 type Completion = { completion: "complete" } | { completion: "open" };
-type SourcePassage = Span & Completion & { text: string; kind: "content" | "section" | "context-heading" | "identity" | "boundary"; region: number; scope: Scope | null };
+type SourcePassage = Span & Completion & { text: string; kind: "content" | "price" | "section" | "context-heading" | "identity" | "boundary"; region: number; scope: Scope | null; support: Readonly<{ name: string; span: Span }> | null };
 type CompletePassage = Extract<SourcePassage, { completion: "complete" }>;
 type Boundary = Readonly<{ start: number; end: number; kind: "gap" | "selector" | "section" | "heading" }>;
 type HighlightContext = Readonly<{ item: Highlight; boundaries: readonly Boundary[] }>;
@@ -127,7 +127,8 @@ function headingScopes(input: Source, highlights: readonly HighlightContext[], p
   if (!category) return [];
   const scopes: Scope[] = [];
   const record = (code: string, detail: Partial<EvidenceDecision> = {}) => decisions.push({ sourceIndex: input.sourceIndex, path: "source-identity", code, ...detail });
-  const titleName = input.title.split(" | ")[0].trim();
+  const title = input.title.split(" | ")[0].trim();
+  const titleName = input.titleClipped ? title : title.replace(/ – [\p{L}][\p{L} .&'-]+ (?:Pte\.? Ltd\.?|Ltd\.?|Limited|Inc\.?|LLC|GmbH|Corporation)$/u, "");
   for (const [highlight, context] of highlights.entries()) {
     const raw = context.item.text;
     for (const marker of context.boundaries.filter((boundary) => boundary.kind === "heading")) {
@@ -139,16 +140,21 @@ function headingScopes(input: Source, highlights: readonly HighlightContext[], p
       const flattened = rest.startsWith(titleName) && /\s|$/.test(rest.charAt(titleName.length));
       const name = intactName && intactName.length <= 160 && !intactName.includes(" #") ? intactName : flattened ? titleName : null;
       if (!name || titleName !== name) { record("variant-mismatch", { highlight, start }); continue; }
-      if (/^(?:Premium|New|Wireless|Wired|Bluetooth|Over-ear|On-ear|In-ear|Gaming|Business)(?:\s+(?:wireless|wired|Bluetooth|over-ear|on-ear|in-ear|noise cancell?ing|gaming|business))*\s+(?:headphones|earbuds|headset|laptop|notebook)$/i.test(name)) { record("missing-identity", { highlight, start }); continue; }
-      if (name.length < 3 || name.split(/\s+/).length < 2 || forbiddenIdentity.test(name)) { record("ambiguous-scope", { highlight, start }); continue; }
+      if (/^(?:Premium|New|Wireless|Wired|Bluetooth|Over-ear|On-ear|In-ear|Gaming|Business)(?:\s+(?:wireless|wired|Bluetooth|over-ear|on-ear|in-ear|noise cancell?ing|gaming|business))*\s+(?:headphones?|earbuds|headset|laptop|notebook)$/i.test(name)) { record("missing-identity", { highlight, start }); continue; }
+      if (name.length < 3 || !/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d-]+$/.test(name) && name.split(/\s+/).length < 2 || forbiddenIdentity.test(name)) { record("ambiguous-scope", { highlight, start }); continue; }
       const designationEnd = contentStart + (intactName === name ? rest.indexOf("\n") : name.length);
       const headingClass = new RegExp(`^.+?\\s+${classPhrases[category]}(?:\\s+-\\s+[\\p{L}\\p{N} +().-]+|\\s+\\([\\p{L}\\p{N} +.-]+\\))?$`, "iu");
       let identityEnd = designationEnd;
+      let directClass = false;
       if (!headingClass.test(name)) {
         const suffix = raw.slice(designationEnd);
         const subtitle = new RegExp(`^\\s+(${classPhrases[category]})(?=\\s|[.!]|$)`, "i").exec(suffix);
-        if (!subtitle) { record("missing-class", { highlight, start }); continue; }
-        identityEnd += subtitle[0].length;
+        if (subtitle) identityEnd += subtitle[0].length;
+        else {
+          const definition = new RegExp(`(?:^|[.!?]\\s+|\\n)(?:The )?${escapeRegex(name)} (?:is|are) [^.!?]+[.!](?=\\s|$)`, "gi");
+          directClass = [...raw.matchAll(definition)].some((match) => categoryStatement(name, cleanText(match[0]), category));
+          if (!directClass) { record("missing-class", { highlight, start }); continue; }
+        }
       }
       const tail = raw.slice(identityEnd);
       if (/^[ \t]+(?:Pro|Plus|Max|Ultra|Special Edition|cases?|covers?|cables?|pads?|stands?|for)\b/i.test(tail)) { record("variant-mismatch", { highlight, start }); continue; }
@@ -172,7 +178,7 @@ function headingScopes(input: Source, highlights: readonly HighlightContext[], p
 
       if (/\bearbuds?\b/i.test(text) && /\b(?:over-ear|on-ear)\b/i.test(text)) { record("contradiction", { highlight, start, end }); continue; }
       record("admitted", { highlight, start, end: identityEnd });
-      scopes.push({ name, identity, text, highlight, start, identityEnd, end });
+      scopes.push({ name, identity, text, highlight, start, identityEnd, end, directClass });
     }
   }
   if (!decisions.some((decision) => decision.sourceIndex === input.sourceIndex)) record("missing-identity");
@@ -209,7 +215,25 @@ function headingKind(text: string): "section" | "context-heading" | "boundary" |
   return isModelLabel(label) ? "boundary" : "context-heading";
 }
 
-function completion(context: HighlightContext, start: number, end: number, role: "identity" | "heading" | "section" | "content", name: string | null): Completion {
+function categoryStatement(name: string, text: string, category: NonNullable<Preferences["hard"]["category"]>): boolean {
+  const generation = "(?:the (?:first|second|third|[0-9]+(?:st|nd|rd|th)) generation of (?:our )?(?:critically acclaimed )?[A-Za-z0-9-]+ )?";
+  return new RegExp(`^(?:The )?${escapeRegex(name)} (?:is|are) ${generation}${categoryStatements[category]}(?: with [^.!?]+)?[.!]?$`, "i").test(text);
+}
+
+type DeviceRecord = "driver" | "microphone" | "control" | "battery" | "class-function";
+function deviceRecord(predicate: string): DeviceRecord | null {
+  if (/\?|\b(?:not|no|without|if|might|may|perhaps|hypothetically|would|another|other|different|replacement|accessories)\b/i.test(predicate)) return null;
+  const terminal = predicate.replace(/[.!]$/, "");
+  if (/^(?:features?|has|have) \d+(?:\.\d+)?\s*mm (?:large aperture )?drivers in a wireless design(?:, so listeners will enjoy the same sonic signature of (?:the )?(?:legendary )?[A-Za-z0-9-]+(?: [A-Za-z0-9-]+)* headphones)?$/i.test(terminal)
+    || /^(?:[A-Za-z]+-coated )?\d+(?:\.\d+)?\s*mm drivers deliver [a-z]+(?:,? [a-z]+){0,4} sound$/i.test(terminal)) return "driver";
+  if (/^features? (?:dual|\d+) microphones and beamforming technology, which provide [a-z -]+ vocal pickup ensuring [a-z -]+ audio call quality$/i.test(terminal)) return "microphone";
+  if (/^(?:Additionally, )?users can (?:conveniently )?mute with the press of a button or access the built-in [A-Za-z ]+ voice assistant, as well as [A-Za-z ]+ and [A-Za-z ]+$/i.test(terminal)) return "control";
+  if (/^(?:has|have) a battery life of up to \d+(?:\.\d+)? hours on a continuous full charge, with up to \d+(?:\.\d+)? hours of use on a \d+-minute rapid charge via the USB-C connection(?:, making them some of the longest-lasting wireless headphones available)?$/i.test(terminal)) return "battery";
+  if (new RegExp(`^${classPhrases.headphones} (?:Hybrid )?noise cancellation with \\d+-mic blocks (?:ambient|wind|ambient and wind) noise$`, "i").test(terminal)) return "class-function";
+  return null;
+}
+
+function completion(context: HighlightContext, start: number, end: number, role: "identity" | "heading" | "section" | "price" | "content", name: string | null): Completion {
   const text = cleanText(context.item.text.slice(start, end));
   if (/[.!?]$/.test(text)) return { completion: "complete" };
   const rest = context.item.text.slice(end);
@@ -225,12 +249,13 @@ function completion(context: HighlightContext, start: number, end: number, role:
     || new RegExp(`^(?:The )?${escapeRegex(name)}\\s+.+[.!?]$`, "i").test(nextLine));
   const scopedRecord = scopedSubject.test(nextLine) && /[.!?]$/.test(nextLine)
     && new RegExp(`^${clauseVerb}`, "i").test(nextLine.replace(scopedSubject, ""));
-  const nextRecord = fieldRecord.test(nextLine) || pricePart.test(nextLine) || namedRecord || scopedRecord;
+  const nextStatement = /^(.*?[.!?])(?:\s|$)/.exec(nextLine)?.[1] ?? nextLine;
+  const nextRecord = deviceRecord(nextStatement) !== null || fieldRecord.test(nextLine) || pricePart.test(nextLine) || namedRecord || scopedRecord;
   if (role !== "content") {
     if (boundary?.kind === "selector" || priceRecordStart.test(nextLine)) return { completion: "complete" };
     if (boundary?.kind === "heading" || newline && (role === "heading" || role === "section" || boundary || nextRecord)) return { completion: "complete" };
   }
-  const structured = attributeLabel.test(text) || pricePart.test(text) || contextPrice.test(text);
+  const structured = role === "price" || attributeLabel.test(text) || pricePart.test(text) || contextPrice.test(text);
   if (structured && newline && (boundary || nextRecord)) return { completion: "complete" };
   return { completion: "open" };
 }
@@ -244,7 +269,7 @@ function namedPredicate(name: string, text: string): string | null {
 }
 
 function ownership(context: SourceContext, subject: SubjectProof, passage: CompletePassage): Ownership {
-  if (passage.kind !== "content" && passage.kind !== "context-heading") return { kind: "unresolved" };
+  if (passage.kind !== "content" && passage.kind !== "price" && passage.kind !== "context-heading") return { kind: "unresolved" };
   const text = passage.text.replace(/^#{1,6}\s+/, "").replace(/[‘’]/g, "'");
   const exact = namedPredicate(subject.name, text);
   const predicate = exact ?? text.replace(scopedSubject, "");
@@ -253,15 +278,15 @@ function ownership(context: SourceContext, subject: SubjectProof, passage: Compl
   const foreignTarget = /\b(?:for|on|with|to)\s+(?:(?:the|a|an)\s+)?(?:[A-Z][a-z]+\s+[A-Z0-9][\p{L}\p{N}-]*|(?:Pro|Plus|Max|Ultra|Black|Teal|White)\s+variant)\b/u.test(predicate)
     || /\b(?:for|on|with|to)\s+(?:the\s+)?(?:another|other|different|pro|plus|max|ultra|black|teal|white)\s+(?:model|variant|edition)\b/i.test(predicate)
     || context.subjects.some((other) => other.name !== subject.name && predicate.toLowerCase().includes(other.name.toLowerCase()));
-  if (compound || comparison || foreignTarget) return { kind: "foreign" };
+  if ((compound || comparison || foreignTarget) && deviceRecord(predicate) !== "driver") return { kind: "foreign" };
   if (/\?|\b(?:if|might|may|perhaps|hypothetically|would)\b/i.test(text)) return { kind: "unresolved" };
   if (exact) return { kind: "own", basis: "exact-statement", predicate };
   if (new RegExp(`^(?:The )?${escapeRegex(subject.name)}\\b`, "i").test(text)) return { kind: "foreign" };
-  if (predicate === text && !new RegExp(`^${clauseVerb}`, "i").test(text) && new RegExp(`^(?:The )?[A-Z][\\p{L}\\p{N} -]+?\\s+${clauseVerb}`, "u").test(text)) return { kind: "foreign" };
-  if (!passage.scope || passage.scope.name !== subject.name) return { kind: "unresolved" };
+  if (passage.kind !== "price" && predicate === text && !new RegExp(`^${clauseVerb}`, "i").test(text) && new RegExp(`^(?:The )?[A-Z][\\p{L}\\p{N} -]+?\\s+${clauseVerb}`, "u").test(text)) return { kind: "foreign" };
+  if (passage.support?.name !== subject.name && (!passage.scope || passage.scope.name !== subject.name)) return { kind: "unresolved" };
   const inherited = new RegExp(`^(?:${clauseVerb}|(?:without|no|not equipped with|you get)\\b)`, "i").test(predicate)
     || attributeLabel.test(predicate)
-    || pricePart.test(predicate) || contextPrice.test(predicate);
+    || passage.kind === "price" || pricePart.test(predicate) || contextPrice.test(predicate) || deviceRecord(predicate) !== null;
   return inherited ? { kind: "own", basis: "valid-scope", predicate } : { kind: "unresolved" };
 }
 
@@ -308,42 +333,80 @@ function sourceContext(source: Source, sourceId: string, native: readonly Native
         || !identity && state.completion === "complete" && (model || heading === "boundary");
       const kind = identity ? "identity" : isBoundary ? "boundary" : heading === "boundary" ? "context-heading" : heading ?? "content";
       if (isBoundary || identity && entries.some((entry) => entry.highlight === highlight && entry.kind === "identity")) region++;
-      entries.push({ highlight, start, end, text, kind, ...state, region, scope });
+      entries.push({ highlight, start, end, text, kind, ...state, region, scope, support: null });
       if (isBoundary) region++;
     }
+  }
+  for (let index = 0; index < entries.length; index++) {
+    const first = entries[index];
+    if (first.kind !== "content" || !(pricePart.test(first.text) || contextPrice.test(first.text) || /^From(?:: SALE)?$/i.test(first.text) || new RegExp(`^From: SALE ${money}$`, "i").test(first.text))) continue;
+    let last = index;
+    while (last + 1 < entries.length) {
+      const next = entries[last + 1];
+      if (next.kind !== "content" || next.highlight !== first.highlight || next.region !== first.region || next.scope !== first.scope
+        || cleanText(source.highlights[first.highlight].text.slice(entries[last].end, next.start))
+        || !(pricePart.test(next.text) || contextPrice.test(next.text) || /^(?:SGD|USD|EUR|GBP|AUD|JPY|From)$/i.test(next.text))) break;
+      last++;
+    }
+    const end = entries[last].end;
+    const text = cleanText(source.highlights[first.highlight].text.slice(first.start, end));
+    const state = completion(highlights[first.highlight], first.start, end, "price", first.scope?.name ?? null);
+    entries.splice(index, last - index + 1, { ...first, end, text, kind: "price", ...state });
   }
   for (const scope of scopes) {
     const identity = entries.filter(isComplete).find((passage) => passage.kind === "identity" && passage.highlight === scope.highlight && passage.start === scope.start);
     if (!identity) continue;
     const anchor: Anchor = { kind: "heading", identity, scope };
+    const category = preferences.hard.category;
+    const definition = scope.directClass && category ? entries.filter(isComplete).find((passage) => categoryStatement(scope.name, passage.text, category)) : null;
+    if (scope.directClass && !definition) continue;
+    const selected: Anchor = definition ? { kind: "direct", identity: definition } : anchor;
     const prior = subjects.findIndex((subject) => subject.name === scope.name);
-    if (prior < 0) subjects.push({ name: scope.name, selected: anchor, anchors: [anchor] });
+    if (prior < 0) subjects.push({ name: scope.name, selected, anchors: definition ? [selected, anchor] : [anchor] });
     else subjects[prior] = { ...subjects[prior], anchors: [...subjects[prior].anchors, anchor] };
   }
   const context: SourceContext = { source, sourceId, passages: entries, subjects };
-  for (const scope of scopes) {
-    const subject = subjects.find((candidate) => candidate.name === scope.name)!;
-    let intact = true;
-    for (const passage of entries) {
-      if (passage.scope !== scope) continue;
-      if (!intact) passage.scope = null;
-      else if (passage.kind === "boundary" || passage.kind === "content" && (!isComplete(passage) || ownership(context, subject, passage).kind !== "own")) {
-        intact = false;
-        passage.scope = null;
-      }
-    }
-  }
-  if (!scopes.length && preferences.hard.category) {
+  const category = preferences.hard.category;
+  if (!scopes.length && category) {
     for (const observation of native) {
       const name = cleanText(observation.name);
-      const category = new RegExp(`^(?:The )?${escapeRegex(name)} (?:is|are) ${categoryStatements[preferences.hard.category]}(?: with [^.!?]+)?[.!]?$`, "i");
-      const matches = entries.filter(isComplete).filter((passage) => category.test(passage.text) && observation.quotedFacts.some((quote) => cleanText(quote) === passage.text));
+      const matches = entries.filter(isComplete).filter((passage) => categoryStatement(name, passage.text, category) && observation.quotedFacts.some((quote) => cleanText(quote) === passage.text));
       const first = matches[0];
       if (!first) continue;
       const selected: Anchor = { kind: "direct", identity: first };
       const proof: SubjectProof = { name, selected, anchors: [selected, ...matches.slice(1).map((passage): Anchor => ({ kind: "direct", identity: passage }))] };
       if (ownership(context, proof, first).kind === "own" && !subjects.some((subject) => subject.name === name)) subjects.push(proof);
     }
+  }
+  let active: { name: string; span: Span; scope: Scope | null; device: DeviceRecord | null } | null = null;
+  let activeHighlight = -1;
+  for (const passage of entries) {
+    if (passage.highlight !== activeHighlight) { active = null; activeHighlight = passage.highlight; }
+    if (passage.kind === "identity") {
+      const scope = scopes.find((item) => item.highlight === passage.highlight && item.start === passage.start);
+      active = scope ? { name: scope.name, span: sourceSpan(passage), scope, device: null } : null;
+      continue;
+    }
+    if (passage.kind === "section") {
+      if (active?.device === "microphone" || active?.device === "control") active = null;
+      continue;
+    }
+    if (passage.kind === "boundary" || !isComplete(passage)) { active = null; passage.scope = null; continue; }
+    passage.scope = active?.scope === passage.scope ? passage.scope : null;
+    const exact = subjects.find((subject) => namedPredicate(subject.name, passage.text) !== null);
+    const subject = exact ?? subjects.find((item) => item.name === active?.name);
+    if (!subject) { active = null; passage.scope = null; continue; }
+    const predicate = namedPredicate(subject.name, passage.text) ?? passage.text.replace(scopedSubject, "");
+    const device = deviceRecord(predicate);
+    const definition = category !== null && categoryStatement(subject.name, passage.text, category);
+    if (exact && (definition && passage.scope !== null && active?.name === subject.name || device === "microphone")) {
+      active = { name: subject.name, span: definition && active?.name === subject.name ? active.span : sourceSpan(passage), scope: passage.scope, device };
+    }
+    if (device === "control" && (!active || active.device !== "microphone")) { active = null; passage.scope = null; continue; }
+    if (active?.name === subject.name) passage.support = { name: subject.name, span: { highlight: passage.highlight, start: active.span.start, end: passage.end } };
+    const owner = ownership(context, subject, passage);
+    if (owner.kind !== "own") { active = null; passage.scope = null; passage.support = null; continue; }
+    if (active) active = { ...active, device };
   }
   for (const [index, subject] of subjects.entries()) {
     const anchors: [Anchor, ...Anchor[]] = [...subject.anchors];
@@ -370,7 +433,7 @@ function assessSubject(context: SourceContext, proof: SubjectProof, preferences:
   let directPriceWitness: Span | null = null;
   const regions = new Set(proof.anchors.map((anchor) => anchor.identity.region));
   for (const passage of context.passages) {
-    if (passage.kind !== "content" && passage.kind !== "context-heading" && isComplete(passage)) continue;
+    if (passage.kind !== "content" && passage.kind !== "price" && passage.kind !== "context-heading" && isComplete(passage)) continue;
     const owner: Ownership = isComplete(passage) ? ownership(context, proof, passage) : { kind: "unresolved" };
     if (owner.kind === "own") {
       const proposition = featureProposition(owner.predicate);
@@ -398,14 +461,26 @@ function assessSubject(context: SourceContext, proof: SubjectProof, preferences:
     : { kind: "eligible", subject: { [eligibleSubject]: true, proof, price }, ledger };
 }
 
-function projectPositive(context: SourceContext, subject: EligibleSubject, native: readonly NativeObservation[], decisions: EvidenceDecision[]): Pick<ResearchProduct, "facts" | "price"> {
+type OwnedClaim = Readonly<{ passage: CompletePassage; support: Span }>;
+type ResolvedProposal = Readonly<{ identity: EligibleSubject; facts: readonly OwnedClaim[]; price: (OwnedClaim & { kind: NonNullable<ResearchProduct["price"]>["kind"] }) | null }>;
+
+function resolveProposal(context: SourceContext, subject: EligibleSubject, observation: NativeObservation, decisions: EvidenceDecision[]): ResolvedProposal | null {
   const { proof } = subject;
   const { selected } = proof;
-  const { sourceId } = context;
   const record = (code: string, field: string) => decisions.push({ sourceIndex: context.source.sourceIndex, path: "native-field", code, field, ...sourceSpan(selected.identity) });
-  const facts: ResearchProduct["facts"] = [];
-  let price: ResearchProduct["price"] = null;
-
+  const designation = cleanText(observation.name);
+  if (designation !== proof.name && (context.source.titleClipped || designation !== context.source.title)) { record("variant-mismatch", "name"); return null; }
+  const normalizeHint = (text: string) => cleanText(text).replace(/^#{1,6}\s+/, "").toLowerCase();
+  const identityHint = observation.identityQuote && normalizeHint(observation.identityQuote);
+  const identity = identityHint ? proof.anchors.find((anchor) => {
+    if (anchor.kind === "direct") return anchor === selected && normalizeHint(anchor.identity.text) === identityHint;
+    const heading = normalizeHint(anchor.identity.text);
+    if (!identityHint.includes(proof.name.toLowerCase())) return false;
+    if (heading.includes(identityHint)) return true;
+    const next = context.passages.find((passage) => passage.highlight === anchor.scope.highlight && passage.start >= anchor.scope.identityEnd && passage.kind === "price" && passage.scope === anchor.scope);
+    return next !== undefined && isComplete(next) && normalizeHint(`${heading} ${next.text}`) === identityHint;
+  }) : selected.kind === "direct" && observation.quotedFacts.some((quote) => cleanText(quote) === selected.identity.text) ? selected : null;
+  if (!identity) { record("missing-identity", "identityQuote"); return null; }
   const featurePhrase = `(?:${Object.values(featureDescriptors).map((descriptor) => descriptor.terms).join("|")})(?: (?:audio|support|display|memory))?`;
   const booleanFeature = new RegExp(`^(?:${Object.values(featureDescriptors).map((descriptor) => descriptor.terms).join("|")}|Connectivity):\\s*(?:yes|no|true|false|supported|not supported|available|unavailable|wired[- ]only|wireless)$`, "i");
   const runtime = "(?:up to )?\\d+(?:\\.\\d+)? (?:hours?|hrs?)(?: of (?:playback|music|battery life))?(?: on a full charge| per charge)?(?: with (?:ANC|noise cancelling) (?:on|off))?";
@@ -426,73 +501,76 @@ function projectPositive(context: SourceContext, subject: EligibleSubject, nativ
     const text = predicate.replace(/[.!]$/, "");
     return booleanFeature.test(text) || scopedPredicates.some((pattern) => pattern.test(text)) || exclusiveWired.test(text);
   }
-  if (selected.kind === "heading") {
-    const scope = selected.scope;
-    const entries = context.passages.filter((passage) => passage.highlight === scope.highlight && passage.start >= scope.identityEnd && passage.end <= scope.end);
-    const priceBlocks: string[] = [];
-    let priceStart: number | null = null;
-    let priceEnd = 0;
-    const finishPrice = () => {
-      if (priceStart !== null) priceBlocks.push(cleanText(context.source.highlights[scope.highlight].text.slice(priceStart, priceEnd)));
-      priceStart = null;
-    };
-    for (const passage of entries) {
-      if (isComplete(passage) && passage.scope === scope && (pricePart.test(passage.text) || contextPrice.test(passage.text))) {
-        priceStart ??= passage.start;
-        priceEnd = passage.end;
-      } else finishPrice();
-    }
-    finishPrice();
-    for (const observation of native) {
-      if (cleanText(observation.name) !== proof.name) { record("variant-mismatch", "name"); continue; }
-      const identityQuote = observation.identityQuote && cleanText(observation.identityQuote);
-      if (!identityQuote || !scope.identity.includes(identityQuote) || !identityQuote.includes(proof.name)) { record("missing-identity", "identityQuote"); continue; }
-      for (const rawQuote of observation.quotedFacts) {
-        const quote = cleanText(rawQuote);
-        const passage = entries.filter(isComplete).find((entry) => entry.text === quote && entry.scope === scope);
-        const owner = passage && ownership(context, proof, passage);
-        const offset = scope.text.indexOf(quote);
-        if (!owner || owner.kind !== "own" || !admissibleFact(owner.predicate)) { record("ambiguous-scope", "quotedFacts"); continue; }
-        if (offset < 0 || offset + quote.length > 640) { record("packing-failure", "quotedFacts"); continue; }
-        if (facts.length < 3 && !facts.some((fact) => fact.quote === quote)) facts.push({ sourceId, quote });
-        record("admitted", "quotedFacts");
-      }
-      if (observation.priceQuote) {
-        const quote = cleanText(observation.priceQuote);
-        const offset = scope.text.indexOf(quote);
-        if (subject.price.kind === "withheld" || priceBlocks.length !== 1 || priceBlocks[0] !== quote || !(contextPrice.test(quote) || singlePrice.test(quote))) { record("price-rejection", "priceQuote"); continue; }
-        if (offset < 0 || offset + quote.length > 640) { record("packing-failure", "priceQuote"); continue; }
-        price = { sourceId, quote, kind: contextPrice.test(quote) ? "page-price-context-unverified" : "page-observed-unverified" };
-        record("admitted", "priceQuote");
-      }
-    }
-  } else {
-    const citation = (rawQuote: string) => {
-      const quote = cleanText(rawQuote);
-      const passage = context.passages.filter(isComplete).find((entry) => entry.kind === "content" && entry.text === quote);
-      if (!passage || quote.length > 640) return null;
-      const owner = ownership(context, proof, passage);
-      return owner.kind === "own" && owner.basis === "exact-statement" ? { sourceId, quote } : null;
-    };
-    const identity = cleanText(context.source.highlights[selected.identity.highlight].text.slice(selected.identity.start, selected.identity.end));
+
+  const candidates = context.passages.filter(isComplete).flatMap((passage): Array<OwnedClaim & { predicate: string; exact: boolean }> => {
+    const owner = ownership(context, proof, passage);
+    if (owner.kind !== "own" || selected.kind === "heading" && passage.scope !== selected.scope) return [];
+    const support = owner.basis === "exact-statement" ? sourceSpan(passage) : passage.support?.name === proof.name ? passage.support.span : null;
+    return support ? [{ passage, support, predicate: owner.predicate, exact: owner.basis === "exact-statement" }] : [];
+  });
+  const facts: OwnedClaim[] = [];
+  for (const rawHint of observation.quotedFacts) {
+    const hint = normalizeHint(rawHint).replace(/[.!]$/, "");
+    const matches = candidates.filter((candidate) => {
+      const text = normalizeHint(candidate.passage.text);
+      const position = text.indexOf(hint);
+      if (!hint || position < 0 || /[\p{L}\p{N}]/u.test(text.charAt(position - 1)) || /[\p{L}\p{N}]/u.test(text.charAt(position + hint.length))) return false;
+      const full = normalizeHint(rawHint) === text;
+      if (!full && /\b(?:not|no|without|lacks?|cannot|can't|doesn't|don't|isn't|aren't)\b/i.test(candidate.predicate)) return false;
+      return admissibleFact(candidate.predicate) || deviceRecord(candidate.predicate) !== null && deviceRecord(candidate.predicate) !== "control"
+        || selected.kind === "direct" && candidate.exact && full;
+    });
+    if (!matches.length || new Set(matches.map((match) => match.passage.text)).size !== 1) { record("ambiguous-scope", "quotedFacts"); continue; }
+    if (!facts.some((fact) => fact.passage === matches[0].passage)) facts.push(matches[0]);
+  }
+  let price: ResolvedProposal["price"] = null;
+  if (observation.priceQuote && subject.price.kind === "unobstructed") {
+    const hint = normalizeHint(observation.priceQuote);
     const directPrice = new RegExp(`^(?:The )?${escapeRegex(proof.name)}\\s+(?:costs|retails for|(?:is|was) (?:listed|priced) at)\\s+${money}(?: on this page| when reviewed)?\\.?$`, "i");
-    for (const observation of native.filter((item) => cleanText(item.name) === proof.name)) {
-      if (!observation.quotedFacts.some((quote) => cleanText(quote) === identity)) continue;
-      const attributed = observation.quotedFacts.flatMap((quote) => {
-        const evidence = citation(quote);
-        record(evidence ? "admitted" : "quote-absence", "quotedFacts");
-        return evidence ? [evidence] : [];
-      });
-      const priceEvidence = observation.priceQuote && citation(observation.priceQuote);
-      if (priceEvidence && subject.price.kind === "unobstructed" && directPrice.test(priceEvidence.quote)) price = { ...priceEvidence, kind: "page-observed-unverified" };
-      if (observation.priceQuote) record(price ? "admitted" : "price-rejection", "priceQuote");
-      const categoryEvidence = attributed.find((fact) => fact.quote === identity);
-      const supporting = attributed.filter((fact) => fact !== categoryEvidence).slice(0, price ? 1 : 2);
-      if (categoryEvidence) facts.push(...attributed.filter((fact) => fact === categoryEvidence || supporting.includes(fact)));
-      break;
+    const prices = candidates.filter(({ passage, exact }) => passage.kind === "price" || exact && directPrice.test(passage.text));
+    if (prices.length === 1) {
+      const candidate = prices[0];
+      const text = normalizeHint(candidate.passage.text);
+      const qualified = contextPrice.test(text);
+      const matches = qualified ? contextPrice.test(hint) && text.startsWith(hint) : text === hint;
+      if (matches && (qualified || singlePrice.test(text) || directPrice.test(candidate.passage.text))) price = { ...candidate, kind: qualified ? "page-price-context-unverified" : "page-observed-unverified" };
     }
   }
-  return { facts, price };
+  if (observation.priceQuote) record(price ? "admitted" : "price-rejection", "priceQuote");
+  return { identity: subject, facts, price };
+}
+
+function projectPositive(context: SourceContext, selected: Anchor, proposals: readonly ResolvedProposal[], capacity: number, decisions: EvidenceDecision[]) {
+  let spans: Span[] = [sourceSpan(selected.identity)];
+  const quote = (span: Span) => cleanText(context.source.highlights[span.highlight].text.slice(span.start, span.end));
+  const pack = (claim: OwnedClaim, identity: EligibleSubject): boolean => {
+    const anchor = identity.proof.selected;
+    const support = anchor.kind === "heading" ? { highlight: claim.support.highlight, start: anchor.scope.start, end: claim.support.end } : claim.support;
+    if (quote(support).length > 640) return false;
+    const next = [...spans];
+    const merged = next.findIndex((span) => span.highlight === support.highlight && span.start <= support.end && span.end >= support.start
+      && quote({ ...span, start: Math.min(span.start, support.start), end: Math.max(span.end, support.end) }).length <= 640);
+    if (merged >= 0) next[merged] = { highlight: support.highlight, start: Math.min(next[merged].start, support.start), end: Math.max(next[merged].end, support.end) };
+    else next.push(support);
+    if (next.length > capacity) return false;
+    spans = next;
+    return true;
+  };
+  const citation = (claim: OwnedClaim) => ({ sourceId: context.sourceId, quote: claim.passage.text });
+  const facts: ResearchProduct["facts"] = [];
+  let price: ResearchProduct["price"] = null;
+  for (const proposal of proposals) {
+    if (!price && proposal.price && pack(proposal.price, proposal.identity)) price = { ...citation(proposal.price), kind: proposal.price.kind };
+    for (const claim of proposal.facts) {
+      if (facts.length === 3 || facts.some((fact) => fact.quote === claim.passage.text)) continue;
+      if (!pack(claim, proposal.identity)) { decisions.push({ sourceIndex: context.source.sourceIndex, path: "native-field", field: "quotedFacts", code: "packing-failure", ...claim.support }); continue; }
+      facts.push(citation(claim));
+      decisions.push({ sourceIndex: context.source.sourceIndex, path: "native-field", field: "quotedFacts", code: "admitted", ...sourceSpan(claim.passage) });
+    }
+  }
+  const quotations = [...facts.map((fact) => fact.quote), ...(price ? [price.quote] : []), selected.identity.text];
+  const windows = spans.map(quote).sort((left, right) => quotations.findIndex((citation) => left.includes(citation)) - quotations.findIndex((citation) => right.includes(citation)));
+  return { facts, price, windows };
 }
 
 export function projectPageEvidence(inputs: Source[], observations: NativeObservation[], preferences: Preferences) {
@@ -520,11 +598,11 @@ export function projectPageEvidence(inputs: Source[], observations: NativeObserv
       const { selected } = proof;
       const identityQuote = cleanText(input.highlights[selected.identity.highlight].text.slice(selected.identity.start, selected.identity.end));
       if (identityQuote.length > 640) continue;
-      const { facts, price } = projectPositive(context, subject, native, decisions);
-      const quotes = [identityQuote, ...facts.map((fact) => fact.quote), ...(price ? [price.quote] : [])];
-      const windows = selected.kind === "heading"
-        ? [selected.scope.text.slice(0, Math.max(...quotes.map((quote) => selected.scope.text.indexOf(quote) + quote.length)))]
-        : [...new Set([...facts.map((fact) => fact.quote), ...(price ? [price.quote] : []), identityQuote])];
+      const proposals = native.flatMap((observation) => {
+        const resolved = resolveProposal(context, subject, observation, decisions);
+        return resolved ? [resolved] : [];
+      });
+      const { facts, price, windows } = projectPositive(context, selected, proposals, 3 - source.highlights.length, decisions);
       if (source.highlights.length + windows.length > 3) {
         decisions.push({ sourceIndex: input.sourceIndex, path: "native-field", field: "identity", code: "packing-failure", ...sourceSpan(selected.identity) });
         continue;

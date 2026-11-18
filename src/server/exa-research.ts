@@ -238,8 +238,9 @@ function projectProductResearch(raw: unknown, preferences: Preferences): { resul
   const inputs = value.results.slice(0, 5).flatMap((result, sourceIndex) => {
     const url = safeUrl(result.url);
     if (!url) return [];
+    const title = boundedTitle(result.title, new URL(url).hostname);
     return [{
-      sourceIndex, url, title: boundedTitle(result.title, new URL(url).hostname).title,
+      sourceIndex, url, title: title.title, titleClipped: title.truncated,
       highlights: (result.highlights ?? []).slice(0, 6).map((highlight) => ({
         text: highlight.slice(0, MAX_HIGHLIGHT_SCAN_LENGTH), clipped: highlight.length > MAX_HIGHLIGHT_SCAN_LENGTH,
       })),
