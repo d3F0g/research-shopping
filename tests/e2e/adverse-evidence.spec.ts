@@ -7,7 +7,7 @@ import { createExaProductResearch } from "../../src/server/exa-research";
 import { createResearchTurns } from "../../src/server/research-turns";
 import { adverseHeading, adversePayload } from "../fixtures/adverse-evidence";
 
-const scenarios: { name: string; cut: string | null; suffix: string; conditional: boolean; wireless: boolean; text?: string; noIdentity?: boolean }[] = [
+const scenarios: { name: string; cut: string | null; suffix: string; conditional: boolean; wireless: boolean; text?: string; noProduct?: boolean; facts?: string[] }[] = [
   { name: "unverified observed price", cut: null, suffix: "", conditional: false, wireless: false },
   { name: "withheld conditional price", cut: null, suffix: "\nWith trade-in of a qualifying device.", conditional: true, wireless: false },
   { name: "withheld condition heading", cut: null, suffix: "\n## With trade-in of a qualifying device", conditional: true, wireless: false },
@@ -17,11 +17,14 @@ const scenarios: { name: string; cut: string | null; suffix: string; conditional
   { name: "unknown scan-cut property", cut: "Aster Wave 2 does not have wireless", suffix: " charging.", conditional: true, wireless: true },
   { name: "withheld scan-cut amount", cut: "Price: SGD 349", suffix: " with trade-in.", conditional: true, wireless: false },
   { name: "unknown wrapped property", cut: null, suffix: "\nWireless: No\nCharging support.", conditional: true, wireless: true },
-  { name: "unproven clipped identity", cut: null, suffix: "", conditional: true, wireless: false, noIdentity: true, text: " ".repeat(16384 - adverseHeading.length - 1) + adverseHeading + "\ncases." },
+  { name: "unproven clipped identity", cut: null, suffix: "", conditional: true, wireless: false, noProduct: true, text: " ".repeat(16384 - adverseHeading.length - 1) + adverseHeading + "\ncases." },
   { name: "unknown gap property", cut: null, suffix: "\nWireless: No\n... charging support.", conditional: true, wireless: true },
   { name: "withheld gap amount", cut: null, suffix: "", conditional: true, wireless: false, text: adverseHeading + "\n## Specifications\nPrice: SGD 349\n... per month for 12 months." },
-  { name: "unproven gap identity", cut: null, suffix: "", conditional: true, wireless: false, noIdentity: true, text: adverseHeading + "\n... cases." },
-  { name: "unproven wrapped category", cut: null, suffix: "", conditional: true, wireless: false, noIdentity: true, text: adverseHeading + "\nFor replacement pads." },
+  { name: "unproven gap identity", cut: null, suffix: "", conditional: true, wireless: false, noProduct: true, text: adverseHeading + "\n... cases." },
+  { name: "period category own fields", cut: null, suffix: "", conditional: false, wireless: false, text: adverseHeading + ".\nDriver size: 42 mm.\nPrice: SGD 349", facts: ["Driver size: 42 mm."] },
+  { name: "period category hard exclusion", cut: null, suffix: "", conditional: true, wireless: true, noProduct: true, text: adverseHeading + ".\nWireless: No" },
+  { name: "CRLF section completed price", cut: null, suffix: "", conditional: false, wireless: false, text: adverseHeading.replaceAll("\n", "\r\n") + "\r\n## Specifications\r\nPrice: SGD 349\r\n## Specifications\r\n... per month for 12 months." },
+  { name: "unproven wrapped category", cut: null, suffix: "", conditional: true, wireless: false, noProduct: true, text: adverseHeading + "\nFor replacement pads." },
 ];
 for (const scenario of scenarios) {
   test(`shows ${scenario.name} through the SDK and Hono with responsive uncertainty`, async ({ page }, testInfo) => {
@@ -31,7 +34,7 @@ for (const scenario of scenarios) {
     const text = scenario.text ?? (scenario.cut !== null
       ? cutPrefix + " ".repeat(16384 - cutPrefix.length - scenario.cut.length) + scenario.cut + scenario.suffix
       : base + scenario.suffix);
-    const payload = adversePayload("heading", [text], { price });
+    const payload = adversePayload("heading", [text], { price, facts: scenario.facts });
     let calls = 0;
     let settlements = 0;
     const server = createServer((incoming, outgoing) => {
@@ -63,7 +66,7 @@ for (const scenario of scenarios) {
       await page.getByRole("button", { name: "Send message" }).click();
       const card = page.getByRole("article", { name: "Aster Wave 2", exact: true });
       await expect(page.getByText(/Automated synthetic fixture/)).toBeVisible();
-      if (scenario.noIdentity) {
+      if (scenario.noProduct) {
         await expect(card).toHaveCount(0);
         await page.getByRole("button", { name: "1 research sources" }).click();
         await page.getByRole("button", { name: "Research limits" }).click();
@@ -71,7 +74,10 @@ for (const scenario of scenarios) {
         await expect(page.getByRole("button", { name: "Compare research leads" })).toHaveCount(0);
       } else {
         await expect(card).toBeVisible();
-        await expect(card).toContainText("Specifications not established by this source");
+        if (scenario.facts?.length) {
+          for (const fact of scenario.facts) await expect(card).toContainText(fact);
+          await expect(card).not.toContainText("Specifications not established by this source");
+        } else await expect(card).toContainText("Specifications not established by this source");
         await expect(card).toContainText("Stock and delivery unverified");
         if (scenario.conditional) {
           await expect(card).not.toContainText("Price: SGD 349");
@@ -88,7 +94,7 @@ for (const scenario of scenarios) {
       await expect(page.getByRole("button", { name: "Select this product" })).toHaveCount(0);
       await page.screenshot({ path: testInfo.outputPath("adverse-desktop.png"), fullPage: true, animations: "disabled" });
       await page.setViewportSize({ width: 390, height: 844 });
-      if (!scenario.noIdentity) await card.scrollIntoViewIfNeeded();
+      if (!scenario.noProduct) await card.scrollIntoViewIfNeeded();
       await expect(page.getByLabel("Message", { exact: true })).toBeInViewport();
       expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBe(390);
       await page.screenshot({ path: testInfo.outputPath("adverse-mobile.png"), fullPage: true, animations: "disabled" });
