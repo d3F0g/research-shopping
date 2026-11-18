@@ -100,7 +100,7 @@ export function LiveResearchResults({
           <div className="shortlist-heading">
             <h2>Research leads</h2>
             <span className="metadata">
-              {research.products.length} source-backed alternatives
+              {research.products.length} source-backed leads
             </span>
           </div>
           <div className="product-grid">
@@ -116,14 +116,16 @@ export function LiveResearchResults({
                     <div className="product-identity">
                       <h3>{product.name}</h3>
                       <p className="metadata">
-                        Research lead · Stock unverified
+                        Research lead · Stock and delivery unverified
                       </p>
                     </div>
                   </div>
                   {product.price ? (
                     <div className="observed-price">
                       <Badge variant="secondary">
-                        Page-observed price · Unverified
+                        {product.price.kind === "page-price-context-unverified"
+                          ? "Page price excerpt · Unverified"
+                          : "Page-observed price · Unverified"}
                       </Badge>
                       <p>{product.price.quote}</p>
                     </div>
@@ -131,6 +133,9 @@ export function LiveResearchResults({
                     <p className="metadata">
                       No attributable price observation
                     </p>
+                  )}
+                  {!product.facts.length && (
+                    <p className="metadata">Specifications not established by this source.</p>
                   )}
                   {product.facts[0] && (
                     <p className="product-summary research-preview">
@@ -152,6 +157,7 @@ export function LiveResearchResults({
                       <TraceCollapsibleContent>
                         <ul className="claim-list">
                           {[
+                            product.identity,
                             ...product.facts,
                             ...(product.price ? [product.price] : []),
                           ].map((citation, index) => {
@@ -174,13 +180,7 @@ export function LiveResearchResults({
                       </TraceCollapsibleContent>
                     </TraceCollapsible>
                   </Trace>
-                  <SourceLink
-                    source={
-                      sourceById.get(
-                        (product.facts[0] ?? product.price!).sourceId,
-                      )!
-                    }
-                  />
+                  <SourceLink source={sourceById.get(product.identity.sourceId)!} />
                 </CardContent>
               </Card>
             ))}
@@ -202,8 +202,8 @@ export function LiveResearchResults({
                   <TableHeader>
                     <TableRow>
                       <TableHead>Product</TableHead>
+                      <TableHead>Source specifications</TableHead>
                       <TableHead>Observed price</TableHead>
-                      <TableHead>Needs verification</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
@@ -211,10 +211,10 @@ export function LiveResearchResults({
                       <TableRow key={product.id}>
                         <TableCell>{product.name}</TableCell>
                         <TableCell>
-                          {product.price?.quote ?? "Not observed"}
+                          {product.facts.map((fact) => fact.quote).join(" ") || "Not established by this source"}
                         </TableCell>
                         <TableCell>
-                          {product.unresolvedConstraints.join(". ")}
+                          {product.price?.quote ?? "Not observed"}
                         </TableCell>
                       </TableRow>
                     ))}

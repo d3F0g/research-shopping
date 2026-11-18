@@ -15,9 +15,12 @@ const ResearchCitationSchema = z.object({
 export const ResearchProductSchema = z.object({
   id: z.string().min(1).max(80),
   name: z.string().min(2).max(160),
+  identity: ResearchCitationSchema.extend({
+    kind: z.enum(["direct-model-statement", "single-product-heading"]),
+  }),
   facts: z.array(ResearchCitationSchema).max(3),
   price: ResearchCitationSchema.extend({
-    kind: z.literal("page-observed-unverified"),
+    kind: z.enum(["page-observed-unverified", "page-price-context-unverified"]),
   }).nullable(),
   stock: z.literal("unverified"),
   unresolvedConstraints: z.array(z.string().min(1).max(180)).max(16),
@@ -25,6 +28,7 @@ export const ResearchProductSchema = z.object({
 export const ResearchSnapshotSchema = z
   .object({
     dataKind: z.literal("web-research"),
+    evidenceVersion: z.literal(2),
     retrievedAt: z.string().datetime(),
     products: z.array(ResearchProductSchema).max(5),
     sources: z
@@ -56,19 +60,19 @@ export const ResearchSnapshotSchema = z
         message: "Research sources must be distinct",
       });
     for (const product of snapshot.products) {
-      if (!product.facts.length && !product.price)
-        context.addIssue({
-          code: "custom",
-          message: "A product requires source evidence",
-        });
       for (const citation of [
+        product.identity,
         ...product.facts,
         ...(product.price ? [product.price] : []),
       ]) {
         const source = sources.get(citation.sourceId);
         if (
           !source ||
-          !source.highlights.some((excerpt) => excerpt.includes(citation.quote))
+          !source.highlights.some((excerpt) =>
+            excerpt.includes(citation.quote) &&
+            (product.identity.kind !== "single-product-heading" || excerpt.includes(product.identity.quote)),
+          ) ||
+          citation.sourceId !== product.identity.sourceId
         ) {
           context.addIssue({
             code: "custom",
