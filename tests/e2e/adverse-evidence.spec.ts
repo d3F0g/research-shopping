@@ -8,17 +8,23 @@ import { createResearchTurns } from "../../src/server/research-turns";
 import { adverseHeading, adversePayload } from "../fixtures/adverse-evidence";
 
 const scenarios = [
-  { name: "unverified observed price", suffix: "", conditional: false, wireless: false },
-  { name: "withheld conditional price", suffix: "\nWith trade-in of a qualifying device.", conditional: true, wireless: false },
-  { name: "withheld condition heading", suffix: "\n## With trade-in of a qualifying device", conditional: true, wireless: false },
-  { name: "withheld payment section", suffix: "\n## Terms\nWith trade-in of a qualifying device.", conditional: true, wireless: false },
-  { name: "unknown narrower property", suffix: "\nAster Wave 2 does not have wireless charging.", conditional: false, wireless: true },
-  { name: "unknown negated absence", suffix: "\nAster Wave 2 is not without Bluetooth.", conditional: false, wireless: true },
+  { name: "unverified observed price", cut: null, suffix: "", conditional: false, wireless: false },
+  { name: "withheld conditional price", cut: null, suffix: "\nWith trade-in of a qualifying device.", conditional: true, wireless: false },
+  { name: "withheld condition heading", cut: null, suffix: "\n## With trade-in of a qualifying device", conditional: true, wireless: false },
+  { name: "withheld payment section", cut: null, suffix: "\n## Terms\nWith trade-in of a qualifying device.", conditional: true, wireless: false },
+  { name: "unknown narrower property", cut: null, suffix: "\nAster Wave 2 does not have wireless charging.", conditional: false, wireless: true },
+  { name: "unknown negated absence", cut: null, suffix: "\nAster Wave 2 is not without Bluetooth.", conditional: false, wireless: true },
+  { name: "unknown scan-cut property", cut: "Aster Wave 2 does not have wireless", suffix: " charging.", conditional: true, wireless: true },
+  { name: "withheld scan-cut amount", cut: "Price: SGD 349", suffix: " with trade-in.", conditional: true, wireless: false },
 ];
 for (const scenario of scenarios) {
   test(`shows ${scenario.name} through the SDK and Hono with responsive uncertainty`, async ({ page }, testInfo) => {
     const price = "Price: SGD 349";
-    const text = `${adverseHeading}\n${price}\nAster Wave 2 supports Bluetooth.${scenario.suffix}`;
+    const base = `${adverseHeading}\n${price}\nAster Wave 2 supports Bluetooth.`;
+    const cutPrefix = scenario.wireless ? base + "\n" : adverseHeading + "\n";
+    const text = scenario.cut !== null
+      ? cutPrefix + " ".repeat(16384 - cutPrefix.length - scenario.cut.length) + scenario.cut + scenario.suffix
+      : base + scenario.suffix;
     const payload = adversePayload("heading", [text], { price });
     let calls = 0;
     let settlements = 0;

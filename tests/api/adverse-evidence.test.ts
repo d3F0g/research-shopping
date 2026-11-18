@@ -286,3 +286,81 @@ describe("price applicability across semantic heading roles", () => {
     });
   }
 });
+
+describe("actual scan completion through the product adapter", () => {
+  for (const path of paths) {
+    const prefix = `${identity(path)}\n`;
+    const at = (text: string, length = 16384) => prefix + " ".repeat(length - prefix.length - text.length) + text;
+    for (const length of [16383, 16384, 16385]) {
+      it(`${path} distinguishes a returned EOF, an actual cut and a closed sentence at ${length}`, async () => {
+        const absence = "Aster Wave 2 does not have wireless";
+        expect((await research(adversePayload(path, [at(absence, length) + " charging."]), "wireless")).products).toHaveLength(1);
+        expect((await research(adversePayload(path, [at(absence, length)]), "wireless")).products).toHaveLength(length <= 16384 ? 0 : 1);
+        expect((await research(adversePayload(path, [at(absence + ".", length) + " Additional context."]), "wireless")).products).toHaveLength(length <= 16384 ? 0 : 1);
+      });
+    }
+    it(`${path} keeps property continuations intact at newlines and inline markers`, async () => {
+      for (const suffix of ["\ncharging.", "\nCharging.", " accessories [included items].", " accessories *included items*.", "\n## Accessories\nCase.", " ... charging."]) {
+        const result = await research(adversePayload(path, [prefix + "Aster Wave 2 does not have wireless" + suffix]), "wireless");
+        expect(result.products, suffix).toHaveLength(1);
+        expect(result.products[0].unresolvedConstraints).toContain("wireless needs independent verification");
+      }
+      expect((await research(adversePayload(path, [prefix + "Aster Wave 2 does not have wireless.\n## Accessories\nCase."]), "wireless")).products).toEqual([]);
+    });
+    it(`${path} does not exclude an unfinished manufacturer or publish an unfinished positive fact`, async () => {
+      const maker = "Aster Wave 2 is made by Bose";
+      expect((await research(adversePayload(path, [at(maker) + "craft."]), undefined, ["Bose"])).products).toHaveLength(1);
+      expect((await research(adversePayload(path, [at(maker)]), undefined, ["Bose"])).products).toEqual([]);
+      expect((await research(adversePayload(path, [at(maker + ".", 16383) + " More context."]), undefined, ["Bose"])).products).toEqual([]);
+      const fact = "Aster Wave 2 supports Bluetooth";
+      for (const [text, quote, admitted] of [[at(fact) + " LE Audio.", fact, false], [at(fact), fact, true], [at(fact + ".", 16383) + " More context.", fact + ".", true]] as const) {
+        const result = await research(adversePayload(path, [text], { facts: [...(path === "direct" ? [adverseClass] : []), quote] }));
+        expect(result.products).toHaveLength(1);
+        expect(result.products[0].facts.some((entry) => entry.quote === quote)).toBe(admitted);
+      }
+    });
+    it(`${path} requires a complete price and retains open qualifiers as uncertainty`, async () => {
+      const amount = path === "heading" ? "Price: SGD 349" : "Aster Wave 2 costs SGD 349";
+      expect((await research(adversePayload(path, [at(amount) + " with trade-in."], { price: amount }))).products[0].price).toBeNull();
+      expect((await research(adversePayload(path, [at(amount)], { price: amount }))).products[0].price?.quote).toBe(amount);
+      const priced = prefix + amount + "\n";
+      const qualifier = "With trade-in";
+      const clipped = priced + " ".repeat(16384 - priced.length - qualifier.length) + qualifier + " of a qualifying device.";
+      expect((await research(adversePayload(path, [clipped], { price: amount }))).products[0].price).toBeNull();
+    });
+    it(`${path} requires completion before proving the product category`, async () => {
+      const open = path === "heading" ? adverseHeading : adverseClass.slice(0, -1);
+      const atLimit = " ".repeat(16384 - open.length) + open;
+      const facts = path === "direct" ? [open] : [];
+      expect((await research(adversePayload(path, [atLimit + " case."], { facts }))).products).toEqual([]);
+      expect((await research(adversePayload(path, [atLimit], { facts }))).products).toHaveLength(1);
+    });
+    it(`${path} withholds a price for an open exact-model qualifier in another retained highlight`, async () => {
+      const amount = path === "heading" ? "Price: SGD 349" : "Aster Wave 2 costs SGD 349.";
+      const qualifier = "Aster Wave 2 requires trade-in";
+      const clipped = " ".repeat(16384 - qualifier.length) + qualifier + " of a qualifying device.";
+      expect((await research(adversePayload(path, [prefix + amount, clipped], { price: amount }))).products[0].price).toBeNull();
+      for (const foreign of ["Orbit Quiet requires trade-in", "Aster Wave 2 Pro requires trade-in"]) {
+        const other = " ".repeat(16384 - foreign.length) + foreign + " of a qualifying device.";
+        expect((await research(adversePayload(path, [prefix + amount, other], { price: amount }))).products[0].price?.quote).toBe(amount);
+      }
+    });
+    it(`${path} cannot use a clipped heading to hide unresolved price context`, async () => {
+      const amount = path === "heading" ? "Price: SGD 349" : "Aster Wave 2 costs SGD 349.";
+      const priced = prefix + amount + "\n";
+      for (const label of ["## Specifications", "## Orbit Quiet"]) {
+        const clipped = priced + " ".repeat(16384 - priced.length - label.length) + label + " payment terms";
+        expect((await research(adversePayload(path, [clipped], { price: amount }))).products[0].price, label).toBeNull();
+      }
+      expect((await research(adversePayload(path, [priced + "## Orbit Quiet\nWith trade-in."], { price: amount }))).products[0].price?.quote).toBe(amount);
+    });
+  }
+  it("does not treat a clipped full-class heading as the complete source designation", async () => {
+    const name = "Aster Wave 2 Headphones";
+    const heading = `# ${name}`;
+    const atLimit = " ".repeat(16384 - heading.length) + heading;
+    const changes = { name, title: `${name} | Synthetic fixture` };
+    expect((await research(adversePayload("heading", [atLimit + " Pro"], changes))).products).toEqual([]);
+    expect((await research(adversePayload("heading", [atLimit], changes))).products.map((entry) => entry.name)).toEqual([name]);
+  });
+});
