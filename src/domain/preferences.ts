@@ -116,6 +116,7 @@ export function updatePreferences(message: string, previous: Preferences): Prefe
     fail("constraint", "Budgets are maximum spending limits. State a maximum amount and currency; minimum or negated budgets are unsupported.");
   }
   const amounts: { token: string; currency?: Currency; dollar: boolean }[] = [];
+  let budgetUpdate: { budget: NonNullable<Preferences["hard"]["budget"]>; note: string | null } | undefined;
   consume(/(?:\b(SGD|USD|US\$|S\$)|\$)\s*([+-]?(?:\d[\d,._]*(?:e[+-]?\d+)?[km]?|infinity|nan))\b/gi, (match) => {
     amounts.push({ token: match[2], currency: match[1] ? (/^(?:USD|US\$)$/i.test(match[1]) ? "USD" : "SGD") : undefined, dollar: !match[1] });
   });
@@ -133,19 +134,19 @@ export function updatePreferences(message: string, previous: Preferences): Prefe
       fail("constraint", "Use a budget greater than zero and no more than 1,000,000, with at most two decimal places. Scientific notation and abbreviated amounts are unsupported.");
     } else {
       const chosenCurrency = currency ?? (preferences.hard.region === "SG" ? "SGD" : "USD");
-      preferences.hard.budget = { amount, currency: chosenCurrency };
-      actionable = true;
-      if (!currency) notes.push(`${dollar ? "The $ sign" : "The amount without a currency"} means ${chosenCurrency} in the ${preferences.hard.region} region. State SGD or USD to change it.`);
+      budgetUpdate = {
+        budget: { amount, currency: chosenCurrency },
+        note: currency ? null : `${dollar ? "The $ sign" : "The amount without a currency"} means ${chosenCurrency} in the ${preferences.hard.region} region. State SGD or USD to change it.`,
+      };
     }
   }
   consume(/\b(SGD|USD)\b/gi, (match) => {
     const currency = match[1].toUpperCase() as Currency;
-    if (preferences.hard.budget?.currency !== currency) fail("currency", "State a new budget amount with that currency. I cannot convert or remove an existing budget without your instruction.");
+    if ((budgetUpdate?.budget.currency ?? preferences.hard.budget?.currency) !== currency) {
+      budgetUpdate = undefined;
+      fail("currency", "State a new budget amount with that currency. I cannot convert or remove an existing budget without your instruction.");
+    }
   });
-  if (previous.hard.region !== preferences.hard.region && preferences.hard.budget
-    && preferences.hard.budget.currency !== (preferences.hard.region === "SG" ? "SGD" : "USD")) {
-    notes.push("The previous budget currency does not match this region. No currency conversion or cross-currency comparison will be made.");
-  }
 
   consume(/\b(?:exclude|avoid|not|no|don't want|do not want|don't like|do not like)\s+((?:sony|bose|sennheiser|audio[- ]technica|asus|dell|apple|lenovo|hp|acer|samsung)(?:\s*(?:,|and|or)\s*(?:sony|bose|sennheiser|audio[- ]technica|asus|dell|apple|lenovo|hp|acer|samsung))*)\b/gi, (match) => {
     const excluded = match[1].split(/\s*(?:,|\band\b|\bor\b)\s*/i).map((brand) => brands.get(brand.toLowerCase().replace("audio technica", "audio-technica"))!);
@@ -194,6 +195,15 @@ export function updatePreferences(message: string, previous: Preferences): Prefe
   consume(/\b(?:i'm|i|we|me|my|our|something|anything|choose|after|a|an|the|some|please|can|could|would|you|want|need|find|recommend|recommendations?|options?|products?|show|compare|comparison|looking|look|buy|shopping|shop|help|good|nice|best|great|suitable|for|with|and|or|but|to|of|in|on|at|is|it|these|those|them|instead|actually|now|also|then|still|just|only|must|have|be|required?|requires|prefer|prioriti[sz]e|better|more|less|focus|care|about|under|below|up|most|budget|limit|maximum|max|make|change|set|lower|raise|reduce|increase|keep|give|get|new|available|any|all|remove|drop|don't|do|not|no|without|than)\b/gi);
   const unrecognized = remaining.replace(/[\s.,!?;:'"()\-]/g, "");
   if (unrecognized) fail("constraint", "I cannot reliably apply part of that request. Supported constraints are category, budget, region, brand exclusions and the listed features. Rephrase it, or explicitly clear the pending constraint.");
+  if (budgetUpdate && !unrecognized) {
+    preferences.hard.budget = budgetUpdate.budget;
+    actionable = true;
+    if (budgetUpdate.note) notes.push(budgetUpdate.note);
+  }
+  if (previous.hard.region !== preferences.hard.region && preferences.hard.budget
+    && preferences.hard.budget.currency !== (preferences.hard.region === "SG" ? "SGD" : "USD")) {
+    notes.push("The previous budget currency does not match this region. No currency conversion or cross-currency comparison will be made.");
+  }
 
   if (preferences.hard.pendingConstraint && !issue) {
     issue = { reason: "constraint", message: "An unresolved requirement is still active. I will not recommend products until you explicitly clear the pending constraint or reset this session." };

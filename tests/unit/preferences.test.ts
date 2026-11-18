@@ -1,8 +1,11 @@
 import { describe, expect, it, vi } from "vitest";
+import { randomUUID } from "node:crypto";
 import { defaultPreferences } from "../../src/domain/contracts";
 import { updatePreferences } from "../../src/domain/preferences";
 import { createShoppingEngine } from "../../src/domain/shopping";
 import { createFixtureProviders } from "../../src/server/fixtures";
+import { createApp } from "../../src/server/app";
+import { createResearchTurns } from "../../src/server/research-turns";
 
 function existingPreferences() {
   const preferences = defaultPreferences();
@@ -14,6 +17,76 @@ function existingPreferences() {
 }
 
 describe("budget currency clarification", () => {
+  it.each(["CHF", "HKD", "CNY", "₹", "₩"])(
+    "does not infer a default currency from an amount with unexplained %s",
+    (suffix) => {
+      const previous = existingPreferences();
+      const message = `under 200 ${suffix}`;
+      const result = updatePreferences(message, previous);
+      expect(result.clarification?.reason).toBe("constraint");
+      expect(result.preferences).toEqual({
+        ...previous,
+        hard: { ...previous.hard, pendingConstraint: message },
+      });
+      expect(result.notes).toEqual([]);
+    },
+  );
+
+  it.each(["under 200", "under $200", "headphones under 200 for commuting", "under 200 with wireless"])(
+    "retains regional default-currency behavior for %s",
+    (message) => {
+      const result = updatePreferences(message, existingPreferences());
+      expect(result.clarification).toBeUndefined();
+      expect(result.preferences.hard.budget).toEqual({ currency: "SGD", amount: 200 });
+      expect(result.notes).toHaveLength(1);
+    },
+  );
+
+  it.each(["under SGD200 and CHF200", "under USD200 and CHF", "under 200 unrecognized", "head200EUR", "EUR200phone", "v2eur"])(
+    "keeps the previous budget when %s contains unexplained text",
+    (message) => {
+      const previous = existingPreferences();
+      const result = updatePreferences(message, previous);
+      expect(result.clarification).toBeDefined();
+      expect(result.preferences.hard.budget).toEqual(previous.hard.budget);
+      expect(result.preferences.hard.pendingConstraint).toBe(message);
+      expect(result.notes).toEqual([]);
+    },
+  );
+
+  it("keeps other recognized edits when a new unknown requirement blocks a budget change", () => {
+    const previous = existingPreferences();
+    const message = "exclude Sony under SGD200 and must be waterproof";
+    const result = updatePreferences(message, previous);
+    expect(result.clarification?.reason).toBe("constraint");
+    expect(result.preferences.hard).toEqual({
+      ...previous.hard,
+      excludedBrands: ["Bose", "Sony"],
+      pendingConstraint: message,
+    });
+  });
+
+  it("keeps a budget separate from a recognized numeric laptop specification", () => {
+    const result = updatePreferences("laptop under SGD2000 with 32 GB memory", existingPreferences());
+    expect(result.clarification).toBeUndefined();
+    expect(result.preferences.hard.budget).toEqual({ currency: "SGD", amount: 2000 });
+    expect(result.preferences.hard.requiredFeatures).toEqual(["high-memory"]);
+  });
+
+  it("does not accept an unexplained model name as part of a budget request", () => {
+    const previous = existingPreferences();
+    const result = updatePreferences("headphones under SGD200 Sony WH-1000XM5", previous);
+    expect(result.clarification?.reason).toBe("constraint");
+    expect(result.preferences.hard.budget).toEqual(previous.hard.budget);
+  });
+
+  it("does not apply a proposed budget with a conflicting standalone currency", () => {
+    const previous = existingPreferences();
+    const result = updatePreferences("under USD200 SGD", previous);
+    expect(result.clarification?.reason).toBe("currency");
+    expect(result.preferences.hard.budget).toEqual(previous.hard.budget);
+  });
+
   it.each(["EUR200", "EUR 200", "200EUR", "200 EUR", "GBP200", "AUD200", "CAD200", "JPY200", "MYR200", "INR200", "€200", "£200", "¥200"])(
     "identifies unsupported %s without replacing accepted preferences",
     (budget) => {
@@ -105,6 +178,52 @@ describe("budget currency clarification", () => {
       expect(discover).not.toHaveBeenCalled();
       await engine.turn("under SGD200", previous);
       expect(discover).toHaveBeenCalledOnce();
+    },
+  );
+
+  it.each(["CHF", "HKD", "CNY", "₹", "₩"])(
+    "preserves the HTTP budget and blocks research for an unexplained %s amount",
+    async (suffix) => {
+      const research = vi.fn(async () => ({ status: "unavailable", reason: "empty" }) as const);
+      const reserve = vi.fn(async () => "admitted" as const);
+      const app = createApp({ researchTurns: createResearchTurns({ research, quota: { reserve, settle: vi.fn() } }) });
+      const previous = existingPreferences();
+      const message = `under 200 ${suffix}`;
+      const response = await app.request("http://127.0.0.1:3000/api/turn", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message, preferences: previous, operationId: randomUUID() }),
+      });
+      expect(response.status).toBe(200);
+      const body = await response.json();
+      expect(body).toMatchObject({
+        kind: "clarification",
+        reason: "constraint",
+        preferences: { ...previous, hard: { ...previous.hard, pendingConstraint: message } },
+        notes: [],
+        toolActivity: [],
+      });
+      expect(reserve).not.toHaveBeenCalled();
+      expect(research).not.toHaveBeenCalled();
+      const followup = await app.request("http://127.0.0.1:3000/api/turn", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: "under SGD200", preferences: body.preferences, operationId: randomUUID() }),
+      });
+      expect(await followup.json()).toMatchObject({
+        kind: "clarification",
+        reason: "constraint",
+        preferences: { hard: { budget: { currency: "SGD", amount: 200 }, pendingConstraint: message } },
+      });
+      expect(reserve).not.toHaveBeenCalled();
+      expect(research).not.toHaveBeenCalled();
+      await app.request("http://127.0.0.1:3000/api/turn", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: "under SGD200", preferences: previous, operationId: randomUUID() }),
+      });
+      expect(reserve).toHaveBeenCalledOnce();
+      expect(research).toHaveBeenCalledOnce();
     },
   );
 });
