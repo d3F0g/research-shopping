@@ -4,7 +4,7 @@ Fieldnote's normal development backend discovers products through Exa. It does n
 
 ## Run the intended application version
 
-Use Node.js22.12 or newer and npm11. Run from the verified feature or local preview checkout. A listening localhost port does not identify the served commit. The original main checkout can still contain the old fixture implementation while its replacement remains unmerged.
+Use Node.js 22.12 or newer and npm 11. Run from the verified feature or local preview checkout. A listening localhost port does not identify the served commit. The original main checkout can still contain the old fixture implementation while its replacement remains unmerged.
 
 ```sh
 npx --yes npm@11.6.2 ci
@@ -19,9 +19,9 @@ Normal live composition requires development mode, an enabled integration, a non
 
 ## Understand the request flow
 
-The server owns intent interpretation. Current intent, response and evidence contracts use version4. Budget `amount` is the maximum; optional `minimum` is the hard floor. Both are validated and enforced in the same currency. A complete range such as `Necklaces between 1k to 2k` preserves its description and bounds without a category lookup. The app discloses an assumed request currency. Source currency still needs explicit source evidence.
+The server owns intent interpretation. Current intent, response and evidence contracts use version 4. Budget `amount` is the maximum; optional `minimum` is the hard floor. Both are validated and enforced in the same currency. A complete range such as `Necklaces between 1k to 2k` preserves its description and bounds without a category lookup. The app discloses an assumed request currency. Source currency still needs explicit source evidence.
 
-Preparation updates preferences without a provider call. The client acknowledges that intent before research starts, so Stop preserves accepted exclusions and price bounds. Invalid hard changes remain pending until correction or explicit discard. Completed historical data is separate from prepared transport state. Frozen version3 and earlier snapshots do not acquire new range semantics. Only active intent is migrated explicitly.
+Preparation updates preferences without a provider call. The client acknowledges that intent before research starts, so Stop preserves accepted exclusions and price bounds. Invalid hard changes remain pending until correction or explicit discard. Completed historical data is separate from prepared transport state. Frozen version 3 and earlier snapshots do not acquire new range semantics. Only active intent is migrated explicitly.
 
 Local greetings, acknowledgments, app-help replies, detail changes and existing evidence disclosures do not start research. Shopping submissions can trigger one paid Exa operation after necessary preferences are resolved. The composer discloses that possibility before submission. No redundant confirmation or context button is required. HTTP preparation and research are two local phases, not two provider calls or simulated token streaming.
 
@@ -47,11 +47,11 @@ Page prices are observed and unverified with the merchant. Retrieval time is not
 
 ## Preserve the shared usage allowance
 
-The local admission policy permits at most40 attempts, reserves US$0.05 for each, caps reserved exposure at US$2 and allows one active operation. These limits are not the Exa account balance or a provider-enforced spending cap. Record provider-reported costs separately.
+The local admission policy permits at most 40 attempts, reserves US$0.05 for each, caps reserved exposure at US$2 and allows one active operation. These limits are not the Exa account balance or a provider-enforced spending cap. Record provider-reported costs separately.
 
 Persist admission before dispatch. Duplicate operation IDs, ordinary replies and held-evidence controls add no provider operation. Cancellation reaches the actual SDK request and response body. An abort does not establish zero cost. Unknown charges, interrupted requests and crashes retain their reservation and stop further paid work. Do not delete or reset a ledger, clear its stopped flag, substitute a new key or fabricate a zero-cost completion to continue.
 
-Issue #42 currently holds genuine live verification after a30-second timeout without a reported cost. Seven settled records report US$0.045; the eighth is uncertain with US$0.05 reserved. The provider balance remains unverified. Trustworthy reconciliation and a newly recorded bounded allowance are required before another real research call. Existing historical proof allowances do not replenish themselves.
+Issue #42 currently holds genuine live verification after a 30-second timeout without a reported cost. Seven settled records report US$0.045; the eighth is uncertain with US$0.05 reserved. The provider balance remains unverified. Trustworthy reconciliation and a newly recorded bounded allowance are required before another real research call. Existing historical proof allowances do not replenish themselves.
 
 ## Read the canonical skill before API changes
 
@@ -61,7 +61,7 @@ Run the documented setup command and read its complete output before choosing or
 npx skills use "https://github.com/exa-labs/agent-skills" --skill "build-with-exa"
 ```
 
-Resolve relative references from the supporting-files directory printed by that run. Consult its Answer, Search, SDK and prompting references as appropriate. The latest setup output was read completely for this work. The installed exa-js2.28 matched the npm release checked on18November2026. Recheck rather than assuming that remains current.
+Resolve relative references from the supporting-files directory printed by that run. Consult its Answer, Search, SDK and prompting references as appropriate. The latest setup output was read completely for this work. The installed exa-js 2.28 matched the npm release checked on 18 November 2026. Recheck rather than assuming that remains current.
 
 ## Verify without spending credits
 
@@ -79,4 +79,4 @@ After building, run the existing private leak verifier. It inspects reachable Gi
 node --env-file=.env .codex/pstack-runs/exa-integration/verify-no-secret.mjs
 ```
 
-Inherited dependency findings remain tracked in Issue #27. Its earlier audit reported12 propagated high tooling findings. Verify the current state during security review; do not present historical zero-audit records as current approval.
+Inherited dependency findings remain tracked in Issue #27. Its earlier audit reported 12 propagated high tooling findings. Verify the current state during security review; do not present historical zero-audit records as current approval.
