@@ -6,6 +6,7 @@ import {
   independentBudgetClauses,
   negatedBudgetCommands,
   originalBudgetRequest,
+  positiveMonetaryClauses,
 } from "../fixtures/budget-negation";
 
 const priorIntent = () =>
@@ -110,6 +111,7 @@ describe("negated hard budget changes", () => {
 
   it.each([
     ...independentBudgetClauses,
+    ...positiveMonetaryClauses,
     "Increase my spending to SGD3000",
     "Change the amount to SGD3000",
     "Raise my discretionary allocation to SGD3000",

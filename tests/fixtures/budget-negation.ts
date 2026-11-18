@@ -33,6 +33,17 @@ export const ambiguousBudgetCommands = [
   "Do not change the amount to SGD3000",
   "Do not raise my discretionary allocation to SGD3000",
   "Don’t change the travel fund to 3,000.50 SGD",
+  "My budget must not be increased to SGD3000",
+  "My budget is not to be changed to SGD3000",
+  "I do not authorize increasing my budget to SGD3000",
+  "Please avoid increasing my budget to SGD3000",
+  "I refuse to raise my budget to SGD3000",
+  "Do not double my budget to SGD3000",
+  "The allowance must never be reindexed to 3,000.25 SGD",
+  "SGD3000 must not supersede the current allowance",
+  "I haven’t agreed to a SGD3000 ceiling",
+  "Without my consent the allowance would become SGD3000",
+  "Do not increase my budget; SGD3000 is too much",
 ];
 
 export const independentBudgetClauses = [
@@ -41,4 +52,14 @@ export const independentBudgetClauses = [
   "Do not change the length beyond 2.5 cm. Budget SGD3000",
   "Do not change the length beyond 2.5 cm\nBudget SGD3000",
   "Do not increase the weight beyond 2 kg, and set the budget to SGD3000",
+  "I refuse nickel; budget SGD3000",
+  "Avoid leather, no more than SGD3000",
+];
+
+export const positiveMonetaryClauses = [
+  "My budget may be increased to SGD3000",
+  "I authorize increasing my budget to SGD3000",
+  "Double my budget to SGD3000",
+  "No more than SGD3,000.00",
+  "No more than 3,000.00 SGD",
 ];

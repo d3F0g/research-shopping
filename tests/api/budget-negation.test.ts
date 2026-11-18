@@ -11,6 +11,7 @@ import {
   independentBudgetClauses,
   negatedBudgetCommands,
   originalBudgetRequest,
+  positiveMonetaryClauses,
 } from "../fixtures/budget-negation";
 import { syntheticAnswer } from "../fixtures/dynamic-research";
 import { localProvider } from "../helpers/local-exa";
@@ -134,6 +135,7 @@ describe("HTTP budget mutation polarity before paid research", () => {
     "Change the amount to SGD3000",
     "Raise my discretionary allocation to SGD3000",
     ...independentBudgetClauses,
+    ...positiveMonetaryClauses,
   ])(
     "dispatches one local request for the accepted counterpart %s",
     async (message) => {
