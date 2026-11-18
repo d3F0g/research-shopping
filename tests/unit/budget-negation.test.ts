@@ -3,6 +3,7 @@ import { defaultIntent } from "../../src/domain/contracts";
 import { updateIntent } from "../../src/domain/preferences";
 import {
   ambiguousBudgetCommands,
+  independentBudgetClauses,
   negatedBudgetCommands,
   originalBudgetRequest,
 } from "../fixtures/budget-negation";
@@ -106,4 +107,20 @@ describe("negated hard budget changes", () => {
       });
     },
   );
+
+  it.each([
+    ...independentBudgetClauses,
+    "Increase my spending to SGD3000",
+    "Change the amount to SGD3000",
+    "Raise my discretionary allocation to SGD3000",
+  ])("keeps positive money separate from non-money negation in %s", (message) => {
+    const result = updateIntent(message, priorIntent());
+    expect(result.clarification).toBeUndefined();
+    expect(result.reply).toBeUndefined();
+    expect(result.preferences.budget).toEqual({
+      minimum: 1000,
+      amount: 3000,
+      currency: "SGD",
+    });
+  });
 });

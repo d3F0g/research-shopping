@@ -8,6 +8,7 @@ import { createExaProductResearch } from "../../src/server/exa-research";
 import { createResearchTurns } from "../../src/server/research-turns";
 import {
   ambiguousBudgetCommands,
+  independentBudgetClauses,
   negatedBudgetCommands,
   originalBudgetRequest,
 } from "../fixtures/budget-negation";
@@ -129,6 +130,10 @@ describe("HTTP budget mutation polarity before paid research", () => {
     "Set my maximum to SGD3000",
     "No more than SGD3000",
     "A neutron interferometer under SGD3000. Must not contain nickel.",
+    "Increase my spending to SGD3000",
+    "Change the amount to SGD3000",
+    "Raise my discretionary allocation to SGD3000",
+    ...independentBudgetClauses,
   ])(
     "dispatches one local request for the accepted counterpart %s",
     async (message) => {

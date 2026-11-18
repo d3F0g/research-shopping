@@ -29,4 +29,16 @@ export const ambiguousBudgetCommands = [
   "Don't make it SGD3000",
   "No need to change my budget to SGD3000",
   "Can we not change my budget to SGD3000?",
+  "Do not increase my spending to SGD3000",
+  "Do not change the amount to SGD3000",
+  "Do not raise my discretionary allocation to SGD3000",
+  "Don’t change the travel fund to 3,000.50 SGD",
+];
+
+export const independentBudgetClauses = [
+  "Do not increase the weight beyond2kg, budget SGD3000",
+  "Do not raise the weight beyond 2 kg; budget SGD3000",
+  "Do not change the length beyond 2.5 cm. Budget SGD3000",
+  "Do not change the length beyond 2.5 cm\nBudget SGD3000",
+  "Do not increase the weight beyond 2 kg, and set the budget to SGD3000",
 ];
