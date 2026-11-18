@@ -20,7 +20,9 @@ describe("HTTP budget mutation polarity before paid research", () => {
   let requests: number;
   const reserve = vi.fn(async () => "admitted" as const);
   const settle = vi.fn(async () => {});
-  let research: ReturnType<typeof vi.fn<ReturnType<typeof createExaProductResearch>>>;
+  let research: ReturnType<
+    typeof vi.fn<ReturnType<typeof createExaProductResearch>>
+  >;
 
   beforeEach(async () => {
     requests = 0;
@@ -31,10 +33,19 @@ describe("HTTP budget mutation polarity before paid research", () => {
       response.writeHead(200, { "Content-Type": "application/json" });
       response.end(JSON.stringify(syntheticAnswer()));
     });
-    research = vi.fn(createExaProductResearch("fake-test-key", { baseUrl: provider.baseUrl }));
-    app = createApp({ researchTurns: createResearchTurns({ research, quota: { reserve, settle } }) });
+    research = vi.fn(
+      createExaProductResearch("fake-test-key", { baseUrl: provider.baseUrl }),
+    );
+    app = createApp({
+      researchTurns: createResearchTurns({
+        research,
+        quota: { reserve, settle },
+      }),
+    });
   });
-  afterEach(async () => { await provider.close(); });
+  afterEach(async () => {
+    await provider.close();
+  });
 
   const post = async (body: unknown) => {
     const response = await app.request("http://127.0.0.1:3000/api/turn", {
@@ -47,7 +58,8 @@ describe("HTTP budget mutation polarity before paid research", () => {
   };
   const prepare = (message: string, preferences: ShoppingIntent) =>
     post({ phase: "prepare", message, preferences, operationId: randomUUID() });
-  const priorIntent = () => updateIntent(originalBudgetRequest, defaultIntent()).preferences;
+  const priorIntent = () =>
+    updateIntent(originalBudgetRequest, defaultIntent()).preferences;
   const expectNoDispatch = () => {
     expect(reserve).not.toHaveBeenCalled();
     expect(settle).not.toHaveBeenCalled();
@@ -55,36 +67,58 @@ describe("HTTP budget mutation polarity before paid research", () => {
     expect(requests).toBe(0);
   };
 
-  it.each(negatedBudgetCommands)("does not prepare a paid submission for %s", async (message) => {
-    const previous = priorIntent();
-    const result = await prepare(message, previous);
-    expect(result.kind).toBe("message");
-    expect(result.preferences).toEqual(previous);
-    expectNoDispatch();
-  });
+  it.each(negatedBudgetCommands)(
+    "does not prepare a paid submission for %s",
+    async (message) => {
+      const previous = priorIntent();
+      const result = await prepare(message, previous);
+      expect(result.kind).toBe("message");
+      expect(result.preferences).toEqual(previous);
+      expectNoDispatch();
+    },
+  );
 
-  it.each(ambiguousBudgetCommands)("blocks research until a compound or ambiguous instruction is resolved: %s", async (message) => {
-    const previous = priorIntent();
-    const result = await prepare(message, previous);
-    expect(result.kind).toBe("clarification");
-    expect(result.preferences.budget).toEqual(previous.budget);
-    expect(result.preferences.pendingChange?.message).toBe(message);
-    const direct = await post({ phase: "research", preferences: result.preferences, operationId: randomUUID() });
-    expect(direct.kind).toBe("clarification");
-    const thanks = await prepare("Thanks", result.preferences);
-    expect(thanks.kind).toBe("message");
-    expect(thanks.preferences.pendingChange).toEqual(result.preferences.pendingChange);
-    expect((await prepare("Compare options", thanks.preferences)).kind).toBe("clarification");
-    expectNoDispatch();
-  });
+  it.each(ambiguousBudgetCommands)(
+    "blocks research until a compound or ambiguous instruction is resolved: %s",
+    async (message) => {
+      const previous = priorIntent();
+      const result = await prepare(message, previous);
+      expect(result.kind).toBe("clarification");
+      expect(result.preferences.budget).toEqual(previous.budget);
+      expect(result.preferences.pendingChange?.message).toBe(message);
+      const direct = await post({
+        phase: "research",
+        preferences: result.preferences,
+        operationId: randomUUID(),
+      });
+      expect(direct.kind).toBe("clarification");
+      const thanks = await prepare("Thanks", result.preferences);
+      expect(thanks.kind).toBe("message");
+      expect(thanks.preferences.pendingChange).toEqual(
+        result.preferences.pendingChange,
+      );
+      expect((await prepare("Compare options", thanks.preferences)).kind).toBe(
+        "clarification",
+      );
+      expectNoDispatch();
+    },
+  );
 
   it("retains an earlier pending currency change through a negated command and ordinary replies", async () => {
-    const pending = await prepare("Under CHF500. Must be nickel-free.", priorIntent());
-    const result = await prepare("Do not increase my budget to SGD3000", pending.preferences);
+    const pending = await prepare(
+      "Under CHF500. Must be nickel-free.",
+      priorIntent(),
+    );
+    const result = await prepare(
+      "Do not increase my budget to SGD3000",
+      pending.preferences,
+    );
     expect(result.kind).toBe("message");
     expect(result.preferences).toEqual(pending.preferences);
     const thanks = await prepare("Thanks", result.preferences);
-    expect((await prepare("Compare options", thanks.preferences)).kind).toBe("clarification");
+    expect((await prepare("Compare options", thanks.preferences)).kind).toBe(
+      "clarification",
+    );
     expectNoDispatch();
   });
 
@@ -95,15 +129,26 @@ describe("HTTP budget mutation polarity before paid research", () => {
     "Set my maximum to SGD3000",
     "No more than SGD3000",
     "A neutron interferometer under SGD3000. Must not contain nickel.",
-  ])("dispatches one local request for the accepted counterpart %s", async (message) => {
-    const prepared = await prepare(message, priorIntent());
-    expect(prepared.kind).toBe("prepared");
-    expect(prepared.preferences.budget).toEqual({ minimum: 1000, amount: 3000, currency: "SGD" });
-    expectNoDispatch();
-    await post({ phase: "research", preferences: prepared.preferences, operationId: randomUUID() });
-    expect(reserve).toHaveBeenCalledTimes(1);
-    expect(settle).toHaveBeenCalledTimes(1);
-    expect(research).toHaveBeenCalledTimes(1);
-    expect(requests).toBe(1);
-  });
+  ])(
+    "dispatches one local request for the accepted counterpart %s",
+    async (message) => {
+      const prepared = await prepare(message, priorIntent());
+      expect(prepared.kind).toBe("prepared");
+      expect(prepared.preferences.budget).toEqual({
+        minimum: 1000,
+        amount: 3000,
+        currency: "SGD",
+      });
+      expectNoDispatch();
+      await post({
+        phase: "research",
+        preferences: prepared.preferences,
+        operationId: randomUUID(),
+      });
+      expect(reserve).toHaveBeenCalledTimes(1);
+      expect(settle).toHaveBeenCalledTimes(1);
+      expect(research).toHaveBeenCalledTimes(1);
+      expect(requests).toBe(1);
+    },
+  );
 });

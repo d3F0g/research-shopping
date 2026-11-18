@@ -24,5 +24,9 @@ export const ambiguousBudgetCommands = [
   "I don't want to increase my budget to SGD3000",
   "My budget should not increase to SGD3000",
   "My maximum budget is not SGD3000",
+  "My maximum budget should not be SGD3000",
+  "I don’t want a budget of SGD3000",
+  "Don't make it SGD3000",
+  "No need to change my budget to SGD3000",
   "Can we not change my budget to SGD3000?",
 ];

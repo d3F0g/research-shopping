@@ -243,6 +243,13 @@ function interpretMessage(
   }
   const intent = structuredClone(previous);
   const budget = parseBudget(text, previous.budget, previous.region);
+  if (budget.kind === "retained")
+    return {
+      preferences: previous,
+      notes: [],
+      reply:
+        "Your budget has not changed. Your preferences and earlier research are still here.",
+    };
   if (budget.kind === "updated") {
     intent.budget = budget.budget;
     intent.budgetClarified = true;

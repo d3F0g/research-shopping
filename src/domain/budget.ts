@@ -20,10 +20,27 @@ const measurementUnit =
   /^\s*(?:[fpnumckMGT]?(?:m|g|s|A|K|Hz|W|V|B|l)|dB|mAh|Wh|lbs?|oz|inches|ft|feet|hours?|minutes?|litres?|liters?|grams?|kilograms?|centimetres?|centimeters?|metres?|meters?|pixels?|percent|%)(?:\b|$)/i;
 type BudgetUpdate =
   | { kind: "unchanged" }
+  | { kind: "retained" }
   | { kind: "updated"; budget: ShoppingIntent["budget"]; note?: string }
   | { kind: "clarification"; reason: "currency" | "budget"; message: string };
 
 const currencyToken = String.raw`SGD|USD|US\$|S\$|\$`;
+const budgetMutation = String.raw`(?:increase|raise|change|adjust|set|update|make|reduce|lower|decrease|remove|drop|clear|forget|relax|lift)`;
+const budgetSubject = String.raw`(?:(?:my|the|our|current|existing)\s+)*(?:budget(?:\s+(?:range|limit|minimum|maximum))?|(?:minimum|maximum|min|max)(?:\s+(?:budget|price))?|(?:lower|upper)\s+(?:budget\s+)?(?:bound|limit)|price\s+(?:floor|cap|ceiling)|spending\s+(?:cap|limit))`;
+const money = String.raw`(?:(?:${currencyToken})\s*)?${amountToken}(?:\s*(?:SGD|USD))?`;
+const negation = String.raw`(?:not|never|no\s+need\s+to|(?:don|doesn|didn|won|wouldn|shouldn|couldn|can|isn|aren)'t)`;
+const negatedCommand = new RegExp(
+  String.raw`^(?:please\s+)?(?:do\s+not|don't|never)\s+${budgetMutation}\s+${budgetSubject}(?:\s+(?:to|at|by)\s+(?:(?:between|from)\s+)?${money}(?:\s*(?:to|and|[-–—])\s*${money})?)?[.!]*$`,
+  "i",
+);
+const negatedMutation = new RegExp(
+  String.raw`\b${negation}\s+(?:(?:want|need|wish|intend|plan|you|us|me|to|ever|please|just|really)\s+)*${budgetMutation}\s+(?:${budgetSubject}\b|(?:it\s+)?(?:to\s+)?${money})`,
+  "i",
+);
+const negatedMoney = new RegExp(
+  String.raw`\b${negation}\s+(?:(?:want|need|be|have|use|spend|pay|a|the|to|at)\s+)*(?:${budgetSubject}\s+(?:(?:of|to|at|is)\s+)?)?(?:(?:${currencyToken})\s*${amountToken}|${amountToken}\s*(?:SGD|USD)\b)`,
+  "i",
+);
 const rangePattern = new RegExp(
   String.raw`(?:\b(between|from|budget(?: is| of| to)?|range(?: is| of)?)\s*)?(${currencyToken})?\s*(${amountToken})\s*(SGD|USD)?\s*(?:to|and|[-–—])\s*(${currencyToken})?\s*(${amountToken})\s*(SGD|USD)?(?!\d|[.,]\d)`,
   "gi",
@@ -47,7 +64,7 @@ export function parseBudget(
   previous: ShoppingIntent["budget"],
   region: Region,
 ): BudgetUpdate {
-  let remaining = message.normalize("NFKC");
+  let remaining = message.normalize("NFKC").replace(/[’‘]/g, "'").trim();
   const clarification = (
     reason: "currency" | "budget",
     explanation: string,
@@ -56,6 +73,12 @@ export function parseBudget(
     reason,
     message: `${explanation} Your current budget has not changed.`,
   });
+  if (negatedCommand.test(remaining)) return { kind: "retained" };
+  if (negatedMutation.test(remaining) || negatedMoney.test(remaining))
+    return clarification(
+      "budget",
+      "Confirm the budget you want to keep or state a new maximum or complete range before researching.",
+    );
   if (
     /^(?:no budget limit|no limit on (?:the |my )?budget|unlimited budget)[.!?]*$/i.test(
       remaining.trim(),
@@ -109,7 +132,7 @@ export function parseBudget(
   );
   if (
     /\b(?:more than|at least|over|minimum|not under|not below)\s*(?:SGD|USD|S\$|US\$|\$)\s*\d/i.test(
-      remaining,
+      remaining.replace(/\bno\s+more\s+than\b/gi, "at most"),
     )
   )
     return clarification(
