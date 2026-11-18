@@ -1,3 +1,4 @@
+import { submitTurn } from "../helpers/turns";
 import { once } from "node:events";
 import { mkdtemp, readFile, rm, stat } from "node:fs/promises";
 import { createServer } from "node:http";
@@ -42,8 +43,10 @@ async function localResearch(
         },
       },
     });
-    const result = await turns.turn(
+    const result = await submitTurn(
+      turns,
       {
+        phase: "prepare",
         message: "Compare options",
         operationId: "00000000-0000-4000-8000-000000000001",
         preferences: syntheticIntent(),

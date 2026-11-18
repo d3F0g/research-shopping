@@ -1,3 +1,4 @@
+import { postTurn, submitTurn } from "../helpers/turns";
 import { randomUUID } from "node:crypto";
 import { mkdtemp, readFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
@@ -21,6 +22,7 @@ const preferences = () => {
   return value;
 };
 const request = (message = "Headphones under SGD300") => ({
+  phase: "prepare" as const,
   message,
   preferences: preferences(),
   operationId: randomUUID(),
@@ -30,11 +32,13 @@ const post = (
   body: unknown,
   route = "turn",
 ) =>
-  app.request(`http://127.0.0.1:3000/api/${route}`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(body),
-  });
+  route === "turn"
+    ? postTurn(app, body)
+    : app.request(`http://127.0.0.1:3000/api/${route}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+      });
 async function quotaPath() {
   return join(await mkdtemp(join(tmpdir(), "fieldnote-turn-")), "usage.json");
 }
@@ -114,7 +118,8 @@ describe("normal research composition", () => {
       "Remove that requirement",
       "Headphones under EUR200",
     ]) {
-      const result = await turns.turn(
+      const result = await submitTurn(
+        turns,
         request(message),
         new AbortController().signal,
       );
@@ -123,7 +128,7 @@ describe("normal research composition", () => {
       );
     }
     expect(calls).toBe(0);
-    await turns.turn(request(), new AbortController().signal);
+    await submitTurn(turns, request(), new AbortController().signal);
     expect(calls).toBe(1);
   });
   it.each([
@@ -160,7 +165,13 @@ describe("normal research composition", () => {
       expect(await response.json()).toMatchObject({
         kind: "clarification",
         reason: "currency",
-        preferences: previous,
+        preferences: {
+          budget: previous.budget,
+          criteria: previous.criteria,
+          region: previous.region,
+          responseLength: previous.responseLength,
+          pendingChange: { message, reason: "currency" },
+        },
       });
       expect(calls).toBe(0);
     },
@@ -178,13 +189,15 @@ describe("normal research composition", () => {
       },
       quota: createResearchQuota(await quotaPath()),
     });
-    const question = await turns.turn(
+    const question = await submitTurn(
+      turns,
       request("A ceramic fermentation crock with a water-seal lid"),
       new AbortController().signal,
     );
     expect(question.kind).toBe("question");
     expect(seen).toHaveLength(0);
-    const result = await turns.turn(
+    const result = await submitTurn(
+      turns,
       {
         ...request("Skip budget"),
         preferences: question.preferences,
@@ -212,7 +225,8 @@ describe("normal research composition", () => {
       },
       quota: createResearchQuota(await quotaPath()),
     });
-    const edited = await turns.turn(
+    const edited = await submitTurn(
+      turns,
       {
         ...request(),
         edit: { kind: "add-criterion", wording: "no glass", strength: "hard" },
@@ -221,11 +235,13 @@ describe("normal research composition", () => {
     );
     expect(edited.kind).toBe("message");
     expect(seen).toHaveLength(0);
-    await turns.turn(
+    await submitTurn(
+      turns,
       { ...request(), preferences: edited.preferences },
       new AbortController().signal,
     );
-    await turns.turn(
+    await submitTurn(
+      turns,
       request("A tea scale under SGD100"),
       new AbortController().signal,
     );
@@ -249,9 +265,9 @@ describe("normal research composition", () => {
         },
         quota: createResearchQuota(await quotaPath()),
       });
-      await turns.turn(request(), new AbortController().signal);
+      await submitTurn(turns, request(), new AbortController().signal);
       expect(
-        await turns.turn(request(), new AbortController().signal),
+        await submitTurn(turns, request(), new AbortController().signal),
       ).toMatchObject({ kind: "research-unavailable", reason: "quota" });
       expect(calls).toBe(1);
     },
@@ -267,8 +283,9 @@ describe("normal research composition", () => {
       quota: createResearchQuota(await quotaPath()),
     });
     const submitted = request();
-    await turns.turn(submitted, new AbortController().signal);
-    const duplicate = await turns.turn(
+    await submitTurn(turns, submitted, new AbortController().signal);
+    const duplicate = await submitTurn(
+      turns,
       { ...submitted, message: "Laptops under SGD1000" },
       new AbortController().signal,
     );
@@ -290,7 +307,7 @@ describe("normal research composition", () => {
       quota: createResearchQuota(await quotaPath()),
     });
     await expect(
-      turns.turn(request(), controller.signal),
+      submitTurn(turns, request(), controller.signal),
     ).rejects.toBeDefined();
     expect(calls).toBe(0);
   });
@@ -338,10 +355,20 @@ describe("normal research composition", () => {
       await listening.promise;
       try {
         const controller = new AbortController();
+        const submitted = request();
+        const prepared = await turns.turn(
+          submitted,
+          new AbortController().signal,
+        );
+        expect(prepared.kind).toBe("prepared");
         const response = fetch(`http://127.0.0.1:${port}/api/turn`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(request()),
+          body: JSON.stringify({
+            phase: "research",
+            preferences: prepared.preferences,
+            operationId: submitted.operationId,
+          }),
           signal: controller.signal,
         });
         await started.promise;

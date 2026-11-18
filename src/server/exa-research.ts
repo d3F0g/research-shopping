@@ -222,8 +222,8 @@ function bindPrice(
     if (first > 0 && relevant(first - 1)) first--;
     if (last < paragraphs.length - 1 && relevant(last + 1)) last++;
     const included = paragraphs.slice(first, last + 1);
-    const start = included[0]!.start;
-    const end = included.at(-1)!.end;
+    const start = Math.min(included[0]!.start, span.start);
+    const end = Math.max(included.at(-1)!.end, span.end);
     if (end - start > 2000 || included.some((paragraph) => !paragraph.complete))
       return [];
     return [

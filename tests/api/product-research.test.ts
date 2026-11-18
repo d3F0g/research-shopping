@@ -1,3 +1,4 @@
+import { postTurn } from "../helpers/turns";
 import { localProvider, research } from "../helpers/local-exa";
 import { describe, expect, it } from "vitest";
 import { createExaProductResearch } from "../../src/server/exa-research";
@@ -41,14 +42,10 @@ describe("dynamic source assessments through actual local SDK transport", () => 
           },
         }),
       });
-      const response = await app.request("http://127.0.0.1:3000/api/turn", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          message: "Compare options",
-          preferences: syntheticIntent(),
-          operationId: "00000000-0000-4000-8000-000000000001",
-        }),
+      const response = await postTurn(app, {
+        message: "Compare options",
+        preferences: syntheticIntent(),
+        operationId: "00000000-0000-4000-8000-000000000001",
       });
       expect(response.status).toBe(200);
       const result = await response.json();
@@ -217,7 +214,7 @@ describe("dynamic source assessments through actual local SDK transport", () => 
       if (eligible)
         expect(
           result.research.products[0]!.price?.assessment.support[0]!.quote,
-        ).toBe(text);
+        ).toBe(payload.citations[0]!.text);
     },
   );
   it("does not consider an unexplained eligibility condition fulfilled", async () => {

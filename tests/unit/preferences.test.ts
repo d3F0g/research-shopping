@@ -86,7 +86,11 @@ describe("one current intent reducer", () => {
       result.preferences,
     );
     expect(ambiguous.clarification?.reason).toBe("constraint");
-    expect(ambiguous.preferences).toEqual(result.preferences);
+    expect(ambiguous.preferences.budget).toEqual(result.preferences.budget);
+    expect(ambiguous.preferences.criteria).toEqual(result.preferences.criteria);
+    expect(ambiguous.preferences.pendingChange?.message).toBe(
+      "Remove that requirement",
+    );
     expect(
       updateIntent("Remove replaceable prefilter", result.preferences)
         .preferences.criteria,
@@ -105,7 +109,9 @@ describe("one current intent reducer", () => {
       const previous = defaultIntent();
       const result = updateIntent(`A coffee scale ${text}`, previous);
       expect(result.clarification).toBeDefined();
-      expect(result.preferences).toEqual(previous);
+      expect(result.preferences.budget).toEqual(previous.budget);
+      expect(result.preferences.criteria).toEqual(previous.criteria);
+      expect(result.preferences.pendingChange).not.toBeNull();
     },
   );
   it.each([
@@ -137,7 +143,9 @@ describe("one current intent reducer", () => {
     ).preferences;
     const result = updateIntent(`A projector ${budgetText}`, previous);
     expect(result.clarification).toBeDefined();
-    expect(result.preferences).toEqual(previous);
+    expect(result.preferences.budget).toEqual(previous.budget);
+    expect(result.preferences.criteria).toEqual(previous.criteria);
+    expect(result.preferences.pendingChange).not.toBeNull();
   });
   it.each(["under USD200", "under 200 USD", "under US$200"])(
     "accepts supported currency binding in %s",
@@ -188,7 +196,9 @@ describe("one current intent reducer", () => {
       });
     const result = updateIntent("Must have one more safety property", previous);
     expect(result.clarification).toBeDefined();
-    expect(result.preferences).toEqual(previous);
+    expect(result.preferences.budget).toEqual(previous.budget);
+    expect(result.preferences.criteria).toEqual(previous.criteria);
+    expect(result.preferences.pendingChange).not.toBeNull();
   });
   it("retains oversized legacy preferences for review rather than dropping requirements", () => {
     const previous = defaultPreferences();

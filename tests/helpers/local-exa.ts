@@ -34,10 +34,7 @@ export async function research(
   try {
     return await createExaProductResearch("fake-test-key", {
       baseUrl: server.baseUrl,
-    })(
-      { message: preferences.productDescription, preferences },
-      new AbortController().signal,
-    );
+    })({ preferences }, new AbortController().signal);
   } finally {
     await server.close();
   }
