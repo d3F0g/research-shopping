@@ -6,7 +6,7 @@ import {
 } from "./contracts";
 import { isApprovedUrl, isSafeMerchantOffer, matchesCatalogIdentity } from "./merchant-links";
 import { conversationalReply, updatePreferences } from "./preferences";
-import type { ProviderEvent, ProviderName, Providers } from "./providers";
+import type { ProviderContext, ProviderEvent, ProviderName, Providers } from "./providers";
 
 const ProductBoundary = DiscoveryProductSchema.extend({ features: DiscoveryProductSchema.shape.features.max(12) });
 const DiscoveryBoundary = z.array(ProductBoundary).max(8);
@@ -74,23 +74,31 @@ export function createShoppingEngine(providers: Providers, options: EngineOption
   const timeoutMs = options.providerTimeoutMs ?? 1500;
   if (!Number.isInteger(timeoutMs) || timeoutMs < 1 || timeoutMs > 5000) throw new Error("Invalid provider deadline");
 
-  async function call<T>(provider: ProviderName, operation: (signal: AbortSignal) => Promise<unknown>, parse: (value: unknown) => T): Promise<T> {
+  async function call<T>(provider: ProviderName, operation: (signal: AbortSignal) => Promise<unknown>, parse: (value: unknown) => T, context?: ProviderContext): Promise<T> {
     const controller = new AbortController();
     let timer: ReturnType<typeof setTimeout> | undefined;
+    let onAbort: (() => void) | undefined;
     try {
+      context?.signal.throwIfAborted();
       const value = await Promise.race([
-        Promise.resolve().then(() => operation(controller.signal)),
+        new Promise<never>((_, reject) => {
+          onAbort = () => { reject(new ProviderFailure("failed")); controller.abort(context?.signal.reason); };
+          context?.signal.addEventListener("abort", onAbort, { once: true });
+        }),
+        Promise.resolve().then(() => { controller.signal.throwIfAborted(); return operation(controller.signal); }),
         new Promise<never>((_, reject) => { timer = setTimeout(() => { reject(new ProviderFailure("timeout")); controller.abort(); }, timeoutMs); }),
       ]);
+      context?.signal.throwIfAborted();
       const result = parse(value);
       options.onProviderEvent?.({ provider, outcome: "ok" });
       return result;
     } catch (error) {
       const outcome = error instanceof ProviderFailure ? error.outcome : "failed";
-      options.onProviderEvent?.({ provider, outcome });
+      if (!context?.signal.aborted) options.onProviderEvent?.({ provider, outcome });
       throw new ProviderFailure(outcome);
     } finally {
       clearTimeout(timer);
+      if (onAbort) context?.signal.removeEventListener("abort", onAbort);
       controller.abort();
     }
   }
@@ -101,7 +109,7 @@ export function createShoppingEngine(providers: Providers, options: EngineOption
     return product;
   }
 
-  async function research(product: DiscoveryProduct): Promise<Product> {
+  async function research(product: DiscoveryProduct, context?: ProviderContext): Promise<Product> {
     const claims = await call("research", (signal) => providers.research.research(product, { signal }), (value) => {
       const result = ClaimsBoundary.parse(value);
       for (const claim of result) {
@@ -109,19 +117,19 @@ export function createShoppingEngine(providers: Providers, options: EngineOption
         if (sources.some((source) => !isApprovedUrl(source.url) || source.url !== product.productUrl)) throw new Error("Untrusted source URL");
       }
       return result;
-    });
+    }, context);
     return { ...product, claims };
   }
 
-  async function lookup(product: DiscoveryProduct, preferences: Preferences): Promise<Offer | null> {
-    return call("merchant", (signal) => providers.merchant.lookup(product, preferences, { signal }), (value) => value === null ? null : OfferSchema.parse(value));
+  async function lookup(product: DiscoveryProduct, preferences: Preferences, context?: ProviderContext): Promise<Offer | null> {
+    return call("merchant", (signal) => providers.merchant.lookup(product, preferences, { signal }), (value) => value === null ? null : OfferSchema.parse(value), context);
   }
 
   function failed(preferences: Preferences): Extract<TurnResult, { kind: "error" }> {
     return { kind: "error", code: "provider-failed", message: "The sample provider could not complete the request. Your preferences are retained. Try again.", retryable: true, preferences, notes: [FIXTURE_NOTICE] };
   }
 
-  async function turn(message: string, previous: Preferences): Promise<TurnResult> {
+  async function turn(message: string, previous: Preferences, context?: ProviderContext): Promise<TurnResult> {
     const reply = conversationalReply(message, previous);
     if (reply) return { kind: "message", message: reply, preferences: structuredClone(previous), notes: [] };
     const update = updatePreferences(message, previous);
@@ -136,9 +144,9 @@ export function createShoppingEngine(providers: Providers, options: EngineOption
         const result = DiscoveryBoundary.parse(value).map(productBoundary);
         if (new Set(result.map((product) => product.id)).size !== result.length) throw new Error("Duplicate product identity");
         return result;
-      });
+      }, context);
       const researched = await Promise.all(products.map(async (product) => {
-        const [details, offer] = await Promise.all([research(product), lookup(product, preferences)]);
+        const [details, offer] = await Promise.all([research(product, context), lookup(product, preferences, context)]);
         if (!offer) return null;
         if (!isSafeMerchantOffer(details, offer)) throw new Error("Unsafe merchant link");
         if (!isEligible(details, offer, preferences)) return null;
@@ -159,13 +167,13 @@ export function createShoppingEngine(providers: Providers, options: EngineOption
     }
   }
 
-  async function select(productId: ProductId, preferences: Preferences): Promise<SelectionResult> {
+  async function select(productId: ProductId, preferences: Preferences, context?: ProviderContext): Promise<SelectionResult> {
     const rejected = (code: "invalid-selection" | "unsafe-link" | "not-eligible", message: string): SelectionResult => ({ kind: "error", code, message, retryable: false, preferences, notes: [FIXTURE_NOTICE] });
     if (preferences.hard.pendingConstraint || !preferences.hard.category) return rejected("not-eligible", "Resolve the category and pending requirements before selecting a product.");
     try {
-      const product = await call("discovery", (signal) => providers.discovery.findById(productId, { signal }), (value) => value === null ? null : productBoundary(value));
+      const product = await call("discovery", (signal) => providers.discovery.findById(productId, { signal }), (value) => value === null ? null : productBoundary(value), context);
       if (!product || product.id !== productId) return rejected("invalid-selection", "That product ID is not in this catalog.");
-      const [details, offer] = await Promise.all([research(product), lookup(product, preferences)]);
+      const [details, offer] = await Promise.all([research(product, context), lookup(product, preferences, context)]);
       if (!offer) return rejected("not-eligible", "No sample offer supports your region and currency. Your constraints were not changed.");
       if (!isSafeMerchantOffer(details, offer)) return rejected("unsafe-link", "The provider did not return the exact approved product destination. No link is available.");
       if (!isEligible(details, offer, preferences)) return rejected("not-eligible", "This product does not meet all current hard constraints or has unavailable or unknown sample stock.");

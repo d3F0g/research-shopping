@@ -1,9 +1,11 @@
-import { describe, expect, it } from "vitest";
+import { getEventListeners } from "node:events";
+import { setImmediate } from "node:timers/promises";
+import { describe, expect, it, vi } from "vitest";
 import { defaultPreferences, ProductIdSchema, TurnResultSchema, type Preferences, type TurnResult } from "../../src/domain/contracts";
 import { FIXTURE_OBSERVED_AT, catalog } from "../../src/domain/catalog";
 import { createShoppingEngine } from "../../src/domain/shopping";
 import { createFixtureProviders } from "../../src/server/fixtures";
-import type { Providers } from "../../src/domain/providers";
+import type { ProviderEvent, Providers } from "../../src/domain/providers";
 
 const engine = () => createShoppingEngine(createFixtureProviders());
 const id = (value: string) => ProductIdSchema.parse(value);
@@ -13,6 +15,18 @@ function recommendations(result: TurnResult) {
   if (result.kind !== "recommendations") throw new Error(JSON.stringify(result));
   expect(TurnResultSchema.safeParse(result).success).toBe(true);
   return result;
+}
+function deferred<T = void>() {
+  let resolve!: (value: T) => void;
+  const promise = new Promise<T>((done) => { resolve = done; });
+  return { promise, resolve };
+}
+function shoppingRequest(service: ReturnType<typeof createShoppingEngine>, operation: "turn" | "select", signal: AbortSignal) {
+  const preferences = defaultPreferences();
+  preferences.hard.category = "headphones";
+  return operation === "turn"
+    ? service.turn("headphones under SGD500", preferences, { signal })
+    : service.select(id("sony-wh-ch720n"), preferences, { signal });
 }
 async function headphonePreferences(): Promise<Preferences> {
   return (await request("Wireless headphones under S$500")).preferences!;
@@ -242,6 +256,125 @@ describe("provider boundaries and selection", () => {
       const providers: Providers = { ...fixture, merchant: { lookup: async (product, preferences, context) => ({ ...(await fixture.merchant.lookup(product, preferences, context))!, ...patch }) } };
       expect((await createShoppingEngine(providers).select(id("sony-wh-1000xm5"), await headphonePreferences())).kind).toBe("error");
     }
+  });
+});
+
+describe("shopping caller cancellation", () => {
+  it.each(["turn", "select"] as const)("does not start any provider for a pre-aborted %s", async (operation) => {
+    const controller = new AbortController();
+    controller.abort();
+    const fixture = createFixtureProviders();
+    const discover = vi.fn(fixture.discovery.discover);
+    const findById = vi.fn(fixture.discovery.findById);
+    const research = vi.fn(fixture.research.research);
+    const lookup = vi.fn(fixture.merchant.lookup);
+    const events: ProviderEvent[] = [];
+    const service = createShoppingEngine({ discovery: { discover, findById }, research: { research }, merchant: { lookup } }, { onProviderEvent: (event) => events.push(event) });
+    expect(await shoppingRequest(service, operation, controller.signal)).toMatchObject({ kind: "error", code: "provider-failed" });
+    for (const provider of [discover, findById, research, lookup]) expect(provider).not.toHaveBeenCalled();
+    expect(events).toEqual([]);
+    expect(getEventListeners(controller.signal, "abort")).toHaveLength(0);
+  });
+
+  it.each(["turn", "select"] as const)("settles a cancelled %s even when discovery ignores abort and completes later", async (operation) => {
+    const fixture = createFixtureProviders();
+    const product = (await fixture.discovery.findById(id("sony-wh-ch720n"), { signal: new AbortController().signal }))!;
+    const started = deferred();
+    const release = deferred();
+    const research = vi.fn(fixture.research.research);
+    const lookup = vi.fn(fixture.merchant.lookup);
+    const events: ProviderEvent[] = [];
+    const service = createShoppingEngine({
+      discovery: {
+        discover: async () => { started.resolve(); await release.promise; return [product]; },
+        findById: async () => { started.resolve(); await release.promise; return product; },
+      },
+      research: { research }, merchant: { lookup },
+    }, { onProviderEvent: (event) => events.push(event) });
+    const controller = new AbortController();
+    const result = shoppingRequest(service, operation, controller.signal);
+    await started.promise;
+    controller.abort();
+    expect(await result).toMatchObject({ kind: "error", code: "provider-failed" });
+    release.resolve();
+    await setImmediate();
+    expect(research).not.toHaveBeenCalled();
+    expect(lookup).not.toHaveBeenCalled();
+    expect(events).toEqual([]);
+    expect(getEventListeners(controller.signal, "abort")).toHaveLength(0);
+  });
+
+  it("suppresses late parallel provider outcomes after cancellation without affecting a separate request", async () => {
+    const fixture = createFixtureProviders();
+    const started = [deferred(), deferred()];
+    const release = deferred();
+    const events: ProviderEvent[] = [];
+    const providerSignals: AbortSignal[] = [];
+    const service = createShoppingEngine({
+      ...fixture,
+      discovery: { ...fixture.discovery, discover: async (preferences, context) => (await fixture.discovery.discover(preferences, context)).slice(0, 1) },
+      research: { research: async (product, context) => {
+        providerSignals.push(context.signal);
+        started[0].resolve();
+        await release.promise;
+        return fixture.research.research(product, context);
+      } },
+      merchant: { lookup: async (product, preferences, context) => {
+        providerSignals.push(context.signal);
+        started[1].resolve();
+        await release.promise;
+        return fixture.merchant.lookup(product, preferences, context);
+      } },
+    }, { onProviderEvent: (event) => events.push(event) });
+    const controller = new AbortController();
+    const result = shoppingRequest(service, "turn", controller.signal);
+    await Promise.all(started.map((event) => event.promise));
+    controller.abort();
+    expect(await result).toMatchObject({ kind: "error", code: "provider-failed" });
+    expect(providerSignals).toHaveLength(2);
+    expect(providerSignals.every((signal) => signal.aborted)).toBe(true);
+    release.resolve();
+    await setImmediate();
+    expect(events).toEqual([{ provider: "discovery", outcome: "ok" }]);
+    expect(getEventListeners(controller.signal, "abort")).toHaveLength(0);
+    expect((await shoppingRequest(service, "turn", new AbortController().signal)).kind).toBe("recommendations");
+  });
+
+  it("does not start research or merchant work if the caller cancels as discovery completes", async () => {
+    const fixture = createFixtureProviders();
+    const controller = new AbortController();
+    const research = vi.fn(fixture.research.research);
+    const lookup = vi.fn(fixture.merchant.lookup);
+    const service = createShoppingEngine({ ...fixture, research: { research }, merchant: { lookup } }, {
+      onProviderEvent: (event) => { if (event.provider === "discovery") controller.abort(); },
+    });
+    expect(await shoppingRequest(service, "turn", controller.signal)).toMatchObject({ kind: "error", code: "provider-failed" });
+    expect(research).not.toHaveBeenCalled();
+    expect(lookup).not.toHaveBeenCalled();
+  });
+
+  it.each(["success", "failure", "timeout"] as const)("cleans caller listeners after %s and preserves provider outcomes", async (mode) => {
+    const fixture = createFixtureProviders(mode === "failure" ? { discovery: "error" } : {});
+    const events: ProviderEvent[] = [];
+    let providerSignal: AbortSignal | undefined;
+    const providers = mode === "timeout" ? {
+      ...fixture,
+      discovery: { ...fixture.discovery, discover: async (_: Preferences, { signal }: { signal: AbortSignal }) => {
+        providerSignal = signal;
+        return new Promise<never>(() => {});
+      } },
+    } : fixture;
+    const controller = new AbortController();
+    const service = createShoppingEngine(providers, { providerTimeoutMs: 15, onProviderEvent: (event) => events.push(event) });
+    const result = await shoppingRequest(service, "turn", controller.signal);
+    expect(result.kind).toBe(mode === "success" ? "recommendations" : "error");
+    expect(events[0]).toEqual({ provider: "discovery", outcome: mode === "success" ? "ok" : mode === "failure" ? "failed" : "timeout" });
+    expect(getEventListeners(controller.signal, "abort")).toHaveLength(0);
+    expect(controller.signal.aborted).toBe(false);
+    if (mode === "timeout") expect(providerSignal?.aborted).toBe(true);
+    const finishedEvents = [...events];
+    controller.abort();
+    expect(events).toEqual(finishedEvents);
   });
 });
 
