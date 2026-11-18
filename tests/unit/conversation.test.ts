@@ -1,55 +1,50 @@
+import { readFileSync } from "node:fs";
+import { createElement } from "react";
+import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it } from "vitest";
-import {
-  defaultPreferences,
-  type ProviderEvent,
-} from "../../src/domain/contracts";
-import { createShoppingEngine } from "../../src/domain/shopping";
-import { createFixtureProviders } from "../../src/server/fixtures";
+import { HistoricalApplicationTurnResponseSchema } from "../../src/domain/research-history";
+import { HistoricalResults } from "../../src/client/HistoricalResults";
+import { syntheticComparison } from "../e2e/support/dynamic-fixture";
 
-describe("bounded conversational replies", () => {
-  it.each(["hi", "Hello!", "thanks", "thank you", "yes", "okay", "why?"])(
-    "answers %s without provider activity or changing constraints",
-    async (message) => {
-      const events: ProviderEvent[] = [];
-      const engine = createShoppingEngine(createFixtureProviders(), {
-        onProviderEvent: (event) => events.push(event),
-      });
-      const preferences = defaultPreferences();
-      preferences.hard.category = "headphones";
-      preferences.hard.budget = { currency: "SGD", amount: 200 };
-      preferences.hard.pendingConstraint = "must be waterproof";
-      const result = await engine.turn(message, preferences);
-      expect(result.kind).toBe("message");
-      expect(result.preferences).toEqual(preferences);
-      expect(events).toEqual([]);
-      const followup = await engine.turn("under SGD500", result.preferences!);
-      expect(followup.kind).toBe("clarification");
-      expect(followup.preferences?.hard.pendingConstraint).toBe(
-        "must be waterproof",
-      );
-    },
-  );
+const snapshotPath = new URL(
+  "../fixtures/research-corpus/page-evidence/normalized-historical-application-response.json",
+  import.meta.url,
+);
 
-  it.each([
-    "what about laptops?",
-    "How about a laptop?",
-    "can you show me headphones",
-  ])("understands the category in %s", async (message) => {
-    const engine = createShoppingEngine(createFixtureProviders());
-    const result = await engine.turn(message, defaultPreferences());
-    expect(result.kind).toBe("recommendations");
-    expect(result.preferences?.hard.pendingConstraint).toBeNull();
+describe("read-only historical response rendering", () => {
+  it("renders the frozen captured history without migrating its preferences or enabling actions", () => {
+    const raw: unknown = JSON.parse(readFileSync(snapshotPath, "utf8"));
+    const before = JSON.stringify(raw);
+    const outcome = HistoricalApplicationTurnResponseSchema.parse(raw);
+    const html = renderToStaticMarkup(
+      createElement(HistoricalResults, { outcome }),
+    );
+    expect(html).toContain("Historical research snapshot");
+    expect(html).toContain("historical research sources");
+    expect(html).toContain(
+      "could not attribute product-specific details reliably",
+    );
+    expect(html).not.toContain("Select this product");
+    expect(html).not.toContain("Edit preferences");
+    expect(JSON.stringify(raw)).toBe(before);
   });
 
-  it.each([
-    "hi, headphones must be waterproof",
-    "yes waterproof",
-    "what about waterproof laptops",
-    "thanks, under EUR200",
-  ])("does not discard a constraint inside %s", async (message) => {
-    const engine = createShoppingEngine(createFixtureProviders());
-    const result = await engine.turn(message, defaultPreferences());
-    expect(result.kind).toBe("clarification");
-    expect(result.preferences?.hard.pendingConstraint).toBeTruthy();
+  it("renders current assessment snapshots through the independent current renderer", () => {
+    const research = syntheticComparison();
+    const outcome = HistoricalApplicationTurnResponseSchema.parse({
+      responseVersion: 3,
+      kind: "research",
+      preferences: research.intent,
+      answer: research.summary,
+      research,
+      notes: [],
+    });
+    const html = renderToStaticMarkup(
+      createElement(HistoricalResults, { outcome }),
+    );
+    expect(html).toContain("Conditional choice");
+    expect(html).toContain("Synthetic Aster Scan");
+    expect(html).toContain("Stock and delivery unverified");
+    expect(html).not.toContain("Edit preferences");
   });
 });

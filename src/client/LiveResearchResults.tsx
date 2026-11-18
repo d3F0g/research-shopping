@@ -1,7 +1,11 @@
 import { ArrowUpRight, BookOpen, ChevronDown, Search } from "lucide-react";
-import type {
-  ApplicationTurnResponse,
-  ResearchSnapshot,
+import {
+  choiceAssessment,
+  type ApplicationTurnResponse,
+  type Assessment,
+  type ResearchProduct,
+  type ResearchSnapshot,
+  type ResearchSource,
 } from "../domain/research";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -26,8 +30,13 @@ import {
   TraceTitle,
 } from "@/components/ui/trace";
 
-type Source = ResearchSnapshot["sources"][number];
-function SourceLink({ source }: { source: Source }) {
+function SourceLink({
+  source,
+  label = "View source",
+}: {
+  source: ResearchSource;
+  label?: string;
+}) {
   return (
     <a
       className="source-link"
@@ -35,12 +44,13 @@ function SourceLink({ source }: { source: Source }) {
       target="_blank"
       rel="noopener noreferrer"
     >
-      View source <ArrowUpRight aria-hidden="true" />
+      {label}
+      <ArrowUpRight aria-hidden="true" />
       <span className="sr-only"> {source.title} (opens in a new tab)</span>
     </a>
   );
 }
-function Citation({ source }: { source: Source }) {
+function Citation({ source }: { source: ResearchSource }) {
   return (
     <HoverCard>
       <HoverCardTrigger
@@ -53,13 +63,87 @@ function Citation({ source }: { source: Source }) {
       </HoverCardTrigger>
       <HoverCardContent className="citation-preview" align="start">
         <p className="font-medium">{source.title}</p>
-        <p className="metadata my-2">
-          {new URL(source.url).hostname} · Page observation
-        </p>
+        <p className="metadata my-2">{new URL(source.url).hostname}</p>
         <SourceLink source={source} />
       </HoverCardContent>
     </HoverCard>
   );
+}
+const statusLabels: Record<Assessment["status"], string> = {
+  supported: "Supported",
+  unknown: "Unknown",
+  contradicted: "Contradicted",
+  conflict: "Conflicting sources",
+};
+const scopeLabels: Record<Assessment["scope"], string> = {
+  "exact-variant": "Exact variant",
+  "product-family": "Product family only",
+  unclear: "Variant scope unclear",
+};
+function Status({ assessment }: { assessment: Assessment }) {
+  return (
+    <Badge
+      className="assessment-status"
+      variant={assessment.status === "supported" ? "secondary" : "outline"}
+    >
+      {assessment.status === "supported" && assessment.scope !== "exact-variant"
+        ? scopeLabels[assessment.scope]
+        : statusLabels[assessment.status]}
+    </Badge>
+  );
+}
+function AssessmentEvidence({
+  label,
+  assessment,
+  sources,
+}: {
+  label: string;
+  assessment: Assessment;
+  sources: Map<string, ResearchSource>;
+}) {
+  return (
+    <li className="assessment-evidence">
+      <p className="font-medium">{label}</p>
+      <p>
+        <Status assessment={assessment} /> {scopeLabels[assessment.scope]}
+      </p>
+      <p>{assessment.rationale}</p>
+      {assessment.support.map((span, index) => {
+        const source = sources.get(span.sourceId)!;
+        return (
+          <div key={`${span.sourceId}-${index}`}>
+            <p className="metadata">Literal source passage</p>
+            <blockquote>{span.quote}</blockquote>
+            <Citation source={source} />
+            <SourceLink source={source} />
+          </div>
+        );
+      })}
+      {!assessment.support.length && (
+        <p className="metadata">No supporting passage retained.</p>
+      )}
+    </li>
+  );
+}
+function assessments(product: ResearchProduct, snapshot: ResearchSnapshot) {
+  return [
+    { label: "Product identity", assessment: product.identity },
+    { label: "Match to your request", assessment: product.requestMatch },
+    ...product.criteria.map((row) => ({
+      label: `${snapshot.intent.criteria.find((criterion) => criterion.id === row.criterionId)!.strength === "hard" ? "Required" : "Flexible"} · ${snapshot.intent.criteria.find((criterion) => criterion.id === row.criterionId)!.wording}`,
+      assessment: row.assessment,
+    })),
+    ...product.attributes.map((attribute) => ({
+      label: attribute.name,
+      assessment: attribute.assessment,
+    })),
+    ...(product.price
+      ? [{ label: "Observed price", assessment: product.price.assessment }]
+      : []),
+    ...(product.budget
+      ? [{ label: "Observed budget comparison", assessment: product.budget }]
+      : []),
+  ];
 }
 export function LiveResearchResults({
   outcome,
@@ -71,191 +155,229 @@ export function LiveResearchResults({
 }) {
   if (outcome.kind === "research-unavailable")
     return (
-      <section className="results-area message-panel" role="status">
+      <section className="message-panel" aria-label="Research unavailable">
         <h2>Research unavailable</h2>
         <p>{outcome.message}</p>
+        <p className="metadata">
+          Your preferences are retained. No merchant stock was checked.
+        </p>
       </section>
     );
   const research = outcome.research;
   const sourceById = new Map(
     research.sources.map((source) => [source.id, source]),
   );
+  const chosen = research.choice
+    ? research.products.find(
+        (product) => product.id === research.choice!.productId,
+      )!
+    : null;
   return (
     <section
-      className="results-area live-research"
-      aria-label="Web product research"
+      className="live-research results-area"
+      aria-label="Source-based shopping comparison"
     >
       <p className="answer-first">{outcome.answer}</p>
-      {research.products.length > 0 && (
-        <>
-          <div className="shortlist-heading">
-            <h2>Research leads</h2>
-            <span className="metadata">
-              {research.products.length} source-backed leads
-            </span>
-          </div>
-          <div className="product-grid">
-            {research.products.map((product) => (
-              <Card
-                className="product-card research-card"
-                role="article"
-                aria-label={product.name}
-                key={product.id}
-              >
-                <CardContent>
-                  <div className="product-row">
-                    <div className="product-identity">
-                      <h3>{product.name}</h3>
-                      <p className="metadata">
-                        Research lead · Stock and delivery unverified
-                      </p>
-                    </div>
-                  </div>
-                  {product.price ? (
-                    <div className="observed-price">
-                      <Badge variant="secondary">
-                        {product.price.kind === "page-price-context-unverified"
-                          ? "Page price excerpt · Unverified"
-                          : "Page-observed price · Unverified"}
-                      </Badge>
-                      <p>{product.price.quote}</p>
-                    </div>
-                  ) : (
-                    <p className="metadata">
-                      No attributable price observation
-                    </p>
-                  )}
-                  {!product.facts.length && (
-                    <p className="metadata">Specifications not established by this source.</p>
-                  )}
-                  {product.facts[0] && (
-                    <p className="product-summary research-preview">
-                      {product.facts[0].quote.length > 180
-                        ? `${product.facts[0].quote.slice(0, 180)}…`
-                        : product.facts[0].quote}
-                    </p>
-                  )}
-                  <Trace className="evidence-details">
-                    <TraceCollapsible>
-                      <TraceCollapsibleTrigger className="min-h-11">
-                        <TraceLine>
-                          <TraceIcon>
-                            <BookOpen />
-                          </TraceIcon>
-                          <TraceTitle>Evidence and limits</TraceTitle>
-                        </TraceLine>
-                      </TraceCollapsibleTrigger>
-                      <TraceCollapsibleContent>
-                        <ul className="claim-list">
-                          {[
-                            product.identity,
-                            ...product.facts,
-                            ...(product.price ? [product.price] : []),
-                          ].map((citation, index) => {
-                            const source = sourceById.get(citation.sourceId)!;
-                            return (
-                              <li key={index}>
-                                <blockquote>{citation.quote}</blockquote>
-                                <Citation source={source} />
-                                <SourceLink source={source} />
-                              </li>
-                            );
-                          })}
-                        </ul>
-                        <p className="metadata">Needs verification</p>
-                        <ul className="preference-notes">
-                          {product.unresolvedConstraints.map((constraint) => (
-                            <li key={constraint}>{constraint}</li>
-                          ))}
-                        </ul>
-                      </TraceCollapsibleContent>
-                    </TraceCollapsible>
-                  </Trace>
-                  <SourceLink source={sourceById.get(product.identity.sourceId)!} />
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-          {research.products.length > 1 && (
-            <Collapsible className="comparison-panel">
-              <CollapsibleTrigger
-                render={<Button variant="outline" />}
-                className="comparison-trigger"
-              >
-                Compare research leads <ChevronDown aria-hidden="true" />
-              </CollapsibleTrigger>
-              <CollapsibleContent
-                className="comparison-content"
-                role="region"
-                aria-label="Research lead comparison"
-              >
-                <p className="metadata comparison-notice">
-                  Page observations are unverified. Stock, delivery and current affordability remain unknown.
-                </p>
-                <ul className="comparison-leads">
-                  {research.products.map((product) => (
-                    <li key={product.id}>
-                      <Card
-                        className="comparison-lead"
-                        size="sm"
-                        role="group"
-                        aria-label={product.name}
-                      >
-                        <CardContent>
-                          <h3>{product.name}</h3>
-                          <dl className="comparison-overview">
-                            <div>
-                              <dt>Source specifications</dt>
-                              <dd>
-                                {product.facts.length
-                                  ? `${product.facts.length} quoted specification${product.facts.length === 1 ? "" : "s"}`
-                                  : "Not established by this source"}
-                              </dd>
-                            </div>
-                            <div>
-                              <dt>Observed price · Unverified</dt>
-                              <dd>{product.price?.quote ?? "Not observed"}</dd>
-                            </div>
-                          </dl>
-                          <Collapsible className="comparison-evidence">
-                            <div className="comparison-actions">
-                              <CollapsibleTrigger
-                                render={<Button variant="ghost" size="sm" />}
-                                aria-label={`Evidence for ${product.name}`}
-                              >
-                                Evidence and limits <ChevronDown aria-hidden="true" />
-                              </CollapsibleTrigger>
-                              <SourceLink
-                                source={sourceById.get(product.identity.sourceId)!}
-                              />
-                            </div>
-                            <CollapsibleContent>
-                              <ul className="claim-list">
-                                {product.facts.map((fact, index) => (
-                                  <li key={index}>
-                                    <blockquote>{fact.quote}</blockquote>
-                                    <Citation source={sourceById.get(fact.sourceId)!} />
-                                  </li>
-                                ))}
-                              </ul>
-                              <p className="metadata">Needs verification</p>
-                              <ul className="preference-notes">
-                                {product.unresolvedConstraints.map((constraint) => (
-                                  <li key={constraint}>{constraint}</li>
-                                ))}
-                              </ul>
-                            </CollapsibleContent>
-                          </Collapsible>
-                        </CardContent>
-                      </Card>
-                    </li>
-                  ))}
-                </ul>
-              </CollapsibleContent>
-            </Collapsible>
-          )}
-        </>
+      {research.choice && chosen ? (
+        <div className="research-choice">
+          <h2>Conditional choice · {chosen.name}</h2>
+          <p className="metadata">Source-based AI assessment</p>
+          <Collapsible>
+            <CollapsibleTrigger render={<Button variant="ghost" size="sm" />}>
+              Choice evidence <ChevronDown aria-hidden="true" />
+            </CollapsibleTrigger>
+            <CollapsibleContent>
+              <ul>
+                {research.choice.reasons.map((reason) => (
+                  <AssessmentEvidence
+                    key={reason.assessmentId}
+                    label="Supporting assessment"
+                    assessment={choiceAssessment(chosen, reason.assessmentId)!}
+                    sources={sourceById}
+                  />
+                ))}
+              </ul>
+            </CollapsibleContent>
+          </Collapsible>
+          <p>{research.choice.caveat}</p>
+        </div>
+      ) : (
+        <p className="assessment-summary" role="status">
+          No confirmed fit. The evidence below supports comparison, but does not
+          establish a recommendation that meets every hard requirement.
+        </p>
       )}
+      <p className="metadata">
+        Source-based AI comparison. Confirm prices, stock and delivery with
+        merchants.
+      </p>
+      <div className="shortlist-heading">
+        <h2>Compare the options</h2>
+        <span className="metadata">{research.products.length} options</span>
+      </div>
+      <div className="product-grid">
+        {research.products.map((product) => {
+          const exactPrice =
+            product.price &&
+            product.price.assessment.status === "supported" &&
+            product.price.assessment.scope === "exact-variant" &&
+            product.price.variant === product.variant;
+          const identitySource = product.identity.support[0]
+            ? sourceById.get(product.identity.support[0].sourceId)!
+            : null;
+          return (
+            <Card
+              className="product-card research-card"
+              key={product.id}
+              role="article"
+              aria-label={product.name}
+            >
+              <CardContent>
+                <div className="product-row">
+                  <div className="product-identity">
+                    <h3>{product.name}</h3>
+                    <p className="metadata">
+                      {product.variant ?? "Exact variant unresolved"}
+                    </p>
+                  </div>
+                </div>
+                <div className="observed-price">
+                  <strong>
+                    {exactPrice && product.price
+                      ? `${product.price.currency} ${product.price.amount.toLocaleString("en-SG", { maximumFractionDigits: 2, minimumFractionDigits: 2 })}`
+                      : product.price
+                        ? "Variant price not established"
+                        : "Price or currency not established"}
+                  </strong>
+                  <p className="metadata">
+                    Observed price · Unverified with merchant
+                  </p>
+                  {product.price && (
+                    <>
+                      {!exactPrice && (
+                        <p>
+                          Page price context · {product.price.currency}{" "}
+                          {product.price.amount.toLocaleString("en-SG", {
+                            maximumFractionDigits: 2,
+                            minimumFractionDigits: 2,
+                          })}{" "}
+                          · {scopeLabels[product.price.assessment.scope]} ·{" "}
+                          {statusLabels[product.price.assessment.status]}
+                        </p>
+                      )}
+                      <p>
+                        {product.price.conditions.length
+                          ? product.price.conditions.join(" · ")
+                          : "No price conditions retained."}
+                      </p>
+                      <p className="metadata">
+                        {!product.price.conditionsResolved &&
+                          "Price conditions unresolved · "}
+                        Variant {product.price.variant}
+                      </p>
+                    </>
+                  )}
+                  <p className="metadata">Stock and delivery unverified</p>
+                </div>
+                <dl className="assessment-summary compact-assessments">
+                  {(product.identity.status !== "supported" ||
+                    product.identity.scope !== "exact-variant") && (
+                    <div>
+                      <dt>Product identity</dt>
+                      <dd>
+                        <Status assessment={product.identity} />
+                      </dd>
+                    </div>
+                  )}
+                  {(product.requestMatch.status !== "supported" ||
+                    product.requestMatch.scope !== "exact-variant") && (
+                    <div>
+                      <dt>Match to your request</dt>
+                      <dd>
+                        <Status assessment={product.requestMatch} />
+                      </dd>
+                    </div>
+                  )}
+                  {product.budget && (
+                    <div>
+                      <dt>Observed budget comparison</dt>
+                      <dd>
+                        <Status assessment={product.budget} />
+                      </dd>
+                    </div>
+                  )}
+                  {product.criteria.map((row) => {
+                    const criterion = research.intent.criteria.find(
+                      (item) => item.id === row.criterionId,
+                    )!;
+                    return (
+                      <div key={row.criterionId}>
+                        <dt>
+                          {criterion.strength === "hard"
+                            ? "Required"
+                            : "Flexible"}{" "}
+                          · {criterion.wording}
+                        </dt>
+                        <dd>
+                          <Status assessment={row.assessment} />
+                        </dd>
+                      </div>
+                    );
+                  })}
+                  {product.attributes.map((attribute) => (
+                    <div className="attribute-preview" key={attribute.name}>
+                      <dt>{attribute.name}</dt>
+                      <dd>
+                        <Status assessment={attribute.assessment} />
+                        <span className="assessment-preview">
+                          {attribute.assessment.rationale}
+                        </span>
+                      </dd>
+                    </div>
+                  ))}
+                </dl>
+                <Trace>
+                  <TraceCollapsible>
+                    <TraceCollapsibleTrigger className="min-h-11">
+                      <TraceLine>
+                        <TraceIcon>
+                          <BookOpen />
+                        </TraceIcon>
+                        <TraceTitle>Evidence and limits</TraceTitle>
+                      </TraceLine>
+                    </TraceCollapsibleTrigger>
+                    <TraceCollapsibleContent>
+                      <p className="metadata">
+                        Rationales are AI synthesis. Quotations below are
+                        literal retained source passages. A matching quotation
+                        does not independently prove the interpretation.
+                      </p>
+                      <ul>
+                        {assessments(product, research).map(
+                          ({ label, assessment }) => (
+                            <AssessmentEvidence
+                              key={label}
+                              label={label}
+                              assessment={assessment}
+                              sources={sourceById}
+                            />
+                          ),
+                        )}
+                      </ul>
+                    </TraceCollapsibleContent>
+                  </TraceCollapsible>
+                </Trace>
+                {identitySource && (
+                  <SourceLink
+                    source={identitySource}
+                    label="View product source"
+                  />
+                )}
+              </CardContent>
+            </Card>
+          );
+        })}
+      </div>
       <Trace className="research-sources">
         <TraceCollapsible>
           <TraceCollapsibleTrigger className="min-h-11">
@@ -272,13 +394,25 @@ export function LiveResearchResults({
             <ul className="web-research-list">
               {research.sources.map((source) => (
                 <li className="web-research-source" key={source.id}>
-                  <p className="font-medium">{source.title}</p>
+                  <p className="font-medium">
+                    {source.title}
+                    {source.titleTruncated ? " [title truncated]" : ""}
+                  </p>
                   <SourceLink source={source} />
-                  <ul className="web-research-highlights">
-                    {source.highlights.map((quote, index) => (
-                      <li key={index}>{quote}</li>
-                    ))}
-                  </ul>
+                  <Collapsible>
+                    <CollapsibleTrigger render={<Button variant="ghost" />}>
+                      Retained source context <ChevronDown aria-hidden="true" />
+                    </CollapsibleTrigger>
+                    <CollapsibleContent>
+                      <p className="source-context">{source.text}</p>
+                      {source.textTruncated && (
+                        <p className="metadata">
+                          Source text was truncated. This is the retained
+                          context.
+                        </p>
+                      )}
+                    </CollapsibleContent>
+                  </Collapsible>
                 </li>
               ))}
             </ul>
@@ -293,9 +427,6 @@ export function LiveResearchResults({
           <ul className="preference-notes">
             {research.limitations.map((limit) => (
               <li key={limit}>{limit}</li>
-            ))}
-            {outcome.notes.map((note) => (
-              <li key={note}>{note}</li>
             ))}
           </ul>
           <p className="metadata">
@@ -319,8 +450,8 @@ export function LiveResearchResults({
           </TraceCollapsibleTrigger>
           <TraceCollapsibleContent>
             <p className="metadata">
-              One search returned {research.sources.length} source pages. This
-              is not a merchant inventory check.
+              One research request returned {research.sources.length} retained
+              source pages. No merchant inventory check was performed.
             </p>
           </TraceCollapsibleContent>
         </TraceCollapsible>
