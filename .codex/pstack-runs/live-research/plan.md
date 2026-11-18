@@ -4,7 +4,7 @@
 
 Exa is the normal product discovery and research provider. Synthetic catalogs are restricted to automated tests. Web-observed prices retain their source and uncertainty; stock and merchant verification are never invented. Preserve the approved chat-first interface and contextual preferences. No payments or purchases.
 
-Latest main base1cf12b2. Issue2 stays open until authorized live merchant verification is genuinely recorded. No eBay/Shopify/BestBuy access exists; the user confirmed that external dependency and instructed us not to ask again. Existing PR28 source-context work is reused, not duplicated. Exa starts with US$10 in credits; fixture tests spend zero and bounded live verification has a separately recorded request/cost budget.
+Latest main is 9d2a3c5 after the cancellation unit. Initial audit base was 1cf12b2. Issue2 stays open until authorized live merchant verification is genuinely recorded. No eBay/Shopify/BestBuy access exists; the user confirmed that external dependency and instructed us not to ask again. Existing PR28 source-context work is reused, not duplicated. Exa starts with US$10 in credits; fixture tests spend zero and bounded live verification has a separately recorded request/cost budget.
 
 ## Figure-it-out phases
 
@@ -34,7 +34,7 @@ A normal request returns real product discoveries, source-linked specifications 
 
 Candidate A is the base. Keep one research-turn operation and reuse the existing Exa adapter. Graft sources-only degradation and a stop when billing is unknown. Do not add session caches or guess the syntax of grounding field names. Every structured observation needs model-specific supporting text in a visible source excerpt. Retrieval notices cannot relax hard constraints.
 
-The initial local allowance is US$2, at most 40 attempts, US$0.05 reserved per attempt and one active request. Persist reservations before dispatch at one configured absolute path shared by every live checkout. This is application admission policy, not the remaining Exa account balance or a provider-enforced charge cap. Unknown billing, errors, cancellation and crashes retain the reservation and stop new paid work pending inspection. Root's runtime proof is separately limited to two calls. Calls made in this program so far: zero.
+The initial local allowance is US$2, at most 40 attempts, US$0.05 reserved per attempt and one active request. Persist reservations before dispatch at one configured absolute path shared by every live checkout. This is application admission policy, not the remaining Exa account balance or a provider-enforced charge cap. Unknown billing, errors, cancellation and crashes retain the reservation and stop new paid work pending inspection. Root's runtime proof is separately limited to two calls. Current usage is recorded in the real application checkpoint below; the original zero-call planning state is historical.
 
 The configured Luna model is unavailable in the current host. Its implementation and verification roles use host inheritance. The two designs used Astra and host inheritance; Astra judged them. Exact root model-family diversity could not be confirmed. No claim of a blind or diverse-family comparison is made.
 
@@ -44,7 +44,7 @@ Candidate 9a85ff1 has independent QA and security verdicts. Five mounted reprodu
 
 ## Development environment checkpoint
 
-Root appended only the nonsecret absolute `EXA_RESEARCH_LEDGER_PATH` to the existing ignored root `.env`. The key remained in place, was not printed or copied, and the file retains mode 600. Every owned live verification process will load that original environment and use the same ledger. Tests use temporary state and explicitly disable live composition. The program still has made zero billable calls.
+Root appended only the nonsecret absolute `EXA_RESEARCH_LEDGER_PATH` to the existing ignored root `.env`. The key remained in place, was not printed or copied, and the file retains mode 600. Every owned live verification process will load that original environment and use the same ledger. Tests use temporary state and explicitly disable live composition. This environment setup preceded the first billable call recorded below.
 
 ## Verification skill alignment
 
@@ -54,4 +54,23 @@ Root is the verification owner for this unit's skill alignment. The offline help
 
 Application source candidate1c24a93 passed213tests, build,46browser journeys and offline smoke. Root integrated policy/verification documents as4968bb3 and published PR38. Independent QA repeated those passing checks and inspected desktop/mobile screenshots. It still rejected the candidate for reproducible attribution and relevance defects tracked in Issue39. Differences, monthly payments and another edition could become base-model prices, while an unrelated cotton sweater could become a headphone lead. Independent security additionally reproduced clear hard-wireless contradictions surviving projection and observed that a named-model request loses its original message in query construction. These findings block merging and live verification.
 
-A fresh boundary-fix owner is reproducing these failures before changing the supported observation contract. Unsupported prose must remain source context. The semantic gate is not satisfied by the existing green regression counts. The real Exa verification allowance remains unused at zero calls.
+A fresh boundary-fix owner is reproducing these failures before changing the supported observation contract. Unsupported prose must remain source context. The semantic gate is not satisfied by the existing green regression counts. The real Exa verification allowance was unused at that checkpoint. The current result is recorded below.
+
+
+## Real application checkpoint
+
+Candidate 85c0522 passed the later semantic, mobile and independent checks, including 357 unit/API tests and 49 browser journeys. Both push and pull-request CI passed. Root's first actual normal chat search then returned five real source pages and zero product cards. Exa reported US$0.007. The source capture and inspected responsive screenshots are retained locally under `/tmp/research-shopping-live/live-proof-1794970994218`. This is retrieval proof and a discovery acceptance failure. PR #38 remains open and unmerged.
+
+The old sentence-only admission premise does not fit the observed headings and labeled price fragments. Original native extraction values and raw whitespace were not retained; the exact rejection of each original observation remains unknown. Root recorded this limitation in Issues #2 and #35 and PR #38. One call remains under the original two-call proof allowance. No ledger reset or extra paid call is authorized by a local test.
+
+Independent architecture review selected source-bound heading identity, optional independently attributable specifications and a separate unverified full-price-context kind. Source-derived identity must survive missing or malformed native extraction. Preserve exact variants, contiguous scope, ellipsis and related-product boundaries, all price qualifiers and visible citation containment. An identity-only lead proves discovery, not useful specification comparison. Page stock and delivery remain unverified. The chosen contract and actual-page oracle are retained under `/tmp/research-shopping-live/page-evidence-verdict.md` and `actual-page-oracles.json`.
+
+A new isolated owner implements the strict version-2 live contract, bounded page-scope validation, identity-only rendering and opt-in private diagnostics. One SDK search and the existing transport, cancellation and shared ledger remain unchanged. Automated proof uses unchanged historical normalized page captures plus clearly labeled test-authored extraction and synthetic raw-structure examples. It must not reconstruct missing provider output and call it captured evidence.
+
+The final real proof waits for independent integration, security, runtime, visual and CI gates. An absent-by-default private sink will retain bounded native content and source structure, with decision codes and a 128 KiB byte cap. It excludes headers, keys, environment values, cookies and user request text. Sink failure cannot retry or change settlement. Discovery, useful specifications, observed price context and comparison will be assessed separately.
+
+## Dependent personalization preflight
+
+The stable account core passed independent runtime/visual and security preflight at 81d1a5b against fb40578. QA passed 343 unit/API tests, 26 real PostgreSQL/API cases, four actual crash boundaries, API/PostgreSQL restart and deletion proofs, real-cookie browser journeys, 18 inspected responsive screenshots and guest regressions. Security independently repeated the PostgreSQL and crash/restart boundaries, generated byte-identical auth schema and added hostile-input and lock-expiry probes. No blocking auth defect was found. The two missing development-mode database command examples were corrected in 657e883.
+
+These verdicts exclude the upcoming live evidence and historical codec integration. The dependent branch must freeze the actual old unversioned snapshot schema, decode version 2 separately, reject unknown versions and preserve original observation times and inactive historical actions. It requires a final independent delta review and CI before publication or merge. Broad Issue #4 coverage work waits for this corrected evidence contract; its actual-page oracle work made no paid calls.

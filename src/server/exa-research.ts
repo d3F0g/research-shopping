@@ -214,8 +214,8 @@ const productEvidenceRules = "Discover distinct named product models relevant to
 const headphoneClass = "(?:headphones|earbuds|headset)";
 const headphoneDesign = "(?:over-ear|on-ear|in-ear|open-back|closed-back|noise-cancell?ing)";
 const categoryStatements: Record<NonNullable<Preferences["hard"]["category"]>, string> = {
-  headphones: `(?:a |a pair of )?(?:(?:wireless|wired|Bluetooth|${headphoneDesign}) )*${headphoneClass}`,
-  laptops: "(?:a |an )?(?:(?:gaming|business|ultraportable|convertible|\\d{1,2}(?:\\.\\d)?-inch) )*(?:laptop|notebook)(?: computer)?",
+  headphones: `(?:a |a pair of )?(?:(?:wireless|wired|Bluetooth|${headphoneDesign}) )*${headphoneClass}(?: designed for neutral listening)?`,
+  laptops: "(?:a |an )?(?:(?:gaming|business|ultraportable|convertible|thin and light|Windows|\\d{1,2}(?:\\.\\d)?-inch) )*(?:laptop|notebook)(?: computer)?",
 };
 
 function escapeRegex(value: string): string {
