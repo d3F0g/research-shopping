@@ -107,7 +107,8 @@ export function updatePreferences(message: string, previous: Preferences): Prefe
     actionable = true;
   });
 
-  if (/\b(?:eur|gbp|aud|cad|jpy|myr|inr|euros?|pounds?|yen|ringgit)\b|[€£¥]/i.test(remaining)) {
+  const unsupportedCurrency = /(?:\b|(?<=\d))(?:eur|gbp|aud|cad|jpy|myr|inr|euros?|pounds?|yen|ringgit)(?=\b|\d)|[€£¥]/i.test(remaining);
+  if (unsupportedCurrency) {
     fail("currency", "This research interface supports SGD and USD budgets only. Specify the currency and a positive amount, or explicitly remove the unsupported requirement.");
   }
   if (/\b(?:more than|at least|over|minimum|not under|not below)\s*(?:SGD|USD|S\$|US\$|\$)?\s*\d/i.test(remaining)
@@ -125,7 +126,7 @@ export function updatePreferences(message: string, previous: Preferences): Prefe
     amounts.push({ token: match[1], dollar: false });
   });
   if (amounts.length > 1) fail("currency", "I found more than one budget amount. State one maximum amount and its currency.");
-  if (amounts.length === 1) {
+  if (amounts.length === 1 && !unsupportedCurrency) {
     const { token, currency, dollar } = amounts[0];
     const amount = Number(token.replaceAll(",", ""));
     if (!numberPattern.test(token) || !validBudgetAmount(amount)) {
