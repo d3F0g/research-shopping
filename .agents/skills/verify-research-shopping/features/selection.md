@@ -1,5 +1,7 @@
 # Product selection
 
+This page describes the explicit legacy fixture regression composition. It does not describe normal development product scope or establish live product behavior. Use [Exa product research](web-research.md) for the dynamic normal interface.
+
 Selecting a current eligible product resolves its identity server-side and adds a safe manufacturer handoff to the conversation. The sample price and stock caveat remain explicit.
 
 ## Drive selection

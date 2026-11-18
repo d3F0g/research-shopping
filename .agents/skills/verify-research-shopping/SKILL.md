@@ -19,13 +19,15 @@ The helper finds its checkout from its own path and loads Playwright from that c
 
 This offline automated-regression helper forces `NODE_ENV=test`, `FIELDNOTE_TEST_FIXTURES=true` and `EXA_RESEARCH_ENABLED=false` in its child environment. It intentionally verifies the fixture test composition, not the normal development provider. It needs no key, database, migrations, or seed command. Never copy a private environment file into another worktree or supply a real key to CI or the browser.
 
-## Confirm the instance
+## Confirm the offline fixture instance
 
 For this offline helper, require `GET /api/health` to report `status: ok`, `mode: fixture`, `liveIntegrations: false`, and `webResearch: disabled`. Then require the visible fixture marker and conversation region. A listening socket alone is insufficient.
 
 Do not drive an unknown instance. The helper records the PID it starts, candidate commit and worktree status. A dirty run proves that working tree, not its commit alone. A separate read-only health request is safe only after ownership is known.
 
 ## Verify the chat contract
+
+The smoke helper and legacy recipes below exercise the explicit synthetic test composition. For normal product behavior use [Exa product research](features/web-research.md), including dynamic intent, prepare/research phases and independent live acceptance. Normal interactions never receive synthetic catalog results.
 
 Use a fresh browser context to establish first-visit dark mode independently of the operating-system theme. Inspect desktop and mobile viewport screenshots. Require the minimal header, centered chat, readable messages and compact composer. No permanent filters, large prechat form, oversized empty-results panel or introductory scrolling may remain.
 

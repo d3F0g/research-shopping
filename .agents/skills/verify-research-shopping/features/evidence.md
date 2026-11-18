@@ -1,5 +1,7 @@
 # Evidence and uncertainty
 
+This page describes the explicit legacy fixture regression composition. It does not describe normal development product scope or establish live product behavior. Use [Exa product research](web-research.md) for the dynamic normal interface.
+
 Each result keeps synthetic claims, unknowns, conflicting observations, and manufacturer references behind an evidence disclosure.
 
 ## Sub-features

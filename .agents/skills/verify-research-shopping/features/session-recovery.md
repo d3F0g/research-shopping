@@ -16,10 +16,12 @@ Delay a real turn response. Before releasing it, edit the draft, submit a newer 
 
 Delay a real selection response. Edit the draft or reset while pending. Release the response and require no stale handoff. Repeat through the source-request boundary where affected. Retained history must not keep cancelled work alive merely because its component remains mounted.
 
+Before paid research, observe the prepare response and accepted intent. Stop during the SDK request, then submit another turn. Accepted criteria must remain. An invalid budget change must remain pending across Thanks and refresh, with no provider request until resolved or explicitly discarded. New chat explicitly clears it. Research-phase requests cannot carry new text or bypass pending state.
+
 ## Feedback
 
 Submit actionable feedback and require the relevant preference update with hard limits preserved. Generic dissatisfaction needs a targeted clarification. A friendly acknowledgment must not create or silently remove an unresolved hard constraint.
 
 ## Evidence
 
-Keep the trace showing action order, actual requests, accepted responses, history and current state. Failure injection proves the ordering/error case only. Core discovery uses real fixtures. Remove route handlers and close contexts you create. Reload resets in-memory conversation state and is not a substitute for testing the actual reset control.
+Keep the trace showing action order, actual requests, accepted responses, history and current state. Failure injection proves the ordering/error case only. Legacy regression uses synthetic fixtures. Normal-mode automated journeys use injected provider evidence and never establish live retrieval. Remove route handlers and close contexts you create. Reload resets in-memory conversation state and is not a substitute for testing the actual reset control.

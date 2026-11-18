@@ -2,12 +2,14 @@
 
 Use a fresh browser context for each independent journey. The offline regression helper explicitly composes the fixture test app. Normal development research and its injected-provider tests have a separate guide. The [skill entrypoint](../SKILL.md) owns launch, doctor, evidence, and cleanup. `scripts/smoke.mjs` records its driven chat and product-link subset. It does not replace independent visual judgment. The other paths need their own browser checks or matching tests in `tests/e2e`.
 
+Normal research accepts arbitrary product descriptions and session criteria. Category registries and sample catalogs are confined to historical/test composition. Start with the Exa guide for normal product changes.
+
 ## Features
 
 - [Conversation and theme](chat.md) covers dark first visit, persisted theme, retained messages, contextual questions and the scrolling composer.
 
 - [Research requests](research.md) covers typed requests, example buttons, ambiguity, and no matches.
-- [Hard limits and preferences](preferences.md) covers editable constraints, category changes, priorities, and answer length.
+- [Hard limits and preferences](preferences.md) covers editable constraints, legacy category changes, priorities, and answer length.
 - [Evidence and uncertainty](evidence.md) covers claim disclosures, fixed fixture timestamps, unknown claims, and conflicts.
 - [Product selection](selection.md) covers exact product identity and safe manufacturer-link handoff.
 - [Session and recovery](session-recovery.md) covers reset, independent contexts, failed requests, and stale responses.
@@ -24,4 +26,4 @@ Browser recipes use Playwright's `page`, `context`, and `expect`. Choose stable 
 
 Run `npm test` for domain, API and SDK boundaries. Run `npm run test:e2e` for the real Chromium journeys. Read the current test titles in `tests/e2e/research-shopping.spec.ts` before choosing a focused `--grep` pattern. A focused selection does not prove all mapped paths.
 
-The browser suite covers fixture recommendations, hard limits, priorities, unknown requirements, exact handoff rejection, session isolation, stale requests, recovery, evidence, comparisons, recorded activity and optional source behavior. Chat changes also need dark-default/theme persistence, ordinary messages, contextual questions/skip, retained turns, obsolete actions and mobile scrolling/composer evidence. Confirm the named tests actually exercise these behaviors on the reviewed candidate instead of inheriting a previous candidate's counts.
+The legacy browser regression covers fixture recommendations, hard limits, priorities, unknown requirements, exact handoff rejection, session isolation, stale requests, recovery, evidence, comparisons, recorded activity and optional source behavior. Chat changes also need dark-default/theme persistence, ordinary messages, contextual questions/skip, retained turns, obsolete actions and mobile scrolling/composer evidence. Confirm the named tests actually exercise these behaviors on the reviewed candidate instead of inheriting a previous candidate's counts.

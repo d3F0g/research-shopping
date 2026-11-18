@@ -1,5 +1,7 @@
 # Hard limits and preferences
 
+This page describes the explicit legacy fixture regression composition. It does not describe normal development product scope or establish live product behavior. Use [Exa product research](web-research.md) for the dynamic normal interface.
+
 Messages update structured shopping preferences. A missing material fact can produce a compact inline question. Full preference editing opens only when the user requests it.
 
 ## Contextual questions

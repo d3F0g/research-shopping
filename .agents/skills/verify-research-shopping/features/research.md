@@ -1,5 +1,7 @@
 # Research requests
 
+This page describes the explicit legacy fixture regression composition. It does not describe normal development product scope or establish live product behavior. Use [Exa product research](web-research.md) for the dynamic normal interface.
+
 Users describe a shopping objective in chat. The assistant returns an ordinary message, a contextual question, a fixture shortlist or an honest limitation.
 
 ## Drive a request

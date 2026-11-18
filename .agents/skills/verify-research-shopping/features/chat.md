@@ -18,13 +18,13 @@ After a shopping response, submit a brief acknowledgment. Require the original e
 
 In a fresh conversation, submit a request missing a material fact, such as `Something good for work`. Require a compact preference question inside the assistant turn. Use the displayed quick choice and observe the resulting accepted preference. Do not require an optional question to block research. When an optional question is shown, exercise its skip action and verify the conversation continues without inventing that preference.
 
-Submit a complete request such as `Wireless headphones for long flights, under S$500`. Require the response to preserve its category and SGD 500 budget without asking for either again. Inspect the actual turn response as well as the visible preference summary or contextual editor.
+Submit a complete request such as `Wireless headphones for long flights, under S$500`. Require the response to preserve its product description and SGD 500 budget without asking for either again. Inspect the actual turn response as well as the visible preference summary or contextual editor.
 
 Open contextual preference editing only through its visible trigger. Verify a single mounted editor and readable mobile controls. Close it without losing accepted changes or previous messages. The initial screen must not expose this editor permanently.
 
 ## Multi-turn results
 
-Capture the first request and response. Then submit `under S$200` through the same composer. Require both user messages and both accepted assistant responses to remain in history. Inspect the second response to require its SGD 200 cap, unchanged relevant hard constraints, and eligible fixture offers.
+Capture the first request and response. Then submit `under S$200` through the same composer. Require both user messages and both accepted assistant responses to remain in history. Inspect the second response to require its SGD 200 cap, unchanged relevant hard constraints, and correctly qualified current product observations. Fixture offers apply only to the explicit test composition.
 
 Scope card, comparison, evidence and selection controls to the intended assistant message. A historical result is a snapshot. It cannot silently replace the current shortlist or provide an action under obsolete preferences. Opening old evidence must not mutate current accepted preferences.
 
@@ -40,4 +40,4 @@ Verify visible keyboard focus, touch-sized actions, readable contrast in both th
 
 Keep actual request/response observations, message retention, theme transitions, scroll/composer measurements, desktop/mobile screenshots, trace, candidate SHA, worktree status and owned-process cleanup. Record exact states covered. In-memory conversation history does not establish refresh, cross-tab or cross-device persistence. Theme persistence is a separate promise.
 
-The issue #30 redesign requires user review of screenshots and design confirmation before merge. Independent visual QA is necessary and does not substitute for that confirmation.
+The user approved the issue #30 design in PR #33. Routine changes follow autonomous CI, independent QA and security gates. A new approval is required only for an explicitly designated design milestone.
