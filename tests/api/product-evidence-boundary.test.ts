@@ -121,12 +121,57 @@ describe("supported product evidence through the actual SDK", () => {
   });
 
   it.each([
+    "is a wired-only headset.",
+    "is wired-only headphones.",
+    "is a pair of wired-only headphones.",
+    "is wired-only earbuds.",
+    "is an over-ear wired-only headset.",
+    "is the wired-only headset.",
+    "is the pair of wired-only earbuds.",
+    "are wired-only headphones.",
+    "are a pair of wired-only headphones.",
+    "is a wired only headset.",
+    "is a wired-only over-ear headset.",
+    "is a lightweight wired-only headset.",
+    "is a wired-only lightweight headset.",
+    "is a lightweight over-ear wired-only headset.",
+    "is a pair of wired-only in-ear earbuds.",
+    "is a pair of closed-back wired-only headphones.",
+    "is a noise-cancelling wired-only headset.",
+    "is a wired-only noise-canceling headset.",
+    "is a wired-only gaming headset.",
+    "is a wired-only stereo headset.",
+    "is a wired-only portable headset.",
+    "are a pair of open-back wired-only headphones.",
+    "is an on-ear wired-only headset.",
+  ])("rejects an exclusive wired noun phrase with independent category evidence: %s", async (clause) => {
+    const categoryFact = categoryEvidence.headphones;
+    const negative = `${name} ${clause}`;
+    const baseline = await observe({ facts: [categoryFact], requiredFeatures: ["wireless"] });
+    expect(baseline.snapshot.products).toHaveLength(1);
+    expect(baseline.snapshot.products[0].facts).toEqual([{ sourceId: "source-1", quote: categoryFact }]);
+    for (const facts of [[categoryFact, negative], [categoryFact]]) {
+      const { snapshot } = await observe({ facts, highlights: [categoryFact, negative], requiredFeatures: ["wireless"] });
+      expect(snapshot.products).toEqual([]);
+      expect(snapshot.sources[0].highlights).toContain(negative);
+    }
+  });
+
+  it.each([
     "supports wired and wireless audio.",
     "supports only wired and wireless audio.",
     "supports not only wired audio but also wireless audio.",
     "does not support wired audio but supports wireless audio.",
     "is not wired-only and supports wireless audio.",
     "supports wireless audio and only uses wired connections for charging.",
+    "is not a wired-only headset.",
+    "isn't a wired-only headset.",
+    "is not a pair of wired-only headphones.",
+    "are not wired-only earbuds.",
+    "is a headset with wired and wireless audio.",
+    "is a pair of wired and wireless headphones.",
+    "is a wired and Bluetooth headset.",
+    "is a wireless headset with wired-only charging.",
   ])("does not treat dual connectivity as exclusive wired support: %s", async (clause) => {
     const positive = `${name} ${clause}`;
     const { snapshot } = await observe({ facts: [categoryQuote, positive], requiredFeatures: ["wireless"] });
@@ -138,6 +183,9 @@ describe("supported product evidence through the actual SDK", () => {
     `Orbit Quiet only supports wired audio.`,
     `${name} Pro only supports wired audio.`,
     `${name} supports wireless audio while Orbit Quiet only supports wired audio.`,
+    `Orbit Quiet is a wired-only headset.`,
+    `${name} Pro is a wired-only headset.`,
+    `${name} supports wireless audio while Orbit Quiet is a wired-only headset.`,
   ])("does not bind another model's exclusive wired clause to this model: %s", async (other) => {
     const { snapshot } = await observe({ facts: [categoryQuote], highlights: [categoryQuote, other], requiredFeatures: ["wireless"] });
     expect(snapshot.products).toHaveLength(1);
