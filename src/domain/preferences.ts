@@ -29,8 +29,11 @@ const priorityRules: [RegExp, Priority][] = [
 const brands = new Map(["Sony", "Bose", "Sennheiser", "Audio-Technica", "ASUS", "Dell", "Apple", "Lenovo", "HP", "Acer", "Samsung"].map((brand) => [brand.toLowerCase(), brand]));
 const numberPattern = /^(?:\d{1,3}(?:,\d{3})+|\d+)(?:\.\d{1,2})?$/;
 const unsupportedCurrencyCodes = Intl.supportedValuesOf("currency").filter((currency) => currency !== "SGD" && currency !== "USD").join("|");
+const unsupportedCurrencyNames = String.raw`euros?|pounds?|yen|ringgit`;
+const unsupportedCurrencyToken = `${unsupportedCurrencyCodes}|${unsupportedCurrencyNames}`;
 const budgetAmountToken = String.raw`[+-]?(?:\d[\d,._]*(?:e[+-]?\d+)?[km]?|infinity|nan)`;
-const unsupportedCurrencyAmountPattern = new RegExp(String.raw`\b(?:${unsupportedCurrencyCodes})\s*${budgetAmountToken}\b(?!\s*gb\b)|\b${budgetAmountToken}\s*(?:${unsupportedCurrencyCodes})\b`, "i");
+const unsupportedCurrencyAmountPattern = new RegExp(String.raw`\b(?:${unsupportedCurrencyToken})\s*${budgetAmountToken}\b(?!\s*gb\b)|\b${budgetAmountToken}\s*(?:${unsupportedCurrencyToken})\b`, "i");
+const unsupportedCurrencyNamePattern = new RegExp(String.raw`\b(?:${unsupportedCurrencyNames})\b`, "i");
 
 export function validBudgetAmount(amount: number): boolean {
   return Number.isFinite(amount) && amount > 0 && amount <= 1_000_000
@@ -111,7 +114,7 @@ export function updatePreferences(message: string, previous: Preferences): Prefe
   });
 
   const unsupportedCurrency = unsupportedCurrencyAmountPattern.test(remaining)
-    || /\b(?:euros?|pounds?|yen|ringgit)\b/i.test(remaining)
+    || unsupportedCurrencyNamePattern.test(remaining)
     || /\p{Sc}/u.test(remaining.replaceAll("$", ""));
   if (unsupportedCurrency) {
     fail("currency", "This research interface supports SGD and USD budgets only. Specify the currency and a positive amount, or explicitly remove the unsupported requirement.");

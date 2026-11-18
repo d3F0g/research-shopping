@@ -17,6 +17,23 @@ function existingPreferences() {
 }
 
 describe("budget currency clarification", () => {
+  it.each(["euros", "pounds", "yen", "ringgit"])("preserves %s amount aliases without matching embedded words", (alias) => {
+    const previous = existingPreferences();
+    for (const token of [`${alias}200`, `${alias} 200`, `200${alias}`, `200 ${alias}`]) {
+      const message = `under ${token}`;
+      const result = updatePreferences(message, previous);
+      expect(result.clarification?.reason).toBe("currency");
+      expect(result.preferences.hard).toEqual({ ...previous.hard, pendingConstraint: message });
+      expect(result.notes).toEqual([]);
+    }
+    for (const message of [`model200${alias}`, `${alias}200phone`, `200${alias}phone`, `${alias}house headphones`]) {
+      const result = updatePreferences(message, previous);
+      expect(result.clarification?.reason).toBe("constraint");
+      expect(result.preferences.hard.budget).toEqual(previous.hard.budget);
+    }
+    expect(updatePreferences(`headphones in ${alias}`, previous).clarification?.reason).toBe("currency");
+  });
+
   it.each(["ALL", "TRY", "TOP"])("recognizes %s only beside a budget amount", (currency) => {
     const previous = existingPreferences();
     for (const token of [`${currency}200`, `${currency} 200`, `200${currency}`, `200 ${currency}`, `${currency.toLowerCase()}200`, `200 ${currency.toLowerCase()}`]) {
@@ -229,6 +246,8 @@ describe("budget currency clarification", () => {
     "under ALL200", "under ALL 200", "under 200ALL", "under 200 ALL",
     "under TRY200", "under TRY 200", "under 200TRY", "under 200 TRY",
     "under TOP200", "under TOP 200", "under 200TOP", "under 200 TOP",
+    "under 200euros", "under euros200", "under 200pounds", "under pounds200",
+    "under 200yen", "under yen200", "under 200ringgit", "under ringgit200",
   ])(
     "preserves the HTTP budget and blocks research for %s",
     async (message) => {
