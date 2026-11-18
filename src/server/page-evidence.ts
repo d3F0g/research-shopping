@@ -2,7 +2,8 @@ import { createHash } from "node:crypto";
 import { FeatureSchema, type Feature, type Preferences } from "../domain/contracts";
 import type { ResearchProduct, ResearchSnapshot } from "../domain/research";
 
-type Source = { sourceIndex: number; url: string; title: string; highlights: string[] };
+type Highlight = Readonly<{ text: string; clipped: boolean }>;
+type Source = { sourceIndex: number; url: string; title: string; highlights: Highlight[] };
 export type NativeObservation = { name: string; url: string; identityQuote: string | null; quotedFacts: string[]; priceQuote: string | null };
 export type EvidenceDecision = {
   sourceIndex: number;
@@ -40,10 +41,14 @@ function unresolvedConstraints(preferences: Preferences): string[] {
 
 type Span = Readonly<{ highlight: number; start: number; end: number }>;
 type Anchor =
-  | Readonly<{ kind: "heading"; identity: Span; scope: Scope }>
-  | Readonly<{ kind: "direct"; identity: Span }>;
+  | Readonly<{ kind: "heading"; identity: CompletePassage; scope: Scope }>
+  | Readonly<{ kind: "direct"; identity: CompletePassage }>;
 type SubjectProof = Readonly<{ name: string; selected: Anchor; anchors: readonly [Anchor, ...Anchor[]] }>;
-type SourcePassage = Span & { text: string; kind: "content" | "fragment" | "section" | "context-heading" | "identity" | "boundary"; region: number; scope: Scope | null };
+type Completion = { completion: "complete" } | { completion: "open" };
+type SourcePassage = Span & Completion & { text: string; kind: "content" | "section" | "context-heading" | "identity" | "boundary"; region: number; scope: Scope | null };
+type CompletePassage = Extract<SourcePassage, { completion: "complete" }>;
+type Boundary = Readonly<{ start: number; end: number; kind: "gap" | "selector" | "section" | "heading" }>;
+type HighlightContext = Readonly<{ item: Highlight; boundaries: readonly Boundary[] }>;
 type SourceContext = Readonly<{ source: Source; sourceId: string; passages: readonly SourcePassage[]; subjects: readonly SubjectProof[] }>;
 type Ownership =
   | Readonly<{ kind: "own"; basis: "exact-statement" | "valid-scope"; predicate: string }>
@@ -95,33 +100,37 @@ const classPhrases: Record<NonNullable<Preferences["hard"]["category"]>, string>
   laptops: "(?:(?:gaming|business|ultraportable|convertible|thin and light|Windows|\\d{1,2}(?:\\.\\d)?-inch) )*(?:laptop|notebook)(?: computer)?",
 };
 const boundaryPattern = /\.{3}|…|\b(?:variations?|related products?|recommended products?|you may also like|accessories|compare(?: products)?|comparison|choose (?:a |your )?(?:colou?r|variant)|select (?:a |your )?(?:colou?r|variant))\b/ig;
-function sourceBoundaries(raw: string): { start: number; end: number }[] {
-  return [...raw.matchAll(new RegExp(boundaryPattern))].flatMap((match) => {
+function sourceBoundaries(raw: string): Boundary[] {
+  const headings: Boundary[] = [...raw.matchAll(/(?:^|\s)(#{1,6})[ \t]+/g)].map((match) => ({
+    start: match.index + match[0].indexOf("#"), end: match.index + match[0].length, kind: "heading",
+  }));
+  const markers = [...raw.matchAll(new RegExp(boundaryPattern))].flatMap((match): Boundary[] => {
     const end = match.index + match[0].length;
-    if (/\.{3}|…/.test(match[0])) return [{ start: match.index, end }];
+    if (/\.{3}|…/.test(match[0])) return [{ start: match.index, end, kind: "gap" }];
     const prefix = raw.slice(0, match.index);
     const linePrefix = prefix.slice(prefix.lastIndexOf("\n") + 1);
     const suffix = raw.slice(end);
-    const heading = /(?:^|\s)#{1,6}[ \t]*$/.exec(prefix);
-    const labelStart = /^\s*$/.test(linePrefix) || heading !== null;
-    const labelEnd = /^[ \t]*(?:$|\n|[#*\[])/.test(suffix);
-    return labelStart && labelEnd || /^[ \t]*[*\[]/.test(suffix)
-      ? [{ start: heading ? heading.index + heading[0].indexOf("#") : match.index, end }] : [];
+    const heading = headings.find((candidate) => candidate.end === match.index);
+    const labelStart = /^\s*$/.test(linePrefix) || heading !== undefined;
+    const labelEnd = /^[ \t]*(?:$|\n|#)/.test(suffix);
+    const selector = /^variations?$/i.test(match[0]) && /^[ \t]+\*(?:[ \t]+\*)?[ \t]*\[/.test(suffix);
+    return labelStart && labelEnd || selector
+      ? [{ start: heading?.start ?? match.index, end, kind: selector ? "selector" : "section" }] : [];
   });
+  return [...headings.filter((heading) => !markers.some((marker) => marker.start === heading.start)), ...markers].sort((a, b) => a.start - b.start);
 }
 
-function headingScopes(input: Source, preferences: Preferences, decisions: EvidenceDecision[]): Scope[] {
+function headingScopes(input: Source, highlights: readonly HighlightContext[], preferences: Preferences, decisions: EvidenceDecision[]): Scope[] {
   const category = preferences.hard.category;
   if (!category) return [];
   const scopes: Scope[] = [];
   const record = (code: string, detail: Partial<EvidenceDecision> = {}) => decisions.push({ sourceIndex: input.sourceIndex, path: "source-identity", code, ...detail });
   const titleName = input.title.split(" | ")[0].trim();
-  for (const [highlight, original] of input.highlights.entries()) {
-    const raw = original.replace(/\r/g, " ").replace(/[\u0000-\u0008\u000b\u000c\u000e-\u001f\u007f-\u009f]/g, " ");
-    const heading = /(?:^|\s)(#{1,6})[ \t]+/g;
-    for (const match of raw.matchAll(heading)) {
-      const start = match.index! + match[0].indexOf("#");
-      const contentStart = match.index! + match[0].length;
+  for (const [highlight, context] of highlights.entries()) {
+    const raw = context.item.text;
+    for (const marker of context.boundaries.filter((boundary) => boundary.kind === "heading")) {
+      const start = marker.start;
+      const contentStart = marker.end;
       const rest = raw.slice(contentStart);
       const newline = rest.indexOf("\n");
       const intactName = newline >= 0 ? cleanText(rest.slice(0, newline).replace(/\s+#+$/, "")) : null;
@@ -141,15 +150,19 @@ function headingScopes(input: Source, preferences: Preferences, decisions: Evide
       }
       const tail = raw.slice(identityEnd);
       if (/^[ \t]+(?:Pro|Plus|Max|Ultra|Special Edition|cases?|covers?|cables?|pads?|stands?|for)\b/i.test(tail)) { record("variant-mismatch", { highlight, start }); continue; }
-      const boundary = sourceBoundaries(tail)[0];
-      let end = boundary ? identityEnd + boundary.start : raw.length;
-      for (const next of tail.matchAll(/(?:^|\s)(#{1,6})[ \t]+/g)) {
-        const label = cleanText(tail.slice(next.index! + next[0].length));
+      const boundary = context.boundaries.find((candidate) => candidate.start >= identityEnd && candidate.kind !== "heading");
+      let end = boundary?.start ?? raw.length;
+      for (const next of context.boundaries.filter((candidate) => candidate.start >= identityEnd && candidate.kind === "heading")) {
+        const label = cleanText(raw.slice(next.end));
         if (/^(?:Description|Specifications|Key Features|Features|Highlights)(?=\s|$)/i.test(label)) continue;
-        const nextStart = identityEnd + next.index! + next[0].indexOf("#");
+        const nextStart = next.start;
         if (nextStart < end) end = nextStart;
         break;
       }
+      const lineEnd = /\n|[.!?](?=\s|$)/.exec(raw.slice(identityEnd));
+      const recordEnd = Math.min(end, lineEnd ? identityEnd + lineEnd.index + (lineEnd[0] === "\n" ? 0 : 1) : raw.length);
+      const identityRecordEnd = priceRecordStart.test(raw.slice(identityEnd).trimStart()) ? identityEnd : recordEnd;
+      if (completion(context, start, identityRecordEnd, "heading").completion !== "complete") { record("ambiguous-scope", { highlight, start, end: identityRecordEnd }); continue; }
       const text = cleanText(raw.slice(start, end));
       const identity = cleanText(raw.slice(start, identityEnd));
 
@@ -165,6 +178,7 @@ function headingScopes(input: Source, preferences: Preferences, decisions: Evide
 const sectionLabels = "Description|Specifications|Key Features|Features|Highlights";
 const scalarAmount = "(?:0|[1-9]\\d{0,2}(?:,\\d{3})+|[1-9]\\d*)(?:\\.\\d{2})?";
 const money = `(?:SGD|USD|EUR|GBP|AUD|JPY|(?:S|US)\\$|[€£¥])\\s*${scalarAmount}`;
+const priceRecordStart = /^(?:[A-Z]{3}\s*|[A-Z]{0,2}\$\s*|[€£¥]\s*)\d/;
 const contextPrice = new RegExp(`^(?:Sale price:?\\s*)?${money}\\s+(?:was|regular price:?|list price:?)\\s+${money}(?:\\s+(?:SGD|USD|EUR|GBP|AUD|JPY))?(?:\\s+(?:You Save|Save|Savings:?)\\s+${money})?$`, "i");
 const singlePrice = new RegExp(`^(?:Price:?\\s*)?${money}$`, "i");
 const pricePart = new RegExp(`^(?:(?:Price|Sale price|Regular price|List price|Savings):?\\s*|was\\s+|You Save\\s+|Save\\s+)?${money}(?:\\s+(?:SGD|USD|EUR|GBP|AUD|JPY))?$`, "i");
@@ -191,11 +205,40 @@ function headingKind(text: string): "section" | "context-heading" | "boundary" |
   return isModelLabel(label) ? "boundary" : "context-heading";
 }
 
-function ownership(context: SourceContext, subject: SubjectProof, passage: SourcePassage): Ownership {
+function completion(context: HighlightContext, start: number, end: number, role: "heading" | "content"): Completion {
+  const text = cleanText(context.item.text.slice(start, end));
+  const rest = context.item.text.slice(end);
+  const next = rest.trimStart();
+  if (/[.!?]$/.test(text)) return { completion: "complete" };
+  if (!next && !context.item.clipped) return { completion: "complete" };
+  const nextStart = end + rest.length - next.length;
+  const boundary = context.boundaries.find((candidate) => candidate.start === nextStart);
+  const newline = /^[ \t]*\n/.test(rest);
+  if (role === "heading") {
+    if (boundary?.kind === "selector" || priceRecordStart.test(next)) return { completion: "complete" };
+    if (boundary?.kind === "heading" || newline && (boundary || !next || /^[A-Z0-9]/.test(next))) return { completion: "complete" };
+  }
+  if (contextPrice.test(text) && boundary?.kind === "gap") return { completion: "complete" };
+  const structured = attributeLabel.test(text) || pricePart.test(text) || contextPrice.test(text);
+  const nextRecord = attributeLabel.test(next) || pricePart.test(next.split("\n")[0])
+    || new RegExp(`^(?:The )?[A-Z][\\p{L}\\p{N} .()-]+?\\s+${clauseVerb}`, "u").test(next);
+  if (structured && newline && (boundary || nextRecord)) return { completion: "complete" };
+  return { completion: "open" };
+}
+
+function isComplete(passage: SourcePassage): passage is CompletePassage {
+  return passage.completion === "complete";
+}
+
+function namedPredicate(name: string, text: string): string | null {
+  return new RegExp(`^(?:The )?${escapeRegex(name)}\\s+(${clauseVerb}.*)$`, "i").exec(text)?.[1] ?? null;
+}
+
+function ownership(context: SourceContext, subject: SubjectProof, passage: CompletePassage): Ownership {
   if (passage.kind !== "content" && passage.kind !== "context-heading") return { kind: "unresolved" };
   const text = passage.text.replace(/^#{1,6}\s+/, "").replace(/[‘’]/g, "'");
-  const exact = new RegExp(`^(?:The )?${escapeRegex(subject.name)}\\s+(${clauseVerb}.*)$`, "i").exec(text);
-  const predicate = exact ? exact[1] : text.replace(/^(?:These (?:headphones|earbuds|laptops)|The (?:headphones|earbuds|laptop)|It|They)\s+/i, "");
+  const exact = namedPredicate(subject.name, text);
+  const predicate = exact ?? text.replace(/^(?:These (?:headphones|earbuds|laptops)|The (?:headphones|earbuds|laptop)|It|They)\s+/i, "");
   const compound = /[.!?]\s+[A-Z0-9]|;|[,;]\s+[A-Z][a-z]+\s+[A-Z0-9]|\b(?:and|while|but|whereas|or)\s+[A-Z][a-z]+\s+[A-Z0-9]/.test(text);
   const comparison = /\b(?:versus|compared (?:with|to)|unlike)\b|\bvs\.?\s/i.test(text);
   const foreignTarget = /\b(?:for|on|with|to)\s+(?:(?:the|a|an)\s+)?(?:[A-Z][a-z]+\s+[A-Z0-9][\p{L}\p{N}-]*|(?:Pro|Plus|Max|Ultra|Black|Teal|White)\s+variant)\b/u.test(predicate)
@@ -214,24 +257,28 @@ function ownership(context: SourceContext, subject: SubjectProof, passage: Sourc
 }
 
 function sourceContext(source: Source, sourceId: string, native: readonly NativeObservation[], preferences: Preferences, decisions: EvidenceDecision[]): SourceContext {
-  const scopes = headingScopes(source, preferences, decisions);
+  const highlights = source.highlights.map((item): HighlightContext => ({ item, boundaries: sourceBoundaries(item.text) }));
+  const scopes = headingScopes(source, highlights, preferences, decisions);
   const subjects: SubjectProof[] = [];
-  for (const scope of scopes) {
-    const anchor: Anchor = { kind: "heading", identity: { highlight: scope.highlight, start: scope.start, end: scope.identityEnd }, scope };
-    const prior = subjects.findIndex((subject) => subject.name === scope.name);
-    if (prior < 0) subjects.push({ name: scope.name, selected: anchor, anchors: [anchor] });
-    else subjects[prior] = { ...subjects[prior], anchors: [...subjects[prior].anchors, anchor] };
-  }
   const entries: SourcePassage[] = [];
   let region = 0;
-  for (const [highlight, raw] of source.highlights.entries()) {
+  for (const [highlight, highlightContext] of highlights.entries()) {
+    const raw = highlightContext.item.text;
     region++;
     const local = scopes.filter((scope) => scope.highlight === highlight);
     const cuts = new Set([0, raw.length]);
-    const boundaries = sourceBoundaries(raw);
+    const boundaries = highlightContext.boundaries;
     for (const scope of local) for (const position of [scope.start, scope.identityEnd, scope.end]) cuts.add(position);
-    for (const boundary of boundaries) { cuts.add(boundary.start); cuts.add(boundary.end); }
-    const separator = new RegExp(`\\n+|(?<=[.!?])\\s+(?=[A-Z0-9])|(?<!\\S)#{1,6}[ \\t]+(?:${sectionLabels})(?=\\s|$)`, "gi");
+    for (const boundary of boundaries) {
+      if (local.some((scope) => boundary.start >= scope.start && boundary.start < scope.identityEnd)) continue;
+      cuts.add(boundary.start);
+      if (boundary.kind !== "heading") cuts.add(boundary.end);
+      else {
+        const section = new RegExp(`^(?:${sectionLabels})(?=\\s|$)`, "i").exec(raw.slice(boundary.end));
+        if (section) cuts.add(boundary.end + section[0].length);
+      }
+    }
+    const separator = /\n+|(?<=[.!?])\s+(?=[A-Z0-9])/g;
     const sections = [...raw.matchAll(separator)];
     for (const match of sections) {
       if (local.some((scope) => match.index >= scope.start && match.index < scope.identityEnd)) continue;
@@ -244,15 +291,24 @@ function sourceContext(source: Source, sourceId: string, native: readonly Native
       if (!text) continue;
       const identity = local.find((scope) => start === scope.start && end === scope.identityEnd);
       const heading = headingKind(text);
-      const isBoundary = boundaries.some((boundary) => boundary.start === start)
-        || !identity && !heading && !pricePart.test(text) && !priceCondition.test(text) && isModelLabel(text)
-        || !identity && heading === "boundary";
-      const fragment = /^(?:\.{3}|…)/.test(raw.slice(end)) && !/[.!?]$/.test(text) && !contextPrice.test(text) && !singlePrice.test(text);
-      const kind = identity ? "identity" : isBoundary ? "boundary" : fragment ? "fragment" : heading ?? "content";
+      const model = !heading && !pricePart.test(text) && !priceCondition.test(text) && isModelLabel(text);
+      const state: Completion = identity ? { completion: "complete" } : completion(highlightContext, start, end, heading || model ? "heading" : "content");
+      const marker = boundaries.find((boundary) => boundary.start === start && boundary.kind !== "heading");
+      const isBoundary = marker && (marker.kind === "gap" || marker.kind === "selector" || state.completion === "complete")
+        || !identity && state.completion === "complete" && (model || heading === "boundary");
+      const kind = identity ? "identity" : isBoundary ? "boundary" : heading === "boundary" ? "context-heading" : heading ?? "content";
       if (isBoundary || identity && entries.some((entry) => entry.highlight === highlight && entry.kind === "identity")) region++;
-      entries.push({ highlight, start, end, text, kind, region, scope: local.find((scope) => start >= scope.identityEnd && end <= scope.end) ?? null });
+      entries.push({ highlight, start, end, text, kind, ...state, region, scope: local.find((scope) => start >= scope.identityEnd && end <= scope.end) ?? null });
       if (isBoundary) region++;
     }
+  }
+  for (const scope of scopes) {
+    const identity = entries.filter(isComplete).find((passage) => passage.kind === "identity" && passage.highlight === scope.highlight && passage.start === scope.start);
+    if (!identity) continue;
+    const anchor: Anchor = { kind: "heading", identity, scope };
+    const prior = subjects.findIndex((subject) => subject.name === scope.name);
+    if (prior < 0) subjects.push({ name: scope.name, selected: anchor, anchors: [anchor] });
+    else subjects[prior] = { ...subjects[prior], anchors: [...subjects[prior].anchors, anchor] };
   }
   const context: SourceContext = { source, sourceId, passages: entries, subjects };
   for (const scope of scopes) {
@@ -261,7 +317,7 @@ function sourceContext(source: Source, sourceId: string, native: readonly Native
     for (const passage of entries) {
       if (passage.scope !== scope) continue;
       if (!intact) passage.scope = null;
-      else if (passage.kind === "boundary" || passage.kind === "fragment" || passage.kind === "content" && ownership(context, subject, passage).kind !== "own") {
+      else if (passage.kind === "boundary" || passage.kind === "content" && (!isComplete(passage) || ownership(context, subject, passage).kind !== "own")) {
         intact = false;
         passage.scope = null;
       }
@@ -271,20 +327,20 @@ function sourceContext(source: Source, sourceId: string, native: readonly Native
     for (const observation of native) {
       const name = cleanText(observation.name);
       const category = new RegExp(`^(?:The )?${escapeRegex(name)} (?:is|are) ${categoryStatements[preferences.hard.category]}(?: with [^.!?]+)?[.!]?$`, "i");
-      const matches = entries.filter((passage) => category.test(passage.text) && observation.quotedFacts.some((quote) => cleanText(quote) === passage.text));
+      const matches = entries.filter(isComplete).filter((passage) => category.test(passage.text) && observation.quotedFacts.some((quote) => cleanText(quote) === passage.text));
       const first = matches[0];
       if (!first) continue;
-      const selected: Anchor = { kind: "direct", identity: sourceSpan(first) };
-      const proof: SubjectProof = { name, selected, anchors: [selected, ...matches.slice(1).map((passage): Anchor => ({ kind: "direct", identity: sourceSpan(passage) }))] };
+      const selected: Anchor = { kind: "direct", identity: first };
+      const proof: SubjectProof = { name, selected, anchors: [selected, ...matches.slice(1).map((passage): Anchor => ({ kind: "direct", identity: passage }))] };
       if (ownership(context, proof, first).kind === "own" && !subjects.some((subject) => subject.name === name)) subjects.push(proof);
     }
   }
   for (const [index, subject] of subjects.entries()) {
     const anchors: [Anchor, ...Anchor[]] = [...subject.anchors];
-    for (const passage of entries) {
+    for (const passage of entries.filter(isComplete)) {
       const owner = ownership(context, subject, passage);
       if (owner.kind !== "own" || owner.basis !== "exact-statement" || anchors.some((anchor) => anchor.identity.highlight === passage.highlight && anchor.identity.start === passage.start)) continue;
-      anchors.push({ kind: "direct", identity: sourceSpan(passage) });
+      anchors.push({ kind: "direct", identity: passage });
     }
     subjects[index] = { ...subject, anchors };
   }
@@ -299,15 +355,13 @@ function assessSubject(context: SourceContext, proof: SubjectProof, preferences:
   let excludedManufacturer: Span | null = preferences.hard.excludedBrands.some((brand) =>
     new RegExp(`^(?:The )?${escapeRegex(brand)}\\b`, "i").test(proof.name)
     || new RegExp(`^(?:The )?${escapeRegex(brand)} ${escapeRegex(proof.name)}(?:\\W|$)`, "i").test(context.source.title),
-  ) ? proof.selected.identity : null;
+  ) ? sourceSpan(proof.selected.identity) : null;
   let price: PriceGate = { kind: "unobstructed" };
   let directPriceWitness: Span | null = null;
-  const regions = new Set(proof.anchors.flatMap((anchor) => context.passages.filter((passage) =>
-    passage.highlight === anchor.identity.highlight && passage.start === anchor.identity.start,
-  ).map((passage) => passage.region)));
+  const regions = new Set(proof.anchors.map((anchor) => anchor.identity.region));
   for (const passage of context.passages) {
-    if (passage.kind !== "content" && passage.kind !== "context-heading" && passage.kind !== "fragment") continue;
-    const owner = ownership(context, proof, passage);
+    if (passage.kind !== "content" && passage.kind !== "context-heading" && isComplete(passage)) continue;
+    const owner: Ownership = isComplete(passage) ? ownership(context, proof, passage) : { kind: "unresolved" };
     if (owner.kind === "own") {
       const proposition = featureProposition(owner.predicate);
       for (const feature of FeatureSchema.options) {
@@ -323,7 +377,7 @@ function assessSubject(context: SourceContext, proof: SubjectProof, preferences:
       directPriceWitness ??= sourceSpan(passage);
     }
     else if (proof.selected.kind === "heading" && passage.scope && passage.scope !== proof.selected.scope && (pricePart.test(passage.text) || contextPrice.test(passage.text))) price = { kind: "withheld", reason: "unresolved-context", witness: sourceSpan(passage) };
-    else if (regions.has(passage.region) && owner.kind === "unresolved") {
+    else if (owner.kind === "unresolved" && (regions.has(passage.region) || !isComplete(passage) && namedPredicate(proof.name, passage.text) !== null)) {
       const beforeHeading = proof.selected.kind === "heading" && passage.highlight === proof.selected.identity.highlight && passage.end <= proof.selected.identity.start;
       if (!beforeHeading || priceCondition.test(passage.text)) price = { kind: "withheld", reason: "unresolved-context", witness: sourceSpan(passage) };
     }
@@ -338,7 +392,7 @@ function projectPositive(context: SourceContext, subject: EligibleSubject, nativ
   const { proof } = subject;
   const { selected } = proof;
   const { sourceId } = context;
-  const record = (code: string, field: string) => decisions.push({ sourceIndex: context.source.sourceIndex, path: "native-field", code, field, ...selected.identity });
+  const record = (code: string, field: string) => decisions.push({ sourceIndex: context.source.sourceIndex, path: "native-field", code, field, ...sourceSpan(selected.identity) });
   const facts: ResearchProduct["facts"] = [];
   let price: ResearchProduct["price"] = null;
 
@@ -369,11 +423,11 @@ function projectPositive(context: SourceContext, subject: EligibleSubject, nativ
     let priceStart: number | null = null;
     let priceEnd = 0;
     const finishPrice = () => {
-      if (priceStart !== null) priceBlocks.push(cleanText(context.source.highlights[scope.highlight].slice(priceStart, priceEnd)));
+      if (priceStart !== null) priceBlocks.push(cleanText(context.source.highlights[scope.highlight].text.slice(priceStart, priceEnd)));
       priceStart = null;
     };
     for (const passage of entries) {
-      if (passage.scope === scope && (pricePart.test(passage.text) || contextPrice.test(passage.text))) {
+      if (isComplete(passage) && passage.scope === scope && (pricePart.test(passage.text) || contextPrice.test(passage.text))) {
         priceStart ??= passage.start;
         priceEnd = passage.end;
       } else finishPrice();
@@ -385,7 +439,7 @@ function projectPositive(context: SourceContext, subject: EligibleSubject, nativ
       if (!identityQuote || !scope.identity.includes(identityQuote) || !identityQuote.includes(proof.name)) { record("missing-identity", "identityQuote"); continue; }
       for (const rawQuote of observation.quotedFacts) {
         const quote = cleanText(rawQuote);
-        const passage = entries.find((entry) => entry.text === quote && entry.scope === scope);
+        const passage = entries.filter(isComplete).find((entry) => entry.text === quote && entry.scope === scope);
         const owner = passage && ownership(context, proof, passage);
         const offset = scope.text.indexOf(quote);
         if (!owner || owner.kind !== "own" || !admissibleFact(owner.predicate)) { record("ambiguous-scope", "quotedFacts"); continue; }
@@ -405,12 +459,12 @@ function projectPositive(context: SourceContext, subject: EligibleSubject, nativ
   } else {
     const citation = (rawQuote: string) => {
       const quote = cleanText(rawQuote);
-      const passage = context.passages.find((entry) => entry.kind === "content" && entry.text === quote);
+      const passage = context.passages.filter(isComplete).find((entry) => entry.kind === "content" && entry.text === quote);
       if (!passage || quote.length > 640) return null;
       const owner = ownership(context, proof, passage);
       return owner.kind === "own" && owner.basis === "exact-statement" ? { sourceId, quote } : null;
     };
-    const identity = cleanText(context.source.highlights[selected.identity.highlight].slice(selected.identity.start, selected.identity.end));
+    const identity = cleanText(context.source.highlights[selected.identity.highlight].text.slice(selected.identity.start, selected.identity.end));
     const directPrice = new RegExp(`^(?:The )?${escapeRegex(proof.name)}\\s+(?:costs|retails for|(?:is|was) (?:listed|priced) at)\\s+${money}(?: on this page| when reviewed)?\\.?$`, "i");
     for (const observation of native.filter((item) => cleanText(item.name) === proof.name)) {
       if (!observation.quotedFacts.some((quote) => cleanText(quote) === identity)) continue;
@@ -454,7 +508,7 @@ export function projectPageEvidence(inputs: Source[], observations: NativeObserv
       if (subject.price.kind === "withheld") decisions.push({ sourceIndex: input.sourceIndex, path: "native-field", field: "priceQuote", code: subject.price.reason, ...subject.price.witness });
       if (products.length === 5 || products.some((product) => product.name.toLowerCase() === proof.name.toLowerCase())) continue;
       const { selected } = proof;
-      const identityQuote = cleanText(input.highlights[selected.identity.highlight].slice(selected.identity.start, selected.identity.end));
+      const identityQuote = cleanText(input.highlights[selected.identity.highlight].text.slice(selected.identity.start, selected.identity.end));
       if (identityQuote.length > 640) continue;
       const { facts, price } = projectPositive(context, subject, native, decisions);
       const quotes = [identityQuote, ...facts.map((fact) => fact.quote), ...(price ? [price.quote] : [])];
@@ -462,7 +516,7 @@ export function projectPageEvidence(inputs: Source[], observations: NativeObserv
         ? [selected.scope.text.slice(0, Math.max(...quotes.map((quote) => selected.scope.text.indexOf(quote) + quote.length)))]
         : [...new Set([...facts.map((fact) => fact.quote), ...(price ? [price.quote] : []), identityQuote])];
       if (source.highlights.length + windows.length > 3) {
-        decisions.push({ sourceIndex: input.sourceIndex, path: "native-field", field: "identity", code: "packing-failure", ...selected.identity });
+        decisions.push({ sourceIndex: input.sourceIndex, path: "native-field", field: "identity", code: "packing-failure", ...sourceSpan(selected.identity) });
         continue;
       }
       source.highlights.push(...windows);
@@ -473,7 +527,7 @@ export function projectPageEvidence(inputs: Source[], observations: NativeObserv
         facts, price, stock: "unverified", unresolvedConstraints: unresolvedConstraints(preferences),
       });
     }
-    for (const excerpt of input.highlights.map(cleanText)) {
+    for (const excerpt of input.highlights.map((item) => cleanText(item.text))) {
       if (source.highlights.length === 3) break;
       const bounded = excerpt.slice(0, 640);
       if (bounded && !source.highlights.some((window) => window.includes(bounded))) source.highlights.push(bounded);

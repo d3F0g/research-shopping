@@ -240,7 +240,9 @@ function projectProductResearch(raw: unknown, preferences: Preferences): { resul
     if (!url) return [];
     return [{
       sourceIndex, url, title: boundedTitle(result.title, new URL(url).hostname).title,
-      highlights: (result.highlights ?? []).slice(0, 6).map((highlight) => highlight.slice(0, MAX_HIGHLIGHT_SCAN_LENGTH)),
+      highlights: (result.highlights ?? []).slice(0, 6).map((highlight) => ({
+        text: highlight.slice(0, MAX_HIGHLIGHT_SCAN_LENGTH), clipped: highlight.length > MAX_HIGHLIGHT_SCAN_LENGTH,
+      })),
     }];
   }).filter((source, index, all) => all.findIndex((other) => other.url === source.url) === index);
   const observations = extraction.observations.map((observation) => ({ ...observation, url: safeUrl(observation.url) ?? observation.url }));
