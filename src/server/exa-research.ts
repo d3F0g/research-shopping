@@ -133,6 +133,22 @@ function retainSources(
       textTruncated: source.text.length > 24000,
     }));
 }
+function retainedParagraphs(
+  source: ResearchSource,
+): { start: number; end: number; complete: boolean }[] {
+  const paragraphs: { start: number; end: number; complete: boolean }[] = [];
+  let start = 0;
+  for (const separator of source.text.matchAll(/\n[ \t]*\n/g)) {
+    paragraphs.push({ start, end: separator.index, complete: true });
+    start = separator.index + separator[0].length;
+  }
+  paragraphs.push({
+    start,
+    end: source.text.length,
+    complete: !source.textTruncated,
+  });
+  return paragraphs;
+}
 function bindAssessment(
   value: z.infer<typeof NativeAssessment>,
   sources: ResearchSource[],
@@ -145,8 +161,11 @@ function bindAssessment(
     if (
       !source ||
       start < 0 ||
-      (source.textTruncated &&
-        start + citation.quote.length >= source.text.length)
+      retainedParagraphs(source).some(
+        (paragraph) =>
+          !paragraph.complete &&
+          start + citation.quote.length > paragraph.start,
+      )
     )
       return unknownAssessment(
         "The proposed support was not a complete retained passage at its returned URL.",
@@ -185,14 +204,27 @@ function bindPrice(
   const assessment = bindAssessment(value.assessment, sources);
   const support = assessment.support.flatMap((span) => {
     const source = sources.find((source) => source.id === span.sourceId)!;
-    const preceding = source.text.lastIndexOf("\n\n", span.start);
-    const following = source.text.indexOf("\n\n", span.end);
-    const start = preceding < 0 ? 0 : preceding + 2;
-    const end = following < 0 ? source.text.length : following;
-    if (
-      end - start > 2000 ||
-      (source.textTruncated && end === source.text.length)
-    )
+    const paragraphs = retainedParagraphs(source);
+    let first = paragraphs.findIndex((paragraph) => paragraph.end > span.start);
+    let last = first;
+    while (paragraphs[last + 1] && paragraphs[last + 1]!.start < span.end)
+      last++;
+    const priceContext =
+      /\b(?:price|offer|members?|membership|trade[ -]?in|vouchers?|coupons?|discount|non-members?|subscri(?:be|ption)|pay|cost|tax|shipping|delivery|conditions? apply)\b|(?:SGD|USD|S\$|US\$)\s*\d/i;
+    const relevant = (index: number) => {
+      const paragraph = paragraphs[index];
+      return (
+        paragraph &&
+        priceContext.test(source.text.slice(paragraph.start, paragraph.end)) &&
+        !/^\s*#/.test(source.text.slice(paragraph.start, paragraph.end))
+      );
+    };
+    if (first > 0 && relevant(first - 1)) first--;
+    if (last < paragraphs.length - 1 && relevant(last + 1)) last++;
+    const included = paragraphs.slice(first, last + 1);
+    const start = included[0]!.start;
+    const end = included.at(-1)!.end;
+    if (end - start > 2000 || included.some((paragraph) => !paragraph.complete))
       return [];
     return [
       { sourceId: source.id, start, end, quote: source.text.slice(start, end) },
@@ -230,6 +262,9 @@ function bindPrice(
       );
       const after = span.quote.slice(match.index + match[0].length);
       if (
+        /\b(?:not|never|no longer|doesn't|isn't|wasn't|aren't|cannot)\b[^.!?\n]*$/i.test(
+          before,
+        ) ||
         /\b(?:save|savings?|discount|rebate|cashback|was|RRP|list price|previously|original(?:ly)?|difference of)\s*[:=-]?\s*$/i.test(
           before,
         ) ||

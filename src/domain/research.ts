@@ -240,10 +240,14 @@ export const ApplicationTurnResponseSchema = z.discriminatedUnion("kind", [
   }),
 ]);
 export const PreparedTurnResponseSchema = z.strictObject({
-  kind: z.literal("prepared"), preferences: ShoppingIntentSchema,
+  kind: z.literal("prepared"),
+  preferences: ShoppingIntentSchema,
   notes: z.array(z.string().max(600)).max(12),
 });
-export const TurnTransportResponseSchema = z.union([PreparedTurnResponseSchema, ApplicationTurnResponseSchema]);
+export const TurnTransportResponseSchema = z.union([
+  PreparedTurnResponseSchema,
+  ApplicationTurnResponseSchema,
+]);
 export type PreparedTurnResponse = z.infer<typeof PreparedTurnResponseSchema>;
 export type TurnTransportResponse = z.infer<typeof TurnTransportResponseSchema>;
 export type Assessment = z.infer<typeof AssessmentSchema>;

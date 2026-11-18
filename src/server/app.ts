@@ -1,7 +1,7 @@
 import { randomUUID } from "node:crypto";
 import { TurnRequestSchema as CurrentTurnRequestSchema } from "../domain/contracts";
 import { z } from "zod";
-import { ApplicationTurnResponseSchema, type ResearchTurns } from "../domain/research";
+import { TurnTransportResponseSchema, type ResearchTurns } from "../domain/research";
 import { createResearchTurns } from "./research-turns";
 import { Hono } from "hono";
 import {
@@ -137,7 +137,7 @@ export function createApp(dependencies: AppDependencies = {}, configuration: Par
       const parsed = CurrentTurnRequestSchema.safeParse(context.get("payload"));
       if (!parsed.success) return context.json({ error: "Invalid JSON or request fields", requestId: context.get("requestId") }, 400);
       const result = await researchTurns.turn(parsed.data, context.req.raw.signal);
-      return context.json(ApplicationTurnResponseSchema.parse(result));
+      return context.json(TurnTransportResponseSchema.parse(result));
     }
     const parsed = TurnInput.safeParse(context.get("payload"));
     if (!parsed.success) return context.json({ error: "Invalid JSON or request fields", requestId: context.get("requestId") }, 400);

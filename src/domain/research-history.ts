@@ -60,7 +60,7 @@ export const LegacySavedBodySchema = z.discriminatedUnion("status", [
   }),
   z.object({
     status: z.literal("complete"),
-    value: LegacyApplicationTurnResponseSchema,
+    value: HistoricalApplicationTurnResponseSchema,
   }),
   z.object({
     status: z.literal("interrupted"),

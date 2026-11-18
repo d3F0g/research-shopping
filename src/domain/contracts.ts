@@ -99,7 +99,10 @@ export const ResearchTurnRequestSchema = z.strictObject({
   preferences: ShoppingIntentSchema,
   operationId: z.string().uuid(),
 });
-export const TurnRequestSchema = z.discriminatedUnion("phase", [PrepareTurnRequestSchema, ResearchTurnRequestSchema]);
+export const TurnRequestSchema = z.discriminatedUnion("phase", [
+  PrepareTurnRequestSchema,
+  ResearchTurnRequestSchema,
+]);
 export type PrepareTurnRequest = z.infer<typeof PrepareTurnRequestSchema>;
 export type ResearchTurnRequest = z.infer<typeof ResearchTurnRequestSchema>;
 export type Currency = z.infer<typeof CurrencySchema>;

@@ -35,17 +35,26 @@ export function createResearchTurns(dependencies: {
   return {
     async turn(request, signal) {
       signal.throwIfAborted();
-      const update = request.edit
-        ? editIntent(request.preferences, request.edit, request.message)
-        : request.skipBudget
-          ? {
-              preferences: {
-                ...structuredClone(request.preferences),
-                budgetClarified: true,
-              },
-              notes: [],
-            }
-          : updateIntent(request.message, request.preferences);
+      const update =
+        request.phase === "prepare"
+          ? request.edit
+            ? editIntent(request.preferences, request.edit, request.message)
+            : request.skipBudget
+              ? {
+                  preferences: {
+                    ...structuredClone(request.preferences),
+                    budget: null,
+                    budgetClarified: true,
+                    pendingChange:
+                      request.preferences.pendingChange?.reason === "constraint"
+                        ? request.preferences.pendingChange
+                        : null,
+                    revision: request.preferences.revision + 1,
+                  },
+                  notes: [],
+                }
+              : updateIntent(request.message, request.preferences)
+          : { preferences: request.preferences, notes: [] };
       const preferences = update.preferences;
       const notes = update.notes;
       const base = { responseVersion: 3 as const, preferences, notes };
@@ -53,6 +62,21 @@ export function createResearchTurns(dependencies: {
         return { ...base, kind: "clarification", ...update.clarification };
       if ("reply" in update && update.reply)
         return { ...base, kind: "message", message: update.reply };
+      if (preferences.pendingChange)
+        return {
+          ...base,
+          kind: "clarification",
+          reason: preferences.pendingChange.reason,
+          message: preferences.pendingChange.explanation,
+        };
+      if (!preferences.productDescription)
+        return {
+          ...base,
+          kind: "clarification",
+          reason: "description",
+          message:
+            "Describe what you are shopping for before starting research.",
+        };
       if (!preferences.budget && !preferences.budgetClarified)
         return {
           ...base,
@@ -61,6 +85,8 @@ export function createResearchTurns(dependencies: {
           message:
             "What is your maximum budget in SGD or USD? You can skip this and compare without a price limit.",
         };
+      if (request.phase === "prepare")
+        return { kind: "prepared", preferences, notes };
       const unavailable = (reason: ResearchUnavailableReason) => ({
         ...base,
         kind: "research-unavailable" as const,
@@ -73,7 +99,7 @@ export function createResearchTurns(dependencies: {
         return unavailable(dependencies.unavailableReason ?? "not-configured");
       signal.throwIfAborted();
       const digest = createHash("sha256")
-        .update(JSON.stringify({ message: request.message, preferences }))
+        .update(JSON.stringify(preferences))
         .digest("hex");
       const reservation = await dependencies.quota.reserve(
         request.operationId,
@@ -82,10 +108,7 @@ export function createResearchTurns(dependencies: {
       if (reservation !== "admitted") return unavailable(reservation);
       try {
         signal.throwIfAborted();
-        const result = await dependencies.research(
-          { message: request.message, preferences },
-          signal,
-        );
+        const result = await dependencies.research({ preferences }, signal);
         signal.throwIfAborted();
         const cost =
           result.status === "ready"

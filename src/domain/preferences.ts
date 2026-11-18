@@ -27,7 +27,7 @@ const nextId = (intent: ShoppingIntent) =>
 const detailOnly =
   /^(?:please )?(shorter|concise|brief|briefly|less detail|keep it short|more details?|detailed|expanded|explain more|in depth)[.!?]*$/i;
 
-export function editIntent(
+function applyIntentEdit(
   previous: ShoppingIntent,
   edit: IntentEdit,
   origin: string,
@@ -36,12 +36,20 @@ export function editIntent(
   const edits = edit.kind === "batch" ? edit.edits : [edit];
   for (const item of edits) {
     switch (item.kind) {
+      case "discard-pending":
+        intent.pendingChange = null;
+        break;
       case "set-description":
         intent.productDescription = item.value;
         break;
       case "set-budget":
         intent.budget = item.value;
         intent.budgetClarified = true;
+        if (
+          intent.pendingChange?.reason === "budget" ||
+          intent.pendingChange?.reason === "currency"
+        )
+          intent.pendingChange = null;
         break;
       case "set-region":
         intent.region = item.value;
@@ -89,6 +97,13 @@ export function editIntent(
                 "That requirement is no longer active. Choose one of the current requirements to remove.",
             },
           };
+        if (
+          intent.pendingChange?.reason === "constraint" &&
+          /^(?:please )?(?:remove|drop|forget)\b/i.test(
+            intent.pendingChange.message,
+          )
+        )
+          intent.pendingChange = null;
         intent.criteria = intent.criteria.filter(
           (criterion) => criterion.id !== item.id,
         );
@@ -119,7 +134,7 @@ export function editIntent(
   };
 }
 
-export function updateIntent(
+function interpretMessage(
   message: string,
   previous: ShoppingIntent,
 ): IntentUpdate {
@@ -191,15 +206,14 @@ export function updateIntent(
   }
   const intent = structuredClone(previous);
   const budget = parseBudget(text, previous.budget, previous.region);
-  if (budget.kind === "clarification")
-    return {
-      preferences: previous,
-      notes: [],
-      clarification: { reason: budget.reason, message: budget.message },
-    };
   if (budget.kind === "updated") {
     intent.budget = budget.budget;
     intent.budgetClarified = true;
+    if (
+      intent.pendingChange?.reason === "currency" ||
+      intent.pendingChange?.reason === "budget"
+    )
+      intent.pendingChange = null;
   }
   if (
     /\b(?:in|market|region|shopping in|deliver to)\s+(?:Singapore|SG)\b/i.test(
@@ -228,13 +242,17 @@ export function updateIntent(
           "This research currently supports Singapore and US markets. Choose one in preferences; your requirements are unchanged.",
       },
     };
+  const isRefresh =
+    /^(?:compare(?: options)?|research(?: now)?|search(?: again)?|find options|refresh(?: research)?)[.!]*$/i.test(
+      text,
+    );
   const clauses = text
     .split(
       /(?:[.;\n]+|(?=\b(?:must(?: have| be)?|require|exclude|avoid|prefer|prioriti[sz]e|compare)\b))/i,
     )
     .map((part) => part.trim())
     .filter(Boolean);
-  for (const clause of clauses) {
+  for (const clause of isRefresh ? [] : clauses) {
     const cue =
       /^(must(?: have| be)?|required?|need(?:s)? to|exclude|avoid|only|prefer|prioriti[sz]e|compare)\s+(.+)$/i.exec(
         clause,
@@ -258,10 +276,6 @@ export function updateIntent(
         origin: { kind: "message", text },
       });
   }
-  const isRefresh =
-    /^(?:compare(?: options)?|research(?: now)?|search(?: again)?|find options|refresh(?: research)?)[.!]*$/i.test(
-      text,
-    );
   if (!isRefresh)
     intent.productDescription = previous.productDescription
       ? `${previous.productDescription}\nFollow-up: ${text}`
@@ -282,6 +296,12 @@ export function updateIntent(
           "That would exceed the saved request limit. Shorten the description or remove a requirement in preferences before continuing. Nothing was dropped.",
       },
     };
+  if (budget.kind === "clarification")
+    return {
+      preferences: parsed.data,
+      notes: [],
+      clarification: { reason: budget.reason, message: budget.message },
+    };
   if (!intent.productDescription)
     return {
       preferences: previous,
@@ -298,9 +318,49 @@ export function updateIntent(
   };
 }
 
-export function migrateLegacyPreferences(
-  previous: LegacyPreferences,
-):
+export function editIntent(
+  previous: ShoppingIntent,
+  edit: IntentEdit,
+  message: string,
+): IntentUpdate {
+  return retainPendingUpdate(applyIntentEdit(previous, edit, message), message);
+}
+function retainPendingUpdate(
+  result: IntentUpdate,
+  message: string,
+): IntentUpdate {
+  const issue = result.clarification;
+  if (
+    issue &&
+    (issue.reason === "currency" ||
+      issue.reason === "budget" ||
+      issue.reason === "constraint")
+  )
+    result.preferences = {
+      ...result.preferences,
+      pendingChange: {
+        message,
+        reason: issue.reason,
+        explanation: issue.message,
+      },
+      revision: result.preferences.revision + 1,
+    };
+  const pending = result.preferences.pendingChange;
+  if (pending && !result.reply)
+    return {
+      ...result,
+      clarification: { reason: pending.reason, message: pending.explanation },
+    };
+  return result;
+}
+export function updateIntent(
+  message: string,
+  previous: ShoppingIntent,
+): IntentUpdate {
+  return retainPendingUpdate(interpretMessage(message, previous), message);
+}
+
+export function migrateLegacyPreferences(previous: LegacyPreferences):
   | { status: "ready"; intent: ShoppingIntent }
   | {
       status: "needs-review";
