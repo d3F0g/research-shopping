@@ -518,3 +518,79 @@ describe("explicit gaps never complete an unfinished proposition", () => {
     expect(result.products[0].facts.map((fact) => fact.quote)).toEqual(["Driver size: 42 mm"]);
   });
 });
+
+describe("category terminators preserve field ownership and raw line boundaries", () => {
+  it("keeps a closed category complete before following inline prose or a later cut", async () => {
+    const closed = `${adverseHeading}.`;
+    expect((await research(adversePayload("heading", [closed + " Wireless: No"]), "wireless")).products).toEqual([]);
+    for (const text of [closed + " For replacement pads.", closed + " ".repeat(16384 - closed.length - "Additional context".length) + "Additional context" + " continues beyond the scan."]) {
+      const result = await research(adversePayload("heading", [text]));
+      expect(result.products).toHaveLength(1);
+      expect(result.products[0].identity.quote).toBe("# Aster Wave 2 Wireless over-ear headphones.");
+      expect(result.products[0]).toMatchObject({ facts: [], price: null });
+    }
+    const fields = await research(adversePayload("heading", [closed + " Driver size: 42 mm. Price: SGD 349"], { facts: ["Driver size: 42 mm."], price: "Price: SGD 349" }));
+    expect(fields.products[0].facts.map((entry) => entry.quote)).toEqual(["Driver size: 42 mm."]);
+    expect(fields.products[0].price?.quote).toBe("Price: SGD 349");
+  });
+  const endings = [["LF", "\n"], ["CRLF", "\r\n"]] as const;
+  for (const [lineName, newline] of endings) {
+    const heading = adverseHeading.replaceAll("\n", newline);
+    for (const [kind, prefix] of [["unpunctuated", heading], ["period", heading + "."], ["section", heading + newline + "## Specifications"]]) {
+      it(`${lineName} ${kind} retains own negative, fact and price fields`, async () => {
+        expect((await research(adversePayload("heading", [prefix + newline + "Wireless: No"]), "wireless")).products).toEqual([]);
+        const fact = await research(adversePayload("heading", [prefix + newline + "Driver size: 42 mm."], { facts: ["Driver size: 42 mm."] }));
+        expect(fact.products).toHaveLength(1);
+        expect(fact.products[0].facts.map((entry) => entry.quote)).toEqual(["Driver size: 42 mm."]);
+        const price = await research(adversePayload("heading", [prefix + newline + "Price: SGD 349"], { price: "Price: SGD 349" }));
+        expect(price.products).toHaveLength(1);
+        expect(price.products[0].price?.quote).toBe("Price: SGD 349");
+        if (kind === "period") expect(price.products[0].identity.quote).toBe("# Aster Wave 2 Wireless over-ear headphones.");
+      });
+    }
+    it(`${lineName} still ends field ownership at unknown prose after a closed category`, async () => {
+      const prefix = heading + "." + newline + "Unknown relation." + newline;
+      const negative = await research(adversePayload("heading", [prefix + "Wireless: No"]), "wireless");
+      expect(negative.products).toHaveLength(1);
+      expect(negative.products[0].unresolvedConstraints).toContain("wireless needs independent verification");
+      const fields = await research(adversePayload("heading", [prefix + "Driver size: 42 mm." + newline + "Price: SGD 349"], { facts: ["Driver size: 42 mm."], price: "Price: SGD 349" }));
+      expect(fields.products).toHaveLength(1);
+      expect(fields.products[0]).toMatchObject({ facts: [], price: null });
+    });
+    it(`${lineName} recognizes actual section boundaries without transferring their following fields`, async () => {
+      for (const section of ["Accessories", "Related products", "Choose a color"]) {
+        const text = [heading, section, "Wireless: No", "Driver size: 42 mm.", "Price: SGD 349"].join(newline);
+        const result = await research(adversePayload("heading", [text], { facts: ["Driver size: 42 mm."], price: "Price: SGD 349" }), "wireless");
+        expect(result.products, section).toHaveLength(1);
+        expect(result.products[0]).toMatchObject({ facts: [], price: null });
+      }
+    });
+    for (const gap of ["...", "…"]) it(`${lineName} ${gap} distinguishes incomplete gaps from complete records`, async () => {
+      const scoped = heading + newline + "## Specifications";
+      const data = (text: string, facts: string[] = [], price: string | null = null) => adversePayload("heading", [text], { facts, price });
+      expect((await research(data(heading + newline + gap + " cases."))).products).toEqual([]);
+      expect((await research(data(heading + "." + newline + gap + " cases."))).products).toHaveLength(1);
+      const openLabel = await research(data(scoped + newline + "Wireless: No" + newline + gap + " charging support."), "wireless");
+      expect(openLabel.products).toHaveLength(1);
+      expect(openLabel.products[0]).toMatchObject({ facts: [], price: null });
+      expect(openLabel.products[0].unresolvedConstraints).toContain("wireless needs independent verification");
+      expect((await research(data(scoped + newline + "Wireless: No." + newline + gap + " charging support."), "wireless")).products).toEqual([]);
+      const openFact = await research(data(scoped + newline + "Driver size: 42 mm" + newline + gap + " for Orbit Quiet.", ["Driver size: 42 mm"]));
+      expect(openFact.products).toHaveLength(1);
+      expect(openFact.products[0].facts).toEqual([]);
+      const closedFact = await research(data(scoped + newline + "Driver size: 42 mm." + newline + gap + " for Orbit Quiet.", ["Driver size: 42 mm."]));
+      expect(closedFact.products[0].facts.map((entry) => entry.quote)).toEqual(["Driver size: 42 mm."]);
+      const openPrice = await research(data(scoped + newline + "Price: SGD 349" + newline + gap + " per month for 12 months.", [], "Price: SGD 349"));
+      expect(openPrice.products).toHaveLength(1);
+      expect(openPrice.products[0].price).toBeNull();
+      const closedPrice = await research(data(scoped + newline + "Price: SGD 349" + newline + "## Specifications" + newline + gap + " per month for 12 months.", [], "Price: SGD 349"));
+      expect(closedPrice.products[0].price?.quote).toBe("Price: SGD 349");
+      const sale = "S$ 349 was S$ 499 SGD You Save S$ 150";
+      expect((await research(data(scoped + newline + sale + newline + gap + " Other context.", [], sale))).products[0].price?.quote).toBe(sale);
+    });
+  }
+  for (const feature of FeatureSchema.options) it(`assesses owned ${feature} after the actual category terminator`, async () => {
+    const result = await research(featurePayload(feature, "heading", [`${adverseHeading}.\n${adverseFeatures[feature].label}: No`]), feature);
+    expect(result.products).toEqual([]);
+  });
+});

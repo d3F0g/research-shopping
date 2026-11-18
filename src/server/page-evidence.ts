@@ -114,7 +114,7 @@ function sourceBoundaries(raw: string): Boundary[] {
     const suffix = raw.slice(end);
     const heading = headings.find((candidate) => candidate.end === match.index);
     const labelStart = /^\s*$/.test(linePrefix) || heading !== undefined;
-    const labelEnd = /^[ \t]*(?:$|\n|#)/.test(suffix);
+    const labelEnd = /^[ \t]*(?:$|\r?\n|#)/.test(suffix);
     const selector = /^variations?$/i.test(match[0]) && /^[ \t]+\*(?:[ \t]+\*)?[ \t]*\[/.test(suffix);
     return labelStart && labelEnd || selector
       ? [{ start: heading?.start ?? match.index, end, kind: selector ? "selector" : "section" }] : [];
@@ -152,6 +152,8 @@ function headingScopes(input: Source, highlights: readonly HighlightContext[], p
       }
       const tail = raw.slice(identityEnd);
       if (/^[ \t]+(?:Pro|Plus|Max|Ultra|Special Edition|cases?|covers?|cables?|pads?|stands?|for)\b/i.test(tail)) { record("variant-mismatch", { highlight, start }); continue; }
+      const terminator = /^[ \t]*[.!](?=\s|$)/.exec(tail);
+      if (terminator) identityEnd += terminator[0].length;
       const boundary = context.boundaries.find((candidate) => candidate.start >= identityEnd && candidate.kind !== "heading");
       let end = boundary?.start ?? raw.length;
       for (const next of context.boundaries.filter((candidate) => candidate.start >= identityEnd && candidate.kind === "heading")) {
@@ -161,9 +163,9 @@ function headingScopes(input: Source, highlights: readonly HighlightContext[], p
         if (nextStart < end) end = nextStart;
         break;
       }
-      const lineEnd = /\n|[.!?](?=\s|$)/.exec(raw.slice(identityEnd));
-      const recordEnd = Math.min(end, lineEnd ? identityEnd + lineEnd.index + (lineEnd[0] === "\n" ? 0 : 1) : raw.length);
-      const identityRecordEnd = priceRecordStart.test(raw.slice(identityEnd).trimStart()) ? identityEnd : recordEnd;
+      const lineEnd = /\r?\n|[.!?](?=\s|$)/.exec(raw.slice(identityEnd));
+      const recordEnd = Math.min(end, lineEnd ? identityEnd + lineEnd.index + (lineEnd[0].endsWith("\n") ? 0 : 1) : raw.length);
+      const identityRecordEnd = terminator || priceRecordStart.test(raw.slice(identityEnd).trimStart()) ? identityEnd : recordEnd;
       if (completion(context, start, identityRecordEnd, "identity", name).completion !== "complete") { record("ambiguous-scope", { highlight, start, end: identityRecordEnd }); continue; }
       const text = cleanText(raw.slice(start, end));
       const identity = cleanText(raw.slice(start, identityEnd));
@@ -215,10 +217,10 @@ function completion(context: HighlightContext, start: number, end: number, role:
   if (!next) return { completion: context.item.clipped ? "open" : "complete" };
   const nextStart = end + rest.length - next.length;
   const lineEnd = context.item.text.indexOf("\n", nextStart);
-  const nextLine = context.item.text.slice(nextStart, lineEnd < 0 ? context.item.text.length : lineEnd);
+  const nextLine = context.item.text.slice(nextStart, lineEnd < 0 ? context.item.text.length : lineEnd).replace(/\r$/, "");
   const boundary = context.boundaries.find((candidate) => candidate.start === nextStart);
   if (boundary?.kind === "gap") return { completion: role === "section" || contextPrice.test(text) ? "complete" : "open" };
-  const newline = /^[ \t]*\n/.test(rest);
+  const newline = /^[ \t]*\r?\n/.test(rest);
   const namedRecord = name !== null && (namedPredicate(name, nextLine) !== null
     || new RegExp(`^(?:The )?${escapeRegex(name)}\\s+.+[.!?]$`, "i").test(nextLine));
   const scopedRecord = scopedSubject.test(nextLine) && /[.!?]$/.test(nextLine)
@@ -285,7 +287,7 @@ function sourceContext(source: Source, sourceId: string, native: readonly Native
         if (section) cuts.add(boundary.end + section[0].length);
       }
     }
-    const separator = /\n+|(?<=[.!?])\s+(?=[A-Z0-9])/g;
+    const separator = /(?:\r?\n)+|(?<=[.!?])\s+(?=[A-Z0-9])/g;
     const sections = [...raw.matchAll(separator)];
     for (const match of sections) {
       if (local.some((scope) => match.index >= scope.start && match.index < scope.identityEnd)) continue;
