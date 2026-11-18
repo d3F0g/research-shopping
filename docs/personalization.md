@@ -2,6 +2,8 @@
 
 Accounts are an optional local development capability. Guest chat stays tab-local and never uploads its history automatically. Signing in loads only that account's saved conversation. A restored response keeps its original source observations and uncertainty; it does not refresh prices or regain old research actions.
 
+Saved research uses explicit historical decoders. Actual unversioned records retain their original fact/price evidence and missing identity. Version-2 records retain identity proof, complete unverified price context and identity-only leads. New research must use version 2. Mixed history preserves the original response preferences while the workspace keeps current preferences separately. An unsupported or malformed saved version reports unavailability without resetting the workspace, stripping evidence fields or writing a replacement record.
+
 ## Configure an owned development database
 
 Keep these settings server-only in the ignored local environment.
