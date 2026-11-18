@@ -1,6 +1,5 @@
 import { createHash } from "node:crypto";
-import type { Preferences } from "../domain/contracts";
-import { conversationalReply, updatePreferences } from "../domain/preferences";
+import { editIntent, updateIntent } from "../domain/preferences";
 import type {
   ResearchOperation,
   ResearchTurns,
@@ -36,46 +35,34 @@ export function createResearchTurns(dependencies: {
   return {
     async turn(request, signal) {
       signal.throwIfAborted();
-      const ordinary = conversationalReply(
-        request.message,
-        request.preferences,
-      );
-      if (ordinary)
-        return {
-          kind: "message",
-          message: ordinary,
-          preferences: structuredClone(request.preferences),
-          notes: [],
-          toolActivity: [],
-        };
-      const update = updatePreferences(request.message, request.preferences);
-      const preferences: Preferences = update.preferences;
+      const update = request.edit
+        ? editIntent(request.preferences, request.edit, request.message)
+        : request.skipBudget
+          ? {
+              preferences: {
+                ...structuredClone(request.preferences),
+                budgetClarified: true,
+              },
+              notes: [],
+            }
+          : updateIntent(request.message, request.preferences);
+      const preferences = update.preferences;
       const notes = update.notes;
-      if (update.clarification)
+      const base = { responseVersion: 3 as const, preferences, notes };
+      if ("clarification" in update && update.clarification)
+        return { ...base, kind: "clarification", ...update.clarification };
+      if ("reply" in update && update.reply)
+        return { ...base, kind: "message", message: update.reply };
+      if (!preferences.budget && !preferences.budgetClarified)
         return {
-          kind: "clarification",
-          ...update.clarification,
-          preferences,
-          notes,
-          toolActivity: [],
-        };
-      if (
-        /^(?:(?:please )?(?:shorter|concise|brief|briefly|less detail|keep it short|more details?|detailed|expanded|explain more|in depth))[.!?]*$/i.test(
-          request.message.trim(),
-        )
-      ) {
-        return {
-          kind: "message",
+          ...base,
+          kind: "question",
+          question: "budget",
           message:
-            preferences.soft.responseLength === "expanded"
-              ? "I’ll keep more detail in future responses. Open the evidence on the existing research cards to inspect their source quotations."
-              : "I’ll keep future responses concise. Your existing research and source links remain above.",
-          preferences,
-          notes,
-          toolActivity: [],
+            "What is your maximum budget in SGD or USD? You can skip this and compare without a price limit.",
         };
-      }
       const unavailable = (reason: ResearchUnavailableReason) => ({
+        ...base,
         kind: "research-unavailable" as const,
         reason,
         message: unavailableMessages[reason],
@@ -114,15 +101,12 @@ export function createResearchTurns(dependencies: {
         signal.throwIfAborted();
         if (result.status !== "ready") return unavailable(result.reason);
         return {
+          ...base,
           kind: "research",
           preferences,
           notes,
           research: result.research,
-          answer: result.research.products.length
-            ? result.research.products.some((product) => product.facts.length)
-              ? "I found source-backed research leads. Compare the quoted specifications and their limits. Page prices, current affordability, stock and delivery remain unverified."
-              : "I found product identities, but useful specifications were not established. Page price excerpts, current affordability, stock and delivery remain unverified."
-            : "I found source pages, but could not attribute product-specific details reliably. Review the excerpts below.",
+          answer: result.research.summary,
         };
       } catch (error) {
         try {

@@ -3,10 +3,10 @@ import { createServer, type IncomingMessage, type Server, type ServerResponse } 
 import type { AddressInfo } from "node:net";
 import { serve } from "@hono/node-server";
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { defaultPreferences } from "../../src/domain/contracts";
+import { defaultPreferences } from "../../src/domain/legacy-contracts";
 import { ShortlistResearchRequestSchema } from "../../src/domain/web-research";
 import { createFixtureApp } from "../../src/server/test-fixture-app";
-import { createExaWebResearch, createExaWebResearchFromEnvironment } from "../../src/server/exa-research";
+import { createExaWebResearch, createExaWebResearchFromEnvironment } from "../../src/server/fixture-web-research";
 
 const request = ShortlistResearchRequestSchema.parse({
   productIds: ["sony-wh-ch720n"],

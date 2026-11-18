@@ -3,9 +3,9 @@ import { FIXTURE_NOTICE, categoryFeatures, featureLabels } from "./catalog";
 import {
   ClaimSchema, DiscoveryProductSchema, OfferSchema, type Candidate, type DiscoveryProduct,
   type Offer, type Preferences, type Priority, type Product, type ProductId, type SelectionResult, type TurnResult,
-} from "./contracts";
+} from "./legacy-contracts";
 import { isApprovedUrl, isSafeMerchantOffer, matchesCatalogIdentity } from "./merchant-links";
-import { conversationalReply, updatePreferences } from "./preferences";
+import { conversationalReply, updatePreferences } from "./fixture-preferences";
 import type { ProviderContext, ProviderEvent, ProviderName, Providers } from "./providers";
 
 const ProductBoundary = DiscoveryProductSchema.extend({ features: DiscoveryProductSchema.shape.features.max(12) });

@@ -1,5 +1,5 @@
 import { approvedMerchantHosts, catalog, type CatalogId } from "./catalog";
-import type { DiscoveryProduct, Offer } from "./contracts";
+import type { DiscoveryProduct, Offer } from "./legacy-contracts";
 
 export function isApprovedUrl(raw: string): boolean {
   try {

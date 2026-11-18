@@ -1,5 +1,5 @@
 import { catalog, FIXTURE_OBSERVED_AT, featureLabels, type CatalogId } from "../domain/catalog";
-import { ProductIdSchema, SourceIdSchema, type Claim, type DiscoveryProduct, type Offer, type Source } from "../domain/contracts";
+import { ProductIdSchema, SourceIdSchema, type Claim, type DiscoveryProduct, type Offer, type Source } from "../domain/legacy-contracts";
 import type { Providers, ProviderName } from "../domain/providers";
 
 export type FixtureFailures = Partial<Record<ProviderName, "error" | "timeout" | "malformed">>;

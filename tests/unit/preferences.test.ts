@@ -1,295 +1,219 @@
-import { describe, expect, it, vi } from "vitest";
-import { randomUUID } from "node:crypto";
-import { defaultPreferences } from "../../src/domain/contracts";
-import { updatePreferences } from "../../src/domain/preferences";
-import { createShoppingEngine } from "../../src/domain/shopping";
-import { createFixtureProviders } from "../../src/server/fixtures";
-import { createApp } from "../../src/server/app";
-import { createResearchTurns } from "../../src/server/research-turns";
+import { describe, expect, it } from "vitest";
+import { defaultIntent } from "../../src/domain/contracts";
+import { defaultPreferences } from "../../src/domain/legacy-contracts";
+import {
+  editIntent,
+  migrateLegacyPreferences,
+  updateIntent,
+} from "../../src/domain/preferences";
 
-function existingPreferences() {
-  const preferences = defaultPreferences();
-  preferences.hard.category = "headphones";
-  preferences.hard.budget = { currency: "SGD", amount: 300 };
-  preferences.hard.requiredFeatures = ["wireless"];
-  preferences.hard.excludedBrands = ["Bose"];
-  return preferences;
-}
-
-describe("budget currency clarification", () => {
-  it.each(["euros", "pounds", "yen", "ringgit"])("preserves %s amount aliases without matching embedded words", (alias) => {
-    const previous = existingPreferences();
-    for (const token of [`${alias}200`, `${alias} 200`, `200${alias}`, `200 ${alias}`]) {
-      const message = `under ${token}`;
-      const result = updatePreferences(message, previous);
-      expect(result.clarification?.reason).toBe("currency");
-      expect(result.preferences.hard).toEqual({ ...previous.hard, pendingConstraint: message });
-      expect(result.notes).toEqual([]);
-    }
-    for (const message of [`model200${alias}`, `${alias}200phone`, `200${alias}phone`, `${alias}house headphones`]) {
-      const result = updatePreferences(message, previous);
-      expect(result.clarification?.reason).toBe("constraint");
-      expect(result.preferences.hard.budget).toEqual(previous.hard.budget);
-    }
-    expect(updatePreferences(`headphones in ${alias}`, previous).clarification?.reason).toBe("currency");
-  });
-
-  it.each(["ALL", "TRY", "TOP"])("recognizes %s only beside a budget amount", (currency) => {
-    const previous = existingPreferences();
-    for (const token of [`${currency}200`, `${currency} 200`, `200${currency}`, `200 ${currency}`, `${currency.toLowerCase()}200`, `200 ${currency.toLowerCase()}`]) {
-      const message = `under ${token}`;
-      const result = updatePreferences(message, previous);
-      expect(result.clarification?.reason).toBe("currency");
-      expect(result.preferences.hard).toEqual({ ...previous.hard, pendingConstraint: message });
-      expect(result.notes).toEqual([]);
-    }
-    const ordinary = updatePreferences(`${currency.toLowerCase()} headphones`, previous);
-    expect(ordinary.clarification?.reason).not.toBe("currency");
-    expect(ordinary.preferences.hard.budget).toEqual(previous.hard.budget);
-    for (const token of [`model${currency}200`, `${currency}200phone`, `model200${currency}`]) {
-      const embedded = updatePreferences(token, previous);
-      expect(embedded.clarification?.reason).toBe("constraint");
-      expect(embedded.preferences.hard.budget).toEqual(previous.hard.budget);
-    }
-  });
-
-  it("never assigns a regional default to a runtime unsupported currency amount", () => {
-    for (const region of ["SG", "US"] as const) {
-      const previous = existingPreferences();
-      previous.hard.region = region;
-      previous.hard.budget = { currency: region === "SG" ? "SGD" : "USD", amount: 300 };
-      for (const currency of Intl.supportedValuesOf("currency").filter((code) => code !== "SGD" && code !== "USD")) {
-        for (const token of [`${currency}200`, `${currency} 200`, `200${currency}`, `200 ${currency}`]) {
-          const message = `under ${token}`;
-          const result = updatePreferences(message, previous);
-          expect(result.clarification?.reason, message).toBe("currency");
-          expect(result.preferences.hard.budget, message).toEqual(previous.hard.budget);
-          expect(result.preferences.hard.pendingConstraint, message).toBe(message);
-        }
-      }
-    }
-  });
-
-  it("does not mistake all before a memory specification for a currency", () => {
-    const result = updatePreferences("all 32 GB laptops under SGD2000", existingPreferences());
-    expect(result.clarification).toBeUndefined();
-    expect(result.preferences.hard.budget).toEqual({ currency: "SGD", amount: 2000 });
-    expect(result.preferences.hard.requiredFeatures).toEqual(["high-memory"]);
-  });
-
-  it.each(["CHF", "HKD", "CNY", "₹", "₩"])(
-    "does not infer a default currency from an amount with unsupported %s",
-    (suffix) => {
-      const previous = existingPreferences();
-      const message = `under 200 ${suffix}`;
-      const result = updatePreferences(message, previous);
-      expect(result.clarification?.reason).toBe("currency");
-      expect(result.preferences).toEqual({
-        ...previous,
-        hard: { ...previous.hard, pendingConstraint: message },
-      });
-      expect(result.notes).toEqual([]);
-    },
-  );
-
-  it.each(["under 200", "under $200", "headphones under 200 for commuting", "under 200 with wireless"])(
-    "retains regional default-currency behavior for %s",
-    (message) => {
-      const result = updatePreferences(message, existingPreferences());
+describe("one current intent reducer", () => {
+  it.each([
+    "A ceramic fermentation crock with a water-seal lid",
+    "A quiet H13 air purifier for a nursery",
+    "A photogrammetry turntable with repeatable indexed motion",
+    "A 193 nm lithography test reticle",
+  ])(
+    "retains complete open description %s without a vocabulary gate",
+    (description) => {
+      const result = updateIntent(description, defaultIntent());
       expect(result.clarification).toBeUndefined();
-      expect(result.preferences.hard.budget).toEqual({ currency: "SGD", amount: 200 });
-      expect(result.notes).toHaveLength(1);
+      expect(result.preferences.productDescription).toBe(description);
     },
   );
-
-  it.each(["under SGD200 and CHF200", "under USD200 and CHF", "under 200 unrecognized", "head200EUR", "EUR200phone", "v2eur"])(
-    "keeps the previous budget when %s contains unexplained text",
-    (message) => {
-      const previous = existingPreferences();
-      const result = updatePreferences(message, previous);
-      expect(result.clarification).toBeDefined();
-      expect(result.preferences.hard.budget).toEqual(previous.hard.budget);
-      expect(result.preferences.hard.pendingConstraint).toBe(message);
-      expect(result.notes).toEqual([]);
-    },
-  );
-
-  it("keeps other recognized edits when a new unknown requirement blocks a budget change", () => {
-    const previous = existingPreferences();
-    const message = "exclude Sony under SGD200 and must be waterproof";
-    const result = updatePreferences(message, previous);
-    expect(result.clarification?.reason).toBe("constraint");
-    expect(result.preferences.hard).toEqual({
-      ...previous.hard,
-      excludedBrands: ["Bose", "Sony"],
-      pendingConstraint: message,
+  it("extracts strong freeform criteria and origins while keeping the complete request", () => {
+    const text =
+      "A purifier under SGD400. Must have a washable prefilter. Prefer quiet operation. Exclude Sony.";
+    const result = updateIntent(text, defaultIntent());
+    expect(result.preferences).toMatchObject({
+      productDescription: text,
+      budget: { amount: 400, currency: "SGD" },
+      budgetClarified: true,
+      criteria: [
+        {
+          wording: "a washable prefilter",
+          strength: "hard",
+          origin: { kind: "message", text },
+        },
+        { wording: "quiet operation", strength: "flexible" },
+        { wording: "Exclude Sony", strength: "hard" },
+      ],
     });
   });
-
-  it("keeps a budget separate from a recognized numeric laptop specification", () => {
-    const result = updatePreferences("laptop under SGD2000 with 32 GB memory", existingPreferences());
-    expect(result.clarification).toBeUndefined();
-    expect(result.preferences.hard.budget).toEqual({ currency: "SGD", amount: 2000 });
-    expect(result.preferences.hard.requiredFeatures).toEqual(["high-memory"]);
+  it("keeps hard criteria and historical snapshots across budget and detail updates", () => {
+    const first = updateIntent(
+      "A travel kettle under SGD200. Must have no plastic in contact with water.",
+      defaultIntent(),
+    ).preferences;
+    const snapshot = structuredClone(first);
+    const second = updateIntent("Raise budget to SGD300", first).preferences;
+    expect(second.budget?.amount).toBe(300);
+    expect(second.criteria).toEqual(first.criteria);
+    expect(first).toEqual(snapshot);
+    const concise = updateIntent("Shorter", second);
+    expect(concise.reply).toBeTypeOf("string");
+    expect(concise.preferences.criteria).toEqual(first.criteria);
   });
-
-  it("does not accept an unexplained model name as part of a budget request", () => {
-    const previous = existingPreferences();
-    const result = updatePreferences("headphones under SGD200 Sony WH-1000XM5", previous);
-    expect(result.clarification?.reason).toBe("constraint");
-    expect(result.preferences.hard.budget).toEqual(previous.hard.budget);
+  it("applies an atomic batch and only removes an identified criterion", () => {
+    const previous = updateIntent(
+      "A purifier under SGD300. Must have washable prefilter. Must have H13 filtration.",
+      defaultIntent(),
+    ).preferences;
+    const criterion = previous.criteria[0]!;
+    const result = editIntent(
+      previous,
+      {
+        kind: "batch",
+        edits: [
+          { kind: "set-budget", value: { amount: 350, currency: "SGD" } },
+          {
+            kind: "replace-criterion",
+            id: criterion.id,
+            wording: "replaceable prefilter",
+            strength: "hard",
+          },
+          { kind: "remove-criterion", id: previous.criteria[1]!.id },
+        ],
+      },
+      "Update my preferences",
+    );
+    expect(result.preferences.criteria).toMatchObject([
+      { id: criterion.id, wording: "replaceable prefilter", strength: "hard" },
+    ]);
+    expect(result.preferences.budget?.amount).toBe(350);
+    const ambiguous = updateIntent(
+      "Remove that requirement",
+      result.preferences,
+    );
+    expect(ambiguous.clarification?.reason).toBe("constraint");
+    expect(ambiguous.preferences).toEqual(result.preferences);
+    expect(
+      updateIntent("Remove replaceable prefilter", result.preferences)
+        .preferences.criteria,
+    ).toEqual([]);
   });
-
-  it("does not apply a proposed budget with a conflicting standalone currency", () => {
-    const previous = existingPreferences();
-    const result = updatePreferences("under USD200 SGD", previous);
-    expect(result.clarification?.reason).toBe("currency");
-    expect(result.preferences.hard.budget).toEqual(previous.hard.budget);
-  });
-
-  it.each(["EUR200", "EUR 200", "200EUR", "200 EUR", "GBP200", "AUD200", "CAD200", "JPY200", "MYR200", "INR200", "€200", "£200", "¥200"])(
-    "identifies unsupported %s without replacing accepted preferences",
-    (budget) => {
-      const previous = existingPreferences();
-      const original = structuredClone(previous);
-      const message = `under ${budget}`;
-      const result = updatePreferences(message, previous);
-      expect(result.clarification?.reason).toBe("currency");
-      expect(result.preferences).toEqual({
-        ...original,
-        hard: { ...original.hard, pendingConstraint: message },
-      });
-      expect(previous).toEqual(original);
+  it.each([
+    "under EUR100",
+    "under $100",
+    "under SGD0",
+    "under SGD100.001",
+    "under SGD1000001",
+    "under SGD100 or SGD200",
+  ])(
+    "clarifies invalid or ambiguous budget %s without mutating previous intent",
+    (text) => {
+      const previous = defaultIntent();
+      const result = updateIntent(`A coffee scale ${text}`, previous);
+      expect(result.clarification).toBeDefined();
+      expect(result.preferences).toEqual(previous);
     },
   );
-
-  it.each(["SGD", "USD"] as const)("accepts a compact or spaced %s budget", (currency) => {
-    const previous = existingPreferences();
-    for (const budget of [`${currency}200`, `${currency} 200`, `200${currency}`, `200 ${currency}`]) {
-      const result = updatePreferences(`under ${budget}`, previous);
+  it.each([
+    ["Air purifier under 40 dB, budget SGD300", 300],
+    ["Shelf under30cm, budget SGD200", 200],
+    ["All 32 GB laptops under SGD1500", 1500],
+    ["Travel bottle under 200 grams, budget USD40", 40],
+  ] as const)(
+    "keeps explicit measurements separate from money in %s",
+    (message, amount) => {
+      const result = updateIntent(message, defaultIntent());
       expect(result.clarification).toBeUndefined();
-      expect(result.preferences).toEqual({
-        ...previous,
-        hard: { ...previous.hard, budget: { currency, amount: 200 } },
-      });
-    }
-  });
-
-  it.each(["European", "poundsaver", "myriad", "headEUR200", "200EURphone"])(
-    "does not mistake %s for an unsupported currency token",
-    (message) => {
-      expect(updatePreferences(message, existingPreferences()).clarification?.reason).toBe("constraint");
+      expect(result.preferences.budget?.amount).toBe(amount);
+      expect(result.preferences.productDescription).toBe(message);
     },
   );
-
-  it("keeps an existing pending constraint when reporting unsupported currency", () => {
-    const previous = existingPreferences();
-    previous.hard.pendingConstraint = "must be waterproof";
-    const result = updatePreferences("under EUR200", previous);
-    expect(result.clarification?.reason).toBe("currency");
+  it.each([
+    "under CHF200",
+    "under 200 CHF",
+    "under ₹200",
+    "under 200 euros",
+    "under SGD2e3",
+    "under SGD200k",
+    "under SGD100.001",
+  ])("does not reuse a prior currency for %s", (budgetText) => {
+    const previous = updateIntent(
+      "A projector under SGD300",
+      defaultIntent(),
+    ).preferences;
+    const result = updateIntent(`A projector ${budgetText}`, previous);
+    expect(result.clarification).toBeDefined();
     expect(result.preferences).toEqual(previous);
   });
-
-  it("keeps an existing pending constraint when accepting a supported budget", () => {
-    const previous = existingPreferences();
-    previous.hard.pendingConstraint = "must be waterproof";
-    const result = updatePreferences("under SGD200", previous);
-    expect(result.clarification?.reason).toBe("constraint");
-    expect(result.preferences).toEqual({
-      ...previous,
-      hard: { ...previous.hard, budget: { currency: "SGD", amount: 200 } },
-    });
-  });
-
-  it("still reports unsupported noncurrency requirements as constraints", () => {
-    const previous = existingPreferences();
-    const message = "headphones delivered tomorrow";
-    const result = updatePreferences(message, previous);
-    expect(result.clarification?.reason).toBe("constraint");
-    expect(result.preferences).toEqual({
-      ...previous,
-      hard: { ...previous.hard, pendingConstraint: message },
-    });
-  });
-
-  it("preserves an earlier category clarification before a currency failure", () => {
-    const result = updatePreferences("headphones and laptops under EUR200", existingPreferences());
-    expect(result.clarification?.reason).toBe("category");
-    expect(result.preferences.hard.pendingConstraint).toBe("headphones and laptops under EUR200");
-  });
-
-  it.each(["under EUR200", "under 200EUR", "under 200 EUR", "under SGD200 and EUR200"])(
-    "returns preserved public preferences and blocks provider dispatch for %s",
-    async (message) => {
-      const fixtures = createFixtureProviders();
-      const discover = vi.fn(fixtures.discovery.discover);
-      const engine = createShoppingEngine({ ...fixtures, discovery: { ...fixtures.discovery, discover } });
-      const previous = existingPreferences();
-      const result = await engine.turn(message, previous);
-      expect(result).toMatchObject({
-        kind: "clarification",
-        reason: "currency",
-        preferences: { ...previous, hard: { ...previous.hard, pendingConstraint: message } },
+  it.each(["under USD200", "under 200 USD", "under US$200"])(
+    "accepts supported currency binding in %s",
+    (budgetText) => {
+      const result = updateIntent(`A projector ${budgetText}`, defaultIntent());
+      expect(result.preferences.budget).toEqual({
+        amount: 200,
+        currency: "USD",
       });
-      expect(discover).not.toHaveBeenCalled();
-      const followup = await engine.turn("under SGD200", result.preferences!);
-      expect(followup).toMatchObject({ kind: "clarification", reason: "constraint" });
-      expect(followup.preferences?.hard.pendingConstraint).toBe(message);
-      expect(discover).not.toHaveBeenCalled();
-      await engine.turn("under SGD200", previous);
-      expect(discover).toHaveBeenCalledOnce();
+      expect(result.clarification).toBeUndefined();
     },
   );
-
-  it.each([
-    "under 200 CHF", "under 200 HKD", "under 200 CNY", "under 200 ₹", "under 200 ₩",
-    "under ALL200", "under ALL 200", "under 200ALL", "under 200 ALL",
-    "under TRY200", "under TRY 200", "under 200TRY", "under 200 TRY",
-    "under TOP200", "under TOP 200", "under 200TOP", "under 200 TOP",
-    "under 200euros", "under euros200", "under 200pounds", "under pounds200",
-    "under 200yen", "under yen200", "under 200ringgit", "under ringgit200",
-  ])(
-    "preserves the HTTP budget and blocks research for %s",
-    async (message) => {
-      const research = vi.fn(async () => ({ status: "unavailable", reason: "empty" }) as const);
-      const reserve = vi.fn(async () => "admitted" as const);
-      const app = createApp({ researchTurns: createResearchTurns({ research, quota: { reserve, settle: vi.fn() } }) });
-      const previous = existingPreferences();
-      const response = await app.request("http://127.0.0.1:3000/api/turn", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message, preferences: previous, operationId: randomUUID() }),
+  it("never reuses a removed criterion ID after allocating a batch", () => {
+    const added = editIntent(
+      defaultIntent(),
+      {
+        kind: "batch",
+        edits: Array.from({ length: 12 }, (_, i) => ({
+          kind: "add-criterion" as const,
+          wording: `Requirement ${i}`,
+          strength: "hard" as const,
+        })),
+      },
+      "Add requirements",
+    ).preferences;
+    const removedId = added.criteria.at(-1)!.id;
+    const removed = editIntent(
+      added,
+      { kind: "remove-criterion", id: removedId },
+      "Remove requirement",
+    ).preferences;
+    const replaced = editIntent(
+      removed,
+      { kind: "add-criterion", wording: "New meaning", strength: "hard" },
+      "Add new requirement",
+    ).preferences;
+    expect(replaced.criteria.at(-1)!.id).not.toBe(removedId);
+    expect(replaced.revision).toBeGreaterThan(added.revision);
+  });
+  it("refuses overflow without dropping hard requirements", () => {
+    const previous = defaultIntent();
+    for (let i = 0; i < 12; i++)
+      previous.criteria.push({
+        id: `criterion-${i + 1}`,
+        wording: `Requirement ${i}`,
+        strength: "hard",
+        origin: { kind: "edit", text: `Requirement ${i}` },
       });
-      expect(response.status).toBe(200);
-      const body = await response.json();
-      expect(body).toMatchObject({
-        kind: "clarification",
-        reason: "currency",
-        preferences: { ...previous, hard: { ...previous.hard, pendingConstraint: message } },
-        notes: [],
-        toolActivity: [],
-      });
-      expect(reserve).not.toHaveBeenCalled();
-      expect(research).not.toHaveBeenCalled();
-      const followup = await app.request("http://127.0.0.1:3000/api/turn", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message: "under SGD200", preferences: body.preferences, operationId: randomUUID() }),
-      });
-      expect(await followup.json()).toMatchObject({
-        kind: "clarification",
-        reason: "constraint",
-        preferences: { hard: { budget: { currency: "SGD", amount: 200 }, pendingConstraint: message } },
-      });
-      expect(reserve).not.toHaveBeenCalled();
-      expect(research).not.toHaveBeenCalled();
-      await app.request("http://127.0.0.1:3000/api/turn", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message: "under SGD200", preferences: previous, operationId: randomUUID() }),
-      });
-      expect(reserve).toHaveBeenCalledOnce();
-      expect(research).toHaveBeenCalledOnce();
-    },
-  );
+    const result = updateIntent("Must have one more safety property", previous);
+    expect(result.clarification).toBeDefined();
+    expect(result.preferences).toEqual(previous);
+  });
+  it("retains oversized legacy preferences for review rather than dropping requirements", () => {
+    const previous = defaultPreferences();
+    previous.hard.excludedBrands = Array.from(
+      { length: 20 },
+      (_, i) => `Brand ${i}`,
+    );
+    const result = migrateLegacyPreferences(previous);
+    expect(result).toMatchObject({
+      status: "needs-review",
+      preferences: previous,
+    });
+  });
+  it("migrates active legacy preferences without changing the saved object", () => {
+    const previous = defaultPreferences();
+    previous.hard.category = "headphones";
+    previous.hard.excludedBrands = ["Sony"];
+    previous.hard.requiredFeatures = ["wireless"];
+    const snapshot = structuredClone(previous);
+    const next = migrateLegacyPreferences(previous);
+    expect(next.status).toBe("ready");
+    if (next.status === "ready")
+      expect(
+        next.intent.criteria.map((criterion) => criterion.wording),
+      ).toEqual(["wireless", "Exclude Sony", "value"]);
+    expect(previous).toEqual(snapshot);
+  });
 });

@@ -1,7 +1,7 @@
 import { getEventListeners } from "node:events";
 import { setImmediate } from "node:timers/promises";
 import { describe, expect, it, vi } from "vitest";
-import { defaultPreferences, ProductIdSchema, TurnResultSchema, type Preferences, type TurnResult } from "../../src/domain/contracts";
+import { defaultPreferences, ProductIdSchema, TurnResultSchema, type Preferences, type TurnResult } from "../../src/domain/legacy-contracts";
 import { FIXTURE_OBSERVED_AT, catalog } from "../../src/domain/catalog";
 import { createShoppingEngine } from "../../src/domain/shopping";
 import { createFixtureProviders } from "../../src/server/fixtures";

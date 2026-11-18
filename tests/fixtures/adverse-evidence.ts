@@ -1,4 +1,4 @@
-import type { Feature } from "../../src/domain/contracts";
+import type { Feature } from "../../src/domain/legacy-contracts";
 
 export const adverseFixtureLabel = "Synthetic adverse-evidence fixture. Not live product evidence.";
 export const adverseName = "Aster Wave 2";

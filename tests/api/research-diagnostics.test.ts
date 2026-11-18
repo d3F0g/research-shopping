@@ -5,13 +5,20 @@ import type { AddressInfo } from "node:net";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
-import { defaultPreferences } from "../../src/domain/contracts";
 import { createExaProductResearch } from "../../src/server/exa-research";
-import { researchDiagnosticPath, type ResearchDiagnosticSink } from "../../src/server/research-diagnostics";
+import {
+  researchDiagnosticPath,
+  type ResearchDiagnosticSink,
+} from "../../src/server/research-diagnostics";
 import { createResearchTurns } from "../../src/server/research-turns";
-import { historicalReplay, syntheticExtraction, syntheticRawStructure } from "../fixtures/page-evidence";
+import { syntheticAnswer, syntheticIntent } from "../fixtures/dynamic-research";
 
-async function localResearch(payload: unknown, sink?: ResearchDiagnosticSink, signal = new AbortController().signal, settlements: { cost: number | null; complete: boolean }[] = []) {
+async function localResearch(
+  payload: unknown,
+  sink?: ResearchDiagnosticSink,
+  signal = new AbortController().signal,
+  settlements: { cost: number | null; complete: boolean }[] = [],
+) {
   let calls = 0;
   const server = createServer((_incoming, outgoing) => {
     calls++;
@@ -20,15 +27,29 @@ async function localResearch(payload: unknown, sink?: ResearchDiagnosticSink, si
   });
   server.listen(0, "127.0.0.1");
   await once(server, "listening");
-  const preferences = defaultPreferences();
-  preferences.hard.category = "headphones";
-  preferences.hard.budget = { amount: 400, currency: "SGD" };
   try {
     const turns = createResearchTurns({
-      research: createExaProductResearch("fake-private-key-never-retained", { baseUrl: `http://127.0.0.1:${(server.address() as AddressInfo).port}`, diagnosticSink: sink }),
-      quota: { async reserve() { return "admitted"; }, async settle(_id, cost, complete) { settlements.push({ cost, complete }); } },
+      research: createExaProductResearch("fake-private-key-never-retained", {
+        baseUrl: `http://127.0.0.1:${(server.address() as AddressInfo).port}`,
+        diagnosticSink: sink,
+      }),
+      quota: {
+        async reserve() {
+          return "admitted";
+        },
+        async settle(_id, cost, complete) {
+          settlements.push({ cost, complete });
+        },
+      },
     });
-    const result = await turns.turn({ message: "Headphones under SGD400", operationId: "private-operation-id-never-retained", preferences }, signal);
+    const result = await turns.turn(
+      {
+        message: "Compare options",
+        operationId: "00000000-0000-4000-8000-000000000001",
+        preferences: syntheticIntent(),
+      },
+      signal,
+    );
     return { result, settlements, calls };
   } finally {
     server.closeAllConnections();
@@ -36,101 +57,154 @@ async function localResearch(payload: unknown, sink?: ResearchDiagnosticSink, si
   }
 }
 
-describe("opt-in private proof diagnostics", () => {
+describe("endpoint-aware private diagnostics", () => {
   it.each([
-    {}, { NODE_ENV: "development" },
+    {},
+    { NODE_ENV: "development" },
     { NODE_ENV: "development", EXA_RESEARCH_DIAGNOSTIC_PATH: "relative.json" },
     { NODE_ENV: "production", EXA_RESEARCH_DIAGNOSTIC_PATH: "/tmp/proof.json" },
     { NODE_ENV: "test", EXA_RESEARCH_DIAGNOSTIC_PATH: "/tmp/proof.json" },
-  ])("does not opt in from an unset, relative or non-development path", (environment) => {
-    expect(researchDiagnosticPath(environment)).toBeUndefined();
+  ])(
+    "does not opt in outside an explicit absolute development path",
+    (environment) => {
+      expect(researchDiagnosticPath(environment)).toBeUndefined();
+    },
+  );
+  it("accepts an explicit absolute development path", () => {
+    expect(
+      researchDiagnosticPath({
+        NODE_ENV: "development",
+        EXA_RESEARCH_DIAGNOSTIC_PATH: "/tmp/proof.json",
+      }),
+    ).toBe("/tmp/proof.json");
   });
-
-  it("accepts only an explicit absolute development path", () => {
-    expect(researchDiagnosticPath({ NODE_ENV: "development", EXA_RESEARCH_DIAGNOSTIC_PATH: "/tmp/proof.json" })).toBe("/tmp/proof.json");
-  });
-
-  it("retains schema decisions, exact raw structure and native kind with owner-only permissions", async () => {
-    const directory = await mkdtemp(join(tmpdir(), "page-evidence-private-"));
+  it("retains exact allowlisted answer and citation fields privately and never overwrites", async () => {
+    const directory = await mkdtemp(join(tmpdir(), "dynamic-proof-"));
     const path = join(directory, "proof.json");
     try {
-      const { result, calls, settlements } = await localResearch({
-        ...historicalReplay, results: [syntheticRawStructure],
-        output: { content: JSON.stringify({ observations: [syntheticExtraction] }) },
+      const payload = {
+        ...syntheticAnswer(),
         headers: { authorization: "header-private-never-retained" },
-        cookies: "cookie-private-never-retained", environment: "env-private-never-retained",
-        notices: [{ code: "RESTRICTIONS_RELAXED", message: "provider-message-never-retained" }],
-      }, path);
+        cookies: "cookie-private-never-retained",
+        environment: "env-private-never-retained",
+        notices: [
+          {
+            code: "RESTRICTIONS_RELAXED",
+            message: "provider-message-never-retained",
+          },
+        ],
+      };
+      const { result, calls, settlements } = await localResearch(payload, path);
       expect(result.kind).toBe("research");
       expect(calls).toBe(1);
-      expect(settlements).toEqual([{ cost: 0.007, complete: true }]);
+      expect(settlements).toEqual([{ cost: 0.005, complete: true }]);
       expect((await stat(path)).mode & 0o777).toBe(0o600);
       const text = await readFile(path, "utf8");
       const artifact = JSON.parse(text);
-      expect(artifact).toMatchObject({ schemaStatus: "valid", extractionStatus: "valid", reportedCostUsd: 0.007, resultCount: 1, native: { kind: "string", truncated: false } });
-      expect(artifact.results[0].highlights[0].text).toBe(syntheticRawStructure.highlights[0]);
-      expect(artifact.decisions).toEqual(expect.arrayContaining([expect.objectContaining({ path: "source-identity", code: "admitted" }), expect.objectContaining({ path: "native-field", field: "quotedFacts", code: "admitted" })]));
-      expect(text).not.toMatch(/private-.*never-retained|provider-message-never-retained/);
-      expect(JSON.stringify(result)).not.toMatch(/schemaStatus|nativeContent|decisionSpans|sha256/);
+      expect(artifact).toMatchObject({
+        endpoint: "answer",
+        schemaStatus: "valid",
+        extractionStatus: "valid",
+        reportedCostUsd: 0.005,
+        resultCount: 1,
+        native: { kind: "object", truncated: false },
+      });
+      expect(JSON.parse(artifact.native.text)).toEqual(payload.answer);
+      expect(artifact.results[0].text.text).toBe(payload.citations[0]!.text);
+      expect(text).not.toMatch(
+        /private-.*never-retained|provider-message-never-retained/,
+      );
+      expect(JSON.stringify(result)).not.toMatch(
+        /schemaStatus|nativeContent|sha256/,
+      );
       expect(JSON.stringify(result)).not.toContain(path);
-    } finally { await rm(directory, { recursive: true, force: true }); }
+      const second = await localResearch(syntheticAnswer(), path);
+      expect(second.result.kind).toBe("research");
+      expect(await readFile(path, "utf8")).toBe(text);
+    } finally {
+      await rm(directory, { recursive: true, force: true });
+    }
   });
-
-  it("prioritizes decision spans and metadata under a 128 KiB serialized byte cap", async () => {
+  it("keeps source/native truncation and hashes under the 128 KiB serialized cap", async () => {
     const payload = {
-      ...historicalReplay,
-      results: Array.from({ length: 5 }, (_, index) => ({ ...syntheticRawStructure, url: `https://reviews.example.com/model-${index}`, highlights: ["Unrelated introduction. ".repeat(500) + "\n" + syntheticRawStructure.highlights[0], ...Array.from({ length: 5 }, () => "😀\n\"\\".repeat(20_000))] })),
-      output: { content: { observations: [], unknown: "😀\"\\".repeat(80_000) } },
+      ...syntheticAnswer(),
+      citations: Array.from({ length: 10 }, (_, index) => ({
+        title: '😀"'.repeat(10000),
+        url: `https://reviews.example.com/${index}`,
+        text: '😀\n"\\'.repeat(20000),
+      })),
+      answer: { unknown: '😀"\\'.repeat(80000) },
     };
     let text = "";
-    const { result } = await localResearch(payload, (artifact) => { text = artifact; });
-    expect(result.kind).toBe("research");
+    const { result } = await localResearch(payload, (artifact) => {
+      text = artifact;
+    });
+    expect(result.kind).toBe("research-unavailable");
     expect(Buffer.byteLength(text)).toBeLessThanOrEqual(128 * 1024);
     const artifact = JSON.parse(text);
-    expect(artifact).toMatchObject({ reportedCostUsd: 0.007, resultCount: 5, extractionStatus: "malformed", native: { kind: "object", truncated: true } });
+    expect(artifact).toMatchObject({
+      reportedCostUsd: 0.005,
+      resultCount: 10,
+      extractionStatus: "malformed",
+      native: { kind: "object", truncated: true },
+    });
     expect(artifact.native.sha256).toMatch(/^[a-f0-9]{64}$/);
-    expect(artifact.decisionSpans.some((span: { text: string }) => span.text.includes("# Aster Wave 2 - Teal (800073)"))).toBe(true);
-    expect(artifact.results.flatMap((source: { highlights: { truncated: boolean }[] }) => source.highlights).some((highlight: { truncated: boolean }) => highlight.truncated)).toBe(true);
+    expect(
+      artifact.results.every(
+        (source: { text: { truncated: boolean } }) => source.text.truncated,
+      ),
+    ).toBe(true);
   });
-
-  it("does not retry, change cost settlement or public results when a sink fails", async () => {
-    const baseline = await localResearch(historicalReplay);
-    const failed = await localResearch(historicalReplay, () => { throw new Error("sink failed"); });
+  it("settles exactly once with identical public evidence when a sink fails", async () => {
+    const baseline = await localResearch(syntheticAnswer());
+    const failed = await localResearch(syntheticAnswer(), () => {
+      throw new Error("sink failed");
+    });
     expect(failed.calls).toBe(1);
     expect(failed.settlements).toEqual(baseline.settlements);
     expect(failed.result.kind).toBe("research");
-    if (failed.result.kind === "research" && baseline.result.kind === "research") {
-      expect(failed.result.research.products).toEqual(baseline.result.research.products);
-    }
+    if (
+      failed.result.kind === "research" &&
+      baseline.result.kind === "research"
+    )
+      expect(failed.result.research.products).toEqual(
+        baseline.result.research.products,
+      );
   });
-
-  it("does not overwrite an existing artifact and still completes the paid operation", async () => {
-    const directory = await mkdtemp(join(tmpdir(), "page-evidence-private-"));
-    const path = join(directory, "proof.json");
-    try {
-      await localResearch(historicalReplay, path);
-      const first = await readFile(path, "utf8");
-      const second = await localResearch(historicalReplay, path);
-      expect(second.result.kind).toBe("research");
-      expect(second.calls).toBe(1);
-      expect(await readFile(path, "utf8")).toBe(first);
-    } finally { await rm(directory, { recursive: true, force: true }); }
+  it("settles a completed unusable answer with trusted cost but keeps malformed cost unknown", async () => {
+    const completed = await localResearch({
+      ...syntheticAnswer(),
+      answer: { malformed: true },
+    });
+    expect(completed.result).toMatchObject({
+      kind: "research-unavailable",
+      reason: "invalid-response",
+    });
+    expect(completed.settlements).toEqual([{ cost: 0.005, complete: true }]);
+    const untrusted = await localResearch({
+      ...syntheticAnswer(),
+      costDollars: { total: "0.005" },
+    });
+    expect(untrusted.result).toMatchObject({
+      kind: "research-unavailable",
+      reason: "invalid-response",
+    });
+    expect(untrusted.settlements).toEqual([{ cost: null, complete: true }]);
   });
-
-  it("keeps cost settlement when the destination cannot be opened", async () => {
-    const directory = await mkdtemp(join(tmpdir(), "page-evidence-private-"));
-    try {
-      const { result, calls, settlements } = await localResearch(historicalReplay, join(directory, "missing", "proof.json"));
-      expect(result.kind).toBe("research");
-      expect(calls).toBe(1);
-      expect(settlements).toEqual([{ cost: 0.007, complete: true }]);
-    } finally { await rm(directory, { recursive: true, force: true }); }
-  });
-
-  it("preserves cancellation even while the optional sink is pending", async () => {
+  it("preserves actual cancellation while an optional sink is pending", async () => {
     const controller = new AbortController();
     const settlements: { cost: number | null; complete: boolean }[] = [];
-    await expect(localResearch(historicalReplay, async () => { controller.abort(); await new Promise(() => {}); }, controller.signal, settlements)).rejects.toMatchObject({ name: "AbortError" });
+    await expect(
+      localResearch(
+        syntheticAnswer(),
+        async () => {
+          controller.abort();
+          await new Promise(() => {});
+        },
+        controller.signal,
+        settlements,
+      ),
+    ).rejects.toMatchObject({ name: "AbortError" });
     expect(settlements).toEqual([{ cost: null, complete: false }]);
   });
 });

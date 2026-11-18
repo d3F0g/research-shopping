@@ -1,5 +1,5 @@
 import capture from "./research-corpus/native-alignment/captured-fields.json" with { type: "json" };
-import type { NativeObservation } from "../../src/server/page-evidence";
+type NativeObservation = { name: string; url: string; identityQuote: string | null; quotedFacts: string[]; priceQuote: string | null };
 
 export { capture };
 export const captureLabel = "Automated replay of captured diagnostic fields. Derived HTTP envelope, not current evidence.";
