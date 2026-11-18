@@ -69,7 +69,10 @@ for (const scenario of scenarios) {
       if (scenario.noProduct) {
         await expect(card).toHaveCount(0);
         await page.getByRole("button", { name: "1 research sources" }).click();
-        await page.getByRole("button", { name: "Research limits" }).click();
+        await expect(page.locator(".web-research-highlights > li").first()).toBeVisible();
+        const limits = page.getByRole("button", { name: "Research limits" });
+        await limits.click();
+        await expect(limits).toHaveAttribute("aria-expanded", "true");
         await expect(page.getByText("No product had sufficiently attributable model, category and constraint evidence")).toBeVisible();
         await expect(page.getByRole("button", { name: "Compare research leads" })).toHaveCount(0);
       } else {

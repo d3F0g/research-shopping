@@ -115,7 +115,7 @@ test("shows cited research cards, observed-price uncertainty and readable deskto
     page.getByRole("button", { name: "Search the web for context" }),
   ).toHaveCount(0);
   await page.getByRole("button", { name: "Compare research leads" }).click();
-  await expect(page.getByRole("table")).toContainText("Orbit Quiet");
+  await expect(page.getByRole("region", { name: "Research lead comparison", exact: true })).toContainText("Orbit Quiet");
   await card.getByRole("button", { name: "Evidence and limits" }).click();
   await expect(card.getByRole("blockquote").first()).toHaveText(quote);
   await expect(

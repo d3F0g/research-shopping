@@ -59,8 +59,8 @@ for (const scenario of ["historical", "synthetic"] as const) {
         await expect(jbl.getByRole("blockquote").first()).toHaveText("# JBL Tour One M3 Premium wireless over-ear Noise Cancelling headphones");
         await expect(hn.getByRole("blockquote").last()).toHaveText("S$ 349 was S$ 499 SGD You Save S$ 150");
         await page.getByRole("button", { name: "Compare research leads" }).click();
-        await expect(page.getByRole("table")).toContainText("Not established by this source");
-        await expect(page.getByRole("table")).toContainText("S$ 349 was S$ 499 SGD You Save S$ 150");
+        await expect(page.getByRole("region", { name: "Research lead comparison", exact: true })).toContainText("Not established by this source");
+        await expect(page.getByRole("region", { name: "Research lead comparison", exact: true })).toContainText("S$ 349 was S$ 499 SGD You Save S$ 150");
       } else {
         const card = page.getByRole("article", { name: syntheticExtraction.name });
         await card.getByRole("button", { name: "Evidence and limits" }).click();
@@ -79,8 +79,8 @@ for (const scenario of ["historical", "synthetic"] as const) {
         await page.getByRole("article").last().scrollIntoViewIfNeeded();
         await expect(page.getByLabel("Message", { exact: true })).toBeInViewport();
         await page.screenshot({ path: testInfo.outputPath("historical-mobile-price.png"), fullPage: true, animations: "disabled" });
-        await page.getByRole("table").scrollIntoViewIfNeeded();
-        expect(await page.locator('[data-slot="table-container"]').evaluate((element) => element.scrollWidth <= element.clientWidth)).toBe(true);
+        await page.getByRole("region", { name: "Research lead comparison", exact: true }).scrollIntoViewIfNeeded();
+        expect(await page.getByRole("region", { name: "Research lead comparison", exact: true }).evaluate((element) => element.scrollWidth <= element.clientWidth)).toBe(true);
         await page.screenshot({ path: testInfo.outputPath("historical-mobile-comparison.png"), fullPage: true, animations: "disabled" });
       }
       await expect(page.getByRole("button", { name: "Select this product" })).toHaveCount(0);
