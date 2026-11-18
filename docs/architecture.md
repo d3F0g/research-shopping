@@ -1,49 +1,46 @@
 # Application architecture
 
-The first milestone is a local, fixture-backed research-to-merchant assistant. It demonstrates preference understanding, evidence-aware comparison, a recommendation, product selection, and a safe merchant product link. Fixtures establish reproducible behavior. They do not establish current prices, inventory, delivery, or unrestricted language understanding.
+Fieldnote is a chat-first product research assistant. Normal development requests use Exa to discover real products, collect attributable specifications and retain observed price context. Source pages do not establish current merchant offers, stock, delivery or affordability. Missing configuration, provider failure, empty evidence, cancellation and exhausted limits produce an explicit limitation instead of a synthetic catalog.
 
-## Design decision
+## Normal research
 
-Candidate A's functional pipeline is the base. Candidate B contributes discriminated conversation results, preference patches, recovery behavior, and UI states. A separate event/effect framework and free-running manager agent are deferred. They add lifecycle complexity before the bounded request needs it.
+The conversation controller sends one bounded research turn through the validated Hono API. The server extracts contextual preferences and separates hard constraints from flexible priorities. Ordinary replies and presentation changes do not dispatch a search. One explicit research operation can reserve one persistent allowance and make one SDK search. Unknown billing retains its reservation and stops new paid work. The shared local ledger is admission policy, not the Exa account balance.
 
-An independent Astra judge scored A 20/25 and B 19/25 across evidence honesty, multi-turn completeness, integration replacement, security/failure behavior, and maintainability. The judge agreed with the hybrid. The exposed parent identity did not permit verification of model-family independence. See the [candidate A](architecture-candidate-a.md) and [candidate B](architecture-candidate-b.md) summaries. These design scores are judgments, not runtime measurements.
-
-## Domain
-
-The application models preferences, product identity, research claims, merchant offers, and turn results separately. Hard constraints determine eligibility before flexible priorities influence ranking. Preference patches distinguish changing a value, removing it, and leaving it unchanged.
-
-Claims retain supported, unknown, or conflicting status. Sources carry fixture provenance and fixed observation times. Offers attach price, currency, availability, region, and merchant URL to a product. A research source does not establish merchant inventory. Freshness and truth are separate concerns.
-
-The result union distinguishes ordinary messages, clarification, recommendations, no-match, and failure. Product selection resolves trusted catalog identity through the backend and returns a validated link. It never places an order.
+Exa native extraction supplies candidate locators, not factual authority. A private source context owns complete bounded passages, exact model and edition identity, attribution, hard-negative assessment and payment conditions. Those decisions precede positive selection and display packing. A claim is published only with its complete quotation and supporting source window. Gaps, truncation, competing models and unresolved conditions cannot supply missing proof. Packing can drop a fact, but cannot make an excluded product eligible.
 
 ```mermaid
 flowchart LR
-  User[User request or preference change] --> UI[React conversation]
+  User[Message or preference change] --> UI[Chat and contextual preferences]
   UI --> HTTP[Validated Hono API]
-  HTTP --> Core[Bounded shopping pipeline]
-  Core --> Discovery[Discovery provider]
-  Core --> Research[Research provider]
-  Core --> Merchant[Merchant provider]
-  Discovery --> Fixture[Explicit fixture adapters]
-  Research --> Fixture
-  Merchant --> Fixture
-  Core --> Result[Comparison and recommendation]
+  HTTP --> Turn[Research turn]
+  Turn --> Quota[Persistent admission ledger]
+  Quota --> Exa[Exa SDK search]
+  Exa --> Evidence[Private source evidence boundary]
+  Evidence --> Result[Versioned research response]
   Result --> UI
-  UI --> Selection[Select product ID]
-  Selection --> HTTP
-  HTTP --> Handoff[Safe merchant product link]
+  User --> Stop[Stop, edit, reset or disconnect]
+  Stop --> Abort[Request and response-body cancellation]
+  Abort --> Exa
 ```
 
-## Boundaries
+## Evidence and merchant boundary
 
-Runtime schemas validate browser input and provider output. Core ranking and preference logic operate on typed values. Adapters own external data normalization, evidence status, and failure behavior. The API owns media types, payload bounds, origin policy, request IDs, and safe error responses. React renders plain text and validated links.
+Research responses distinguish model identity, quoted specifications, observed price text, unresolved constraints and safe source links. Prices remain page-observed and unverified. Sale/list/savings text stays complete and is not converted into a scalar current offer. Stock and delivery remain unverified. Identity-only leads explicitly disclose missing specifications. Unsupported categories or unresolved hard constraints produce an honest question or limitation.
 
-The engineering agents are separate from the product runtime. Codex agents research, implement, test, and review the repository. The product's first version uses a deterministic planner and fixture adapters, with explicit language/category limits. No model-produced fact is accepted as source evidence.
+The client renders official shadcn/ui and AI Elements. It presents compact leads and responsive comparisons, with full source quotations and citations behind accessible disclosure controls. It renders returned text as text. No source instruction becomes executable behavior. Historical response snapshots stay separate from current preferences and action authority.
 
-## State and expansion
+`MerchantVerificationProvider` is a separate future interface. It requires exact listing and variant, market, currency, amount, availability semantics, observation and expiry, source reference and destination. No live merchant adapter is enabled. The user confirmed that authorized eBay, Shopify and Best Buy access is unavailable. Issues #2 and #36 remain open until genuine authorized responses satisfy merchant acceptance. Normal research has source links and no payment, purchase or verified merchant-selection action.
 
-The client keeps an ordered turn ledger in useConversation. Each turn retains its submitted message, accepted response snapshot and selection/source state. One controller owns active preferences, valid drafts, request cancellation and current action authority. Earlier messages stay readable; historical offers do not authorize a fresh handoff. Contextual questions collect missing useful preferences without a permanent form. The theme alone persists in localStorage.
+## Automated fixture composition
 
-The local milestone uses tab-scoped state with a New chat reset. It does not claim authenticated cross-device or restart persistence. PostgreSQL belongs behind authentication and ownership checks when durable multi-user state becomes necessary.
+Synthetic products and sample merchant links belong exclusively to explicit automated test composition. The legacy discovery/research/merchant interfaces and fixture renderer remain for reproducible regression tests. Their fixed observations, prices and availability are visibly labeled. They never become a normal provider fallback.
 
-Live providers replace adapters through the same contracts. Each integration needs credentialed runtime evidence before it can be called verified. Live offer checks need currency, region, product variant, price, stock status, retrieval time, expiry, and selection-time refresh. See the [capability matrix](capability-gaps.md) and [security model](security-model.md).
+The initial fixture pipeline's design rationale is retained in [candidate A](architecture-candidate-a.md) and [candidate B](architecture-candidate-b.md). Those historical designs are not descriptions of the normal Exa path or proof of live commerce.
+
+## State and security
+
+The client keeps an ordered conversation ledger with submitted messages, accepted response snapshots and current action authority. One controller owns preferences, drafts and cancellation. Earlier messages remain readable, while abandoned operations cannot publish late results. The theme persists locally. Durable authenticated personalization is a separate dependent unit tracked in Issue #3 and PR #41; this branch does not claim its acceptance.
+
+Runtime schemas validate browser input and provider output. Source URLs require safe public HTTPS destinations. The API owns payload bounds, media types, origin policy, request IDs and safe failures. The Exa key remains server-only in the original ignored development environment. Production integration remains disabled. Optional proof diagnostics are development-only, private and bounded; they are absent from normal responses and history.
+
+Engineering agents implement and independently verify the application. They are separate from its deterministic preference and evidence logic. See [Exa setup](exa-research.md), [capability gaps](capability-gaps.md), [security boundaries](security-model.md) and the [engineering workflow](engineering-workflow.md).
