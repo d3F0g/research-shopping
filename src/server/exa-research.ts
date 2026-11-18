@@ -1,6 +1,6 @@
 import { createHash } from "node:crypto";
 import { ResearchSnapshotSchema, type ResearchOperation, type ResearchSnapshot } from "../domain/research";
-import type { Preferences } from "../domain/contracts";
+import type { Feature, Preferences } from "../domain/contracts";
 import Exa, { ExaTimeoutError } from "exa-js";
 import { z } from "zod";
 import { catalog, type CatalogId } from "../domain/catalog";
@@ -229,16 +229,27 @@ function unresolvedConstraints(preferences: Preferences): string[] {
   ];
 }
 
-function contradictsRequiredFeature(quotes: string[], preferences: Preferences): boolean {
-  const terms: Partial<Record<Preferences["hard"]["requiredFeatures"][number], string>> = {
-    wireless: "wireless|bluetooth", "active-noise-cancelling": "active noise cancell?ing|ANC", multipoint: "multipoint|multi-point",
-    "oled-display": "OLED", "high-memory": "32 ?GB|high.memory",
-  };
+const featureTerms: Record<Feature, string> = {
+  "active-noise-cancelling": "active[- ]noise[- ]cancell?(?:ing|ation)|ANC",
+  wireless: "wireless|bluetooth",
+  multipoint: "multi[- ]?point",
+  "long-battery-life": "long[- ]battery(?:[- ]life)?",
+  lightweight: "light[- ]?weight",
+  "oled-display": "OLED",
+  "high-memory": "32 ?GB|high[- ]memory",
+  "long-battery": "long[- ]battery(?:[- ]life)?",
+  portable: "portable|portability",
+};
+const wiredMedium = "wired(?: (?:audio|connections?|connectivity))?";
+const connectionVerb = "(?:supports?|uses?|offers?|provides?|has|have|can (?:support|use))";
+const exclusiveWired = new RegExp(`^(?:(?:is|are) wired[- ]only|(?:only ${connectionVerb}|${connectionVerb} only|can only (?:support|use)) ${wiredMedium}|${connectionVerb} ${wiredMedium} only|${connectionVerb} wired-only(?: (?:audio|connections?|connectivity))?)[.!]?$`, "i");
+
+function contradictsRequiredFeature(quotes: string[], preferences: Preferences, name: string): boolean {
+  const subject = new RegExp(`^(?:The )?${escapeRegex(name)}\\s+`, "i");
+  const descriptions = quotes.map((quote) => quote.replace(subject, "").replace(/[‘’]/g, "'"));
   return preferences.hard.requiredFeatures.some((feature) => {
-    const term = terms[feature];
-    if (!term) return false;
-    const negative = new RegExp(`\\b(?:is not|isn't|are not|aren't|does not|doesn't|cannot|can't|no|without|lacks|not equipped with)\\b.{0,36}\\b(?:${term})\\b`, "i");
-    return quotes.some((quote) => negative.test(quote.replace(/[‘’]/g, "'")) || (feature === "wireless" && /\bwired[- ]only\b|\bonly wired\b/i.test(quote)));
+    const negative = new RegExp(`\\b(?:is not|isn't|are not|aren't|does not|doesn't|do not|don't|cannot|can't|no|without|lacks?|not equipped with)\\s+(?:(?:support|have|include|offer|provide|use)\\s+)?(?:an?\\s+|any\\s+)?(?:${featureTerms[feature]})\\b`, "i");
+    return descriptions.some((description) => negative.test(description) || (feature === "wireless" && exclusiveWired.test(description)));
   });
 }
 
@@ -270,7 +281,7 @@ function projectProductResearch(raw: unknown, preferences: Preferences): ReturnT
       const escapedName = escapeRegex(name);
       const productId = `research-${createHash("sha256").update(`${url}\n${name}`).digest("hex").slice(0, 24)}`;
       if (products.some((product) => product.id === productId)) continue;
-      const directSubject = new RegExp(`^(?:The )?${escapedName}\\s+(?:(?:is|are|has|have|supports?|uses?|offers?|features?|provides?|weighs?|costs?|includes?|does|do|was|were)(?:n['’]t)?|can|can't|can’t|cannot|comes|retails|lacks?)\\b`, "i");
+      const directSubject = new RegExp(`^(?:The )?${escapedName}\\s+(?:only\\s+)?(?:(?:is|are|has|have|supports?|uses?|offers?|features?|provides?|weighs?|costs?|includes?|does|do|was|were)(?:n['’]t)?|can|can't|can’t|cannot|comes|retails|lacks?)\\b`, "i");
       const attributableQuote = (rawQuote: string) => {
         const quote = cleanText(rawQuote);
         const lower = quote.toLowerCase();
@@ -298,7 +309,7 @@ function projectProductResearch(raw: unknown, preferences: Preferences): ReturnT
       const supportingFacts = attributedFacts.filter((fact) => fact !== categoryEvidence).slice(0, price ? 1 : 2);
       const facts = attributedFacts.filter((fact) => fact === categoryEvidence || supportingFacts.includes(fact));
       const modelStatements = statements.filter((statement) => attributableQuote(statement) !== null);
-      if (contradictsRequiredFeature(modelStatements, preferences)) continue;
+      if (contradictsRequiredFeature(modelStatements, preferences, name)) continue;
       if (preferences.hard.excludedBrands.some((brand) => {
         const escapedBrand = escapeRegex(brand);
         const namedBrand = new RegExp(`^(?:The )?${escapedBrand}\\b`, "i");

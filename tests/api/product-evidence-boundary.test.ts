@@ -143,6 +143,13 @@ describe("supported product evidence through the actual SDK", () => {
     expect(snapshot.products).toHaveLength(1);
   });
 
+  it("retains an exact exclusive wired fact when wireless is not required", async () => {
+    const negative = `${name} only supports wired audio.`;
+    const { snapshot } = await observe({ facts: [categoryEvidence.headphones, negative] });
+    expect(snapshot.products).toHaveLength(1);
+    expect(snapshot.products[0].facts).toEqual(expect.arrayContaining([{ sourceId: "source-1", quote: negative }]));
+  });
+
   it.each([
     "costs SGD 99 less than its competitors.",
     "costs SGD 99/month.",
