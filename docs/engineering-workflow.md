@@ -40,7 +40,7 @@ The standing policy is repository-scoped. Historical run plans retain the author
 - [Milestone #1](https://github.com/d3F0g/research-shopping/issues/1) covers the functioning vertical slice.
 - [Live integration #2](https://github.com/d3F0g/research-shopping/issues/2) covers research and merchant providers.
 - [Durable personalization #3](https://github.com/d3F0g/research-shopping/issues/3) covers authentication and PostgreSQL.
-- [Coverage #4](https://github.com/d3F0g/research-shopping/issues/4) covers more categories and semantic evaluations.
+- [Coverage #4](https://github.com/d3F0g/research-shopping/issues/4) covers dynamic product breadth and semantic evaluations.
 
 Git operations in this run use the authenticated GitHub CLI helper per command because the host's default helper could not access the new private repository. No global credential configuration changed.
 
@@ -53,6 +53,8 @@ Cancellation is merged. The active product milestone replaces the fixed-category
 A green technical suite does not waive failed product acceptance. Require genuine normal-app journeys across varied needs, including a product class outside earlier examples, useful distinct alternatives, attributable specifications/prices, explicit hard-constraint outcomes, justified conditional choice and safe product links. Keep source synthesis, literal quotations and merchant verification separate. A source-only result or an unresolved hard fit is a documented failed shopping outcome, not success by test or source count.
 
 Use small live allowances recorded before calls, preserve the shared persistent ledger and every failed proof, and stop on unexpected error/charge. Tests use explicit substitutes and must not spend credits. An API-only prototype resolves an endpoint risk but is not application acceptance. Do not iterate indefinitely on offline source-pattern tests while product usefulness is unproven.
+
+The current real-app program is held after an Exa deadline without a reported cost. Issue #42 tracks reconciliation. Preserve the uncertain reservation and stopped shared ledger. A new key, fresh ledger, guessed zero cost or weaker stop rule cannot unblock it. Resume paid checks only after trustworthy reconciliation and a newly recorded bounded allowance. Service-key provisioning or permission expansion remains outside routine autonomy.
 
 Current intent and response/evidence schemas evolve independently of exact frozen historical request/question/response snapshots. Unknown hard compliance cannot authorize a confident match. Review changed trust boundaries and preserve meaningful adverse behavior when replacing the provider contract; unused legacy suites cannot stand in for current verification.
 

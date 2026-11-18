@@ -8,7 +8,7 @@ The user wants a genuinely useful shopping assistant across product types, rathe
 - [x] Phase A: Frame
 - [x] Phase B: Design the workflow
 - [ ] Phase C: Run the loop
-- [ ] Phase D: Keep the audit trail
+- [x] Phase D: Keep the audit trail
 - [ ] Phase E: Verify and hand back
 
 Architect steps: Ground; Sketch; Agree (no human checkpoint requested); Implement; Scrap if the selected shape fails the product predicate. Arena steps: Frame; Fan out; Cross-judge; Pick; Graft; Verify.
@@ -38,3 +38,7 @@ Use the three actual checkpoint requests and at least one materially different p
 Root owns orchestration, docs, GitHub, the real environment and live proof. Workers own explicitly assigned application files in separate worktrees; reviewers do not author implementation. No real key, environment file, shared ledger, existing database, paid API, GitHub mutation or production action is delegated. Main's user lockfile and untracked skill/configuration files stay intact. The unfinished auth integration worktree stays intact.
 
 Configured Luna is unavailable on this host. Its roles use explicit host inheritance fallback. Root model-family identity is unknown, so no blind or model-family-diversity claim is made. Existing auto-merge remains unarmed while product acceptance is blocked.
+
+## Current execution state
+
+Implementation and exact-candidate technical reviews pass. The real product milestone is BLOCKED. One genuine request produced identities without useful attributes or choice; the next timed out without reported cost. The persistent ledger remains stopped with an uncertain reservation. Issue #42 and [execution checkpoint](execution-checkpoint.md) record reconciliation and the remaining acceptance work. Phase C and Phase E are not marked complete. No merge occurred.
