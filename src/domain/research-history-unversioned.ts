@@ -1,6 +1,5 @@
 import { z } from "zod";
 
-// Stored research emitted by 657e883 must not inherit later evidence contracts.
 export const HistoricalResearchPreferencesSchema = z.strictObject({
   hard: z.strictObject({
     category: z.enum(["headphones", "laptops"]).nullable(),

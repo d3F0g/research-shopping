@@ -94,7 +94,6 @@ export async function writeResearchDiagnostic(sink: ResearchDiagnosticSink, diag
     });
     await Promise.race([write, stop]);
   } catch {
-    // Proof retention is optional and cannot change the paid operation's outcome.
   } finally {
     signal.removeEventListener("abort", onAbort);
     if (timer) clearTimeout(timer);
