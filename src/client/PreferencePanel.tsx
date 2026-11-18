@@ -158,7 +158,7 @@ export function PreferencePanel({
             )}
           </Field>
           <Field>
-            <FieldLabel htmlFor="region">Offer region</FieldLabel>
+            <FieldLabel htmlFor="region">Research market</FieldLabel>
             <NativeSelect
               id="region"
               value={preferences.hard.region}
@@ -174,7 +174,7 @@ export function PreferencePanel({
               </NativeSelectOption>
             </NativeSelect>
             <FieldDescription className="text-xs">
-              Sample offers only. Shipping is not checked.
+              Shipping and stock are unverified.
             </FieldDescription>
           </Field>
           <Field>
