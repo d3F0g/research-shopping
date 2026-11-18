@@ -1,5 +1,8 @@
 import { spawn } from "node:child_process";
-import { mkdir, writeFile } from "node:fs/promises";
+import { mkdir, writeFile, readFile, mkdtemp, rm } from "node:fs/promises";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
+import { Pool } from "pg";
 import { once } from "node:events";
 import { randomUUID } from "node:crypto";
 import net from "node:net";
@@ -7,6 +10,8 @@ import assert from "node:assert/strict";
 import { fixtureDatabase, run } from "./test-postgres.mjs";
 
 const fixture = await fixtureDatabase();
+const directory = await mkdtemp(join(tmpdir(), "fieldnote-history-restart-"));
+const pool = new Pool({ connectionString: fixture.url });
 if (!fixture.restart)
   throw new Error(
     "Restart verification requires an owned temporary PostgreSQL cluster",
@@ -28,12 +33,14 @@ const environment = {
   FIELDNOTE_DATABASE_URL: fixture.url,
   FIELDNOTE_AUTH_ORIGIN: origin,
   FIELDNOTE_AUTH_SECRET: "fixture-process-restart-secret-long-enough",
+  FIELDNOTE_TEST_LEDGER: join(directory, "ledger.json"),
 };
 let api;
+let entry = "src/server/index.ts";
 let logs = "";
 const proof = [];
 async function start() {
-  api = spawn(process.execPath, ["--import", "tsx", "src/server/index.ts"], {
+  api = spawn(process.execPath, ["--import", "tsx", entry], {
     env: environment,
     stdio: ["ignore", "pipe", "pipe"],
   });
@@ -146,6 +153,92 @@ try {
   proof.push(
     "Deletion remained empty with an advanced revision and epoch after both actual restarts.",
   );
+  const account = await load(cookie);
+  const legacy = JSON.parse(
+    await readFile(
+      "tests/fixtures/research-history/unversioned-application-response.json",
+      "utf8",
+    ),
+  );
+  const data = (
+    await pool.query("SELECT data FROM shopping_workspace WHERE user_id = $1", [
+      account.user.id,
+    ])
+  ).rows[0].data;
+  data.turns = [
+    {
+      id: randomUUID(),
+      operationId: randomUUID(),
+      digest: "a".repeat(64),
+      createdAt: new Date().toISOString(),
+      message: "Historical capture fixture",
+      request: {
+        message: "Historical capture fixture",
+        preferences: legacy.preferences,
+      },
+      body: { status: "complete", value: legacy },
+    },
+  ];
+  await pool.query(
+    "UPDATE shopping_workspace SET data = $2::jsonb WHERE user_id = $1",
+    [account.user.id, JSON.stringify(data)],
+  );
+  await stop();
+  entry = "tests/personalization-e2e/server.ts";
+  await start();
+  const loaded = (await load(cookie)).workspace;
+  assert.deepEqual(loaded.turns, data.turns);
+  const freshId = randomUUID();
+  const freshCommand = {
+    revision: loaded.revision,
+    operationId: freshId,
+    command: { kind: "message", text: "headphones under SGD250" },
+  };
+  const fresh = await post("/api/workspace", freshCommand, cookie);
+  assert.equal(fresh.status, 200);
+  const mixed = (await fresh.json()).workspace;
+  assert.deepEqual(mixed.turns[0], data.turns[0]);
+  assert.equal(mixed.turns[1].body.value.research.evidenceVersion, 2);
+  assert.equal(
+    mixed.turns[1].body.value.research.products[0].price.quote,
+    "S$ 249 was S$ 349 SGD You Save S$ 100",
+  );
+  assert.deepEqual(mixed.turns[1].body.value.research.products[1].facts, []);
+  const ledger = await readFile(environment.FIELDNOTE_TEST_LEDGER, "utf8");
+  await stop();
+  await pool.end();
+  await fixture.restart();
+  await start();
+  assert.deepEqual((await load(cookie)).workspace, mixed);
+  assert.deepEqual(
+    (await (await post("/api/workspace", freshCommand, cookie)).json())
+      .workspace,
+    mixed,
+  );
+  assert.equal(
+    await readFile(environment.FIELDNOTE_TEST_LEDGER, "utf8"),
+    ledger,
+  );
+  const later = await post(
+    "/api/workspace",
+    {
+      revision: mixed.revision,
+      operationId: randomUUID(),
+      command: { kind: "message", text: "thanks" },
+    },
+    cookie,
+  );
+  const after = (await later.json()).workspace;
+  assert.deepEqual(after.turns.slice(0, 2), mixed.turns);
+  assert.equal(after.preferences.hard.budget.amount, 250);
+  assert.equal(after.turns[0].body.value.preferences.hard.budget.amount, 400);
+  assert.equal(
+    await readFile(environment.FIELDNOTE_TEST_LEDGER, "utf8"),
+    ledger,
+  );
+  proof.push(
+    "Actual unmodified legacy capture and newly completed v2 price context and identity-only lead survived API and PostgreSQL restart, duplicate commands and ordinary follow-ups. Hydration and replay left the provider admission ledger unchanged.",
+  );
   assert.ok(
     !logs.includes("fixture-restart-password-only") &&
       !logs.includes("headphones under") &&
@@ -171,5 +264,7 @@ try {
   process.stdout.write(proof.join("\n") + "\n");
 } finally {
   await stop();
+  if (!pool.ended) await pool.end();
   await fixture.stop();
+  await rm(directory, { recursive: true });
 }

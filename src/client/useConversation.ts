@@ -17,7 +17,7 @@ import {
   conversationPolicy,
   preferenceDisplay,
 } from "../domain/conversation-policy";
-import type { ApplicationTurnResponse as TurnResponse } from "../domain/research";
+import type { HistoricalApplicationTurnResponse as TurnResponse } from "../domain/research-history";
 import type { WebResearchResponse } from "../domain/web-research";
 import {
   accountAction,

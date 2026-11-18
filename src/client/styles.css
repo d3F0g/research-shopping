@@ -787,3 +787,9 @@ button {
 .account-retention { color: var(--muted-foreground); font-size: 12px; line-height: 1.6; }
 .account-email { overflow-wrap: anywhere; }
 .account-banner { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 8px; padding: 8px 16px; font-size: 13px; }
+.live-research .comparison-table {
+  table-layout: fixed;
+}
+.live-research .comparison-table td {
+  min-width: 0;
+}

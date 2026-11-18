@@ -54,7 +54,7 @@ async function observe({
     incoming.on("end", () => {
       requests.push(JSON.parse(Buffer.concat(chunks).toString()));
       outgoing.writeHead(200, { "Content-Type": "application/json" });
-      const observation = { name: model, url, quotedFacts: facts, priceQuote: price };
+      const observation = { name: model, url, identityQuote: null, quotedFacts: facts, priceQuote: price };
       outgoing.end(JSON.stringify({
         results: [{ title: sourceTitle, url, highlights }],
         output: { content: { observations: duplicates ? [observation, observation] : [observation] }, grounding: [] },

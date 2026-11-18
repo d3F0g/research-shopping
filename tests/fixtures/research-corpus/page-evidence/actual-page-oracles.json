@@ -1,0 +1,1048 @@
+{
+  "schemaVersion": 1,
+  "purpose": "Literal ground truth for an evidence-model redesign. These cases describe permitted and forbidden observations from the first actual returned public excerpts. They are not current commerce evidence or an evaluation result.",
+  "provenance": {
+    "candidate": "85c0522885fa84eb36adac5c32672e2b9a77cdc8",
+    "applicationResponsePath": "/tmp/research-shopping-live/live-proof-1794970994218/application-response.json",
+    "applicationResponseSha256": "306a624d0069a6d73a45279a6a4b8544b99c5d37e38d2495c2e91175215a7923",
+    "proofPath": "/tmp/research-shopping-live/live-proof-1794970994218/proof.json",
+    "proofSha256": "f56f51a3ae5f1e9acf5953d425929cc68061dc6d70d0e320f312abc29ab71688",
+    "requestId": "14e2fa601bf5dff98dc2a5057cb8bdd5",
+    "retrievedAt": "2026-11-18T03:03:18.390Z",
+    "reportedCostUsd": 0.007,
+    "sourceCount": 5,
+    "originalProductCount": 0,
+    "inputKind": "Normalized bounded application-response excerpts from an actual live Exa project-runtime call",
+    "originalRawProviderResponseAvailable": false,
+    "rawSynthesizedObservationsAvailable": false,
+    "originalHighlightLineBoundariesAvailable": false,
+    "retainedMarkdownHeadingMarkersAvailable": true,
+    "additionalLiveCallsByOracleAuthor": 0,
+    "additionalPageFetchesByOracleAuthor": 0
+  },
+  "inputPreferences": {
+    "hard": {
+      "category": "headphones",
+      "budget": {
+        "amount": 400,
+        "currency": "SGD"
+      },
+      "region": "SG",
+      "excludedBrands": [],
+      "requiredFeatures": [],
+      "pendingConstraint": null
+    },
+    "soft": {
+      "useCase": "",
+      "priorities": [
+        "value"
+      ],
+      "responseLength": "concise"
+    }
+  },
+  "interpretationRules": [
+    "All actual-case excerpts and titles are copied exactly from application-response.json. Quote offsets use Unicode code points, zero-based with an exclusive end.",
+    "The artifacts already flatten whitespace and cap visible highlights. Literal # markers remain text, but original lines, HTML structure, omitted sections and raw Exa synthesis must not be reconstructed.",
+    "Expected positive cases are product usefulness requirements for a proposed source-scope implementation. This corpus does not assert that the current implementation passes them.",
+    "Every permitted claim remains a source observation with its identity proof visible. No heading, fragment or safe source URL supplies merchant authorization.",
+    "JBL and HN must be independent positives. Bose and the guide must remain negative controls. The shop.com base-model case must not merge with HN without exact variant evidence.",
+    "Keep source-specific spelling and variant labels. Case normalization may support comparison but cannot erase part, color, generation or suffix differences.",
+    "A retained price excerpt preserves its qualifiers. No amount becomes a parsed current payable offer, inventory promise or automatic budget match.",
+    "Grounding field paths are opaque metadata. They do not reveal the missing observation values or prove why the old adapter rejected them.",
+    "Exact claims and identity proof must fit the existing visible-source bounds. Capacity failure must not erase an adverse or inconsistent observation."
+  ],
+  "sources": [
+    {
+      "title": "JBL Tour One M3 | Wireless over-ear Noise Cancelling headphones",
+      "url": "https://www.jbl.com.sg/over-ear-headphones/TOUR-ONE-M3.html?dwvar_TOUR-ONE-M3_color=Black-GLOBAL-Current",
+      "highlights": [
+        "JBLTOURONEM3BLK # JBL Tour One M3 Premium wireless over-ear Noise Cancelling headphones with Hi-Res Audio and legendary JBL pro sound Variations * * [ Blue ](/on/demandware.store/Sites-JB-APAC-NCOM-Site/en_SG/Product-Variation?pid=TOUR-ONE-M3&cgid=over-ear-headphones&dwvar_TOUR-ONE-M3_color=Blue-GLOBAL-Current&source=detail) * [ Black ](/on/demandware.store/Sites-JB-APAC-NCOM-Site/en_SG/Product-Variation?pid=TOUR-ONE-M3&cgid=over-ear-headphones&dwvar_TOUR-ONE-M3_color=Black-GLOBAL-Current&source=detail) * [ Mocha ](/on/demandware.store/Sites-JB-APAC-NCOM-Site/en_SG/Product-Variation?pid=TOUR-ONE-M3&cgid=over-ear-headphones&dwvar_TOU"
+      ],
+      "id": "source-1",
+      "titleSha256": "335f8d51d79765bce74258cc4b3badc8759efcfae200fd849a08fe5f8a086d19",
+      "highlightSha256": [
+        "9d3e1c5458b532bca039cbdd491e7cd68791214483f43ea9a30c06aea1901068"
+      ],
+      "highlightLengths": [
+        640
+      ],
+      "at640CharacterDisplayLimit": [
+        true
+      ]
+    },
+    {
+      "title": "Sennheiser MOMENTUM 4 Wireless Over-Ear Headphones - Teal (800073) | Harvey Norman Singapore",
+      "url": "https://www.harveynorman.com.sg/tv-and-audio/headphones-en/over-ear-headphones-en-2/sennheiser-momentum-4-wireless-over-ear-headphones-teal-800073-q.html",
+      "highlights": [
+        "# Sennheiser MOMENTUM 4 Wireless Over-Ear Headphones - Teal (800073) S$ 349 was S$ 499 SGD You Save S$ 150 ... ### Description Experience superb audio clarity, comfort, and endurance with the Sennheiser MOMENTUM 4 Wireless. Boasting a high-fidelity 42 mm transducer system and support for aptX Adaptive, these headphones deliver rich, detailed sound with excellent dynamics. You get up to 60 hours of playback on a full charge, making them ideal for long journeys or all-day listening sessions. #### Key Features - Sennheiser Signature Sound – Powered by Sennheiser’s audiophile-inspired 42mm transducer system for exceptional high-fidelity"
+      ],
+      "id": "source-2",
+      "titleSha256": "302b366f9f41d6f97fb91ed49774ed0bd3561d6cd067dbf2328e9aec0178b9f1",
+      "highlightSha256": [
+        "fd20b56be7c1f5a1735c70d0982985af25949841d23bcad8358e683a88433238"
+      ],
+      "highlightLengths": [
+        640
+      ],
+      "at640CharacterDisplayLimit": [
+        true
+      ]
+    },
+    {
+      "title": "METAPOD SG Sennheiser Momentum 4 Wireless Headphones - Shop",
+      "url": "https://shop.com/products/7284764901572/sennheiser-momentum-4-wireless-headphones",
+      "highlights": [
+        "4.5 (123) # Sennheiser Momentum 4 Wireless Headphones 4.5 (1,234) Sold 100+ last 30 days SGD 349.00 SGD 599.00 42% off Language 4.8(1.1K) SGD 349.00 SGD 599.00 ## Highlights ## Description ... ## Specifications ## Reviews 5.0(4) 5.0 4 ratings"
+      ],
+      "id": "source-3",
+      "titleSha256": "f593b9516e75e2ec68fc4b70b684cefc10c75b20b2be0702288de90d1bb9ea82",
+      "highlightSha256": [
+        "d0c650f9ca2c7c220f78ea552481018aa9e971b4bfa34b88f02821f05b8fb86e"
+      ],
+      "highlightLengths": [
+        242
+      ],
+      "at640CharacterDisplayLimit": [
+        false
+      ]
+    },
+    {
+      "title": "BOSE EARPHONES/HEADPHONES/EARBUDS QC HP - CHILLED LILAC",
+      "url": "https://www.bestdenki.com.sg/0607397-bose-earphones-headphones-earbuds-qc-hp-chilled-lilac.html",
+      "highlights": [
+        "# BOSE EARPHONES/HEADPHONES/EARBUDS BOSE QUIETCOMFORT HEADPHONES CHILLED LILAC In stock Special Price $389.00 Regular Price $499.00 Availability: In stock BREAKTHROUGH BOSE IMMERSIVE AUDIO WORLD-CLASS NOISE CANCELLATION SOUND AND SILENCE TAILORED TO YOU SUPERIOR COMFORT PLAYS UP TO 6 HOURS¹ MODES FOR ANY MUSICAL MOOD SIMPLE TOUCH CONTROLS EARBUDS SWEAT AND WATER RESISTANT (IPX4) BATTERY LIFE: UP TO 6 HOURS Hurry! Only 12 left in stock days hrs mins secs In stock Availability: In stock Model: QC HP - CHILLED LILAC Iconic over-ear wireless headphones featuring world-class noise cancellation, customizable Quiet and Aware modes, up to 2"
+      ],
+      "id": "source-4",
+      "titleSha256": "037345faef412672aaf8015b956b6568c98aca043b6fd9bdd169be5f3f063302",
+      "highlightSha256": [
+        "d69d0d2ef681e1827ad976fdf88344a494ef0b71c49ccc9dc2d86f1e7448bf6f"
+      ],
+      "highlightLengths": [
+        640
+      ],
+      "at640CharacterDisplayLimit": [
+        true
+      ]
+    },
+    {
+      "title": "What Are the Best Noise Cancelling Headphones in Singapore in 2026? | ShopBack Guides",
+      "url": "https://www.shopback.sg/guide/shopping/best-noise-cancelling-headphones-money-singapore",
+      "highlights": [
+        "Garry Shi Cashback Expert, ShopBack· 8 October 2026 ... ## What are the best noise-cancelling headphones for the money in Singapore? For most Singapore shoppers, value sits in the S$249 to S$349 earbud range, with the S$649 over-ear tier worth it mainly for frequent flyers. Here is how the main picks line up, using official Singapore list prices at the time of writing: - Samsung Galaxy Buds4, S$249 (Samsung Singapore). Samsung's spec sheet lists active noise cancellation with adaptive ANC, 6 microphones, IP54, and up to 5 hours of music with noise cancelling on (up to 30 hours total with the case and noise cancelling off). A sensibl"
+      ],
+      "id": "source-5",
+      "titleSha256": "afc6ed2044f731c9640e9c3eb6d058985cee55c942f9242e2fda83bef652ef47",
+      "highlightSha256": [
+        "b54453cf661203d31f3e521fe05d068cadd5607f6b39cafef38ff0823c917db9"
+      ],
+      "highlightLengths": [
+        640
+      ],
+      "at640CharacterDisplayLimit": [
+        true
+      ]
+    }
+  ],
+  "actualCases": [
+    {
+      "id": "actual-jbl-model-heading",
+      "material": "unchanged-public-application-capture",
+      "sourceIds": [
+        "source-1"
+      ],
+      "exactEvidence": {
+        "modelHeading": {
+          "sourceId": "source-1",
+          "highlightIndex": 0,
+          "quote": "# JBL Tour One M3",
+          "start": 16,
+          "end": 33
+        },
+        "modelTitle": {
+          "sourceId": "source-1",
+          "field": "title",
+          "quote": "JBL Tour One M3",
+          "start": 0,
+          "end": 15
+        },
+        "categoryAndWireless": {
+          "sourceId": "source-1",
+          "highlightIndex": 0,
+          "quote": "Premium wireless over-ear Noise Cancelling headphones",
+          "start": 34,
+          "end": 87
+        },
+        "audioMarketing": {
+          "sourceId": "source-1",
+          "highlightIndex": 0,
+          "quote": "with Hi-Res Audio and legendary JBL pro sound",
+          "start": 88,
+          "end": 133
+        },
+        "untypedIdentifier": {
+          "sourceId": "source-1",
+          "highlightIndex": 0,
+          "quote": "JBLTOURONEM3BLK",
+          "start": 0,
+          "end": 15
+        },
+        "variationBoundary": {
+          "sourceId": "source-1",
+          "highlightIndex": 0,
+          "quote": "Variations",
+          "start": 134,
+          "end": 144
+        },
+        "blueOption": {
+          "sourceId": "source-1",
+          "highlightIndex": 0,
+          "quote": "[ Blue ]",
+          "start": 149,
+          "end": 157
+        },
+        "blackOption": {
+          "sourceId": "source-1",
+          "highlightIndex": 0,
+          "quote": "[ Black ]",
+          "start": 329,
+          "end": 338
+        },
+        "mochaOption": {
+          "sourceId": "source-1",
+          "highlightIndex": 0,
+          "quote": "[ Mocha ]",
+          "start": 511,
+          "end": 520
+        }
+      },
+      "expected": {
+        "disposition": "source-bound-model-lead",
+        "identity": {
+          "model": "JBL Tour One M3",
+          "brandLabel": "JBL",
+          "variant": null,
+          "manufacturerPartNumber": null
+        },
+        "category": "headphones",
+        "permittedClaims": [
+          {
+            "attribute": "wireless",
+            "value": true,
+            "qualification": "source-observed heading label",
+            "evidenceKey": "categoryAndWireless"
+          },
+          {
+            "attribute": "form-factor",
+            "value": "over-ear",
+            "qualification": "source-observed heading label",
+            "evidenceKey": "categoryAndWireless"
+          },
+          {
+            "attribute": "noise-cancelling-label",
+            "value": "Noise Cancelling",
+            "qualification": "Preserve the label. Do not infer active cancellation or measured performance.",
+            "evidenceKey": "categoryAndWireless"
+          }
+        ],
+        "price": null,
+        "mustRemainUnknown": [
+          {
+            "field": "selectedColor",
+            "state": "unknown",
+            "reason": "Black appears as a variation option and in a URL parameter. The captured text does not explicitly label a selected color. Do not decode BLK into a variant proof."
+          },
+          {
+            "field": "manufacturerPartNumber",
+            "state": "unknown",
+            "reason": "JBLTOURONEM3BLK is an unlabeled identifier, not an explicit manufacturer part number."
+          },
+          {
+            "field": "manufacturerIdentity",
+            "state": "unknown",
+            "reason": "JBL is a brand/model label here. No manufacturing statement is retained."
+          },
+          {
+            "field": "active-noise-cancelling",
+            "state": "unknown",
+            "reason": "The visible category text says Noise Cancelling but not active or ANC."
+          },
+          {
+            "field": "price",
+            "state": "unknown",
+            "reason": "There is no amount in the retained JBL excerpt. A grounding path named priceQuote cannot supply its missing content."
+          },
+          {
+            "field": "batteryRuntime",
+            "state": "unknown",
+            "reason": "No runtime is present."
+          }
+        ],
+        "forbiddenClaims": [
+          "Black variant proven",
+          "current price under SGD 400",
+          "verified active noise cancellation",
+          "manufacturer part number proven",
+          "independently corroborated specifications"
+        ],
+        "commonUnknownsApply": true
+      },
+      "criteria": [
+        {
+          "id": "positive-model-discovery",
+          "expected": [
+            "JBL Tour One M3"
+          ],
+          "reason": "An exact visible model heading and explicit headphone class must support a useful source-bound lead."
+        },
+        {
+          "id": "variant-scope",
+          "expected": null,
+          "reason": "Variation links and an unlabeled code cannot prove a selected variant."
+        },
+        {
+          "id": "missing-price",
+          "expected": null,
+          "reason": "Do not invent the missing raw extraction price."
+        },
+        {
+          "id": "literal-evidence",
+          "expected": true,
+          "reason": "Published evidence must remain a contiguous substring of the captured title or excerpt, with both model and claim proof visible."
+        }
+      ]
+    },
+    {
+      "id": "actual-hn-teal-description-and-sale-context",
+      "material": "unchanged-public-application-capture",
+      "sourceIds": [
+        "source-2"
+      ],
+      "exactEvidence": {
+        "fullHeading": {
+          "sourceId": "source-2",
+          "highlightIndex": 0,
+          "quote": "# Sennheiser MOMENTUM 4 Wireless Over-Ear Headphones - Teal (800073)",
+          "start": 0,
+          "end": 68
+        },
+        "fullTitle": {
+          "sourceId": "source-2",
+          "field": "title",
+          "quote": "Sennheiser MOMENTUM 4 Wireless Over-Ear Headphones - Teal (800073)",
+          "start": 0,
+          "end": 66
+        },
+        "priceContext": {
+          "sourceId": "source-2",
+          "highlightIndex": 0,
+          "quote": "S$ 349 was S$ 499 SGD You Save S$ 150",
+          "start": 69,
+          "end": 106
+        },
+        "gapMarker": {
+          "sourceId": "source-2",
+          "highlightIndex": 0,
+          "quote": "... ### Description",
+          "start": 107,
+          "end": 126
+        },
+        "namedDescription": {
+          "sourceId": "source-2",
+          "highlightIndex": 0,
+          "quote": "Experience superb audio clarity, comfort, and endurance with the Sennheiser MOMENTUM 4 Wireless.",
+          "start": 127,
+          "end": 223
+        },
+        "descriptionSpecification": {
+          "sourceId": "source-2",
+          "highlightIndex": 0,
+          "quote": "Boasting a high-fidelity 42 mm transducer system and support for aptX Adaptive, these headphones deliver rich, detailed sound with excellent dynamics.",
+          "start": 224,
+          "end": 374
+        },
+        "qualifiedRuntime": {
+          "sourceId": "source-2",
+          "highlightIndex": 0,
+          "quote": "You get up to 60 hours of playback on a full charge, making them ideal for long journeys or all-day listening sessions.",
+          "start": 375,
+          "end": 494
+        }
+      },
+      "expected": {
+        "disposition": "source-bound-variant-lead",
+        "identity": {
+          "model": "Sennheiser MOMENTUM 4 Wireless",
+          "brandLabel": "Sennheiser",
+          "variant": "Teal",
+          "pageIdentifier": "800073",
+          "manufacturerPartNumber": null
+        },
+        "category": "headphones",
+        "permittedClaims": [
+          {
+            "attribute": "wireless",
+            "value": true,
+            "qualification": "source-observed heading label",
+            "evidenceKey": "fullHeading"
+          },
+          {
+            "attribute": "form-factor",
+            "value": "over-ear",
+            "qualification": "source-observed heading label",
+            "evidenceKey": "fullHeading"
+          },
+          {
+            "attribute": "transducer-diameter",
+            "value": "42 mm",
+            "qualification": "source-observed description fragment within the visible named description, not measured or cross-source verified",
+            "evidenceKey": "descriptionSpecification"
+          },
+          {
+            "attribute": "codec-support",
+            "value": "aptX Adaptive",
+            "qualification": "source-observed description fragment within the visible named description",
+            "evidenceKey": "descriptionSpecification"
+          },
+          {
+            "attribute": "playback-runtime",
+            "value": "up to 60 hours of playback on a full charge",
+            "qualification": "Qualified page claim. Preserve up to and full charge. Do not guarantee 60 hours or infer test conditions.",
+            "evidenceKey": "qualifiedRuntime"
+          }
+        ],
+        "price": {
+          "kind": "page-observed-unverified-excerpt",
+          "quote": "S$ 349 was S$ 499 SGD You Save S$ 150",
+          "currencyExplicitInExcerpt": "SGD",
+          "saleAmountText": "S$ 349",
+          "formerAmountText": "S$ 499",
+          "savingsText": "S$ 150",
+          "scalarCurrentPayableAmount": null,
+          "evidenceKey": "priceContext"
+        },
+        "mustRemainUnknown": [
+          {
+            "field": "manufacturerPartNumber",
+            "state": "unknown",
+            "reason": "800073 is parenthesized in the page heading but has no retained manufacturer-part-number label."
+          },
+          {
+            "field": "manufacturerIdentity",
+            "state": "unknown",
+            "reason": "The heading explicitly names the brand, not a separate manufacturer identity statement."
+          },
+          {
+            "field": "active-noise-cancelling",
+            "state": "unknown",
+            "reason": "No retained excerpt explicitly asserts active noise cancellation."
+          },
+          {
+            "field": "runtimeConditions",
+            "state": "unknown",
+            "reason": "Volume, codec, cancellation mode, test protocol and repeatability are not specified."
+          },
+          {
+            "field": "crossSourceSameVariantAsShopCom",
+            "state": "unknown",
+            "reason": "The shop.com source does not name Teal or 800073. A shared base name is not exact variant proof."
+          },
+          {
+            "field": "gapContents",
+            "state": "unknown",
+            "reason": "The literal ellipsis precedes the Description heading. The removed content and original structural boundaries are unavailable."
+          }
+        ],
+        "forbiddenClaims": [
+          "guaranteed 60-hour battery",
+          "at least 60 hours of playback",
+          "current payable price SGD 349",
+          "verified sale or savings",
+          "800073 is manufacturer part number",
+          "same variant as the shop.com result"
+        ],
+        "commonUnknownsApply": true
+      },
+      "criteria": [
+        {
+          "id": "positive-variant-discovery",
+          "expected": [
+            {
+              "model": "Sennheiser MOMENTUM 4 Wireless",
+              "variant": "Teal"
+            }
+          ],
+          "reason": "The exact explicit heading must admit a useful lead while retaining its variant label."
+        },
+        {
+          "id": "sale-qualifiers-preserved",
+          "expected": "S$ 349 was S$ 499 SGD You Save S$ 150",
+          "reason": "If published as price evidence, retain former-price and savings context. No scalar current offer is allowed."
+        },
+        {
+          "id": "qualified-feature-preserved",
+          "expected": "up to 60 hours of playback on a full charge",
+          "reason": "A quoted upper-bound claim cannot become an exact or guaranteed runtime."
+        },
+        {
+          "id": "bounded-description-scope",
+          "expected": true,
+          "reason": "Attribute fragments only in the visible named description. Do not infer the contents of the ellipsis."
+        }
+      ]
+    },
+    {
+      "id": "actual-shop-base-model-ambiguous-price-roles",
+      "material": "unchanged-public-application-capture",
+      "sourceIds": [
+        "source-3"
+      ],
+      "exactEvidence": {
+        "modelHeading": {
+          "sourceId": "source-3",
+          "highlightIndex": 0,
+          "quote": "# Sennheiser Momentum 4 Wireless Headphones",
+          "start": 10,
+          "end": 53
+        },
+        "amountSequence": {
+          "sourceId": "source-3",
+          "highlightIndex": 0,
+          "quote": "SGD 349.00 SGD 599.00 42% off",
+          "start": 89,
+          "end": 118
+        },
+        "salesText": {
+          "sourceId": "source-3",
+          "highlightIndex": 0,
+          "quote": "Sold 100+ last 30 days",
+          "start": 66,
+          "end": 88
+        },
+        "emptySectionMarkers": {
+          "sourceId": "source-3",
+          "highlightIndex": 0,
+          "quote": "## Highlights ## Description ... ## Specifications ## Reviews",
+          "start": 160,
+          "end": 221
+        }
+      },
+      "expected": {
+        "disposition": "source-bound-model-lead-with-unresolved-variant",
+        "identity": {
+          "model": "Sennheiser Momentum 4 Wireless",
+          "brandLabel": "Sennheiser",
+          "variant": null,
+          "manufacturerPartNumber": null
+        },
+        "category": "headphones",
+        "permittedClaims": [
+          {
+            "attribute": "wireless",
+            "value": true,
+            "qualification": "source-observed heading label",
+            "evidenceKey": "modelHeading"
+          }
+        ],
+        "price": null,
+        "mustRemainUnknown": [
+          {
+            "field": "selectedVariant",
+            "state": "unknown",
+            "reason": "No color or variant identifier is retained."
+          },
+          {
+            "field": "structuredPrice",
+            "state": "unknown",
+            "reason": "Two amounts and a discount percentage have no explicit current/former role labels. Retain them as source context only."
+          },
+          {
+            "field": "featureSpecifications",
+            "state": "unknown",
+            "reason": "Highlights, Description and Specifications headings contain no retained specification content."
+          },
+          {
+            "field": "recentSalesAccuracy",
+            "state": "unknown",
+            "reason": "The text is a page claim and has no verification provenance or absolute reporting period."
+          }
+        ],
+        "forbiddenClaims": [
+          "Teal variant",
+          "800073 variant",
+          "verified 42 percent savings",
+          "SGD 349 current payable amount",
+          "same exact product as HN",
+          "sold count proves stock"
+        ],
+        "commonUnknownsApply": true
+      },
+      "criteria": [
+        {
+          "id": "base-model-positive",
+          "expected": [
+            "Sennheiser Momentum 4 Wireless"
+          ],
+          "reason": "An exact main heading can establish a source-bound model even without a selectable variant."
+        },
+        {
+          "id": "ambiguous-amounts-context-only",
+          "expected": null,
+          "reason": "Do not assign price roles from position or arithmetical plausibility."
+        },
+        {
+          "id": "no-cross-source-merge",
+          "expected": true,
+          "reason": "Same base name alone cannot merge the variant with the HN Teal result."
+        }
+      ]
+    },
+    {
+      "id": "actual-bose-inconsistent-product-scope",
+      "material": "unchanged-public-application-capture",
+      "sourceIds": [
+        "source-4"
+      ],
+      "exactEvidence": {
+        "heading": {
+          "sourceId": "source-4",
+          "highlightIndex": 0,
+          "quote": "# BOSE EARPHONES/HEADPHONES/EARBUDS BOSE QUIETCOMFORT HEADPHONES CHILLED LILAC",
+          "start": 0,
+          "end": 78
+        },
+        "modelLabel": {
+          "sourceId": "source-4",
+          "highlightIndex": 0,
+          "quote": "Model: QC HP - CHILLED LILAC",
+          "start": 490,
+          "end": 518
+        },
+        "priceContext": {
+          "sourceId": "source-4",
+          "highlightIndex": 0,
+          "quote": "Special Price $389.00 Regular Price $499.00",
+          "start": 88,
+          "end": 131
+        },
+        "earbudSpecification": {
+          "sourceId": "source-4",
+          "highlightIndex": 0,
+          "quote": "EARBUDS SWEAT AND WATER RESISTANT (IPX4) BATTERY LIFE: UP TO 6 HOURS",
+          "start": 341,
+          "end": 409
+        },
+        "headphoneDescription": {
+          "sourceId": "source-4",
+          "highlightIndex": 0,
+          "quote": "Iconic over-ear wireless headphones featuring world-class noise cancellation, customizable Quiet and Aware modes, up to 2",
+          "start": 519,
+          "end": 640
+        },
+        "stockClaim": {
+          "sourceId": "source-4",
+          "highlightIndex": 0,
+          "quote": "Hurry! Only 12 left in stock",
+          "start": 410,
+          "end": 438
+        }
+      },
+      "expected": {
+        "disposition": "source-context-only",
+        "identity": {
+          "candidateHeadingModel": "BOSE QUIETCOMFORT HEADPHONES",
+          "candidateVariantLabel": "CHILLED LILAC",
+          "resolvedModel": null,
+          "resolvedVariant": null,
+          "manufacturerPartNumber": null
+        },
+        "category": "unresolved-product-scope",
+        "permittedClaims": [],
+        "price": null,
+        "mustRemainUnknown": [
+          {
+            "field": "resolvedProductIdentity",
+            "state": "unknown",
+            "reason": "The excerpt includes headphone and earbud descriptions without a visible trustworthy separating scope. Do not silently decide that one block is the intended product."
+          },
+          {
+            "field": "boundBatteryRuntime",
+            "state": "unknown",
+            "reason": "The six-hour text appears in the earbud block and the headphone description is truncated at up to 2."
+          },
+          {
+            "field": "boundIPX4",
+            "state": "unknown",
+            "reason": "IPX4 is explicitly next to EARBUDS and cannot transfer to the headphone model."
+          },
+          {
+            "field": "priceCurrency",
+            "state": "unknown",
+            "reason": "The price uses only $. Source geography, URL or research currency does not make it an explicit SGD observation."
+          },
+          {
+            "field": "wholeProductPriceAssociation",
+            "state": "unknown",
+            "reason": "The inconsistent product scope prevents binding the page price to a resolved exact product."
+          },
+          {
+            "field": "completedTruncatedText",
+            "state": "unknown",
+            "reason": "The final up to 2 fragment must not be completed to 24, 20 or any other runtime."
+          }
+        ],
+        "forbiddenClaims": [
+          "Bose headphones have six-hour battery",
+          "Bose headphones are IPX4",
+          "price is SGD 389",
+          "24-hour battery",
+          "12 units available",
+          "verified active noise cancellation",
+          "selected resolved Bose product"
+        ],
+        "commonUnknownsApply": true
+      },
+      "criteria": [
+        {
+          "id": "inconsistency-visible",
+          "expected": true,
+          "reason": "Keep contradictory product-class signals visible and do not turn either block into resolved specifications."
+        },
+        {
+          "id": "no-product-lead",
+          "expected": [],
+          "reason": "This excerpt cannot support a resolved source-bound model with reliable fragment scope."
+        },
+        {
+          "id": "unknown-currency",
+          "expected": null,
+          "reason": "A bare dollar sign is not SGD proof."
+        },
+        {
+          "id": "no-completion-of-truncation",
+          "expected": true,
+          "reason": "Missing suffix text remains missing."
+        }
+      ]
+    },
+    {
+      "id": "actual-shopback-list-has-no-pagewide-model-scope",
+      "material": "unchanged-public-application-capture",
+      "sourceIds": [
+        "source-5"
+      ],
+      "exactEvidence": {
+        "listHeading": {
+          "sourceId": "source-5",
+          "highlightIndex": 0,
+          "quote": "## What are the best noise-cancelling headphones for the money in Singapore?",
+          "start": 56,
+          "end": 132
+        },
+        "genericRanges": {
+          "sourceId": "source-5",
+          "highlightIndex": 0,
+          "quote": "value sits in the S$249 to S$349 earbud range, with the S$649 over-ear tier",
+          "start": 162,
+          "end": 237
+        },
+        "priceQualification": {
+          "sourceId": "source-5",
+          "highlightIndex": 0,
+          "quote": "using official Singapore list prices at the time of writing",
+          "start": 311,
+          "end": 370
+        },
+        "firstListItem": {
+          "sourceId": "source-5",
+          "highlightIndex": 0,
+          "quote": "- Samsung Galaxy Buds4, S$249 (Samsung Singapore).",
+          "start": 372,
+          "end": 422
+        },
+        "quotedSpecificationAttribution": {
+          "sourceId": "source-5",
+          "highlightIndex": 0,
+          "quote": "Samsung's spec sheet lists active noise cancellation with adaptive ANC, 6 microphones, IP54, and up to 5 hours of music with noise cancelling on (up to 30 hours total with the case and noise cancelling off).",
+          "start": 423,
+          "end": 630
+        }
+      },
+      "expected": {
+        "disposition": "source-context-only-for-single-product-scope",
+        "identity": {
+          "pageModel": null,
+          "namedListItem": "Samsung Galaxy Buds4",
+          "resolvedVariant": null
+        },
+        "category": "multi-product-guide",
+        "permittedClaims": [],
+        "price": null,
+        "mustRemainUnknown": [
+          {
+            "field": "singleProductPageScope",
+            "state": "unknown",
+            "reason": "This is a multi-product guide. A page-wide identity must not be inferred from one named bullet."
+          },
+          {
+            "field": "otherListItems",
+            "state": "unknown",
+            "reason": "The excerpt ends mid-word. Unseen products and their details cannot be reconstructed."
+          },
+          {
+            "field": "independentManufacturerProof",
+            "state": "unknown",
+            "reason": "The guide attributes a claim to a Samsung spec sheet, but that original specification is not a retained returned source."
+          },
+          {
+            "field": "applicableVariant",
+            "state": "unknown",
+            "reason": "No exact variant or part number accompanies the named list item."
+          }
+        ],
+        "forbiddenClaims": [
+          "S$649 is the Galaxy Buds4 price",
+          "all listed products share Samsung specifications",
+          "live current price S$249",
+          "manufacturer independently verified the returned source",
+          "30 hours with noise cancelling on"
+        ],
+        "commonUnknownsApply": true
+      },
+      "criteria": [
+        {
+          "id": "no-pagewide-product-lead",
+          "expected": [],
+          "reason": "An aggregate guide is not a proven single-product heading scope."
+        },
+        {
+          "id": "no-range-as-model-price",
+          "expected": null,
+          "reason": "Ranges and tiers cannot be assigned to an individual model."
+        },
+        {
+          "id": "historical-list-price-context",
+          "expected": true,
+          "reason": "The price qualification at the time of writing must not disappear."
+        },
+        {
+          "id": "conditional-runtime-preserved",
+          "expected": true,
+          "reason": "The case and cancellation-mode distinctions cannot be collapsed into a single runtime."
+        }
+      ]
+    }
+  ],
+  "syntheticControls": [
+    {
+      "id": "synthetic-hn-title-heading-variant-mismatch",
+      "material": "synthetic-transformation",
+      "derivedFromSourceId": "source-2",
+      "transformation": {
+        "field": "title",
+        "old": "Teal (800073)",
+        "new": "Black (509266)"
+      },
+      "source": {
+        "title": "Sennheiser MOMENTUM 4 Wireless Over-Ear Headphones - Black (509266) | Harvey Norman Singapore",
+        "url": "https://www.harveynorman.com.sg/tv-and-audio/headphones-en/over-ear-headphones-en-2/sennheiser-momentum-4-wireless-over-ear-headphones-teal-800073-q.html",
+        "highlights": [
+          "# Sennheiser MOMENTUM 4 Wireless Over-Ear Headphones - Teal (800073) S$ 349 was S$ 499 SGD You Save S$ 150 ... ### Description Experience superb audio clarity, comfort, and endurance with the Sennheiser MOMENTUM 4 Wireless. Boasting a high-fidelity 42 mm transducer system and support for aptX Adaptive, these headphones deliver rich, detailed sound with excellent dynamics. You get up to 60 hours of playback on a full charge, making them ideal for long journeys or all-day listening sessions. #### Key Features - Sennheiser Signature Sound – Powered by Sennheiser’s audiophile-inspired 42mm transducer system for exceptional high-fidelity"
+        ],
+        "id": "source-2"
+      },
+      "expected": {
+        "disposition": "source-context-only",
+        "price": null,
+        "resolvedVariant": null
+      },
+      "reason": "An explicit conflicting variant in title and main heading must not be silently ignored."
+    },
+    {
+      "id": "synthetic-hn-accessory-heading",
+      "material": "synthetic-transformation",
+      "derivedFromSourceId": "source-2",
+      "transformation": {
+        "field": "highlights[0]",
+        "old": "# Sennheiser MOMENTUM 4 Wireless Over-Ear Headphones - Teal (800073)",
+        "new": "# Replacement ear pads for Sennheiser MOMENTUM 4 Wireless Over-Ear Headphones - Teal (800073)"
+      },
+      "source": {
+        "title": "Sennheiser MOMENTUM 4 Wireless Over-Ear Headphones - Teal (800073) | Harvey Norman Singapore",
+        "url": "https://www.harveynorman.com.sg/tv-and-audio/headphones-en/over-ear-headphones-en-2/sennheiser-momentum-4-wireless-over-ear-headphones-teal-800073-q.html",
+        "highlights": [
+          "# Replacement ear pads for Sennheiser MOMENTUM 4 Wireless Over-Ear Headphones - Teal (800073) S$ 349 was S$ 499 SGD You Save S$ 150 ... ### Description Experience superb audio clarity, comfort, and endurance with the Sennheiser MOMENTUM 4 Wireless. Boasting a high-fidelity 42 mm transducer system and support for aptX Adaptive, these headphones deliver rich, detailed sound with excellent dynamics. You get up to 60 hours of playback on a full charge, making them ideal for long journeys or all-day listening sessions. #### Key Features - Sennheiser Signature Sound – Powered by Sennheiser’s audiophile-inspired 42mm transducer system for exceptional high-fidelity"
+        ],
+        "id": "source-2"
+      },
+      "expected": {
+        "disposition": "source-context-only",
+        "price": null,
+        "acceptedHeadphoneModels": []
+      },
+      "reason": "Accessory class at the main heading cannot inherit the target model category from its title or description."
+    },
+    {
+      "id": "synthetic-hn-installment-price",
+      "material": "synthetic-transformation",
+      "derivedFromSourceId": "source-2",
+      "transformation": {
+        "field": "highlights[0]",
+        "old": "S$ 349 was S$ 499 SGD You Save S$ 150",
+        "new": "S$ 29 per month for 12 months SGD"
+      },
+      "source": {
+        "title": "Sennheiser MOMENTUM 4 Wireless Over-Ear Headphones - Teal (800073) | Harvey Norman Singapore",
+        "url": "https://www.harveynorman.com.sg/tv-and-audio/headphones-en/over-ear-headphones-en-2/sennheiser-momentum-4-wireless-over-ear-headphones-teal-800073-q.html",
+        "highlights": [
+          "# Sennheiser MOMENTUM 4 Wireless Over-Ear Headphones - Teal (800073) S$ 29 per month for 12 months SGD ... ### Description Experience superb audio clarity, comfort, and endurance with the Sennheiser MOMENTUM 4 Wireless. Boasting a high-fidelity 42 mm transducer system and support for aptX Adaptive, these headphones deliver rich, detailed sound with excellent dynamics. You get up to 60 hours of playback on a full charge, making them ideal for long journeys or all-day listening sessions. #### Key Features - Sennheiser Signature Sound – Powered by Sennheiser’s audiophile-inspired 42mm transducer system for exceptional high-fidelity"
+        ],
+        "id": "source-2"
+      },
+      "expected": {
+        "wholeProductObservedPrice": null,
+        "currentPayablePrice": null
+      },
+      "reason": "A monthly payment must remain source context even when the model heading is valid."
+    },
+    {
+      "id": "synthetic-hn-other-variant-price",
+      "material": "synthetic-transformation",
+      "derivedFromSourceId": "source-2",
+      "transformation": {
+        "field": "highlights[0]",
+        "old": "S$ 349 was S$ 499 SGD You Save S$ 150",
+        "new": "Black variant S$ 349. Teal variant price unavailable."
+      },
+      "source": {
+        "title": "Sennheiser MOMENTUM 4 Wireless Over-Ear Headphones - Teal (800073) | Harvey Norman Singapore",
+        "url": "https://www.harveynorman.com.sg/tv-and-audio/headphones-en/over-ear-headphones-en-2/sennheiser-momentum-4-wireless-over-ear-headphones-teal-800073-q.html",
+        "highlights": [
+          "# Sennheiser MOMENTUM 4 Wireless Over-Ear Headphones - Teal (800073) Black variant S$ 349. Teal variant price unavailable. ... ### Description Experience superb audio clarity, comfort, and endurance with the Sennheiser MOMENTUM 4 Wireless. Boasting a high-fidelity 42 mm transducer system and support for aptX Adaptive, these headphones deliver rich, detailed sound with excellent dynamics. You get up to 60 hours of playback on a full charge, making them ideal for long journeys or all-day listening sessions. #### Key Features - Sennheiser Signature Sound – Powered by Sennheiser’s audiophile-inspired 42mm transducer system for exceptional high-fidelity"
+        ],
+        "id": "source-2"
+      },
+      "expected": {
+        "tealObservedPrice": null,
+        "currentPayablePrice": null
+      },
+      "reason": "An explicit Black price cannot be transplanted to the Teal heading."
+    },
+    {
+      "id": "synthetic-hn-related-product-boundary",
+      "material": "synthetic-transformation",
+      "derivedFromSourceId": "source-2",
+      "transformation": {
+        "field": "highlights[0]",
+        "old": "### Description Experience",
+        "new": "### Related products # Sennheiser MOMENTUM 4 Wireless Special Edition ### Description Experience"
+      },
+      "source": {
+        "title": "Sennheiser MOMENTUM 4 Wireless Over-Ear Headphones - Teal (800073) | Harvey Norman Singapore",
+        "url": "https://www.harveynorman.com.sg/tv-and-audio/headphones-en/over-ear-headphones-en-2/sennheiser-momentum-4-wireless-over-ear-headphones-teal-800073-q.html",
+        "highlights": [
+          "# Sennheiser MOMENTUM 4 Wireless Over-Ear Headphones - Teal (800073) S$ 349 was S$ 499 SGD You Save S$ 150 ... ### Related products # Sennheiser MOMENTUM 4 Wireless Special Edition ### Description Experience superb audio clarity, comfort, and endurance with the Sennheiser MOMENTUM 4 Wireless. Boasting a high-fidelity 42 mm transducer system and support for aptX Adaptive, these headphones deliver rich, detailed sound with excellent dynamics. You get up to 60 hours of playback on a full charge, making them ideal for long journeys or all-day listening sessions. #### Key Features - Sennheiser Signature Sound – Powered by Sennheiser’s audiophile-inspired 42mm transducer system for exceptional high-fidelity"
+        ],
+        "id": "source-2"
+      },
+      "expected": {
+        "baseModelDescriptionFacts": [],
+        "specialEditionFactsTransferredToTeal": false
+      },
+      "reason": "The inserted product heading ends the Teal scope before the same description fragments."
+    },
+    {
+      "id": "synthetic-jbl-negated-class",
+      "material": "synthetic-transformation",
+      "derivedFromSourceId": "source-1",
+      "transformation": {
+        "field": "highlights[0]",
+        "old": "Premium wireless over-ear Noise Cancelling headphones",
+        "new": "Not headphones. Replacement cable for wireless over-ear Noise Cancelling headphones"
+      },
+      "source": {
+        "title": "JBL Tour One M3 | Wireless over-ear Noise Cancelling headphones",
+        "url": "https://www.jbl.com.sg/over-ear-headphones/TOUR-ONE-M3.html?dwvar_TOUR-ONE-M3_color=Black-GLOBAL-Current",
+        "highlights": [
+          "JBLTOURONEM3BLK # JBL Tour One M3 Not headphones. Replacement cable for wireless over-ear Noise Cancelling headphones with Hi-Res Audio and legendary JBL pro sound Variations * * [ Blue ](/on/demandware.store/Sites-JB-APAC-NCOM-Site/en_SG/Product-Variation?pid=TOUR-ONE-M3&cgid=over-ear-headphones&dwvar_TOUR-ONE-M3_color=Blue-GLOBAL-Current&source=detail) * [ Black ](/on/demandware.store/Sites-JB-APAC-NCOM-Site/en_SG/Product-Variation?pid=TOUR-ONE-M3&cgid=over-ear-headphones&dwvar_TOUR-ONE-M3_color=Black-GLOBAL-Current&source=detail) * [ Mocha ](/on/demandware.store/Sites-JB-APAC-NCOM-Site/en_SG/Product-Variation?pid=TOUR-ONE-M3&cgid=over-ear-headphones&dwvar_TOU"
+        ],
+        "id": "source-1"
+      },
+      "expected": {
+        "disposition": "source-context-only",
+        "acceptedHeadphoneModels": []
+      },
+      "reason": "The exact product name alone cannot defeat explicit negation and accessory class."
+    }
+  ],
+  "notEstablished": [
+    "Live Exa discovery success after any future correction.",
+    "The content or precise rejection reason of the original synthesized observations.",
+    "Native HTML or original Exa highlight structure beyond the literal markers retained in the application excerpt.",
+    "Cross-source model or variant equivalence, manufacturer part identity, editorial independence or verified corroboration.",
+    "Current price, inventory, delivery, merchant authorization or purchase capability.",
+    "General natural-language comprehension beyond these literal captured examples and separately labeled controls."
+  ],
+  "principleDecisions": [
+    {
+      "principle": "Prove It Works",
+      "decision": "The oracle uses the actual captured application response and records the missing raw-provider evidence instead of reconstructing it."
+    },
+    {
+      "principle": "Test Behavior, Not Implementation",
+      "decision": "Literal expected identities, preserved qualifiers and forbidden outcomes define observable success without depending on proposed internal schema names."
+    },
+    {
+      "principle": "Boundary Discipline",
+      "decision": "Source-observed fragments, unknown commerce state and absent synthesis remain separate evidentiary boundaries."
+    },
+    {
+      "principle": "Laziness Protocol",
+      "decision": "Five actual sources and six minimal one-field synthetic controls test the observed failure without adding a new fetch, provider call or application change."
+    }
+  ],
+  "commonMustRemainUnknown": [
+    {
+      "field": "verifiedOffer",
+      "state": "unknown",
+      "reason": "No authorized merchant verification was returned."
+    },
+    {
+      "field": "currentPayablePrice",
+      "state": "unknown",
+      "reason": "A retrieved page quotation is not a current verified offer."
+    },
+    {
+      "field": "currentStock",
+      "state": "unknown",
+      "reason": "Page stock or sales text cannot verify inventory."
+    },
+    {
+      "field": "deliveryToSG",
+      "state": "unknown",
+      "reason": "Research market and source geography do not establish shipping or delivery."
+    },
+    {
+      "field": "affordableWithinSGD400",
+      "state": "unknown",
+      "reason": "The research budget does not turn page observations into verified budget eligibility."
+    },
+    {
+      "field": "crossSourceExactVariant",
+      "state": "unknown",
+      "reason": "The captures do not independently prove matching manufacturer and manufacturer part number on each source."
+    },
+    {
+      "field": "providerObservationFields",
+      "state": "unknown",
+      "reason": "Raw synthesized observations were not retained. Grounding paths are not their contents."
+    }
+  ],
+  "artifactValidation": {
+    "sourceCopiesMatchCapturedApplication": true,
+    "sourceHashesVerified": true,
+    "literalCitationOffsetsChecked": 31,
+    "syntheticTransformationsChecked": 6,
+    "networkRequestsForValidation": 0,
+    "oracleExecutedAgainstCandidate": false
+  }
+}

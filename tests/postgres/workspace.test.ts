@@ -17,7 +17,16 @@ import {
   migrationManifest,
 } from "../../src/server/migrations";
 import { defaultPreferences } from "../../src/domain/contracts";
-import type { ResearchTurns } from "../../src/domain/research";
+import type {
+  ApplicationTurnResponse,
+  ResearchTurns,
+} from "../../src/domain/research";
+import legacyCapture from "../fixtures/research-history/unversioned-application-response.json";
+import {
+  version2Response,
+  storedResearchTurn,
+  legacyBrowserResponse,
+} from "../fixtures/research-history/records";
 import {
   RETENTION_MS,
   workspaceBytes,
@@ -44,6 +53,7 @@ let hold: (() => void) | null = null;
 let started: (() => void) | null = null;
 let shouldHold = false;
 let resultSize = 0;
+let researchResult: unknown;
 let identities: {
   cookie: string;
   id: string;
@@ -63,6 +73,8 @@ const operation: ResearchTurns = {
       });
     }
     signal.throwIfAborted();
+    if (researchResult)
+      return structuredClone(researchResult) as ApplicationTurnResponse;
     return {
       kind: "message",
       message: "Local fixture research result",
@@ -175,6 +187,7 @@ beforeEach(async () => {
   shouldHold = false;
   calls = 0;
   resultSize = 0;
+  researchResult = undefined;
   logs = [];
   await pool.query("TRUNCATE shopping_workspace");
   for (const identity of identities) {
@@ -192,6 +205,202 @@ afterAll(async () => {
 });
 
 describe("PostgreSQL account workspace through HTTP cookies", () => {
+  async function seedLegacy(value: unknown = legacyCapture) {
+    const identity = identities[0];
+    await state(identity.cookie);
+    const row = (
+      await pool.query(
+        "SELECT data FROM shopping_workspace WHERE user_id = $1",
+        [identity.id],
+      )
+    ).rows[0].data;
+    row.turns = [storedResearchTurn(value)];
+    await pool.query(
+      "UPDATE shopping_workspace SET data = $2::jsonb WHERE user_id = $1",
+      [identity.id, JSON.stringify(row)],
+    );
+    return row;
+  }
+
+  it("preserves actual legacy bytes and new v2 evidence through commands, hydration and replay", async () => {
+    const { cookie, id } = identities[0];
+    const before = await seedLegacy();
+    const restored = await state(cookie);
+    expect(restored.workspace.turns).toEqual(before.turns);
+    expect(calls).toBe(0);
+    researchResult = version2Response;
+    const operationId = randomUUID();
+    const action = {
+      kind: "message" as const,
+      text: "headphones under SGD250",
+    };
+    const response = await command(
+      cookie,
+      restored.workspace.revision,
+      action,
+      operationId,
+    );
+    expect(response.status).toBe(200);
+    const saved = (await response.json()).workspace;
+    expect(saved.turns[0]).toEqual(before.turns[0]);
+    expect(saved.turns[1].body.value).toEqual(version2Response);
+    expect(saved.turns[1].body.value.research.products[0].price.quote).toBe(
+      "S$ 249 was S$ 349 SGD You Save S$ 100",
+    );
+    expect(saved.turns[1].body.value.research.products[1].facts).toEqual([]);
+    expect(saved.preferences.hard.budget.amount).toBe(250);
+    expect(saved.turns[0].body.value.preferences.hard.budget.amount).toBe(400);
+    expect((await state(cookie)).workspace).toEqual(saved);
+    expect(
+      (await command(cookie, restored.workspace.revision, action, operationId))
+        .status,
+    ).toBe(200);
+    expect(calls).toBe(1);
+    const ordinary = (
+      await (
+        await command(cookie, saved.revision, {
+          kind: "message",
+          text: "thanks",
+        })
+      ).json()
+    ).workspace;
+    expect(ordinary.turns.slice(0, 2)).toEqual(saved.turns);
+    expect(calls).toBe(1);
+    const stored = (
+      await pool.query(
+        "SELECT data FROM shopping_workspace WHERE user_id = $1",
+        [id],
+      )
+    ).rows[0].data;
+    expect(stored.turns[0]).toEqual(before.turns[0]);
+    expect(stored.turns[1].body.value).toEqual(version2Response);
+    expect((await state(identities[1].cookie)).workspace.turns).toEqual([]);
+  });
+
+  it.each([
+    { version: 3 },
+    { version: "2" },
+    { version: null },
+    { version: 2 },
+    { extra: "assessmentVersion" },
+  ])(
+    "rejects unreadable stored evidence without rewriting it %j",
+    async (change) => {
+      const bad = structuredClone(legacyBrowserResponse);
+      if ("version" in change)
+        Object.assign(bad.research, { evidenceVersion: change.version });
+      else Object.assign(bad.research, { assessmentVersion: 1 });
+      const before = await seedLegacy(bad);
+      expect((await state(identities[0].cookie)).status).toBe("unavailable");
+      expect(
+        (
+          await command(identities[0].cookie, 0, {
+            kind: "message",
+            text: "hello",
+          })
+        ).status,
+      ).toBe(503);
+      const after = (
+        await pool.query(
+          "SELECT data FROM shopping_workspace WHERE user_id = $1",
+          [identities[0].id],
+        )
+      ).rows[0].data;
+      expect(after).toEqual(before);
+      expect(calls).toBe(0);
+    },
+  );
+
+  it.each(["legacy", "malformed-v2"])(
+    "rejects a newly completed %s research response",
+    async (kind) => {
+      researchResult =
+        kind === "legacy"
+          ? legacyCapture
+          : {
+              ...legacyBrowserResponse,
+              research: {
+                ...legacyBrowserResponse.research,
+                evidenceVersion: 2,
+              },
+            };
+      const response = await command(identities[0].cookie, 0, {
+        kind: "message",
+        text: "headphones under SGD250",
+      });
+      const workspace = (await response.json()).workspace;
+      expect(workspace.turns[0].body).toEqual({
+        status: "interrupted",
+        reason: "failed",
+      });
+      expect(calls).toBe(1);
+    },
+  );
+
+  it("counts v2 identities and price quotes in canonical UTF-8 workspace limits and trims whole turns", async () => {
+    const large = structuredClone(version2Response);
+    if (large.kind !== "research")
+      throw new Error("Expected a research fixture");
+    const quote = "Automated fixture " + "😀".repeat(300);
+    large.research.sources = Array.from({ length: 5 }, (_, index) => ({
+      id: `large-${index}`,
+      title: "Automated fixture source",
+      url: `https://example.com/large-fixture-${index}`,
+      highlights: [quote, quote, quote],
+    }));
+    large.research.products = large.research.sources.map((source, index) => ({
+      id: `large-product-${index}`,
+      name: "Automated fixture product",
+      identity: { kind: "direct-model-statement", sourceId: source.id, quote },
+      facts: Array.from({ length: 3 }, () => ({ sourceId: source.id, quote })),
+      price: {
+        kind: "page-price-context-unverified",
+        sourceId: source.id,
+        quote,
+      },
+      stock: "unverified",
+      unresolvedConstraints: Array.from({ length: 16 }, () => "😀".repeat(90)),
+    }));
+    large.research.limitations = Array.from({ length: 12 }, () =>
+      "😀".repeat(150),
+    );
+    large.notes = Array.from({ length: 12 }, () => "😀".repeat(150));
+    large.research.grounding = Array.from({ length: 30 }, () => ({
+      field: "😀".repeat(120),
+      sourceIds: [],
+    }));
+    researchResult = large;
+    let revision = 0;
+    const ids: string[] = [];
+    for (let index = 0; index < 4; index++) {
+      const response = await command(identities[0].cookie, revision, {
+        kind: "message",
+        text: `headphones under SGD${250 + index}`,
+      });
+      expect(response.status).toBe(200);
+      const saved = (await response.json()).workspace;
+      revision = saved.revision;
+      ids.push(saved.turns.at(-1).id);
+      for (const turn of saved.turns)
+        expect(turn.body).toEqual({ status: "complete", value: large });
+    }
+    const data = (
+      await pool.query(
+        "SELECT data FROM shopping_workspace WHERE user_id = $1",
+        [identities[0].id],
+      )
+    ).rows[0].data;
+    expect(data.turns.length).toBeGreaterThan(0);
+    expect(data.turns.length).toBeLessThan(4);
+    expect(data.turns.map((turn: { id: string }) => turn.id)).toEqual(
+      ids.slice(-data.turns.length),
+    );
+    expect(Buffer.byteLength(JSON.stringify(data), "utf8")).toBeLessThanOrEqual(
+      WORKSPACE_LIMIT,
+    );
+    expect(calls).toBe(4);
+  });
+
   it("persists ordinary messages, questions and immutable preferences without provider work", async () => {
     const { cookie } = identities[0];
     const hello = await command(cookie, 0, { kind: "message", text: "hello" });

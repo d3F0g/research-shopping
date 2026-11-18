@@ -22,7 +22,7 @@ export const productResearchResponse = {
         {
           name: "Aster Wave 2",
           url: "https://reviews.example.com/aster-wave-2",
-          quotedFacts: [
+          identityQuote: null, quotedFacts: [
             "Aster Wave 2 uses Bluetooth wireless audio and active noise cancelling.",
             "Aster Wave 2 is a pair of wireless headphones.",
           ],
@@ -31,7 +31,7 @@ export const productResearchResponse = {
         {
           name: "Orbit Quiet",
           url: "https://reviews.example.com/orbit-quiet",
-          quotedFacts: ["Orbit Quiet supports wireless audio and multipoint.", "Orbit Quiet is a pair of wireless headphones."],
+          identityQuote: null, quotedFacts: ["Orbit Quiet supports wireless audio and multipoint.", "Orbit Quiet is a pair of wireless headphones."],
           priceQuote: "Orbit Quiet was listed at USD 179.00 when reviewed.",
         },
       ],

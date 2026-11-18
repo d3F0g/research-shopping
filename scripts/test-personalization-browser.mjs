@@ -30,16 +30,23 @@ try {
     ["--import", "tsx", "src/server/database-command.ts", "migrate"],
     env,
   );
-  await run(
-    process.execPath,
-    [
-      "node_modules/@playwright/test/cli.js",
-      "test",
-      "--config",
-      "playwright.personalization.config.ts",
-    ],
-    env,
-  );
+  for (const suite of ["accounts", "history"]) {
+    await run(
+      process.execPath,
+      [
+        "node_modules/@playwright/test/cli.js",
+        "test",
+        `${suite}.spec.ts`,
+        "--config",
+        "playwright.personalization.config.ts",
+        `--output=artifacts/personalization/playwright-${suite}`,
+      ],
+      {
+        ...env,
+        FIELDNOTE_TEST_LEDGER: join(directory, `${suite}-ledger.json`),
+      },
+    );
+  }
 } finally {
   await fixture.stop();
   await rm(directory, { recursive: true });
