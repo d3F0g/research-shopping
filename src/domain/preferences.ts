@@ -145,7 +145,7 @@ function interpretMessage(
   const text = message.trim();
   const help = normalized(text);
   if (
-    /^(?:how (?:does (?:this|fieldnote|this app) work|do i use (?:this|fieldnote|this app))|what can (?:you|fieldnote|this app) do|help(?: me use (?:this|fieldnote|this app))?|can you (?:place an order|buy (?:it|something) for me))$/.test(
+    /^(?:how (?:does (?:this|it|fieldnote|this app) work|do i use (?:this|fieldnote|this app))|what can (?:you|fieldnote|this app) do|help(?: me use (?:this|fieldnote|this app))?|can you (?:place an order|buy (?:it|something) for me))$/.test(
       help,
     )
   )
@@ -155,6 +155,25 @@ function interpretMessage(
       reply:
         "Describe what you are shopping for, your hard requirements and any flexible preferences. I compare source-based product evidence and explain unresolved tradeoffs. You can edit preferences or ask for a shorter reply. I provide source links; I do not place orders or verify merchant stock.",
     };
+  if (
+    /^(?:(?:what(?: is|'s)|show me|remind me of) my (?:(?:current|accepted|saved) )?(?:budget(?: range| limit)?|price range|(?:minimum|maximum) budget)|what (?:budget(?: range)?|price range) (?:did i set|have i set))$/.test(
+      help,
+    )
+  ) {
+    const budget = previous.budget;
+    const money = (value: number) =>
+      `${budget!.currency} ${value.toLocaleString("en-SG", { maximumFractionDigits: 2 })}`;
+    const reply = budget
+      ? budget.minimum === undefined
+        ? `Your accepted budget is up to ${money(budget.amount)}.`
+        : `Your accepted budget is ${money(budget.minimum)} to ${money(budget.amount)}.`
+      : "You do not have an accepted budget limit.";
+    return {
+      preferences: previous,
+      notes: [],
+      reply: `${reply}${previous.pendingChange ? " Your pending change has not been applied." : ""}`,
+    };
+  }
   if (
     /^(?:does (?:this|fieldnote|this app|a search|research) cost (?:money|anything)|is (?:this|fieldnote|this app|a search|research) free|how much does (?:this|fieldnote|this app|a search|research) cost|(?:do i|will i) (?:pay|be charged)(?: for (?:this|a search|research))?)$/.test(
       help,
