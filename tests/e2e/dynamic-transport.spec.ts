@@ -168,7 +168,10 @@ test("compares unfamiliar products and freeform criteria through the normal nati
   );
   native.answer.choice = {
     productId: product.id,
-    reasonIds: ["criterion-1", "budget"],
+    reasons: [
+      { kind: "criterion", criterionId: "criterion-1" },
+      { kind: "field", name: "budget" },
+    ],
   };
   const other = structuredClone(product);
   other.id = "synthetic-sol-arc-pro";

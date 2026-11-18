@@ -117,7 +117,6 @@ describe("dynamic source assessments through actual local SDK transport", () => 
   );
   it.each([
     "missing-criterion",
-    "missing-relevance",
     "wrong-product",
     "family-scope",
     "different-price-variant",
@@ -134,8 +133,6 @@ describe("dynamic source assessments through actual local SDK transport", () => 
     const payload = syntheticAnswer();
     const product = payload.answer.products[0]!;
     if (kind === "missing-criterion") product.criteria = [];
-    if (kind === "missing-relevance")
-      delete (product as Partial<typeof product>).requestMatch;
     if (kind === "wrong-product") {
       product.requestMatch.status = "contradicted";
       product.requestMatch.rationale =

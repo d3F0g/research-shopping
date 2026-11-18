@@ -14,6 +14,7 @@ import {
   syntheticIntent,
 } from "../fixtures/dynamic-research";
 import cases from "../fixtures/dynamic-correction.json";
+import { withCurrentChoiceProtocol } from "../fixtures/current-native-choice";
 import { research } from "../helpers/local-exa";
 
 const post = (app: ReturnType<typeof createApp>, value: unknown) =>
@@ -31,12 +32,27 @@ const prepare = (message: string, preferences: ShoppingIntent) => ({
 
 describe("independent correction reproductions", () => {
   it.each(cases.cases)(
-    "does not authorize a choice from $name",
+    "rejects the unchanged former native wire payload for $name",
     async ({ payload, sha256 }) => {
       expect(
         createHash("sha256").update(JSON.stringify(payload)).digest("hex"),
       ).toBe(sha256);
-      const result = await research(payload);
+      expect(await research(payload)).toMatchObject({
+        status: "unavailable",
+        reason: "invalid-response",
+      });
+    },
+  );
+  it.each(cases.cases)(
+    "does not authorize a choice from the current-wire derivative of $name",
+    async ({ payload, sha256 }) => {
+      const derived = withCurrentChoiceProtocol(payload);
+      expect(derived.answer.products).toEqual(payload.answer.products);
+      expect(derived.citations).toEqual(payload.citations);
+      expect(
+        createHash("sha256").update(JSON.stringify(payload)).digest("hex"),
+      ).toBe(sha256);
+      const result = await research(derived);
       expect(result.status).toBe("ready");
       if (result.status === "ready") expect(result.research.choice).toBeNull();
     },
@@ -58,8 +74,10 @@ describe("independent correction reproductions", () => {
     }
   });
   it("admits the actual current higher price only when the requested budget covers it", async () => {
-    const payload = structuredClone(
-      cases.cases.find((item) => item.name === "negated-page-price")!.payload,
+    const payload = withCurrentChoiceProtocol(
+      structuredClone(
+        cases.cases.find((item) => item.name === "negated-page-price")!.payload,
+      ),
     );
     const product = payload.answer.products[0]!;
     product.price.amount = 499;

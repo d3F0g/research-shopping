@@ -28,6 +28,10 @@ export const syntheticAssessment = (
   scope: "exact-variant" as "exact-variant" | "product-family" | "unclear",
   support: [{ url, quote }],
 });
+export type SyntheticChoiceReason =
+  | { kind: "field"; name: "identity" | "requestMatch" | "budget" | "price" }
+  | { kind: "criterion"; criterionId: string }
+  | { kind: "attribute"; name: string };
 export function syntheticAnswer() {
   const identity =
     "Aster Pure 30 white is an H13 air purifier for rooms up to 30 square metres.";
@@ -93,8 +97,11 @@ export function syntheticAnswer() {
       ],
       choice: {
         productId: "aster-pure",
-        reasonIds: ["criterion-1", "budget"],
-      } as { productId: string; reasonIds: string[] } | null,
+        reasons: [
+          { kind: "criterion", criterionId: "criterion-1" },
+          { kind: "field", name: "budget" },
+        ],
+      } as { productId: string; reasons: SyntheticChoiceReason[] } | null,
       limitations: [
         "Synthetic provider extraction for automated tests. No live product or price claim.",
       ],
