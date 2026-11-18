@@ -15,13 +15,13 @@ Do not use production credentials or an unrelated database. This feature does no
 The API development command reads `.env`. Database package commands require the settings in their environment and do not load that file implicitly. To run the migration command with the existing private file, use Node's environment-file support without printing its contents.
 
 ```sh
-node --env-file=.env --import tsx src/server/database-command.ts migrate
+NODE_ENV=development node --env-file=.env --import tsx src/server/database-command.ts migrate
 ```
 
 Run migrations only against the explicit owned development database. Restart the application afterward. Startup checks migration readiness; it does not create tables. Cleanup uses the same explicit environment.
 
 ```sh
-node --env-file=.env --import tsx src/server/database-command.ts cleanup
+NODE_ENV=development node --env-file=.env --import tsx src/server/database-command.ts cleanup
 ```
 
 ## Account and data behavior
