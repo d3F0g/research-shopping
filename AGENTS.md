@@ -51,7 +51,7 @@ Chat acceptance includes first-visit dark mode, light/dark persistence after ref
 
 The user authorizes fully autonomous routine development and GitHub PR merging for this repository. The orchestrator may merge completed PRs without asking for approval when every gate below passes. This standing authorization supersedes earlier project run notes that prohibited merging.
 
-Exception for the chat-first redesign tracked in issue #30. Open a new PR with passing checks and desktop/mobile screenshots, then wait for the user to review those screenshots and confirm the design direction. Do not merge or enable auto-merge before that explicit confirmation. After visual approval, the normal merge gates below apply.
+The user approved the chat-first design in PR #33. That task-specific screenshot-approval gate is satisfied. Return to fully autonomous development and merge completed PRs after the gates below pass. Request approval only for production deployments, sensitive operations, or a design-review milestone the user explicitly designates. Routine frontend work still requires independent visual QA and screenshots, but does not require another human design approval unless designated.
 
 1. All required CI checks pass on the current candidate. Inspect actual workflow results and required status checks. A missing required check is a blocker. A docs-only PR with no configured required checks must record that fact rather than claim CI ran.
 2. Independent QA and security reviews pass for each PR. Reviewers must not have authored the change. Record the reviewed base, head, scope, commands, and verdict. Application changes require actual runtime verification; frontend changes also require desktop and mobile visual QA.

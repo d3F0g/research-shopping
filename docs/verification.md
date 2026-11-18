@@ -4,7 +4,7 @@
 
 The chat-first application source at db4d800 passed independent 167 unit/API tests, typecheck/build and 43 browser journeys. The source is identical in integrated 99a0913, where the updated helper also passed from a clean checkout with owned-server cleanup. Independent security passed 167 unit/API tests, build, 20 targeted browser journeys and four additional hostile-input/storage probes. These are local review results; the new PR checks establish its hosted result.
 
-See the [screenshot gallery](../artifacts/chat-first/gallery.md), [source manifest](../artifacts/chat-first/application/manifest.json) and [current verification record](../.codex/pstack-runs/chat-first/verification.md). The screenshot-approval gate remains mandatory before merge. The full audit currently reports 12 inherited high tooling findings tracked in issue #27; the older zero-audit rows below are historical results.
+See the [screenshot gallery](../artifacts/chat-first/gallery.md), [source manifest](../artifacts/chat-first/application/manifest.json) and [current verification record](../.codex/pstack-runs/chat-first/verification.md). The user approved PR #33's design, satisfying its screenshot-review gate. The full audit currently reports 12 inherited high tooling findings tracked in issue #27; the older zero-audit rows below are historical results.
 
 ## Initial milestone history
 

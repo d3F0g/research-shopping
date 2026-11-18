@@ -41,7 +41,7 @@ The workflow in [`.github/workflows/ci.yml`](.github/workflows/ci.yml) runs auto
 
 ## Frontend standard
 
-The conversation uses official shadcn/ui and AI Elements patterns with retained messages, contextual preference cards, a bottom composer, centralized themes, local Geist typography, concise product rows, expandable comparisons, safe citations and actual recorded provider outcomes. See [frontend architecture and provenance](docs/frontend-standard.md) and the [desktop/mobile screenshot gallery](artifacts/chat-first/gallery.md). The redesign PR requires user screenshot review and design confirmation before merge.
+The conversation uses official shadcn/ui and AI Elements patterns with retained messages, contextual preference cards, a bottom composer, centralized themes, local Geist typography, concise product rows, expandable comparisons, safe citations and actual recorded provider outcomes. See [frontend architecture and provenance](docs/frontend-standard.md) and the [desktop/mobile screenshot gallery](artifacts/chat-first/gallery.md). The user approved PR #33's design. Routine changes follow the autonomous merge gates in AGENTS.md; future human design reviews require an explicitly designated milestone.
 
 ## Exa web context
 

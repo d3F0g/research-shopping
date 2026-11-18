@@ -51,7 +51,7 @@ Use real fixture responses for the core shopping journey. Inject failures or sou
 
 Keep `proof.json`, `server.log`, `trace.zip` and screenshots together. Require `result: passed` and `cleanup: true`. Inspect the actual images for contrast, clipping, density, conversational structure and composer placement. Passing overflow assertions or a build cannot establish visual quality.
 
-Independent visual QA judges the rendered interface against the chat-first brief. For the issue #30 redesign, that verdict does not replace the user's required screenshot review and design confirmation before merge. Follow the task-specific gate in AGENTS.md.
+Independent visual QA judges the rendered interface against the chat-first brief. The user approved PR #33's design, satisfying issue #30's screenshot-review milestone. Routine PRs return to autonomous merging after CI, independent QA/security and repository policies pass. Request design approval only for a milestone the user explicitly designates. Follow AGENTS.md for production deployments and sensitive operations.
 
 ## Clean up owned work
 

@@ -4,7 +4,7 @@ This redesign replaces the dashboard with a conversation. First visits are dark.
 
 The actual application screenshots below use the source recorded in [the manifest](application/manifest.json). They are fixture journeys, not live price or stock verification. Desktop images are 1440×900; mobile images are 390×844. The theme uses the official Vite provider pattern and the existing official shadcn/ui and AI Elements components.
 
-The PR stays unmerged until you review these screenshots and confirm the design direction. [Independent review reports and raw logs](reviews/README.md) accompany the gallery.
+The user reviewed these screenshots and approved the design in PR #33. Its visual-approval milestone is satisfied; the normal CI, independent QA/security and repository merge gates still apply. [Independent review reports and raw logs](reviews/README.md) accompany the gallery.
 
 ## Required states
 

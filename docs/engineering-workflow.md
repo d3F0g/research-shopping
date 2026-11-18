@@ -8,7 +8,7 @@ The installed pstack role settings in `~/.codex/pstack-models.md` guide this run
 
 ## Loop
 
-The chat-first redesign in issue #30 has an explicit user visual-approval gate. Deliver a new PR with passing CI, independent reviews and inspected desktop/mobile screenshots. Keep the PR open and auto-merge disabled until the user confirms the design direction after reviewing those screenshots. This task-specific gate takes precedence over routine autonomous merging. Normal merge rules resume after that confirmation.
+The user approved the chat-first design in PR #33, satisfying issue #30's visual-approval milestone. Routine development now proceeds autonomously through implementation, independent QA/security, CI and merge. Request approval only for production deployments, sensitive operations or explicitly designated design-review milestones. A future milestone pauses merging only when the user designates it; ordinary frontend work retains independent visual QA and screenshot requirements.
 
 1. Plan a checkable behavior and name its data shape.
 2. Delegate to an owner with exact worktree, branch, paths, and success evidence.

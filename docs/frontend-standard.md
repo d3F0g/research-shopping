@@ -34,6 +34,6 @@ Run the project [verification skill](../.agents/skills/verify-research-shopping/
 
 Independent visual QA must judge the rendered layout against the chat-first brief. A test pass cannot approve the old dashboard composition. Preserve existing behavior and security assertions when adapting selectors.
 
-For the issue #30 redesign, user screenshot review and design confirmation are mandatory before merge. Keep its PR open and auto-merge disabled until that confirmation. The routine merge gates still apply afterward.
+The user approved the issue #30 design in PR #33. Its screenshot-review milestone is satisfied. Future routine frontend PRs merge autonomously after CI, independent visual QA, security verification and repository policies pass. Request human design approval only for a milestone the user explicitly designates. Production deployments and sensitive operations retain their separate approval requirements.
 
 Historical frontend evidence is retained under artifacts/frontend-standard. Those runs describe older candidates and do not establish acceptance of this redesign. The inherited picomatch advisory remains tracked in [issue #27](https://github.com/d3F0g/research-shopping/issues/27). Earlier zero-audit records are historical results.
