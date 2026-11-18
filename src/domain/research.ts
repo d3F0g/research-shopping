@@ -91,7 +91,7 @@ export const ConditionalChoiceSchema = z.strictObject({
     .array(
       z.strictObject({
         assessmentId: z.string().min(1).max(100),
-        explanation: z.string().min(1).max(400),
+        explanation: AssessmentSchema.shape.rationale,
       }),
     )
     .min(1)
@@ -459,10 +459,7 @@ export function assessResearch(
             .slice(0, 4)
             .map((id) => ({
               assessmentId: id,
-              explanation: choiceAssessment(
-                selected.product,
-                id,
-              )!.rationale.slice(0, 400),
+              explanation: choiceAssessment(selected.product, id)!.rationale,
             })),
           caveat:
             "Source-based AI interpretation. Confirm the exact variant, all price conditions and current merchant stock before buying.",
