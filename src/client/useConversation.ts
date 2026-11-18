@@ -5,9 +5,12 @@ import {
   type Currency,
   type IntentEdit,
   type ShoppingIntent,
-  type TurnRequest,
+  type PrepareTurnRequest,
 } from "../domain/contracts";
-import type { ApplicationTurnResponse } from "../domain/research";
+import type {
+  ApplicationTurnResponse,
+  PreparedTurnResponse,
+} from "../domain/research";
 import { runTurn } from "./api";
 
 type TurnBody =
@@ -15,12 +18,13 @@ type TurnBody =
   | { status: "pending"; key: number }
   | { status: "complete"; value: ApplicationTurnResponse }
   | { status: "failed"; message: string };
-export type RequestSnapshot = Omit<TurnRequest, "operationId">;
+export type RequestSnapshot = Omit<PrepareTurnRequest, "phase" | "operationId">;
 export type ConversationTurn = {
   id: string;
   request: RequestSnapshot;
   message: string;
   body: TurnBody;
+  prepared: PreparedTurnResponse | null;
 };
 export type CriterionDraft = {
   id: string | null;
@@ -50,7 +54,7 @@ export type ConversationCommand =
   | { type: "draft"; value: string }
   | { type: "submit"; message?: string }
   | { type: "reply"; origin: string; message: string }
-  | { type: "stop" | "reset" }
+  | { type: "stop" | "reset" | "resolve-pending" | "discard-pending" }
   | {
       type: "retry" | "skip-budget" | "open-editor" | "compare";
       origin: string;
@@ -130,8 +134,36 @@ export function useConversation() {
       ),
     });
     try {
-      const value = await runTurn(request, pending.controller.signal);
+      const operationId = crypto.randomUUID();
+      let prepared = current.current.turns.find(
+        (turn) => turn.id === id,
+      )!.prepared;
+      let value =
+        prepared ??
+        (await runTurn(
+          { phase: "prepare", ...request, operationId },
+          pending.controller.signal,
+        ));
       if (task.current?.key !== pending.key) return;
+      if (value.kind === "prepared") {
+        prepared = value;
+        commit({
+          ...current.current,
+          preferences: prepared.preferences,
+          turns: current.current.turns.map((turn) =>
+            turn.id === id ? { ...turn, prepared } : turn,
+          ),
+        });
+        value = await runTurn(
+          { phase: "research", preferences: prepared.preferences, operationId },
+          pending.controller.signal,
+        );
+        if (task.current?.key !== pending.key) return;
+        if (value.kind === "prepared")
+          throw new Error(
+            "The research service returned an unreadable result.",
+          );
+      }
       task.current = null;
       commit({
         ...current.current,
@@ -183,7 +215,13 @@ export function useConversation() {
       ...current.current,
       turns: [
         ...current.current.turns,
-        { id, request, message: message.trim(), body: { status: "cancelled" } },
+        {
+          id,
+          request,
+          message: message.trim(),
+          body: { status: "cancelled" },
+          prepared: null,
+        },
       ],
       draft: "",
       editor: null,
@@ -209,6 +247,22 @@ export function useConversation() {
       case "skip-budget":
         if (snapshot.activeTurnId === command.origin)
           submit("Skip the budget for now", { skipBudget: true });
+        return;
+      case "resolve-pending":
+        if (!snapshot.preferences.pendingChange) return;
+        cancel();
+        commit({
+          ...current.current,
+          draft: snapshot.preferences.pendingChange.message,
+          editor: null,
+          retryTurnId: null,
+        });
+        return;
+      case "discard-pending":
+        if (snapshot.preferences.pendingChange)
+          submit("Discard the pending change", {
+            edit: { kind: "discard-pending" },
+          });
         return;
       case "stop":
         cancel();

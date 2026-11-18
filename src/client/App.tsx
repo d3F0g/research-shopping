@@ -1,7 +1,7 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ArrowUp, Moon, Plus, Square, Sun } from "lucide-react";
 import { LiveResearchResults } from "./LiveResearchResults";
-import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Bubble, BubbleContent } from "@/components/ui/bubble";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -32,6 +32,7 @@ import { useConversation } from "./useConversation";
 
 export function App() {
   const chat = useConversation();
+  const composerRef = useRef<HTMLTextAreaElement>(null);
   const [fixtureMode, setFixtureMode] = useState(false);
   useEffect(() => {
     const controller = new AbortController();
@@ -60,8 +61,49 @@ export function App() {
         chat.send({ type: "submit" });
       }}
     >
+      {chat.preferences.pendingChange && (
+        <Alert className="pending-change" role="status">
+          <AlertTitle>Resolve this change before researching</AlertTitle>
+          <AlertDescription>
+            <p className="pending-change-preview">
+              {chat.preferences.pendingChange.message}
+            </p>
+            <Collapsible>
+              <CollapsibleTrigger
+                render={<Button type="button" variant="ghost" size="sm" />}
+              >
+                Review pending change
+              </CollapsibleTrigger>
+              <CollapsibleContent className="pending-change-details">
+                <p>{chat.preferences.pendingChange.explanation}</p>
+                <p>{chat.preferences.pendingChange.message}</p>
+              </CollapsibleContent>
+            </Collapsible>
+            <div className="pending-change-actions">
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => {
+                  chat.send({ type: "resolve-pending" });
+                  composerRef.current?.focus();
+                }}
+              >
+                Resolve change
+              </Button>
+              <Button
+                type="button"
+                variant="ghost"
+                onClick={() => chat.send({ type: "discard-pending" })}
+              >
+                Discard pending change
+              </Button>
+            </div>
+          </AlertDescription>
+        </Alert>
+      )}
       <InputGroup className="prompt-input">
         <InputGroupTextarea
+          ref={composerRef}
           aria-label="Message"
           value={chat.draft}
           maxLength={2000}

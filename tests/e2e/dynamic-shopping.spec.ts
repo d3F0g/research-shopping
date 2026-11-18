@@ -1,5 +1,8 @@
 import { expect, test, type Page } from "@playwright/test";
-import { defaultIntent, type TurnRequest } from "../../src/domain/contracts";
+import {
+  defaultIntent,
+  type PrepareTurnRequest as TurnRequest,
+} from "../../src/domain/contracts";
 import { syntheticComparison } from "./support/dynamic-fixture";
 
 function response(research = syntheticComparison()) {
@@ -704,4 +707,127 @@ test("submits with Enter, retains Shift+Enter newlines and scrolls history witho
   expect(
     await page.evaluate(() => document.body.scrollWidth),
   ).toBeLessThanOrEqual(390);
+});
+
+test("keeps pending-change controls and composer usable on short mobile screens with long invalid wording", async ({
+  page,
+}, testInfo) => {
+  await fixtureHealth(page);
+  const pending = {
+    message: `under 200CHF ${"with an unresolved qualifier ".repeat(55)}`,
+    reason: "currency" as const,
+    explanation:
+      "This synthetic invalid currency change is unresolved. Choose SGD or USD, or explicitly discard this change.",
+  };
+  const preferences = {
+    ...syntheticComparison().intent,
+    pendingChange: pending,
+  };
+  let calls = 0;
+  await page.route("**/api/turn", (route) => {
+    calls++;
+    const incoming = route.request().postDataJSON() as TurnRequest;
+    return route.fulfill({
+      json:
+        incoming.edit?.kind === "discard-pending"
+          ? {
+              responseVersion: 3,
+              kind: "message",
+              preferences: { ...preferences, pendingChange: null },
+              notes: [],
+              message: "Synthetic pending change explicitly discarded.",
+            }
+          : {
+              responseVersion: 3,
+              kind: "clarification",
+              preferences,
+              notes: [],
+              reason: "currency",
+              message: pending.explanation,
+            },
+    });
+  });
+  await page.setViewportSize({ width: 390, height: 600 });
+  await page.goto("/");
+  await send(page, pending.message);
+  await expect(
+    page.getByRole("button", { name: "Resolve change", exact: true }),
+  ).toBeInViewport();
+  await expect(
+    page.getByRole("button", { name: "Discard pending change", exact: true }),
+  ).toBeInViewport();
+  await expect(page.getByLabel("Message", { exact: true })).toBeInViewport();
+  await page
+    .getByRole("button", { name: "Review pending change", exact: true })
+    .click();
+  await expect(page.getByLabel("Message", { exact: true })).toBeInViewport();
+  expect(
+    await page.evaluate(() => document.body.scrollWidth),
+  ).toBeLessThanOrEqual(390);
+  await page.screenshot({
+    path: testInfo.outputPath("long-pending-mobile.png"),
+    animations: "disabled",
+  });
+  await page
+    .getByRole("button", { name: "Resolve change", exact: true })
+    .click();
+  await expect(page.getByLabel("Message", { exact: true })).toHaveValue(
+    pending.message,
+  );
+  expect(calls).toBe(1);
+  await page
+    .getByRole("button", { name: "Discard pending change", exact: true })
+    .click();
+  await expect(page.locator(".pending-change")).toHaveCount(0);
+  expect(calls).toBe(2);
+});
+
+test("does not accept a stale prepared intent or start research after its generation was cancelled", async ({
+  page,
+}) => {
+  await fixtureHealth(page);
+  const requests: Record<string, unknown>[] = [];
+  let release: (() => void) | undefined;
+  await page.route("**/api/turn", async (route) => {
+    requests.push(route.request().postDataJSON());
+    if (requests.length === 1) {
+      await new Promise<void>((resolve) => {
+        release = resolve;
+      });
+      await route
+        .fulfill({
+          json: {
+            kind: "prepared",
+            preferences: syntheticComparison().intent,
+            notes: [],
+          },
+        })
+        .catch(() => undefined);
+    } else
+      await route.fulfill({
+        json: {
+          responseVersion: 3,
+          kind: "message",
+          message: "Synthetic ordinary acknowledgment.",
+          preferences: defaultIntent(),
+          notes: [],
+        },
+      });
+  });
+  await page.goto("/");
+  await send(page, "Exclude Stale Brand");
+  await expect.poll(() => requests.length).toBe(1);
+  await page.getByLabel("Message", { exact: true }).fill("Thanks");
+  release!();
+  await expect(
+    page.getByText("Response stopped.", { exact: true }),
+  ).toBeVisible();
+  await page.getByRole("button", { name: "Send message", exact: true }).click();
+  await expect(
+    page.getByText("Synthetic ordinary acknowledgment."),
+  ).toBeVisible();
+  expect(requests).toHaveLength(2);
+  expect(requests[1].phase).toBe("prepare");
+  expect(requests[1].preferences).toEqual(defaultIntent());
+  await expect(page.getByRole("article")).toHaveCount(0);
 });

@@ -911,3 +911,27 @@ button {
     gap: 0 8px;
   }
 }
+.pending-change {
+  margin-bottom: 10px;
+  padding: 12px;
+  max-height: 40dvh;
+  overflow-y: auto;
+}
+.pending-change-preview {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  overflow-wrap: anywhere;
+}
+.pending-change-details {
+  overflow-wrap: anywhere;
+}
+.pending-change-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 8px;
+}
+.pending-change-actions button {
+  white-space: normal;
+}
