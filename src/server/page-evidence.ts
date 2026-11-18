@@ -207,7 +207,7 @@ function headingKind(text: string): "section" | "context-heading" | "boundary" |
   return isModelLabel(label) ? "boundary" : "context-heading";
 }
 
-function completion(context: HighlightContext, start: number, end: number, role: "identity" | "heading" | "content", name: string | null): Completion {
+function completion(context: HighlightContext, start: number, end: number, role: "identity" | "heading" | "section" | "content", name: string | null): Completion {
   const text = cleanText(context.item.text.slice(start, end));
   if (/[.!?]$/.test(text)) return { completion: "complete" };
   const rest = context.item.text.slice(end);
@@ -217,6 +217,7 @@ function completion(context: HighlightContext, start: number, end: number, role:
   const lineEnd = context.item.text.indexOf("\n", nextStart);
   const nextLine = context.item.text.slice(nextStart, lineEnd < 0 ? context.item.text.length : lineEnd);
   const boundary = context.boundaries.find((candidate) => candidate.start === nextStart);
+  if (boundary?.kind === "gap") return { completion: role === "section" || contextPrice.test(text) ? "complete" : "open" };
   const newline = /^[ \t]*\n/.test(rest);
   const namedRecord = name !== null && (namedPredicate(name, nextLine) !== null
     || new RegExp(`^(?:The )?${escapeRegex(name)}\\s+.+[.!?]$`, "i").test(nextLine));
@@ -225,9 +226,8 @@ function completion(context: HighlightContext, start: number, end: number, role:
   const nextRecord = fieldRecord.test(nextLine) || pricePart.test(nextLine) || namedRecord || scopedRecord;
   if (role !== "content") {
     if (boundary?.kind === "selector" || priceRecordStart.test(nextLine)) return { completion: "complete" };
-    if (boundary?.kind === "heading" || newline && (role === "heading" || boundary || nextRecord)) return { completion: "complete" };
+    if (boundary?.kind === "heading" || newline && (role === "heading" || role === "section" || boundary || nextRecord)) return { completion: "complete" };
   }
-  if (contextPrice.test(text) && boundary?.kind === "gap") return { completion: "complete" };
   const structured = attributeLabel.test(text) || pricePart.test(text) || contextPrice.test(text);
   if (structured && newline && (boundary || nextRecord)) return { completion: "complete" };
   return { completion: "open" };
@@ -300,7 +300,7 @@ function sourceContext(source: Source, sourceId: string, native: readonly Native
       const scope = local.find((scope) => start >= scope.identityEnd && end <= scope.end) ?? null;
       const heading = headingKind(text);
       const model = !heading && !pricePart.test(text) && !priceCondition.test(text) && isModelLabel(text);
-      const state: Completion = identity ? { completion: "complete" } : completion(highlightContext, start, end, heading || model ? "heading" : "content", scope?.name ?? null);
+      const state: Completion = identity ? { completion: "complete" } : completion(highlightContext, start, end, heading === "section" ? "section" : heading || model ? "heading" : "content", scope?.name ?? null);
       const marker = boundaries.find((boundary) => boundary.start === start && boundary.kind !== "heading");
       const isBoundary = marker && (marker.kind === "gap" || marker.kind === "selector" || state.completion === "complete")
         || !identity && state.completion === "complete" && (model || heading === "boundary");
