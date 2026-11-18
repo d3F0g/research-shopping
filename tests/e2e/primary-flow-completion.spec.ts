@@ -79,6 +79,35 @@ test("discloses paid submission and completes server-ranked shopping with local 
       "Tradeoffs and unknowns",
     );
     await expect(shopping).not.toContainText("criterion-2");
+    const firstCard = shopping.getByRole("article").first();
+    await expect(firstCard.locator(".attribute-preview")).toContainText(
+      "Its stated coverage is up to 30 square metres; actual conditions may differ.",
+    );
+    await expect(firstCard.locator(".attribute-preview")).toBeVisible();
+    for (const label of [
+      "Product identity",
+      "Match to your request",
+      "Observed price",
+      "Observed budget comparison",
+    ]) {
+      await expect(
+        firstCard
+          .locator(".compact-assessments dt")
+          .getByText(label, { exact: true }),
+      ).toHaveCount(0);
+    }
+    await expect(shopping.locator(".answer-first")).not.toContainText(
+      "Order reflects",
+    );
+    await shopping
+      .getByRole("button", { name: "Research limits", exact: true })
+      .click();
+    await expect(
+      shopping.getByText(/Order reflects hard eligibility/),
+    ).toBeVisible();
+    await shopping
+      .getByRole("button", { name: "Research limits", exact: true })
+      .click();
     await shopping
       .getByRole("button", { name: "Evidence and limits", exact: true })
       .first()

@@ -50,6 +50,32 @@ function comparison(coverage: number[][]) {
 }
 
 describe("server-owned evidence coverage", () => {
+  it("keeps at most two complete qualified reasons in the answer and moves ordering detail to limits", async () => {
+    const payload = syntheticAnswer();
+    const product = payload.answer.products[0]!;
+    const qualified =
+      "The washable prefilter meets your requirement, provided you choose the white variant; the source does not establish this for other variants.";
+    const lengthy = `The observed SGD 249 fits the requested limit. ${"Delivery and installation terms require confirmation. ".repeat(5)}This price applies only to one white unit.`;
+    product.criteria[0]!.assessment.rationale = qualified;
+    product.budget.rationale = lengthy;
+    payload.answer.choice!.reasons.push(
+      { kind: "field", name: "identity" },
+      { kind: "field", name: "requestMatch" },
+    );
+    const result = await research(payload);
+    expect(result.status).toBe("ready");
+    if (result.status !== "ready") return;
+    expect(result.research.summary).toBe(
+      `My conditional choice is Aster Pure 30. ${qualified} ${product.identity.rationale}`,
+    );
+    expect(result.research.summary).not.toContain("Order reflects");
+    expect(result.research.limitations).toContainEqual(
+      expect.stringContaining("Order reflects"),
+    );
+    expect(result.research.choice?.reasons).toHaveLength(4);
+    expect(result.research.products[0]!.budget?.rationale).toBe(lengthy);
+  });
+
   it("derives a sole eligible choice when the native hint is absent", async () => {
     const payload = syntheticAnswer();
     payload.answer.choice = null;

@@ -309,7 +309,16 @@ export function LiveResearchResults({
                 {"explanation" in product && product.explanation ? (
                   <div className="assessment-summary">
                     {(["reasons", "tradeoffs"] as const).map((kind) => {
-                      const ids = product.explanation![kind];
+                      const ids = product.explanation![kind].filter(
+                        (id) =>
+                          kind === "tradeoffs" ||
+                          product.criteria.some(
+                            (criterion) => criterion.criterionId === id,
+                          ) ||
+                          product.attributes.some(
+                            (attribute) => `attribute:${attribute.name}` === id,
+                          ),
+                      );
                       if (!ids.length) return null;
                       const rows = assessments(product, research);
                       return (
@@ -322,11 +331,28 @@ export function LiveResearchResults({
                           <dl className="compact-assessments">
                             {ids.map((id) => {
                               const row = rows.find((row) => row.id === id)!;
+                              const attribute = product.attributes.some(
+                                (attribute) =>
+                                  `attribute:${attribute.name}` === id,
+                              );
                               return (
-                                <div key={id}>
+                                <div
+                                  key={id}
+                                  className={
+                                    attribute ? "attribute-preview" : undefined
+                                  }
+                                >
                                   <dt>{row.label}</dt>
                                   <dd>
                                     <Status assessment={row.assessment} />
+                                    {attribute &&
+                                      row.assessment.status === "supported" &&
+                                      row.assessment.scope ===
+                                        "exact-variant" && (
+                                        <span className="assessment-preview">
+                                          {row.assessment.rationale}
+                                        </span>
+                                      )}
                                   </dd>
                                 </div>
                               );

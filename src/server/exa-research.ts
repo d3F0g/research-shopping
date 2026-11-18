@@ -567,6 +567,7 @@ function projectAnswer(raw: unknown, intent: ShoppingIntent) {
     sources,
     limitations: [
       "Assessments are source-based AI interpretations. Literal quotations establish provenance, not semantic verification. Prices are page observations; current stock, delivery and merchant offers remain unverified.",
+      "Order reflects hard eligibility, exact request match and source-supported preferences. Original order within tied evidence tiers does not imply superiority.",
       ...extracted.data.limitations,
     ],
     requestId: parsed.data.requestId ?? "",

@@ -468,14 +468,20 @@ export function assessResearch(
             "Source-based AI interpretation. Confirm the exact variant, all price conditions and current merchant stock before buying.",
         }
     : null;
-  const ordering =
-    "Order reflects hard eligibility, exact request match and source-supported preferences. Original order within tied evidence tiers does not imply superiority.";
+  const conciseReasons =
+    choice && selected
+      ? choice.reasons
+          .map(
+            (reason) =>
+              choiceAssessment(selected.product, reason.assessmentId)!
+                .rationale,
+          )
+          .filter((rationale) => rationale.length <= 240)
+          .slice(0, 2)
+      : [];
   const summary =
     choice && selected
-      ? `My conditional choice is ${selected.product.name}. ${strongest.length > 1 ? "The strongest options are tied on preference evidence; this choice uses the source-based research suggestion. " : ""}${choice.reasons.map((reason) => reason.explanation).join(" ")}`.slice(
-          0,
-          900,
-        )
+      ? `My conditional choice is ${selected.product.name}. ${strongest.length > 1 ? "The strongest options are tied on preference evidence; this choice uses the source-based research suggestion. " : ""}${conciseReasons.join(" ")}`.trim()
       : !strongest.length
         ? "I could not establish an option that meets every hard requirement. Compare the sourced assessments and check the unresolved details before choosing."
         : hint.status === "invalid"
@@ -484,6 +490,6 @@ export function assessResearch(
   return {
     products: tiers.flat().map((candidate) => candidate.product),
     choice,
-    summary: `${summary} ${ordering}`,
+    summary,
   };
 }
