@@ -6,13 +6,13 @@ import {
   type Preferences,
   type ProductId,
   type SelectionResult,
-  type TurnResponse,
 } from "../domain/contracts";
 import {
   conversationalReply,
   updatePreferences,
   validBudgetAmount,
 } from "../domain/preferences";
+import type { ApplicationTurnResponse as TurnResponse } from "../domain/research";
 import type { WebResearchResponse } from "../domain/web-research";
 import { researchShortlist, runTurn, selectProduct } from "./api";
 import { featureOptions, priorityOptions } from "./preference-options";

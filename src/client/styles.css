@@ -752,3 +752,25 @@ button {
     transition-duration: 0.01ms !important;
   }
 }
+
+.live-research .observed-price {
+  margin-block: 12px;
+  font-size: 13px;
+  line-height: 1.6;
+}
+.live-research .observed-price p {
+  margin-top: 6px;
+}
+.live-research .research-preview {
+  margin-block: 12px;
+}
+.live-research :is(blockquote, .observed-price p, .web-research-highlights, td) {
+  overflow-wrap: anywhere;
+}
+.live-research .research-card > [data-slot="card-content"] > .source-link {
+  margin-top: 10px;
+  min-height: 40px;
+}
+.live-research .research-sources {
+  margin-top: 16px;
+}

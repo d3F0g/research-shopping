@@ -1,4 +1,7 @@
 import { randomUUID } from "node:crypto";
+import { z } from "zod";
+import { ApplicationTurnResponseSchema, type ResearchTurns } from "../domain/research";
+import { createResearchTurns } from "./research-turns";
 import { Hono } from "hono";
 import {
   BudgetSchema, PreferencesSchema, SelectionRequestSchema, SelectionResultSchema,
@@ -13,14 +16,13 @@ import type { ProviderEvent, Providers } from "../domain/providers";
 import { catalog } from "../domain/catalog";
 import { validBudgetAmount } from "../domain/preferences";
 import { createShoppingEngine } from "../domain/shopping";
-import { createFixtureProviders } from "./fixtures";
 import { resolveServerConfig, type ServerConfig } from "./config";
 
 const PreferenceInput = PreferencesSchema.extend({
   hard: PreferencesSchema.shape.hard.extend({ budget: BudgetSchema.strict().refine((budget) => validBudgetAmount(budget.amount)).nullable() }).strict(),
   soft: PreferencesSchema.shape.soft.strict(),
 }).strict();
-const TurnInput = TurnRequestSchema.extend({ preferences: PreferenceInput }).strict();
+const TurnInput = TurnRequestSchema.extend({ preferences: PreferenceInput, operationId: z.string().uuid().optional() }).strict();
 const SelectionInput = SelectionRequestSchema.extend({ preferences: PreferenceInput }).strict();
 const WebResearchInput = ShortlistResearchRequestSchema.extend({ preferences: PreferenceInput }).strict();
 const MAX_BODY_BYTES = 16_384;
@@ -33,6 +35,9 @@ export type RequestLog = {
   outcomes: ProviderEvent[];
 };
 export type AppDependencies = {
+  mode?: "research" | "test-fixture";
+  researchTurns?: ResearchTurns;
+  researchAvailable?: boolean;
   providers?: Providers;
   providerTimeoutMs?: number;
   webResearch?: WebResearchOperation;
@@ -41,7 +46,10 @@ export type AppDependencies = {
 
 export function createApp(dependencies: AppDependencies = {}, configuration: Partial<ServerConfig> = {}) {
   const config = resolveServerConfig(configuration);
-  const providers = dependencies.providers ?? createFixtureProviders();
+  const fixtureMode = dependencies.mode === "test-fixture";
+  const providers = fixtureMode ? dependencies.providers : undefined;
+  if (fixtureMode && !providers) throw new Error("Test fixture providers must be supplied explicitly");
+  const researchTurns = dependencies.researchTurns ?? createResearchTurns({});
   const hosts = new Set([config.apiPort, config.webPort].flatMap((port) => [`127.0.0.1:${port}`, `localhost:${port}`]));
   const origins = new Set([...hosts].map((host) => `http://${host}`));
   const app = new Hono<{ Variables: { requestId: string; outcomes: ProviderEvent[]; payload: unknown } }>();
@@ -118,13 +126,19 @@ export function createApp(dependencies: AppDependencies = {}, configuration: Par
 
   app.get("/api/health", (context) => context.json({
     status: "ok",
-    mode: "fixture",
-    liveIntegrations: Boolean(dependencies.webResearch),
-    webResearch: dependencies.webResearch ? "enabled" : "disabled",
+    mode: fixtureMode ? "fixture" : "research",
+    liveIntegrations: fixtureMode ? Boolean(dependencies.webResearch) : (dependencies.researchAvailable ?? Boolean(dependencies.researchTurns)),
+    webResearch: fixtureMode && dependencies.webResearch ? "enabled" : "disabled",
+    ...(!fixtureMode ? { merchantVerification: "unavailable" } : {}),
   }));
   app.post("/api/turn", async (context) => {
     const parsed = TurnInput.safeParse(context.get("payload"));
     if (!parsed.success) return context.json({ error: "Invalid JSON or request fields", requestId: context.get("requestId") }, 400);
+    if (!fixtureMode || !providers) {
+      if (!parsed.data.operationId) return context.json({ error: "A research operation ID is required", requestId: context.get("requestId") }, 400);
+      const result = await researchTurns.turn({ ...parsed.data, operationId: parsed.data.operationId }, context.req.raw.signal);
+      return context.json(ApplicationTurnResponseSchema.parse(result));
+    }
     const engine = createShoppingEngine(providers, {
       providerTimeoutMs: dependencies.providerTimeoutMs,
       onProviderEvent: (event) => { if (context.get("outcomes").length < 20) context.get("outcomes").push(event); },
@@ -136,6 +150,7 @@ export function createApp(dependencies: AppDependencies = {}, configuration: Par
   app.post("/api/select", async (context) => {
     const parsed = SelectionInput.safeParse(context.get("payload"));
     if (!parsed.success) return context.json({ error: "Invalid JSON or request fields", requestId: context.get("requestId") }, 400);
+    if (!fixtureMode || !providers) return context.json({ error: "Verified merchant selection is unavailable", requestId: context.get("requestId") }, 409);
     const engine = createShoppingEngine(providers, {
       providerTimeoutMs: dependencies.providerTimeoutMs,
       onProviderEvent: (event) => { if (context.get("outcomes").length < 20) context.get("outcomes").push(event); },
@@ -144,6 +159,7 @@ export function createApp(dependencies: AppDependencies = {}, configuration: Par
     return context.json(SelectionResultSchema.parse(result));
   });
   app.post("/api/research", async (context) => {
+    if (!fixtureMode) return context.json({ status: "disabled" });
     const parsed = WebResearchInput.safeParse(context.get("payload"));
     if (!parsed.success || parsed.data.productIds.some((productId) => !(productId in catalog))) {
       return context.json({ error: "Invalid JSON or request fields", requestId: context.get("requestId") }, 400);

@@ -1,7 +1,8 @@
 import { describe, expect, it, vi } from "vitest";
 import { defaultPreferences } from "../../src/domain/contracts";
 import type { WebResearchOperation, WebResearchResponse } from "../../src/domain/web-research";
-import { createApp, type RequestLog } from "../../src/server/app";
+import { createFixtureApp } from "../../src/server/test-fixture-app";
+import type { RequestLog } from "../../src/server/app";
 
 const url = "http://127.0.0.1:3000/api/research";
 const shortlist = {
@@ -19,7 +20,7 @@ const ready: WebResearchResponse = {
   truncated: false,
 };
 
-function post(app: ReturnType<typeof createApp>, payload: unknown = shortlist) {
+function post(app: ReturnType<typeof createFixtureApp>, payload: unknown = shortlist) {
   return app.request(url, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -29,7 +30,7 @@ function post(app: ReturnType<typeof createApp>, payload: unknown = shortlist) {
 
 describe("web research API", () => {
   it("keeps fixture health and web research disabled by default", async () => {
-    const app = createApp();
+    const app = createFixtureApp();
     const health = await app.request("http://127.0.0.1:3000/api/health");
     expect(await health.json()).toEqual({
       status: "ok",
@@ -41,7 +42,7 @@ describe("web research API", () => {
   });
 
   it("reports configured web research without changing the fixture commerce mode", async () => {
-    const app = createApp({ webResearch: async () => ready });
+    const app = createFixtureApp({ webResearch: async () => ready });
     const health = await app.request("http://127.0.0.1:3000/api/health");
     expect(await health.json()).toEqual({
       status: "ok",
@@ -59,7 +60,7 @@ describe("web research API", () => {
       signal = requestSignal;
       return ready;
     };
-    const response = await post(createApp({ webResearch: operation }));
+    const response = await post(createFixtureApp({ webResearch: operation }));
     expect(response.status).toBe(200);
     expect(await response.json()).toEqual(ready);
     expect(received).toEqual(shortlist);
@@ -75,7 +76,7 @@ describe("web research API", () => {
     { ...shortlist, preferences: { ...shortlist.preferences, payment: "not allowed" } },
   ])("rejects invalid web research input", async (payload) => {
     const operation = vi.fn(async () => ready);
-    const response = await post(createApp({ webResearch: operation }), payload);
+    const response = await post(createFixtureApp({ webResearch: operation }), payload);
     expect(response.status).toBe(400);
     expect(await response.json()).toMatchObject({ error: "Invalid JSON or request fields" });
     expect(operation).not.toHaveBeenCalled();
@@ -83,7 +84,7 @@ describe("web research API", () => {
 
   it("returns a generic failure for operation errors and keeps details out of logs", async () => {
     const logs: RequestLog[] = [];
-    const app = createApp({
+    const app = createFixtureApp({ mode: "test-fixture",
       webResearch: async () => { throw new Error("private-api-key-and-query"); },
       logger: (event) => logs.push(event),
     });
@@ -101,7 +102,7 @@ describe("web research API", () => {
       ...ready,
       results: [{ title: "Local host", url: "https://127.0.0.1/private", highlights: [] }],
     };
-    const response = await post(createApp({ webResearch: async () => unsafe as WebResearchResponse }));
+    const response = await post(createFixtureApp({ webResearch: async () => unsafe as WebResearchResponse }));
     expect(response.status).toBe(200);
     expect(await response.json()).toEqual({ status: "unavailable", reason: "provider-error" });
   });

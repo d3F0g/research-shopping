@@ -36,14 +36,14 @@ export function validBudgetAmount(amount: number): boolean {
 
 export function conversationalReply(message: string, preferences: Preferences): string | null {
   const text = message.trim().toLowerCase().replace(/[.!?]+$/, "");
-  if (/^(hi|hello|hey)$/.test(text)) return "Hi. What are you looking for? I can compare sample headphones and laptops.";
+  if (/^(hi|hello|hey)$/.test(text)) return "Hi. What are you looking for? I can help compare headphones and laptops.";
   if (/^(thanks|thank you|thank you very much)$/.test(text)) return "You're welcome. Tell me if you'd like to change the budget or compare another option.";
   if (/^(yes|ok|okay)$/.test(text)) return preferences.hard.pendingConstraint
     ? "Your unresolved requirement is still active. Rephrase it, or explicitly ask to clear the pending constraint."
     : "Tell me what you'd like to change, or ask to refresh the shortlist.";
   if (text === "why") return preferences.hard.pendingConstraint
-    ? "I cannot verify your unresolved requirement with this sample catalog, so it still blocks recommendations."
-    : "I compare sample products against your hard limits, then rank them by supported priorities and sample price. These fixtures do not establish current price or stock.";
+    ? "I cannot verify your unresolved requirement, so it still blocks recommendations."
+    : "I keep your hard requirements separate from preferences and expose the evidence behind each comparison. Research does not establish current price, stock or delivery.";
   return null;
 }
 
@@ -108,11 +108,11 @@ export function updatePreferences(message: string, previous: Preferences): Prefe
   });
 
   if (/\b(?:eur|gbp|aud|cad|jpy|myr|inr|euros?|pounds?|yen|ringgit)\b|[€£¥]/i.test(remaining)) {
-    fail("currency", "This fixture supports SGD and USD budgets only. Specify the currency and a positive amount, or explicitly remove the unsupported requirement.");
+    fail("currency", "This research interface supports SGD and USD budgets only. Specify the currency and a positive amount, or explicitly remove the unsupported requirement.");
   }
   if (/\b(?:more than|at least|over|minimum|not under|not below)\s*(?:SGD|USD|S\$|US\$|\$)?\s*\d/i.test(remaining)
     && !/\b(?:at least|minimum)\s*32\s*gb/i.test(remaining)) {
-    fail("constraint", "Budgets in this fixture are maximum spending limits. State a maximum amount and currency; minimum or negated budgets are unsupported.");
+    fail("constraint", "Budgets are maximum spending limits. State a maximum amount and currency; minimum or negated budgets are unsupported.");
   }
   const amounts: { token: string; currency?: Currency; dollar: boolean }[] = [];
   consume(/(?:\b(SGD|USD|US\$|S\$)|\$)\s*([+-]?(?:\d[\d,._]*(?:e[+-]?\d+)?[km]?|infinity|nan))\b/gi, (match) => {
@@ -177,7 +177,7 @@ export function updatePreferences(message: string, previous: Preferences): Prefe
   }
   for (const [pattern, priority] of priorityRules) consume(pattern, (match) => {
     const before = match.input.slice(Math.max(0, match.index - 30), match.index);
-    if (/\b(?:must|require|requires|required|only)\b/i.test(before)) fail("constraint", "That requirement needs evidence this fixture does not provide. Use it as a flexible preference or explicitly remove the pending constraint.");
+    if (/\b(?:must|require|requires|required|only)\b/i.test(before)) fail("constraint", "That requirement needs evidence this research interface cannot verify. Use it as a flexible preference or explicitly remove the pending constraint.");
     else prioritize(priority);
   });
   consume(/\b(?:for )?(commut(?:ing|e)|(?:long )?flights?|travel(?:ling|ing)?|work|office|calls|music|school|university|study|studying|writing|coding|programming|gaming|video editing|meetings)\b/gi, (match) => {
@@ -198,7 +198,7 @@ export function updatePreferences(message: string, previous: Preferences): Prefe
     issue = { reason: "constraint", message: "An unresolved requirement is still active. I will not recommend products until you explicitly clear the pending constraint or reset this session." };
   }
   if (issue) return { preferences, notes, budgetRemoved, clarification: issue };
-  if (!preferences.hard.category) return { preferences, notes, budgetRemoved, clarification: { reason: "category", message: "Are you looking for headphones or a laptop? Those are the two categories in this sample catalog." } };
+  if (!preferences.hard.category) return { preferences, notes, budgetRemoved, clarification: { reason: "category", message: "Are you looking for headphones or a laptop? Those are the two supported research categories." } };
   if (preferences.hard.requiredFeatures.some((feature) => !categoryFeatures[preferences.hard.category!].includes(feature))) {
     return { preferences, notes, budgetRemoved, clarification: { reason: "constraint", message: "A required feature does not apply to this category. Remove it or change the category before comparing products." } };
   }

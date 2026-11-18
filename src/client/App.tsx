@@ -1,3 +1,5 @@
+import { useEffect, useState } from "react";
+import { LiveResearchResults } from "./LiveResearchResults";
 import { ArrowUp, Moon, Plus, Square, Sun } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Bubble, BubbleContent } from "@/components/ui/bubble";
@@ -27,6 +29,14 @@ import { useConversation } from "./useConversation";
 
 export function App() {
   const chat = useConversation();
+  const [fixtureMode, setFixtureMode] = useState(false);
+  useEffect(() => {
+    const controller = new AbortController();
+    void fetch("/api/health", { signal: controller.signal }).then((response) => response.json()).then((health: unknown) => {
+      if (!controller.signal.aborted && typeof health === "object" && health !== null && "mode" in health) setFixtureMode(health.mode === "fixture");
+    }).catch(() => undefined);
+    return () => controller.abort();
+  }, []);
   const { theme, setTheme } = useTheme();
   const empty = chat.turns.length === 0;
   const editor = chat.editor;
@@ -84,7 +94,7 @@ export function App() {
         </InputGroupAddon>
       </InputGroup>
       <p className="composer-note">
-        Sample catalog. Prices and stock are fixture data.
+        {fixtureMode ? "Sample catalog. Prices and stock are fixture data." : "Source-backed research. Prices and stock need verification."}
       </p>
     </form>
   );
@@ -93,7 +103,7 @@ export function App() {
     <div className="app-shell">
       <header className="topbar">
         <span className="brand-lockup">
-          fieldnote<span className="fixture-marker">Fixture data</span>
+          fieldnote<span className="fixture-marker">{fixtureMode ? "Fixture data" : "Web research"}</span>
         </span>
         <div className="topbar-right">
           <Button
@@ -206,10 +216,9 @@ export function App() {
                                 </span>
                                 {turn.body.status === "pending" && (
                                   <p role="status" className="pending-message">
-                                    Waiting for the sample service…
+                                    {fixtureMode ? "Waiting for the sample service…" : "Researching sources…"}
                                     <span className="sr-only">
-                                      The sample service has not returned a
-                                      response yet.
+                                      {fixtureMode ? "The sample service has not returned a response yet." : "No research response has returned yet."}
                                     </span>
                                   </p>
                                 )}
@@ -259,7 +268,8 @@ export function App() {
                                     }
                                   />
                                 )}
-                                {response && (
+                                {(response?.kind === "research" || response?.kind === "research-unavailable") && <LiveResearchResults outcome={response} />}
+                                {response && response.kind !== "research" && response.kind !== "research-unavailable" && (
                                   <Results
                                     outcome={response}
                                     active={active}

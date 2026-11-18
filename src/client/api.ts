@@ -1,9 +1,9 @@
 import {
   SelectionResultSchema,
-  TurnResponseSchema,
   type Preferences,
   type ProductId,
 } from "../domain/contracts";
+import { ApplicationTurnResponseSchema } from "../domain/research";
 import { isSafeCatalogHandoff } from "../domain/merchant-links";
 import {
   WebResearchResponseSchema,
@@ -20,7 +20,7 @@ export async function runTurn(
     response = await fetch("/api/turn", {
       method: "POST",
       headers: { "content-type": "application/json" },
-      body: JSON.stringify({ message, preferences }),
+      body: JSON.stringify({ message, preferences, operationId: crypto.randomUUID() }),
       signal,
     });
   } catch (error) {
@@ -28,7 +28,7 @@ export async function runTurn(
     throw new Error("Research could not finish. Check the connection and try again.");
   }
   if (!response.ok) throw new Error("Research could not finish. Try again.");
-  const result = TurnResponseSchema.safeParse(await response.json());
+  const result = ApplicationTurnResponseSchema.safeParse(await response.json());
   if (!result.success) throw new Error("The research service returned an unreadable result.");
   return result.data;
 }

@@ -29,6 +29,8 @@ export default defineConfig({
       VITE_API_PORT: apiPort,
       WEB_PORT: webPort,
       EXA_RESEARCH_ENABLED: "false",
+      FIELDNOTE_TEST_FIXTURES: "true",
+      NODE_ENV: "test",
     },
   },
 });

@@ -152,3 +152,5 @@ artifacts/screenshots/filters-mobile.png
 artifacts/screenshots/request-pending.png
 artifacts/screenshots/web-research-desktop.png
 artifacts/screenshots/web-research-mobile.png
+
+.local/

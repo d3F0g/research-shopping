@@ -5,7 +5,7 @@ import { serve } from "@hono/node-server";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { defaultPreferences } from "../../src/domain/contracts";
 import { ShortlistResearchRequestSchema } from "../../src/domain/web-research";
-import { createApp } from "../../src/server/app";
+import { createFixtureApp } from "../../src/server/test-fixture-app";
 import { createExaWebResearch, createExaWebResearchFromEnvironment } from "../../src/server/exa-research";
 
 const request = ShortlistResearchRequestSchema.parse({
@@ -244,7 +244,7 @@ describe("Exa web research adapter", () => {
     });
 
     const port = await reservePort();
-    const app = createApp({
+    const app = createFixtureApp({ mode: "test-fixture",
       webResearch: createExaWebResearch("fake-key", { baseUrl: exa.baseUrl, timeoutMs: 2_000 }),
     }, { apiPort: port, webPort: port });
     let resolveListening!: () => void;
