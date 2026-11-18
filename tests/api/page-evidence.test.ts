@@ -116,7 +116,10 @@ describe("synthetic raw-structure fixtures with test-authored extraction", () =>
   });
 
   it.each(["...", "…", "## Related products", "# Orbit Quiet", "## Comparison", "Variations", "Choose a color"])("does not transfer a specification across %s", async (boundary) => {
-    const highlight = syntheticRawStructure.highlights[0].replace("## Specifications", `${boundary}\n## Specifications`);
+    const open = syntheticRawStructure.highlights[0].replace("## Specifications", `${boundary}\n## Specifications`);
+    const gap = boundary === "..." || boundary === "…";
+    if (gap) expect((await replay(synthetic(open))).products).toEqual([]);
+    const highlight = gap ? open.replace("Wireless over-ear headphones\n", "Wireless over-ear headphones.\n") : open;
     const snapshot = await replay(synthetic(highlight));
     expect(snapshot.products).toHaveLength(1);
     expect(snapshot.products[0]).toMatchObject({ facts: [], price: null });

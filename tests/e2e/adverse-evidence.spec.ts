@@ -18,6 +18,9 @@ const scenarios: { name: string; cut: string | null; suffix: string; conditional
   { name: "withheld scan-cut amount", cut: "Price: SGD 349", suffix: " with trade-in.", conditional: true, wireless: false },
   { name: "unknown wrapped property", cut: null, suffix: "\nWireless: No\nCharging support.", conditional: true, wireless: true },
   { name: "unproven clipped identity", cut: null, suffix: "", conditional: true, wireless: false, noIdentity: true, text: " ".repeat(16384 - adverseHeading.length - 1) + adverseHeading + "\ncases." },
+  { name: "unknown gap property", cut: null, suffix: "\nWireless: No\n... charging support.", conditional: true, wireless: true },
+  { name: "withheld gap amount", cut: null, suffix: "", conditional: true, wireless: false, text: adverseHeading + "\n## Specifications\nPrice: SGD 349\n... per month for 12 months." },
+  { name: "unproven gap identity", cut: null, suffix: "", conditional: true, wireless: false, noIdentity: true, text: adverseHeading + "\n... cases." },
   { name: "unproven wrapped category", cut: null, suffix: "", conditional: true, wireless: false, noIdentity: true, text: adverseHeading + "\nFor replacement pads." },
 ];
 for (const scenario of scenarios) {

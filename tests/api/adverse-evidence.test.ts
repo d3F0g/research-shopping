@@ -104,9 +104,9 @@ describe("source-local assessment before output limits", () => {
   });
   it.each(["Orbit Quiet", "Orbit Quiet: no Bluetooth.", "Specifications for Orbit Quiet", "Pro variant", "...", "## Related products", "# Orbit Quiet"])("ends inheritance at %s but still assesses a complete exact statement", async (boundary) => {
     const open = `${adverseHeading}\n${boundary}\nWireless: No\nThese headphones are not wireless.`;
-    const unmarked = ["Orbit Quiet", "Specifications for Orbit Quiet", "Pro variant"].includes(boundary);
-    if (unmarked) expect((await research(adversePayload("heading", [open]), "wireless")).products).toEqual([]);
-    const text = unmarked ? open.replace("Wireless over-ear headphones\n", "Wireless over-ear headphones.\n") : open;
+    const unproven = ["Orbit Quiet", "Specifications for Orbit Quiet", "Pro variant", "..."].includes(boundary);
+    if (unproven) expect((await research(adversePayload("heading", [open]), "wireless")).products).toEqual([]);
+    const text = unproven ? open.replace("Wireless over-ear headphones\n", "Wireless over-ear headphones.\n") : open;
     expect((await research(adversePayload("heading", [text]), "wireless")).products).toHaveLength(1);
     expect((await research(adversePayload("heading", [text + `\n${adverseName} has no wireless support.`]), "wireless")).products).toEqual([]);
   });
@@ -216,7 +216,14 @@ describe("full retained price applicability", () => {
     const price = path === "heading" ? "Price: SGD 349" : "Aster Wave 2 costs SGD 349.";
     const base = `${identity(path)}\n${price}`;
     for (const highlights of [[base], [base, "With trade-in of a qualifying device."], [`${base}\n...\nWith trade-in of a qualifying device.`], [`Orbit Quiet requires trade-in.\n${base}`], [base, "Aster Wave 2 Pro requires trade-in."]]) {
-      expect((await research(adversePayload(path, highlights, { price }))).products[0].price?.quote, highlights.join("\n")).toBe(price);
+      const result = await research(adversePayload(path, highlights, { price }));
+      if (path === "heading" && highlights[0] === `${base}\n...\nWith trade-in of a qualifying device.`) {
+        expect(result.products).toHaveLength(1);
+        expect(result.products[0].price).toBeNull();
+        const closed = `${base}\n## Specifications\n...\nWith trade-in of a qualifying device.`;
+        expect((await research(adversePayload(path, [closed], { price }))).products[0].price?.quote).toBe(price);
+        expect((await research(adversePayload(path, [closed + "\nAster Wave 2 requires trade-in."], { price }))).products[0].price).toBeNull();
+      } else expect(result.products[0].price?.quote, highlights.join("\n")).toBe(price);
     }
     const foreignAfterAmount = await research(adversePayload(path, [`${base}\nOrbit Quiet requires trade-in.`], { price }));
     expect(foreignAfterAmount.products).toHaveLength(1);
@@ -311,7 +318,14 @@ describe("price applicability across semantic heading roles", () => {
     it(`${path} retains unconditional prices and isolates foreign headings, gaps and unrelated highlights`, async () => {
       const base = `${identity(path)}\n${amount}`;
       for (const highlights of [[base], [`${base}\n## Orbit Quiet\nWith trade-in of a qualifying device.`], [`${base}\n## Related products\nWith trade-in of a qualifying device.`], [`${base}\n## Aster Wave 2 Pro\nWith trade-in of a qualifying device.`], [`${base}\n## Aster Wave 2 - Teal (800073)\nWith trade-in of a qualifying device.`], [`${base}\n...\n## Terms\nWith trade-in of a qualifying device.`], [base, "## Terms\nWith trade-in of a qualifying device."], [`${base}\n## Orbit Quiet requires trade-in.`]]) {
-        expect((await research(adversePayload(path, highlights, { price: amount }))).products[0].price?.quote, highlights.join("\n")).toBe(amount);
+        const result = await research(adversePayload(path, highlights, { price: amount }));
+        if (path === "heading" && highlights[0] === `${base}\n...\n## Terms\nWith trade-in of a qualifying device.`) {
+          expect(result.products).toHaveLength(1);
+          expect(result.products[0].price).toBeNull();
+          const closed = `${base}\n## Specifications\n...\n## Terms\nWith trade-in of a qualifying device.`;
+          expect((await research(adversePayload(path, [closed], { price: amount }))).products[0].price?.quote).toBe(amount);
+          expect((await research(adversePayload(path, [closed + "\nAster Wave 2 requires trade-in."], { price: amount }))).products[0].price).toBeNull();
+        } else expect(result.products[0].price?.quote, highlights.join("\n")).toBe(amount);
       }
       expect((await research(adversePayload(path, [base, "## Aster Wave 2 requires trade-in."], { price: amount }))).products[0].price).toBeNull();
     });
@@ -436,5 +450,71 @@ describe("complete source records without capitalization or clipped-newline infe
   });
   it.each(["Driver size: 42 mm.", "## Specifications\nDriver size: 42 mm."])("accepts an established next record: %s", async (next) => {
     expect((await research(adversePayload("heading", [`${adverseHeading}\n${next}`]))).products).toHaveLength(1);
+  });
+});
+
+describe("explicit gaps never complete an unfinished proposition", () => {
+  const scoped = `${adverseHeading}\n## Specifications`;
+  for (const [label, separator] of [["inline", " "], ["newline", "\n"]] as const) {
+    it(`rejects an unfinished category before an ${label} gap`, async () => {
+      expect((await research(adversePayload("heading", [adverseHeading + separator + "... cases."]))).products).toEqual([]);
+    });
+    it(`keeps an unfinished absence label unknown before an ${label} gap`, async () => {
+      const result = await research(adversePayload("heading", [`${scoped}\nWireless: No${separator}... charging support.`]), "wireless");
+      expect(result.products).toHaveLength(1);
+      expect(result.products[0]).toMatchObject({ facts: [], price: null });
+      expect(result.products[0].unresolvedConstraints).toContain("wireless needs independent verification");
+    });
+    it(`omits an unfinished specification before an ${label} gap`, async () => {
+      const result = await research(adversePayload("heading", [`${scoped}\nDriver size: 42 mm${separator}... for Orbit Quiet.`], { facts: ["Driver size: 42 mm"] }));
+      expect(result.products).toHaveLength(1);
+      expect(result.products[0].facts).toEqual([]);
+    });
+    it(`withholds an unfinished amount before an ${label} gap`, async () => {
+      const result = await research(adversePayload("heading", [`${scoped}\nPrice: SGD 349${separator}... per month for 12 months.`], { price: "Price: SGD 349" }));
+      expect(result.products).toHaveLength(1);
+      expect(result.products[0].price).toBeNull();
+    });
+  }
+  it("retains an identity established by an actual section before a gap", async () => {
+    const result = await research(adversePayload("heading", [`${scoped}\n... cases.`]));
+    expect(result.products).toHaveLength(1);
+    expect(result.products[0]).toMatchObject({ facts: [], price: null });
+  });
+  it.each(["Wireless: No.\n... charging support.", "Wireless: No\n## Specifications\nDriver size: 42 mm."])("excludes a completed absence label: %s", async (text) => {
+    expect((await research(adversePayload("heading", [`${scoped}\n${text}`]), "wireless")).products).toEqual([]);
+  });
+  it("retains a completed specification before a gap", async () => {
+    const result = await research(adversePayload("heading", [`${scoped}\nDriver size: 42 mm.\n... for Orbit Quiet.`], { facts: ["Driver size: 42 mm."] }));
+    expect(result.products).toHaveLength(1);
+    expect(result.products[0].facts.map((fact) => fact.quote)).toEqual(["Driver size: 42 mm."]);
+  });
+  it.each(["", "\n## Specifications\n... per month for 12 months."])("retains an amount completed by true EOF or a section: %s", async (suffix) => {
+    const result = await research(adversePayload("heading", [`${scoped}\nPrice: SGD 349${suffix}`], { price: "Price: SGD 349" }));
+    expect(result.products).toHaveLength(1);
+    expect(result.products[0].price?.quote).toBe("Price: SGD 349");
+  });
+  it("preserves the complete sale, list and savings record before a gap", async () => {
+    const block = "S$ 349 was S$ 499 SGD You Save S$ 150";
+    const result = await research(adversePayload("heading", [`${scoped}\n${block}\n... Other context.`], { price: block }));
+    expect(result.products).toHaveLength(1);
+    expect(result.products[0].price?.quote).toBe(block);
+  });
+  it("preserves a closed direct price before a gap", async () => {
+    const price = "Aster Wave 2 costs SGD 349.";
+    const result = await research(adversePayload("direct", [`${adverseClass}\n${price}\n... per month for 12 months.`], { price }));
+    expect(result.products).toHaveLength(1);
+    expect(result.products[0].price?.quote).toBe(price);
+  });
+  it("retains an unpunctuated category at genuine EOF", async () => {
+    expect((await research(adversePayload("heading", [adverseHeading]))).products).toHaveLength(1);
+  });
+  it("assesses an unpunctuated absence label at genuine EOF", async () => {
+    expect((await research(adversePayload("heading", [`${scoped}\nWireless: No`]), "wireless")).products).toEqual([]);
+  });
+  it("retains an unpunctuated specification at genuine EOF", async () => {
+    const result = await research(adversePayload("heading", [`${scoped}\nDriver size: 42 mm`], { facts: ["Driver size: 42 mm"] }));
+    expect(result.products).toHaveLength(1);
+    expect(result.products[0].facts.map((fact) => fact.quote)).toEqual(["Driver size: 42 mm"]);
   });
 });
