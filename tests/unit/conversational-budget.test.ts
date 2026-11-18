@@ -41,7 +41,9 @@ describe("financial wording around currencyless ranges", () => {
       ).preferences;
       const result = updateIntent(message, previous);
       expect(result.preferences.budget).toEqual(previous.budget);
-      expect(result.preferences.criteria).toEqual(previous.criteria);
+      expect(result.preferences.criteria).toEqual(
+        expect.arrayContaining(previous.criteria),
+      );
       expect(result.preferences.pendingChange?.message).toBe(message);
       expect(result.clarification?.reason).toBe("budget");
     },

@@ -13,7 +13,7 @@ const unavailableMessages: Record<ResearchUnavailableReason, string> = {
   disabled:
     "Live research is disabled in this environment. No product results are available.",
   quota:
-    "Live web research is paused by its usage limit. Your request and preferences are retained.",
+    "Research is paused by the app's local usage safeguard. Your request and preferences are retained.",
   busy: "Another research request is still active or needs review. No additional search was started.",
   duplicate:
     "This research request was already submitted. No additional search was started.",

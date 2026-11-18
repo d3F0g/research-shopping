@@ -87,11 +87,12 @@ describe("conversational budgets at the HTTP boundary", () => {
       expect(prepared.kind).toBe("clarification");
       expect(prepared.preferences.budget).toEqual(previous.budget);
       expect(prepared.preferences.pendingChange?.message).toBe(message);
-      expect((await post({
+      const researchAttempt = await post({
         phase: "research",
         preferences: prepared.preferences,
         operationId: randomUUID(),
-      })).kind).toBe("clarification");
+      });
+      expect(researchAttempt.kind).toBe("clarification");
       expect(reserve).not.toHaveBeenCalled();
       expect(research).not.toHaveBeenCalled();
     },

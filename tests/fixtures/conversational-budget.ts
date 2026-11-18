@@ -6,6 +6,8 @@ export const conversationalRanges = [
   "A pottery wheel with a price of 500-600",
   "A neutron interferometer priced around 500 to 600",
   "I can spend 500–600 on an unfamiliar instrument",
+  "An unfamiliar instrument with a budget around 500-600",
+  "A phone for my nephew with a budget about 500-600",
 ];
 
 export const negatedConversationalRanges = [
@@ -14,4 +16,5 @@ export const negatedConversationalRanges = [
   "The price must not be around 500-600",
   "A phone priced around 500-600 is not acceptable",
   "I don’t authorize spending 500-600",
+  "I refuse a budget around 500-600",
 ];

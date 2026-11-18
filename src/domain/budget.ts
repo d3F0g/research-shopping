@@ -34,6 +34,13 @@ const currencyAmount = new RegExp(
 );
 const moneyClauseNegation =
   /\b(?:no|not|never|cannot|without|neither|nor|[a-z]+n't|avoid\w*|refus\w*)\b/i;
+const clauseBoundary = /[;!?\r\n]+|(?<!\d)[,.]|[,.](?!\d)/;
+const financialWording = String.raw`(?:cost(?:s|ing)?|price(?:d)?|spend(?:ing)?|budget)`;
+const financialContext = new RegExp(String.raw`\b${financialWording}\b`, "i");
+const negatedBudgetExplanation =
+  "Confirm the budget you want to keep or state a new maximum or complete range before researching.";
+const hasNegation = (clause: string) =>
+  moneyClauseNegation.test(clause.replace(/\bno\s+more\s+than\b/gi, "at most"));
 const negation = String.raw`(?:not|never|no\s+need\s+to|(?:don|doesn|didn|won|wouldn|shouldn|couldn|can|isn|aren)'t)`;
 const negatedCommand = new RegExp(
   String.raw`^(?:please\s+)?(?:do\s+not|don't|never)\s+${budgetMutation}\s+${budgetSubject}(?:\s+(?:to|at|by)\s+(?:(?:between|from)\s+)?${money}(?:\s*(?:to|and|[-–—])\s*${money})?)?[.!]*$`,
@@ -44,7 +51,7 @@ const negatedMutation = new RegExp(
   "i",
 );
 const rangePattern = new RegExp(
-  String.raw`(?:\b(between|from|budget(?: is| of| to)?|range(?: is| of)?)\s*)?(${currencyToken})?\s*(${amountToken})\s*(SGD|USD)?\s*(?:to|and|[-–—])\s*(${currencyToken})?\s*(${amountToken})\s*(SGD|USD)?(?!\d|[.,]\d)`,
+  String.raw`(?:\b(between|from|budget(?: is| of| to)?|range(?: is| of)?|${financialWording}(?:\s+(?:is|of|at))?(?:\s+(?:around|about|approximately|roughly))?)\s*)?(${currencyToken})?\s*(${amountToken})\s*(SGD|USD)?\s*(?:to|and|[-–—])\s*(${currencyToken})?\s*(${amountToken})(?:\s*(SGD|USD))?(?!\d|[.,]\d)`,
   "gi",
 );
 const currencyOf = (token: string): Currency | undefined =>
@@ -77,18 +84,10 @@ export function parseBudget(
   });
   if (negatedCommand.test(remaining)) return { kind: "retained" };
   const hasNegatedMoney = remaining
-    .split(/[;!?\r\n]+|(?<!\d)[,.]|[,.](?!\d)/)
-    .some((clause) =>
-      currencyAmount.test(clause) &&
-      moneyClauseNegation.test(
-        clause.replace(/\bno\s+more\s+than\b/gi, "at most"),
-      ),
-    );
+    .split(clauseBoundary)
+    .some((clause) => currencyAmount.test(clause) && hasNegation(clause));
   if (hasNegatedMoney || negatedMutation.test(remaining))
-    return clarification(
-      "budget",
-      "Confirm the budget you want to keep or state a new maximum or complete range before researching.",
-    );
+    return clarification("budget", negatedBudgetExplanation);
   if (
     /^(?:no budget limit|no limit on (?:the |my )?budget|unlimited budget)[.!?]*$/i.test(
       remaining.trim(),
@@ -109,6 +108,7 @@ export function parseBudget(
 
   const ranges: { lower: string; upper: string; tokens: string[] }[] = [];
   let measurementRange = false;
+  let negatedRange = false;
   remaining = remaining.replace(
     rangePattern,
     (
@@ -129,17 +129,28 @@ export function parseBudget(
         secondCurrency,
         secondSuffix,
       ].filter((value): value is string => Boolean(value));
-      if (!cue && !tokens.length) return whole;
       const after = source.slice(offset + whole.length);
       if (measurementUnit.test(after)) {
         measurementRange = true;
         return whole;
       }
       if (/^[A-Za-z_]/.test(after)) return whole;
+      const clause =
+        (source.slice(0, offset).split(clauseBoundary).at(-1) ?? "") +
+        whole +
+        (after.split(clauseBoundary)[0] ?? "");
+      if (
+        hasNegation(clause) &&
+        (cue || tokens.length || financialContext.test(clause))
+      )
+        negatedRange = true;
+      if (!cue && !tokens.length) return whole;
       ranges.push({ lower, upper, tokens });
       return " ";
     },
   );
+  if (negatedRange)
+    return clarification("budget", negatedBudgetExplanation);
   if (
     /\b(?:more than|at least|over|minimum|not under|not below)\s*(?:SGD|USD|S\$|US\$|\$)\s*\d/i.test(
       remaining.replace(/\bno\s+more\s+than\b/gi, "at most"),

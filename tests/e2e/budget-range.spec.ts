@@ -154,7 +154,7 @@ test("accepts necklace ranges through actual server and SDK, preserves editor bo
       "SGD 3,000–4,000",
     );
     await expect(last()).toContainText(
-      "Live web research is paused by its usage limit.",
+      "Research is paused by the app's local usage safeguard.",
     );
     await expect(last().getByRole("article")).toHaveCount(0);
     expect(transport.sdkRequests).toHaveLength(2);
