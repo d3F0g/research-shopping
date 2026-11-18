@@ -1,0 +1,15 @@
+# Durable personalization architecture brief
+
+The user authorized continuing all P-prefix issues autonomously. Issue #3 requires authenticated PostgreSQL persistence, isolated per-user preferences and conversation history, deletion/reset and documented retention. Acceptance includes restart persistence, authorization tests, cross-user rejection, migrations from an empty database and preference changes without stale recommendations.
+
+The approved interface stays chat-first, with official shadcn/ui and AI Elements. Guest research should remain usable without a mandatory account form. No paid Exa calls in automated tests, no deployment, no production credentials, no account signup with external services, and no changes to existing PostgreSQL services or databases. Implement and test locally in an isolated database. Production deployment and sensitive permission/credential operations remain separately gated. Do not assume a standing routine merge grant authorizes elevated production or GitHub permissions.
+
+Read personalization-grounding.md for exact baseline seams. The active Exa owner is changing the normal response to genuine research and explicit test-fixture composition in /Users/josiahwong/Documents/research-shopping-exa-primary. Do not edit or infer unstable working changes as final. Authentication and persistence should wrap the canonical HTTP/turn facade, not Exa transport. Historical snapshots remain immutable. The browser owns current action/generation cancellation and must clear or replace user state safely on sign-out/account switch.
+
+PostgreSQL 17.11 Homebrew binaries exist at /opt/homebrew/bin/{postgres,initdb,pg_ctl,psql}. Only temporary directories and owned loopback ports may be used for verification. No existing database connections or service changes have been made. CI should exercise a real isolated PostgreSQL service, not pretend an in-memory map or SQLite establishes PostgreSQL acceptance.
+
+Evaluate current primary documentation for established Hono-compatible authentication rather than guessing. Better Auth has an official Hono example and PostgreSQL support. This is a candidate, not a mandate. No external OAuth credentials or email service is currently configured. Do not invent email verification or recovery. Secrets used in isolated tests are fixtures; actual development credentials stay ignored and server-only. Normal app configuration must fail honestly when persistence is unavailable.
+
+Design data shapes and a small interface first. Include transaction and optimistic version semantics for concurrent preference/history writes, retention, reset/delete ownership, and preventing an in-flight old request from recreating deleted or signed-out data. Protect authentication and paid endpoints using existing host/origin rules. State exactly what happens to guest and signed-in sessions, credentials, cookies, authorization, old conversation snapshots and unknown prices.
+
+Deliver only a design document. No source edits, installation, servers, keys, Exa requests or GitHub writes. Root owns the final synthesis and subsequent independent QA/security gates.
