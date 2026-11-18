@@ -152,6 +152,7 @@ describe("supported product evidence through the actual SDK", () => {
     `${name} isn't wireless.`,
     `${name} isn’t wireless.`,
     `${name} doesn’t support Bluetooth.`,
+    `${name} lacks wireless support.`,
     `${name} supports wired only.`,
     `${name} supports only wired audio.`,
     `${name} costs SGD 99 without wireless support.`,
@@ -204,5 +205,18 @@ describe("supported product evidence through the actual SDK", () => {
   it("publishes one identity when the provider repeats an observation", async () => {
     const { snapshot } = await observe({ duplicates: true });
     expect(snapshot.products).toHaveLength(1);
+  });
+
+  it("retains category evidence and a valid price when extraction fills all three fact slots", async () => {
+    const { snapshot } = await observe({
+      facts: [`${name} supports multipoint.`, `${name} has a 30-hour battery.`, categoryQuote],
+      price: `${name} costs SGD 229.00.`,
+    });
+    expect(snapshot.products).toHaveLength(1);
+    expect(snapshot.products[0].facts).toEqual(expect.arrayContaining([{ sourceId: "source-1", quote: categoryQuote }]));
+    expect(snapshot.products[0].price?.quote).toBe(`${name} costs SGD 229.00.`);
+    for (const citation of [...snapshot.products[0].facts, snapshot.products[0].price!]) {
+      expect(snapshot.sources[0].highlights).toContain(citation.quote);
+    }
   });
 });
