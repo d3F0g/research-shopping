@@ -20,7 +20,7 @@ const app = createApp({ turns, accounts });
 const identity = await accounts.requireIdentity(request.headers);
 return accounts.command(identity, parsedCommand, request.signal);
 const saved = await api.loadWorkspace(signal);
-conversation.restore(saved); // completed snapshots, no restored active actions
+conversation.restore(saved);
 const next = await api.workspaceCommand({ revision: saved.revision, command }, signal);
 if (accepts(accountEpoch, generation)) conversation.restore(next);
 ```
