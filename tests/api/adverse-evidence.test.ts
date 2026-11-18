@@ -103,7 +103,10 @@ describe("source-local assessment before output limits", () => {
     expect((await research(adversePayload("heading", order.map((index) => scopes[index])), "wireless")).products).toEqual([]);
   });
   it.each(["Orbit Quiet", "Orbit Quiet: no Bluetooth.", "Specifications for Orbit Quiet", "Pro variant", "...", "## Related products", "# Orbit Quiet"])("ends inheritance at %s but still assesses a complete exact statement", async (boundary) => {
-    const text = `${adverseHeading}\n${boundary}\nWireless: No\nThese headphones are not wireless.`;
+    const open = `${adverseHeading}\n${boundary}\nWireless: No\nThese headphones are not wireless.`;
+    const unmarked = ["Orbit Quiet", "Specifications for Orbit Quiet", "Pro variant"].includes(boundary);
+    if (unmarked) expect((await research(adversePayload("heading", [open]), "wireless")).products).toEqual([]);
+    const text = unmarked ? open.replace("Wireless over-ear headphones\n", "Wireless over-ear headphones.\n") : open;
     expect((await research(adversePayload("heading", [text]), "wireless")).products).toHaveLength(1);
     expect((await research(adversePayload("heading", [text + `\n${adverseName} has no wireless support.`]), "wireless")).products).toEqual([]);
   });
@@ -129,7 +132,13 @@ describe("source-local assessment before output limits", () => {
     const inside = prefix + " ".repeat(16384 - prefix.length - negative.length) + negative;
     const outside = prefix + " ".repeat(16384 - prefix.length) + negative;
     expect((await research(adversePayload("heading", [inside]), "wireless")).products).toEqual([]);
-    expect((await research(adversePayload("heading", [outside]), "wireless")).products).toHaveLength(1);
+    expect((await research(adversePayload("heading", [outside]), "wireless")).products).toEqual([]);
+    const closedPrefix = `${adverseHeading}.\n`;
+    const closedOutside = closedPrefix + " ".repeat(16384 - closedPrefix.length) + negative;
+    expect((await research(adversePayload("heading", [closedOutside]), "wireless")).products).toHaveLength(1);
+    const retained = outside.slice(0, 16384);
+    expect((await research(adversePayload("heading", [retained]), "wireless")).products).toHaveLength(1);
+    expect((await research(adversePayload("heading", [retained + "cases."]), "wireless")).products).toEqual([]);
   });
   it("assesses every bounded source before name deduplication and the product cap", async () => {
     const payload = adversePayload("heading", [adverseHeading]);
@@ -146,6 +155,13 @@ describe("source-local assessment before output limits", () => {
 });
 
 describe("affirmative manufacturer evidence", () => {
+  it.each(["made", "manufactured"])("requires a complete category before a foreign %s-by statement", async (verb) => {
+    const open = `${adverseHeading}\nOrbit Quiet is ${verb} by Bose.`;
+    expect((await research(adversePayload("heading", [open]), undefined, ["Bose"])).products).toEqual([]);
+    const closed = open.replace("Wireless over-ear headphones\n", "Wireless over-ear headphones.\n");
+    expect((await research(adversePayload("heading", [closed]), undefined, ["Bose"])).products).toHaveLength(1);
+    expect((await research(adversePayload("heading", [closed.replace("Orbit Quiet", "Aster Wave 2")]), undefined, ["Bose"])).products).toEqual([]);
+  });
   it("uses exact title and designation brand relations without substring matches", async () => {
     for (const [title, expected] of [["Bose Aster Wave 2 | Synthetic fixture", 0], ["Bosecraft Aster Wave 2 | Synthetic fixture", 1], ["Aster Wave 2 | Bose comparison fixture", 1]] as const) {
       expect((await research(adversePayload("direct", [adverseClass], { title }), undefined, ["Bose"])).products).toHaveLength(expected);
@@ -182,9 +198,16 @@ describe("full retained price applicability", () => {
   for (const path of paths) for (const condition of adversePriceConditions) {
     it(`${path} withholds ${condition} across own facts, class statements and section headings`, async () => {
       const price = path === "heading" ? "Price: SGD 349" : "Aster Wave 2 costs SGD 349.";
+      const provenIdentity = path === "heading" ? `${adverseHeading}.` : adverseClass;
       for (const bridge of ["Aster Wave 2 supports Bluetooth.", adverseClass, "## Specifications"]) {
-        for (const text of [`${identity(path)}\n${price}\n${bridge}\n${condition}`, `${condition}\n${identity(path)}\n${bridge}\n${price}`, `${identity(path)}\n${condition}\n${bridge}\n${price}`]) {
-          expect((await research(adversePayload(path, [text], { price }))).products[0].price, text).toBeNull();
+        for (const text of [`${provenIdentity}\n${price}\n${bridge}\n${condition}`, `${condition}\n${provenIdentity}\n${bridge}\n${price}`, `${provenIdentity}\n${condition}\n${bridge}\n${price}`]) {
+          const result = await research(adversePayload(path, [text], { price }));
+          expect(result.products, text).toHaveLength(1);
+          expect(result.products[0].price, text).toBeNull();
+        }
+        if (path === "heading") {
+          const openPrefix = `${adverseHeading}\n${condition}\n${bridge}\n${price}`;
+          expect((await research(adversePayload(path, [openPrefix], { price }))).products, openPrefix).toEqual([]);
         }
       }
     });
@@ -192,9 +215,17 @@ describe("full retained price applicability", () => {
   for (const path of paths) it(`${path} pairs exact-model cross-highlight conditions with foreign and unconditional controls`, async () => {
     const price = path === "heading" ? "Price: SGD 349" : "Aster Wave 2 costs SGD 349.";
     const base = `${identity(path)}\n${price}`;
-    for (const highlights of [[base], [base, "With trade-in of a qualifying device."], [`${base}\n...\nWith trade-in of a qualifying device.`], [`Orbit Quiet requires trade-in.\n${base}`], [`${base}\nOrbit Quiet requires trade-in.`], [base, "Aster Wave 2 Pro requires trade-in."]]) {
+    for (const highlights of [[base], [base, "With trade-in of a qualifying device."], [`${base}\n...\nWith trade-in of a qualifying device.`], [`Orbit Quiet requires trade-in.\n${base}`], [base, "Aster Wave 2 Pro requires trade-in."]]) {
       expect((await research(adversePayload(path, highlights, { price }))).products[0].price?.quote, highlights.join("\n")).toBe(price);
     }
+    const foreignAfterAmount = await research(adversePayload(path, [`${base}\nOrbit Quiet requires trade-in.`], { price }));
+    expect(foreignAfterAmount.products).toHaveLength(1);
+    if (path === "heading") {
+      expect(foreignAfterAmount.products[0].price).toBeNull();
+      const closed = `${base}\n## Specifications\nOrbit Quiet requires trade-in.`;
+      expect((await research(adversePayload(path, [closed], { price }))).products[0].price?.quote).toBe(price);
+      expect((await research(adversePayload(path, [closed.replace("Orbit Quiet", "Aster Wave 2")], { price }))).products[0].price).toBeNull();
+    } else expect(foreignAfterAmount.products[0].price?.quote).toBe(price);
     expect((await research(adversePayload(path, [base, "Aster Wave 2 requires trade-in."], { price }))).products[0].price).toBeNull();
     expect((await research(adversePayload(path, [base, adverseClass + "\nWith trade-in of a qualifying device."], { price }))).products[0].price).toBeNull();
     expect((await research(adversePayload(path, [base + "\nUnknown applicability."], { price }))).products[0].price).toBeNull();
@@ -362,5 +393,48 @@ describe("actual scan completion through the product adapter", () => {
     const changes = { name, title: `${name} | Synthetic fixture` };
     expect((await research(adversePayload("heading", [atLimit + " Pro"], changes))).products).toEqual([]);
     expect((await research(adversePayload("heading", [atLimit], changes))).products.map((entry) => entry.name)).toEqual([name]);
+  });
+});
+
+describe("complete source records without capitalization or clipped-newline inference", () => {
+  for (const path of paths) {
+    const openClass = path === "heading" ? adverseHeading : adverseClass.slice(0, -1);
+    const payload = (text: string, closed = false) => adversePayload(path, [text], { facts: path === "heading" ? [] : [closed ? adverseClass : openClass] });
+    for (const [label, separator] of [["LF", "\n"], ["CRLF", "\r\n"], ["space-LF", " \n"], ["LF-tab", "\n\t"]] as const) {
+      const retained = " ".repeat(16384 - openClass.length - separator.length) + openClass + separator;
+      it(`${path} rejects an open category before clipped ${label}`, async () => {
+        expect((await research(payload(retained + "cases."))).products).toEqual([]);
+      });
+      it(`${path} accepts genuine EOF after category and ${label}`, async () => {
+        expect((await research(payload(retained))).products).toHaveLength(1);
+      });
+    }
+    it(`${path} accepts a closed category before a clipped newline`, async () => {
+      const closed = path === "heading" ? `${adverseHeading}.` : adverseClass;
+      const retained = " ".repeat(16384 - closed.length - 1) + closed + "\n";
+      expect((await research(payload(retained + "More source content.", true))).products).toHaveLength(1);
+    });
+    for (const [label, separator, qualifier] of [
+      ["inline-lower", " ", "for replacement pads."], ["inline-upper", " ", "For replacement pads."],
+      ["wrapped-lower", "\n", "for replacement pads."], ["wrapped-upper", "\n", "For replacement pads."],
+    ]) it(`${path} rejects the qualified category ${label}`, async () => {
+      expect((await research(payload(openClass + separator + qualifier))).products).toEqual([]);
+    });
+  }
+  it.each([["charging support.", 1], ["Charging support.", 1], ["Driver size: 42 mm.", 0], ["## Accessories\nCarrying case.", 0]] as const)("distinguishes property continuation from a new record: %s", async (next, expected) => {
+    const result = await research(adversePayload("heading", [`${adverseHeading}\nWireless: No\n${next}`]), "wireless");
+    expect(result.products).toHaveLength(expected);
+    if (expected) {
+      expect(result.products[0].facts).toEqual([]);
+      expect(result.products[0].unresolvedConstraints).toContain("wireless needs independent verification");
+    }
+  });
+  it.each(["Per month for 12 months.", "per month for 12 months."])("withholds a price before a wrapped condition: %s", async (condition) => {
+    const result = await research(adversePayload("heading", [`${adverseHeading}\nPrice: SGD 349\n${condition}`], { price: "Price: SGD 349" }));
+    expect(result.products).toHaveLength(1);
+    expect(result.products[0].price).toBeNull();
+  });
+  it.each(["Driver size: 42 mm.", "## Specifications\nDriver size: 42 mm."])("accepts an established next record: %s", async (next) => {
+    expect((await research(adversePayload("heading", [`${adverseHeading}\n${next}`]))).products).toHaveLength(1);
   });
 });

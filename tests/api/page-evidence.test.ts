@@ -178,7 +178,9 @@ describe("synthetic raw-structure fixtures with test-authored extraction", () =>
 
   it("drops distant facts without truncating identity proof or joining disjoint fragments", async () => {
     const highlight = syntheticRawStructure.highlights[0].replace("## Specifications", "Details ".repeat(100) + "\n## Specifications");
-    const snapshot = await replay(synthetic(highlight));
+    expect((await replay(synthetic(highlight))).products).toEqual([]);
+    const closed = highlight.replace("Wireless over-ear headphones\n", "Wireless over-ear headphones.\n");
+    const snapshot = await replay(synthetic(closed));
     expect(snapshot.products[0]).toMatchObject({ facts: [], price: null });
     expect(snapshot.sources[0].highlights.every((window) => window.length <= 640)).toBe(true);
   });
