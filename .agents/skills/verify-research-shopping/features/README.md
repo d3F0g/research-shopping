@@ -1,6 +1,6 @@
 # Fieldnote verification map
 
-Use a fresh browser context and the fixture app for each independent journey. The [skill entrypoint](../SKILL.md) owns launch, doctor, evidence, and cleanup. `scripts/smoke.mjs` records its driven chat and product-link subset. It does not replace independent visual judgment. The other paths need their own browser checks or matching tests in `tests/e2e`.
+Use a fresh browser context for each independent journey. The offline regression helper explicitly composes the fixture test app. Normal development research and its injected-provider tests have a separate guide. The [skill entrypoint](../SKILL.md) owns launch, doctor, evidence, and cleanup. `scripts/smoke.mjs` records its driven chat and product-link subset. It does not replace independent visual judgment. The other paths need their own browser checks or matching tests in `tests/e2e`.
 
 ## Features
 
@@ -12,7 +12,7 @@ Use a fresh browser context and the fixture app for each independent journey. Th
 - [Product selection](selection.md) covers exact product identity and safe manufacturer-link handoff.
 - [Session and recovery](session-recovery.md) covers reset, independent contexts, failed requests, and stale responses.
 
-- [Optional Exa web context](web-research.md) covers explicit retrieval, source disclosures, live-versus-stubbed evidence, safe links, and cancellation.
+- [Exa product research](web-research.md) covers the normal research composition, source-linked cards, observed prices, no-fixture failure behavior, safe links, credit limits and cancellation.
 
 ## Proof standard
 

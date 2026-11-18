@@ -4,7 +4,7 @@ The orchestrator owns scope, contracts, GitHub issues, and final verification. A
 
 Project custom agents live in `.codex/agents/`. The three TOML definitions define implementation, QA, and security roles. Models and efforts are omitted so pstack role choices passed at spawn remain authoritative. `.codex/config.toml` allows three child threads. The current host can impose a lower limit. Reload the project to discover new roles. Custom agent instructions inherit the parent's permissions and do not create a separate sandbox. See the [official subagent configuration](https://learn.chatgpt.com/docs/agent-configuration/subagents).
 
-The installed pstack role settings in `~/.codex/pstack-models.md` guide this run. Explicit host-supported model choices and bounded briefs are recorded in the run ledger. If a configured model is unavailable, record the fallback before using inheritance. The initial architecture candidates used Astra and Luna. Sol assessed security capabilities. Astra cross-judged the designs. The application owner uses Luna.
+The installed pstack role settings in `~/.codex/pstack-models.md` guide this run. Explicit host-supported model choices and bounded briefs are recorded in the run ledger. If a configured model is unavailable, record the fallback before using inheritance. Historical initial architecture candidates used Astra and Luna, with Sol assessing security capabilities. Current runs record their actual assignments and host fallbacks in the run ledger. Do not infer a current model assignment or model-family diversity from that historical record.
 
 ## Loop
 
@@ -43,3 +43,9 @@ The standing policy is repository-scoped. Historical run plans retain the author
 - [Coverage #4](https://github.com/d3F0g/research-shopping/issues/4) covers more categories and semantic evaluations.
 
 Git operations in this run use the authenticated GitHub CLI helper per command because the host's default helper could not access the new private repository. No global credential configuration changed.
+
+## Live research program
+
+Exa is the primary development research provider. Fixture catalogs are confined to explicit automated-test composition. Research observations and unverified page prices cannot become verified merchant offers. The absence of authorized merchant API access is an external dependency. Record it in Issue #36 and keep Issue #2 open until real merchant proof satisfies its acceptance criteria. Do not repeatedly request the same unavailable access.
+
+The active queue fixes cancellation first, then delivers cited Exa product research, broader coverage and evaluation, and authenticated PostgreSQL personalization. Each unit needs independent verification and the same merge gates. The ledger in `.codex/pstack-runs/live-research/` records the architecture, conservative paid-call allowance, exact reviewed commits and actual outcomes. Production deployment and changes to sensitive credentials or security-critical permissions remain outside routine merge authorization.

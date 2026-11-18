@@ -5,7 +5,7 @@ description: Launch and verify the Fieldnote chat-first Research + Shopping app 
 
 # Verify Fieldnote chat
 
-Read the [feature map](features/README.md), then choose the affected journeys. Fieldnote is a conversation with contextual shopping controls. A dashboard with official components does not satisfy this interface contract. The product ends at a manufacturer link. Fixtures cannot establish current specifications, prices, stock, delivery, or merchant-page reachability.
+Read the [feature map](features/README.md), then choose the affected journeys. Fieldnote is a conversation with contextual shopping controls. A dashboard with official components does not satisfy this interface contract. Normal development research uses Exa product observations and source links. Merchant verification remains unavailable without authorized access. Fixtures are confined to automated verification and cannot establish real specifications, prices, stock or delivery.
 
 ## Launch an owned instance
 
@@ -17,11 +17,11 @@ node .agents/skills/verify-research-shopping/scripts/smoke.mjs
 
 The helper finds its checkout from its own path and loads Playwright from that checkout. Pass `--project-dir /absolute/checkout` for a separate worktree. It refuses occupied ports, then starts `npm run dev` with API port 3173 and web port 5283. Override these with distinct unused `VERIFY_API_PORT` and `VERIFY_WEB_PORT` values. Set `VERIFY_ARTIFACT_DIR` to choose the evidence directory.
 
-The helper itself forces `EXA_RESEARCH_ENABLED=false` in its child environment. It needs no key, database, migrations, or seed command. Never copy a private environment file into another worktree or supply a real key to CI or the browser.
+This offline automated-regression helper forces `NODE_ENV=test`, `FIELDNOTE_TEST_FIXTURES=true` and `EXA_RESEARCH_ENABLED=false` in its child environment. It intentionally verifies the fixture test composition, not the normal development provider. It needs no key, database, migrations, or seed command. Never copy a private environment file into another worktree or supply a real key to CI or the browser.
 
 ## Confirm the instance
 
-Require `GET /api/health` to report `status: ok`, `mode: fixture`, `liveIntegrations: false`, and `webResearch: disabled`. Then require the visible fixture marker and conversation region. A listening socket alone is insufficient.
+For this offline helper, require `GET /api/health` to report `status: ok`, `mode: fixture`, `liveIntegrations: false`, and `webResearch: disabled`. Then require the visible fixture marker and conversation region. A listening socket alone is insufficient.
 
 Do not drive an unknown instance. The helper records the PID it starts, candidate commit and worktree status. A dirty run proves that working tree, not its commit alone. A separate read-only health request is safe only after ownership is known.
 
@@ -37,7 +37,7 @@ Submit a natural preference follow-up. Require the earlier user and assistant me
 
 Scroll the conversation at mobile size. Require the composer to remain visible and usable without hiding the current message or allowing body-level horizontal overflow. Test Enter to submit, Shift+Enter for a newline, keyboard focus and touch disclosures through the actual controls.
 
-The smoke helper records its driven subset. The broader [conversation and theme guide](features/chat.md) and matching package tests cover the remaining chat states. Use the [preferences](features/preferences.md), [research](features/research.md), [evidence](features/evidence.md), [selection](features/selection.md), [session](features/session-recovery.md) and [web-context](features/web-research.md) guides for affected behaviors.
+The smoke helper records its driven subset. The broader [conversation and theme guide](features/chat.md) and matching package tests cover the remaining chat states. Use the [preferences](features/preferences.md), [research](features/research.md), [evidence](features/evidence.md), [selection](features/selection.md), [session](features/session-recovery.md) and [Exa research](features/web-research.md) guides for affected behaviors.
 
 ## Preserve shopping and safety
 
@@ -45,7 +45,7 @@ Run `npm test` for domain, API, provider and security boundaries. Run `npm run t
 
 Keep fixture labels, fixed observation timestamps, evidence conflicts, unknown claims, safe exact-product links, budget drafts, unresolved hard constraints and session isolation. Retained history must not revive abandoned requests. Test cancellation on edits, new turns, reset and handoff. Pending indicators reflect actual HTTP work; complete JSON is not token streaming or intermediate reasoning.
 
-Use real fixture responses for the core shopping journey. Inject failures or source stubs only at the established network/provider boundary and label that evidence. Stubbed Exa data does not prove real retrieval. A separate live check follows [web-context verification](features/web-research.md).
+Use real fixture responses for the core shopping journey. Inject failures or source stubs only at the established network/provider boundary and label that evidence. Stubbed Exa data does not prove real retrieval. Research-mode browser tests use injected provider replies and report that limitation. A separate bounded real check follows [Exa research verification](features/web-research.md).
 
 ## Keep reviewable evidence
 
