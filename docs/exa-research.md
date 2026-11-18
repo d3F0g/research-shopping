@@ -57,6 +57,35 @@ On 19 November 2026, the user explicitly authorized up to US$0.50 of additional 
 
 The grant is an explicit development-server configuration, not a browser permission or a provider-enforced spending cap. Activation preserves the original stopped flag and all existing records. Its operator procedure and read-only inspection must never reserve a synthetic attempt or call Exa. Keep the grant outside Git with private permissions. Do not renew or replace it without another explicit authorization. Automated tests and engineering scripts must not consume this manual allowance. Issue #42 and genuine product acceptance remain open.
 
+### Operate the approved manual grant
+
+The private operator CLI imports quota accounting only. It does not load the key, start the application or construct an Exa client. Creation requires development mode, an existing stopped ledger with a null-cost uncertain baseline, an expected current ledger hash, and recorded approval provenance. Stop the owned server before initial activation so the snapshot is stable.
+
+```sh
+NODE_ENV=development node --import tsx scripts/manual-research-allowance.ts create \
+  --ledger /absolute/path/to/exa-research-budget.json \
+  --grant /absolute/path/to/private-manual-grant.json \
+  --grant-id APPROVED_GRANT_UUID \
+  --approval-reference 'Explicit user approval for US$0.50 additional reserved manual testing' \
+  --reviewed-commit REVIEWED_40_CHARACTER_COMMIT \
+  --approved-at APPROVAL_RFC3339_TIME \
+  --expected-ledger-sha256 EXPECTED_64_CHARACTER_LEDGER_HASH
+```
+
+The placeholders must be supplied from the actual authorization and reviewed candidate. This command cannot overwrite an existing grant. Repeating the identical creation does not reset consumption. Conflicting creation fails. No grant is needed or permitted for automated paid tests.
+
+Add only the nonsecret absolute grant path to the ignored development environment as `EXA_MANUAL_RESEARCH_GRANT_PATH`. The existing development-only server composition passes it to quota. Without that setting, the original stopped behavior remains. Production composition stays disabled even if the path is set.
+
+```sh
+node --import tsx scripts/manual-research-allowance.ts inspect \
+  --ledger /absolute/path/to/exa-research-budget.json \
+  --grant /absolute/path/to/private-manual-grant.json
+```
+
+Inspection acquires the normal accounting lock, reads current state and reports eligibility and remaining capacity. It does not rewrite the ledger, change its modification time, reserve an attempt or call a provider. Require byte equality before/after activation and inspection. Then restart the exact reviewed development app. Do not submit a paid activation test; leave the allowance for the user.
+
+Every reservation rereads the grant. A missing, corrupt or mismatched grant denies admission. To revoke without deleting evidence, stop using the grant path and restart the development server, or move the private grant aside so the next reservation fails closed. Settlement of an already admitted request still records its result. Restoring both the ledger and grant from old snapshots is outside this local mechanism's rollback protection and must never be used to replenish usage.
+
 ## Read the canonical skill before API changes
 
 Run the documented setup command and read its complete output before choosing or changing API shapes.
