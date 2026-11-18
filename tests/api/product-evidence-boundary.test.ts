@@ -2,12 +2,27 @@ import { once } from "node:events";
 import { createServer } from "node:http";
 import type { AddressInfo } from "node:net";
 import { describe, expect, it } from "vitest";
-import { defaultPreferences, type Preferences } from "../../src/domain/contracts";
+import { CategorySchema, FeatureSchema, defaultPreferences, type Feature, type Preferences } from "../../src/domain/contracts";
 import { createExaProductResearch } from "../../src/server/exa-research";
 
 const name = "Aster Wave 2";
 const url = "https://reviews.example.com/aster-wave-2";
 const categoryQuote = `${name} is a pair of wireless headphones.`;
+const featureEvidence: Record<Feature, { positive: string; negative: string }> = {
+  "active-noise-cancelling": { positive: "has active noise cancelling.", negative: "lacks active noise cancelling." },
+  wireless: { positive: "supports wireless audio.", negative: "is not wireless." },
+  multipoint: { positive: "supports multipoint.", negative: "does not support multipoint." },
+  "long-battery-life": { positive: "has long battery life.", negative: "lacks long battery life." },
+  lightweight: { positive: "is lightweight.", negative: "is not lightweight." },
+  "oled-display": { positive: "has an OLED display.", negative: "does not have an OLED display." },
+  "high-memory": { positive: "has 32 GB of memory.", negative: "does not have 32 GB of memory." },
+  "long-battery": { positive: "has long battery life.", negative: "lacks long battery life." },
+  portable: { positive: "is portable.", negative: "is not portable." },
+};
+const categoryEvidence: Record<NonNullable<Preferences["hard"]["category"]>, string> = {
+  headphones: `${name} is a pair of headphones.`,
+  laptops: `${name} is a laptop.`,
+};
 
 async function observe({
   model = name,
@@ -69,6 +84,65 @@ async function observe({
 }
 
 describe("supported product evidence through the actual SDK", () => {
+  it.each(CategorySchema.options.flatMap((category) => FeatureSchema.options.map((feature) => ({ category, feature }))))(
+    "rejects a literal $feature contradiction with independent positive $category evidence",
+    async ({ category, feature }) => {
+      const categoryFact = categoryEvidence[category];
+      const positive = `${name} ${featureEvidence[feature].positive}`;
+      const negative = `${name} ${featureEvidence[feature].negative}`;
+      const accepted = await observe({ category, facts: [categoryFact, positive], requiredFeatures: [feature] });
+      expect(accepted.snapshot.products).toHaveLength(1);
+      expect(accepted.snapshot.products[0].facts).toEqual(expect.arrayContaining([{ sourceId: "source-1", quote: categoryFact }]));
+      for (const facts of [[categoryFact, negative], [categoryFact]]) {
+        const rejected = await observe({ category, facts, highlights: [categoryFact, negative], requiredFeatures: [feature] });
+        expect(rejected.snapshot.products).toEqual([]);
+        expect(rejected.snapshot.sources[0].highlights).toContain(negative);
+      }
+    },
+  );
+
+  it.each([
+    "is wired-only.",
+    "is wired only.",
+    "supports wired audio only.",
+    "supports wired connections only.",
+    "only supports wired audio.",
+    "supports only wired connections.",
+    "uses wired audio only.",
+    "has only wired connections.",
+    "can only use wired audio.",
+  ])("rejects an attributable exclusive wired clause with positive category evidence: %s", async (clause) => {
+    const negative = `${name} ${clause}`;
+    const baseline = await observe({ facts: [categoryQuote], requiredFeatures: ["wireless"] });
+    expect(baseline.snapshot.products).toHaveLength(1);
+    const { snapshot } = await observe({ facts: [categoryQuote], highlights: [categoryQuote, negative], requiredFeatures: ["wireless"] });
+    expect(snapshot.products).toEqual([]);
+    expect(snapshot.sources[0].highlights).toContain(negative);
+  });
+
+  it.each([
+    "supports wired and wireless audio.",
+    "supports only wired and wireless audio.",
+    "supports not only wired audio but also wireless audio.",
+    "does not support wired audio but supports wireless audio.",
+    "is not wired-only and supports wireless audio.",
+    "supports wireless audio and only uses wired connections for charging.",
+  ])("does not treat dual connectivity as exclusive wired support: %s", async (clause) => {
+    const positive = `${name} ${clause}`;
+    const { snapshot } = await observe({ facts: [categoryQuote, positive], requiredFeatures: ["wireless"] });
+    expect(snapshot.products).toHaveLength(1);
+    expect(snapshot.products[0].facts).toEqual(expect.arrayContaining([{ sourceId: "source-1", quote: positive }]));
+  });
+
+  it.each([
+    `Orbit Quiet only supports wired audio.`,
+    `${name} Pro only supports wired audio.`,
+    `${name} supports wireless audio while Orbit Quiet only supports wired audio.`,
+  ])("does not bind another model's exclusive wired clause to this model: %s", async (other) => {
+    const { snapshot } = await observe({ facts: [categoryQuote], highlights: [categoryQuote, other], requiredFeatures: ["wireless"] });
+    expect(snapshot.products).toHaveLength(1);
+  });
+
   it.each([
     "costs SGD 99 less than its competitors.",
     "costs SGD 99/month.",
