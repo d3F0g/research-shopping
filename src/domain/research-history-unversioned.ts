@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 // Stored research emitted by 657e883 must not inherit later evidence contracts.
-const Preferences = z.strictObject({
+export const HistoricalResearchPreferencesSchema = z.strictObject({
   hard: z.strictObject({
     category: z.enum(["headphones", "laptops"]).nullable(),
     budget: z.strictObject({
@@ -60,7 +60,7 @@ const Product = z.strictObject({
   stock: z.literal("unverified"),
   unresolvedConstraints: z.array(z.string().min(1).max(180)).max(16),
 });
-const Source = z.strictObject({
+export const HistoricalResearchSourceSchema = z.strictObject({
   id: z.string().min(1).max(80),
   title: z.string().min(1).max(180),
   url: z.string().url().max(2_048).refine(isHistoricalSourceUrl),
@@ -71,7 +71,7 @@ export const UnversionedResearchSnapshotSchema = z.strictObject({
   dataKind: z.literal("web-research"),
   retrievedAt: z.string().datetime(),
   products: z.array(Product).max(5),
-  sources: z.array(Source).max(5),
+  sources: z.array(HistoricalResearchSourceSchema).max(5),
   limitations: z.array(z.string().min(1).max(300)).max(12),
   requestId: z.string().max(180),
   reportedCostUsd: z.number().finite().nonnegative().nullable(),
@@ -98,7 +98,7 @@ export const UnversionedResearchSnapshotSchema = z.strictObject({
 export const UnversionedResearchResponseSchema = z.strictObject({
   kind: z.literal("research"),
   answer: z.string().min(1).max(400),
-  preferences: Preferences,
+  preferences: HistoricalResearchPreferencesSchema,
   notes: z.array(z.string().max(300)).max(12),
   research: UnversionedResearchSnapshotSchema,
 });
