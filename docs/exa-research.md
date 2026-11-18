@@ -51,7 +51,11 @@ The local admission policy permits at most 40 attempts, reserves US$0.05 for eac
 
 Persist admission before dispatch. Duplicate operation IDs, ordinary replies and held-evidence controls add no provider operation. Cancellation reaches the actual SDK request and response body. An abort does not establish zero cost. Unknown charges, interrupted requests and crashes retain their reservation and stop further paid work. Do not delete or reset a ledger, clear its stopped flag, substitute a new key or fabricate a zero-cost completion to continue.
 
-Issue #42 currently holds genuine live verification after a 30-second timeout without a reported cost. Seven settled records report US$0.045; the eighth is uncertain with US$0.05 reserved. The provider balance remains unverified. Trustworthy reconciliation and a newly recorded bounded allowance are required before another real research call. Existing historical proof allowances do not replenish themselves.
+Issue #42 tracks a 30-second timeout without a reported cost. Seven settled records report US$0.045; the eighth is uncertain with US$0.05 reserved. The provider balance remains unverified. Trustworthy reconciliation remains necessary to resolve that unknown charge. Existing historical proof allowances do not replenish themselves.
+
+On 19 November 2026, the user explicitly authorized up to US$0.50 of additional reserved usage for manual testing while preserving the uncertain charge and existing records. The private grant acknowledges only the exact existing baseline. It allows at most ten additional requests, still subject to the global attempt/exposure limits and one active operation. Usage is derived from appended ledger records, so restarts and low reported costs do not replenish it. A new uncertain or excessive-cost settlement stops further admission.
+
+The grant is an explicit development-server configuration, not a browser permission or a provider-enforced spending cap. Activation preserves the original stopped flag and all existing records. Its operator procedure and read-only inspection must never reserve a synthetic attempt or call Exa. Keep the grant outside Git with private permissions. Do not renew or replace it without another explicit authorization. Automated tests and engineering scripts must not consume this manual allowance. Issue #42 and genuine product acceptance remain open.
 
 ## Read the canonical skill before API changes
 
