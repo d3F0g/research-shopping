@@ -22,7 +22,7 @@ async function observe(capture: (typeof captures)[number], quote = capture.quote
       output: { content: { observations: [{
         name: capture.name,
         url: capture.url,
-        quotedFacts: [quote],
+        identityQuote: null, quotedFacts: [quote],
         priceQuote: null,
       }] } },
       costDollars: { total: 0 },
