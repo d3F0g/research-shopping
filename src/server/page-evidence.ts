@@ -43,7 +43,7 @@ type Anchor =
   | Readonly<{ kind: "heading"; identity: Span; scope: Scope }>
   | Readonly<{ kind: "direct"; identity: Span }>;
 type SubjectProof = Readonly<{ name: string; selected: Anchor; anchors: readonly [Anchor, ...Anchor[]] }>;
-type SourcePassage = Span & { text: string; kind: "content" | "section" | "identity" | "boundary"; region: number; scope: Scope | null };
+type SourcePassage = Span & { text: string; kind: "content" | "fragment" | "section" | "context-heading" | "identity" | "boundary"; region: number; scope: Scope | null };
 type SourceContext = Readonly<{ source: Source; sourceId: string; passages: readonly SourcePassage[]; subjects: readonly SubjectProof[] }>;
 type Ownership =
   | Readonly<{ kind: "own"; basis: "exact-statement" | "valid-scope"; predicate: string }>
@@ -67,23 +67,23 @@ const connectionVerb = "(?:supports?|uses?|offers?|provides?|has|have|can (?:sup
 const headphoneDescriptor = `(?:${headphoneDesign}|lightweight|portable|gaming|stereo)`;
 const exclusiveWiredHeadphones = `(?:an? |the )?(?:pair of )?(?:${headphoneDescriptor} )*wired[- ]only (?:${headphoneDescriptor} )*${headphoneClass}`;
 const exclusiveWired = new RegExp(`^(?:(?:is|are) (?:wired[- ]only|${exclusiveWiredHeadphones})|(?:only ${connectionVerb}|${connectionVerb} only|can only (?:support|use)) ${wiredMedium}|${connectionVerb} ${wiredMedium} only|${connectionVerb} wired-only(?: (?:audio|connections?|connectivity))?)[.!]?$`, "i");
-type FeatureDescriptor = Readonly<{ terms: string; proseNegative: RegExp; labelNegative: RegExp; exclusive: RegExp | null }>;
-function featureDescriptor(terms: string, exclusive: RegExp | null = null): FeatureDescriptor {
+type FeatureDescriptor = Readonly<{ terms: string; wholeProperty: RegExp; labelNegative: RegExp; exclusive: RegExp | null }>;
+function featureDescriptor(terms: string, neutralNouns: string | null = null, exclusive: RegExp | null = null): FeatureDescriptor {
   return {
     terms,
-    proseNegative: new RegExp(`\\b(?:is not|isn't|are not|aren't|does not|doesn't|do not|don't|cannot|can't|no longer|no|without|lacks?|not equipped with)\\s+(?:(?:support|have|include|offer|provide|use)\\s+)?(?:an?\\s+|any\\s+)?(?:${terms})\\b`, "i"),
+    wholeProperty: new RegExp(`^(?:an? |any )?(?:${terms})${neutralNouns ? `(?: (?:${neutralNouns}))?` : ""}$`, "i"),
     labelNegative: new RegExp(`^(?:${terms})\\s*:\\s*(?:no|false|not supported|unavailable)[.!]?$`, "i"),
     exclusive,
   };
 }
 const featureDescriptors: Record<Feature, FeatureDescriptor> = {
-  "active-noise-cancelling": featureDescriptor("active[- ]noise[- ]cancell?(?:ing|ation)|ANC"),
-  wireless: featureDescriptor("wireless|bluetooth", new RegExp(`${exclusiveWired.source}|^Connectivity:\\s*wired[- ]only[.!]?$`, "i")),
-  multipoint: featureDescriptor("multi[- ]?point"),
+  "active-noise-cancelling": featureDescriptor("active[- ]noise[- ]cancell?(?:ing|ation)|ANC", "support"),
+  wireless: featureDescriptor("wireless|bluetooth", "audio|support|connectivity|connections?", new RegExp(`${exclusiveWired.source}|^Connectivity:\\s*wired[- ]only[.!]?$`, "i")),
+  multipoint: featureDescriptor("multi[- ]?point", "support|connectivity|connections?"),
   "long-battery-life": featureDescriptor("long[- ]battery(?:[- ]life)?"),
   lightweight: featureDescriptor("light[- ]?weight"),
-  "oled-display": featureDescriptor("OLED"),
-  "high-memory": featureDescriptor("32 ?GB|high[- ]memory"),
+  "oled-display": featureDescriptor("OLED", "display|screen|panel|support"),
+  "high-memory": featureDescriptor("32 ?GB|high[- ]memory", "(?:of )?memory|RAM"),
   "long-battery": featureDescriptor("long[- ]battery(?:[- ]life)?"),
   portable: featureDescriptor("portable|portability"),
 };
@@ -95,6 +95,20 @@ const classPhrases: Record<NonNullable<Preferences["hard"]["category"]>, string>
   laptops: "(?:(?:gaming|business|ultraportable|convertible|thin and light|Windows|\\d{1,2}(?:\\.\\d)?-inch) )*(?:laptop|notebook)(?: computer)?",
 };
 const boundaryPattern = /\.{3}|…|\b(?:variations?|related products?|recommended products?|you may also like|accessories|compare(?: products)?|comparison|choose (?:a |your )?(?:colou?r|variant)|select (?:a |your )?(?:colou?r|variant))\b/ig;
+function sourceBoundaries(raw: string): { start: number; end: number }[] {
+  return [...raw.matchAll(new RegExp(boundaryPattern))].flatMap((match) => {
+    const end = match.index + match[0].length;
+    if (/\.{3}|…/.test(match[0])) return [{ start: match.index, end }];
+    const prefix = raw.slice(0, match.index);
+    const linePrefix = prefix.slice(prefix.lastIndexOf("\n") + 1);
+    const suffix = raw.slice(end);
+    const heading = /(?:^|\s)#{1,6}[ \t]*$/.exec(prefix);
+    const labelStart = /^\s*$/.test(linePrefix) || heading !== null;
+    const labelEnd = /^[ \t]*(?:$|\n|[#*\[])/.test(suffix);
+    return labelStart && labelEnd || /^[ \t]*[*\[]/.test(suffix)
+      ? [{ start: heading ? heading.index + heading[0].indexOf("#") : match.index, end }] : [];
+  });
+}
 
 function headingScopes(input: Source, preferences: Preferences, decisions: EvidenceDecision[]): Scope[] {
   const category = preferences.hard.category;
@@ -127,8 +141,8 @@ function headingScopes(input: Source, preferences: Preferences, decisions: Evide
       }
       const tail = raw.slice(identityEnd);
       if (/^[ \t]+(?:Pro|Plus|Max|Ultra|Special Edition|cases?|covers?|cables?|pads?|stands?|for)\b/i.test(tail)) { record("variant-mismatch", { highlight, start }); continue; }
-      const boundary = new RegExp(boundaryPattern).exec(tail);
-      let end = boundary ? identityEnd + boundary.index : raw.length;
+      const boundary = sourceBoundaries(tail)[0];
+      let end = boundary ? identityEnd + boundary.start : raw.length;
       for (const next of tail.matchAll(/(?:^|\s)(#{1,6})[ \t]+/g)) {
         const label = cleanText(tail.slice(next.index! + next[0].length));
         if (/^(?:Description|Specifications|Key Features|Features|Highlights)(?=\s|$)/i.test(label)) continue;
@@ -156,10 +170,30 @@ const singlePrice = new RegExp(`^(?:Price:?\\s*)?${money}$`, "i");
 const pricePart = new RegExp(`^(?:(?:Price|Sale price|Regular price|List price|Savings):?\\s*|was\\s+|You Save\\s+|Save\\s+)?${money}(?:\\s+(?:SGD|USD|EUR|GBP|AUD|JPY))?$`, "i");
 const clauseVerb = "(?:only\\s+)?(?:(?:is|are|has|have|supports?|uses?|offers?|features?|provides?|weighs?|costs?|includes?|does|do|was|were)(?:n['’]t)?|can|can't|can’t|cannot|comes|retails|lacks?|requires?)\\b";
 const priceCondition = /\b(?:trade[- ]?in|qualifying|subscription|members?(?:hip)?|deposit|cashback|rebate|installments?|instalments?|per (?:month|week|day|year)|replacement|accessor(?:y|ies)|checkout|conditions?|terms|coupon|voucher)\b/i;
+type FeatureProposition = Readonly<{ kind: "absence"; property: string }> | Readonly<{ kind: "unknown" }>;
+function featureProposition(predicate: string): FeatureProposition {
+  const text = predicate.replace(/[.!]$/, "");
+  const operator = /^(?:(?:is|are) not equipped with|(?:does not|doesn't|do not|don't|cannot|can't) (?:support|have|include|offer|provide|use)|(?:has|have) no|(?:is|are) (?:without|not|no longer)|isn't|aren't|no longer|no|without|lacks?|not equipped with) (.+)$/i;
+  const absence = operator.exec(text) ?? new RegExp(`^costs ${money} without (.+)$`, "i").exec(text);
+  return absence ? { kind: "absence", property: absence[1] } : { kind: "unknown" };
+}
+
+const modelLabel = /^[A-Z][\p{L}\p{N}.-]*(?:\s+(?:[A-Z\d][\p{L}\p{N}.-]*|[-+]|\([\p{L}\p{N} .+-]+\)))+$/u;
+function isModelLabel(text: string): boolean {
+  return modelLabel.test(text) && !/[.!?]$/.test(text)
+    && !new RegExp(`^(?:${clauseVerb}|no\\b|without\\b|not equipped with\\b|you get\\b)`, "i").test(text);
+}
+function headingKind(text: string): "section" | "context-heading" | "boundary" | null {
+  if (!/^#{1,6}\s/.test(text)) return null;
+  const label = text.replace(/^#{1,6}\s+/, "").replace(/\s+#+$/, "");
+  if (new RegExp(`^(?:${sectionLabels})$`, "i").test(label)) return "section";
+  if (priceCondition.test(label) || /\b(?:payment|pricing|price|offer|purchase|details|information|notes|disclaimer)\b/i.test(label)) return "context-heading";
+  return isModelLabel(label) ? "boundary" : "context-heading";
+}
 
 function ownership(context: SourceContext, subject: SubjectProof, passage: SourcePassage): Ownership {
-  if (passage.kind !== "content") return { kind: "unresolved" };
-  const text = passage.text.replace(/[‘’]/g, "'");
+  if (passage.kind !== "content" && passage.kind !== "context-heading") return { kind: "unresolved" };
+  const text = passage.text.replace(/^#{1,6}\s+/, "").replace(/[‘’]/g, "'");
   const exact = new RegExp(`^(?:The )?${escapeRegex(subject.name)}\\s+(${clauseVerb}.*)$`, "i").exec(text);
   const predicate = exact ? exact[1] : text.replace(/^(?:These (?:headphones|earbuds|laptops)|The (?:headphones|earbuds|laptop)|It|They)\s+/i, "");
   const compound = /[.!?]\s+[A-Z0-9]|;|[,;]\s+[A-Z][a-z]+\s+[A-Z0-9]|\b(?:and|while|but|whereas|or)\s+[A-Z][a-z]+\s+[A-Z0-9]/.test(text);
@@ -194,9 +228,9 @@ function sourceContext(source: Source, sourceId: string, native: readonly Native
     region++;
     const local = scopes.filter((scope) => scope.highlight === highlight);
     const cuts = new Set([0, raw.length]);
-    const boundaries = [...raw.matchAll(new RegExp(boundaryPattern))];
+    const boundaries = sourceBoundaries(raw);
     for (const scope of local) for (const position of [scope.start, scope.identityEnd, scope.end]) cuts.add(position);
-    for (const match of boundaries) { cuts.add(match.index); cuts.add(match.index + match[0].length); }
+    for (const boundary of boundaries) { cuts.add(boundary.start); cuts.add(boundary.end); }
     const separator = new RegExp(`\\n+|(?<=[.!?])\\s+(?=[A-Z0-9])|(?<!\\S)#{1,6}[ \\t]+(?:${sectionLabels})(?=\\s|$)`, "gi");
     const sections = [...raw.matchAll(separator)];
     for (const match of sections) {
@@ -209,10 +243,12 @@ function sourceContext(source: Source, sourceId: string, native: readonly Native
       const text = cleanText(raw.slice(start, end)).replace(/^[-*]\s+/, "");
       if (!text) continue;
       const identity = local.find((scope) => start === scope.start && end === scope.identityEnd);
-      const isBoundary = boundaries.some((match) => match.index === start)
-        || !identity && !pricePart.test(text) && !priceCondition.test(text) && /^[A-Z][\p{L}\p{N}-]*(?: [A-Z][\p{L}\p{N}-]*)+(?: \d+)?$/u.test(text)
-        || /^#{1,6}\s/.test(text) && !identity && !new RegExp(`^#{1,6}\\s+(?:${sectionLabels})$`, "i").test(text);
-      const kind = identity ? "identity" : isBoundary ? "boundary" : new RegExp(`^#{1,6}\\s+(?:${sectionLabels})$`, "i").test(text) ? "section" : "content";
+      const heading = headingKind(text);
+      const isBoundary = boundaries.some((boundary) => boundary.start === start)
+        || !identity && !heading && !pricePart.test(text) && !priceCondition.test(text) && isModelLabel(text)
+        || !identity && heading === "boundary";
+      const fragment = /^(?:\.{3}|…)/.test(raw.slice(end)) && !/[.!?]$/.test(text) && !contextPrice.test(text) && !singlePrice.test(text);
+      const kind = identity ? "identity" : isBoundary ? "boundary" : fragment ? "fragment" : heading ?? "content";
       if (isBoundary || identity && entries.some((entry) => entry.highlight === highlight && entry.kind === "identity")) region++;
       entries.push({ highlight, start, end, text, kind, region, scope: local.find((scope) => start >= scope.identityEnd && end <= scope.end) ?? null });
       if (isBoundary) region++;
@@ -225,7 +261,7 @@ function sourceContext(source: Source, sourceId: string, native: readonly Native
     for (const passage of entries) {
       if (passage.scope !== scope) continue;
       if (!intact) passage.scope = null;
-      else if (passage.kind === "boundary" || passage.kind === "content" && ownership(context, subject, passage).kind !== "own") {
+      else if (passage.kind === "boundary" || passage.kind === "fragment" || passage.kind === "content" && ownership(context, subject, passage).kind !== "own") {
         intact = false;
         passage.scope = null;
       }
@@ -270,12 +306,13 @@ function assessSubject(context: SourceContext, proof: SubjectProof, preferences:
     passage.highlight === anchor.identity.highlight && passage.start === anchor.identity.start,
   ).map((passage) => passage.region)));
   for (const passage of context.passages) {
-    if (passage.kind !== "content") continue;
+    if (passage.kind !== "content" && passage.kind !== "context-heading" && passage.kind !== "fragment") continue;
     const owner = ownership(context, proof, passage);
     if (owner.kind === "own") {
+      const proposition = featureProposition(owner.predicate);
       for (const feature of FeatureSchema.options) {
         const descriptor = featureDescriptors[feature];
-        if (descriptor.proseNegative.test(owner.predicate) || descriptor.labelNegative.test(owner.predicate) || descriptor.exclusive?.test(owner.predicate)) absentFeatures[feature] ??= sourceSpan(passage);
+        if (proposition.kind === "absence" && descriptor.wholeProperty.test(proposition.property) || descriptor.labelNegative.test(owner.predicate) || descriptor.exclusive?.test(owner.predicate)) absentFeatures[feature] ??= sourceSpan(passage);
       }
       if (preferences.hard.excludedBrands.some((brand) => new RegExp(`^(?:is|are|was|were) (?:made|manufactured) by ${escapeRegex(brand)}[.!]?$`, "i").test(owner.predicate))) excludedManufacturer ??= sourceSpan(passage);
     }
@@ -368,7 +405,7 @@ function projectPositive(context: SourceContext, subject: EligibleSubject, nativ
   } else {
     const citation = (rawQuote: string) => {
       const quote = cleanText(rawQuote);
-      const passage = context.passages.find((entry) => entry.text === quote);
+      const passage = context.passages.find((entry) => entry.kind === "content" && entry.text === quote);
       if (!passage || quote.length > 640) return null;
       const owner = ownership(context, proof, passage);
       return owner.kind === "own" && owner.basis === "exact-statement" ? { sourceId, quote } : null;
