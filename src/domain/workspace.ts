@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { defaultPreferences, PreferencesSchema } from "./contracts";
-import { ApplicationTurnResponseSchema } from "./research";
+import { HistoricalApplicationTurnResponseSchema } from "./research-history";
 import { validBudgetAmount } from "./preferences";
 
 export const WORKSPACE_LIMIT = 256 * 1024;
@@ -66,7 +66,7 @@ export const SavedTurnSchema = z.object({
     }),
     z.object({
       status: z.literal("complete"),
-      value: ApplicationTurnResponseSchema,
+      value: HistoricalApplicationTurnResponseSchema,
     }),
     z.object({
       status: z.literal("interrupted"),

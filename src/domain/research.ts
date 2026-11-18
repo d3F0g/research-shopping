@@ -6,8 +6,15 @@ import {
   type Region,
   type Currency,
 } from "./contracts";
-import { ResearchSnapshotSchema, ResearchProductSchema, Version2ResearchResponseSchema } from "./research-evidence-v2";
-export { ResearchSnapshotSchema, ResearchProductSchema } from "./research-evidence-v2";
+import {
+  ResearchSnapshotSchema,
+  ResearchProductSchema,
+  Version2ResearchResponseSchema,
+} from "./research-evidence-v2";
+export {
+  ResearchSnapshotSchema,
+  ResearchProductSchema,
+} from "./research-evidence-v2";
 
 export const ResearchUnavailableReasonSchema = z.enum([
   "not-configured",

@@ -188,7 +188,9 @@ export function AccountControl({
             </Button>
           </form>
         )}
-        {chat.accountError && <p role="alert">{chat.accountError}</p>}
+        {chat.accountError && chat.account.status !== "unavailable" && (
+          <p role="alert">{chat.accountError}</p>
+        )}
       </DialogContent>
     </Dialog>
   );

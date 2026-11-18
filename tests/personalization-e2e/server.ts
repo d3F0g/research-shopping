@@ -1,3 +1,5 @@
+import snapshot from "../fixtures/research-history/version2-browser-snapshot.json";
+import { ResearchSnapshotSchema } from "../../src/domain/research";
 import { serve } from "@hono/node-server";
 import {
   configuredAccounts,
@@ -21,41 +23,7 @@ const turns = createResearchTurns({
       await new Promise((resolve) => setTimeout(resolve, 1800));
     return {
       status: "ready",
-      research: {
-        dataKind: "web-research",
-        retrievedAt: "2026-11-18T00:00:00.000Z",
-        requestId: "automated-fixture",
-        reportedCostUsd: 0,
-        products: [
-          {
-            id: "fixture-headphones",
-            name: "Automated fixture headphones",
-            facts: [
-              {
-                sourceId: "fixture-source",
-                quote: "Automated fixture headphones have wireless audio.",
-              },
-            ],
-            price: null,
-            stock: "unverified",
-            unresolvedConstraints: [
-              "Automated fixture data. Price, stock and delivery are unknown.",
-            ],
-          },
-        ],
-        sources: [
-          {
-            id: "fixture-source",
-            title: "Automated fixture source",
-            url: "https://example.com/fixture-headphones",
-            highlights: ["Automated fixture headphones have wireless audio."],
-          },
-        ],
-        limitations: [
-          "Automated fixture data. This is not current product evidence.",
-        ],
-        grounding: [],
-      },
+      research: ResearchSnapshotSchema.parse(snapshot),
     };
   },
 });

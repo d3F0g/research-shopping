@@ -1,5 +1,4 @@
 {
-  "contractCommit": "657e8831fdfeb564df30c1c842e0e0d32bd3c88c",
   "records": [
     {
       "file": "unversioned-application-response.json",
@@ -10,6 +9,13 @@
       "file": "unversioned-browser-snapshot.json",
       "provenance": "Automated synthetic browser fixture serialized from tests/personalization-e2e/server.ts at the contract commit. No provider call.",
       "sha256": "3b8cb7a8f69a1f3b5bdff813b8a9dd2600860344feb07e362d4cb8b85b14ae88"
+    },
+    {
+      "file": "version2-browser-snapshot.json",
+      "provenance": "Synthetic raw-structure automated fixture. Test-authored version 2 identity and price context. Not current product evidence.",
+      "sha256": "07cead23501bc831150bd89f2a384c68c4d41aec83d1bdd24d152a1cd7d481e5"
     }
-  ]
+  ],
+  "unversionedContractCommit": "657e8831fdfeb564df30c1c842e0e0d32bd3c88c",
+  "version2ContractCommit": "870898d69f3e55ef0efeda5ded3d2704ec588ea7"
 }

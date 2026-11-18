@@ -1,5 +1,8 @@
 import { z } from "zod";
-import { HistoricalResearchPreferencesSchema, HistoricalResearchSourceSchema } from "./research-history-unversioned";
+import {
+  HistoricalResearchPreferencesSchema,
+  HistoricalResearchSourceSchema,
+} from "./research-history-unversioned";
 
 const ResearchCitationSchema = z.strictObject({
   sourceId: z.string().min(1).max(80),
@@ -24,9 +27,7 @@ export const ResearchSnapshotSchema = z
     evidenceVersion: z.literal(2),
     retrievedAt: z.string().datetime(),
     products: z.array(ResearchProductSchema).max(5),
-    sources: z
-      .array(HistoricalResearchSourceSchema)
-      .max(5),
+    sources: z.array(HistoricalResearchSourceSchema).max(5),
     limitations: z.array(z.string().min(1).max(300)).max(12),
     requestId: z.string().max(180),
     reportedCostUsd: z.number().finite().nonnegative().nullable(),
@@ -61,9 +62,11 @@ export const ResearchSnapshotSchema = z
         const source = sources.get(citation.sourceId);
         if (
           !source ||
-          !source.highlights.some((excerpt) =>
-            excerpt.includes(citation.quote) &&
-            (product.identity.kind !== "single-product-heading" || excerpt.includes(product.identity.quote)),
+          !source.highlights.some(
+            (excerpt) =>
+              excerpt.includes(citation.quote) &&
+              (product.identity.kind !== "single-product-heading" ||
+                excerpt.includes(product.identity.quote)),
           ) ||
           citation.sourceId !== product.identity.sourceId
         ) {

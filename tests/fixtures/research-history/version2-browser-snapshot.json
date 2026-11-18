@@ -1,0 +1,70 @@
+{
+  "dataKind": "web-research",
+  "retrievedAt": "2026-11-18T01:00:00.000Z",
+  "requestId": "automated-fixture",
+  "reportedCostUsd": 0,
+  "products": [
+    {
+      "id": "fixture-headphones",
+      "name": "Automated fixture headphones",
+      "facts": [
+        {
+          "sourceId": "fixture-source",
+          "quote": "Automated fixture headphones have wireless audio."
+        }
+      ],
+      "price": {
+        "kind": "page-price-context-unverified",
+        "sourceId": "fixture-source",
+        "quote": "S$ 249 was S$ 349 SGD You Save S$ 100"
+      },
+      "stock": "unverified",
+      "unresolvedConstraints": [
+        "Automated fixture data. Price, stock and delivery are unknown."
+      ],
+      "identity": {
+        "kind": "single-product-heading",
+        "sourceId": "fixture-source",
+        "quote": "Automated fixture headphones"
+      }
+    },
+    {
+      "id": "fixture-identity-only",
+      "name": "Automated fixture identity-only headphones",
+      "identity": {
+        "kind": "single-product-heading",
+        "sourceId": "fixture-identity-source",
+        "quote": "Automated fixture identity-only headphones"
+      },
+      "facts": [],
+      "price": null,
+      "stock": "unverified",
+      "unresolvedConstraints": [
+        "Automated fixture data. Specifications, price, stock and delivery are unknown."
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "id": "fixture-source",
+      "title": "Automated fixture source",
+      "url": "https://example.com/fixture-headphones",
+      "highlights": [
+        "# Automated fixture headphones\nAutomated fixture headphones have wireless audio.\nS$ 249 was S$ 349 SGD You Save S$ 100"
+      ]
+    },
+    {
+      "id": "fixture-identity-source",
+      "title": "Automated fixture identity-only source",
+      "url": "https://example.com/fixture-identity-only",
+      "highlights": [
+        "# Automated fixture identity-only headphones"
+      ]
+    }
+  ],
+  "limitations": [
+    "Automated fixture data. This is not current product evidence."
+  ],
+  "grounding": [],
+  "evidenceVersion": 2
+}
