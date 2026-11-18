@@ -9,6 +9,7 @@ const quote = "Aster Wave 2 supports wireless audio.";
 const price = "Aster Wave 2 is listed at SGD 229.00.";
 const snapshot = {
   dataKind: "web-research",
+  evidenceVersion: 2,
   retrievedAt: "2026-11-18T01:00:00.000Z",
   requestId: "automated-fixture",
   reportedCostUsd: 0.007,
@@ -31,6 +32,7 @@ const snapshot = {
     {
       id: "research-aster",
       name: "Aster Wave 2",
+      identity: { kind: "direct-model-statement", sourceId: "source-1", quote },
       facts: [{ sourceId: "source-1", quote }],
       price: {
         kind: "page-observed-unverified",
@@ -46,6 +48,7 @@ const snapshot = {
     {
       id: "research-orbit",
       name: "Orbit Quiet",
+      identity: { kind: "direct-model-statement", sourceId: "source-2", quote: "Orbit Quiet supports wireless audio." },
       facts: [
         { sourceId: "source-2", quote: "Orbit Quiet supports wireless audio." },
       ],
@@ -69,7 +72,7 @@ test.beforeEach(async ({ page }) => {
     route.fulfill({
       json: {
         status: "ok",
-        mode: "research",
+        mode: "fixture",
         liveIntegrations: true,
         merchantVerification: "unavailable",
       },
@@ -96,7 +99,7 @@ test("shows cited research cards, observed-price uncertainty and readable deskto
   });
   await page.setViewportSize({ width: 1440, height: 1000 });
   await page.goto("/");
-  await expect(page.getByText("Web research", { exact: true })).toBeVisible();
+  await expect(page.getByText("Fixture data", { exact: true })).toBeVisible();
   await page
     .getByLabel("Message", { exact: true })
     .fill("Wireless headphones under SGD300");
@@ -104,7 +107,7 @@ test("shows cited research cards, observed-price uncertainty and readable deskto
   const card = page.getByRole("article", { name: "Aster Wave 2" });
   await expect(card).toBeVisible();
   await expect(card).toContainText("Page-observed price · Unverified");
-  await expect(card).toContainText("Stock unverified");
+  await expect(card).toContainText("Stock and delivery unverified");
   await expect(
     page.getByRole("button", { name: "Select this product" }),
   ).toHaveCount(0);
@@ -161,6 +164,7 @@ test("shows cited research cards, observed-price uncertainty and readable deskto
 test("keeps unavailable research explicit without synthetic results or merchant actions", async ({
   page,
 }) => {
+  await page.route("**/api/health", (route) => route.fulfill({ json: { status: "ok", mode: "research", liveIntegrations: true, merchantVerification: "unavailable" } }));
   await page.route("**/api/turn", (route) =>
     route.fulfill({
       json: {

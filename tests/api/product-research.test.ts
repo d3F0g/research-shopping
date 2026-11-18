@@ -56,7 +56,7 @@ describe("real SDK product research against local HTTP", () => {
       output: {
         content: { observations: [{
           name: "Aster Wave 2", url: "https://reviews.example.com/aster-wave-2",
-          quotedFacts: price ? [] : [quote], priceQuote: price ? quote : null,
+          identityQuote: null, quotedFacts: price ? [] : [quote], priceQuote: price ? quote : null,
         }] }, grounding: [],
       },
     });
@@ -135,13 +135,13 @@ describe("real SDK product research against local HTTP", () => {
     {
       name: "Invented Model",
       url: "https://reviews.example.com/aster-wave-2",
-      quotedFacts: ["Invented Model has 200 hours of battery."],
+      identityQuote: null, quotedFacts: ["Invented Model has 200 hours of battery."],
       priceQuote: null,
     },
     {
       name: "Aster Wave 2",
       url: "https://attacker.example.org/new-destination",
-      quotedFacts: [
+      identityQuote: null, quotedFacts: [
         "Aster Wave 2 uses Bluetooth wireless audio and active noise cancelling.",
       ],
       priceQuote: null,
@@ -149,7 +149,7 @@ describe("real SDK product research against local HTTP", () => {
     {
       name: "Aster Wave 2",
       url: "https://reviews.example.com/aster-wave-2",
-      quotedFacts: ["Orbit Quiet supports wireless audio and multipoint."],
+      identityQuote: null, quotedFacts: ["Orbit Quiet supports wireless audio and multipoint."],
       priceQuote: "Aster Wave 2 costs SGD 1.",
     },
   ])(
@@ -181,7 +181,7 @@ describe("real SDK product research against local HTTP", () => {
             {
               name: "Aster Wave 2",
               url: "https://reviews.example.com/aster-wave-2",
-              quotedFacts: ["Aster Wave 2 is wireless.", "Aster Wave 2 is a pair of headphones."],
+              identityQuote: null, quotedFacts: ["Aster Wave 2 is wireless.", "Aster Wave 2 is a pair of headphones."],
               priceQuote: "Orbit Quiet costs SGD 999.",
             },
           ],
@@ -216,7 +216,7 @@ describe("real SDK product research against local HTTP", () => {
               {
                 name: "Aster Wave 2",
                 url: "https://reviews.example.com/aster-wave-2",
-                quotedFacts: [],
+                identityQuote: null, quotedFacts: [],
                 priceQuote: quote,
               },
             ],
@@ -248,7 +248,7 @@ describe("real SDK product research against local HTTP", () => {
               {
                 name: "Aster Wave 2",
                 url: "https://reviews.example.com/aster-wave-2",
-                quotedFacts: [quote, category],
+                identityQuote: null, quotedFacts: [quote, category],
                 priceQuote: null,
               },
             ],
@@ -280,7 +280,7 @@ describe("real SDK product research against local HTTP", () => {
             {
               name,
               url: "https://reviews.example.com/aster-wave-2",
-              quotedFacts: [quote, category],
+              identityQuote: null, quotedFacts: [quote, category],
               priceQuote: null,
             },
           ],
@@ -369,7 +369,7 @@ describe("real SDK product research against local HTTP", () => {
             {
               name: "Aster Wave 2",
               url: "https://reviews.example.com/aster-wave-2",
-              quotedFacts: ["Aster Wave 2 does not support wireless audio.", "Aster Wave 2 is a pair of headphones."],
+              identityQuote: null, quotedFacts: ["Aster Wave 2 does not support wireless audio.", "Aster Wave 2 is a pair of headphones."],
               priceQuote: null,
             },
           ],

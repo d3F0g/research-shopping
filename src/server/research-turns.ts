@@ -119,7 +119,9 @@ export function createResearchTurns(dependencies: {
           notes,
           research: result.research,
           answer: result.research.products.length
-            ? "These source-backed research leads are worth comparing. Prices are page observations; current affordability, stock and delivery need verification."
+            ? result.research.products.some((product) => product.facts.length)
+              ? "I found source-backed research leads. Compare the quoted specifications and their limits. Page prices, current affordability, stock and delivery remain unverified."
+              : "I found product identities, but useful specifications were not established. Page price excerpts, current affordability, stock and delivery remain unverified."
             : "I found source pages, but could not attribute product-specific details reliably. Review the excerpts below.",
         };
       } catch (error) {

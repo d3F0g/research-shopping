@@ -781,3 +781,10 @@ button {
 .live-research .research-sources {
   margin-top: 16px;
 }
+
+.live-research .comparison-table {
+  table-layout: fixed;
+}
+.live-research .comparison-table td {
+  min-width: 0;
+}

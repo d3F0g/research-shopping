@@ -27,7 +27,7 @@ test("renders ambiguous prices and unrelated products as limited source context"
         }],
         output: { content: { observations: [{
           name: "Aster Wave 2", url,
-          quotedFacts: [relevant ? category : sweater],
+          identityQuote: null, quotedFacts: [relevant ? category : sweater],
           priceQuote: relevant ? monthlyPrice : null,
         }] }, grounding: [] },
       }));
@@ -48,7 +48,7 @@ test("renders ambiguous prices and unrelated products as limited source context"
     if (response.status !== "ready" || unrelated.status !== "ready") return;
     let turns = 0;
     await page.route("**/api/health", (route) => route.fulfill({ json: {
-      status: "ok", mode: "research", liveIntegrations: true, merchantVerification: "unavailable",
+      status: "ok", mode: "fixture", liveIntegrations: true, merchantVerification: "unavailable",
     } }));
     await page.route("**/api/turn", (route) => route.fulfill({ json: {
       kind: "research", preferences, notes: [],

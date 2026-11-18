@@ -4,6 +4,7 @@ import { createApp } from "./app";
 import { configFromEnvironment } from "./config";
 import { createExaProductResearch } from "./exa-research";
 import { createResearchQuota } from "./research-quota";
+import { researchDiagnosticPath } from "./research-diagnostics";
 import { createResearchTurns } from "./research-turns";
 
 const config = configFromEnvironment(process.env);
@@ -13,7 +14,7 @@ const key = process.env.EXA_API_KEY?.trim();
 const ledgerPath = process.env.EXA_RESEARCH_LEDGER_PATH;
 const configured = enabled && Boolean(key) && Boolean(ledgerPath && isAbsolute(ledgerPath));
 const researchTurns = createResearchTurns(configured && key && ledgerPath ? {
-  research: createExaProductResearch(key), quota: createResearchQuota(ledgerPath),
+  research: createExaProductResearch(key, { diagnosticSink: researchDiagnosticPath(process.env) }), quota: createResearchQuota(ledgerPath),
 } : { unavailableReason: enabled ? "not-configured" : "disabled" });
 const composeApp = fixtureMode ? (await import("./test-fixture-app")).createFixtureApp : createApp;
 const app = composeApp({
