@@ -28,6 +28,9 @@ const priorityRules: [RegExp, Priority][] = [
 
 const brands = new Map(["Sony", "Bose", "Sennheiser", "Audio-Technica", "ASUS", "Dell", "Apple", "Lenovo", "HP", "Acer", "Samsung"].map((brand) => [brand.toLowerCase(), brand]));
 const numberPattern = /^(?:\d{1,3}(?:,\d{3})+|\d+)(?:\.\d{1,2})?$/;
+const unsupportedCurrencyCodes = Intl.supportedValuesOf("currency").filter((currency) => currency !== "SGD" && currency !== "USD").join("|");
+const budgetAmountToken = String.raw`[+-]?(?:\d[\d,._]*(?:e[+-]?\d+)?[km]?|infinity|nan)`;
+const unsupportedCurrencyAmountPattern = new RegExp(String.raw`\b(?:${unsupportedCurrencyCodes})\s*${budgetAmountToken}\b(?!\s*gb\b)|\b${budgetAmountToken}\s*(?:${unsupportedCurrencyCodes})\b`, "i");
 
 export function validBudgetAmount(amount: number): boolean {
   return Number.isFinite(amount) && amount > 0 && amount <= 1_000_000
@@ -107,7 +110,9 @@ export function updatePreferences(message: string, previous: Preferences): Prefe
     actionable = true;
   });
 
-  const unsupportedCurrency = /(?:\b|(?<=\d))(?:eur|gbp|aud|cad|jpy|myr|inr|euros?|pounds?|yen|ringgit)(?=\b|\d)|[€£¥]/i.test(remaining);
+  const unsupportedCurrency = unsupportedCurrencyAmountPattern.test(remaining)
+    || /\b(?:euros?|pounds?|yen|ringgit)\b/i.test(remaining)
+    || /\p{Sc}/u.test(remaining.replaceAll("$", ""));
   if (unsupportedCurrency) {
     fail("currency", "This research interface supports SGD and USD budgets only. Specify the currency and a positive amount, or explicitly remove the unsupported requirement.");
   }
@@ -117,13 +122,13 @@ export function updatePreferences(message: string, previous: Preferences): Prefe
   }
   const amounts: { token: string; currency?: Currency; dollar: boolean }[] = [];
   let budgetUpdate: { budget: NonNullable<Preferences["hard"]["budget"]>; note: string | null } | undefined;
-  consume(/(?:\b(SGD|USD|US\$|S\$)|\$)\s*([+-]?(?:\d[\d,._]*(?:e[+-]?\d+)?[km]?|infinity|nan))\b/gi, (match) => {
+  consume(new RegExp(String.raw`(?:\b(SGD|USD|US\$|S\$)|\$)\s*(${budgetAmountToken})\b`, "gi"), (match) => {
     amounts.push({ token: match[2], currency: match[1] ? (/^(?:USD|US\$)$/i.test(match[1]) ? "USD" : "SGD") : undefined, dollar: !match[1] });
   });
-  consume(/\b([+-]?(?:\d[\d,._]*(?:e[+-]?\d+)?[km]?|infinity|nan))\s*(SGD|USD)\b/gi, (match) => {
+  consume(new RegExp(String.raw`\b(${budgetAmountToken})\s*(SGD|USD)\b`, "gi"), (match) => {
     amounts.push({ token: match[1], currency: match[2].toUpperCase() as Currency, dollar: false });
   });
-  consume(/\b(?:under|below|up to|at most|less than|no more than|budget(?: is| of| to)?|limit(?: is| of| to)?|maximum(?: of)?|max(?: of)?|make it)\s*([+-]?(?:\d[\d,._]*(?:e[+-]?\d+)?[km]?|infinity|nan))\b/gi, (match) => {
+  consume(new RegExp(String.raw`\b(?:under|below|up to|at most|less than|no more than|budget(?: is| of| to)?|limit(?: is| of| to)?|maximum(?: of)?|max(?: of)?|make it)\s*(${budgetAmountToken})\b`, "gi"), (match) => {
     amounts.push({ token: match[1], dollar: false });
   });
   if (amounts.length > 1) fail("currency", "I found more than one budget amount. State one maximum amount and its currency.");

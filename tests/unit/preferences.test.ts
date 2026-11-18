@@ -17,13 +17,56 @@ function existingPreferences() {
 }
 
 describe("budget currency clarification", () => {
+  it.each(["ALL", "TRY", "TOP"])("recognizes %s only beside a budget amount", (currency) => {
+    const previous = existingPreferences();
+    for (const token of [`${currency}200`, `${currency} 200`, `200${currency}`, `200 ${currency}`, `${currency.toLowerCase()}200`, `200 ${currency.toLowerCase()}`]) {
+      const message = `under ${token}`;
+      const result = updatePreferences(message, previous);
+      expect(result.clarification?.reason).toBe("currency");
+      expect(result.preferences.hard).toEqual({ ...previous.hard, pendingConstraint: message });
+      expect(result.notes).toEqual([]);
+    }
+    const ordinary = updatePreferences(`${currency.toLowerCase()} headphones`, previous);
+    expect(ordinary.clarification?.reason).not.toBe("currency");
+    expect(ordinary.preferences.hard.budget).toEqual(previous.hard.budget);
+    for (const token of [`model${currency}200`, `${currency}200phone`, `model200${currency}`]) {
+      const embedded = updatePreferences(token, previous);
+      expect(embedded.clarification?.reason).toBe("constraint");
+      expect(embedded.preferences.hard.budget).toEqual(previous.hard.budget);
+    }
+  });
+
+  it("never assigns a regional default to a runtime unsupported currency amount", () => {
+    for (const region of ["SG", "US"] as const) {
+      const previous = existingPreferences();
+      previous.hard.region = region;
+      previous.hard.budget = { currency: region === "SG" ? "SGD" : "USD", amount: 300 };
+      for (const currency of Intl.supportedValuesOf("currency").filter((code) => code !== "SGD" && code !== "USD")) {
+        for (const token of [`${currency}200`, `${currency} 200`, `200${currency}`, `200 ${currency}`]) {
+          const message = `under ${token}`;
+          const result = updatePreferences(message, previous);
+          expect(result.clarification?.reason, message).toBe("currency");
+          expect(result.preferences.hard.budget, message).toEqual(previous.hard.budget);
+          expect(result.preferences.hard.pendingConstraint, message).toBe(message);
+        }
+      }
+    }
+  });
+
+  it("does not mistake all before a memory specification for a currency", () => {
+    const result = updatePreferences("all 32 GB laptops under SGD2000", existingPreferences());
+    expect(result.clarification).toBeUndefined();
+    expect(result.preferences.hard.budget).toEqual({ currency: "SGD", amount: 2000 });
+    expect(result.preferences.hard.requiredFeatures).toEqual(["high-memory"]);
+  });
+
   it.each(["CHF", "HKD", "CNY", "₹", "₩"])(
-    "does not infer a default currency from an amount with unexplained %s",
+    "does not infer a default currency from an amount with unsupported %s",
     (suffix) => {
       const previous = existingPreferences();
       const message = `under 200 ${suffix}`;
       const result = updatePreferences(message, previous);
-      expect(result.clarification?.reason).toBe("constraint");
+      expect(result.clarification?.reason).toBe("currency");
       expect(result.preferences).toEqual({
         ...previous,
         hard: { ...previous.hard, pendingConstraint: message },
@@ -181,14 +224,18 @@ describe("budget currency clarification", () => {
     },
   );
 
-  it.each(["CHF", "HKD", "CNY", "₹", "₩"])(
-    "preserves the HTTP budget and blocks research for an unexplained %s amount",
-    async (suffix) => {
+  it.each([
+    "under 200 CHF", "under 200 HKD", "under 200 CNY", "under 200 ₹", "under 200 ₩",
+    "under ALL200", "under ALL 200", "under 200ALL", "under 200 ALL",
+    "under TRY200", "under TRY 200", "under 200TRY", "under 200 TRY",
+    "under TOP200", "under TOP 200", "under 200TOP", "under 200 TOP",
+  ])(
+    "preserves the HTTP budget and blocks research for %s",
+    async (message) => {
       const research = vi.fn(async () => ({ status: "unavailable", reason: "empty" }) as const);
       const reserve = vi.fn(async () => "admitted" as const);
       const app = createApp({ researchTurns: createResearchTurns({ research, quota: { reserve, settle: vi.fn() } }) });
       const previous = existingPreferences();
-      const message = `under 200 ${suffix}`;
       const response = await app.request("http://127.0.0.1:3000/api/turn", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -198,7 +245,7 @@ describe("budget currency clarification", () => {
       const body = await response.json();
       expect(body).toMatchObject({
         kind: "clarification",
-        reason: "constraint",
+        reason: "currency",
         preferences: { ...previous, hard: { ...previous.hard, pendingConstraint: message } },
         notes: [],
         toolActivity: [],
