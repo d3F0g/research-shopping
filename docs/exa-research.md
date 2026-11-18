@@ -1,72 +1,82 @@
 # Exa product research
 
-Exa is Fieldnote's normal development discovery and research API. A submitted shopping request can return real product research leads, supporting quotations, safe source links and page-observed price text. These observations are separate from merchant-verified offers. No authorized merchant API is configured. Stock and delivery remain unverified, and Issue #2 stays open for genuine merchant proof.
+Fieldnote's normal development backend discovers products through Exa. It does not filter a fixed catalog or require a separate context-search button. A shopping submission updates preferences, asks for material missing information, then researches and returns structured comparisons inside the assistant message. Product descriptions and criteria are open-ended.
 
-## Private development setup
+## Run the intended application version
 
-Use Node.js 22.12 or newer and npm 11. The API development command reads the repository-root `.env` using Node's environment-file mechanism. Preserve the existing `EXA_API_KEY` there. Never prefix it with `VITE_`, put it in command arguments, copy it into another checkout or add it to GitHub.
-
-Set `EXA_RESEARCH_LEDGER_PATH` to one absolute private file path shared by every development checkout using this key. The existing local setup points to the original checkout's ignored `.local/exa-research-budget.json`. A fresh setup can use `.env.example` as a guide. Do not overwrite an existing environment file.
+Use Node.js22.12 or newer and npm11. Run from the verified feature or local preview checkout. A listening localhost port does not identify the served commit. The original main checkout can still contain the old fixture implementation while its replacement remains unmerged.
 
 ```sh
 npx --yes npm@11.6.2 ci
 npm run dev
 ```
 
-Submit a supported request in chat. Research appears in the assistant response. Open evidence or comparisons for details and use **View source** for the actual cited page. No external page opens automatically. Source links are not purchase or verified-offer links.
+The development API reads the repository-root `.env` through Node's environment-file mechanism. Preserve the existing `EXA_API_KEY`. Keep it server-only, outside Git, browser code, public responses, logs and screenshots. Never use a `VITE_` prefix, put a secret value in command arguments or copy the private environment into another worktree.
 
-Explicit development mode is required for live composition. `EXA_RESEARCH_ENABLED=false`, missing key, missing/invalid ledger configuration, production mode, provider failure, missing evidence or exhausted allowance returns an unavailable state. Normal interactions never fall back to fixture products. Automated tests select their fixture composition explicitly and disable live research even if the developer environment contains a key.
+Set `EXA_RESEARCH_LEDGER_PATH` to the one absolute private ledger shared by every development checkout using the key. The existing setup uses the original checkout's ignored `.local/exa-research-budget.json`. Separate proof checkouts load the original environment through Node's `--env-file` and keep this same ledger. A different checkout is not a fresh allowance.
 
-## Search and evidence
+Normal live composition requires development mode, an enabled integration, a nonempty server key and a valid absolute ledger path. Production remains disabled. Missing configuration, explicit disablement, failed research, invalid evidence or blocked usage returns an honest unavailable or insufficient-evidence response. It never selects fixture products. Explicit automated test composition is separate and visibly labels synthetic data.
 
-The existing official `exa-js` transport is reused. One research operation sends one compact `/search` request on `auto`, five results, highlights, an objective and a small structured-output schema. The five-result cap is a deliberate credit-conservation choice. No automatic retries, Agent/deep chain, extra LLM dependency or per-page summary fan-out is added.
+## Understand the request flow
 
-The query expresses the accepted shopping intent. The objective supports useful product comparison. The extraction prompt requires model-specific verbatim evidence, preserves negation and variant/currency context, treats page instructions as untrusted data and leaves missing values unknown. The adapter validates every returned structure and destination. Grounding field names remain opaque provider metadata; confidence is not proof.
+The server owns intent interpretation. Current intent, response and evidence contracts use version4. Budget `amount` is the maximum; optional `minimum` is the hard floor. Both are validated and enforced in the same currency. A complete range such as `Necklaces between 1k to 2k` preserves its description and bounds without a category lookup. The app discloses an assumed request currency. Source currency still needs explicit source evidence.
 
-Version-2 live observations require a visible identity citation. Source-bound product headings can establish research leads independently of native extraction. A displayed structured fact or price must retain its supporting quotation in a visible bounded excerpt from its validated returned source, within the same proven product scope. Gaps, competing products, related items and variant menus end a heading scope. Ambiguous model attribution is dropped from structured product observations. Safe sources may still be shown when extraction cannot establish products, with that limitation visible. Sources-only degradation does not establish successful structured discovery.
+Preparation updates preferences without a provider call. The client acknowledges that intent before research starts, so Stop preserves accepted exclusions and price bounds. Invalid hard changes remain pending until correction or explicit discard. Completed historical data is separate from prepared transport state. Frozen version3 and earlier snapshots do not acquire new range semantics. Only active intent is migrated explicitly.
 
-An identity-only lead explicitly says that useful specifications were not established. Complete sale/list/savings blocks can be retained as unverified price context without choosing a scalar payable price, savings calculation or budget match. Page prices are visibly observed and unverified. Retrieval time is not page freshness, an inventory timestamp or a current payable amount. Unknown hard constraints remain unresolved. Retrieval restriction notices cannot relax the shopper's requirements. Never infer stock, shipping, merchant authorization, variant equivalence or budget eligibility from an unrelated page quotation.
+Local greetings, acknowledgments, app-help replies, detail changes and existing evidence disclosures do not start research. Shopping submissions can trigger one paid Exa operation after necessary preferences are resolved. The composer discloses that possibility before submission. No redundant confirmation or context button is required. HTTP preparation and research are two local phases, not two provider calls or simulated token streaming.
 
-## Development usage allowance
+## Use Exa without another model provider
 
-The initial local policy permits at most 40 attempted searches, reserves US$0.05 per attempt, limits reserved usage to US$2 and allows one active search. It leaves most of the user's initial US$10 outside this application allowance. These are admission limits, not the current account balance or a guarantee of Exa's billing. Actual reported cost is recorded separately.
+Fieldnote has no separate chat LLM. The backend uses the existing official `exa-js` SDK and one native `/answer` request. The canonical Answer reference supports this combination of retrieval, generation, citations and structured output. Exa performs the search and synthesis; the backend binds and evaluates returned product assessments rather than trusting the proposed order or final prose.
 
-The ledger persists before dispatch and survives refresh, reset and server restart. Duplicate operation IDs spend nothing. Locks and pending reservations prevent another process from silently multiplying the allowance. Unknown charges, cancellation, errors or crashes retain their reservation and stop further paid work pending developer inspection. Do not delete the ledger to make a blocked request succeed or automatically replenish it.
+The request's documented options have explicit jobs. `text: true` supplies source context for literal evidence and price qualifiers. `outputSchema` defines product assessments. `systemPrompt` contains behavior, attribution and uncertainty rules plus authoritative intent. `userLocation` localizes discovery to the selected market. Location does not prove manufacturer, currency, stock or delivery. There is no Agent/deep chain, per-page summary fan-out, other paid provider or additional model credential.
 
-Cancellation reaches the SDK request and response-body read. Stopping the browser request does not prove that Exa charged nothing. Presentation changes, ordinary replies, disclosures and comparisons of already held evidence do not make another paid request.
+A future app-owned LLM would change this choice. The canonical skill recommends giving that LLM `/search` as a tool, including a required query and objective and its exact system-prompt search guidance. Inspect available configuration and explain the dependency before adding it. Do not add an unused tool prompt to this application.
 
-## Follow the canonical Exa skill
+## Evaluate and explain candidates on the backend
 
-For Exa API changes, fetch and read the current skill output before editing call shapes.
+Candidates come from Exa's returned product output and citations, not a local catalog. Bind support only to the explicit matching returned URL and literal retained text. Do not map numeric citation markers to guessed array positions, rewrite quotations, repair ellipses or use a discarded source qualifier as positive evidence.
+
+Separate identity, relevance, hard criteria, flexible preferences, attributes, observed price and budget assessment. Unknown and conflicting facts remain explicit. Positive recommendation reasons need source-supported exact-variant assessments. A budgeted choice also needs an applicable amount in the requested currency, with both bounds, variant and conditions satisfied. Bare dollar signs, seller domains and unrelated SKU prices cannot establish those facts.
+
+The server orders candidates by hard eligibility and exact request relevance, then supported flexible-preference coverage. Equal or incomparable coverage remains a tie; it is not a performance score. Extra facts, source counts and unknown values do not earn preference credit. Conditional choice and summary follow this evaluation. Valid native preference can break a strongest-tier tie but cannot bypass stronger applicable evidence or a failed hard gate. Invalid typed references remain rejected.
+
+The response contains ordered products, source-bound assessments, conditional choice/reason references and per-product explanation references. `explanation.reasons` identifies supported assessments; `explanation.tradeoffs` identifies actual unresolved or adverse assessments. The UI renders compact comparisons and disclosures from those references. Quotations establish provenance, not semantic entailment. Rationales remain source-based AI interpretations and need independent product verification.
+
+Page prices are observed and unverified with the merchant. Retrieval time is not source freshness or a current payable amount. Search results do not verify inventory. Stock, delivery and authorized merchant offers remain unverified. Product links are validated source destinations and open only on user action. Payments and order placement are out of scope. Issue #36 records unavailable merchant access; do not repeatedly ask for it or close #2 without genuine proof.
+
+## Preserve the shared usage allowance
+
+The local admission policy permits at most40 attempts, reserves US$0.05 for each, caps reserved exposure at US$2 and allows one active operation. These limits are not the Exa account balance or a provider-enforced spending cap. Record provider-reported costs separately.
+
+Persist admission before dispatch. Duplicate operation IDs, ordinary replies and held-evidence controls add no provider operation. Cancellation reaches the actual SDK request and response body. An abort does not establish zero cost. Unknown charges, interrupted requests and crashes retain their reservation and stop further paid work. Do not delete or reset a ledger, clear its stopped flag, substitute a new key or fabricate a zero-cost completion to continue.
+
+Issue #42 currently holds genuine live verification after a30-second timeout without a reported cost. Seven settled records report US$0.045; the eighth is uncertain with US$0.05 reserved. The provider balance remains unverified. Trustworthy reconciliation and a newly recorded bounded allowance are required before another real research call. Existing historical proof allowances do not replenish themselves.
+
+## Read the canonical skill before API changes
+
+Run the documented setup command and read its complete output before choosing or changing API shapes.
 
 ```sh
 npx skills use "https://github.com/exa-labs/agent-skills" --skill "build-with-exa"
 ```
 
-Read its complete output. Resolve relative references against the supporting-files directory printed by that run. Use the skill rather than remembered API options. The current feature uses `/search`; no Agent, Monitor, Webset, Answer, or OpenAI-compatible endpoint is needed for this interface.
+Resolve relative references from the supporting-files directory printed by that run. Consult its Answer, Search, SDK and prompting references as appropriate. The latest setup output was read completely for this work. The installed exa-js2.28 matched the npm release checked on18November2026. Recheck rather than assuming that remains current.
 
-The app has no separate LLM tool loop. Exa performs the bounded structured extraction. If a future feature gives an LLM web search, prefer the SDK tool helpers and require both `query` and `objective`. Pass the model's objective unchanged. The required objective description is:
+## Verify without spending credits
 
-> Goal for this search turn; say which documents should rank first, which should be excluded, and what specific facts or figures to pull from them.
+CI and automated checks use explicit fixtures, injected responses or fake-key loopback SDK/Hono transport. Live Exa composition is disabled. Test actual upstream cancellation before headers and during body reads, quota persistence, concurrent/duplicate attempts, stale responses, interval boundaries, evidence/URL validation, ranking ties, ordinary help and no-fallback failures.
 
-Add this exact sentence to the existing model system prompt, replacing `web_search` with the actual tool name:
+Use Playwright for actual chat submission, source-backed simulated comparisons, historical turns, preference changes, isolation, reset, theme and desktop/mobile disclosures. Inspect screenshots, including the short mobile composer and editor. Clearly label provider substitutes. A passing simulated journey is not a successful real Exa recommendation.
 
-> Call web_search before answering unless you're certain the answer can't have changed since your training cutoff.
+Genuine project verification is separate. Pin the candidate, original shared ledger, permitted calls and conservative reservation before dispatch. Use fresh conversations and preserve failures. A proof-only private diagnostic sink can retain bounded native/source information with truncation hashes; it is absent by default and excluded from public responses, history and routine logs. Never retain headers, keys, cookies or environment values. Sink failure cannot retry a request or change settlement.
 
-Keep the rest of that system prompt. Do not add an unused prompt or a model dependency to the current deterministic application.
+Assess relevant distinct products, useful qualified comparisons, observed prices, hard fit, justified choice and source-link behavior independently. Neither source counts nor green CI can waive failed product acceptance. Keep merging blocked while the real research journey is unproven.
 
-## Verify safely
-
-Automated tests use local SDK substitutes, local HTTP transports and explicit fixture composition. They spend no Exa credits. Cover source/model attribution, missing or malformed data, observed-price labels, notices, quota persistence, duplicate/concurrent requests, stale results and actual upstream cancellation. Inspect desktop/mobile screenshots through the project verification skill.
-
-Live verification is separate. Root's initial proof allowance is at most two bounded calls through the real project runtime. Load the original private environment without copying it. Shared evidence contains sanitized request IDs, returned costs, accepted/rejected observation counts, source excerpts and inspected screenshots. A proof-only server diagnostic sink may retain bounded native output and original highlight structure in a private owner-only artifact of at most 128 KiB. It is absent by default and excluded from public responses, history and routine logs. Do not retain headers, keys, environment values, cookies or user request fields. Sink failure cannot retry or change settlement. Stop on the first unexpected error or charge. Assess discovery, specification usefulness, price context and comparison separately. A successful search proves only its observed research path, not stock, delivery or authorized merchant offers. Historical normalized captures do not supply missing raw provider structure or native extraction.
-
-Run the existing private leak check after building. It checks reachable Git objects, compressed traces and assets without printing the key.
+After building, run the existing private leak verifier. It inspects reachable Git objects, compressed traces and build assets without printing the key.
 
 ```sh
 node --env-file=.env .codex/pstack-runs/exa-integration/verify-no-secret.mjs
 ```
 
-## Current dependency advisory
-
-The current full audit reports12 propagated high package findings from one inherited picomatch ReDoS advisory. Base and Exa candidate have the same finding set; no finding originates in exa-js. The primary [GHSA-fc5q-39xc-vjpf advisory](https://github.com/advisories/GHSA-fc5q-39xc-vjpf) currently lists no patched release. [Issue27](https://github.com/d3F0g/research-shopping/issues/27) tracks compatible remediation and actual untrusted-pattern reachability. Do not suppress this audit or represent earlier zero-audit installation records as the current result. The independent security verdict is required before shipping.
+Inherited dependency findings remain tracked in Issue #27. Its earlier audit reported12 propagated high tooling findings. Verify the current state during security review; do not present historical zero-audit records as current approval.
