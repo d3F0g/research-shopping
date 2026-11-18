@@ -1,6 +1,6 @@
-import type { Claim, DiscoveryProduct, Offer, Preferences, ProductId } from "./contracts";
+import type { Claim, DiscoveryProduct, Offer, Preferences, ProductId } from "./legacy-contracts";
 
-export type { ProviderEvent } from "./contracts";
+export type { ProviderEvent } from "./legacy-contracts";
 
 export type ProviderContext = { signal: AbortSignal };
 
