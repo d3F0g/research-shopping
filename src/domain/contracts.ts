@@ -27,6 +27,11 @@ export const CriterionSchema = z.strictObject({
     text: z.string().min(1).max(2000),
   }),
 });
+export const PendingChangeSchema = z.strictObject({
+  message: z.string().min(1).max(2000),
+  reason: z.enum(["currency", "budget", "constraint"]),
+  explanation: z.string().min(1).max(600),
+});
 export const ShoppingIntentSchema = z.strictObject({
   version: z.literal(3),
   productDescription: z.string().max(4000),
@@ -38,11 +43,13 @@ export const ShoppingIntentSchema = z.strictObject({
     ),
   budget: BudgetSchema.nullable(),
   budgetClarified: z.boolean(),
+  pendingChange: PendingChangeSchema.nullable(),
   region: RegionSchema,
   responseLength: DetailModeSchema,
   revision: z.number().int().nonnegative().max(Number.MAX_SAFE_INTEGER),
 });
 const SingleIntentEditSchema = z.discriminatedUnion("kind", [
+  z.strictObject({ kind: z.literal("discard-pending") }),
   z.strictObject({
     kind: z.literal("set-description"),
     value: z.string().min(1).max(4000),
@@ -79,13 +86,22 @@ export const IntentEditSchema = z.union([
     edits: z.array(SingleIntentEditSchema).min(1).max(20),
   }),
 ]);
-export const TurnRequestSchema = z.strictObject({
+export const PrepareTurnRequestSchema = z.strictObject({
+  phase: z.literal("prepare"),
   message: z.string().trim().min(1).max(2000),
   preferences: ShoppingIntentSchema,
   operationId: z.string().uuid(),
   edit: IntentEditSchema.optional(),
   skipBudget: z.boolean().optional(),
 });
+export const ResearchTurnRequestSchema = z.strictObject({
+  phase: z.literal("research"),
+  preferences: ShoppingIntentSchema,
+  operationId: z.string().uuid(),
+});
+export const TurnRequestSchema = z.discriminatedUnion("phase", [PrepareTurnRequestSchema, ResearchTurnRequestSchema]);
+export type PrepareTurnRequest = z.infer<typeof PrepareTurnRequestSchema>;
+export type ResearchTurnRequest = z.infer<typeof ResearchTurnRequestSchema>;
 export type Currency = z.infer<typeof CurrencySchema>;
 export type Region = z.infer<typeof RegionSchema>;
 export type ShoppingIntent = z.infer<typeof ShoppingIntentSchema>;
@@ -99,6 +115,7 @@ export function defaultIntent(): ShoppingIntent {
     criteria: [],
     budget: null,
     budgetClarified: false,
+    pendingChange: null,
     region: "SG",
     responseLength: "concise",
     revision: 0,

@@ -239,6 +239,13 @@ export const ApplicationTurnResponseSchema = z.discriminatedUnion("kind", [
     ]),
   }),
 ]);
+export const PreparedTurnResponseSchema = z.strictObject({
+  kind: z.literal("prepared"), preferences: ShoppingIntentSchema,
+  notes: z.array(z.string().max(600)).max(12),
+});
+export const TurnTransportResponseSchema = z.union([PreparedTurnResponseSchema, ApplicationTurnResponseSchema]);
+export type PreparedTurnResponse = z.infer<typeof PreparedTurnResponseSchema>;
+export type TurnTransportResponse = z.infer<typeof TurnTransportResponseSchema>;
 export type Assessment = z.infer<typeof AssessmentSchema>;
 export type EvidenceSpan = z.infer<typeof EvidenceSpanSchema>;
 export type ResearchSource = z.infer<typeof ResearchSourceSchema>;
@@ -251,7 +258,7 @@ export type ResearchUnavailableReason = z.infer<
   typeof ResearchUnavailableReasonSchema
 >;
 export type ResearchOperation = (
-  request: { message: string; preferences: ShoppingIntent },
+  request: { preferences: ShoppingIntent },
   signal: AbortSignal,
 ) => Promise<
   | { status: "ready"; research: ResearchSnapshot }
@@ -265,7 +272,7 @@ export type ResearchTurns = {
   turn(
     request: TurnRequest,
     signal: AbortSignal,
-  ): Promise<ApplicationTurnResponse>;
+  ): Promise<TurnTransportResponse>;
 };
 export function choiceAssessment(
   product: ResearchProduct,

@@ -37,6 +37,7 @@ describe("independent current and historical contracts", () => {
     ).toContain("H13");
     expect(
       TurnRequestSchema.safeParse({
+        phase: "prepare",
         message: "Update preferences",
         operationId: "00000000-0000-4000-8000-000000000001",
         preferences,
