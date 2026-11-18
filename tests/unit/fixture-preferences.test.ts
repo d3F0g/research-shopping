@@ -1,11 +1,8 @@
 import { describe, expect, it, vi } from "vitest";
-import { randomUUID } from "node:crypto";
 import { defaultPreferences } from "../../src/domain/legacy-contracts";
 import { updatePreferences } from "../../src/domain/fixture-preferences";
 import { createShoppingEngine } from "../../src/domain/shopping";
 import { createFixtureProviders } from "../../src/server/fixtures";
-import { createApp } from "../../src/server/app";
-import { createResearchTurns } from "../../src/server/research-turns";
 
 function existingPreferences() {
   const preferences = defaultPreferences();
@@ -241,55 +238,4 @@ describe("budget currency clarification", () => {
     },
   );
 
-  it.each([
-    "under 200 CHF", "under 200 HKD", "under 200 CNY", "under 200 ₹", "under 200 ₩",
-    "under ALL200", "under ALL 200", "under 200ALL", "under 200 ALL",
-    "under TRY200", "under TRY 200", "under 200TRY", "under 200 TRY",
-    "under TOP200", "under TOP 200", "under 200TOP", "under 200 TOP",
-    "under 200euros", "under euros200", "under 200pounds", "under pounds200",
-    "under 200yen", "under yen200", "under 200ringgit", "under ringgit200",
-  ])(
-    "preserves the HTTP budget and blocks research for %s",
-    async (message) => {
-      const research = vi.fn(async () => ({ status: "unavailable", reason: "empty" }) as const);
-      const reserve = vi.fn(async () => "admitted" as const);
-      const app = createApp({ researchTurns: createResearchTurns({ research, quota: { reserve, settle: vi.fn() } }) });
-      const previous = existingPreferences();
-      const response = await app.request("http://127.0.0.1:3000/api/turn", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message, preferences: previous, operationId: randomUUID() }),
-      });
-      expect(response.status).toBe(200);
-      const body = await response.json();
-      expect(body).toMatchObject({
-        kind: "clarification",
-        reason: "currency",
-        preferences: { ...previous, hard: { ...previous.hard, pendingConstraint: message } },
-        notes: [],
-        toolActivity: [],
-      });
-      expect(reserve).not.toHaveBeenCalled();
-      expect(research).not.toHaveBeenCalled();
-      const followup = await app.request("http://127.0.0.1:3000/api/turn", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message: "under SGD200", preferences: body.preferences, operationId: randomUUID() }),
-      });
-      expect(await followup.json()).toMatchObject({
-        kind: "clarification",
-        reason: "constraint",
-        preferences: { hard: { budget: { currency: "SGD", amount: 200 }, pendingConstraint: message } },
-      });
-      expect(reserve).not.toHaveBeenCalled();
-      expect(research).not.toHaveBeenCalled();
-      await app.request("http://127.0.0.1:3000/api/turn", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message: "under SGD200", preferences: previous, operationId: randomUUID() }),
-      });
-      expect(reserve).toHaveBeenCalledOnce();
-      expect(research).toHaveBeenCalledOnce();
-    },
-  );
 });

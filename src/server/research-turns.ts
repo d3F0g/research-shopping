@@ -35,13 +35,32 @@ export function createResearchTurns(dependencies: {
   return {
     async turn(request, signal) {
       signal.throwIfAborted();
-      const update = request.edit ? editIntent(request.preferences, request.edit, request.message) : request.skipBudget ? { preferences: { ...structuredClone(request.preferences), budgetClarified: true }, notes: [] } : updateIntent(request.message, request.preferences);
+      const update = request.edit
+        ? editIntent(request.preferences, request.edit, request.message)
+        : request.skipBudget
+          ? {
+              preferences: {
+                ...structuredClone(request.preferences),
+                budgetClarified: true,
+              },
+              notes: [],
+            }
+          : updateIntent(request.message, request.preferences);
       const preferences = update.preferences;
       const notes = update.notes;
       const base = { responseVersion: 3 as const, preferences, notes };
-      if ("clarification" in update && update.clarification) return { ...base, kind: "clarification", ...update.clarification };
-      if ("reply" in update && update.reply) return { ...base, kind: "message", message: update.reply };
-      if (!preferences.budget && !preferences.budgetClarified) return { ...base, kind: "question", question: "budget", message: "What is your maximum budget in SGD or USD? You can skip this and compare without a price limit." };
+      if ("clarification" in update && update.clarification)
+        return { ...base, kind: "clarification", ...update.clarification };
+      if ("reply" in update && update.reply)
+        return { ...base, kind: "message", message: update.reply };
+      if (!preferences.budget && !preferences.budgetClarified)
+        return {
+          ...base,
+          kind: "question",
+          question: "budget",
+          message:
+            "What is your maximum budget in SGD or USD? You can skip this and compare without a price limit.",
+        };
       const unavailable = (reason: ResearchUnavailableReason) => ({
         ...base,
         kind: "research-unavailable" as const,

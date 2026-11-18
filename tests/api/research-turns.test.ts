@@ -7,17 +7,17 @@ import { createServer, type Server } from "node:http";
 import type { AddressInfo } from "node:net";
 import { serve } from "@hono/node-server";
 import { describe, expect, it } from "vitest";
-import { defaultPreferences } from "../../src/domain/contracts";
+import { defaultIntent } from "../../src/domain/contracts";
 import type { ResearchOperation } from "../../src/domain/research";
 import { createApp } from "../../src/server/app";
 import { createExaProductResearch } from "../../src/server/exa-research";
 import { createResearchTurns } from "../../src/server/research-turns";
 import { createResearchQuota } from "../../src/server/research-quota";
-import { productResearchResponse } from "../fixtures/exa-research";
+import { syntheticAnswer } from "../fixtures/dynamic-research";
 
 const preferences = () => {
-  const value = defaultPreferences();
-  value.hard.category = "headphones";
+  const value = defaultIntent();
+  value.productDescription = "Headphones";
   return value;
 };
 const request = (message = "Headphones under SGD300") => ({
@@ -93,11 +93,10 @@ describe("normal research composition", () => {
         .status,
     ).toBe(400);
     expect(
-      (await post(app, { ...request(), research: productResearchResponse }))
-        .status,
+      (await post(app, { ...request(), research: syntheticAnswer() })).status,
     ).toBe(400);
   });
-  it("makes no calls for ordinary conversation, detail changes, ambiguity or sticky unsupported constraints", async () => {
+  it("makes no calls for ordinary conversation, detail changes, ambiguous edits or invalid budgets", async () => {
     let calls = 0;
     const research: ResearchOperation = async () => {
       calls++;
@@ -112,8 +111,8 @@ describe("normal research composition", () => {
       "Thanks",
       "More detail",
       "Shorter",
-      "Headphones that are waterproof",
-      "Headphones and laptops",
+      "Remove that requirement",
+      "Headphones under EUR200",
     ]) {
       const result = await turns.turn(
         request(message),
@@ -127,6 +126,136 @@ describe("normal research composition", () => {
     await turns.turn(request(), new AbortController().signal);
     expect(calls).toBe(1);
   });
+  it.each([
+    "projectors under 200 CHF",
+    "projectors under CHF200",
+    "projectors under ₹200",
+  ])(
+    "preserves the current HTTP intent and blocks paid dispatch for %s",
+    async (message) => {
+      let calls = 0;
+      const app = createApp({
+        researchTurns: createResearchTurns({
+          research: async () => {
+            calls++;
+            return {
+              status: "unavailable",
+              reason: "empty",
+              reportedCostUsd: 0.005,
+            };
+          },
+          quota: createResearchQuota(await quotaPath()),
+        }),
+      });
+      const previous = {
+        ...preferences(),
+        budget: { amount: 300, currency: "SGD" as const },
+        budgetClarified: true,
+      };
+      const response = await post(app, {
+        ...request(message),
+        preferences: previous,
+      });
+      expect(response.status).toBe(200);
+      expect(await response.json()).toMatchObject({
+        kind: "clarification",
+        reason: "currency",
+        preferences: previous,
+      });
+      expect(calls).toBe(0);
+    },
+  );
+  it("asks an optional budget question and continues the retained request after skip", async () => {
+    const seen: unknown[] = [];
+    const turns = createResearchTurns({
+      research: async (request) => {
+        seen.push(request.preferences);
+        return {
+          status: "unavailable",
+          reason: "empty",
+          reportedCostUsd: 0.005,
+        };
+      },
+      quota: createResearchQuota(await quotaPath()),
+    });
+    const question = await turns.turn(
+      request("A ceramic fermentation crock with a water-seal lid"),
+      new AbortController().signal,
+    );
+    expect(question.kind).toBe("question");
+    expect(seen).toHaveLength(0);
+    const result = await turns.turn(
+      {
+        ...request("Skip budget"),
+        preferences: question.preferences,
+        skipBudget: true,
+      },
+      new AbortController().signal,
+    );
+    expect(result.kind).toBe("research-unavailable");
+    expect(seen).toHaveLength(1);
+    expect(seen[0]).toMatchObject({
+      budgetClarified: true,
+      productDescription: expect.stringContaining("fermentation crock"),
+    });
+  });
+  it("stages explicit preference edits without spending and keeps separate sessions independent", async () => {
+    const seen: unknown[] = [];
+    const turns = createResearchTurns({
+      research: async (request) => {
+        seen.push(request.preferences);
+        return {
+          status: "unavailable",
+          reason: "empty",
+          reportedCostUsd: 0.005,
+        };
+      },
+      quota: createResearchQuota(await quotaPath()),
+    });
+    const edited = await turns.turn(
+      {
+        ...request(),
+        edit: { kind: "add-criterion", wording: "no glass", strength: "hard" },
+      },
+      new AbortController().signal,
+    );
+    expect(edited.kind).toBe("message");
+    expect(seen).toHaveLength(0);
+    await turns.turn(
+      { ...request(), preferences: edited.preferences },
+      new AbortController().signal,
+    );
+    await turns.turn(
+      request("A tea scale under SGD100"),
+      new AbortController().signal,
+    );
+    expect(seen[0]).toMatchObject({ criteria: [{ wording: "no glass" }] });
+    expect(seen[1]).toMatchObject({ criteria: [] });
+  });
+  it.each(["unknown-cost", "provider-error", "overrun"])(
+    "stops subsequent work after %s without a retry",
+    async (reason) => {
+      let calls = 0;
+      const turns = createResearchTurns({
+        research: async () => {
+          calls++;
+          return {
+            status: "unavailable",
+            reason: reason === "provider-error" ? "provider-error" : "empty",
+            ...(reason === "unknown-cost"
+              ? {}
+              : { reportedCostUsd: reason === "overrun" ? 0.06 : 0 }),
+          };
+        },
+        quota: createResearchQuota(await quotaPath()),
+      });
+      await turns.turn(request(), new AbortController().signal);
+      expect(
+        await turns.turn(request(), new AbortController().signal),
+      ).toMatchObject({ kind: "research-unavailable", reason: "quota" });
+      expect(calls).toBe(1);
+    },
+  );
   it("rejects duplicates without billing twice or returning another request's evidence", async () => {
     let calls = 0;
     const research: ResearchOperation = async () => {
@@ -177,7 +306,7 @@ describe("normal research composition", () => {
           if (phase === "during-body") {
             outgoing.writeHead(200, { "Content-Type": "application/json" });
             outgoing.flushHeaders();
-            outgoing.write('{"results":');
+            outgoing.write('{"answer":');
           }
           started.resolve();
         });

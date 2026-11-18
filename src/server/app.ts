@@ -150,9 +150,9 @@ export function createApp(dependencies: AppDependencies = {}, configuration: Par
     return context.json(TurnResponseSchema.parse({ ...result, toolActivity }));
   });
   app.post("/api/select", async (context) => {
+    if (!fixtureMode || !providers) return context.json({ error: "Verified merchant selection is unavailable", requestId: context.get("requestId") }, 409);
     const parsed = SelectionInput.safeParse(context.get("payload"));
     if (!parsed.success) return context.json({ error: "Invalid JSON or request fields", requestId: context.get("requestId") }, 400);
-    if (!fixtureMode || !providers) return context.json({ error: "Verified merchant selection is unavailable", requestId: context.get("requestId") }, 409);
     const engine = createShoppingEngine(providers, {
       providerTimeoutMs: dependencies.providerTimeoutMs,
       onProviderEvent: (event) => { if (context.get("outcomes").length < 20) context.get("outcomes").push(event); },
