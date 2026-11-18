@@ -6,6 +6,7 @@ import { updateIntent } from "../../src/domain/preferences";
 import { createApp } from "../../src/server/app";
 import { createResearchTurns } from "../../src/server/research-turns";
 import {
+  ambiguousConversationalRanges,
   conversationalRanges,
   negatedConversationalRanges,
 } from "../fixtures/conversational-budget";
@@ -70,12 +71,12 @@ describe("conversational budgets at the HTTP boundary", () => {
     },
   );
 
-  it.each(negatedConversationalRanges)(
+  it.each([...negatedConversationalRanges, ...ambiguousConversationalRanges])(
     "does not reserve research for %s",
     async (message) => {
       const { post, reserve, research } = setup();
       const previous = updateIntent(
-        "A phone between SGD300 and SGD400",
+        "Necklaces between SGD1000 and SGD2000",
         defaultIntent(),
       ).preferences;
       const prepared = await post({

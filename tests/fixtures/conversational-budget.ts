@@ -8,6 +8,16 @@ export const conversationalRanges = [
   "I can spend 500–600 on an unfamiliar instrument",
   "An unfamiliar instrument with a budget around 500-600",
   "A phone for my nephew with a budget about 500-600",
+  "A phone costs500-600 with model700-800",
+  "Phone model700-800 costs500-600",
+  "A phone costs500-600 with256-512GB of storage",
+];
+
+export const ambiguousConversationalRanges = [
+  "A phone costing 500-600 or 700-800",
+  "A phone costing 700-800 or 500-600",
+  "500-600 or a phone costing 700-800",
+  "A device costs 500-600 with a choice of 700-800",
 ];
 
 export const negatedConversationalRanges = [

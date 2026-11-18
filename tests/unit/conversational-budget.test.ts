@@ -2,12 +2,27 @@ import { describe, expect, it } from "vitest";
 import { defaultIntent } from "../../src/domain/contracts";
 import { updateIntent } from "../../src/domain/preferences";
 import {
+  ambiguousConversationalRanges,
   conversationalRanges,
   negatedConversationalRanges,
   phoneBudgetRequest,
 } from "../fixtures/conversational-budget";
 
 describe("financial wording around currencyless ranges", () => {
+  it.each(ambiguousConversationalRanges)(
+    "retains the prior hard range when financial alternatives are ambiguous in %s",
+    (message) => {
+      const previous = updateIntent(
+        "Necklaces between SGD1000 and SGD2000",
+        defaultIntent(),
+      ).preferences;
+      const result = updateIntent(message, previous);
+      expect(result.clarification?.reason).toBe("budget");
+      expect(result.preferences.budget).toEqual(previous.budget);
+      expect(result.preferences.pendingChange?.message).toBe(message);
+    },
+  );
+
   it.each(conversationalRanges)("extracts both bounds from %s", (message) => {
     const result = updateIntent(message, defaultIntent());
     expect(result.clarification).toBeUndefined();
