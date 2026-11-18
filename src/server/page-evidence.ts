@@ -14,7 +14,7 @@ export type EvidenceDecision = {
   start?: number;
   end?: number;
 };
-type Scope = { name: string; identity: string; text: string; highlight: number; start: number; identityEnd: number; end: number; directClass: boolean };
+type Scope = { name: string; highlight: number; start: number; identityEnd: number; end: number; directClass: boolean };
 
 function cleanText(raw: string): string {
   return raw.replace(/[\u0000-\u001f\u007f-\u009f]/g, " ").replace(/\s+/g, " ").trim();
@@ -30,12 +30,16 @@ function escapeRegex(value: string): string {
   return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }
 
-function unresolvedConstraints(preferences: Preferences): string[] {
+function unresolvedConstraints(preferences: Preferences, retainedFacts: readonly RetainedFact[]): string[] {
+  const batteryRequested = (preferences.hard.category === "headphones" || preferences.hard.category === "laptops")
+    && (preferences.soft.priorities.includes("battery-life") || preferences.hard.requiredFeatures.some((feature) => feature === "long-battery-life" || feature === "long-battery"));
   return [
     ...preferences.hard.requiredFeatures.map((feature) => `${feature.replaceAll("-", " ")} needs independent verification`),
     ...(preferences.hard.excludedBrands.length ? ["Manufacturer identity and brand exclusions need independent verification"] : []),
     ...(preferences.hard.budget ? [`Current affordability within ${preferences.hard.budget.currency} ${preferences.hard.budget.amount} is unverified`] : []),
     `Stock and delivery to ${preferences.hard.region} are unverified`,
+    ...(batteryRequested && !retainedFacts.some((fact) => fact.meaning === "battery-runtime")
+      ? ["Battery life for this model or edition is unknown from the retained comparison evidence."] : []),
   ];
 }
 
@@ -174,11 +178,9 @@ function headingScopes(input: Source, highlights: readonly HighlightContext[], p
       const identityRecordEnd = terminator || priceRecordStart.test(raw.slice(identityEnd).trimStart()) ? identityEnd : recordEnd;
       if (completion(context, start, identityRecordEnd, "identity", name).completion !== "complete") { record("ambiguous-scope", { highlight, start, end: identityRecordEnd }); continue; }
       const text = cleanText(raw.slice(start, end));
-      const identity = cleanText(raw.slice(start, identityEnd));
-
       if (/\bearbuds?\b/i.test(text) && /\b(?:over-ear|on-ear)\b/i.test(text)) { record("contradiction", { highlight, start, end }); continue; }
       record("admitted", { highlight, start, end: identityEnd });
-      scopes.push({ name, identity, text, highlight, start, identityEnd, end, directClass });
+      scopes.push({ name, highlight, start, identityEnd, end, directClass });
     }
   }
   if (!decisions.some((decision) => decision.sourceIndex === input.sourceIndex)) record("missing-identity");
@@ -220,6 +222,14 @@ function categoryStatement(name: string, text: string, category: NonNullable<Pre
   return new RegExp(`^(?:The )?${escapeRegex(name)} (?:is|are) ${generation}${categoryStatements[category]}(?: with [^.!?]+)?[.!]?$`, "i").test(text);
 }
 
+const runtime = "(?:up to )?\\d+(?:\\.\\d+)? (?:hours?|hrs?)(?: of (?:playback|music|battery life))?(?: on a full charge| per charge)?(?: with (?:ANC|noise cancelling) (?:on|off))?";
+const batteryPatterns = {
+  device: /^(?:has|have) a battery life of up to \d+(?:\.\d+)? hours on a continuous full charge, with up to \d+(?:\.\d+)? hours of use on a \d+-minute rapid charge via the USB-C connection(?:, making them some of the longest-lasting wireless headphones available)?$/i,
+  scoped: [
+    new RegExp(`^(?:Battery(?: life| runtime)?|Runtime):\\s*${runtime}$`, "i"),
+    new RegExp(`^(?:Has|Have|You get) ${runtime}$`, "i"),
+  ],
+};
 type DeviceRecord = "driver" | "microphone" | "control" | "battery" | "class-function";
 function deviceRecord(predicate: string): DeviceRecord | null {
   if (/\?|\b(?:not|no|without|if|might|may|perhaps|hypothetically|would|another|other|different|replacement|accessories)\b/i.test(predicate)) return null;
@@ -228,7 +238,7 @@ function deviceRecord(predicate: string): DeviceRecord | null {
     || /^(?:[A-Za-z]+-coated )?\d+(?:\.\d+)?\s*mm drivers deliver [a-z]+(?:,? [a-z]+){0,4} sound$/i.test(terminal)) return "driver";
   if (/^features? (?:dual|\d+) microphones and beamforming technology, which provide [a-z -]+ vocal pickup ensuring [a-z -]+ audio call quality$/i.test(terminal)) return "microphone";
   if (/^(?:Additionally, )?users can (?:conveniently )?mute with the press of a button or access the built-in [A-Za-z ]+ voice assistant, as well as [A-Za-z ]+ and [A-Za-z ]+$/i.test(terminal)) return "control";
-  if (/^(?:has|have) a battery life of up to \d+(?:\.\d+)? hours on a continuous full charge, with up to \d+(?:\.\d+)? hours of use on a \d+-minute rapid charge via the USB-C connection(?:, making them some of the longest-lasting wireless headphones available)?$/i.test(terminal)) return "battery";
+  if (batteryPatterns.device.test(terminal)) return "battery";
   if (new RegExp(`^${classPhrases.headphones} (?:Hybrid )?noise cancellation with \\d+-mic blocks (?:ambient|wind|ambient and wind) noise$`, "i").test(terminal)) return "class-function";
   return null;
 }
@@ -462,7 +472,10 @@ function assessSubject(context: SourceContext, proof: SubjectProof, preferences:
 }
 
 type OwnedClaim = Readonly<{ passage: CompletePassage; support: Span }>;
-type ResolvedProposal = Readonly<{ identity: EligibleSubject; facts: readonly OwnedClaim[]; price: (OwnedClaim & { kind: NonNullable<ResearchProduct["price"]>["kind"] }) | null }>;
+type FactMeaning = "battery-runtime" | "other";
+type OwnedFact = OwnedClaim & Readonly<{ meaning: FactMeaning }>;
+type RetainedFact = Readonly<{ citation: ResearchProduct["facts"][number]; meaning: FactMeaning }>;
+type ResolvedProposal = Readonly<{ identity: EligibleSubject; facts: readonly OwnedFact[]; price: (OwnedClaim & { kind: NonNullable<ResearchProduct["price"]>["kind"] }) | null }>;
 
 function resolveProposal(context: SourceContext, subject: EligibleSubject, observation: NativeObservation, decisions: EvidenceDecision[]): ResolvedProposal | null {
   const { proof } = subject;
@@ -483,9 +496,7 @@ function resolveProposal(context: SourceContext, subject: EligibleSubject, obser
   if (!identity) { record("missing-identity", "identityQuote"); return null; }
   const featurePhrase = `(?:${Object.values(featureDescriptors).map((descriptor) => descriptor.terms).join("|")})(?: (?:audio|support|display|memory))?`;
   const booleanFeature = new RegExp(`^(?:${Object.values(featureDescriptors).map((descriptor) => descriptor.terms).join("|")}|Connectivity):\\s*(?:yes|no|true|false|supported|not supported|available|unavailable|wired[- ]only|wireless)$`, "i");
-  const runtime = "(?:up to )?\\d+(?:\\.\\d+)? (?:hours?|hrs?)(?: of (?:playback|music|battery life))?(?: on a full charge| per charge)?(?: with (?:ANC|noise cancelling) (?:on|off))?";
   const scopedPredicates = [
-    new RegExp(`^(?:Battery(?: life| runtime)?|Runtime):\\s*${runtime}$`, "i"),
     /^(?:Driver(?: size)?|Transducer(?: size)?):\s*\d+(?:\.\d+)?\s*mm$/i,
     /^(?:Weight:\s*|Weighs?\s+)\d+(?:\.\d+)?\s*(?:g|kg|grams?|kilograms?)$/i,
     /^(?:Memory:\s*)\d+\s*GB(?: RAM)?$/i,
@@ -494,21 +505,23 @@ function resolveProposal(context: SourceContext, subject: EligibleSubject, obser
     new RegExp(`^(?:is|are) (?:not |no longer )?${featurePhrase}$`, "i"),
     new RegExp(`^(?:isn't|aren't) ${featurePhrase}$`, "i"),
     new RegExp(`^(?:lacks?|without|no) (?:an? )?${featurePhrase}$`, "i"),
-    new RegExp(`^(?:Has|Have|You get) ${runtime}$`, "i"),
   ];
 
-  function admissibleFact(predicate: string): boolean {
+  function interpretFact(predicate: string): FactMeaning | null {
     const text = predicate.replace(/[.!]$/, "");
-    return booleanFeature.test(text) || scopedPredicates.some((pattern) => pattern.test(text)) || exclusiveWired.test(text);
+    const device = deviceRecord(predicate);
+    if (device === "battery" || batteryPatterns.scoped.some((pattern) => pattern.test(text))) return "battery-runtime";
+    return booleanFeature.test(text) || scopedPredicates.some((pattern) => pattern.test(text)) || exclusiveWired.test(text)
+      || device !== null && device !== "control" ? "other" : null;
   }
 
-  const candidates = context.passages.filter(isComplete).flatMap((passage): Array<OwnedClaim & { predicate: string; exact: boolean }> => {
+  const candidates = context.passages.filter(isComplete).flatMap((passage): Array<OwnedClaim & { predicate: string; exact: boolean; meaning: FactMeaning | null }> => {
     const owner = ownership(context, proof, passage);
     if (owner.kind !== "own" || selected.kind === "heading" && passage.scope !== selected.scope) return [];
     const support = owner.basis === "exact-statement" ? sourceSpan(passage) : passage.support?.name === proof.name ? passage.support.span : null;
-    return support ? [{ passage, support, predicate: owner.predicate, exact: owner.basis === "exact-statement" }] : [];
+    return support ? [{ passage, support, predicate: owner.predicate, exact: owner.basis === "exact-statement", meaning: interpretFact(owner.predicate) }] : [];
   });
-  const facts: OwnedClaim[] = [];
+  const facts: OwnedFact[] = [];
   for (const rawHint of observation.quotedFacts) {
     const hint = normalizeHint(rawHint).replace(/[.!]$/, "");
     const matches = candidates.filter((candidate) => {
@@ -517,11 +530,11 @@ function resolveProposal(context: SourceContext, subject: EligibleSubject, obser
       if (!hint || position < 0 || /[\p{L}\p{N}]/u.test(text.charAt(position - 1)) || /[\p{L}\p{N}]/u.test(text.charAt(position + hint.length))) return false;
       const full = normalizeHint(rawHint) === text;
       if (!full && /\b(?:not|no|without|lacks?|cannot|can't|doesn't|don't|isn't|aren't)\b/i.test(candidate.predicate)) return false;
-      return admissibleFact(candidate.predicate) || deviceRecord(candidate.predicate) !== null && deviceRecord(candidate.predicate) !== "control"
-        || selected.kind === "direct" && candidate.exact && full;
+      return candidate.meaning !== null || selected.kind === "direct" && candidate.exact && full;
     });
     if (!matches.length || new Set(matches.map((match) => match.passage.text)).size !== 1) { record("ambiguous-scope", "quotedFacts"); continue; }
-    if (!facts.some((fact) => fact.passage === matches[0].passage)) facts.push(matches[0]);
+    const match = matches[0];
+    if (!facts.some((fact) => fact.passage === match.passage)) facts.push({ passage: match.passage, support: match.support, meaning: match.meaning ?? "other" });
   }
   let price: ResolvedProposal["price"] = null;
   if (observation.priceQuote && subject.price.kind === "unobstructed") {
@@ -557,20 +570,20 @@ function projectPositive(context: SourceContext, selected: Anchor, proposals: re
     return true;
   };
   const citation = (claim: OwnedClaim) => ({ sourceId: context.sourceId, quote: claim.passage.text });
-  const facts: ResearchProduct["facts"] = [];
+  const retainedFacts: RetainedFact[] = [];
   let price: ResearchProduct["price"] = null;
   for (const proposal of proposals) {
     if (!price && proposal.price && pack(proposal.price, proposal.identity)) price = { ...citation(proposal.price), kind: proposal.price.kind };
     for (const claim of proposal.facts) {
-      if (facts.length === 3 || facts.some((fact) => fact.quote === claim.passage.text)) continue;
+      if (retainedFacts.length === 3 || retainedFacts.some((fact) => fact.citation.quote === claim.passage.text)) continue;
       if (!pack(claim, proposal.identity)) { decisions.push({ sourceIndex: context.source.sourceIndex, path: "native-field", field: "quotedFacts", code: "packing-failure", ...claim.support }); continue; }
-      facts.push(citation(claim));
+      retainedFacts.push({ citation: citation(claim), meaning: claim.meaning });
       decisions.push({ sourceIndex: context.source.sourceIndex, path: "native-field", field: "quotedFacts", code: "admitted", ...sourceSpan(claim.passage) });
     }
   }
-  const quotations = [...facts.map((fact) => fact.quote), ...(price ? [price.quote] : []), selected.identity.text];
+  const quotations = [...retainedFacts.map((fact) => fact.citation.quote), ...(price ? [price.quote] : []), selected.identity.text];
   const windows = spans.map(quote).sort((left, right) => quotations.findIndex((citation) => left.includes(citation)) - quotations.findIndex((citation) => right.includes(citation)));
-  return { facts, price, windows };
+  return { retainedFacts, price, windows };
 }
 
 export function projectPageEvidence(inputs: Source[], observations: NativeObservation[], preferences: Preferences) {
@@ -602,7 +615,7 @@ export function projectPageEvidence(inputs: Source[], observations: NativeObserv
         const resolved = resolveProposal(context, subject, observation, decisions);
         return resolved ? [resolved] : [];
       });
-      const { facts, price, windows } = projectPositive(context, selected, proposals, 3 - source.highlights.length, decisions);
+      const { retainedFacts, price, windows } = projectPositive(context, selected, proposals, 3 - source.highlights.length, decisions);
       if (source.highlights.length + windows.length > 3) {
         decisions.push({ sourceIndex: input.sourceIndex, path: "native-field", field: "identity", code: "packing-failure", ...sourceSpan(selected.identity) });
         continue;
@@ -612,7 +625,7 @@ export function projectPageEvidence(inputs: Source[], observations: NativeObserv
         id: `research-${createHash("sha256").update(`${input.url}\n${proof.name}`).digest("hex").slice(0, 24)}`,
         name: proof.name,
         identity: { sourceId: source.id, quote: identityQuote, kind: selected.kind === "heading" ? "single-product-heading" : "direct-model-statement" },
-        facts, price, stock: "unverified", unresolvedConstraints: unresolvedConstraints(preferences),
+        facts: retainedFacts.map((fact) => fact.citation), price, stock: "unverified", unresolvedConstraints: unresolvedConstraints(preferences, retainedFacts),
       });
     }
     for (const excerpt of input.highlights.map((item) => cleanText(item.text))) {
