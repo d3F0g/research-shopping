@@ -1,34 +1,27 @@
 # Hard limits and preferences
 
-Users can edit hard constraints separately from flexible priorities and change them within the same session.
+Messages update structured shopping preferences. A missing material fact can produce a compact inline question. Full preference editing opens only when the user requests it.
 
-## Sub-features
+## Contextual questions
 
-- `preferences.budget` changes or clears the budget and validates positive amounts.
-- `preferences.filters` edits region, excluded brands, and required features.
-- `preferences.category` resets category-specific options with a visible explanation.
-- `preferences.presentation` adapts use case, priorities, and answer length.
+Start with an incomplete request. Require the question inside its assistant turn. Choose a supported category through its quick choice and require an actual response using that category. An optional budget question can offer quick amounts, a validated custom amount and Skip. Exercise Skip and verify it is remembered in that context instead of asking repeatedly.
 
-## How to get to it (user POV)
+Submit a complete category and budget request. Require both values to be extracted without another question for either fact. A generic Skip action must never clear an unresolved hard requirement.
 
-Use **Your filters** beside the request box on desktop. On mobile, choose **Filters and preferences** to open the Sheet. After research, edit fields and choose **Update comparison**. Follow-up requests can also change preferences.
+## Edit accepted preferences
 
-## Driving it with Playwright
+Open the current answer's preference disclosure. Verify a single mounted editor, visible keyboard focus, readable mobile fields and accepted values. Use its actual close control and confirm earlier conversation messages remain. Inline disclosure does not need a dialog focus trap.
 
-Preconditions: Research the first headphone example and retain its result as the before state.
+- Lower the budget, apply the change and inspect the actual turn response. Every current offer must have the requested currency and meet the new cap. Earlier results remain historical snapshots.
+- Clear the cap explicitly. Require no hidden old limit in the accepted preferences or next request.
+- Exclude Sony, apply the change and require no current Sony candidate. Add a required feature and require every candidate to satisfy supported fixture evidence for it.
+- Change category. Require relevant feature options and the existing explanation when category-specific assumptions are removed. Budget, region and unrelated constraints must remain as designed.
+- Change currency and region. Require mismatches to be explicit. Never treat SGD and USD amounts as interchangeable.
+- Change answer length or a flexible priority. Inspect the real response and confirm the hard-constraint object remains unchanged.
+- Enter zero or an invalid budget. Require an alert and disabled submission while the accepted positive budget stays intact. Recover through a valid amount or explicit removal.
 
-- At mobile width, open `page.getByRole('button', { name: /Filters and preferences/ })` and use the dialog's single preference editor. Verify Tab stays inside, Escape closes it, and focus returns to the trigger after the transition. Only one budget editor should be mounted.
-- Lower the cap with `await page.getByLabel('Maximum budget amount').fill('200')`, then `await page.getByRole('button', { name: 'Update comparison' }).click()`. Observe that every returned offer is SGD and at most 200, with the hard budget preserved.
-- Use `await page.getByRole('button', { name: 'Clear budget cap' }).click()` and update again. Require an empty **Maximum budget amount**, not a hidden old limit.
-- Fill `page.getByLabel('Brands to exclude', { exact: false })` with `Sony`, update, and require no Sony result. Use `page.getByLabel('Wireless', { exact: true }).check()` for a required feature and verify every candidate meets it.
-- Select `laptops` with `page.getByLabel('Product type').selectOption('laptops')`. Require laptop feature options, a visible note for removed headphone assumptions when applicable, and no stale headphone result.
-- Use `page.getByLabel('Budget currency').selectOption('USD')` and `page.getByLabel('Offer region').selectOption('US')`. Update and require regional/currency limits to remain explicit. Do not compare SGD amounts numerically with USD.
-- Use `page.getByLabel('Answer length', { exact: false }).selectOption('expanded')`, update, and compare the visible answer with the concise state. Change a flexible priority through its checkbox and verify the next response respects the unchanged hard limits.
-- After the long-flights starter, require checked **Portability** and **Value**, with priority badges1 and2. Uncheck Portability and update. Inspect the actual `/api/turn` request and response: priorities exclude portability while category, SGD500 budget, SG region, and wireless remain unchanged.
-- Fill budget `0`. Require an alert and disabled **Update comparison**. Clear the cap to recover.
+Use natural follow-up messages for the same changes where supported. After `under S$200`, require the new accepted budget and retained previous exchanges. Do not replay an old natural-language budget when applying editor changes.
 
-## Gotchas
+## Safety and state
 
-- Editing preferences invalidates the current shortlist before the next request. Capture both the edit and the replacement result.
-- The first selected flexible priority has the most influence. It cannot override hard limits.
-- An unsupported hard requirement remains unresolved until the user changes it or chooses **Drop this requirement**.
+Editing preferences cancels obsolete work and disables stale actions without erasing accepted history. The first flexible priority has the most influence but cannot override a hard limit. Unsupported requirements remain unresolved until an explicit supported correction, removal or reset. Scope repeated fields and cards to the current editor and assistant turn.

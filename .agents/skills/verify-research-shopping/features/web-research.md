@@ -10,13 +10,13 @@ A real service check is a separate development action using the private root `.e
 
 ## Drive the browser
 
-1. Submit the first headphone example and require **Your shortlist**. Before any web action, require zero POST requests to `/api/research`.
-2. Choose `page.getByRole('button', { name: 'Search the web for context', exact: true })`. Require one request with the current catalog product IDs and preferences. No client key or raw Exa options are sent.
+1. Submit a complete supported headphone request and identify its current actionable assistant turn. Before any web action, require zero POST requests to `/api/research`.
+2. Within that turn, choose `getByRole('button', { name: 'Search the web for context', exact: true })`. Require one request with the current catalog product IDs and preferences. No client key or raw Exa options are sent.
 3. On a ready response, open the source-count disclosure with `getByRole('button', { name: /web sources?/ })`. Inspect source titles, HTTPS destinations and plain excerpts. The displayed retrieval time is not page freshness or a verified offer observation.
-4. Use representative ten-source results with long excerpts. The initial view stays compact; additional sources and full excerpts require explicit controls. Check keyboard and touch activation, text wrapping and body-level overflow at1440px and390px. Do not open external pages merely to complete a local test.
-5. While a delayed source request is pending, edit valid and invalid budgets, a brand draft, the prompt, or reset/new-turn state. Require no stale result in the replacement workspace. Check one request per action despite double click/StrictMode. After a handoff replaces the recommendation, the source panel disappears.
+4. Use representative ten-source results with long excerpts. The initial view stays compact; additional sources and full excerpts require explicit controls. Check keyboard and touch activation, text wrapping and body-level overflow at 1440px and 390px. Do not open external pages merely to complete a local test.
+5. While a delayed source request is pending, edit valid and invalid budgets, a brand draft, the prompt, or reset/new-turn state. Require actual cancellation and no late result attached to another or invalidated turn. Completed historical sources may remain as attributed snapshots. Check one request per action despite double click/StrictMode. Starting a handoff cancels pending source work. A cancelled task must not remain spinning when its historical message stays mounted.
 6. Exercise disabled, empty, timeout, invalid response and connection-failure states. The sample comparison and selection remain usable. A retry must require another explicit action.
-7. Compare the product-card contents before and after web retrieval. Select a product and require the visible **Open manufacturer product page** link to equal the actual `/api/select` response. Its accessible name includes the new-tab suffix; use a non-exact name match or the complete accessible name.
+7. Compare the same turn’s product-card contents before and after web retrieval. Select a product and require the visible **Open manufacturer product page** link to equal the actual `/api/select` response. Its accessible name includes the new-tab suffix; use a non-exact name match or the complete accessible name.
 
 ## Trust and evidence
 

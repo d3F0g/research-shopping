@@ -1,0 +1,14 @@
+{
+  "repo": "/Users/josiahwong/Documents/research-shopping-chat",
+  "apiPort": 4773,
+  "webPort": 6773,
+  "artifacts": "/tmp/research-shopping-chat/verification-owner/before-disable",
+  "commit": "151fa506f58f4171add9f5efd684da809ee3248f",
+  "worktreeStatus": "M AGENTS.md\n M docs/engineering-workflow.md\n M docs/frontend-standard.md\n?? .audit/chat-first.tsv\n?? .codex/pstack-runs/chat-first/\n?? artifacts/chat-first/",
+  "feature": "research-request",
+  "actions": [],
+  "result": "failed",
+  "cleanup": true,
+  "serverPid": 82903,
+  "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n\ntrue !== false\n\n    at file:///Users/josiahwong/Documents/research-shopping-chat-verification/.agents/skills/verify-research-shopping/scripts/smoke.mjs:66:16\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)"
+}

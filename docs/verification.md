@@ -1,5 +1,13 @@
 # Verification evidence
 
+## Current chat-first candidate
+
+The chat-first application source at db4d800 passed independent 167 unit/API tests, typecheck/build and 43 browser journeys. The source is identical in integrated 99a0913, where the updated helper also passed from a clean checkout with owned-server cleanup. Independent security passed 167 unit/API tests, build, 20 targeted browser journeys and four additional hostile-input/storage probes. These are local review results; the new PR checks establish its hosted result.
+
+See the [screenshot gallery](../artifacts/chat-first/gallery.md), [source manifest](../artifacts/chat-first/application/manifest.json) and [current verification record](../.codex/pstack-runs/chat-first/verification.md). The user approved PR #33's design, satisfying its screenshot-review gate. The full audit currently reports 12 inherited high tooling findings tracked in issue #27; the older zero-audit rows below are historical results.
+
+## Initial milestone history
+
 The initial fixture-backed vertical slice passed independent QA at application commit `2dcfe45ed05bcf476f294c3152c723806f2d6d97`. At the initial delivery, the original checkout contained the same application source, package lock, configuration, and tests. Later assembly changes add documentation, the verification skill, and retained evidence.
 
 ## Reproduced checks
@@ -52,8 +60,8 @@ At the initial milestone, GitHub-hosted CI did not run. The then-current OAuth c
 
 ## Published review
 
-[Application PR20](https://github.com/d3F0g/research-shopping/pull/20) stacks on [architecture PR6](https://github.com/d3F0g/research-shopping/pull/6). Both are open and unmerged. The initial milestone and reproduced defects are closed with verification links. Live integration, durable personalization, and broader coverage remain assigned backlog items. CI activation is complete.
+[Application PR20](https://github.com/d3F0g/research-shopping/pull/20) stacks on [architecture PR6](https://github.com/d3F0g/research-shopping/pull/6). Both were merged, architecture first and application second. The initial milestone and reproduced defects are closed with verification links. Live integration, durable personalization, and broader coverage remain assigned backlog items. CI activation is complete.
 
 ## CI activation and mandatory frontend follow-up
 
-The user updated workflow permission and required official shadcn/ui and AI Elements for all frontend development. The active workflow is now under `.github/workflows/ci.yml`. [Automatic pull-request CI](https://github.com/d3F0g/research-shopping/actions/runs/44106643836) passed the pre-refactor source with108 unit/API tests and15 browser journeys. The official frontend migration and independent visualQA are complete at application candidate `a3163a2`:110 unit/API tests,20 browser journeys, desktop/mobile captures, build/typecheck, and zero-vulnerability audits passed. See [frontend evidence](frontend-standard.md) for provenance and review links. Automatic PR and push CI passed the published frontend at `cba0d46`, including the same110 unit/API and20 browser tests and evidence upload; see [hosted results](ci.md). Later documentation commits must also pass the latest PR checks. The PR remains unmerged.
+The user updated workflow permission and required official shadcn/ui and AI Elements for all frontend development. The active workflow is now under `.github/workflows/ci.yml`. [Automatic pull-request CI](https://github.com/d3F0g/research-shopping/actions/runs/44106643836) passed the pre-refactor source with108 unit/API tests and15 browser journeys. The official frontend migration and independent visualQA are complete at application candidate `a3163a2`:110 unit/API tests,20 browser journeys, desktop/mobile captures, build/typecheck, and zero-vulnerability audits passed. See [frontend evidence](frontend-standard.md) for provenance and review links. Automatic PR and push CI passed the published frontend at `cba0d46`, including the same110 unit/API and20 browser tests and evidence upload; see [hosted results](ci.md). Later documentation commits must also pass the latest PR checks. The earlier application PR was merged. The current chat-first redesign has its separate user screenshot-approval gate.

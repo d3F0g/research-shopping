@@ -8,6 +8,8 @@ The installed pstack role settings in `~/.codex/pstack-models.md` guide this run
 
 ## Loop
 
+The user approved the chat-first design in PR #33, satisfying issue #30's visual-approval milestone. Routine development now proceeds autonomously through implementation, independent QA/security, CI and merge. Request approval only for production deployments, sensitive operations or explicitly designated design-review milestones. A future milestone pauses merging only when the user designates it; ordinary frontend work retains independent visual QA and screenshot requirements.
+
 1. Plan a checkable behavior and name its data shape.
 2. Delegate to an owner with exact worktree, branch, paths, and success evidence.
 3. Implement the smallest complete behavior and commit verified units.

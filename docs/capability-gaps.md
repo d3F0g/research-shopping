@@ -33,7 +33,7 @@ These findings came from parallel architecture, shopping-capability, and securit
 | Principle | Observable behavior |
 | --- | --- |
 | Understand first | A supported clear request produces useful results; an ambiguous request gets one relevant question. |
-| Define preferences | Hard constraints and flexible priorities remain visible and editable. |
+| Define preferences | Hard constraints and flexible priorities remain in structured session state and are editable through contextual conversation controls. |
 | Research and plan ahead | Results include source status, tradeoffs, and uncertainty before merchant selection. |
 | Front-load | A short answer and primary recommendation precede detailed evidence. |
 | No scrolling blobs | Small comparisons and disclosure controls replace long generated essays. |

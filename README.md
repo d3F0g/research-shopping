@@ -1,6 +1,6 @@
 # Research + Shopping
 
-Fieldnote combines a fixture-backed product comparison demo with optional development-only Exa web context. It supports headphones and laptops in the Singapore sample catalog. Prices, availability, and product claims are labeled as synthetic data. The app does not read live inventory or place orders.
+Fieldnote is a chat-first shopping assistant with fixture-backed comparisons and optional development-only Exa web context. It supports headphones and laptops in the Singapore sample catalog. Prices, availability, and product claims are labeled as synthetic data. The app does not read live inventory or place orders.
 
 ## Run the app
 
@@ -13,7 +13,7 @@ npm run dev
 
 Open `http://127.0.0.1:5173`. The API listens on `http://127.0.0.1:3000`.
 
-The UI stores preferences in the current browser tab. Select **Reset session** to clear them.
+First visits use dark mode. Use the theme toggle to persist light or dark mode. Messages and shopping preferences stay in this tab until refresh. Select **New chat** to clear the conversation and preferences; the theme remains selected.
 
 ## Verify changes
 
@@ -41,7 +41,7 @@ The workflow in [`.github/workflows/ci.yml`](.github/workflows/ci.yml) runs auto
 
 ## Frontend standard
 
-The workspace uses official shadcn/ui and AI Elements patterns with centralized tokens, local Geist typography, responsive filters, concise product cards, expandable comparison, safe citations, and actual recorded provider outcomes. See [frontend architecture and provenance](docs/frontend-standard.md).
+The conversation uses official shadcn/ui and AI Elements patterns with retained messages, contextual preference cards, a bottom composer, centralized themes, local Geist typography, concise product rows, expandable comparisons, safe citations and actual recorded provider outcomes. See [frontend architecture and provenance](docs/frontend-standard.md) and the [desktop/mobile screenshot gallery](artifacts/chat-first/gallery.md). The user approved PR #33's design. Routine changes follow the autonomous merge gates in AGENTS.md; future human design reviews require an explicitly designated milestone.
 
 ## Exa web context
 

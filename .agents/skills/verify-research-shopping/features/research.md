@@ -1,34 +1,27 @@
 # Research requests
 
-Users describe a shopping objective and receive a short fixture shortlist, a relevant clarification, or an honest no-match result.
+Users describe a shopping objective in chat. The assistant returns an ordinary message, a contextual question, a fixture shortlist or an honest limitation.
 
-## Sub-features
+## Drive a request
 
-- `research.typed` submits the request form.
-- `research.examples` submits each visible example request.
-- `research.ambiguity` asks for the missing product category.
-- `research.no-match` preserves impossible hard limits.
+Start at the owned app in a fresh context. Submit `Wireless headphones for long flights, under S$500` through the composer. Observe the actual POST `/api/turn` response. Require headphones, SGD offers at most 500, fixture labels, and recommendation content inside its assistant turn. No category or budget question is needed for this message.
 
-## How to get to it (user POV)
+Exercise each visible starter separately if starters changed. A starter must submit its displayed intent rather than silently installing unrelated preferences. It is an optional shortcut, not a form prerequisite.
 
-Open the home page. Type in the request box and choose **Research options**, or choose one of the three example buttons. After a result, type a follow-up in the same box. Examples then live behind the **Example requests** disclosure; open it before choosing another example.
+In a fresh conversation, submit `Something good for work`. Require a targeted material-preference question and no fabricated product cards. Use its quick choice to continue. Submit `Noise cancelling headphones under S$100` and require the honest no-match response with the 100 cap retained. Submit a supported laptop request and require laptop results or an explicit limitation.
 
-## Driving it with Playwright
+Submit an ordinary greeting or acknowledgment. Require a normal assistant message with no new shortlist or invented activity. Unsupported categories and requirements must still receive an honest clarification.
 
-Preconditions: A fresh context at the web base URL passes doctor.
+## Retain the conversation
 
-- Submit a typed request with `await page.getByLabel('Start with the outcome, not a model number.').fill('Wireless headphones for long flights, under S$500')` and `await page.getByRole('button', { name: 'Research options' }).click()`. Require the **Your shortlist** heading, at least one `.product-card`, visible sample prices, and the budget control set to `500`.
-- Drive the first example with `await page.getByRole('button', { name: /Wireless headphones for long flights, under S\$500/ }).click()`. The smoke helper executes this entry point and records its actual response.
-- In a fresh session, submit `Something good for work`. Require **One thing to clarify** and no `.product-card`.
-- Choose the example matching `/Noise cancelling headphones under S\$100/`. Require **No sample option meets these limits**, no product cards, and the preserved budget of `100`.
-- Drive the laptop example matching `/A light laptop for writing and travel/`. Require the **Product type** value `laptops` and relevant fixture results or an explicit limitation.
+Submit a second natural shopping message. Require both submitted messages and accepted assistant responses to remain visible in history. Current results must use the latest accepted preferences. Typing must cancel obsolete work without deleting completed exchanges.
+
+Scope each `.product-card`, evidence, comparison and selection action to its message. A global first-card locator can select an earlier shortlist. Use the latest actionable turn for current-behavior assertions.
 
 ## Recorded activity
 
-The app uses a complete JSON response, with no token stream. Before a response arrives, require no recorded activity. Capture the actual POST `/api/turn` response, open the button named `Recorded activity · ${payload.toolActivity.length} outcomes`, and compare every visible provider/outcome with that payload. A clarification has an empty array and no activity control. Do not assert fabricated stages, durations, or a complete execution audit.
+The transport returns complete JSON. While waiting, require no invented tool stages, timings, reasoning or recorded outcomes. After the response arrives, open its actual activity control and compare every visible provider/outcome with `toolActivity` in that response. Ordinary messages and clarifications with an empty array have no recorded activity control.
 
-## Gotchas
+## Limits
 
-- Only headphones and laptops are supported. Unsupported categories or requirements need an honest limitation or clarification.
-- Typing a follow-up hides the previous result. Use the new response as the proof, not a stale card.
-- The header and footer identify fixture mode. No clock or screenshot date makes the catalog current evidence.
+Only headphones and laptops are supported. Fixture prices, claims and stock remain labeled as samples with fixed timestamps. A current screenshot date or Exa retrieval timestamp cannot make those fixtures current evidence. No source excerpt establishes merchant inventory.

@@ -1,0 +1,32 @@
+{
+  "evidence390": {
+    "cardWidth": 358,
+    "evidenceWidth": 328,
+    "cardX": 16,
+    "evidenceX": 31
+  },
+  "evidence320": {
+    "cardWidth": 288,
+    "evidenceWidth": 258,
+    "cardX": 16,
+    "evidenceX": 31
+  },
+  "citationTarget": {
+    "x": 206.640625,
+    "y": 697.828125,
+    "width": 91.3125,
+    "height": 44
+  },
+  "sourceFocus": {
+    "outline": "solid",
+    "width": "3px"
+  },
+  "jumpTarget": {
+    "x": 173,
+    "y": 681.40625,
+    "width": 44,
+    "height": 44
+  },
+  "jumpRemaining": 0,
+  "pass": true
+}

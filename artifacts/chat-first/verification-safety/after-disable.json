@@ -1,0 +1,55 @@
+{
+  "repo": "/Users/josiahwong/Documents/research-shopping-chat",
+  "apiPort": 4773,
+  "webPort": 6773,
+  "artifacts": "/tmp/research-shopping-chat/verification-owner/after-disable",
+  "commit": "151fa506f58f4171add9f5efd684da809ee3248f",
+  "worktreeStatus": "M AGENTS.md\n M docs/engineering-workflow.md\n M docs/frontend-standard.md\n?? .audit/chat-first.tsv\n?? .codex/pstack-runs/chat-first/\n?? artifacts/chat-first/",
+  "feature": "research-request",
+  "actions": [
+    "Doctor confirmed owned fresh ports, fixture health, and research workspace.",
+    "Clicked the first example request. Received headphones within the displayed SGD 500 hard budget and visible sample disclosures.",
+    "Opened the first product evidence disclosure and checked its clickable manufacturer reference against the product URL.",
+    "Selected the first product. The displayed manufacturer link equals the API handoff URL. Did not open the merchant page."
+  ],
+  "result": "passed",
+  "cleanup": true,
+  "serverPid": 83276,
+  "health": {
+    "status": "ok",
+    "mode": "fixture",
+    "liveIntegrations": false,
+    "webResearch": "disabled"
+  },
+  "candidates": [
+    {
+      "id": "sony-wh-ch720n",
+      "price": {
+        "amount": 149,
+        "currency": "SGD"
+      },
+      "dataKind": "fixture"
+    },
+    {
+      "id": "sony-wh-1000xm5",
+      "price": {
+        "amount": 399,
+        "currency": "SGD"
+      },
+      "dataKind": "fixture"
+    },
+    {
+      "id": "sennheiser-momentum-4",
+      "price": {
+        "amount": 329,
+        "currency": "SGD"
+      },
+      "dataKind": "fixture"
+    }
+  ],
+  "handoff": {
+    "productId": "sony-wh-ch720n",
+    "destination": "https://www.sony.com.sg/headphones/products/wh-ch720n"
+  },
+  "externalRequests": []
+}

@@ -14,11 +14,11 @@ The application models preferences, product identity, research claims, merchant 
 
 Claims retain supported, unknown, or conflicting status. Sources carry fixture provenance and fixed observation times. Offers attach price, currency, availability, region, and merchant URL to a product. A research source does not establish merchant inventory. Freshness and truth are separate concerns.
 
-The result union distinguishes clarification, recommendations, no-match, and failure. Product selection resolves trusted catalog identity through the backend and returns a validated link. It never places an order.
+The result union distinguishes ordinary messages, clarification, recommendations, no-match, and failure. Product selection resolves trusted catalog identity through the backend and returns a validated link. It never places an order.
 
 ```mermaid
 flowchart LR
-  User[User request or preference change] --> UI[React workspace]
+  User[User request or preference change] --> UI[React conversation]
   UI --> HTTP[Validated Hono API]
   HTTP --> Core[Bounded shopping pipeline]
   Core --> Discovery[Discovery provider]
@@ -42,6 +42,8 @@ The engineering agents are separate from the product runtime. Codex agents resea
 
 ## State and expansion
 
-The local milestone uses session-scoped state with a reset. It does not claim authenticated cross-device or restart persistence. PostgreSQL belongs behind authentication and ownership checks when durable multi-user state becomes necessary.
+The client keeps an ordered turn ledger in useConversation. Each turn retains its submitted message, accepted response snapshot and selection/source state. One controller owns active preferences, valid drafts, request cancellation and current action authority. Earlier messages stay readable; historical offers do not authorize a fresh handoff. Contextual questions collect missing useful preferences without a permanent form. The theme alone persists in localStorage.
+
+The local milestone uses tab-scoped state with a New chat reset. It does not claim authenticated cross-device or restart persistence. PostgreSQL belongs behind authentication and ownership checks when durable multi-user state becomes necessary.
 
 Live providers replace adapters through the same contracts. Each integration needs credentialed runtime evidence before it can be called verified. Live offer checks need currency, region, product variant, price, stock status, retrieval time, expiry, and selection-time refresh. See the [capability matrix](capability-gaps.md) and [security model](security-model.md).

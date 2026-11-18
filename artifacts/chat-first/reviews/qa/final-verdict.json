@@ -1,0 +1,15 @@
+{
+  "base": "151fa506f58f4171add9f5efd684da809ee3248f",
+  "head": "99a09138de9df3b09766160ea60ad9220e5776d9",
+  "source": "db4d80011a60b14b4045125d21c6765d86f0a004",
+  "verdict": "PASS WITH NOTES",
+  "sourceAndTestsIdentical": true,
+  "unitApiTests": 167,
+  "browserTests": 43,
+  "typecheck": true,
+  "build": true,
+  "exactHeadSmoke": "passed",
+  "clean": true,
+  "cleanup": true,
+  "userVisualApprovalRequired": true
+}

@@ -4,10 +4,14 @@ Run these through the visible UI and API. The automated suite must assert the ob
 
 | Scenario | User action | Required result |
 | --- | --- | --- |
+| Dark first visit | Open a fresh browser context with light OS preference | Show a minimal dark chat without filters or an empty-results panel. |
+| Theme persistence | Toggle light/dark and refresh | Retain the selected theme independently of tab-local conversation state. |
+| Ordinary message | Send Hi or Thanks | Append an ordinary assistant message without research cards or lost constraints. |
+| Optional preference | Receive a missing-budget card and choose Skip | Continue without inventing a cap or repeating the question in that context. |
 | Clear intent | Ask for noise-cancelling headphones within a named budget and currency | Show eligible sample options, decisive tradeoff, and explicit fixture disclosure. |
 | Ambiguous intent | Ask for something good for work without a category | Ask one question that materially affects discovery. |
-| Budget change | Follow results with a lower budget | Replace the prior budget, preserve other preferences, and remove ineligible products. |
-| Constraint removal | Remove the budget limit | Clear the constraint instead of retaining hidden filtering. |
+| Budget change | Follow results with a lower budget | Replace the active budget, preserve other preferences, exclude ineligible products from the new answer, and retain earlier message snapshots. |
+| Constraint removal | Remove the budget limit | Clear the constraint without a repeated budget question or hidden filtering. |
 | Excluded brand | Exclude a displayed brand | Remove that brand before ranking. |
 | Changed category | Change headphones to laptops or monitors | Reset category-specific assumptions and show relevant results or a stated capability limit. |
 | Region/currency change | Change market and currency | Avoid numeric comparison between currencies and disclose missing regional evidence. |
@@ -20,7 +24,7 @@ Run these through the visible UI and API. The automated suite must assert the ob
 | Selection | Select an eligible product | Resolve its ID server-side and show the exact approved merchant hostname and HTTPS destination. |
 | Session isolation | Use two independent browser contexts | Keep preferences, result state, and reset separate. |
 | Stale request | Overlap turns or reset during a request | Prevent late responses from overwriting newer state. |
-| Mobile use | Complete the journey at 390px width | Keep controls, comparisons, and merchant selection readable and unclipped. |
+| Mobile use | Complete the journey at 390px width | Keep controls, expanded evidence and selection readable while history scrolls and the bottom composer stays usable. |
 | Keyboard use | Complete core actions using keyboard controls | Preserve visible focus, labels, and operable disclosures. |
 | HTTP attacks | Send foreign origins, malformed JSON, wrong media types, large bodies, and unsafe links | Reject the boundary violation without state mutation or secret-bearing errors. |
 
