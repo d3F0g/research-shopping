@@ -194,13 +194,13 @@ test("does not convert a budget across regions, adapts answer length, and honors
   await openPreferences(page);
   const budget = page.getByLabel("Maximum budget amount");
   await expect(budget).toHaveValue("400");
-  await page.getByLabel("Offer region").selectOption("US");
+  await page.getByLabel("Research market").selectOption("US");
   await page.getByRole("button", { name: "Update comparison" }).click();
   await expect(currentTurn(page).getByRole("heading", { name: "No sample option meets these limits" })).toBeVisible();
   await expect(currentTurn(page).getByText(/No regional offer or currency conversion/)).toBeVisible();
 
   await openPreferences(page);
-  await page.getByLabel("Offer region").selectOption("SG");
+  await page.getByLabel("Research market").selectOption("SG");
   await page.getByRole("button", { name: "Update comparison" }).click();
   await expect(currentTurn(page).getByRole("heading", { name: "Your shortlist" })).toBeVisible();
   await openPreferences(page);
@@ -266,19 +266,19 @@ test("keeps browser contexts separate and resets their preferences", async ({ br
   const secondPage = await secondContext.newPage();
   await researchWithPrompt(firstPage, "Headphones under SGD500");
   await openPreferences(firstPage);
-  await firstPage.getByLabel("Offer region").selectOption("US");
+  await firstPage.getByLabel("Research market").selectOption("US");
   await firstPage.getByLabel("Brands to exclude").fill("Bose, Sony");
   await expect(firstPage.getByLabel("Brands to exclude")).toHaveValue("Bose, Sony");
   await researchWithPrompt(secondPage, "Headphones under SGD500");
   await openPreferences(secondPage);
-  await expect(secondPage.getByLabel("Offer region")).toHaveValue("SG");
+  await expect(secondPage.getByLabel("Research market")).toHaveValue("SG");
   await expect(secondPage.getByLabel("Brands to exclude")).toHaveValue("");
   await firstPage.getByRole("button", { name: "New chat" }).click();
   await expect(firstPage.getByTestId("conversation-turn")).toHaveCount(0);
   await firstPage.getByLabel("Message", { exact: true }).fill("Headphones under SGD500");
   await firstPage.getByRole("button", { name: "Send message" }).click();
   await openPreferences(firstPage);
-  await expect(firstPage.getByLabel("Offer region")).toHaveValue("SG");
+  await expect(firstPage.getByLabel("Research market")).toHaveValue("SG");
   await expect(firstPage.getByLabel("Brands to exclude")).toHaveValue("");
   await firstContext.close();
   await secondContext.close();

@@ -30,7 +30,7 @@ export function BudgetQuestion({
       <CardContent>
         <h2>Any budget in mind?</h2>
         <p className="metadata">
-          Optional. A cap helps narrow the sample options.
+          Optional. A cap helps narrow the options.
         </p>
         {active ? (
           <>
