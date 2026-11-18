@@ -15,13 +15,10 @@ The current hook owns both visible history and current preferences. It also crea
 ## Caller first
 
 ```ts
-// Composition. Missing persistence configuration keeps guest research available.
 const accounts = configured ? createAccounts({ pool, auth, turns }) : undefined;
 const app = createApp({ turns, accounts });
-// HTTP validates commands and resolves the cookie through the auth boundary.
 const identity = await accounts.requireIdentity(request.headers);
 return accounts.command(identity, parsedCommand, request.signal);
-// Browser. Replace only after session identity and local generation still match.
 const saved = await api.loadWorkspace(signal);
 conversation.restore(saved); // completed snapshots, no restored active actions
 const next = await api.workspaceCommand({ revision: saved.revision, command }, signal);
