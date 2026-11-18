@@ -1,6 +1,7 @@
 import { z } from "zod";
 import {
   PreferencesSchema,
+  BudgetSchema,
   TurnResponseSchema,
   type Preferences,
   type Region,
@@ -16,6 +17,15 @@ export {
   ResearchProductSchema,
 } from "./research-evidence-v2";
 
+const CurrentPreferencesSchema = PreferencesSchema.extend({
+  hard: PreferencesSchema.shape.hard
+    .extend({
+      budget: BudgetSchema.strict().nullable(),
+    })
+    .strict(),
+  soft: PreferencesSchema.shape.soft.strict(),
+}).strict();
+
 export const ResearchUnavailableReasonSchema = z.enum([
   "not-configured",
   "disabled",
@@ -28,14 +38,18 @@ export const ResearchUnavailableReasonSchema = z.enum([
   "empty",
 ]);
 export const ResearchTurnResponseSchema = z.discriminatedUnion("kind", [
-  Version2ResearchResponseSchema,
-  z.object({
-    kind: z.literal("research-unavailable"),
-    message: z.string().min(1).max(400),
-    reason: ResearchUnavailableReasonSchema,
-    preferences: PreferencesSchema,
-    notes: z.array(z.string().max(300)).max(12),
+  Version2ResearchResponseSchema.extend({
+    preferences: CurrentPreferencesSchema,
   }),
+  z
+    .object({
+      kind: z.literal("research-unavailable"),
+      message: z.string().min(1).max(400),
+      reason: ResearchUnavailableReasonSchema,
+      preferences: CurrentPreferencesSchema,
+      notes: z.array(z.string().max(300)).max(12),
+    })
+    .strict(),
 ]);
 export const ApplicationTurnResponseSchema = z.union([
   ResearchTurnResponseSchema,

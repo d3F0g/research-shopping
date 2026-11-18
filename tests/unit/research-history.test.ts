@@ -325,6 +325,55 @@ describe("raw historical version dispatch and fresh boundaries", () => {
     );
   });
 
+  it("keeps current preference defaults and normalization out of stored research", () => {
+    const response = structuredClone(version2Response);
+    if (response.kind !== "research")
+      throw new Error("Expected research fixture");
+    response.preferences.hard.excludedBrands = [" Fixture brand "];
+    const current = ApplicationTurnResponseSchema.parse(response);
+    expect(current.preferences?.hard.excludedBrands).toEqual(["Fixture brand"]);
+    expect(HistoricalApplicationTurnResponseSchema.parse(response)).toEqual(
+      response,
+    );
+    Reflect.deleteProperty(response.preferences.hard, "pendingConstraint");
+    expect(
+      ApplicationTurnResponseSchema.parse(response).preferences?.hard
+        .pendingConstraint,
+    ).toBeNull();
+    expect(
+      HistoricalApplicationTurnResponseSchema.safeParse(response).success,
+    ).toBe(false);
+    expect(response.preferences.hard).not.toHaveProperty("pendingConstraint");
+  });
+
+  it.each(
+    [
+      [],
+      ["preferences"],
+      ["preferences", "hard"],
+      ["preferences", "hard", "budget"],
+      ["preferences", "soft"],
+    ].map((path) => ({ path })),
+  )("retains current unavailable-response strictness at $path", ({ path }) => {
+    const response = {
+      kind: "research-unavailable",
+      message: "Offline fixture failure",
+      reason: "provider-error",
+      preferences: structuredClone(version2Response.preferences),
+      notes: [],
+    };
+    expect(ApplicationTurnResponseSchema.parse(response)).toEqual(response);
+    let target: object = response;
+    for (const key of path) target = Reflect.get(target, key) as object;
+    Object.assign(target, { unknownEvidence: "fixture" });
+    expect(ApplicationTurnResponseSchema.safeParse(response).success).toBe(
+      false,
+    );
+    expect(
+      HistoricalApplicationTurnResponseSchema.safeParse(response).success,
+    ).toBe(false);
+  });
+
   it("rejects legacy fresh network output while accepting a mixed saved envelope", async () => {
     const workspace = history();
     const fetcher = vi

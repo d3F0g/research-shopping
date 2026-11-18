@@ -10,8 +10,9 @@ export type ResearchDiagnostic = {
   requestId: string;
   reportedCostUsd: number | null;
   resultCount: number;
-  notices: string[];
-  warnings: string[];
+  notices: (string | number | null)[];
+  warnings: (string | number | null)[];
+  validationIssues: { path: string; code: string }[];
   decisions: EvidenceDecision[];
   nativeContent: unknown;
   results: { title: string | null; url: string; highlights?: string[] }[];
@@ -21,6 +22,33 @@ const MAX_BYTES = 128 * 1024;
 export function researchDiagnosticPath(environment: NodeJS.ProcessEnv): string | undefined {
   const path = environment.EXA_RESEARCH_DIAGNOSTIC_PATH;
   return environment.NODE_ENV === "development" && path && isAbsolute(path) ? path : undefined;
+}
+
+export function captureResearchDiagnostic(raw: unknown): ResearchDiagnostic {
+  const object = (value: unknown): Record<string, unknown> => typeof value === "object" && value !== null && !Array.isArray(value) ? value as Record<string, unknown> : {};
+  const envelope = object(raw);
+  const output = object(envelope.output);
+  const cost = object(envelope.costDollars).total;
+  const results = Array.isArray(envelope.results) ? envelope.results : [];
+  const codes = (value: unknown) => Array.isArray(value) ? value.slice(0, 30).map((item) => {
+    const code = object(item).code;
+    return typeof code === "string" ? code.slice(0, 160) : typeof code === "number" && Number.isFinite(code) ? code : null;
+  }) : [];
+  return {
+    schemaStatus: "invalid", extractionStatus: "unavailable",
+    requestId: typeof envelope.requestId === "string" ? envelope.requestId.slice(0, 180) : "",
+    reportedCostUsd: typeof cost === "number" && Number.isFinite(cost) && cost >= 0 ? cost : null,
+    resultCount: results.length, notices: codes(envelope.notices), warnings: codes(envelope.warnings),
+    decisions: [], validationIssues: [], nativeContent: output.content,
+    results: results.slice(0, 5).map((value) => {
+      const source = object(value);
+      return {
+        title: typeof source.title === "string" ? source.title : null,
+        url: typeof source.url === "string" ? source.url : "",
+        highlights: Array.isArray(source.highlights) ? source.highlights.map((highlight) => typeof highlight === "string" ? highlight : "") : [],
+      };
+    }),
+  };
 }
 
 function boundedText(value: string, byteLimit: number) {
@@ -39,6 +67,7 @@ function serialize(diagnostic: ResearchDiagnostic): string {
     retention: "Opt-in bounded diagnostic. Truncated fields are not the complete provider response.",
     schemaStatus: diagnostic.schemaStatus,
     extractionStatus: diagnostic.extractionStatus,
+    validationIssues: diagnostic.validationIssues.slice(0, 30),
     requestId: diagnostic.requestId,
     reportedCostUsd: diagnostic.reportedCostUsd,
     resultCount: diagnostic.resultCount,
