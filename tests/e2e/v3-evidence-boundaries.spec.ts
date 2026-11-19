@@ -114,11 +114,13 @@ for (const viewport of [{ width: 1440, height: 1000 }, { width: 390, height: 844
     await disclosure.scrollIntoViewIfNeeded();
     await disclosure.focus();
     await disclosure.press("Enter");
+    await expect.poll(() => disclosure.evaluate((element) => element.parentElement!.querySelector("[data-slot=trace-collapsible-content]")!.getAnimations().length)).toBe(0);
     const interpretation = card.getByText(rationale, { exact: false });
     await expect(interpretation).toBeVisible();
     await expect(interpretation).toContainText("AI assessment, unverified:");
-    await expect(card.locator("blockquote").first()).toHaveText(literal, { useInnerText: true });
-    await interpretation.scrollIntoViewIfNeeded();
+    expect(await card.locator("blockquote").first().textContent()).toBe(literal);
+    await interpretation.evaluate((element) => element.scrollIntoView({ block: "center" }));
+    await expect(interpretation).toBeInViewport();
     await expect(composer).toBeInViewport();
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
     await page.screenshot({ path: `${directory}/${viewport.width}-assessment.png`, animations: "disabled" });
@@ -130,6 +132,7 @@ for (const viewport of [{ width: 1440, height: 1000 }, { width: 390, height: 844
     expect(retained.products[0].identity.support[0].context.text).toBe(literal);
     unresolved = false;
     await page.getByRole("button", { name: "New chat", exact: true }).click();
+    await expect(page.getByRole("heading", { name: "What are you looking for?", exact: true })).toBeVisible();
     await composer.fill("Find a fixture powerbank between SGD30 and40");
     await page.getByRole("button", { name: "Send message", exact: true }).click();
     const eligible = page.locator('[data-slot="card"]').filter({ has: page.getByText("Fixture Powerbank Model A", { exact: true }) });

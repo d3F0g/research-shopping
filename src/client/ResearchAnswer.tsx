@@ -69,7 +69,10 @@ function Evidence({
         {label} <Badge variant="outline">{assessment.status}</Badge>{" "}
         <span className="text-muted-foreground">{assessment.scope}</span>
       </p>
-      <p>{assessment.rationale}</p>
+      <p>
+        <span className="text-muted-foreground">AI assessment, unverified: </span>
+        {assessment.rationale}
+      </p>
       {assessment.support.map((span, i) => {
         const source = snapshot.sources.find((s) => s.id === span.sourceId);
         return source ? (
@@ -114,13 +117,13 @@ function Product({
             <img
               className="h-28 max-w-full object-contain"
               src={source.imageUrl}
-              alt={`Source illustration for ${product.name}`}
+              alt={`Source page preview for ${product.name}`}
               loading="lazy"
               referrerPolicy="no-referrer"
               onError={() => setFailed(true)}
             />
             <figcaption className="text-xs text-muted-foreground">
-              Representative source illustration. Exact variant unverified.
+              Source page preview. Product image and exact variant unverified.
             </figcaption>
           </figure>
         )}
@@ -146,7 +149,6 @@ function Product({
           {(observation.reportedConditions.length > 0 || !observation.reportedConditionsResolved) && <p>Provider-reported, unverified: {observation.reportedConditions.join(" ")}{!observation.reportedConditionsResolved && " Purchase conditions remain unresolved."}</p>}
         </>}
         <p className="text-muted-foreground">Stock and delivery unknown.</p>
-        <p>{product.requestMatch.rationale}</p>
         {product.blockers.length > 0 && (
           <p className="text-muted-foreground">
             Unresolved: {product.blockers.slice(0, 2).join(" ")}

@@ -189,7 +189,7 @@ try {
     await expect(name).toBeInViewport();
     await expect(page.getByText("SGD 868.00", { exact: true })).toBeVisible();
     await expect(page.getByText(/Provider-reported, unverified: Price as listed on Fixture Index/)).toBeVisible();
-    const illustration = page.getByRole("img", { name: "Source illustration for Fixture Meridian Sunglasses - Silver", exact: true });
+    const illustration = page.getByRole("img", { name: "Source page preview for Fixture Meridian Sunglasses - Silver", exact: true });
     await expect(illustration).toHaveCount(0);
     const initialPath = `${directory}/${viewport.width}-current-observation.png`;
     await page.screenshot({ path: initialPath }); proof.screenshots.push(initialPath);
