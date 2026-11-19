@@ -69,7 +69,7 @@ test("accepts necklace ranges through actual server and SDK, preserves editor bo
     expect(transport.requests[1]).toMatchObject({
       phase: "research",
       preferences: {
-        version: 4,
+        version: 5,
         budget: { minimum: 1000, amount: 2000, currency: "SGD" },
       },
     });
@@ -107,9 +107,9 @@ test("accepts necklace ranges through actual server and SDK, preserves editor bo
       .getByRole("button", { name: "Save preferences", exact: true })
       .click();
     await expect(last()).toHaveAttribute("data-active", "true");
-    await expect(last().locator(".intent-summary > p")).toHaveText(
-      "SGD 1,000–2,000",
-    );
+    await expect(last().locator(".intent-summary > p")).toHaveCount(0);
+    await last().getByRole("button", { name: "Current preferences", exact: true }).click();
+    await expect(last().locator(".intent-summary")).toContainText("SGD 1,000–2,000");
     expect(transport.sdkRequests).toHaveLength(1);
     expect(transport.requests.at(-1)).toMatchObject({
       edit: {

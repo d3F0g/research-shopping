@@ -44,6 +44,7 @@ export const ResearchSourceSchema = z.strictObject({
   titleTruncated: z.boolean(),
   text: z.string().max(24000),
   textTruncated: z.boolean(),
+  imageUrl: z.string().url().max(2048).refine(isSafeWebResearchUrl).optional(),
 });
 export const ObservedPriceSchema = z.strictObject({
   amount: BudgetSchema.shape.amount,
@@ -101,7 +102,7 @@ export const ConditionalChoiceSchema = z.strictObject({
 export const ResearchSnapshotSchema = z
   .strictObject({
     dataKind: z.literal("web-research"),
-    evidenceVersion: z.literal(4),
+    evidenceVersion: z.literal(5),
     retrievedAt: z.string().datetime(),
     intent: ShoppingIntentSchema,
     summary: z.string().min(1).max(1200),
@@ -229,9 +230,10 @@ export const ResearchUnavailableReasonSchema = z.enum([
   "provider-error",
   "invalid-response",
   "empty",
+  "intent-unavailable",
 ]);
 const ResponseBase = {
-  responseVersion: z.literal(4),
+  responseVersion: z.literal(5),
   preferences: ShoppingIntentSchema,
   notes: z.array(z.string().max(600)).max(12),
 };

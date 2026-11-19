@@ -9,15 +9,23 @@ import { createApp } from "../../../src/server/app";
 import { createExaProductResearch } from "../../../src/server/exa-research";
 import { createResearchTurns } from "../../../src/server/research-turns";
 import { syntheticAnswer } from "../../fixtures/dynamic-research";
+import { fixtureIntentInterpreter } from "../../helpers/intent";
+import { freePort } from "../../helpers/manual-composition";
+import type { IntentInterpreter } from "../../../src/domain/intent-actions";
 
 export async function actualComposition(
   page: Page,
   testInfo: TestInfo,
   payload?: unknown,
+  options: { interpretIntent?: IntentInterpreter } = {},
 ) {
   const sdkRequests: Record<string, unknown>[] = [];
   const requests: Record<string, unknown>[] = [];
   const responses: unknown[] = [];
+  const interpretationRequests: Record<string, unknown>[] = [];
+  let deferInterpretation = false;
+  let releaseInterpretation: (() => void) | undefined;
+  let nextStatus = 200;
   let deferred = false;
   let release: (() => void) | undefined;
   let aborts = 0;
@@ -36,11 +44,16 @@ export async function actualComposition(
       body += String(chunk);
     });
     request.on("end", () => {
-      sdkRequests.push(JSON.parse(body));
+      const parsed = JSON.parse(body) as Record<string, unknown>;
+      sdkRequests.push(parsed);
+      const status = nextStatus;
+      nextStatus = 200;
       const finish = () => {
         if (!response.destroyed) {
-          response.writeHead(200, { "Content-Type": "application/json" });
-          response.end(JSON.stringify(native));
+          response.writeHead(status, { "Content-Type": "application/json" });
+          response.end(JSON.stringify(status === 200
+            ? typeof native === "function" ? native(parsed) : native
+            : { error: "Synthetic provider failure" }));
         }
       };
       if (deferred) {
@@ -56,8 +69,8 @@ export async function actualComposition(
   await once(provider, "listening");
   const providerUrl = `http://127.0.0.1:${(provider.address() as AddressInfo).port}`;
   const originalFetch = globalThis.fetch;
-  const apiPort = 6543;
-  const webPort = 6544;
+  const apiPort = await freePort();
+  const webPort = await freePort();
   const baseUrl = `http://127.0.0.1:${webPort}`;
   globalThis.fetch = (input, init) => {
     const target =
@@ -74,6 +87,18 @@ export async function actualComposition(
   const app = createApp(
     {
       researchTurns: createResearchTurns({
+        async interpretIntent(request, signal) {
+          interpretationRequests.push(structuredClone(request));
+          if (deferInterpretation) {
+            deferInterpretation = false;
+            await new Promise<void>((resolve, reject) => {
+              releaseInterpretation = resolve;
+              signal.addEventListener("abort", () => reject(signal.reason), { once: true });
+            });
+          }
+          signal.throwIfAborted();
+          return (options.interpretIntent ?? fixtureIntentInterpreter)(request, signal);
+        },
         research: createExaProductResearch("fake-lifecycle-loopback-key", {
           baseUrl: providerUrl,
         }),
@@ -146,6 +171,7 @@ export async function actualComposition(
   return {
     baseUrl,
     sdkRequests,
+    interpretationRequests,
     requests,
     responses,
     pauseResearch() {
@@ -154,11 +180,24 @@ export async function actualComposition(
     deferNext() {
       deferred = true;
     },
+    deferInterpretation() {
+      deferInterpretation = true;
+    },
+    resumeInterpretation() {
+      releaseInterpretation?.();
+    },
+    resumeResearch() {
+      release?.();
+    },
+    failNextResearch() {
+      nextStatus = 503;
+    },
     get aborts() {
       return aborts;
     },
     async close() {
       release?.();
+      releaseInterpretation?.();
       web.kill("SIGTERM");
       await once(web, "exit");
       await new Promise<void>((resolve, reject) =>
@@ -179,6 +218,7 @@ export async function actualComposition(
             requests,
             responses,
             sdkRequests,
+            interpretationRequests,
             aborts,
             cleanup: true,
           },

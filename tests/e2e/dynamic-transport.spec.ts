@@ -225,7 +225,14 @@ test("compares unfamiliar products and freeform criteria through the normal nati
     support: [],
   };
   native.answer.products.push(other);
-  const transport = await normalComposition(page, testInfo, native);
+  const transport = await normalComposition(page, testInfo, (body: Record<string, unknown>) => {
+    const intent = JSON.parse(String(body.systemPrompt).split("Current authoritative shopping intent: ")[1]);
+    const preference = intent.criteria.find((criterion: { wording: string }) => criterion.wording === "field repairability");
+    const result = structuredClone(native);
+    for (const product of result.answer.products)
+      product.criteria[1].criterionId = preference.id;
+    return result;
+  });
   try {
     await page.goto("/");
     await send(
@@ -270,43 +277,29 @@ test("compares unfamiliar products and freeform criteria through the normal nati
   }
 });
 
-test("asks and validates an optional budget on the server-owned path before one explicit comparison", async ({
+test("automatically researches useful requests without an optional budget gate and validates later budget changes", async ({
   page,
 }, testInfo) => {
   const transport = await normalComposition(page, testInfo, syntheticAnswer());
   try {
     await page.goto("/");
     await send(page, "A quiet H13 air purifier. Must have washable prefilter.");
-    await expect(
-      page.getByRole("heading", { name: "Any budget in mind?" }),
-    ).toBeVisible();
-    expect(transport.requests).toHaveLength(0);
-    await page.getByLabel("Budget amount", { exact: true }).fill("0");
-    await page
-      .getByRole("button", { name: "Apply budget", exact: true })
-      .click();
-    await expect(page.getByRole("alert")).toContainText("positive amount");
-    expect(transport.requests).toHaveLength(0);
-    await page.getByLabel("Budget amount", { exact: true }).fill("250");
-    await page
-      .getByRole("button", { name: "Apply budget", exact: true })
-      .click();
-    await expect(
-      page.getByRole("article", { name: "Aster Pure 30", exact: true }),
-    ).toBeVisible();
+    await expect(page.getByRole("article", { name: "Aster Pure 30", exact: true })).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Any budget in mind?" })).toHaveCount(0);
     expect(transport.requests).toHaveLength(1);
-    await expect(
-      page.getByRole("button", { name: "Skip budget", exact: true }),
-    ).toHaveCount(0);
+    await send(page, "under SGD0");
+    const invalid = page.getByTestId("conversation-turn").last();
+    await expect(invalid).toHaveAttribute("data-active", "true");
+    await expect(invalid.getByRole("article")).toHaveCount(0);
+    expect(transport.requests).toHaveLength(1);
+    await send(page, "under SGD250");
+    await expect(page.getByTestId("conversation-turn").last().getByRole("article", { name: "Aster Pure 30", exact: true })).toBeVisible();
+    expect(transport.requests).toHaveLength(2);
+    await expect(page.getByRole("button", { name: "Skip budget", exact: true })).toHaveCount(0);
     await page.getByRole("button", { name: "New chat" }).click();
     await send(page, "A quiet H13 air purifier. Must have washable prefilter.");
-    await page
-      .getByRole("button", { name: "Skip budget", exact: true })
-      .click();
-    await expect(page.getByTestId("conversation-turn").last()).toContainText(
-      "Aster Pure 30",
-    );
-    expect(transport.requests).toHaveLength(2);
+    await expect(page.getByTestId("conversation-turn").last()).toContainText("Aster Pure 30");
+    expect(transport.requests).toHaveLength(3);
   } finally {
     await transport.close();
   }

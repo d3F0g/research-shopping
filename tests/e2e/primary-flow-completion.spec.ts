@@ -44,7 +44,14 @@ test("discloses paid submission and completes server-ranked shopping with local 
   });
   payload.answer.products = [weaker, stronger];
   payload.answer.choice = null;
-  const transport = await actualComposition(page, testInfo, payload);
+  const transport = await actualComposition(page, testInfo, (body: Record<string, unknown>) => {
+    const intent = JSON.parse(String(body.systemPrompt).split("Current authoritative shopping intent: ")[1]);
+    const preference = intent.criteria.find((criterion: { wording: string }) => criterion.wording === "low power");
+    const result = structuredClone(payload);
+    for (const product of result.answer.products)
+      product.criteria[1].criterionId = preference.id;
+    return result;
+  });
   try {
     await page.setViewportSize({ width: 1440, height: 1000 });
     await page.goto(transport.baseUrl);

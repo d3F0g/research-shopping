@@ -1,3 +1,4 @@
+import { fixtureIntentInterpreter } from "../helpers/intent";
 import { randomUUID } from "node:crypto";
 import { expect, it, vi } from "vitest";
 import type { ShoppingIntent } from "../../src/domain/contracts";
@@ -17,7 +18,7 @@ it("answers help and current-budget queries during Hono preparation with no quot
   const reserve = vi.fn(async () => "admitted" as const);
   const settle = vi.fn(async () => undefined);
   const app = createApp({
-    researchTurns: createResearchTurns({
+    researchTurns: createResearchTurns({ interpretIntent: fixtureIntentInterpreter,
       research,
       quota: { reserve, settle },
     }),

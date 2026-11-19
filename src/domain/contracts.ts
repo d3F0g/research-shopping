@@ -41,13 +41,40 @@ export const CriterionSchema = z.strictObject({
     text: z.string().min(1).max(2000),
   }),
 });
-export const PendingChangeSchema = z.strictObject({
+export const MoneyDraftSchema = z.strictObject({
+  amount: MoneyAmountSchema.nullable(),
+  minimum: MoneyAmountSchema.nullable(),
+  currency: CurrencySchema.nullable(),
+}).refine((draft) => draft.amount === null || draft.minimum === null || draft.minimum <= draft.amount, { message: "Draft minimum cannot exceed maximum" });
+const QuestionBase = {
+  id: z.string().min(1).max(80),
   message: z.string().min(1).max(2000),
-  reason: z.enum(["currency", "budget", "constraint"]),
+  originalRequest: z.string().min(1).max(4000),
   explanation: z.string().min(1).max(600),
-});
+};
+export const PendingChangeSchema = z.discriminatedUnion("kind", [
+  z.strictObject({
+    ...QuestionBase,
+    kind: z.literal("money"),
+    reason: z.enum(["currency", "budget"]),
+    missingSlot: z.enum(["currency", "amount", "range"]),
+    draft: MoneyDraftSchema,
+  }),
+  z.strictObject({
+    ...QuestionBase,
+    kind: z.literal("constraint"),
+    reason: z.literal("constraint"),
+  }),
+  z.strictObject({
+    ...QuestionBase,
+    kind: z.literal("legacy"),
+    reason: z.enum(["currency", "budget", "constraint"]),
+  }),
+]);
+export type MoneyDraft = z.infer<typeof MoneyDraftSchema>;
+export type PendingQuestion = z.infer<typeof PendingChangeSchema>;
 export const ShoppingIntentSchema = z.strictObject({
-  version: z.literal(4),
+  version: z.literal(5),
   productDescription: z.string().max(4000),
   criteria: z
     .array(CriterionSchema)
@@ -107,6 +134,7 @@ export const PrepareTurnRequestSchema = z.strictObject({
   operationId: z.string().uuid(),
   edit: IntentEditSchema.optional(),
   skipBudget: z.boolean().optional(),
+  questionId: z.string().min(1).max(80).optional(),
 });
 export const ResearchTurnRequestSchema = z.strictObject({
   phase: z.literal("research"),
@@ -127,7 +155,7 @@ export type Criterion = z.infer<typeof CriterionSchema>;
 export type TurnRequest = z.infer<typeof TurnRequestSchema>;
 export function defaultIntent(): ShoppingIntent {
   return {
-    version: 4,
+    version: 5,
     productDescription: "",
     criteria: [],
     budget: null,

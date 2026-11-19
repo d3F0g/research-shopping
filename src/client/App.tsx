@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { ArrowUp, Moon, Plus, Square, Sun } from "lucide-react";
+import { ArrowUp, Moon, Plus, Search, Square, Sun, TextSearch } from "lucide-react";
 import { LiveResearchResults } from "./LiveResearchResults";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Bubble, BubbleContent } from "@/components/ui/bubble";
@@ -17,6 +17,7 @@ import {
   InputGroupTextarea,
 } from "@/components/ui/input-group";
 import { Message, MessageContent } from "@/components/ui/message";
+import { Trace, TraceIcon, TraceLine, TraceTitle } from "@/components/ui/trace";
 import {
   MessageScroller,
   MessageScrollerButton,
@@ -61,7 +62,9 @@ export function App() {
         chat.send({ type: "submit" });
       }}
     >
-      {chat.preferences.pendingChange && (
+      {chat.preferences.pendingChange &&
+        !(!chat.preferences.budget && chat.preferences.pendingChange.kind === "money" &&
+          chat.preferences.pendingChange.missingSlot === "currency") && (
         <Alert className="pending-change" role="status">
           <AlertTitle>Resolve this change before researching</AlertTitle>
           <AlertDescription>
@@ -158,7 +161,7 @@ export function App() {
       <p className="composer-note">
         {fixtureMode
           ? "Automated fixture service. Sample claims are synthetic."
-          : "Shopping requests may use one paid Exa call. Viewing saved evidence does not start another search."}
+          : "Messages may use paid OpenAI interpretation. Shopping requests may also use one paid Exa call."}
       </p>
     </form>
   );
@@ -241,6 +244,7 @@ export function App() {
                       response &&
                       response.preferences.revision !==
                         turn.request.preferences.revision;
+                    const researchSubject = turn.prepared?.preferences.productDescription.trim();
                     return (
                       <MessageScrollerItem
                         key={turn.id}
@@ -269,13 +273,22 @@ export function App() {
                             >
                               <span className="assistant-name">fieldnote</span>
                               {turn.body.status === "pending" && (
-                                <p role="status" className="pending-message">
-                                  {fixtureMode
-                                    ? "Waiting for the sample service…"
-                                    : turn.request.edit
-                                      ? "Saving preferences…"
-                                      : "Waiting for a response…"}
-                                </p>
+                                <Trace role="status" className="pending-message" aria-live="polite">
+                                  <TraceLine status="running">
+                                    <TraceIcon>
+                                      {turn.body.phase === "research" ? <Search /> : <TextSearch />}
+                                    </TraceIcon>
+                                    <TraceTitle className="shimmer-none">
+                                      {turn.body.phase === "research"
+                                        ? researchSubject && researchSubject.length <= 120
+                                          ? `Searching sources for ${researchSubject}`
+                                          : "Searching product sources"
+                                        : turn.request.edit
+                                          ? "Applying your preferences"
+                                          : "Understanding your request"}
+                                    </TraceTitle>
+                                  </TraceLine>
+                                </Trace>
                               )}
                               {turn.body.status === "failed" && (
                                 <Alert variant="destructive">
@@ -290,7 +303,8 @@ export function App() {
                                 </p>
                               )}
                               {(turn.body.status === "failed" ||
-                                turn.body.status === "cancelled") &&
+                                turn.body.status === "cancelled" ||
+                                response?.kind === "research-unavailable") &&
                                 chat.retryTurnId === turn.id && (
                                   <Button
                                     variant="outline"
@@ -337,6 +351,26 @@ export function App() {
                                   {response.message}
                                 </p>
                               )}
+                              {active && response?.kind === "clarification" &&
+                                response.preferences.pendingChange?.kind === "money" &&
+                                response.preferences.pendingChange.missingSlot === "currency" && (
+                                  <div className="currency-choices" aria-label="Budget currency">
+                                    {(["SGD", "USD"] as const).map((currency) => (
+                                      <Button
+                                        key={currency}
+                                        variant="outline"
+                                        onClick={() => chat.send({
+                                          type: "reply",
+                                          origin: turn.id,
+                                          questionId: response.preferences.pendingChange!.id,
+                                          message: currency,
+                                        })}
+                                      >
+                                        {currency}
+                                      </Button>
+                                    ))}
+                                  </div>
+                                )}
                               {turn.prepared?.notes
                                 .filter(
                                   (note) => !response?.notes.includes(note),
@@ -371,7 +405,8 @@ export function App() {
                                   intentChanged) &&
                                 !editor && (
                                   <div className="intent-summary">
-                                    {response.preferences.budget && (
+                                    {response.preferences.budget &&
+                                      JSON.stringify(response.preferences.budget) !== JSON.stringify(turn.request.preferences.budget) && (
                                       <p className="metadata">
                                         {response.preferences.budget.currency}{" "}
                                         {response.preferences.budget.minimum !==

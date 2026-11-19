@@ -47,10 +47,10 @@ describe("frozen version 3 before range semantics", () => {
     expect(ShoppingIntentSchema.safeParse(preferences).success).toBe(false);
     expect(migrateVersion3Intent(preferences)).toEqual({
       ...preferences,
-      version: 4,
+      version: 5,
     });
     expect(preferences.version).toBe(3);
-    expect(defaultIntent().version).toBe(4);
+    expect(defaultIntent().version).toBe(5);
   });
 
   it("renders old research read-only and refuses to reinterpret a v3 range", () => {

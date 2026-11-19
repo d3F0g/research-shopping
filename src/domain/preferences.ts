@@ -1,15 +1,17 @@
-import { parseBudget } from "./budget";
+import { hasExplicitBudgetCurrency, isCompleteBudgetAmendment, parseBudget } from "./budget";
 import {
   defaultIntent,
   ShoppingIntentSchema,
   type Criterion,
   type IntentEdit,
   type ShoppingIntent,
+  type MoneyDraft,
 } from "./contracts";
 import {
   ShoppingIntentSchema as Version3ShoppingIntentSchema,
   type ShoppingIntent as Version3ShoppingIntent,
 } from "./research-intent-v3";
+import { ShoppingIntentSchema as Version4ShoppingIntentSchema, type ShoppingIntent as Version4ShoppingIntent } from "./research-intent-v4";
 import type { Preferences as LegacyPreferences } from "./legacy-contracts";
 
 export type IntentUpdate = {
@@ -339,10 +341,8 @@ function interpretMessage(
         origin: { kind: "message", text },
       });
   }
-  if (!isRefresh)
-    intent.productDescription = previous.productDescription
-      ? `${previous.productDescription}\nFollow-up: ${text}`
-      : text;
+  if (!isRefresh && !previous.productDescription)
+    intent.productDescription = text;
   intent.revision =
     Math.max(
       previous.revision,
@@ -398,16 +398,30 @@ function retainPendingUpdate(
     (issue.reason === "currency" ||
       issue.reason === "budget" ||
       issue.reason === "constraint")
-  )
+  ) {
+    const draft = unresolvedMoneyDraft(message, result.preferences);
     result.preferences = {
       ...result.preferences,
-      pendingChange: {
+      pendingChange: issue.reason === "constraint" ? {
+        kind: "constraint",
+        id: `question-${result.preferences.revision + 1}`,
+        originalRequest: result.preferences.productDescription || message,
+        message,
+        reason: "constraint",
+        explanation: issue.message,
+      } : {
+        kind: "money",
+        id: `question-${result.preferences.revision + 1}`,
+        originalRequest: result.preferences.productDescription || message,
         message,
         reason: issue.reason,
         explanation: issue.message,
+        missingSlot: issue.reason === "currency" && draft.currency === null ? "currency" : "range",
+        draft,
       },
       revision: result.preferences.revision + 1,
     };
+  }
   const pending = result.preferences.pendingChange;
   if (pending && !result.reply)
     return {
@@ -420,7 +434,7 @@ export function updateIntent(
   message: string,
   previous: ShoppingIntent,
 ): IntentUpdate {
-  return retainPendingUpdate(interpretMessage(message, previous), message);
+  return resolvePendingAnswer(message, previous) ?? retainPendingUpdate(interpretMessage(message, previous), message);
 }
 
 export function migrateLegacyPreferences(previous: LegacyPreferences):
@@ -479,8 +493,82 @@ export function migrateLegacyPreferences(previous: LegacyPreferences):
 export function migrateVersion3Intent(
   previous: Version3ShoppingIntent,
 ): ShoppingIntent {
-  return ShoppingIntentSchema.parse({
-    ...Version3ShoppingIntentSchema.parse(previous),
-    version: 4,
+  return migrateVersion4Intent({ ...Version3ShoppingIntentSchema.parse(previous), version: 4 });
+}
+
+export function migrateVersion4Intent(
+  previous: Version4ShoppingIntent,
+  originalRequest?: string,
+): ShoppingIntent {
+  const parsed = Version4ShoppingIntentSchema.parse(previous);
+  const pending = parsed.pendingChange;
+  let pendingChange: ShoppingIntent["pendingChange"] = pending ? {
+    ...pending,
+    kind: "legacy",
+    id: `question-${parsed.revision}`,
+    originalRequest: originalRequest ?? pending.message,
+  } : null;
+  const original = originalRequest ?? pending?.message;
+  if (pending?.reason === "currency" && original && /\$/.test(original)) {
+    const known = parseBudget(original.replace(/(?<![A-Z])\$/g, "SGD"), null, parsed.region);
+    if (known.kind === "updated" && known.budget) {
+      pendingChange = {
+        ...pending,
+        reason: "currency",
+        kind: "money",
+        id: `question-${parsed.revision}`,
+        originalRequest: original,
+        missingSlot: "currency",
+        draft: { amount: known.budget.amount, minimum: known.budget.minimum ?? null, currency: null },
+      };
+    }
+  }
+  return ShoppingIntentSchema.parse({ ...parsed, version: 5, pendingChange });
+}
+
+export function unresolvedMoneyDraft(message: string, previous: ShoppingIntent): MoneyDraft {
+  const candidate = parseBudget(message.replace(/(?:SGD\$|S\$|(?<![A-Z])\$)/gi, "SGD"), null, previous.region);
+  return candidate.kind === "updated" && candidate.budget
+    ? { amount: candidate.budget.amount, minimum: candidate.budget.minimum ?? null, currency: hasExplicitBudgetCurrency(message) ? candidate.budget.currency : null }
+    : { amount: null, minimum: null, currency: null };
+}
+
+export function resolvePendingAnswer(message: string, previous: ShoppingIntent): IntentUpdate | null {
+  const question = previous.pendingChange;
+  if (!question || question.kind !== "money" || question.missingSlot !== "currency" || question.draft.currency !== null || question.draft.amount === null) return null;
+  if (/^make it\s/i.test(message.trim()) && isCompleteBudgetAmendment(message) && !hasExplicitBudgetCurrency(message)) {
+    const amended = parseBudget(message, { amount: question.draft.amount, currency: "SGD", ...(question.draft.minimum === null ? {} : { minimum: question.draft.minimum }) }, previous.region);
+    if (amended.kind === "updated" && amended.budget) {
+      const pendingChange = { ...question, message, id: `question-${previous.revision + 1}`, draft: { ...question.draft, amount: amended.budget.amount } };
+      return { preferences: { ...previous, pendingChange, revision: previous.revision + 1 }, notes: [], clarification: { reason: pendingChange.reason, message: pendingChange.explanation } };
+    }
+    return { preferences: previous, notes: [], clarification: { reason: question.reason, message: amended.kind === "clarification" ? amended.message : question.explanation } };
+  }
+  const match = /^(?:it(?:'s| is) |in )?(SGD|USD|S\$|US\$)(?:\s*\$?\s*\d+(?:\.\d{1,2})?)?[.!?]*$/i.exec(message.trim());
+  if (!match) return null;
+  const currency = /^(?:USD|US\$)$/i.test(match[1]!) ? "USD" : "SGD";
+  const preferences = ShoppingIntentSchema.parse({
+    ...previous,
+    budget: { amount: question.draft.amount, currency, ...(question.draft.minimum === null ? {} : { minimum: question.draft.minimum }) },
+    budgetClarified: true,
+    pendingChange: null,
+    revision: previous.revision + 1,
   });
+  return { preferences, notes: [] };
+}
+
+export function resolveLocalIntent(message: string, previous: ShoppingIntent): IntentUpdate | null {
+  const pending = resolvePendingAnswer(message, previous);
+  if (pending) return pending;
+  const text = message.trim();
+  if (/^(?:cancel|discard|never mind|nevermind)(?: (?:that|the pending change))?[.!?]*$/i.test(text))
+    return editIntent(previous, { kind: "discard-pending" }, text);
+  const interpreted = updateIntent(text, previous);
+  if (interpreted.reply && JSON.stringify(interpreted.preferences) === JSON.stringify(previous)) return interpreted;
+  if (detailOnly.test(text)) return interpreted;
+  if (/^(?:please )?(?:remove|drop|forget|clear)\s/i.test(text)) return interpreted;
+  if (/^(?:compare(?: options)?|research(?: now)?|search(?: again)?|find options|refresh(?: research)?)[.!?]*$/i.test(text)) return interpreted;
+  if (isCompleteBudgetAmendment(text) && previous.productDescription) return interpreted;
+  if (/^(?:SGD|USD|S\$|US\$)(?:\s*\$?\s*[0-9,.]+)?[.!?]*$/i.test(text) && previous.productDescription) return interpreted;
+  return null;
 }

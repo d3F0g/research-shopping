@@ -6,12 +6,10 @@ import { expect, test, type Page } from "@playwright/test";
 import { freePort, startManualServer } from "../helpers/manual-composition";
 import { manualResearchFiles, sha256 } from "../helpers/manual-research";
 
-async function send(page: Page) {
+async function send(page: Page, message = "A quiet H13 air purifier under SGD300. Must have washable prefilter.") {
   await page
     .getByLabel("Message", { exact: true })
-    .fill(
-      "A quiet H13 air purifier under SGD300. Must have washable prefilter.",
-    );
+    .fill(message);
   await page.getByRole("button", { name: "Send message", exact: true }).click();
   await expect(page.getByTestId("conversation-turn").last()).toHaveAttribute(
     "data-active",
@@ -27,6 +25,7 @@ test("activates the manual allowance without a paid call and revokes the next br
   const server = await startManualServer(files, {
     grantPath: files.grantPath,
     webPort,
+    intent: true,
   });
   const baseUrl = `http://127.0.0.1:${webPort}`;
   const web = spawn(
@@ -124,14 +123,15 @@ test("activates the manual allowance without a paid call and revokes the next br
       files.approval.expectedLedgerSha256,
     );
     expect(server.requests).toHaveLength(0);
-    await send(page);
-    const result = page.getByTestId("conversation-turn").nth(1);
+    await page.getByRole("button", { name: "Retry", exact: true }).click();
+    const result = page.getByTestId("conversation-turn").first();
     await expect(
       result.getByRole("heading", {
         name: "Conditional choice · Synthetic fixture Aster Pure 30",
       }),
     ).toBeVisible();
     expect(server.requests).toHaveLength(1);
+    expect(server.intentRequests).toHaveLength(1);
     await page.screenshot({
       path: testInfo.outputPath("manual-admitted-desktop.png"),
       animations: "disabled",
@@ -147,7 +147,7 @@ test("activates the manual allowance without a paid call and revokes the next br
       animations: "disabled",
     });
     await unlink(files.grantPath);
-    await send(page);
+    await send(page, "Compare options");
     await expect
       .poll(
         () =>
@@ -170,6 +170,7 @@ test("activates the manual allowance without a paid call and revokes the next br
             "Synthetic test data through actual browser, index.ts, Hono and SDK with a fake key and loopback-only transport. No paid Exa request.",
           activation: JSON.parse(created.stdout),
           requests: server.requests,
+          intentRequests: server.intentRequests,
           responses,
           baselinePreserved: true,
           stopped: ledger.stopped,

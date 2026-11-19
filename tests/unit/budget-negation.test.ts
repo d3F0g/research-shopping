@@ -33,7 +33,7 @@ describe("negated hard budget changes", () => {
     expect(result.preferences.productDescription).toContain(
       originalBudgetRequest,
     );
-    expect(result.preferences.productDescription).toContain(message);
+    expect(result.preferences.productDescription).toBe(previous.productDescription);
   });
 
   it("preserves existing pending changes and criteria through no-change commands", () => {

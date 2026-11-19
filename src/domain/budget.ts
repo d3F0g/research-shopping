@@ -73,7 +73,7 @@ export function parseBudget(
   previous: ShoppingIntent["budget"],
   region: Region,
 ): BudgetUpdate {
-  let remaining = message.normalize("NFKC").replace(/[’‘]/g, "'").trim();
+  let remaining = message.normalize("NFKC").replace(/[’‘]/g, "'").replace(/\b(SGD|USD)\$/gi, "$1").trim();
   const clarification = (
     reason: "currency" | "budget",
     explanation: string,
@@ -297,4 +297,14 @@ export function parseBudget(
         }
       : {}),
   };
+}
+
+const localMoney = String.raw`(?:(?:${currencyToken}|[A-Z]{3})\s*)?${amountToken}(?:\s*[A-Z]{3})?`;
+const completeAmendment = new RegExp(String.raw`^(?:make it|(?:set|change|raise|lower|increase|reduce|update) (?:my |the )?budget(?: to)?|budget(?: is| of)?|under|up to|at most)\s+${localMoney}(?:\s*(?:to|and|[-–—])\s*${localMoney})?[.!?]*$`, "i");
+export function isCompleteBudgetAmendment(message: string): boolean {
+  return completeAmendment.test(message.trim());
+}
+
+export function hasExplicitBudgetCurrency(message: string): boolean {
+  return /(?:^|[^a-z])(?:SGD|USD)(?=$|[^a-z])|(?:^|[^a-z])(?:S|US)\$/i.test(message);
 }

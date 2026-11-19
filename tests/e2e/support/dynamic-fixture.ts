@@ -58,7 +58,7 @@ export function syntheticComparison(
   }
   return {
     dataKind: "web-research",
-    evidenceVersion: 4,
+    evidenceVersion: 5,
     retrievedAt: "2026-11-18T04:00:00.000Z",
     intent,
     summary:

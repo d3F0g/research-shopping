@@ -1,3 +1,4 @@
+import { fixtureIntentInterpreter } from "../helpers/intent";
 import { postTurn, submitTurn } from "../helpers/turns";
 import { randomUUID } from "node:crypto";
 import { mkdtemp, readFile } from "node:fs/promises";
@@ -62,7 +63,7 @@ describe("normal research composition", () => {
     const response = await post(app, request());
     expect(await response.json()).toMatchObject({
       kind: "research-unavailable",
-      reason: "not-configured",
+      reason: "intent-unavailable",
     });
     expect(
       await (await app.request("http://127.0.0.1:3000/api/health")).json(),
@@ -106,7 +107,7 @@ describe("normal research composition", () => {
       calls++;
       return { status: "unavailable", reason: "empty", reportedCostUsd: 0.007 };
     };
-    const turns = createResearchTurns({
+    const turns = createResearchTurns({ interpretIntent: fixtureIntentInterpreter,
       research,
       quota: createResearchQuota(await quotaPath()),
     });
@@ -143,7 +144,7 @@ describe("normal research composition", () => {
     async (message) => {
       let calls = 0;
       const app = createApp({
-        researchTurns: createResearchTurns({
+        researchTurns: createResearchTurns({ interpretIntent: fixtureIntentInterpreter,
           research: async () => {
             calls++;
             return {
@@ -179,45 +180,22 @@ describe("normal research composition", () => {
       expect(calls).toBe(0);
     },
   );
-  it("asks an optional budget question and continues the retained request after skip", async () => {
+  it("researches a useful request without asking for an optional budget", async () => {
     const seen: unknown[] = [];
     const turns = createResearchTurns({
-      research: async (request) => {
-        seen.push(request.preferences);
-        return {
-          status: "unavailable",
-          reason: "empty",
-          reportedCostUsd: 0.005,
-        };
-      },
+      interpretIntent: fixtureIntentInterpreter,
+      research: async ({ preferences }) => { seen.push(preferences); return { status: "unavailable", reason: "empty", reportedCostUsd: 0.005 }; },
       quota: createResearchQuota(await quotaPath()),
     });
-    const question = await submitTurn(
-      turns,
-      request("A ceramic fermentation crock with a water-seal lid"),
-      new AbortController().signal,
-    );
-    expect(question.kind).toBe("question");
-    expect(seen).toHaveLength(0);
-    const result = await submitTurn(
-      turns,
-      {
-        ...request("Skip budget"),
-        preferences: question.preferences,
-        skipBudget: true,
-      },
-      new AbortController().signal,
-    );
+    const result = await submitTurn(turns, { ...request("A hand-powered wool carder"), preferences: defaultIntent() }, new AbortController().signal);
     expect(result.kind).toBe("research-unavailable");
     expect(seen).toHaveLength(1);
-    expect(seen[0]).toMatchObject({
-      budgetClarified: true,
-      productDescription: expect.stringContaining("fermentation crock"),
-    });
+    expect(result.preferences).toMatchObject({ productDescription: "A hand-powered wool carder", budget: null, pendingChange: null });
   });
+
   it("stages explicit preference edits without spending and keeps separate sessions independent", async () => {
     const seen: unknown[] = [];
-    const turns = createResearchTurns({
+    const turns = createResearchTurns({ interpretIntent: fixtureIntentInterpreter,
       research: async (request) => {
         seen.push(request.preferences);
         return {
@@ -255,7 +233,7 @@ describe("normal research composition", () => {
     "stops subsequent work after %s without a retry",
     async (reason) => {
       let calls = 0;
-      const turns = createResearchTurns({
+      const turns = createResearchTurns({ interpretIntent: fixtureIntentInterpreter,
         research: async () => {
           calls++;
           return {
@@ -281,7 +259,7 @@ describe("normal research composition", () => {
       calls++;
       return { status: "unavailable", reason: "empty", reportedCostUsd: 0.007 };
     };
-    const turns = createResearchTurns({
+    const turns = createResearchTurns({ interpretIntent: fixtureIntentInterpreter,
       research,
       quota: createResearchQuota(await quotaPath()),
     });
@@ -302,7 +280,7 @@ describe("normal research composition", () => {
     let calls = 0;
     const controller = new AbortController();
     controller.abort();
-    const turns = createResearchTurns({
+    const turns = createResearchTurns({ interpretIntent: fixtureIntentInterpreter,
       research: async () => {
         calls++;
         return { status: "unavailable", reason: "empty" };
@@ -334,7 +312,7 @@ describe("normal research composition", () => {
       upstream.listen(0, "127.0.0.1");
       await once(upstream, "listening");
       const path = await quotaPath();
-      const turns = createResearchTurns({
+      const turns = createResearchTurns({ interpretIntent: fixtureIntentInterpreter,
         research: createExaProductResearch("fake-test-key", {
           baseUrl: `http://127.0.0.1:${(upstream.address() as AddressInfo).port}`,
           timeoutMs: 2000,

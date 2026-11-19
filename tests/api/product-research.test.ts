@@ -1,3 +1,4 @@
+import { fixtureIntentInterpreter } from "../helpers/intent";
 import { postTurn } from "../helpers/turns";
 import { localProvider, research } from "../helpers/local-exa";
 import { describe, expect, it } from "vitest";
@@ -28,7 +29,7 @@ describe("dynamic source assessments through actual local SDK transport", () => 
     const settlements: unknown[] = [];
     try {
       const app = createApp({
-        researchTurns: createResearchTurns({
+        researchTurns: createResearchTurns({ interpretIntent: fixtureIntentInterpreter,
           research: createExaProductResearch("fake-test-key", {
             baseUrl: provider.baseUrl,
           }),
@@ -51,9 +52,9 @@ describe("dynamic source assessments through actual local SDK transport", () => 
       const result = await response.json();
       expect(result).toMatchObject({
         kind: "research",
-        responseVersion: 4,
+        responseVersion: 5,
         research: {
-          evidenceVersion: 4,
+          evidenceVersion: 5,
           choice: { productId: "aster-pure" },
           products: [
             { stock: "unverified", price: { amount: 249, currency: "SGD" } },

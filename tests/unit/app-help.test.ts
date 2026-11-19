@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { updateIntent } from "../../src/domain/preferences";
+import { resolveLocalIntent, updateIntent } from "../../src/domain/preferences";
 import { syntheticIntent } from "../fixtures/dynamic-research";
 import type { Budget, ShoppingIntent } from "../../src/domain/contracts";
 
@@ -70,8 +70,6 @@ describe("local app help", () => {
     "How does this air purifier work?",
     "What is the budget for a reversible ceramic fermentation crock?",
   ])("preserves shopping questions as research intent for %s", (message) => {
-    const result = updateIntent(message, syntheticIntent());
-    expect(result.reply).toBeUndefined();
-    expect(result.preferences.productDescription).toContain(message);
+    expect(resolveLocalIntent(message, syntheticIntent())).toBeNull();
   });
 });

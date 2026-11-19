@@ -1,3 +1,4 @@
+import { fixtureIntentInterpreter } from "../helpers/intent";
 import { randomUUID } from "node:crypto";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { defaultIntent, type ShoppingIntent } from "../../src/domain/contracts";
@@ -39,7 +40,7 @@ describe("HTTP budget mutation polarity before paid research", () => {
       createExaProductResearch("fake-test-key", { baseUrl: provider.baseUrl }),
     );
     app = createApp({
-      researchTurns: createResearchTurns({
+      researchTurns: createResearchTurns({ interpretIntent: fixtureIntentInterpreter,
         research,
         quota: { reserve, settle },
       }),

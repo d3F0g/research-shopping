@@ -5,6 +5,8 @@ import { createServer } from "node:http";
 import type { AddressInfo } from "node:net";
 import { join } from "node:path";
 import { syntheticAnswer } from "../fixtures/dynamic-research";
+import { fixtureIntentInterpreter } from "./intent";
+import type { PrepareTurnRequest } from "../../src/domain/contracts";
 
 export async function freePort() {
   const server = createServer();
@@ -17,9 +19,10 @@ export async function freePort() {
 
 export async function startManualServer(
   files: { ledgerPath: string; directory: string },
-  options: { grantPath?: string; mode?: string; webPort?: number } = {},
+  options: { grantPath?: string; mode?: string; webPort?: number; intent?: boolean } = {},
 ) {
   const requests: unknown[] = [];
+  const intentRequests: unknown[] = [];
   let defer = false;
   let aborts = 0;
   const provider = createServer((request, response) => {
@@ -27,8 +30,23 @@ export async function startManualServer(
     request.on("data", (chunk) => {
       body += String(chunk);
     });
-    request.on("end", () => {
-      requests.push(JSON.parse(body));
+    request.on("end", async () => {
+      const parsed = JSON.parse(body);
+      if (request.url === "/v1/responses" && options.intent) {
+        intentRequests.push(parsed);
+        const input = JSON.parse(parsed.input);
+        const result = await fixtureIntentInterpreter({
+          ...input, phase: "prepare", operationId: "00000000-0000-4000-8000-000000000001",
+        } as PrepareTurnRequest, new AbortController().signal);
+        response.writeHead(200, { "Content-Type": "application/json" });
+        response.end(JSON.stringify({
+          status: "completed",
+          output: [{ type: "message", content: [{ type: "output_text", text: result.status === "ready" ? JSON.stringify(result.interpretation) : "{}" }] }],
+          usage: { input_tokens: 100, output_tokens: 100 },
+        }));
+        return;
+      }
+      requests.push(parsed);
       if (defer) {
         defer = false;
         response.on("close", () => {
@@ -55,7 +73,7 @@ export async function startManualServer(
 const originalFetch = globalThis.fetch;
 globalThis.fetch = (input, init) => {
   const url = new URL(typeof input === "string" ? input : input instanceof URL ? input.href : input.url);
-  if (url.origin !== "https://api.exa.ai") throw new Error("External transport forbidden in automated proof");
+  if (url.origin !== "https://api.exa.ai" && !(${options.intent === true} && url.origin === "https://api.openai.com")) throw new Error("External transport forbidden in automated proof");
   const target = new URL(url.pathname + url.search, ${JSON.stringify(providerUrl)});
   return originalFetch(input instanceof Request ? new Request(target, input) : target, init);
 };
@@ -76,6 +94,11 @@ globalThis.fetch = (input, init) => {
         EXA_RESEARCH_LEDGER_PATH: files.ledgerPath,
         API_PORT: String(port),
         WEB_PORT: String(options.webPort ?? port),
+        ...(options.intent ? {
+          OPENAI_INTENT_ENABLED: "true",
+          OPENAI_API_KEY: "fake-manual-intent-loopback-key",
+          OPENAI_INTENT_LEDGER_PATH: join(files.directory, "intent-receipts.json"),
+        } : {}),
         ...(options.grantPath !== undefined
           ? { EXA_MANUAL_RESEARCH_GRANT_PATH: options.grantPath }
           : {}),
@@ -115,6 +138,7 @@ globalThis.fetch = (input, init) => {
     url,
     port,
     requests,
+    intentRequests,
     close,
     get log() {
       return log;

@@ -1,3 +1,4 @@
+import { fixtureIntentInterpreter } from "../helpers/intent";
 import { randomUUID } from "node:crypto";
 import { describe, expect, it, vi } from "vitest";
 import { defaultIntent } from "../../src/domain/contracts";
@@ -20,7 +21,7 @@ describe("conversational budgets at the HTTP boundary", () => {
       reportedCostUsd: 0,
     }));
     const app = createApp({
-      researchTurns: createResearchTurns({
+      researchTurns: createResearchTurns({ interpretIntent: fixtureIntentInterpreter,
         research,
         quota: { reserve, settle: async () => {} },
       }),
