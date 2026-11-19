@@ -262,3 +262,71 @@ test("keeps free replies during research and stops abandoned transport before ne
     ),
   ).toBe(true);
 });
+
+for (const viewport of [
+  { name: "desktop", width: 1440, height: 1000 },
+  { name: "mobile", width: 390, height: 844 },
+]) {
+  test(`${viewport.name} New chat retains typing during its response and waits to submit`, async ({ page }) => {
+    await page.setViewportSize(viewport);
+    await page.goto("/");
+    const composer = page.getByRole("textbox", { name: "Message", exact: true });
+    const send = page.getByRole("button", { name: "Send message", exact: true });
+    const newChat = page.getByRole("button", { name: "New chat", exact: true });
+    await composer.fill("A fixture powerbank around $30-40");
+    await send.click();
+    await expect(page.getByRole("button", { name: "SGD", exact: true })).toBeVisible();
+    const calls = async () => (await page.request.get("/api/test-stats").then((r) => r.json())).calls as number;
+    const baseline = await calls();
+    let release!: () => void;
+    let entered!: () => void;
+    const held = new Promise<void>((resolve) => { entered = resolve; });
+    const gate = new Promise<void>((resolve) => { release = resolve; });
+    await page.route("**/api/new-chat", async (route) => {
+      entered();
+      await gate;
+      await route.continue();
+    });
+    const submissions: unknown[] = [];
+    page.on("request", (request) => {
+      if (request.url().endsWith("/api/turn")) submissions.push(request.postDataJSON());
+    });
+    await composer.fill("Fixture old unsent draft");
+    await newChat.click();
+    await held;
+    try {
+      await expect(composer).toHaveValue("");
+      await expect(composer).toBeEditable();
+      await composer.fill("SGD");
+      await expect(send).toBeDisabled();
+      await expect(newChat).toBeDisabled();
+      await composer.press("Enter");
+      await page.getByRole("button", { name: "SGD", exact: true }).click();
+      await expect(composer).toHaveValue("SGD");
+      expect(submissions).toEqual([]);
+      expect(await calls()).toBe(baseline);
+      await mkdir("artifacts/fieldnote-v4/e2e", { recursive: true });
+      await page.screenshot({ path: `artifacts/fieldnote-v4/e2e/${viewport.name}-new-chat-pending.png` });
+      const response = page.waitForResponse((result) => result.url().endsWith("/api/new-chat"));
+      release();
+      await response;
+      await expect(page.getByRole("heading", { name: "What are you looking for?" })).toBeVisible();
+      await expect(composer).toHaveValue("SGD");
+      await expect(send).toBeEnabled();
+      expect(submissions).toEqual([]);
+      expect(await calls()).toBe(baseline);
+      await page.screenshot({ path: `artifacts/fieldnote-v4/e2e/${viewport.name}-new-chat-draft-retained.png` });
+      await composer.fill("hello");
+      await send.click();
+      await expect(page.getByText("Hi. What are you looking to buy?", { exact: true })).toBeVisible();
+      expect(submissions).toHaveLength(1);
+      expect(await calls()).toBe(baseline);
+      const current = await page.request.get("/api/session").then((r) => r.json());
+      expect(current.state.intent.budget).toBeNull();
+      expect(current.state.intent.requirements).toEqual([]);
+      expect(current.state.messages.some((message: { text: string }) => message.text.includes("powerbank"))).toBe(false);
+    } finally {
+      release();
+    }
+  });
+}

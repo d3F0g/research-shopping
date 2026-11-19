@@ -45,6 +45,18 @@ try {
     await expect(
       page.getByText("Hi. What are you looking to buy?", { exact: true }),
     ).toBeVisible();
+    let releaseReset;
+    let resetEntered;
+    const resetGate = new Promise((resolve) => { releaseReset = resolve; });
+    const resetHeld = new Promise((resolve) => { resetEntered = resolve; });
+    await page.route("**/api/new-chat", async (route) => {
+      const response = await route.fetch();
+      resetEntered();
+      await resetGate;
+      await route.fulfill({ response });
+    });
+    await page.getByRole("button", { name: "New chat", exact: true }).click();
+    await resetHeld;
     const email = `fixture-browser-${randomUUID()}@example.test`;
     await authenticate(page, email, true);
     await expect(
@@ -56,6 +68,17 @@ try {
     await expect(
       page.getByText("Hi. What are you looking to buy?", { exact: true }),
     ).toHaveCount(0);
+    await send(page, "hello");
+    await expect(page.getByText("Hi. What are you looking to buy?", { exact: true })).toBeVisible();
+    const resetResponse = page.waitForResponse((response) => response.url().endsWith("/api/new-chat"));
+    releaseReset();
+    await resetResponse;
+    await page.unroute("**/api/new-chat");
+    await expect(page.getByText("Hi. What are you looking to buy?", { exact: true })).toBeVisible();
+    const afterStaleReset = await page.request.get(`${runtime.origin}/api/account`).then((r) => r.json());
+    assert.equal(afterStaleReset.status, "signed-in");
+    assert.equal(afterStaleReset.workspace.state.messages.some((message) => message.text === "hello"), true);
+    proof.push(`${size.name} delayed guest reset cannot replace the signed-in workspace.`);
     await send(page, "I want to buy a powerbank around $30-40.");
     await page.getByRole("button", { name: "SGD", exact: true }).click();
     await expect(
