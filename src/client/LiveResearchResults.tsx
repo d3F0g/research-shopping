@@ -94,6 +94,7 @@ function SourceIllustration({ source }: { source: ResearchSource | null }) {
         {source?.imageUrl && !failed ? (
           <>
             <SourceLink source={source} label="Source illustration" />
+            <span>{new URL(source.url).hostname}</span>
             <span>Representative only. Exact variant unverified.</span>
           </>
         ) : (

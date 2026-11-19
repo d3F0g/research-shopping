@@ -978,6 +978,7 @@ button {
   font-size: 11px;
   line-height: 1.5;
   color: var(--muted-foreground);
+  overflow-wrap: anywhere;
 }
 .source-illustration figcaption > span {
   display: block;

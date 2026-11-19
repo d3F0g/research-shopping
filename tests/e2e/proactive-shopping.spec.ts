@@ -49,6 +49,7 @@ test("shows actual preparation and search activity with an attributed source ill
     await expect(image).toHaveAttribute("loading", "lazy");
     await expect(image).toHaveAttribute("referrerpolicy", "no-referrer");
     await expect(card.getByRole("link", { name: /Source illustration/ })).toHaveAttribute("href", native.citations[0].url);
+    await expect(card.locator("figcaption")).toContainText("reviews.example.com");
     await expect(card).toContainText("Representative only. Exact variant unverified.");
     expect(imageRequests).toHaveLength(1);
     expect(imageRequests[0].headers().referer).toBeUndefined();
