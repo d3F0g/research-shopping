@@ -26,6 +26,7 @@ import { ResearchAnswer } from "./ResearchAnswer";
 import { AccountControl } from "./AccountControl";
 import { useFieldnote } from "./useFieldnote";
 import { PreferenceEditor } from "./PreferenceEditor";
+import { HeldReplyDetails } from "./HeldReplyDetails";
 
 function ResponseAnchor({ id }: { id: string | null }) {
   const { scrollToMessage } = useMessageScroller();
@@ -118,6 +119,7 @@ export function App() {
                             <p className="whitespace-pre-wrap">
                               {message.text}
                             </p>
+                            {message.detail && <HeldReplyDetails detail={message.detail} />}
                           </BubbleContent>
                         </Bubble>
                         {message.research && (

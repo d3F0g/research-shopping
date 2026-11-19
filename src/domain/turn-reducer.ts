@@ -1,15 +1,17 @@
 import { assessProduct } from "./research";
-import { BudgetSchema, MoneySchema, type ConversationState, type PrepareInput, type Requirement, type ShoppingIntent, type TurnDecision } from "./conversation";
+import { BudgetSchema, MoneySchema, type ChatMessage, type ConversationState, type PrepareInput, type Requirement, type ShoppingIntent, type TurnDecision } from "./conversation";
 
 const normalize = (value: string) => value.trim().replace(/[.!?]+$/, "").toLowerCase();
 const currency = (value: string) => ({ "s$": "SGD", "us$": "USD", "€": "EUR", "£": "GBP", "sgd": "SGD", "usd": "USD", "eur": "EUR", "gbp": "GBP", "aud": "AUD", "cad": "CAD", "myr": "MYR", "jpy": "JPY", "inr": "INR" }[value.toLowerCase()] ?? null);
-const amount = (value: string) => Number(value.replaceAll(",", "")) * (/k$/i.test(value) ? 1000 : 1);
+const amount = (value: string) => Number(value.replaceAll(",", "").replace(/k$/i, "")) * (/k$/i.test(value) ? 1000 : 1);
 
 function monetaryDraft(text: string): { minimum?: number; maximum?: number; currency: string | null; remainder: string } | null {
   const token = "(?:SGD|USD|EUR|GBP|AUD|CAD|MYR|JPY|INR|US\\$|S\\$|\\$|€|£)";
-  const number = "([0-9]+(?:,[0-9]{3})*(?:\\.[0-9]+)?)";
+  const number = "([0-9]+(?:,[0-9]{3})*(?:\\.[0-9]+)?k?)";
   const range = new RegExp(`(?:between|around|budget(?: of)?|from)?\\s*(${token})?\\s*${number}\\s*(?:-|–|to|and)\\s*(${token})?\\s*${number}\\s*(${token})?\\s*(?=$|[\\s.,;!?])`, "i").exec(text);
-  if (range && (/[A-Za-z$€£]/.test(range[0].replace(/to|and/gi, "")) || /^\s*[\d$]/.test(text))) {
+  const hasCurrency = range && [range[1], range[3], range[5]].some(Boolean);
+  const bareRange = range && /^(?:between|around|budget(?: of)?|from)\s*/i.test(range[0]) && /^(?:\s*[.,;!?]|\s*$)/.test(text.slice(range.index + range[0].length));
+  if (range && (hasCurrency || bareRange || /^\s*[\d$]/.test(text))) {
     const tokens = [range[1], range[3], range[5]].filter((v): v is string => !!v && v !== "$");
     const currencies = new Set(tokens.map((v) => currency(v)));
     if (currencies.size > 1) return { minimum: NaN, maximum: NaN, currency: null, remainder: text };
@@ -55,15 +57,19 @@ function requirementClauses(text: string, userId: string, request: boolean): Req
   ];
 }
 
-function heldReply(state: ConversationState, mode: "compare" | "best" | "detail" | "held-question" | "cheaper", question = ""): string {
+type HeldReply = Pick<ChatMessage, "text" | "detail">;
+const brandName = "[A-Z][a-z][A-Za-z0-9]*(?: [A-Z][a-z][A-Za-z0-9]*)*";
+const brandClause = new RegExp(`^[Oo][Nn][Ll][Yy]\\s+${brandName}$`);
+
+function heldReply(state: ConversationState, mode: "compare" | "best" | "detail" | "held-question" | "cheaper", question = ""): HeldReply {
   const research = lastResearch(state);
-  if (!research) return "There is no retained research for this question. Your request is unchanged. Submit research explicitly when you want new evidence.";
+  if (!research) return { text: "There is no retained research for this question. Your request is unchanged. Submit research explicitly when you want new evidence." };
   const previousQuestion = [...state.messages].reverse().find((message) => message.role === "user" && message.text !== question)?.text ?? "";
   const subject = /^i mean the /i.test(question) ? `${previousQuestion} ${question}` : question;
   const ordinals = /\bfirst two\b/i.test(subject) ? [0, 1] : [...subject.matchAll(/\b(first|second|third)\b/gi)].map((match) => ({ first: 0, second: 1, third: 2 }[match[1]!.toLowerCase()]!));
-  if (/\bthat one\b/i.test(subject) && !ordinals.length && research.products.length > 1) return "Which displayed option do you mean, the first, second, or third? I will use its retained evidence.";
+  if (/\bthat one\b/i.test(subject) && !ordinals.length && research.products.length > 1) return { text: "Which displayed option do you mean, the first, second, or third? I will use its retained evidence." };
   const selected = ordinals.length ? research.products.filter((_, index) => ordinals.includes(index)) : research.products;
-  if (!selected.length || ordinals.some((index) => !research.products[index])) return "That option is not present in the retained comparison.";
+  if (!selected.length || ordinals.some((index) => !research.products[index])) return { text: "That option is not present in the retained comparison." };
   const unchanged = state.intent.requirements.filter((requirement) => requirement.strength === "hard").every((requirement) => research.intent.requirements.some((prior) => prior.id === requirement.id && prior.text === requirement.text && prior.strength === "hard"));
   const current = selected.map((product) => {
     const assessed = assessProduct(product, state.intent);
@@ -76,18 +82,50 @@ function heldReply(state: ConversationState, mode: "compare" | "best" | "detail"
     }).join("");
     return `${assessment.rationale} (${assessment.status}).${spans}`;
   };
+  const fixture = research.dataKind === "test-fixture" ? "Fixture data. " : "";
+  const display = (text: string, paragraphs: string[]): HeldReply => {
+    const full = paragraphs.join("\n\n");
+    if (state.intent.responseLength === "expanded" && full.length <= 6000) return { text: full };
+    let detail = "";
+    for (const paragraph of paragraphs) {
+      if (detail.length + paragraph.length > 23800) {
+        detail += "\n\nAdditional complete evidence remains in the original research message. Open its evidence and tradeoffs for the full retained passages.";
+        break;
+      }
+      detail += `${detail ? "\n\n" : ""}${paragraph}`;
+    }
+    return { text: fixture + text, detail };
+  };
   if (mode === "best") {
     const chosen = current.find((product) => product.id === research.choice?.productId && product.eligible);
-    return chosen ? `${research.dataKind === "test-fixture" ? "Fixture data. " : ""}${chosen.name}. ${research.choice!.rationale} ${supportText(chosen.requestMatch)}` : "I cannot choose a compliant best option from the retained evidence for your current requirements. " + current.map((product) => `${product.name}: ${product.blockers.join(" ")}`).join(" ");
+    return chosen
+      ? display(`${chosen.name} is the retained source-supported option. Merchant price, stock and delivery remain unverified.`, [`${fixture}${chosen.name}. ${research.choice!.rationale} ${supportText(chosen.requestMatch)}`])
+      : display(`I cannot choose a compliant best option from the retained evidence.${!unchanged ? " The retained evidence has not assessed the changed requirements." : " The options have unresolved requirements."}`, current.map((product) => `${product.name}: ${product.blockers.join(" ")}`));
   }
   const ordered = mode === "cheaper" ? [...current].sort((a, b) => a.eligible !== b.eligible ? Number(b.eligible) - Number(a.eligible) : a.eligible && a.price && b.price && a.price.currency === b.price.currency ? a.price.amount - b.price.amount : 0) : current;
-  return `${research.dataKind === "test-fixture" ? "Fixture data. " : ""}${ordered.map((product) => {
-    const topics = subject.toLowerCase().match(/[a-z][a-z-]{3,}/g)?.filter((word) => !["what", "about", "which", "their", "compare", "first", "second", "third", "options", "machine", "mean", "good", "stronger", "evidence"].includes(word)) ?? [];
-    const rows = mode === "held-question" || /their /i.test(question) ? product.attributes.filter((attribute) => topics.some((topic) => attribute.name.toLowerCase().includes(topic) || topic.includes(attribute.name.toLowerCase()))) : product.attributes;
-    const detail = rows.length ? rows.map((attribute) => `${attribute.name}: ${supportText(attribute.assessment)}`).join("; ") : "No supported detail was retained for this question. Missing attributes remain unknown.";
+  const topics = subject.toLowerCase().match(/[a-z][a-z-]{3,}/g)?.filter((word) => !["what", "about", "which", "their", "compare", "first", "second", "third", "options", "machine", "mean", "good", "stronger", "evidence"].includes(word)) ?? [];
+  const rows = (product: typeof current[number]) => mode === "held-question" || /their /i.test(question) ? product.attributes.filter((attribute) => topics.some((topic) => attribute.name.toLowerCase().includes(topic) || topic.includes(attribute.name.toLowerCase()))) : product.attributes;
+  const findingsByProduct = ordered.map((product) => {
+    const attributes = rows(product);
+    const findings = attributes.slice(0, 2).map(({ name, assessment }) => {
+      const status = `AI source assessment ${assessment.status}, ${assessment.scope}`;
+      const qualified = [assessment.rationale, ...assessment.support.map((span) => `"${span.quote}"`)].join(" ");
+      return `${name}: ${assessment.support.length && qualified.length <= 180 ? `${qualified} ` : ""}(${status})`;
+    }).join("; ");
+    return { name: product.name, finding: `${findings || "Missing attributes remain unknown."}${product.blockers.length ? " Unresolved requirements remain." : ""}` };
+  });
+  const sameFinding = findingsByProduct.every((row) => row.finding === findingsByProduct[0]?.finding);
+  const brief = (sameFinding
+    ? `${findingsByProduct[0]!.name}: ${findingsByProduct[0]!.finding}${findingsByProduct.length > 1 ? `\nSame assessment status for ${findingsByProduct.slice(1).map((row) => row.name).join(" and ")}.` : ""}`
+    : findingsByProduct.map((row) => `${row.name}: ${row.finding}`).join("\n\n"))
+    + "\n\nFull findings and price conditions are in the details. Stock and delivery remain unverified.";
+  const full = ordered.map((product, index) => {
+    const attributes = rows(product);
+    const detail = attributes.length ? attributes.map((attribute) => `${attribute.name}: ${supportText(attribute.assessment)}`).join("; ") : "No supported detail was retained for this question. Missing attributes remain unknown.";
     const price = product.price ? ` Observed ${product.price.currency} ${product.price.amount}. ${product.price.conditions.join(" ")} ${supportText(product.price.assessment)} Stock and delivery remain unverified.` : " No qualifying observed price was retained.";
-    return `${product.name}: ${detail}${price}${product.blockers.length ? ` Unresolved: ${product.blockers.join(" ")}` : ""}`;
-  }).join("\n\n")}`;
+    return `${index === 0 ? fixture : ""}${product.name}: ${detail}${price}${product.blockers.length ? ` Unresolved: ${product.blockers.join(" ")}` : ""}`;
+  });
+  return display(brief, full);
 }
 
 export function reduceTurn(previous: ConversationState, input: PrepareInput): TurnDecision {
@@ -98,9 +136,10 @@ export function reduceTurn(previous: ConversationState, input: PrepareInput): Tu
   const userId = input.operationId;
   state.revision++;
   state.messages.push({ id: userId, role: "user", text });
-  const reply = (message: string, kind: "message" | "clarification" = "message"): TurnDecision => {
-    state.messages.push({ id: `${userId}-reply`, role: "assistant", text: message });
-    return { state, kind, message };
+  const reply = (content: string | HeldReply, kind: "message" | "clarification" = "message"): TurnDecision => {
+    const message = typeof content === "string" ? { text: content } : content;
+    state.messages.push({ id: `${userId}-reply`, role: "assistant", ...message });
+    return { state, kind, message: message.text };
   };
   const pendingEdit = (explanation: string) => {
     state.pending = { kind: "edit", id: userId, message: text, explanation };
@@ -141,7 +180,10 @@ export function reduceTurn(previous: ConversationState, input: PrepareInput): Tu
   }
   if (operation === "status") return reply("This status question does not start research. Transport cancellation status is shown by the active research operation; this message cannot confirm a provider stopped.");
   if (operation === "dissatisfied") return reply("What should change, such as price, size, or a specific feature? Your existing requirements remain active.");
-  if (operation === "selection") return reply("Your existing budget and requirements remain active. " + heldReply(state, "detail", text));
+  if (operation === "selection") {
+    const held = heldReply(state, "detail", text);
+    return reply({ ...held, text: "Your existing budget and requirements remain active. " + held.text });
+  }
   if (operation === "cheaper") {
     if (state.intent.requirements.length >= 24) return reply("The requirement limit is reached. Your accepted requirements remain unchanged.");
     if (!state.intent.requirements.some((requirement) => requirement.text === text)) state.intent.requirements.push({ id: `requirement-${userId}`, text, strength: "flexible", originMessageId: userId, kind: "preference" });
@@ -210,7 +252,7 @@ export function reduceTurn(previous: ConversationState, input: PrepareInput): Tu
     return { state, kind: "research" };
   }
   if (["show me other brands", "other brands", "remove brand restriction"].includes(command)) {
-    for (const requirement of state.intent.requirements.filter((r) => r.kind === "request")) requirement.text = requirement.text.replace(/\bonly\s+[A-Z][A-Za-z0-9-]*\b/g, "").trim();
+    for (const requirement of state.intent.requirements.filter((r) => r.kind === "request")) requirement.text = requirement.text.replace(new RegExp(`\\b[Oo][Nn][Ll][Yy]\\s+${brandName}(?=[.;!?]|$)`, "g"), "").trim();
     state.intent.requirements = state.intent.requirements.filter((r) => r.kind !== "brand");
     state.intent.productDescription = state.intent.requirements.map((r) => r.text).join("\n");
     return { state, kind: "research" };
@@ -237,8 +279,8 @@ export function reduceTurn(previous: ConversationState, input: PrepareInput): Tu
   if (!state.intent.originalText || newObjective) {
     state.intent = requestIntent;
   } else {
-    const brand = /^only\s+([^,;.!?]+)$/i.exec(text);
-    const kind = brand && !/\b(?:and|or|with|without|must)\b/i.test(brand[1]!) ? "brand" : /^(?:no|avoid|exclude|without)\b/i.test(text) ? "exclusion" : "preference";
+    const brand = brandClause.test(text.replace(/[.!?]+$/, ""));
+    const kind = brand ? "brand" : /^(?:no|avoid|exclude|without)\b/i.test(text) ? "exclusion" : "preference";
     const clauses = requirementClauses(text, userId, false);
     state.intent.requirements.push(...clauses.map((requirement) => ({ ...requirement, kind: kind === "brand" ? "brand" as const : requirement.kind })));
   }

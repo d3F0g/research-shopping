@@ -1,6 +1,7 @@
 import { randomUUID } from "node:crypto";
 import { describe, expect, it, vi } from "vitest";
 import { initialConversation, MoneySchema, type ConversationState } from "../../src/domain/conversation";
+import { StoredConversationV2Schema } from "../../src/domain/workspace";
 import { reduceTurn } from "../../src/domain/turn-reducer";
 import { projectExaAnswer } from "../../src/server/exa-research";
 import { nativeMaterial } from "../helpers/v2-material";
@@ -121,11 +122,69 @@ describe("retained snapshot answers", () => {
     expect(result.state.messages.at(-1)?.text).toContain("Fixture option 1");
     expect(result.state.messages.at(-1)?.text).toContain("Fixture option 3");
     expect(result.state.messages.at(-1)?.text).not.toContain("Fixture option 2");
-    expect(result.state.messages.at(-1)?.text).toContain("https://manufacturer.com/model-a");
+    expect(result.state.messages.at(-1)?.detail).toContain("https://manufacturer.com/model-a");
     const firstTwo = turn(state, "Compare the first two").state.messages.at(-1)?.text;
     expect(firstTwo).toContain("Fixture option 1");
     expect(firstTwo).toContain("Fixture option 2");
     expect(firstTwo).not.toContain("Fixture option 3");
+  });
+  it("keeps concise held answers useful and retains full qualified evidence without changing snapshots", () => {
+    const state = researched();
+    const product = state.messages.at(-1)!.research!.products[0]!;
+    product.attributes[0]!.assessment.rationale = "Up to 12 hours, only with low-power devices; high-power use has not been established.";
+    const qualified = product.attributes[0]!.assessment.rationale;
+    const accepted = structuredClone(state.messages);
+    const short = turn(state, "Keep it short.");
+    const question = turn(short.state, "What about battery life?");
+    const answer = question.state.messages.at(-1)!;
+    expect(question.kind).toBe("message");
+    expect(answer.text).not.toContain("Up to 12 hours");
+    expect(answer.text).toContain("AI source assessment supported");
+    expect(answer.text.length).toBeLessThan(850);
+    expect(answer.text).not.toContain("https://");
+    expect(answer.detail).toContain(qualified);
+    expect(answer.detail).toContain("up to 12 hours battery life");
+    expect(answer.detail).toContain("tax included");
+    expect(question.state.messages.slice(0, accepted.length)).toEqual(accepted);
+    expect(StoredConversationV2Schema.safeParse(question.state).success).toBe(true);
+    expect(StoredConversationV2Schema.safeParse(state).success).toBe(true);
+    const expanded = turn(question.state, "Show me more details.");
+    expect(expanded.state.messages.at(-1)?.text).toContain("https://manufacturer.com/model-a");
+    expect(expanded.state.messages.at(-1)?.text).toContain(qualified);
+  });
+  it("shows a useful short finding only with every complete retained quotation and qualifier", () => {
+    const state = researched();
+    const assessment = state.messages.at(-1)!.research!.products[0]!.attributes[0]!.assessment;
+    assessment.rationale = "Light-load claim only.";
+    assessment.support = [{ ...assessment.support[0]!, quote: "Up to 12 hours with low-power devices; high-power runtime is unknown." }];
+    const answer = turn(state, "What about battery life?").state.messages.at(-1)!;
+    expect(answer.text).toContain("Up to 12 hours with low-power devices; high-power runtime is unknown.");
+    expect(answer.text).toContain("Light-load claim only.");
+    expect(answer.detail).toContain("high-power runtime is unknown");
+  });
+  it("discloses long or adverse findings whole instead of truncating them into a positive claim", () => {
+    const state = researched();
+    const assessment = state.messages.at(-1)!.research!.products[0]!.attributes[0]!.assessment;
+    assessment.status = "conflict";
+    assessment.rationale = "A long positive-looking battery claim ".repeat(8) + "does not hold for the requested variant; a second retained passage contradicts it.";
+    const result = turn(state, "What about battery life?");
+    const answer = result.state.messages.at(-1)!;
+    expect(answer.text).toContain("AI source assessment conflict");
+    expect(answer.text).not.toContain("positive-looking");
+    expect(answer.detail).toContain(assessment.rationale);
+    expect(answer.detail).toContain("https://manufacturer.com/model-a");
+  });
+  it("keeps oversized passages whole in canonical history and makes display omissions explicit", () => {
+    const state = researched();
+    const research = state.messages.at(-1)!.research!;
+    research.products[0]!.attributes = Array.from({ length: 6 }, () => structuredClone(research.products[0]!.attributes[0]!));
+    for (const attribute of research.products[0]!.attributes) attribute.assessment.support = Array.from({ length: 3 }, () => ({ ...attribute.assessment.support[0]!, quote: "x".repeat(4000) }));
+    const result = turn(state, "Compare the first two.");
+    const answer = result.state.messages.at(-1)!;
+    expect(answer.detail!.length).toBeLessThanOrEqual(24000);
+    expect(answer.detail).toContain("Additional complete evidence remains in the original research message");
+    expect(answer.detail).not.toContain("x");
+    expect(result.state.messages[1]?.research).toEqual(research);
   });
   it("asks for an ambiguous referent and answers only the chosen option with unknown attributes", () => {
     const state = researched();
@@ -272,5 +331,67 @@ describe("complete nonnumeric corrections", () => {
     expect(next.kind).toBe("research");
     expect(next.state.intent.requirements.at(-1)).toMatchObject({ text: message, strength: "hard" });
     expect(next.state.intent.budget).toEqual(state.intent.budget);
+  });
+});
+
+
+describe("punctuated brand release", () => {
+  it.each([".", "!", "?", ""])("releases a named brand ending in %s while retaining hard exclusions, interface and both bounds", (punctuation) => {
+    let state = turn(initialConversation(), "Find a charger between SGD30 and40. No Sony. Only USB-C.").state;
+    const before = structuredClone(state.intent);
+    state = turn(state, `Only Lumenvale${punctuation}`).state;
+    expect(state.intent.requirements.at(-1)).toMatchObject({ kind: "brand", strength: "hard", text: `Only Lumenvale${punctuation}` });
+    const accepted = structuredClone(state.messages);
+    const released = turn(state, `Show me other brands${punctuation}`);
+    expect(released.kind).toBe("research");
+    expect(released.state.intent.productDescription).not.toContain("Lumenvale");
+    expect(released.state.intent.requirements).toEqual(before.requirements);
+    expect(released.state.intent.productDescription).toContain("No Sony");
+    expect(released.state.intent.productDescription).toContain("Only USB-C");
+    expect(released.state.intent.budget).toEqual({ minimum: 30, maximum: 40, currency: "SGD" });
+    expect(released.state.messages.slice(0, accepted.length)).toEqual(accepted);
+  });
+  it("does not remove an interface-only contextual follow-up or a compound hard clause", () => {
+    let state = turn(initialConversation(), "Find a charger under USD100.").state;
+    state = turn(state, "Only USB-C.").state;
+    state = turn(state, "Only Lumenvale with replaceable cables.").state;
+    expect(state.intent.requirements.slice(-2).every((requirement) => requirement.kind !== "brand")).toBe(true);
+    const released = turn(state, "Show me other brands.");
+    expect(released.state.intent.requirements).toEqual(state.intent.requirements);
+  });
+});
+
+describe("conventional financial thousands", () => {
+  it.each([
+    ["Necklaces between1kto2k", 1000, 2000],
+    ["An archival cradle between 1.5k and 2K.", 1500, 2000],
+    ["Find an unfamiliar instrument budget of 1k-2.25k.", 1000, 2250],
+  ])("retains both numeric bounds and resolves only currency for %s", (message, minimum, maximum) => {
+    const first = turn(initialConversation(), message as string);
+    expect(first.kind).toBe("clarification");
+    expect(first.state.pending).toMatchObject({ kind: "currency", originalRequest: message, minimum, maximum });
+    const resolved = turn(first.state, "SGD.");
+    expect(resolved.kind).toBe("research");
+    expect(resolved.state.intent.budget).toEqual({ minimum, maximum, currency: "SGD" });
+    expect(resolved.state.intent.originalText).toBe(message);
+  });
+  it.each([
+    ["Find a synthesizer between USD1.2k and USD2k.", { minimum: 1200, maximum: 2000, currency: "USD" }],
+    ["Find an instrument under EUR1.5k.", { maximum: 1500, currency: "EUR" }],
+  ])("accepts explicit currency for %s", (message, budget) => {
+    const result = turn(initialConversation(), message as string);
+    expect(result.kind).toBe("research");
+    expect(result.state.intent.budget).toEqual(budget);
+  });
+  it.each([
+    "Find a Model1kto2k accessory.",
+    "Find a model 1k to 2k accessory.",
+    "Find an audio device between1kto2k Hz.",
+    "Find a 1k ohm resistor.",
+    "Find a 4k monitor.",
+  ])("does not manufacture money from a model or measurement in %s", (message) => {
+    const result = turn(initialConversation(), message);
+    expect(result.state.intent.budget).toBeNull();
+    expect(result.state.pending).toBeNull();
   });
 });

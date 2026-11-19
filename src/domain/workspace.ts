@@ -41,7 +41,7 @@ export const StoredConversationV2Schema = z.strictObject({
     z.strictObject({ kind: z.literal("currency"), id: z.string().max(80), originalRequest: z.string().max(2000), draft: IntentV2, minimum: MoneyV2.optional(), maximum: MoneyV2.optional() }),
     z.strictObject({ kind: z.literal("edit"), id: z.string().max(80), message: z.string().max(2000), explanation: z.string().max(2000) }),
   ]).nullable(),
-  messages: z.array(z.strictObject({ id: z.string().max(100), role: z.enum(["user", "assistant"]), text: z.string().max(6000), research: StoredResearchV2Schema.optional() })).max(200),
+  messages: z.array(z.strictObject({ id: z.string().max(100), role: z.enum(["user", "assistant"]), text: z.string().max(6000), detail: z.string().max(24000).optional(), research: StoredResearchV2Schema.optional() })).max(200),
 });
 const ReceiptSchema = z.strictObject({ operationId: Id, digest: z.string().length(64), status: z.enum(["prepared", "running", "complete", "interrupted"]), preparedId: Id.optional(), createdAt: Stamp });
 export const WorkspaceDataSchema = z.strictObject({
