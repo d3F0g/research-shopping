@@ -245,3 +245,16 @@ describe("monetary grammar and open product descriptions", () => {
     expect(result.research.choice).toBeNull();
   });
 });
+
+it("uses the explicit budget currency for monetary evidence when no native price exists", () => {
+  const request = { ...initialConversation().intent, productDescription: "Fixture powerbank", budget: { currency: "CAD", maximum: 40 } };
+  const material = JSON.parse(JSON.stringify(nativeMaterial(request)).replaceAll("SGD 35", "CAD35"));
+  material.answer.products[0].price = null;
+  material.answer.products[0].requestMatch = { ...material.answer.products[0].requestMatch, support: [{ url: material.citations[0].url, quote: "CAD35 per unit" }] };
+  const source = material.citations[0].text;
+  const updated = JSON.parse(JSON.stringify(material).replaceAll(JSON.stringify(source).slice(1, -1), JSON.stringify(source + " Fixture monetary note: CAD35 per unit.").slice(1, -1)));
+  const result = projectExaAnswer(updated, request);
+  if (result.status !== "ready") throw new Error("Expected fixture comparison");
+  expect(result.research.products[0]!.requestMatch.support).toHaveLength(1);
+  expect(result.research.products[0]!.requestMatch.status).toBe("unknown");
+});

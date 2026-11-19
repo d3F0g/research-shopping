@@ -45,9 +45,11 @@ function conditionProof(tail: string): Set<string> | null {
   return proven;
 }
 
+const buyerRestriction = /^this price requires (?:a )?(?:membership|subscription|voucher|coupon)(?: and (?:a )?(?:membership|subscription|voucher|coupon))*$/iu;
+const conditionalRestriction = /^(?:(?:only )?with (?:a )?(?:membership(?: voucher)?|voucher|coupon)|(?:membership|voucher|coupon|subscription) (?:is )?required|(?:for )?members only|only available with membership|(?:not|without) tax included|excluding (?:tax|GST|VAT)|mandatory shipping charges)$/iu;
+
 function conditionalProof(tail: string): string[] | null {
   const conditions: string[] = [];
-  const buyerRestriction = /^this price requires (?:a )?(?:membership|subscription|voucher|coupon)(?: and (?:a )?(?:membership|subscription|voucher|coupon))*$/iu;
   for (const chunk of tail.trim().replace(/^[,;]\s*/u, "").split(/\s*[,;]\s*/u)) {
     if (buyerRestriction.test(chunk)) {
       conditions.push(chunk);
@@ -55,7 +57,7 @@ function conditionalProof(tail: string): string[] | null {
     }
     for (const part of conditionParts(chunk)) {
       if (conditionKinds.has(part.toLowerCase())) continue;
-      if (!/^(?:(?:only )?with (?:a )?(?:membership(?: voucher)?|voucher|coupon)|(?:membership|voucher|coupon|subscription) (?:is )?required|(?:for )?members only|only available with membership|(?:not|without) tax included|excluding (?:tax|GST|VAT)|mandatory shipping charges)$/iu.test(part)) return null;
+      if (!conditionalRestriction.test(part)) return null;
       conditions.push(part);
     }
   }
@@ -84,13 +86,33 @@ function priceClauses(text: string, subjects: string[], money: string) {
   }
   return clauses.flatMap((clause) => clause.split(/(?<=[.!?])\s+(?=[\p{Lu}\d])/u));
 }
+const currencyAliases: Record<string, string> = {
+  SGD: "(?:SGD|S\\$|Singapore dollars?)",
+  USD: "(?:USD|US\\$|U\\.S\\. dollars?|United States dollars?)",
+  EUR: "(?:EUR|€|euros?)",
+  GBP: "(?:GBP|£|pounds?)",
+};
+function denominationPattern(currency: string) {
+  return currencyAliases[currency] ?? literal(currency);
+}
 function moneyPattern(currency: string) {
-  const denomination = currency === "SGD" ? "(?:SGD|S\\$|Singapore dollars?)"
-    : currency === "USD" ? "(?:USD|US\\$|U\\.S\\. dollars?|United States dollars?)"
-    : currency === "EUR" ? "(?:EUR|€|euros?)"
-    : currency === "GBP" ? "(?:GBP|£|pounds?)" : currency;
+  const denomination = denominationPattern(currency);
   const number = "([0-9]+(?:,[0-9]{3})*(?:\\.[0-9]{1,2})?)";
   return `(?:${denomination}\\s*${number}|${number}\\s*${denomination})(?![\\w.,]\\d|\\d)`;
+}
+
+export function isMonetaryOnlyEvidence(text: string, currencies: readonly string[]): boolean {
+  if (!/[0-9]/u.test(text)) return false;
+  const denominations = [...new Set([...Object.keys(currencyAliases), ...currencies])].map(denominationPattern);
+  const conditions = [buyerRestriction.source.slice(1, -1), conditionalRestriction.source.slice(1, -1), "(?:for|per)\\s+(?:one|[0-9]+)\\s+units?", ...[...conditionKinds.keys()].map(literal)];
+  const phrase = (parts: string[]) => new RegExp(`(?<!\\p{L})(?:${parts.join("|")})(?!\\p{L})`, "giu");
+  const remainder = text
+    .replace(phrase(conditions), " ")
+    .replace(phrase([...denominations, "\\p{Sc}"]), " ")
+    .replace(/[0-9]+(?:[.,][0-9]+)*/gu, " ")
+    .replace(phrase(["is priced at", "has a price of", "from", "to", "between", "and"]), " ")
+    .replace(new RegExp(monetaryContext.source, "giu"), " ");
+  return /^[\s\p{P}+−]*$/u.test(remainder);
 }
 
 export function assessPriceContext(

@@ -16,7 +16,7 @@ import {
 } from "../domain/research";
 import { isSafeSourceUrl } from "../domain/safe-url";
 import { bindReportedQuote, completeContext } from "../domain/evidence-binding-v3";
-import { assessPriceContext, observePrice, unresolvedConditions } from "./price-evidence";
+import { assessPriceContext, observePrice, unresolvedConditions, isMonetaryOnlyEvidence } from "./price-evidence";
 
 const NativeAssessment = z.object({
   status: z.enum(["supported", "unknown", "contradicted", "conflict"]),
@@ -196,9 +196,9 @@ function bindAssessment(
     support,
   };
 }
-function bindRequestMatch(value: z.infer<typeof NativeAssessment>, sources: ResearchSource[], completeSources: boolean): Assessment {
+function bindRequestMatch(value: z.infer<typeof NativeAssessment>, sources: ResearchSource[], completeSources: boolean, currencies: string[]): Assessment {
   const assessment = bindAssessment(value, sources, completeSources);
-  if (assessment.status === "supported" && assessment.support.every((span) => /^(?:(?:[A-Z]{3}|[A-Z]{0,2}\p{Sc})\s*)?[+-]?\d[\d,.]*(?:\s*(?:[A-Z]{3}|[A-Z]{0,2}\p{Sc}))?$/iu.test(span.literal.text.trim())))
+  if (assessment.status === "supported" && assessment.support.every((span) => isMonetaryOnlyEvidence(span.literal.text, currencies)))
     return { ...assessment, status: "unknown", rationale: "The provider's quotation establishes only a monetary observation. It does not establish fit to the complete shopping objective." };
   return assessment;
 }
@@ -325,7 +325,7 @@ function projectAnswer(raw: unknown, intent: ShoppingIntent): {
         name: p.name,
         variant: p.variant,
         identity,
-        requestMatch: bindRequestMatch(p.requestMatch, sources, complete),
+        requestMatch: bindRequestMatch(p.requestMatch, sources, complete, [p.price?.currency, intent.budget?.currency].filter((currency): currency is string => currency !== undefined)),
         requirements: intent.requirements.map((r) => ({
           requirementId: r.id,
           assessment:
