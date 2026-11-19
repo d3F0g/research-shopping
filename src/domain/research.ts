@@ -1,4 +1,4 @@
-import type { ShoppingIntent } from "./conversation";
+import type { DeepReadonly, ShoppingIntent } from "./conversation";
 import type { Assessment, ResearchProduct, ResearchSnapshot } from "./research-history-v3";
 export { SupportSchema, AssessmentSchema, SourceSchema, ProductSchema, ResearchSnapshotSchema } from "./research-history-v3";
 export type { Assessment, ResearchSource, ResearchProduct, ResearchSnapshot } from "./research-history-v3";
@@ -25,7 +25,7 @@ export type ResearchOperation = (
     }
 >;
 
-export function supportedExactly(value: Assessment): boolean {
+export function supportedExactly(value: DeepReadonly<Assessment>): boolean {
   return (
     value.status === "supported" &&
     value.scope === "exact-variant" &&
@@ -33,10 +33,10 @@ export function supportedExactly(value: Assessment): boolean {
   );
 }
 
-export function assessProduct(
-  product: ResearchProduct,
+export function assessProduct<Product extends DeepReadonly<ResearchProduct>>(
+  product: Product,
   intent: ShoppingIntent,
-): ResearchProduct {
+): Product & { eligible: boolean; blockers: string[] } {
   const blockers: string[] = [];
   if (!product.variant || !supportedExactly(product.identity))
     blockers.push("Exact product identity and variant remain unproven.");

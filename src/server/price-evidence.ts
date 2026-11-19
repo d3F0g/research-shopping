@@ -204,19 +204,23 @@ export type PriceObservation =
 function namedCatalogObservation(price: Price, productName: string, identity: Assessment, source: ResearchSource): PriceObservation {
   if (source.textTruncated || source.text.length > 4000 || identity.status !== "supported" || identity.scope !== "exact-variant") return { kind: "absent" };
   if (!new RegExp(`(?:^|[^\\p{L}\\p{N}])${literal(price.variant)}(?=$|[^\\p{L}\\p{N}])`, "u").test(productName)) return { kind: "absent" };
-  const rows = [...source.text.matchAll(/^([^\r\n]+)\r?\n[\t \r\n]*([A-Z]{3}[\t ]+([0-9]+(?:,[0-9]{3})*(?:\.[0-9]{1,2})?))[\t ]*(?=\r?$)/gmu)];
+  const rows = [...source.text.matchAll(/^([^\r\n]+)\r?\n[\t \r\n]*([A-Z]{3}[\t ]*[0-9][^\r\n]*)(?=\r?$)/gmu)];
   const trimHeading = (text: string) => text.replace(/^[\t \u00a0]+|[\t \u00a0]+$/gu, "");
   const selected = rows.filter((row) => trimHeading(row[1]!) === productName);
   if (selected.length !== 1) return { kind: "absent" };
   const row = selected[0]!;
   const rowEnd = row.index + row[0].length;
   const nameStart = row.index + row[1]!.indexOf(productName), nameEnd = nameStart + productName.length;
-  const moneyStart = row.index + row[0].lastIndexOf(row[2]!), moneyEnd = moneyStart + row[2]!.length;
-  if (row[2]!.slice(0, 3) !== price.currency || Number(row[3]!.replaceAll(",", "")) !== price.amount) return { kind: "absent" };
+  const moneyStart = row.index + row[0].lastIndexOf(row[2]!), moneyEnd = moneyStart + row[2]!.replace(/[ \t]+$/u, "").length;
+  const selectedMoney = new RegExp(`^${moneyPattern(price.currency)}[ \t]*$`, "u").exec(row[2]!);
+  if (!selectedMoney || Number((selectedMoney[1] ?? selectedMoney[2])!.replaceAll(",", "")) !== price.amount) return { kind: "absent" };
   const identityBound = identity.support.some((span) => span.sourceId === source.id && span.literal.start <= nameStart && span.literal.end >= nameEnd);
   const priceBound = price.assessment.support.some((span) => span.sourceId === source.id && span.literal.start >= nameStart && span.literal.start <= moneyStart && span.literal.end >= moneyEnd && span.literal.end <= rowEnd);
   if (!identityBound || !priceBound) return { kind: "absent" };
-  const independent = rows.filter((other) => other !== row && trimHeading(other[1]!) !== productName && !other[1]!.includes(price.variant) && !monetaryContext.test(other[1]!) && !/\b(?:variant|configuration|range)\b/iu.test(other[1]!));
+  const opaqueMoneyLine = (text: string) => /^[ \t]*$/u.test(text
+    .replace(/\b[A-Z]{3}[ \t]*[0-9]+(?:,[0-9]{3})*(?:\.[0-9]{1,2})?/gu, "")
+    .replace(/\([0-9]+(?:\.[0-9]+)?%[ \t]*off\)/gu, ""));
+  const independent = rows.filter((other) => other !== row && !other[1]!.includes(productName) && !monetaryContext.test(other[1]!) && !/\b(?:variant|configuration|range)\b/iu.test(other[1]!) && opaqueMoneyLine(other[2]!));
   const removed = [row, ...independent].sort((a, b) => b.index - a.index);
   let remainder = source.text;
   for (const entry of removed) remainder = remainder.slice(0, entry.index) + "\n" + remainder.slice(entry.index + entry[0].length);

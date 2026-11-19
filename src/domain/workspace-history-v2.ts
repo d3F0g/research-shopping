@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { isSafeSourceUrl } from "./safe-url";
 const Revision = z.number().int().nonnegative().max(Number.MAX_SAFE_INTEGER);
+const Id = z.string().uuid();
 const Stamp = z.string().datetime();
 const MoneyV2 = z.number().finite().positive().max(1_000_000).refine((n) => Math.round(n * 100) / 100 === n);
 const CurrencyV2 = z.string().regex(/^[A-Z]{3}$/);
@@ -39,3 +40,11 @@ export const StoredConversationV2Schema = z.strictObject({
 });
 
 export type StoredResearchV2 = z.infer<typeof StoredResearchV2Schema>;
+
+const ReceiptSchema = z.strictObject({ operationId: Id, digest: z.string().length(64), status: z.enum(["prepared", "running", "complete", "interrupted"]), preparedId: Id.optional(), createdAt: Stamp });
+export const StoredWorkspaceV2Schema = z.strictObject({
+  schema: z.literal(2), state: StoredConversationV2Schema, acceptedAt: Stamp.nullable(),
+  turns: z.array(z.strictObject({ operationId: Id, messageIds: z.array(z.string().max(100)).max(6), createdAt: Stamp })).max(50),
+  receipts: z.array(ReceiptSchema).max(64),
+  pending: z.strictObject({ preparedId: Id, operationId: Id, sessionId: z.string().min(1).max(256), revision: Revision, epoch: Revision, intentDigest: z.string().length(64), deadline: Stamp, status: z.enum(["prepared", "running"]) }).nullable(),
+});

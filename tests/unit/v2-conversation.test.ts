@@ -156,7 +156,7 @@ describe("retained snapshot answers", () => {
     research.products = [0, 1, 2].map((index) => ({ ...structuredClone(research.products[0]!), id: `fixture-${index}`, name: `Fixture option ${index + 1}` }));
     research.choice = { productId: "fixture-0", rationale: "Fixture data: this option has supported USB-C evidence." };
     state.messages.push({ id: "fixture-response", role: "assistant", text: "Fixture data comparison", research });
-    return state;
+    return StoredConversationSchema.parse(state);
   }
   it("compares exact displayed ordinals and retains their evidence provenance", () => {
     const state = researched();
