@@ -11,6 +11,7 @@ import { scenarioMaterial } from "../inputs/materials";
 import { materialPayloadHash } from "../hash";
 import { stableComposerGeometry } from "../browser/layout";
 import type { Json } from "../frozen-v4/contracts";
+import type { TurnResponse } from "../../src/domain/conversation";
 
 const { values } = parseArgs({ options: { out: { type: "string", default: "artifacts/product-evals/v2-browser" }, mode: { type: "string", default: "report" } }, strict: true });
 if (!["report", "strict", "smoke"].includes(values.mode!)) throw new Error("Use --mode report, strict or smoke");
@@ -56,11 +57,26 @@ async function screenshot(page: Page, name: string, subject?: Locator) {
   await page.screenshot({ path: join(output, `${name}.png`), animations: "disabled" });
   proof.screenshots.push(`${name}.png`);
 }
+async function settledTurn(page: Page, originatingTurn: number) {
+  let response: TurnResponse | undefined;
+  await expect.poll(() => {
+    response = app!.events.filter((event) => event.kind === "app-response" && event.turn === originatingTurn)
+      .map((event) => (event.body as { body?: TurnResponse }).body)
+      .find((body) => body?.kind && body.kind !== "prepared");
+    return Boolean(response);
+  }, { timeout: 10000 }).toBe(true);
+  await expect(page.getByRole("button", { name: "Stop research", exact: true })).toHaveCount(0);
+  const message = response!.state.messages.at(-1);
+  if (!message) throw new Error("The completed originating turn has no visible message");
+  await expect(page.getByText(message.text, { exact: true }).last()).toBeVisible();
+}
 async function send(page: Page, text: string, pending = false) {
-  await page.evaluate((value) => { (globalThis as typeof globalThis & { evaluationTurn: number }).evaluationTurn = value; }, ++turn);
+  const originatingTurn = ++turn;
+  await page.evaluate((value) => { (globalThis as typeof globalThis & { evaluationTurn: number }).evaluationTurn = value; }, originatingTurn);
   await page.getByLabel("Message", { exact: true }).fill(text);
   await page.getByRole("button", { name: "Send message", exact: true }).click();
-  if (!pending) await expect(page.getByRole("button", { name: "Send message", exact: true })).toBeVisible({ timeout: 10000 });
+  if (!pending) await settledTurn(page, originatingTurn);
+  return originatingTurn;
 }
 async function initialResultGeometry(page: Page, name: string) {
   const title = await page.locator('[data-slot="card-title"]').first().boundingBox();
@@ -129,11 +145,11 @@ try {
   });
   await journey("research-evidence-and-held-comparison", async () => {
     const page = main.page; await page.setViewportSize({ width: 1440, height: 1000 });
-    const before = app!.providerCalls; await send(page, "Find binoculars for birdwatching under USD 250", true);
+    const before = app!.providerCalls; const researchTurn = await send(page, "Find binoculars for birdwatching under USD 250", true);
     await expect.poll(() => app!.providerCalls).toBe(before + 1);
     await expect(page.getByRole("button", { name: "Stop research", exact: true })).toBeVisible();
     await screenshot(page, "04-actual-research-progress-desktop");
-    await expect(page.getByRole("button", { name: "Send message", exact: true })).toBeVisible();
+    await settledTurn(page, researchTurn);
     checked("actual-products-rendered", await page.locator('[data-slot="card-title"]').count() > 0, { products: await page.locator('[data-slot="card-title"]').count() });
     await initialResultGeometry(page, "05a-initial-result-scroll-desktop");
     await screenshot(page, "05-synthetic-cards-desktop", page.locator('[data-slot="card"]').first());
