@@ -26,6 +26,34 @@ function monetaryDraft(text: string): { minimum?: number; maximum?: number; curr
 
 function lastResearch(state: ConversationState) { return [...state.messages].reverse().find((m) => m.research)?.research; }
 
+type ContextualOperation =
+  | { kind: "inspect-sources" }
+  | { kind: "qualify-selection"; qualification: string }
+  | { kind: "unresolved-context" };
+
+function contextualOperation(text: string): ContextualOperation | null {
+  const clauses = text.split(/(?<=[.!?;])\s+/);
+  const first = normalize(clauses[0]!);
+  const selection = /^(?:(?:that|this|the) .+? (?:looks?|seems?|sounds?) (?:good|fine|right|suitable)\b|i like\b)/i.test(first);
+  if (selection) {
+    if (/[,;]|\b(?:and|but|also|then)\b/.test(first)) return { kind: "unresolved-context" };
+    if (!/^(?:(?:that|this|the) .+ (?:looks?|seems?|sounds?) (?:good|fine|right|suitable)|i like .+)$/i.test(first)) return { kind: "unresolved-context" };
+    const qualification = clauses.slice(1).join(" ");
+    const complete = clauses.slice(1).every((clause) => normalize(clause)
+      .replace(/i'm/g, "i am").replace(/won't/g, "will not").replace(/don't/g, "do not").replace(/can't/g, "cannot")
+      .split(/,?\s+(?:and|but|also|then|so)\s+/)
+      .every((part, index) => new RegExp(`^${index === 0 ? "i " : "(?:i )?"}(?:am not|will not|do not|cannot|have no) [^,;.!?]+$`).test(part)));
+    return complete ? { kind: "qualify-selection", qualification } : { kind: "unresolved-context" };
+  }
+  const directResearch = /^(?:(?:please|can you|could you|would you)\s+)*(?:find|research|search|recommend|look for|i (?:want|need|would like))\b/i;
+  if (directResearch.test(text)) return null;
+  const inquiry = /^(?:which|what|why|how|is|are|does|do|can|could)\b/i;
+  const sourceReport = /^(?:(?:one|another|the|this|that|a|both|these|those)\s+)?(?:sources?|evidence|pages?|quotes?|citations?)\b/i;
+  if (!/\b(?:sources?|evidence|pages?|quotes?|citations?)\b/i.test(text) || !clauses.some((clause) => inquiry.test(clause))) return null;
+  const combinedEdit = /(?:[,;]|\b(?:and|but|also|then|so)\b)\s*(?:please\s+)?(?:make it|change|remove|drop|find|research|search|budget|(?:i|it) (?:want|need|prefer|must)|must|without|only)\b/i;
+  return clauses.every((clause) => (sourceReport.test(clause) || inquiry.test(clause)) && !combinedEdit.test(clause)) ? { kind: "inspect-sources" } : { kind: "unresolved-context" };
+}
+
 type LocalOperation = "short" | "detail" | "compare" | "best" | "held-question" | "cheaper" | "selection" | "remember" | "sources" | "theme" | "help" | "error" | "cancel" | "status" | "dissatisfied" | "retry";
 const localOperations: { kind: LocalOperation; matches: RegExp }[] = [
   { kind: "short", matches: /^(?:keep it short|shorter|less detail)$/i },
@@ -42,7 +70,7 @@ const localOperations: { kind: LocalOperation; matches: RegExp }[] = [
   { kind: "best", matches: /^(?:(?:just )?(?:give|show) me the best one|best one|which(?: one)? is best(?: overall)?)$/i },
   { kind: "compare", matches: /^compare (?:the |their |them|these|current )/i },
   { kind: "cheaper", matches: /^(?:something cheaper|the lower-priced options within that range are fine)$/i },
-  { kind: "selection", matches: /^(?:i like .+|don't change my existing budget)(?:[.,].*)?$/i },
+  { kind: "selection", matches: /^don't change my existing budget(?:[.,].*)?$/i },
   { kind: "held-question", matches: /^(?:what about |which (?:one |has |is |of )|why is |is that one |i mean the |battery life$)/i },
 ];
 
@@ -61,7 +89,7 @@ type HeldReply = Pick<ChatMessage, "text" | "detail">;
 const brandName = "[A-Z][a-z][A-Za-z0-9]*(?: [A-Z][a-z][A-Za-z0-9]*)*";
 const brandClause = new RegExp(`^[Oo][Nn][Ll][Yy]\\s+${brandName}$`);
 
-function heldReply(state: ConversationState, mode: "compare" | "best" | "detail" | "held-question" | "cheaper", question = ""): HeldReply {
+function heldReply(state: ConversationState, mode: "compare" | "best" | "detail" | "held-question" | "cheaper" | "inspect-sources" | "qualify-selection", question = ""): HeldReply {
   const research = lastResearch(state);
   if (!research) return { text: "There is no retained research for this question. Your request is unchanged. Submit research explicitly when you want new evidence." };
   const previousQuestion = [...state.messages].reverse().find((message) => message.role === "user" && message.text !== question)?.text ?? "";
@@ -104,7 +132,9 @@ function heldReply(state: ConversationState, mode: "compare" | "best" | "detail"
   }
   const ordered = mode === "cheaper" ? [...current].sort((a, b) => a.eligible !== b.eligible ? Number(b.eligible) - Number(a.eligible) : a.eligible && a.price && b.price && a.price.currency === b.price.currency ? a.price.amount - b.price.amount : 0) : current;
   const topics = subject.toLowerCase().match(/[a-z][a-z-]{3,}/g)?.filter((word) => !["what", "about", "which", "their", "compare", "first", "second", "third", "options", "machine", "mean", "good", "stronger", "evidence"].includes(word)) ?? [];
-  const rows = (product: typeof current[number]) => mode === "held-question" || /their /i.test(question) ? product.attributes.filter((attribute) => topics.some((topic) => attribute.name.toLowerCase().includes(topic) || topic.includes(attribute.name.toLowerCase()))) : product.attributes;
+  const rows = (product: typeof current[number]) => mode === "inspect-sources"
+    ? [...product.attributes, { name: "Request fit", assessment: product.requestMatch }, ...product.requirements.map((row) => ({ name: research.intent.requirements.find((requirement) => requirement.id === row.requirementId)?.text ?? "Retained requirement", assessment: row.assessment }))].sort((a, b) => ({ conflict: 0, contradicted: 1, unknown: 2, supported: 3 }[a.assessment.status] - { conflict: 0, contradicted: 1, unknown: 2, supported: 3 }[b.assessment.status]))
+    : mode === "held-question" || /their /i.test(question) ? product.attributes.filter((attribute) => topics.some((topic) => attribute.name.toLowerCase().includes(topic) || topic.includes(attribute.name.toLowerCase()))) : product.attributes;
   const findingsByProduct = ordered.map((product) => {
     const attributes = rows(product);
     const findings = attributes.slice(0, 2).map(({ name, assessment }) => {
@@ -112,7 +142,8 @@ function heldReply(state: ConversationState, mode: "compare" | "best" | "detail"
       const qualified = assessment.rationale;
       return `${name}: (${status})${assessment.support.length && qualified.length <= 180 ? ` ${qualified}` : ""}`;
     }).join("; ");
-    return { name: product.name, finding: `${findings || "Missing attributes remain unknown."}${product.blockers.length ? " Unresolved requirements remain." : ""}` };
+    const price = mode === "qualify-selection" ? product.price ? `Observed ${product.price.currency} ${product.price.amount}. ${product.price.conditionsResolved ? "This is an unverified page price." : "Its conditions are unresolved; it is not an applicable offer."} ` : "No qualifying observed price was retained. " : "";
+    return { name: product.name, finding: `${price}${findings || "Missing attributes remain unknown."}${product.blockers.length ? `${mode === "qualify-selection" ? " I cannot confirm this option meets your current requirements." : ""} Unresolved requirements remain.` : ""}` };
   });
   const sameFinding = findingsByProduct.every((row) => row.finding === findingsByProduct[0]?.finding);
   const brief = (sameFinding
@@ -125,7 +156,7 @@ function heldReply(state: ConversationState, mode: "compare" | "best" | "detail"
     const price = product.price ? ` Observed ${product.price.currency} ${product.price.amount}. ${product.price.conditions.join(" ")} ${supportText(product.price.assessment)} Stock and delivery remain unverified.` : " No qualifying observed price was retained.";
     return `${index === 0 ? fixture : ""}${product.name}: ${detail}${price}${product.blockers.length ? ` Unresolved: ${product.blockers.join(" ")}` : ""}`;
   });
-  return display(brief, full);
+  return display((mode === "inspect-sources" ? "I can only report the retained AI source assessments below. Your description is not new source evidence; any conclusion beyond these assessments remains unknown.\n\n" : "") + brief, full);
 }
 
 export function reduceTurn(previous: ConversationState, input: PrepareInput): TurnDecision {
@@ -156,6 +187,20 @@ export function reduceTurn(previous: ConversationState, input: PrepareInput): Tu
   }
   if (["hi", "hello", "hey"].includes(command)) return reply("Hi. What are you looking to buy?");
   if (["thanks", "thank you", "ok", "okay"].includes(command)) return reply("You're welcome. Tell me what you would like to change.");
+  const contextual = state.intent.originalText ? contextualOperation(text) : null;
+  if (contextual?.kind === "unresolved-context") return state.pending
+    ? reply("The earlier clarification remains pending. Your complete combined instruction is retained in this message and no part was applied.", "clarification")
+    : pendingEdit("I kept the complete combined instruction pending because I cannot safely combine its contextual question or selection with the remaining changes. No part was applied.");
+  if (contextual?.kind === "inspect-sources") return reply(heldReply(state, "inspect-sources", text));
+  if (contextual?.kind === "qualify-selection") {
+    if (state.pending && contextual.qualification) return reply("Resolve or discard the pending change before adding buyer requirements. Your complete message is retained and no part was applied.", "clarification");
+    if (contextual.qualification && !state.intent.requirements.some((requirement) => requirement.text === contextual.qualification)) {
+      if (state.intent.requirements.length >= 24 || state.intent.productDescription.length + contextual.qualification.length + 1 > 6000) return pendingEdit("This complete change exceeds the requirement limit. Your accepted request is unchanged.");
+      state.intent.requirements.push({ id: `requirement-${userId}`, text: contextual.qualification, strength: "hard", originMessageId: userId, kind: "preference" });
+      state.intent.productDescription = state.intent.requirements.map((requirement) => requirement.text).join("\n");
+    }
+    return reply(heldReply(state, "qualify-selection", text));
+  }
   const operation = localOperations.find((operation) => operation.matches.test(command))?.kind;
   const changeText = command.replace(/don't change my existing budget/g, "");
   const unsupportedCompound = /\b(?:and|but|also|then)\b|[.;!?]\s+/.test(changeText) && (/\b(?:make it|change|remove|drop|budget|currency|must|need|want|prefer|only|without|no longer|cheaper)\b/.test(changeText) || monetaryDraft(changeText) !== null);

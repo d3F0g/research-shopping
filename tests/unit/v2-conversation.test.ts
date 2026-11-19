@@ -61,6 +61,48 @@ describe("V2 contextual conversation", () => {
 });
 
 describe("free contextual operations", () => {
+  it("inspects reported source disagreement without accepting the report as a requirement", () => {
+    const state = turn(initialConversation(), "Find a waterproof backpack under USD100. It must protect contents in heavy rain.").state;
+    const result = turn(state, "One source says waterproof and another says only splash-resistant. Which is it?");
+    expect(result.kind).toBe("message");
+    expect(result.state.intent).toEqual(state.intent);
+    expect(result.state.messages.at(-1)?.text).toContain("no retained research");
+  });
+  it("keeps a referenced product price separate from the budget and retains buyer eligibility", () => {
+    const state = turn(initialConversation(), "Find a compact photo printer between GBP50 and100. No disposable batteries.").state;
+    const history = structuredClone(state.messages);
+    const result = turn(state, "That GBP89 one looks good. I'm not a member and won't subscribe.");
+    expect(result.kind).toBe("message");
+    expect(result.state.intent.budget).toEqual({ minimum: 50, maximum: 100, currency: "GBP" });
+    expect(result.state.intent.requirements.slice(0, state.intent.requirements.length)).toEqual(state.intent.requirements);
+    expect(result.state.intent.requirements.at(-1)).toMatchObject({ text: "I'm not a member and won't subscribe.", strength: "hard" });
+    expect(result.state.messages.slice(0, history.length)).toEqual(history);
+  });
+  it.each([
+    "That GBP89 one looks good and make it70.",
+    "I like the first one and change my budget to GBP80.",
+    "That GBP89 one looks good. I'm not a member and remove the minimum.",
+    "That GBP89 one looks good. I'm not a member and I need archival ink.",
+    "One source says waterproof. Which is it? Remove the budget.",
+    "One source says waterproof. Which is it and make it GBP80?",
+  ])("keeps all of an unsupported contextual compound pending: %s", (message) => {
+    const state = turn(initialConversation(), "Find an unfamiliar tool between GBP50 and100.").state;
+    const result = turn(state, message);
+    expect(result.kind).toBe("clarification");
+    expect(result.state.intent).toEqual(state.intent);
+    expect(result.state.pending).toMatchObject({ kind: "edit", message });
+  });
+  it.each([
+    "That GBP89 one looks good. I'm not a member and won't subscribe.",
+    "That GBP89 one looks good and remove the minimum.",
+  ])("retains the original typed currency draft through contextual message %s", (message) => {
+    const state = turn(initialConversation(), "Find an unfamiliar tool between $50 and100.").state;
+    const result = turn(state, message);
+    expect(result.kind).toBe("clarification");
+    expect(result.state.intent).toEqual(state.intent);
+    expect(result.state.pending).toEqual(state.pending);
+    expect(turn(result.state, "GBP").state.intent.budget).toEqual({ minimum: 50, maximum: 100, currency: "GBP" });
+  });
   it.each([
     "Thanks. How do I change the theme?", "Compare the first and third options", "Which one is best overall?",
     "Just show me the best one", "Which has the stronger evidence for background-noise rejection?",
