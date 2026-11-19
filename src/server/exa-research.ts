@@ -233,11 +233,12 @@ function bindAssessment(
 function bindPrice(
   value: z.infer<typeof NativeProduct>["price"],
   productName: string,
+  selectedVariant: string | null,
   otherProducts: Pick<ResearchProduct, "name" | "variant">[],
   sources: ResearchSource[],
   completeSources: boolean,
 ): ResearchProduct["price"] {
-  if (!value) return null;
+  if (!value || !selectedVariant || value.variant !== selectedVariant) return null;
   const assessment = bindAssessment(value.assessment, sources, completeSources);
   if (!assessment.support.length) return null;
   if (
@@ -281,7 +282,7 @@ function bindPrice(
     conditions:
       resolved && observation.kind === "qualified"
         ? observation.conditions
-        : [],
+        : observation.kind === "unresolved" ? observation.conditions : [],
     conditionsResolved: resolved,
     assessment: {
       ...assessment,
@@ -374,6 +375,7 @@ function projectAnswer(raw: unknown, intent: ShoppingIntent): {
         price: bindPrice(
           p.price,
           p.name,
+          p.variant,
           native.data.products.filter((other) => other.id !== p.id),
           sources,
           complete,

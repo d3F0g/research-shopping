@@ -4,7 +4,7 @@ type Price = NonNullable<ResearchProduct["price"]>;
 type PriceContext =
   | { kind: "absent" }
   | { kind: "unbound" }
-  | { kind: "unresolved" }
+  | { kind: "unresolved"; conditions: string[] }
   | { kind: "qualified"; conditions: string[] };
 
 function literal(value: string) {
@@ -12,7 +12,7 @@ function literal(value: string) {
 }
 
 const monetaryContext =
-  /\b(?:prices?|priced|costs?|amounts?|totals?|tax|GST|VAT|fees?|charges?|payments?|payable|paid|pay|surcharges?|deposits?|shipping|extra|additional|loyalty|instalments?|installments?|members?|membership|vouchers?|coupons?|subscriptions?|offers?|sales?|discounts?|rebates?|cashback|purchases?|bundles?|packs?|eligib\w*|only|unless|depending|requires?|required|minimum|register|registration|join)\b|\bsubject to\b/iu;
+  /\b(?:prices?|priced|costs?|amounts?|totals?|tax|GST|VAT|fees?|charges?|payments?|payable|paid|pay|surcharges?|deposits?|shipping|extra|additional|loyalty|instalments?|installments?|members?|membership|vouchers?|coupons?|subscriptions?|offers?|sales?|discounts?|rebates?|cashback|purchases?|bundles?|packs?|variants?|configurations?|quantit(?:y|ies)|units?|eligib\w*|only|unless|depending|requires?|required|minimum|register|registration|join)\b|\bsubject to\b|^for\b/iu;
 const conditionKinds = new Map([
   ["one unit", "unit"],
   ["per unit", "unit"],
@@ -24,7 +24,7 @@ const conditionKinds = new Map([
   ["including vat", "vat"],
 ]);
 
-function conditionProof(tail: string): Set<string> | null {
+function conditionParts(tail: string) {
   const parts = tail.trim()
     ? tail
         .trim()
@@ -32,13 +32,26 @@ function conditionProof(tail: string): Set<string> | null {
         .replace(/^[,;]\s*/u, "")
         .split(/\s*[,;]\s*|\s+and\s+/iu)
     : [];
+  return parts;
+}
+function conditionProof(tail: string): Set<string> | null {
   const proven = new Set<string>();
-  for (const part of parts) {
+  for (const part of conditionParts(tail)) {
     const kind = conditionKinds.get(part.toLowerCase());
     if (!kind) return null;
     proven.add(kind);
   }
   return proven;
+}
+
+function conditionalProof(tail: string): string[] | null {
+  const conditions: string[] = [];
+  for (const part of conditionParts(tail)) {
+    if (conditionKinds.has(part.toLowerCase())) continue;
+    if (!/^(?:(?:only )?with (?:a )?(?:membership(?: voucher)?|voucher|coupon)|(?:membership|voucher|coupon|subscription) (?:is )?required|(?:for )?members only|only available with membership|(?:not|without) tax included|excluding (?:tax|GST|VAT)|mandatory shipping charges)$/iu.test(part)) return null;
+    conditions.push(part);
+  }
+  return conditions.length ? conditions : null;
 }
 
 function priceClauses(text: string, subjects: string[], money: string) {
@@ -126,6 +139,7 @@ export function assessPriceContext(
   let observed = false;
   let complete = true;
   const proven = new Set<string>();
+  const unresolved: string[] = [];
   for (const sentence of priceClauses(text, [...subjects, ...otherSubjects], money)) {
     const clause = sentence.trim().replace(/[.!?]$/, "");
     if (
@@ -146,13 +160,16 @@ export function assessPriceContext(
       !match ||
       Number((match[1] ?? match[2])!.replaceAll(",", "")) !== price.amount
     ) {
-      complete = false;
-      continue;
+      return { kind: "unbound" };
     }
     observed = true;
     const conditions = conditionProof(match[3]!);
-    if (!conditions) complete = false;
-    else for (const condition of conditions) proven.add(condition);
+    if (!conditions) {
+      const conditional = conditionalProof(match[3]!);
+      if (!conditional) return { kind: "unbound" };
+      unresolved.push(...conditional);
+      complete = false;
+    } else for (const condition of conditions) proven.add(condition);
   }
   if (!observed) return { kind: relevant ? "unbound" : "absent" };
   const conditions = price.conditions.filter((condition) => {
@@ -165,5 +182,5 @@ export function assessPriceContext(
     price.conditionsResolved &&
     conditions.length === price.conditions.length
     ? { kind: "qualified", conditions }
-    : { kind: "unresolved" };
+    : { kind: "unresolved", conditions: [...new Set(unresolved)].slice(0, 8) };
 }

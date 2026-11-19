@@ -62,6 +62,7 @@ test("retrieval query oracle binds every authoritative field and rejects missing
       { ...expected, budget: { ...expected.budget, maximum: 100 } },
       { ...expected, budget: { ...expected.budget, currency: "USD" } },
       { ...expected, requirements: [] },
+      { ...expected, requirements: expected.requirements.map((row) => ({ ...row, text: "Different mandatory requirement" })) },
       { ...expected, requirements: expected.requirements.map((row) => ({ ...row, strength: "flexible" })) },
       { ...expected, region: "US" },
       { productDescription: expected.productDescription, budget: expected.budget, requirements: expected.requirements },

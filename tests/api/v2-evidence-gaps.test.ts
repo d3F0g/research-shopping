@@ -194,6 +194,15 @@ describe("shopping retrieval and ordinary source price blocks", () => {
     expect(result.research.choice).toBeNull();
     expect(result.research.products[0]!.price).toBeNull();
   });
+  it("does not display another native price variant under the selected product", () => {
+    const intent = sunglassesIntent();
+    const material = merchantMaterial(intent, "AX2\nSGD850\nTax included.");
+    material.answer.products[0]!.price!.variant = "AX2";
+    const result = projectExaAnswer(material, intent);
+    if (result.status !== "ready") throw new Error("No comparison");
+    expect(result.research.products[0]!.price).toBeNull();
+    expect(result.research.choice).toBeNull();
+  });
   it("retains a literal known membership price condition prominently without making a choice", () => {
     const intent = sunglassesIntent();
     const result = projectExaAnswer(merchantMaterial(intent, "Fixture Meridian Sunglasses AX1\nSGD850\nTax included.\nMembership required."), intent);

@@ -32,8 +32,17 @@ export function grade(scenario: Scenario, observation: Observation): Check[] {
         try { return hash(JSON.parse(line.slice(start))) === hash(raw.after.intent); } catch { return false; }
       });
       const check = checks.find((item) => item.id === `research-query-intent:${turn.index}`)!;
-      check.status = payload.query === raw.after.intent.productDescription && intentIncluded ? "pass" : "fail";
-      check.observed = { query: payload.query ?? null, intentIncluded };
+      const expectedQuery = {
+        productDescription: raw.after.intent.productDescription,
+        budget: raw.after.intent.budget,
+        requirements: raw.after.intent.requirements.map(({ text, strength }) => ({ text, strength })),
+        region: raw.after.intent.region,
+      };
+      let queryIncluded = false;
+      try { queryIncluded = typeof payload.query === "string" && hash(JSON.parse(payload.query)) === hash(expectedQuery); } catch {}
+      check.status = queryIncluded && intentIncluded ? "pass" : "fail";
+      check.expected = "Actual retrieval query contains exactly the accepted product description, both optional budget bounds, explicit currency, every requirement text and strength, and region; the system prompt contains the complete authoritative intent";
+      check.observed = { query: payload.query ?? null, queryIncluded, intentIncluded };
     }
     if (raw.response?.kind === "research" && raw.response.research.choice) {
       const { research } = raw.response;
