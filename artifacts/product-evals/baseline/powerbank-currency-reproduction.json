@@ -1,0 +1,59 @@
+{
+  "applicationCommit": "bb51c38748b35d838b44109d72ab4dc9a9847d8c",
+  "method": "normal Hono prepare; provider unconfigured; no research or ledger touched",
+  "expected": "After SGD, preserve powerbank and budget SGD30-40 and return prepared",
+  "observations": [
+    {
+      "message": "I want to buy a powerbank that costs around $30-40",
+      "status": 200,
+      "response": {
+        "responseVersion": 4,
+        "preferences": {
+          "version": 4,
+          "productDescription": "I want to buy a powerbank that costs around $30-40",
+          "criteria": [],
+          "budget": null,
+          "budgetClarified": false,
+          "pendingChange": {
+            "message": "I want to buy a powerbank that costs around $30-40",
+            "reason": "currency",
+            "explanation": "Is that budget in SGD or USD? Include the currency. Your current budget has not changed."
+          },
+          "region": "SG",
+          "responseLength": "concise",
+          "revision": 2
+        },
+        "notes": [],
+        "kind": "clarification",
+        "message": "Is that budget in SGD or USD? Include the currency. Your current budget has not changed.",
+        "reason": "currency"
+      }
+    },
+    {
+      "message": "SGD",
+      "status": 200,
+      "response": {
+        "responseVersion": 4,
+        "preferences": {
+          "version": 4,
+          "productDescription": "I want to buy a powerbank that costs around $30-40\nFollow-up: SGD",
+          "criteria": [],
+          "budget": null,
+          "budgetClarified": false,
+          "pendingChange": {
+            "message": "SGD",
+            "reason": "currency",
+            "explanation": "State a new amount with that currency. I cannot convert or remove your existing budget without an instruction. Your current budget has not changed."
+          },
+          "region": "SG",
+          "responseLength": "concise",
+          "revision": 4
+        },
+        "notes": [],
+        "kind": "clarification",
+        "message": "State a new amount with that currency. I cannot convert or remove your existing budget without an instruction. Your current budget has not changed.",
+        "reason": "currency"
+      }
+    }
+  ]
+}

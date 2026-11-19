@@ -1,0 +1,46 @@
+{
+  "recordedAt": "2026-11-19T03:43:22.334107+00:00",
+  "applicationCommit": "bb51c38748b35d838b44109d72ab4dc9a9847d8c",
+  "applicationChanges": false,
+  "existingUnitApi": {
+    "command": "npm test",
+    "filesPassed": 31,
+    "testsPassed": 659,
+    "log": "existing-tests.log"
+  },
+  "existingBrowser": {
+    "command": "PLAYWRIGHT_API_PORT=7163 PLAYWRIGHT_WEB_PORT=7273 npm run test:e2e -- --workers=1 --trace on --output=artifacts/product-evals/baseline/existing-browser",
+    "testsPassed": 23,
+    "log": "existing-browser.log",
+    "method": "Existing explicit response stubs, loopback SDK and actual local HTTP compositions; no genuine live research"
+  },
+  "verificationSkill": {
+    "result": "failed",
+    "cleanup": true,
+    "proof": "verification-skill/proof.json",
+    "cause": "Legacy fixture server rejects current UI request with HTTP400 after theme verification"
+  },
+  "mandatoryPowerbank": {
+    "result": "failed",
+    "issue": 44,
+    "evidence": "powerbank-currency-reproduction.json",
+    "observed": "SGD reply loses pending 30-40 range; demands amount again; no research"
+  },
+  "rootVisualInspection": [
+    "verification-skill/01-dark-empty-desktop.png",
+    "verification-skill/failure.png",
+    "existing-browser/primary-flow-completion-di-dda0f-local-help-over-actual-HTTP-chromium/ranked-comparison-desktop.png",
+    "existing-browser/primary-flow-completion-di-dda0f-local-help-over-actual-HTTP-chromium/ranked-tradeoffs-mobile.png",
+    "existing-browser/budget-range-accepts-neckl-0e3f2-keeps-quota-failures-honest-chromium/mobile-range-editor.png",
+    "existing-browser/dynamic-shopping-shows-use-2629b-ces-and-responsive-composer-chromium/mobile-600-evidence.png"
+  ],
+  "sourceFeatureReviews": 7,
+  "exaPaidCalls": 0,
+  "privateLedgerAccess": false,
+  "productUsefulnessScore": null,
+  "limits": [
+    "Existing passing technical suites do not establish product usefulness.",
+    "Manual Exa continuation is not authorized for automated evaluation.",
+    "Independent full evaluation QA/security still pending."
+  ]
+}
