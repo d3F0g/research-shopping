@@ -10,6 +10,7 @@ import {
   ShoppingIntentSchema as Version3ShoppingIntentSchema,
   type ShoppingIntent as Version3ShoppingIntent,
 } from "./research-intent-v3";
+import { ShoppingIntentSchema as Version4ShoppingIntentSchema, type ShoppingIntent as Version4ShoppingIntent } from "./research-intent-v4";
 import type { Preferences as LegacyPreferences } from "./legacy-contracts";
 
 export type IntentUpdate = {
@@ -402,6 +403,9 @@ function retainPendingUpdate(
     result.preferences = {
       ...result.preferences,
       pendingChange: {
+        kind: "legacy",
+        id: `question-${result.preferences.revision + 1}`,
+        originalRequest: message,
         message,
         reason: issue.reason,
         explanation: issue.message,
@@ -479,8 +483,34 @@ export function migrateLegacyPreferences(previous: LegacyPreferences):
 export function migrateVersion3Intent(
   previous: Version3ShoppingIntent,
 ): ShoppingIntent {
-  return ShoppingIntentSchema.parse({
-    ...Version3ShoppingIntentSchema.parse(previous),
-    version: 4,
-  });
+  return migrateVersion4Intent({ ...Version3ShoppingIntentSchema.parse(previous), version: 4 });
+}
+
+export function migrateVersion4Intent(
+  previous: Version4ShoppingIntent,
+  originalRequest?: string,
+): ShoppingIntent {
+  const parsed = Version4ShoppingIntentSchema.parse(previous);
+  const pending = parsed.pendingChange;
+  let pendingChange: ShoppingIntent["pendingChange"] = pending ? {
+    ...pending,
+    kind: "legacy",
+    id: `question-${parsed.revision}`,
+    originalRequest: originalRequest ?? pending.message,
+  } : null;
+  const original = originalRequest ?? pending?.message;
+  if (pending?.reason === "currency" && original && /\$/.test(original)) {
+    const known = parseBudget(original.replace(/(?<![A-Z])\$/g, "SGD"), null, parsed.region);
+    if (known.kind === "updated" && known.budget) {
+      pendingChange = {
+        ...pending,
+        kind: "money",
+        id: `question-${parsed.revision}`,
+        originalRequest: original,
+        missingSlot: "currency",
+        draft: { amount: known.budget.amount, minimum: known.budget.minimum ?? null, currency: null },
+      };
+    }
+  }
+  return ShoppingIntentSchema.parse({ ...parsed, version: 5, pendingChange });
 }

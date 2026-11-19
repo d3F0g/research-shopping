@@ -6,6 +6,7 @@ import {
 } from "./research-history-unversioned";
 import { Version2ResearchResponseSchema } from "./research-evidence-v2";
 import { ApplicationTurnResponseSchema } from "./research";
+import { ApplicationTurnResponseSchema as Version4ApplicationTurnResponseSchema } from "./research-evidence-v4";
 import { ApplicationTurnResponseSchema as Version3ApplicationTurnResponseSchema } from "./research-evidence-v3";
 
 export const LegacyApplicationTurnResponseSchema = z.union([
@@ -41,7 +42,9 @@ export const HistoricalApplicationTurnResponseSchema = z
       versioned
         ? (raw as { responseVersion: unknown }).responseVersion === 3
           ? Version3ApplicationTurnResponseSchema
-          : ApplicationTurnResponseSchema
+          : (raw as { responseVersion: unknown }).responseVersion === 4
+            ? Version4ApplicationTurnResponseSchema
+            : ApplicationTurnResponseSchema
         : LegacyApplicationTurnResponseSchema
     ).safeParse(raw);
     if (!parsed.success) {
