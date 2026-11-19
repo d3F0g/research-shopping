@@ -1,3 +1,5 @@
+import storedConversation from "../fixtures/stored-conversation-v2.json";
+import { StoredConversationV2Schema } from "../../src/domain/workspace-history-v2";
 import type { StoredResearchV2 } from "../../src/domain/workspace-history-v2";
 import { initialConversation } from "../../src/domain/conversation";
 
@@ -10,3 +12,5 @@ export function storedResearchV2(): StoredResearchV2 {
     choice: null, sources: [{ id: "fixture-old", url: "https://example.com/fixture-old", title: "Fixture historical source", text, originalLength: text.length, textTruncated: false }], limitations: ["Fixture data only."], requestId: "fixture-historical-request", reportedCostUsd: null,
   };
 }
+
+export function actualStoredConversationV2() { return StoredConversationV2Schema.parse(storedConversation.state); }

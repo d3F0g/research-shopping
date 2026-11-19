@@ -58,6 +58,11 @@ jobs:
         run: node scripts/verify-personalization-browser.mjs
         env:
           FIELDNOTE_TEST_DATABASE_URL: postgresql://fieldnote_fixture:fixture-only-password@127.0.0.1:5432/fieldnote_fixture
+      - name: Verify mixed evidence history and database restart
+        run: npm run verify:evidence:history
+        env:
+          FIELDNOTE_TEST_DATABASE_URL: postgresql://fieldnote_fixture:fixture-only-password@127.0.0.1:5432/fieldnote_fixture
+          FIELDNOTE_TEST_POSTGRES_CONTAINER_ID: ${{ job.services.postgres.id }}
       - run: npm run test:e2e
         env:
           DEBUG: pw:webserver
@@ -68,6 +73,7 @@ jobs:
           path: |
             artifacts/playwright-results/
             artifacts/fieldnote-v2/accounts/
+            artifacts/fieldnote-v3/history-browser/
             artifacts/fieldnote-v2/*.png
             artifacts/fieldnote-v2/conversation-polish/*.png
             artifacts/fieldnote-v2/conversation-polish/*-proof.json

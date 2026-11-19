@@ -1,4 +1,4 @@
-import { storedResearchV2 } from "../helpers/v2-stored-material";
+import { actualStoredConversationV2 } from "../helpers/v2-stored-material";
 import { randomUUID } from "node:crypto";
 import { afterAll, beforeAll, beforeEach, describe, expect, it } from "vitest";
 import { Pool } from "pg";
@@ -83,7 +83,7 @@ describe("V2 PostgreSQL account persistence", () => {
     const prepared = await prepare();
     const previous = await data();
     previous.schema = 2;
-    previous.state.messages.push({ id: "fixture-history", role: "assistant", text: "Fixture historical response", detail: "Fixture historical disclosure", research: storedResearchV2() });
+    previous.state = actualStoredConversationV2();
     await pool.query("UPDATE fieldnote_v2_workspace SET data=$2::jsonb WHERE user_id=$1", [identities[0].userId, JSON.stringify(previous)]);
     const oldMessages = structuredClone(previous.state.messages);
     const loaded = await createWorkspaceStore(pool, dependencies).load(identities[0]);
