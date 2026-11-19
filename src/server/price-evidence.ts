@@ -77,7 +77,19 @@ export function assessPriceContext(
       `(?:^|\\W)${literal(product.variant)}(?:$|\\W)`,
       "iu",
     ).test(product.name);
-    return [namedVariant ? product.name : `${product.name} ${product.variant}`];
+    const subjects = [
+      namedVariant ? product.name : `${product.name} ${product.variant}`,
+    ];
+    if (
+      product.variant.toLowerCase() !== price.variant.toLowerCase() &&
+      otherProducts.filter(
+        (other) =>
+          other.variant?.toLowerCase() === product.variant!.toLowerCase(),
+      ).length === 1 &&
+      text.toLowerCase().includes(product.name.toLowerCase())
+    )
+      subjects.push(product.variant);
+    return subjects;
   });
   const otherAssertion = otherSubjects.length
     ? new RegExp(

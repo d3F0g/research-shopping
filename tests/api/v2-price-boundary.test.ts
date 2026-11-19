@@ -225,38 +225,44 @@ describe("complete atomic price evidence", () => {
         ),
       ).toContain(span.originalQuote);
   });
-  it("keeps three distinct products with the same variant usable on separate unambiguous pages", () => {
-    const material = nativeMaterial(intent);
-    material.answer.products = [];
-    material.citations = [];
-    for (let index = 0; index < 3; index++) {
-      const name = `Fixture Pebble ${index + 1}`;
-      const price = 35 + index;
-      const text = `Fixture data. ${name} standard is a USB-C powerbank. ${name} standard costs SGD ${price} for one unit, tax included.`;
-      const product = materialWith(text);
-      const item = product.answer.products[0]!;
-      item.id = `model-${index + 1}`;
-      item.name = name;
-      item.variant = "standard";
-      item.price.variant = "standard";
-      item.price.amount = price;
-      const url = `https://manufacturer.com/pebble-${index + 1}`;
-      const oldUrl = product.citations[0]!.url;
-      const changed = JSON.parse(
-        JSON.stringify(product).replaceAll(oldUrl, url),
-      ) as typeof product;
-      material.answer.products.push(changed.answer.products[0]!);
-      material.citations.push(changed.citations[0]!);
-    }
-    material.answer.choice.productId = "model-1";
-    const research = project(material);
-    expect(research.products.map((product) => product.eligible)).toEqual([
-      true,
-      true,
-      true,
-    ]);
-    expect(research.choice?.productId).toBe("model-1");
-  });
+  it.each(["shared", "distinct"])(
+    "keeps three products with %s variants usable on separate unambiguous pages",
+    (scope) => {
+      const material = nativeMaterial(intent);
+      material.answer.products = [];
+      material.citations = [];
+      for (let index = 0; index < 3; index++) {
+        const name = `Fixture Pebble ${index + 1}`;
+        const price = 35 + index;
+        const variant = scope === "shared" ? "standard" : `Model ${index + 1}`;
+        const priceSubject =
+          scope === "shared" ? `${name} ${variant}` : variant;
+        const text = `Fixture data. ${name} ${variant} is a USB-C powerbank. ${priceSubject} costs SGD ${price} for one unit, tax included.`;
+        const product = materialWith(text);
+        const item = product.answer.products[0]!;
+        item.id = `model-${index + 1}`;
+        item.name = name;
+        item.variant = variant;
+        item.price.variant = variant;
+        item.price.amount = price;
+        const url = `https://manufacturer.com/pebble-${index + 1}`;
+        const oldUrl = product.citations[0]!.url;
+        const changed = JSON.parse(
+          JSON.stringify(product).replaceAll(oldUrl, url),
+        ) as typeof product;
+        material.answer.products.push(changed.answer.products[0]!);
+        material.citations.push(changed.citations[0]!);
+      }
+      material.answer.choice.productId = "model-1";
+      const research = project(material);
+      expect(research.products.map((product) => product.eligible)).toEqual([
+        true,
+        true,
+        true,
+      ]);
+      expect(research.choice?.productId).toBe("model-1");
+    },
+  );
   it("preserves native adverse status and complete quotes", () => {
     const material = materialWith(
       `${identity} Model A costs SGD 35 without tax included.`,
