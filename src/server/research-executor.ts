@@ -15,9 +15,8 @@ export function createResearchExecutor(dependencies: { research?: ResearchOperat
     try {
       signal.throwIfAborted();
       const result = await dependencies.research({ intent }, signal);
-      signal.throwIfAborted();
       const cost = result.status === "ready" ? result.research.reportedCostUsd : result.reportedCostUsd ?? null;
-      await dependencies.quota.settle(operationId, cost, result.status === "ready" || result.reason === "empty" || result.reason === "invalid-response");
+      await dependencies.quota.settle(operationId, cost, !signal.aborted && (result.status === "ready" || result.reason === "empty" || result.reason === "invalid-response"));
       settled = true;
       signal.throwIfAborted();
       return result;

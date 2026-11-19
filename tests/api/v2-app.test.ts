@@ -51,7 +51,7 @@ describe("V2 server-owned prepare and paid lifecycle", () => {
     finish!();
     expect((await response).kind).toBe("research-unavailable");
     expect(service.state(id).messages).toEqual([]);
-    expect(budget.settle).toHaveBeenCalledWith(expect.any(String), null, false);
+    expect(budget.settle).toHaveBeenCalledWith(expect.any(String), 0.005, false);
   });
   it("preserves in-flight results through a free presentation change and joins duplicate dispatch", async () => {
     const budget = quota(); let finish: (() => void) | undefined;

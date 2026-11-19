@@ -20,7 +20,7 @@ export default defineConfig({
   },
   projects: [{ name: "chromium", use: { ...devices["Desktop Chrome"] } }],
   webServer: {
-    command: "npm run dev",
+    command: 'npx concurrently -k "npm:dev:web" "npx tsx tests/helpers/browser-server.ts"',
     url: `${baseURL}/api/health`,
     reuseExistingServer: false,
     timeout: 60_000,
@@ -29,6 +29,7 @@ export default defineConfig({
       VITE_API_PORT: apiPort,
       WEB_PORT: webPort,
       EXA_RESEARCH_ENABLED: "false",
+      NODE_ENV: "test",
     },
   },
 });

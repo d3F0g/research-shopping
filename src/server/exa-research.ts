@@ -34,7 +34,7 @@ function bindAssessment(value: z.infer<typeof NativeAssessment>, sources: Resear
     if (!source || start < 0) return unknown("The quotation was not found at its retained source URL.");
     const complete = paragraph(source, start, start + span.quote.length);
     if (!complete) return unknown("Cut or oversized source context cannot establish complete support.");
-    if (!support.some((s) => s.sourceId === complete.sourceId && s.start === complete.start && s.end === complete.end)) support.push(complete);
+    if (!support.some((s) => s.sourceId === complete.sourceId && s.start === complete.start && s.end === complete.end)) support.push({ ...complete, originalQuote: span.quote, originalStart: start, originalEnd: start + span.quote.length });
   }
   if (value.status !== "unknown" && !support.length) return unknown("Supporting evidence was not returned.");
   if (value.status === "conflict" && support.length < 2) return unknown("Both conflicting observations were not retained.");
@@ -53,17 +53,22 @@ function bindPrice(value: z.infer<typeof NativeProduct>["price"], sources: Resea
   for (const span of assessment.support) {
     const source = sources.find((s) => s.id === span.sourceId)!;
     let start = span.start, end = span.end;
-    const adjacent = /\b(?:price|offer|members?|membership|voucher|coupon|trade.in|subscription|conditions?|tax|shipping|delivery)\b|(?:SGD|USD|EUR|GBP|S\$|US\$|€|£)\s*\d/i;
+    const adjacent = /\b(?:price|offer|members?|membership|voucher|coupon|trade.in|subscription|conditions?|minimum|purchase|tax|shipping|delivery)\b|(?:SGD|USD|EUR|GBP|S\$|US\$|€|£)\s*\d/i;
     if (start > 1) { const previous = paragraph(source, start - 3, start - 3); if (previous && adjacent.test(previous.quote)) start = previous.start; }
     if (end < source.text.length) { const next = paragraph(source, end + 2, end + 2); if (!next && source.textTruncated) return null; if (next && adjacent.test(next.quote)) end = next.end; }
     if (end - start > 4000 || (source.textTruncated && end === source.text.length)) return null;
     const quote = source.text.slice(start, end);
+    if (/\b(?:minimum (?:spend|purchase)|membership|voucher|coupon|subscription|requires? (?:a |an )?purchase)\b/i.test(source.text)) unresolved = true;
     contexts.push({ ...span, start, end, quote });
     for (const match of quote.matchAll(money)) {
       if (Number((match[1] ?? match[2])!.replaceAll(",", "")) !== value.amount) continue;
       const before = quote.slice(Math.max(0, match.index - 120), match.index), after = quote.slice(match.index + match[0].length);
       if (/\b(?:not|never|no longer|isn't|wasn't|cannot)\b[^.!?\n]*$/i.test(before) || /\b(?:save|savings?|discount|rebate|cashback|was|RRP|list price|previously|originally|difference of)\s*[:=-]?\s*$/i.test(before) || /^\s*(?:off|less|cheaper)\b/i.test(after) || /(?:\/\s*(?:mo|month|wk|week|yr|year)|\bper\s+(?:month|week|year)|\bmonthly|\binstal+ments?|\bpayments?)\b/i.test(quote)) return null;
       observed = true;
+      if (/\b(?:less than|more than|difference|compared (?:with|to))\b/i.test(quote)) unresolved = true;
+      const sentenceBefore = before.split(/[.!?\n]/).at(-1) ?? "";
+      const sentenceAfter = after.split(/[.!?\n]/)[0] ?? "";
+      if (!(sentenceBefore + match[0] + sentenceAfter).toLowerCase().includes(value.variant.toLowerCase())) unresolved = true;
       unresolved ||= /\.\.\.|…|\b(?:members?|membership|trade[ -]?in|vouchers?|coupons?|subscri(?:be|ption)|new customers?|minimum (?:spend|purchase)|when you|with (?:a )?purchase|bundle|pack of|for \d+ units?)\b/i.test(quote) || /\bfrom\s*(?:SALE\s*)?$/i.test(before);
     }
   }
@@ -86,6 +91,23 @@ export function projectExaAnswer(raw: unknown, intent: ShoppingIntent) {
   if (!sources.length) return unavailable("empty");
   if (new Set(native.data.products.map((p) => p.id)).size !== native.data.products.length) return unavailable("invalid-response");
   const products = native.data.products.map((p) => assessProduct({ id: p.id, name: p.name, variant: p.variant, identity: bindAssessment(p.identity, sources), requestMatch: bindAssessment(p.requestMatch, sources), requirements: intent.requirements.map((r) => ({ requirementId: r.id, assessment: p.criteria.filter((c) => c.criterionId === r.id).length === 1 ? bindAssessment(p.criteria.find((c) => c.criterionId === r.id)!.assessment, sources) : unknown("No unambiguous source assessment covers this complete requirement.") })), attributes: p.attributes.map((a) => ({ name: a.name, assessment: bindAssessment(a.assessment, sources) })), price: bindPrice(p.price, sources), stock: "unverified", eligible: false, blockers: [] }, intent));
+  for (const product of products) {
+    if (product.requestMatch.status !== "supported") continue;
+    const relevant = sources.filter((source) => product.identity.support.some((span) => span.sourceId === source.id) || source.text.toLowerCase().includes(product.name.toLowerCase()));
+    const adverse = relevant.flatMap((source) => {
+      const rows: Assessment["support"] = [];
+      for (const match of source.text.matchAll(/[^\n]+(?:\n(?!\n)[^\n]+)*/g)) {
+        if (!/\b(?:is|are|does|do|has|have|can|will)\s+not\b|\b(?:without wireless|wired (?:audio )?only|not wireless|incompatible|cannot)\b/i.test(match[0])) continue;
+        const context = paragraph(source, match.index, match.index + match[0].length);
+        if (context) rows.push({ ...context, originalQuote: match[0], originalStart: match.index, originalEnd: match.index + match[0].length });
+      }
+      return rows;
+    });
+    if (adverse.length) {
+      product.requestMatch = { status: "unknown", scope: product.requestMatch.scope, rationale: "Retained sources include adverse context that needs resolution before full fit can be claimed.", support: [...product.requestMatch.support, ...adverse].slice(0, 3) };
+      Object.assign(product, assessProduct(product, intent));
+    }
+  }
   const coverage = (p: ResearchProduct) => new Set(intent.requirements.filter((r) => r.strength === "flexible" && p.requirements.some((row) => row.requirementId === r.id && supportedExactly(row.assessment))).map((r) => r.id));
   products.sort((a, b) => {
     if (a.eligible !== b.eligible) return Number(b.eligible) - Number(a.eligible);
