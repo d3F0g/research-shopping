@@ -1,0 +1,170 @@
+Installed Playwright 1.65.1 primary source excerpts.
+
+node_modules/playwright/lib/runner/index.js
+716: var fs2 = __toESM(require("fs"));
+717: var { spawnAsync } = require("playwright-core/lib/coreBundle").utils;
+718: var GIT_OPERATIONS_TIMEOUT_MS = 3e3;
+719: var addGitCommitInfoPlugin = (fullConfig) => {
+720:   fullConfig.plugins.push({ factory: gitCommitInfoPlugin.bind(null, fullConfig) });
+721: };
+722: function print(s, ...args) {
+723:   console.log("GitCommitInfo: " + s, ...args);
+724: }
+725: function debug(s, ...args) {
+726:   if (!process.env.DEBUG_GIT_COMMIT_INFO)
+727:     return;
+728:   print(s, ...args);
+729: }
+730: var gitCommitInfoPlugin = (fullConfig) => {
+731:   return {
+732:     name: "playwright:git-commit-info",
+733:     setup: async (config2, configDir) => {
+734:       const metadata = config2.metadata;
+735:       const ci = await ciInfo();
+736:       if (!metadata.ci && ci) {
+737:         debug("ci info", ci);
+738:         metadata.ci = ci;
+739:       }
+740:       if (fullConfig.captureGitInfo?.commit || fullConfig.captureGitInfo?.commit === void 0 && ci) {
+741:         const git = await gitCommitInfo(configDir).catch((e) => print("failed to get git commit info", e));
+742:         if (git) {
+743:           debug("commit info", git);
+744:           metadata.gitCommit = git;
+745:         }
+746:       }
+747:       if (fullConfig.captureGitInfo?.diff || fullConfig.captureGitInfo?.diff === void 0 && ci) {
+748:         const diffResult = await gitDiff(configDir, ci).catch((e) => print("failed to get git diff", e));
+749:         if (diffResult) {
+750:           debug(`diff length ${diffResult.length}`);
+751:           metadata.gitDiff = diffResult;
+752:         }
+753:       }
+754:     }
+755:   };
+756: };
+757: async function ciInfo() {
+758:   if (process.env.GITHUB_ACTIONS) {
+759:     let pr;
+760:     try {
+761:       const json = JSON.parse(await fs2.promises.readFile(process.env.GITHUB_EVENT_PATH, "utf8"));
+762:       pr = { title: json.pull_request.title, number: json.pull_request.number, baseHash: json.pull_request.base.sha };
+763:     } catch {
+764:     }
+765:     return {
+766:       commitHref: `${process.env.GITHUB_SERVER_URL}/${process.env.GITHUB_REPOSITORY}/commit/${process.env.GITHUB_SHA}`,
+767:       commitHash: process.env.GITHUB_SHA,
+768:       prHref: pr ? `${process.env.GITHUB_SERVER_URL}/${process.env.GITHUB_REPOSITORY}/pull/${pr.number}` : void 0,
+769:       prTitle: pr?.title,
+770:       prBaseHash: pr?.baseHash,
+771:       buildHref: `${process.env.GITHUB_SERVER_URL}/${process.env.GITHUB_REPOSITORY}/actions/runs/${process.env.GITHUB_RUN_ID}`
+
+node_modules/playwright/lib/runner/index.js
+837: async function gitDiff(gitDir, ci) {
+838:   const diffLimit = 1e5;
+839:   if (ci?.prBaseHash) {
+840:     const hasBaseCommit = await runGit(["cat-file", "-e", `${ci.prBaseHash}^{commit}`], gitDir) !== void 0;
+841:     if (!hasBaseCommit) {
+842:       const isShallow = await runGit(["rev-parse", "--is-shallow-repository"], gitDir) === "true";
+843:       const fetchArgs = ["fetch", "origin", ci.prBaseHash, "--no-auto-maintenance", "--no-auto-gc", "--no-tags", "--no-recurse-submodules"];
+844:       if (isShallow)
+845:         fetchArgs.push("--depth=1");
+846:       await runGit(fetchArgs, gitDir);
+847:     }
+848:     const diff3 = await runGit(["diff", ci.prBaseHash, "HEAD"], gitDir);
+849:     if (diff3)
+850:       return diff3.substring(0, diffLimit);
+851:   }
+852:   if (ci)
+853:     return;
+854:   const uncommitted = await runGit(["diff"], gitDir);
+855:   if (uncommitted === void 0) {
+856:     return;
+857:   }
+858:   if (uncommitted)
+859:     return uncommitted.substring(0, diffLimit);
+860:   const diff2 = await runGit(["diff", "HEAD~1"], gitDir);
+861:   return diff2?.substring(0, diffLimit);
+862: }
+863: async function runGit(args, cwd) {
+864:   debug(`running "git ${args.join(" ")}"`);
+865:   const result = await spawnAsync("git", ["-c", "credential.interactive=false", ...args], {
+866:     stdio: "pipe",
+867:     cwd,
+868:     timeout: GIT_OPERATIONS_TIMEOUT_MS,
+869:     env: { ...process.env, GIT_TERMINAL_PROMPT: "0" }
+870:   });
+871:   if (result.timedOut) {
+872:     print(`timeout of ${GIT_OPERATIONS_TIMEOUT_MS}ms exceeded while running "git ${args.join(" ")}"`);
+873:     return;
+874:   }
+875:   if (result.code)
+876:     debug(`failure, code=${result.code}
+877:
+878: ${result.stderr}`);
+879:   else
+880:     debug(`success`);
+881:   return result.code ? void 0 : result.stdout.trim();
+882: }
+883:
+884: // packages/playwright/src/plugins/webServerPlugin.ts
+
+node_modules/playwright-core/lib/coreBundle.js
+10452: function spawnAsync(cmd, args, options = {}) {
+10453:   const { timeout, ...spawnOptions } = options;
+10454:   const child = childProcess.spawn(cmd, args, { windowsHide: true, ...spawnOptions });
+10455:   return new Promise((resolve) => {
+10456:     let stdout = "";
+10457:     let stderr = "";
+10458:     if (child.stdout)
+10459:       child.stdout.on("data", (data) => stdout += data.toString());
+10460:     if (child.stderr)
+10461:       child.stderr.on("data", (data) => stderr += data.toString());
+10462:     const timer = timeout ? setTimeout(() => {
+10463:       if (child.pid)
+10464:         killProcessTree(child.pid);
+10465:       resolve({ stdout, stderr, code: null, timedOut: true });
+10466:     }, timeout) : void 0;
+10467:     child.on("close", (code) => {
+10468:       clearTimeout(timer);
+10469:       resolve({ stdout, stderr, code });
+
+node_modules/playwright/types/test.d.ts
+1119:
+1120:   /**
+1121:    * These settings control whether git information is captured and stored in the config
+1122:    * [testConfig.metadata](https://playwright.dev/docs/api/class-testconfig#test-config-metadata).
+1123:    *
+1124:    * **Usage**
+1125:    *
+1126:    * ```js
+1127:    * // playwright.config.ts
+1128:    * import { defineConfig } from '@playwright/test';
+1129:    *
+1130:    * export default defineConfig({
+1131:    *   captureGitInfo: { commit: true, diff: true }
+1132:    * });
+1133:    * ```
+1134:    *
+1135:    * **Details**
+1136:    * - Capturing `commit` information is useful when you'd like to see it in your HTML (or a third party) report.
+1137:    * - Capturing `diff` information is useful to enrich the report with the actual source diff. This information can
+1138:    *   be used to provide intelligent advice on how to fix the test.
+1139:    *
+1140:    * **NOTE** Default values for these settings depend on the environment. When tests run as a part of CI where it is
+1141:    * safe to obtain git information, the default value is `true`, `false` otherwise.
+1142:    *
+1143:    * **NOTE** The structure of the git commit metadata is subject to change.
+1144:    *
+1145:    */
+1146:   captureGitInfo?: {
+1147:     /**
+1148:      * Whether to capture commit and pull request information such as hash, author, timestamp.
+1149:      */
+1150:     commit?: boolean;
+1151:
+1152:     /**
+1153:      * Whether to capture commit diff.
+1154:      */
+1155:     diff?: boolean;
+1156:   };
+1157:

@@ -1,0 +1,490 @@
+{
+  "config": {
+    "argv": [
+      "/usr/local/bin/node",
+      "/Users/josiahwong/Documents/research-shopping-v2-ci-metadata/node_modules/.bin/playwright",
+      "test",
+      "--reporter=list,json",
+      "--output=artifacts/fieldnote-v2/ci-metadata/test-results"
+    ],
+    "configFile": "/Users/josiahwong/Documents/research-shopping-v2-ci-metadata/playwright.config.ts",
+    "rootDir": "/Users/josiahwong/Documents/research-shopping-v2-ci-metadata/tests/e2e",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": true,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "ci": {
+        "commitHref": "https://github.com/d3F0g/research-shopping/commit/91c92b2750cbbdc4bdaaa197ddd59bb0d1a8660c",
+        "commitHash": "91c92b2750cbbdc4bdaaa197ddd59bb0d1a8660c",
+        "prHref": "https://github.com/d3F0g/research-shopping/pull/53",
+        "prTitle": "Local PR CI metadata reproduction",
+        "prBaseHash": "9d2a3c5e336a6652ec6b02e0c3deff6617fb7d11",
+        "buildHref": "https://github.com/d3F0g/research-shopping/actions/runs/0"
+      },
+      "gitCommit": {
+        "shortHash": "91c92b2",
+        "hash": "91c92b2750cbbdc4bdaaa197ddd59bb0d1a8660c",
+        "subject": "fix: skip inline Playwright git diff metadata",
+        "body": "fix: skip inline Playwright git diff metadata\n",
+        "author": {
+          "name": "d3F0g",
+          "email": "joqeewee@gmail.com",
+          "time": 1795074609000
+        },
+        "committer": {
+          "name": "d3F0g",
+          "email": "joqeewee@gmail.com",
+          "time": 1795074609000
+        },
+        "branch": "rebuild/fieldnote-v2-ci-metadata"
+      },
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "/Users/josiahwong/Documents/research-shopping-v2-ci-metadata/artifacts/fieldnote-v2/ci-metadata/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "ci": {
+            "commitHref": "https://github.com/d3F0g/research-shopping/commit/91c92b2750cbbdc4bdaaa197ddd59bb0d1a8660c",
+            "commitHash": "91c92b2750cbbdc4bdaaa197ddd59bb0d1a8660c",
+            "prHref": "https://github.com/d3F0g/research-shopping/pull/53",
+            "prTitle": "Local PR CI metadata reproduction",
+            "prBaseHash": "9d2a3c5e336a6652ec6b02e0c3deff6617fb7d11",
+            "buildHref": "https://github.com/d3F0g/research-shopping/actions/runs/0"
+          },
+          "gitCommit": {
+            "shortHash": "91c92b2",
+            "hash": "91c92b2750cbbdc4bdaaa197ddd59bb0d1a8660c",
+            "subject": "fix: skip inline Playwright git diff metadata",
+            "body": "fix: skip inline Playwright git diff metadata\n",
+            "author": {
+              "name": "d3F0g",
+              "email": "joqeewee@gmail.com",
+              "time": 1795074609000
+            },
+            "committer": {
+              "name": "d3F0g",
+              "email": "joqeewee@gmail.com",
+              "time": 1795074609000
+            },
+            "branch": "rebuild/fieldnote-v2-ci-metadata"
+          },
+          "actualWorkers": 1
+        },
+        "id": "chromium",
+        "name": "chromium",
+        "testDir": "/Users/josiahwong/Documents/research-shopping-v2-ci-metadata/tests/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "/Users/josiahwong/Documents/research-shopping-v2-ci-metadata/artifacts/fieldnote-v2/ci-metadata/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "ci": {
+            "commitHref": "https://github.com/d3F0g/research-shopping/commit/91c92b2750cbbdc4bdaaa197ddd59bb0d1a8660c",
+            "commitHash": "91c92b2750cbbdc4bdaaa197ddd59bb0d1a8660c",
+            "prHref": "https://github.com/d3F0g/research-shopping/pull/53",
+            "prTitle": "Local PR CI metadata reproduction",
+            "prBaseHash": "9d2a3c5e336a6652ec6b02e0c3deff6617fb7d11",
+            "buildHref": "https://github.com/d3F0g/research-shopping/actions/runs/0"
+          },
+          "gitCommit": {
+            "shortHash": "91c92b2",
+            "hash": "91c92b2750cbbdc4bdaaa197ddd59bb0d1a8660c",
+            "subject": "fix: skip inline Playwright git diff metadata",
+            "body": "fix: skip inline Playwright git diff metadata\n",
+            "author": {
+              "name": "d3F0g",
+              "email": "joqeewee@gmail.com",
+              "time": 1795074609000
+            },
+            "committer": {
+              "name": "d3F0g",
+              "email": "joqeewee@gmail.com",
+              "time": 1795074609000
+            },
+            "branch": "rebuild/fieldnote-v2-ci-metadata"
+          },
+          "actualWorkers": 1
+        },
+        "name": "chromium",
+        "testDir": "/Users/josiahwong/Documents/research-shopping-v2-ci-metadata/tests/e2e",
+        "snapshotDir": "/Users/josiahwong/Documents/research-shopping-v2-ci-metadata/tests/e2e",
+        "testIgnore": [],
+        "testMatch": "**/*.@(spec|test).?(c|m)[jt]s?(x)",
+        "timeout": 30000,
+        "use": {
+          "baseURL": "http://127.0.0.1:5297",
+          "trace": "retain-on-failure",
+          "screenshot": "only-on-failure",
+          "video": "retain-on-failure",
+          "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/159.0.8154.6 Safari/537.36",
+          "viewport": {
+            "width": 1280,
+            "height": 720
+          },
+          "screen": {
+            "width": 1920,
+            "height": 1080
+          },
+          "deviceScaleFactor": 1,
+          "isMobile": false,
+          "hasTouch": false,
+          "defaultBrowserType": "chromium"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": "chromium"
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list"
+      ],
+      [
+        "json"
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.65.1",
+    "workers": 1,
+    "webServer": {
+      "command": "npx concurrently -k \"npm:dev:web\" \"npx tsx tests/helpers/browser-server.ts\"",
+      "url": "http://127.0.0.1:5297/api/health",
+      "reuseExistingServer": false,
+      "timeout": 60000,
+      "env": {
+        "API_PORT": "3197",
+        "VITE_API_PORT": "3197",
+        "WEB_PORT": "5297",
+        "EXA_RESEARCH_ENABLED": "false",
+        "NODE_ENV": "test"
+      }
+    }
+  },
+  "suites": [
+    {
+      "title": "v2-chat.spec.ts",
+      "file": "v2-chat.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "desktop chat currency, evidence, history, theme and composer",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3818,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-19T07:51:23.815Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c7d8e86b66e9f94f1974-37e430675fae280c4d7f",
+          "file": "v2-chat.spec.ts",
+          "line": 9,
+          "column": 3
+        },
+        {
+          "title": "mobile chat currency, evidence, history, theme and composer",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1319,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-19T07:51:27.922Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c7d8e86b66e9f94f1974-d26d44bb3cd1880cc285",
+          "file": "v2-chat.spec.ts",
+          "line": 9,
+          "column": 3
+        },
+        {
+          "title": "short-mobile chat currency, evidence, history, theme and composer",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1281,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-19T07:51:29.249Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c7d8e86b66e9f94f1974-f0ddf01f467599e7133b",
+          "file": "v2-chat.spec.ts",
+          "line": 9,
+          "column": 3
+        },
+        {
+          "title": "edits the actual open objective, requirements and both budget bounds",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 717,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-19T07:51:30.536Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c7d8e86b66e9f94f1974-3860f9bad436a6aceff3",
+          "file": "v2-chat.spec.ts",
+          "line": 146,
+          "column": 1
+        },
+        {
+          "title": "keeps free replies during research and stops abandoned transport before new results publish",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2431,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-19T07:51:31.258Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c7d8e86b66e9f94f1974-5bdcce46532395abfba3",
+          "file": "v2-chat.spec.ts",
+          "line": 200,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "v2-held-replies.spec.ts",
+      "file": "v2-held-replies.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "desktop concise held evidence, disclosure and punctuated brand release",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1727,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-19T07:51:33.701Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "65edc0b9c22265fddaae-7b56ffefb5d040995b5a",
+          "file": "v2-held-replies.spec.ts",
+          "line": 10,
+          "column": 3
+        },
+        {
+          "title": "mobile concise held evidence, disclosure and punctuated brand release",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1661,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-19T07:51:35.433Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "65edc0b9c22265fddaae-f62017419f14e114315d",
+          "file": "v2-held-replies.spec.ts",
+          "line": 10,
+          "column": 3
+        },
+        {
+          "title": "short-mobile concise held evidence, disclosure and punctuated brand release",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1649,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-19T07:51:37.100Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "65edc0b9c22265fddaae-8824b0ffc2d9f84d684d",
+          "file": "v2-held-replies.spec.ts",
+          "line": 10,
+          "column": 3
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-11-19T07:51:21.481Z",
+    "duration": 17352.534,
+    "expected": 8,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}
