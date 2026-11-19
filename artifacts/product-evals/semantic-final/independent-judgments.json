@@ -1,0 +1,584 @@
+{
+  "schemaVersion": 1,
+  "judge": {
+    "identity": "semantic_final gpt-6-astra",
+    "provider": "Codex independent review agent",
+    "independentOfImplementation": true,
+    "identityEvidence": "Fresh independent agent given only anonymized packet file; did not author product or evaluator",
+    "implementationAuthorIdentity": "Separate Fieldnote product implementation orchestrator",
+    "calibrationStatus": "pending-human-review"
+  },
+  "judgments": [
+    {
+      "label": "052dfa5750c3f976e5b69fb6",
+      "packetHash": "fca30e4164109d786ffbd6e1ea82543708b63eef95515a74db6fbd7bdd3139a4",
+      "scores": {
+        "intentUnderstanding": {
+          "status": "scored",
+          "score": 1,
+          "rationale": "The final budget changes to SGD 180, but the active hard criterion is still clamping to a desk after the user explicitly abandons that objective for an essential freestanding floor lamp.",
+          "uncertain": false
+        },
+        "relevance": {
+          "status": "scored",
+          "score": 4,
+          "rationale": "For the final corrected objective only, all three supplied synthetic standard variants are described as freestanding floor lamps. Earlier-turn relevance is unassessable because the fixed input is explicitly unsuitable for that turn; this score does not establish real discovery quality.",
+          "uncertain": true
+        },
+        "usefulness": {
+          "status": "scored",
+          "score": 1,
+          "rationale": "On the final synthetic evidence, three freestanding lamps have observed prices below SGD 180, yet the obsolete clamp requirement leaves every option unresolved and gives the user no justified choice. Earlier-turn discovery usefulness and real shopping usefulness are unassessed.",
+          "uncertain": true
+        },
+        "reasoning": {
+          "status": "scored",
+          "score": 2,
+          "rationale": "Price assessments update consistently and stock remains unverified, but the final no-fit explanation depends on the superseded clamp requirement rather than the corrected objective. The earlier request-match interpretation is not judged against the known unsuitable fixed input.",
+          "uncertain": true
+        },
+        "naturalness": {
+          "status": "scored",
+          "score": 2,
+          "rationale": "The identical generic no-fit reply does not acknowledge the explicit change from desk lamp to freestanding floor lamp or explain the surviving blocker.",
+          "uncertain": false
+        },
+        "conciseness": {
+          "status": "scored",
+          "score": 3,
+          "rationale": "Each reply is brief and leads with its outcome, but repeating the same generic instruction adds little and omits the concrete reason for the final blockage.",
+          "uncertain": false
+        },
+        "adaptation": {
+          "status": "scored",
+          "score": 1,
+          "rationale": "The new maximum survives, but the explicit objective replacement does not remove the old clamp criterion or establish the new essential freestanding criterion. This preference-state failure is observable independently of fixture suitability.",
+          "uncertain": false
+        },
+        "clarificationNecessity": {
+          "status": "scored",
+          "score": 4,
+          "rationale": "No unnecessary question is asked. The final message already supplies the replacement product, maximum budget, currency and essential mounting form; the needed correction is interpretation, not another user answer.",
+          "uncertain": false
+        }
+      },
+      "criticalFailures": [
+        "After an explicit objective replacement, the active hard criterion remains clamp onto the desk and blocks a recommendation for the requested freestanding floor lamp."
+      ],
+      "overall": "not-useful"
+    },
+    {
+      "label": "15823850525a6535da043475",
+      "packetHash": "787ea6fedcd1ad3d5223231264a67955ead597659286774b08ef5b3fdd2d6d5e",
+      "scores": {
+        "intentUnderstanding": {
+          "status": "scored",
+          "score": 4,
+          "rationale": "The reply retains power banks and both original bounds, resolving only the missing currency to SGD.",
+          "uncertain": false
+        },
+        "relevance": {
+          "status": "not-observable",
+          "score": null,
+          "rationale": "No product result has arrived, so product class, use and variant relevance cannot be judged.",
+          "uncertain": true
+        },
+        "usefulness": {
+          "status": "not-observable",
+          "score": null,
+          "rationale": "The observed acknowledgment and start of one research dispatch show progress, but there is no result or evidence from which to judge completed shopping usefulness.",
+          "uncertain": true
+        },
+        "reasoning": {
+          "status": "not-observable",
+          "score": null,
+          "rationale": "There is no product assessment, recommendation explanation or supporting evidence to evaluate.",
+          "uncertain": true
+        },
+        "naturalness": {
+          "status": "scored",
+          "score": 4,
+          "rationale": "The short acknowledgment directly follows the currency answer and naturally states what will be researched.",
+          "uncertain": false
+        },
+        "conciseness": {
+          "status": "scored",
+          "score": 4,
+          "rationale": "One sentence states the product and resolved price range without redundant warnings or progress messages.",
+          "uncertain": false
+        },
+        "adaptation": {
+          "status": "scored",
+          "score": 4,
+          "rationale": "The short answer SGD fills the requested currency while preserving the 30 to 40 range; the supplied event records research starting without requiring repetition.",
+          "uncertain": false
+        },
+        "clarificationNecessity": {
+          "status": "scored",
+          "score": 4,
+          "rationale": "The original dollar sign is ambiguous, and the only question asks for currency while retaining the known amounts.",
+          "uncertain": false
+        }
+      },
+      "criticalFailures": [],
+      "overall": "uncertain"
+    },
+    {
+      "label": "4643e354ffc360010a8b70bf",
+      "packetHash": "a1cf0901762cd2df6181e5b068f8a884b4311cc29583a7d89668489bc669a3ff",
+      "scores": {
+        "intentUnderstanding": {
+          "status": "scored",
+          "score": 0,
+          "rationale": "The final recommendation directly conflicts with both the latest SGD 300 maximum and the explicit exclusion of Sony.",
+          "uncertain": false
+        },
+        "relevance": {
+          "status": "scored",
+          "score": 0,
+          "rationale": "The only named recommendation is explicitly a Sony product despite the exclusion. No source evidence establishes additional use or exact-variant fit, but the brand mismatch is directly observable.",
+          "uncertain": false
+        },
+        "usefulness": {
+          "status": "scored",
+          "score": 0,
+          "rationale": "The response directs the user toward an expressly excluded product at SGD 399, so following it cannot satisfy the recorded request.",
+          "uncertain": false
+        },
+        "reasoning": {
+          "status": "scored",
+          "score": 0,
+          "rationale": "Best choice and worth stretching the budget have no supporting evidence, and the explanation unilaterally overrides the revised maximum.",
+          "uncertain": false
+        },
+        "naturalness": {
+          "status": "scored",
+          "score": 3,
+          "rationale": "The prose is fluent and easy to read, though its sales-like instruction to stretch the budget is poorly responsive to the correction.",
+          "uncertain": false
+        },
+        "conciseness": {
+          "status": "scored",
+          "score": 4,
+          "rationale": "The recommendation and claimed justification are short and immediate; brevity does not mitigate the constraint violations.",
+          "uncertain": false
+        },
+        "adaptation": {
+          "status": "scored",
+          "score": 0,
+          "rationale": "Neither the lowered maximum nor the later brand exclusion changes the recommendation appropriately.",
+          "uncertain": false
+        },
+        "clarificationNecessity": {
+          "status": "scored",
+          "score": 4,
+          "rationale": "There is no unnecessary question, and the supplied constraints are sufficiently explicit to avoid one. The failure is compliance rather than missing clarification.",
+          "uncertain": false
+        }
+      },
+      "criticalFailures": [
+        "Recommends Sony despite the explicit No Sony products instruction.",
+        "Recommends SGD 399 after the user lowers the maximum to SGD 300 and urges an unauthorized budget relaxation."
+      ],
+      "overall": "not-useful"
+    },
+    {
+      "label": "8f36fb602929166c66f4b23f",
+      "packetHash": "41cc1ba5ea711ded365f8df5f710e3c305440f73996dd1ccaa70b2a8dac12e81",
+      "scores": {
+        "intentUnderstanding": {
+          "status": "scored",
+          "score": 4,
+          "rationale": "The answer incorporates the GBP 100 ceiling and the refusal to join a membership, addressing which option can actually be justified.",
+          "uncertain": false
+        },
+        "relevance": {
+          "status": "scored",
+          "score": 2,
+          "rationale": "The summaries identify printer options and support compact-printer identity for B, but do not fully establish photo-printing suitability or exact variants for both. Budget ineligibility is correctly separated from that limited product evidence.",
+          "uncertain": true
+        },
+        "usefulness": {
+          "status": "scored",
+          "score": 3,
+          "rationale": "The user can avoid treating either option as a confirmed affordable purchase: A is too expensive without membership and B lacks price evidence. No viable replacement is provided. This is useful rejection on the supplied example, not proof of a live shopping result.",
+          "uncertain": true
+        },
+        "reasoning": {
+          "status": "scored",
+          "score": 4,
+          "rationale": "The answer uses the non-member GBP 119 price instead of the conditional GBP 89 price, preserves B as unknown, and does not claim current stock or manufacture a compliant winner.",
+          "uncertain": false
+        },
+        "naturalness": {
+          "status": "scored",
+          "score": 4,
+          "rationale": "The response directly answers the decision question and explains the two different blockers in plain language.",
+          "uncertain": false
+        },
+        "conciseness": {
+          "status": "scored",
+          "score": 4,
+          "rationale": "The decisive conclusion comes first, followed by one compact reason per option.",
+          "uncertain": false
+        },
+        "adaptation": {
+          "status": "scored",
+          "score": 4,
+          "rationale": "The refusal of membership changes the applicable price while the original currency and maximum remain intact.",
+          "uncertain": false
+        },
+        "clarificationNecessity": {
+          "status": "scored",
+          "score": 4,
+          "rationale": "No further question is needed to establish these blockers, and none is asked.",
+          "uncertain": false
+        }
+      },
+      "criticalFailures": [],
+      "overall": "useful"
+    },
+    {
+      "label": "966a74bd7b7b5ecba0d11a31",
+      "packetHash": "9644c61d93f9f75ab1c13560a67e2f6d7dd78e91fa8422b3ccec95a7708f61c5",
+      "scores": {
+        "intentUnderstanding": {
+          "status": "scored",
+          "score": 1,
+          "rationale": "The travel context remains in the description, but the accepted hard criterion becomes weigh no more than 1, losing the decimal and kg unit from 1.3 kg. The explicit EUR budget is retained only in text and rejected as unsupported.",
+          "uncertain": false
+        },
+        "relevance": {
+          "status": "not-observable",
+          "score": null,
+          "rationale": "No products are returned, and the packet explicitly reports a missing matching product profile. Relevance is unassessed.",
+          "uncertain": true
+        },
+        "usefulness": {
+          "status": "not-observable",
+          "score": null,
+          "rationale": "There is no recommendation evidence, and the declared input-suitability gap prevents assessment of shopping usefulness. The separately observable numeric preference corruption is not a successful result.",
+          "uncertain": true
+        },
+        "reasoning": {
+          "status": "not-observable",
+          "score": null,
+          "rationale": "No sourced product comparison or recommendation reasoning is present. The currency capability statement alone does not establish shopping reasoning quality.",
+          "uncertain": true
+        },
+        "naturalness": {
+          "status": "scored",
+          "score": 2,
+          "rationale": "The replies are understandable but generic; the final administrative currency message does not acknowledge train travel or the precise weight requirement.",
+          "uncertain": false
+        },
+        "conciseness": {
+          "status": "scored",
+          "score": 3,
+          "rationale": "The replies are short, although the repeated current-budget wording adds little when no budget has been accepted.",
+          "uncertain": false
+        },
+        "adaptation": {
+          "status": "scored",
+          "score": 1,
+          "rationale": "The follow-up is appended, but its exact weight constraint is corrupted and its EUR maximum cannot become an operative budget. Preserving the full original message does not repair the malformed active criterion.",
+          "uncertain": false
+        },
+        "clarificationNecessity": {
+          "status": "scored",
+          "score": 1,
+          "rationale": "An optional budget question interrupts an actionable initial request; after the user gives an explicit currency, the response asks for a different currency or budget removal rather than missing information. The declared capability limit is honest but creates avoidable user repair.",
+          "uncertain": false
+        }
+      },
+      "criticalFailures": [
+        "The explicit hard limit of 1.3 kg becomes weigh no more than 1 in accepted criteria, losing both decimal precision and unit."
+      ],
+      "overall": "not-useful"
+    },
+    {
+      "label": "97a503b1112e59a0cba78b95",
+      "packetHash": "75eac3c55b52dcdbdc3c572bdb42c1ea17eb8b97ec8dcad3c8c40fc9a057d59f",
+      "scores": {
+        "intentUnderstanding": {
+          "status": "scored",
+          "score": 1,
+          "rationale": "The assistant recognizes the original currency ambiguity but fails to combine SGD with the already supplied 30 to 40 range, asking the user to provide the amount again.",
+          "uncertain": false
+        },
+        "relevance": {
+          "status": "not-observable",
+          "score": null,
+          "rationale": "No products or supporting sources are returned.",
+          "uncertain": true
+        },
+        "usefulness": {
+          "status": "scored",
+          "score": 1,
+          "rationale": "The observed response actively blocks progress after the missing information has been supplied, requiring the user to repeat an amount already known. This assesses conversational obstruction, not unseen recommendation quality.",
+          "uncertain": false
+        },
+        "reasoning": {
+          "status": "scored",
+          "score": 1,
+          "rationale": "The warning about converting or removing an existing budget is inapplicable: no conversion or removal was requested, and structured budget remains null. It does not justify requiring a new amount.",
+          "uncertain": false
+        },
+        "naturalness": {
+          "status": "scored",
+          "score": 1,
+          "rationale": "The currency answer is met with an unrelated protective warning rather than a natural acknowledgment of the resolved range.",
+          "uncertain": false
+        },
+        "conciseness": {
+          "status": "scored",
+          "score": 2,
+          "rationale": "Several sentences repeat unchanged-budget warnings while failing to state or use the known range.",
+          "uncertain": false
+        },
+        "adaptation": {
+          "status": "scored",
+          "score": 1,
+          "rationale": "SGD is appended as a generic follow-up instead of filling the pending currency field; neither bound becomes an accepted budget and no research dispatch is observed.",
+          "uncertain": false
+        },
+        "clarificationNecessity": {
+          "status": "scored",
+          "score": 1,
+          "rationale": "The first currency question is necessary, but the second request for a new amount reasks an answered fact and prevents automatic continuation.",
+          "uncertain": false
+        }
+      },
+      "criticalFailures": [
+        "A valid short currency answer does not resolve the known 30 to 40 budget range and instead requires the user to repeat the amount."
+      ],
+      "overall": "not-useful"
+    },
+    {
+      "label": "9dbdbdf549b23b75989a0379",
+      "packetHash": "4586792db989198847c83e5021ebc712f7bc9a8974059d3d98934eabb8e00da9",
+      "scores": {
+        "intentUnderstanding": {
+          "status": "scored",
+          "score": 1,
+          "rationale": "The flight use and reduced SGD 300 maximum are retained, but No Sony products is only appended to the description. It creates no hard criterion or explicit brand-compliance uncertainty in the final choice.",
+          "uncertain": false
+        },
+        "relevance": {
+          "status": "scored",
+          "score": 2,
+          "rationale": "The synthetic first option has supported headphone/flight class and variant descriptions; the second is explicitly non-functional and the third has unresolved fit. No source establishes any candidate manufacturer, so relevance to the final brand exclusion is unresolved.",
+          "uncertain": true
+        },
+        "usefulness": {
+          "status": "scored",
+          "score": 1,
+          "rationale": "The supplied facts allow partial price and use comparison, but the final chosen option has no evidence or warning about the new hard brand exclusion. The user cannot rely on it as satisfying the complete request; this is limited to the synthetic packet.",
+          "uncertain": true
+        },
+        "reasoning": {
+          "status": "scored",
+          "score": 1,
+          "rationale": "The packet preserves the display-model contradiction and unknown fit for alternatives, but the final choice still gives only generic identity and price reasons with no assessment of the brand exclusion. A generic conditional-choice caveat does not explain that missing hard fit.",
+          "uncertain": false
+        },
+        "naturalness": {
+          "status": "scored",
+          "score": 1,
+          "rationale": "Every assistant turn repeats the same choice and duplicated synthetic disclaimer, without a conversational acknowledgment of the changed budget or brand restriction.",
+          "uncertain": false
+        },
+        "conciseness": {
+          "status": "scored",
+          "score": 2,
+          "rationale": "The text is short but repeats the identical disclaimer twice per reply and the same recommendation over three turns without explaining what changed.",
+          "uncertain": false
+        },
+        "adaptation": {
+          "status": "scored",
+          "score": 1,
+          "rationale": "The maximum correctly changes from SGD 500 to SGD 300, but the subsequent brand exclusion does not appear in criteria, tradeoffs or the final recommendation explanation.",
+          "uncertain": false
+        },
+        "clarificationNecessity": {
+          "status": "scored",
+          "score": 4,
+          "rationale": "No unnecessary user question is asked. The exclusion is already explicit; verifying a manufacturer requires evidence rather than making the user restate it.",
+          "uncertain": false
+        }
+      },
+      "criticalFailures": [
+        "The explicit Sony exclusion is absent from active criteria and final choice assessments, yet a conditional choice is issued without identifying manufacturer compliance as unknown. This does not establish that the synthetic option actually is Sony."
+      ],
+      "overall": "not-useful"
+    },
+    {
+      "label": "b2febdcceef7a585a308b1a2",
+      "packetHash": "f05bceeec91bcc55dc22cf510181dd927bc46836b99f21522086467c0476b839",
+      "scores": {
+        "intentUnderstanding": {
+          "status": "scored",
+          "score": 2,
+          "rationale": "The desired portable flashing receiver remains in the description and exact existing-bell compatibility is accepted as hard. The explicit GBP 80 maximum is not operationally accepted, so the full objective is not yet actionable.",
+          "uncertain": false
+        },
+        "relevance": {
+          "status": "not-observable",
+          "score": null,
+          "rationale": "No product is returned, and the packet explicitly declares no matching product profile. Compatibility and product relevance are unassessed.",
+          "uncertain": true
+        },
+        "usefulness": {
+          "status": "not-observable",
+          "score": null,
+          "rationale": "No researched result or recommendation is available, and the input-suitability gap rules out treating this exchange as a shopping success.",
+          "uncertain": true
+        },
+        "reasoning": {
+          "status": "not-observable",
+          "score": null,
+          "rationale": "No source-backed product assessment or comparison is supplied. The transparent currency restriction is a capability statement rather than evidence of recommendation reasoning.",
+          "uncertain": true
+        },
+        "naturalness": {
+          "status": "scored",
+          "score": 2,
+          "rationale": "The replies are readable but generic: the final reply focuses entirely on currency and does not acknowledge the newly supplied exact bell model or compatibility need.",
+          "uncertain": false
+        },
+        "conciseness": {
+          "status": "scored",
+          "score": 3,
+          "rationale": "The responses are brief, though current budget has not changed is unhelpful when the accepted budget is null.",
+          "uncertain": false
+        },
+        "adaptation": {
+          "status": "scored",
+          "score": 2,
+          "rationale": "The exact Fixture Bell 7 compatibility criterion is retained correctly with the original objective. The GBP maximum remains only in the appended text, and the flow stops at an honestly stated currency limitation.",
+          "uncertain": false
+        },
+        "clarificationNecessity": {
+          "status": "scored",
+          "score": 1,
+          "rationale": "An optional budget question precedes useful progress, and the second reply requests changing an already explicit currency or abandoning the budget. Neither request resolves the material product-compatibility question; the limitation is disclosed rather than silently converted.",
+          "uncertain": false
+        }
+      },
+      "criticalFailures": [],
+      "overall": "uncertain"
+    },
+    {
+      "label": "decd8f4bd4a01412a47346e0",
+      "packetHash": "9127dcd89d9ca4154aa9ec551b7abda12ee26f577f096c746d4b82fb6448f42f",
+      "scores": {
+        "intentUnderstanding": {
+          "status": "scored",
+          "score": 3,
+          "rationale": "The final response addresses a 35 mm slide scanner rather than a camera and records the USD 250 maximum. The initial response contributes only an optional budget question rather than acknowledging the intended task.",
+          "uncertain": false
+        },
+        "relevance": {
+          "status": "scored",
+          "score": 3,
+          "rationale": "The selected standard variant is explicitly described as a 35 mm photographic slide scanner. The non-functional second option is marked contradicted and the third unresolved, rather than treated as equally suitable. These are synthetic descriptions, not real product relevance proof.",
+          "uncertain": true
+        },
+        "usefulness": {
+          "status": "scored",
+          "score": 3,
+          "rationale": "Within the supplied synthetic facts, the user gets a conditional USD 140 scanner under USD 250 and visible adverse/unknown alternatives. The generic choice explanation gives little practical comparison, and real discovery, stock and purchase usefulness are not established.",
+          "uncertain": true
+        },
+        "reasoning": {
+          "status": "scored",
+          "score": 3,
+          "rationale": "Identity, observed price and budget evidence support the conditional first option; the second option retains its non-functional contradiction and the third its unknown match. The choice reasons merely repeat a generic interpretation label rather than explaining those comparative distinctions.",
+          "uncertain": true
+        },
+        "naturalness": {
+          "status": "scored",
+          "score": 2,
+          "rationale": "The reply identifies a choice but repeats the synthetic interpretation disclaimer verbatim; the earlier generic budget question adds a mechanical interruption.",
+          "uncertain": false
+        },
+        "conciseness": {
+          "status": "scored",
+          "score": 2,
+          "rationale": "The result comes first, but duplicated disclaimer text consumes most of the final answer without a concrete comparative reason.",
+          "uncertain": false
+        },
+        "adaptation": {
+          "status": "scored",
+          "score": 4,
+          "rationale": "The clarification to slide scanner and explicit USD 250 ceiling are incorporated while the original 35 mm objective and rejection of a camera remain in the description.",
+          "uncertain": false
+        },
+        "clarificationNecessity": {
+          "status": "scored",
+          "score": 2,
+          "rationale": "Budget could improve selection, and skipping is offered, but the initial goal is already actionable. Asking this optional question before any useful progress adds avoidable friction.",
+          "uncertain": false
+        }
+      },
+      "criticalFailures": [],
+      "overall": "useful"
+    },
+    {
+      "label": "e421bbec7642d4588c905a47",
+      "packetHash": "17e855c7ff37e1b667731912b2a0109f36cda21ab6b8d051228a678441538adf",
+      "scores": {
+        "intentUnderstanding": {
+          "status": "scored",
+          "score": 4,
+          "rationale": "The answer compares exactly the first and third options, respects the request for brevity and retains the USD 250 budget context.",
+          "uncertain": false
+        },
+        "relevance": {
+          "status": "not-observable",
+          "score": null,
+          "rationale": "The supplied summaries report relative field of view, weight and prices but do not identify actual binocular models or exact variants. Independent product-class and variant relevance cannot be established from these snippets.",
+          "uncertain": true
+        },
+        "usefulness": {
+          "status": "scored",
+          "score": 3,
+          "rationale": "The comparison offers an actionable field-of-view versus weight tradeoff and preserves the unknown sharpness winner. The bird-tracking advantage is an interpretation rather than an established result, and usefulness is limited to this author example.",
+          "uncertain": true
+        },
+        "reasoning": {
+          "status": "scored",
+          "score": 2,
+          "rationale": "The relative field of view, weight and sub-USD-250 prices follow the supplied summaries, and the sharpness uncertainty is explicit. Easier bird tracking is a plausible inference from wider field of view but is not established by the provided evidence or labeled as inference; other tracking determinants are unseen.",
+          "uncertain": true
+        },
+        "naturalness": {
+          "status": "scored",
+          "score": 4,
+          "rationale": "The response naturally resolves first and third to A and C and explains a concise, conditional tradeoff in ordinary language.",
+          "uncertain": false
+        },
+        "conciseness": {
+          "status": "scored",
+          "score": 4,
+          "rationale": "The answer is compact, fronts the comparison and avoids a repeated research narrative or unnecessary detail.",
+          "uncertain": false
+        },
+        "adaptation": {
+          "status": "scored",
+          "score": 4,
+          "rationale": "It switches to a short comparison of held options, retains the budget context and does not invent a sharpness ranking. The supplied event explicitly records no new research dispatch.",
+          "uncertain": false
+        },
+        "clarificationNecessity": {
+          "status": "scored",
+          "score": 4,
+          "rationale": "The requested options and comparison length are clear, and the assistant asks no redundant question.",
+          "uncertain": false
+        }
+      },
+      "criticalFailures": [],
+      "overall": "useful"
+    }
+  ]
+}

@@ -8,4 +8,4 @@ The root rerun executed sixty conversations and 140 turns with zero infrastructu
 
 The local full-run directory retains per-case trace files and issue drafts. The machine report includes their complete observations. Routine CI regenerates and uploads those artifacts. All inputs remain visibly synthetic; no paid research, private ledger or credential was used.
 
-Independent final QA and security re-verification is required before accepting the evaluator corrections. PR 47 remains held for latest-application integration after PR 38 stabilizes and lands. Human judge calibration and genuine current-contract research replay remain separate prerequisites. See the evaluation guide and upstream integration note.
+Independent final QA and security verdicts are recorded in PR 47 for their exact reviewed head. PR 47 remains held for latest-application integration after PR 38 stabilizes and lands. Human judge calibration and genuine current-contract research replay remain separate prerequisites. See the evaluation guide and upstream integration note.
