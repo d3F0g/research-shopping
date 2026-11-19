@@ -52,6 +52,7 @@ describe("real SDK transport and bounded evidence", () => {
   it("uses one native Answer with exact query, complete authoritative intent and parsed returned cost", async () => {
     const current = intent();
     let calls = 0;
+    let outputSchema: unknown;
     const baseUrl = await listen(async (req, res) => {
       let body = "";
       for await (const chunk of req) body += chunk;
@@ -65,7 +66,7 @@ describe("real SDK transport and bounded evidence", () => {
         region: current.region,
       });
       expect(request.text).toBe(true);
-      expect(request.outputSchema).toBeTruthy();
+      outputSchema = request.outputSchema;
       expect(
         request.systemPrompt.split(
           "Current authoritative shopping intent: ",
@@ -78,11 +79,82 @@ describe("real SDK transport and bounded evidence", () => {
       baseUrl,
     })({ intent: current }, new AbortController().signal);
     expect(calls).toBe(1);
+    expect(outputSchema).toMatchObject({
+      $schema: "http://json-schema.org/draft-07/schema#",
+    });
     expect(result.status).toBe("ready");
     if (result.status !== "ready") throw new Error("No comparison");
     expect(result.research.choice?.productId).toBe("model-a");
     expect(result.research.reportedCostUsd).toBe(0.005);
   });
+  it.each(["quotation-object", "missing-required-fields", "non-object-product"])(
+    "rejects %s through the SDK without repairing evidence or retrying",
+    async (mode) => {
+      const current = intent();
+      const material = nativeMaterial(current);
+      const product = material.answer.products[0]!;
+      let answer: unknown;
+      if (mode === "quotation-object")
+        answer = {
+          ...material.answer,
+          products: [{
+            ...product,
+            identity: {
+              ...product.identity,
+              support: [{
+                url: product.identity.support[0]!.url,
+                quote: { value: material.citations[0]!.text },
+              }],
+            },
+          }],
+        };
+      if (mode === "missing-required-fields")
+        answer = {
+          products: [Object.fromEntries(
+            Object.entries(product).filter(([key]) => key !== "attributes" && key !== "price"),
+          )],
+        };
+      if (mode === "non-object-product")
+        answer = { ...material.answer, products: [product, "Fixture invalid product item."] };
+      let calls = 0;
+      const baseUrl = await listen((_req, res) => {
+        calls++;
+        res.setHeader("content-type", "application/json");
+        res.end(JSON.stringify({ ...material, answer }));
+      });
+      const result = await createExaProductResearch("fake-loopback-key", { baseUrl })(
+        { intent: current }, new AbortController().signal,
+      );
+      expect(result).toEqual({ status: "unavailable", reason: "invalid-response", reportedCostUsd: 0.005 });
+      expect(calls).toBe(1);
+    },
+  );
+  it.each([29, 35, 41])(
+    "preserves literal source money and both budget bounds for SDK price SGD%s",
+    async (amount) => {
+      const current = intent();
+      let material = nativeMaterial(current);
+      material.answer.products[0]!.price.amount = amount;
+      material = rewrite(material, material.citations[0]!.text.replace("SGD 35", `SGD ${amount}`));
+      let calls = 0;
+      const baseUrl = await listen((_req, res) => {
+        calls++;
+        res.setHeader("content-type", "application/json");
+        res.end(JSON.stringify(material));
+      });
+      const result = await createExaProductResearch("fake-loopback-key", { baseUrl })(
+        { intent: current }, new AbortController().signal,
+      );
+      expect(result.status).toBe("ready");
+      if (result.status !== "ready") throw new Error("No fixture comparison");
+      const product = result.research.products[0]!;
+      expect(product.price).toMatchObject({ amount, currency: "SGD", conditionsResolved: true });
+      expect(product.identity.support[0]!.literal.text).toBe(material.citations[0]!.text);
+      expect(product.eligible).toBe(amount === 35);
+      expect(result.research.choice?.productId ?? null).toBe(amount === 35 ? "model-a" : null);
+      expect(calls).toBe(1);
+    },
+  );
   it.each(["headers", "body"])(
     "aborts actual SDK %s transport without a retry",
     async (phase) => {
