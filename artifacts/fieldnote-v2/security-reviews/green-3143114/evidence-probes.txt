@@ -1,0 +1,86 @@
+[
+  {
+    "name": "uncut-positive-control",
+    "status": "ready",
+    "choice": {
+      "productId": "model-a",
+      "rationale": "Fixture data: the cited Model A passage supports this assessment."
+    },
+    "price": {
+      "amount": 35,
+      "currency": "SGD",
+      "variant": "Model A",
+      "conditions": [
+        "tax included"
+      ],
+      "conditionsResolved": true,
+      "assessment": {
+        "status": "supported",
+        "scope": "exact-variant",
+        "rationale": "Fixture data: the cited Model A passage supports this assessment.",
+        "support": [
+          {
+            "sourceId": "source-1",
+            "originalQuote": "Fixture data: Fixture Powerbank Model A is a USB-C powerbank, 10000 mAh, with up to 12 hours battery life. Model A costs SGD 35 for one unit, tax included.",
+            "originalStart": 0,
+            "originalEnd": 155,
+            "quote": "Fixture data: Fixture Powerbank Model A is a USB-C powerbank, 10000 mAh, with up to 12 hours battery life. Model A costs SGD 35 for one unit, tax included.",
+            "start": 0,
+            "end": 155
+          }
+        ]
+      }
+    },
+    "cut": false
+  },
+  {
+    "name": "known-price-qualifier-discarded-after-cut",
+    "status": "ready",
+    "choice": null,
+    "price": null,
+    "cut": true
+  },
+  {
+    "name": "adjacent-tax-exclusion",
+    "status": "ready",
+    "choice": null,
+    "price": {
+      "amount": 35,
+      "currency": "SGD",
+      "variant": "Model A",
+      "conditions": [],
+      "conditionsResolved": false,
+      "assessment": {
+        "status": "unknown",
+        "scope": "exact-variant",
+        "rationale": "The source amount is an unresolved observation. Its exact variant, complete monetary context or eligibility conditions do not establish an applicable price. Confirm the total with the merchant.",
+        "support": [
+          {
+            "sourceId": "source-1",
+            "originalQuote": "Fixture data: Fixture Powerbank Model A is a USB-C powerbank. Model A costs SGD 35 excluding tax and mandatory shipping charges.",
+            "originalStart": 0,
+            "originalEnd": 128,
+            "quote": "Fixture data: Fixture Powerbank Model A is a USB-C powerbank. Model A costs SGD 35 excluding tax and mandatory shipping charges.",
+            "start": 0,
+            "end": 128
+          }
+        ]
+      }
+    },
+    "cut": false
+  },
+  {
+    "name": "negative-sgd-amount",
+    "status": "ready",
+    "choice": null,
+    "price": null,
+    "cut": false
+  },
+  {
+    "name": "source-instruction-as-support",
+    "status": "ready",
+    "choice": null,
+    "price": null,
+    "cut": false
+  }
+]

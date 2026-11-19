@@ -1,0 +1,13 @@
+
+> research-shopping@0.1.0 test:postgres
+> node scripts/test-postgres.mjs
+
+
+ RUN  v4.1.12 /Users/josiahwong/Documents/research-shopping-v2-security
+
+
+ Test Files  1 passed (1)
+      Tests  27 passed (27)
+   Start at  15:23:19
+   Duration  2.23s (transform 106ms, setup 0ms, import 398ms, tests 1.73s, environment 0ms)
+

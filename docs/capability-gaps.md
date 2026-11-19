@@ -1,41 +1,21 @@
-# Capability gaps and delivery gates
+# Fieldnote V2 capabilities and limits
 
-These findings came from parallel architecture, shopping-capability, and security assessments. A provider's documented API is not evidence of working access in this application.
+Local substitute tests establish application behavior. They do not establish genuine Exa usefulness, current merchant prices or inventory. Final verdicts are pinned to the reviewed candidate in the V2 audit records.
 
-| Priority | Capability | First implementation | Verification | Tracker |
-| --- | --- | --- | --- | --- |
-| P0 | Intent and preferences | Typed session preference patches, explicit category limits, hard constraints and flexible priorities | Ambiguous request, lower budget, excluded brand, category/region change | #1 |
-| P0 | Discovery and relevance | Deterministic fixture discovery behind a replaceable interface | Eligible products only, no silent constraint relaxation | #1 |
-| P0 | Specifications and sources | Claim-level fixture evidence with unknown/conflicting states | Conflict is disclosed and cannot become a confident reason | #1 |
-| P0 | Comparison and recommendation | Constraint filtering before scoring, concise rationale and tradeoff | Recommendation changes with preferences; no match is explicit | #1 |
-| P0 | Price and availability | Labeled sample offers with fixed timestamps | No sample price or stock is described as current or verified | #1 |
-| P0 | Selection and merchant link | Product-ID selection, safe HTTPS exact-host link policy | Selected identity matches handoff; unsafe links rejected | #1 |
-| P0 | Failure recovery | Bounded adapters and explicit failure outcomes | Failed/stale tools cannot fabricate replacements | #1 |
-| P0 | Conversation and adaptation | Session-scoped preferences, reset, concise/expanded presentation | Multiple turns, dissatisfaction, independent sessions | #1 |
-| P0 | UI and usability | Responsive React comparison, accessible native controls and disclosures | Desktop/mobile browser journeys and screenshots | #1 |
-| P0 | Security and observability | Loopback, HTTP boundary validation, safe links, bounded logs and state | Runtime boundary tests and independent security review | #1 |
-| P0 | Engineering system | Native subagents, isolated owner worktree, independent reviewers, durable issues | Exact-commit review and tested pull request | #1 |
-| P1 | Live web research | Add credential-gated search provider retaining citations | Live smoke evidence with retrieval dates and exact cited URLs | #2 |
-| P1 | Live merchant data | Approved eBay access or configured Shopify store; refresh on selection | Exact variant, currency, region, price and stock checks | #2 |
-| P1 | Durable personalization | Authentication and PostgreSQL when shared durable state is needed | Restart retention, ownership, deletion, migrations | #3 |
-| P1 | General language understanding | Structured model extraction behind provider boundary | Schema validation plus realistic semantic evaluations | #4 |
-| P2 | Broader categories | Add sourced specifications and reviewed relevance corpus | Cross-category and unsupported-category evaluations | #4 |
-| P2 | Cart handoff | Supported merchant cart only after product-link journey | Exact variant, quantity and region; no order placement | #2 |
+| Capability | V2 implementation | Remaining acceptance or limit |
+| --- | --- | --- |
+| Open requests and preferences | Typed local operations plus complete raw request obligations, without category registry | Arbitrary semantic reinterpretation is not guaranteed. Ambiguous changes stay pending or use contextual editing. |
+| Exa discovery and recommendations | One native Answer request with source-bound assessments and computed eligibility | Live request-to-recommendation usefulness remains blocked by billing reconciliation in #42. |
+| Context and clarification | Typed currency draft preserves original request and both bounds; material answers resume research | Optional/unfamiliar ambiguity requires honest recovery rather than silent assumptions. |
+| Held comparisons | Server resolves retained product IDs and evidence, with no new research charge | Source interpretations and missing comparable measurements remain uncertain. |
+| Price observations | Exact currency, numeric bounds, variant and condition gates | Source price is unverified with merchant. Known adverse qualifiers block confidence; arbitrary natural wording may remain unresolved. |
+| Merchant offers | Safe user-activated source/product links | Authorized live stock, delivery and payable offers unavailable in #36. |
+| Images | Validated attributed citation illustrations with failure handling | Exact variant photography is not verified. |
+| Accounts | Optional Better Auth and PostgreSQL with isolated bounded workspaces, replay and publication fencing | Loopback development only. No verified email, recovery, full account deletion or secure backup erasure. |
+| History | Immutable snapshots separate from mutable active preferences | Guest history is process-memory state. Accounts retain at most 30 days, 50 turns and 256 KiB. |
+| Cancellation and billing | SDK/body cancellation, persistent conservative admission and unknown-cost stop | Aborting transport does not prove a zero charge or exactly-once provider billing. |
+| Evaluation | Sixty unchanged scenarios, frozen baselines, explicit V2 adapter and comparison bridge | Semantic, browser and external checks remain separately assessed; green CI is not product success. |
+| Frontend | Official unmodified shadcn and AI Elements, standard neutral tokens, first dark visit and persistent themes | Independent actual viewport and interaction review remains mandatory. |
+| Delivery | Isolated V2 branch and reviewable GitHub PR | Final appearance/evaluation approval is a human milestone. No automatic merge or production deployment. |
 
-## External dependencies
-
-[eBay production access](https://developer.ebay.com/api-docs/buy/static/buy-requirements.html) requires approval. [Shopify Storefront search](https://shopify.dev/docs/api/storefront/latest/queries/search) covers a configured shop. [Google Merchant API](https://developers.google.com/merchant/api/guides/products/overview) manages a merchant's catalog. None supplies an unrestricted shopping connector merely because its documentation is public.
-
-[OpenAI web search](https://developers.openai.com/api/docs/guides/tools-web-search) can supply research citations. Citations do not prove inventory. [Structured outputs](https://developers.openai.com/api/docs/guides/structured-outputs) can enforce output shape, but factual claims still require evidence.
-
-## Product principles as acceptance criteria
-
-| Principle | Observable behavior |
-| --- | --- |
-| Understand first | A supported clear request produces useful results; an ambiguous request gets one relevant question. |
-| Define preferences | Hard constraints and flexible priorities remain in structured session state and are editable through contextual conversation controls. |
-| Research and plan ahead | Results include source status, tradeoffs, and uncertainty before merchant selection. |
-| Front-load | A short answer and primary recommendation precede detailed evidence. |
-| No scrolling blobs | Small comparisons and disclosure controls replace long generated essays. |
-| Per-user adaptation | Budget, feedback, and detail preferences affect subsequent turns in that session. |
-| Restraint | One response per request, no unsolicited notifications or repeated progress messages. |
+Payments, order placement, unauthorized scraping and new external inference providers are outside this product. The historical stopped OpenAI experiment remains preserved in #48 and is not an application dependency.

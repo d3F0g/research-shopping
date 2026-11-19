@@ -1,0 +1,44 @@
+{
+  "commit": "d858ca7a3d7be0d356c3b26848f708ed90c0b7bb",
+  "composition": "Actual UI/Hono/Exa SDK. Explicit loopback fixture only. No live usefulness established.",
+  "cases": [
+    {
+      "name": "powerbank-range-and-free-followups",
+      "result": "fail",
+      "error": "apiRequestContext.get: Invalid URL\n    at send (/Users/josiahwong/Documents/research-shopping-v2-qa/.audit/fieldnote-v2/qa/extended.mjs:13:697)\n    at async file:///Users/josiahwong/Documents/research-shopping-v2-qa/.audit/fieldnote-v2/qa/extended.mjs:22:67\n    at async check (/Users/josiahwong/Documents/research-shopping-v2-qa/.audit/fieldnote-v2/qa/extended.mjs:12:35)\n    at async file:///Users/josiahwong/Documents/research-shopping-v2-qa/.audit/fieldnote-v2/qa/extended.mjs:22:2"
+    },
+    {
+      "name": "brand-budget-currency-dissatisfaction",
+      "result": "fail",
+      "error": "apiRequestContext.get: Invalid URL\n    at send (/Users/josiahwong/Documents/research-shopping-v2-qa/.audit/fieldnote-v2/qa/extended.mjs:13:697)\n    at async file:///Users/josiahwong/Documents/research-shopping-v2-qa/.audit/fieldnote-v2/qa/extended.mjs:23:70\n    at async check (/Users/josiahwong/Documents/research-shopping-v2-qa/.audit/fieldnote-v2/qa/extended.mjs:12:35)\n    at async file:///Users/josiahwong/Documents/research-shopping-v2-qa/.audit/fieldnote-v2/qa/extended.mjs:23:2"
+    },
+    {
+      "name": "generic-scalar-correction-and-sticky-hard",
+      "result": "fail",
+      "error": "apiRequestContext.get: Invalid URL\n    at /Users/josiahwong/Documents/research-shopping-v2-qa/.audit/fieldnote-v2/qa/extended.mjs:13:465\n    at async send (/Users/josiahwong/Documents/research-shopping-v2-qa/.audit/fieldnote-v2/qa/extended.mjs:13:410)\n    at async file:///Users/josiahwong/Documents/research-shopping-v2-qa/.audit/fieldnote-v2/qa/extended.mjs:24:88\n    at async check (/Users/josiahwong/Documents/research-shopping-v2-qa/.audit/fieldnote-v2/qa/extended.mjs:12:35)\n    at async file:///Users/josiahwong/Documents/research-shopping-v2-qa/.audit/fieldnote-v2/qa/extended.mjs:24:2"
+    },
+    {
+      "name": "compound-no-partial-and-editor-recovery",
+      "result": "fail",
+      "error": "apiRequestContext.get: Invalid URL\n    at /Users/josiahwong/Documents/research-shopping-v2-qa/.audit/fieldnote-v2/qa/extended.mjs:25:99\n    at check (/Users/josiahwong/Documents/research-shopping-v2-qa/.audit/fieldnote-v2/qa/extended.mjs:12:41)\n    at /Users/josiahwong/Documents/research-shopping-v2-qa/.audit/fieldnote-v2/qa/extended.mjs:25:8"
+    },
+    {
+      "name": "keyboard-composer-and-history-links",
+      "result": "fail",
+      "error": "apiRequestContext.get: Invalid URL\n    at stats (/Users/josiahwong/Documents/research-shopping-v2-qa/.audit/fieldnote-v2/qa/extended.mjs:14:51)\n    at /Users/josiahwong/Documents/research-shopping-v2-qa/.audit/fieldnote-v2/qa/extended.mjs:26:81\n    at check (/Users/josiahwong/Documents/research-shopping-v2-qa/.audit/fieldnote-v2/qa/extended.mjs:12:41)\n    at /Users/josiahwong/Documents/research-shopping-v2-qa/.audit/fieldnote-v2/qa/extended.mjs:26:8"
+    },
+    {
+      "name": "new-turn-during-research-and-stop",
+      "result": "fail",
+      "error": "apiRequestContext.get: Invalid URL\n    at /Users/josiahwong/Documents/research-shopping-v2-qa/.audit/fieldnote-v2/qa/extended.mjs:13:465\n    at async send (/Users/josiahwong/Documents/research-shopping-v2-qa/.audit/fieldnote-v2/qa/extended.mjs:13:410)\n    at async file:///Users/josiahwong/Documents/research-shopping-v2-qa/.audit/fieldnote-v2/qa/extended.mjs:27:332\n    at async check (/Users/josiahwong/Documents/research-shopping-v2-qa/.audit/fieldnote-v2/qa/extended.mjs:12:35)\n    at async file:///Users/josiahwong/Documents/research-shopping-v2-qa/.audit/fieldnote-v2/qa/extended.mjs:27:2"
+    },
+    {
+      "name": "short-viewport-and-pay-disclosure",
+      "result": "fail",
+      "error": "AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:\n\n  assert(await page.getByText(/Submitting a shopping request can use paid Exa credits/).isVisible())\n\n    at file:///Users/josiahwong/Documents/research-shopping-v2-qa/.audit/fieldnote-v2/qa/extended.mjs:28:143\n    at async check (file:///Users/josiahwong/Documents/research-shopping-v2-qa/.audit/fieldnote-v2/qa/extended.mjs:12:35)\n    at async file:///Users/josiahwong/Documents/research-shopping-v2-qa/.audit/fieldnote-v2/qa/extended.mjs:28:2"
+    }
+  ],
+  "turns": [],
+  "cleanup": true,
+  "result": "failed"
+}

@@ -1,0 +1,4 @@
+Database migrations applied.
+desktop UI creates an account, keeps guest messages separate, saves both SGD30-40 bounds and fixture research, restores after refresh, isolates another account and deletes saved shopping data.
+Mobile sign-out during actual SDK body consumption aborts the transport, preserves accepted context, and prevents late research publication.
+mobile UI creates an account, keeps guest messages separate, saves both SGD30-40 bounds and fixture research, restores after refresh, isolates another account and deletes saved shopping data.

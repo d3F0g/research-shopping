@@ -1,0 +1,4 @@
+
+> research-shopping@0.1.0 eval:typecheck
+> tsc --noEmit -p evals/v2/tsconfig.json
+

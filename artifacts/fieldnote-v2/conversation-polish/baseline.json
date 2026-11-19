@@ -1,0 +1,18 @@
+{
+  "commit": "d858ca7",
+  "composition": "Reducer reproduction with labeled synthetic retained evidence only",
+  "battery": {
+    "characters": 1947,
+    "words": 293,
+    "hasDetail": false
+  },
+  "brand": {
+    "kind": "preference",
+    "retainedAfterRelease": true
+  },
+  "thousands": {
+    "kind": "research",
+    "budget": null,
+    "pending": null
+  }
+}

@@ -1,0 +1,579 @@
+{
+  "schemaVersion": 1,
+  "judge": {
+    "identity": "independent-qa-agent /root/v2_independent_qa",
+    "provider": "Codex engineering judgment; exact host model identity not exposed; no additional model API",
+    "independentOfImplementation": true,
+    "identityEvidence": "Parent assigned this independent QA agent. This agent authored only QA harnesses and evidence, not application changes. Sampling was purposeful and prior context was known; no blind-study claim.",
+    "implementationAuthorIdentity": "Fieldnote V2 application and evidence implementation agents coordinated by /root",
+    "calibrationStatus": "pending-human-review"
+  },
+  "judgments": [
+    {
+      "label": "1efcf162840e905f7cca5ac3",
+      "packetHash": "19cba8e578a6fb7b3e0109cb2ee808b3f68b521e5502ccb023f2c3be7ef9199b",
+      "scores": {
+        "intentUnderstanding": {
+          "status": "scored",
+          "score": 4,
+          "rationale": "The refusal to recommend accounts for the cap and no-membership instruction.",
+          "uncertain": true
+        },
+        "relevance": {
+          "status": "scored",
+          "score": 3,
+          "rationale": "Candidate compact-printer identity is retained; applicability is unresolved.",
+          "uncertain": true
+        },
+        "usefulness": {
+          "status": "scored",
+          "score": 3,
+          "rationale": "The user can avoid a misleading membership price and unsupported choice.",
+          "uncertain": true
+        },
+        "reasoning": {
+          "status": "scored",
+          "score": 4,
+          "rationale": "GBP 119 nonmember price and missing alternative price directly support the answer.",
+          "uncertain": true
+        },
+        "naturalness": {
+          "status": "scored",
+          "score": 4,
+          "rationale": "The direct explanation fits the user question.",
+          "uncertain": true
+        },
+        "conciseness": {
+          "status": "scored",
+          "score": 4,
+          "rationale": "The answer names the essential blockers in a short paragraph.",
+          "uncertain": true
+        },
+        "adaptation": {
+          "status": "scored",
+          "score": 4,
+          "rationale": "The membership objection changes eligibility honestly.",
+          "uncertain": true
+        },
+        "clarificationNecessity": {
+          "status": "scored",
+          "score": 4,
+          "rationale": "No redundant question delays the result.",
+          "uncertain": true
+        }
+      },
+      "criticalFailures": [],
+      "overall": "useful"
+    },
+    {
+      "label": "1fe107ee291c409e33848418",
+      "packetHash": "6398f63a29ef700e4af8b462c0b3876475928413a407c78b93cc34567e291f01",
+      "scores": {
+        "intentUnderstanding": {
+          "status": "scored",
+          "score": 4,
+          "rationale": "Currency alone resolves the retained original product and both SGD bounds.",
+          "uncertain": true
+        },
+        "relevance": {
+          "status": "scored",
+          "score": 3,
+          "rationale": "Retained literal source describes a power bank, while the complete hard requirement remains unresolved.",
+          "uncertain": true
+        },
+        "usefulness": {
+          "status": "scored",
+          "score": 2,
+          "rationale": "Research progresses to one unresolved alternative without a completed compliant choice.",
+          "uncertain": true
+        },
+        "reasoning": {
+          "status": "scored",
+          "score": 3,
+          "rationale": "The reply avoids a choice when a hard assessment is unknown.",
+          "uncertain": true
+        },
+        "naturalness": {
+          "status": "scored",
+          "score": 3,
+          "rationale": "The currency question fits; the generic result lead is less helpful.",
+          "uncertain": true
+        },
+        "conciseness": {
+          "status": "scored",
+          "score": 3,
+          "rationale": "The question and result lead are brief; actual visual quality is separately checked.",
+          "uncertain": true
+        },
+        "adaptation": {
+          "status": "scored",
+          "score": 4,
+          "rationale": "The short currency answer preserves the original objective and range.",
+          "uncertain": true
+        },
+        "clarificationNecessity": {
+          "status": "scored",
+          "score": 4,
+          "rationale": "Currency affects budget fit and was the only question.",
+          "uncertain": true
+        }
+      },
+      "criticalFailures": [],
+      "overall": "uncertain"
+    },
+    {
+      "label": "4141bb77ad8d5dd0f669845a",
+      "packetHash": "3b6aa6f3a755d56c919fc40c25c2a3e107e1b4318167b086141de412b03edfa2",
+      "scores": {
+        "intentUnderstanding": {
+          "status": "scored",
+          "score": 0,
+          "rationale": "The reply directly violates the updated cap and excluded brand.",
+          "uncertain": true
+        },
+        "relevance": {
+          "status": "scored",
+          "score": 0,
+          "rationale": "A Sony item fails the explicit No Sony requirement.",
+          "uncertain": true
+        },
+        "usefulness": {
+          "status": "scored",
+          "score": 0,
+          "rationale": "The recommendation requires violating two hard requirements.",
+          "uncertain": true
+        },
+        "reasoning": {
+          "status": "scored",
+          "score": 0,
+          "rationale": "Stretching the budget cannot justify ignoring an explicit cap.",
+          "uncertain": true
+        },
+        "naturalness": {
+          "status": "scored",
+          "score": 2,
+          "rationale": "The prose sounds fluent while giving a wrong result.",
+          "uncertain": true
+        },
+        "conciseness": {
+          "status": "scored",
+          "score": 3,
+          "rationale": "The short length does not repair the substantive failure.",
+          "uncertain": true
+        },
+        "adaptation": {
+          "status": "scored",
+          "score": 0,
+          "rationale": "The budget correction and brand exclusion were ignored.",
+          "uncertain": true
+        },
+        "clarificationNecessity": {
+          "status": "scored",
+          "score": 4,
+          "rationale": "No extra question was necessary or asked.",
+          "uncertain": true
+        }
+      },
+      "criticalFailures": [
+        "Recommends excluded Sony product at SGD 399 after explicit SGD 300 cap."
+      ],
+      "overall": "not-useful"
+    },
+    {
+      "label": "56366eadf05725751a86abc8",
+      "packetHash": "eed4b4cd7a72790052e1cebf170fe3977ea5160ecb7258a42eeb5e66dcdcb904",
+      "scores": {
+        "intentUnderstanding": {
+          "status": "scored",
+          "score": 4,
+          "rationale": "The original powerbank request and SGD 30 to 40 range are retained.",
+          "uncertain": true
+        },
+        "relevance": {
+          "status": "not-observable",
+          "score": null,
+          "rationale": "No product result has arrived, so relevance is not observable.",
+          "uncertain": true
+        },
+        "usefulness": {
+          "status": "scored",
+          "score": 2,
+          "rationale": "A truthful start acknowledgment is interim progress, not a completed recommendation.",
+          "uncertain": true
+        },
+        "reasoning": {
+          "status": "not-observable",
+          "score": null,
+          "rationale": "No source-based product reasoning is present yet.",
+          "uncertain": true
+        },
+        "naturalness": {
+          "status": "scored",
+          "score": 4,
+          "rationale": "The acknowledgment naturally follows the currency answer.",
+          "uncertain": true
+        },
+        "conciseness": {
+          "status": "scored",
+          "score": 4,
+          "rationale": "One brief acknowledgment suffices.",
+          "uncertain": true
+        },
+        "adaptation": {
+          "status": "scored",
+          "score": 4,
+          "rationale": "Both range bounds survive the short answer.",
+          "uncertain": true
+        },
+        "clarificationNecessity": {
+          "status": "scored",
+          "score": 4,
+          "rationale": "The only currency question was necessary.",
+          "uncertain": true
+        }
+      },
+      "criticalFailures": [],
+      "overall": "uncertain"
+    },
+    {
+      "label": "5c2adaec6a11a28184881560",
+      "packetHash": "15fedc2b0b9b2de8c23e9d7e7437d80cf84887f2ffc8531fde536513913c6f52",
+      "scores": {
+        "intentUnderstanding": {
+          "status": "scored",
+          "score": 3,
+          "rationale": "Noise and battery-life question is handled from held evidence without new research.",
+          "uncertain": true
+        },
+        "relevance": {
+          "status": "not-observable",
+          "score": null,
+          "rationale": "The declared input suitability gap contains a powerbank rather than an air pump.",
+          "uncertain": true
+        },
+        "usefulness": {
+          "status": "not-observable",
+          "score": null,
+          "rationale": "No matching fixture profile supports an outcome judgment.",
+          "uncertain": true
+        },
+        "reasoning": {
+          "status": "scored",
+          "score": 3,
+          "rationale": "Missing attributes and unusable price are explicit.",
+          "uncertain": true
+        },
+        "naturalness": {
+          "status": "scored",
+          "score": 3,
+          "rationale": "The direct unknown answer is understandable.",
+          "uncertain": true
+        },
+        "conciseness": {
+          "status": "scored",
+          "score": 3,
+          "rationale": "Brief text and separate collapsed detail avoid repetition.",
+          "uncertain": true
+        },
+        "adaptation": {
+          "status": "scored",
+          "score": 3,
+          "rationale": "Existing objective and GBP cap remain unchanged with zero extra calls.",
+          "uncertain": true
+        },
+        "clarificationNecessity": {
+          "status": "scored",
+          "score": 4,
+          "rationale": "No question repeats known information.",
+          "uncertain": true
+        }
+      },
+      "criticalFailures": [],
+      "overall": "uncertain"
+    },
+    {
+      "label": "645ebba8ef42db0fe261b637",
+      "packetHash": "fc8857130f827ae5c602262e415e7ba2ec5308cc3ffedbca1efe3b77de518bde",
+      "scores": {
+        "intentUnderstanding": {
+          "status": "scored",
+          "score": 1,
+          "rationale": "A question about conflicting held sources is accepted as a new hard criterion and researched again.",
+          "uncertain": true
+        },
+        "relevance": {
+          "status": "scored",
+          "score": 3,
+          "rationale": "The synthetic backpack sources match the class; heavy-rain fit is disputed.",
+          "uncertain": true
+        },
+        "usefulness": {
+          "status": "scored",
+          "score": 1,
+          "rationale": "The reply does not directly resolve the clear waterproof versus splash-resistant question.",
+          "uncertain": true
+        },
+        "reasoning": {
+          "status": "scored",
+          "score": 3,
+          "rationale": "The conflict and source caveats survive and no compliant choice is fabricated.",
+          "uncertain": true
+        },
+        "naturalness": {
+          "status": "scored",
+          "score": 1,
+          "rationale": "Generic repeated comparisons prose does not answer the question naturally.",
+          "uncertain": true
+        },
+        "conciseness": {
+          "status": "scored",
+          "score": 2,
+          "rationale": "The direct evidence question triggers another full research response.",
+          "uncertain": true
+        },
+        "adaptation": {
+          "status": "scored",
+          "score": 1,
+          "rationale": "The question mutates current hard requirements and adds one provider dispatch.",
+          "uncertain": true
+        },
+        "clarificationNecessity": {
+          "status": "scored",
+          "score": 4,
+          "rationale": "No unnecessary clarification question was asked, although handling was wrong.",
+          "uncertain": true
+        }
+      },
+      "criticalFailures": [
+        "Held-source question is reclassified as a hard requirement and dispatches an extra local SDK operation. No actual paid charge was made in this evaluation."
+      ],
+      "overall": "not-useful"
+    },
+    {
+      "label": "92f16c7f53de00f766c53389",
+      "packetHash": "6cd3ff75ba059faf318e4e1cb823f4ab5deeb21aca69cbf6664a49de12becca7",
+      "scores": {
+        "intentUnderstanding": {
+          "status": "scored",
+          "score": 3,
+          "rationale": "The open loom request and explicit inkle correction are retained.",
+          "uncertain": true
+        },
+        "relevance": {
+          "status": "not-observable",
+          "score": null,
+          "rationale": "Material explicitly declares no matching product profile; returned powerbank cannot establish relevance.",
+          "uncertain": true
+        },
+        "usefulness": {
+          "status": "not-observable",
+          "score": null,
+          "rationale": "Unsuitable fixed input prevents a fair shopping-usefulness assessment.",
+          "uncertain": true
+        },
+        "reasoning": {
+          "status": "scored",
+          "score": 3,
+          "rationale": "The app withholds a choice and exposes unknown hard fit despite the unsuitable native match.",
+          "uncertain": true
+        },
+        "naturalness": {
+          "status": "scored",
+          "score": 2,
+          "rationale": "A repeated generic comparisons lead is mechanical.",
+          "uncertain": true
+        },
+        "conciseness": {
+          "status": "scored",
+          "score": 3,
+          "rationale": "The lead is compact; full details remain separate.",
+          "uncertain": true
+        },
+        "adaptation": {
+          "status": "scored",
+          "score": 3,
+          "rationale": "Both product wording and exclusions survive without a category gate.",
+          "uncertain": true
+        },
+        "clarificationNecessity": {
+          "status": "scored",
+          "score": 4,
+          "rationale": "No redundant optional survey is introduced.",
+          "uncertain": true
+        }
+      },
+      "criticalFailures": [],
+      "overall": "uncertain"
+    },
+    {
+      "label": "93bef59915bb8239fe12034f",
+      "packetHash": "3db03a02ed1541b7ef98e8e679412ed4d0deff54d2cbcf8ff093a289be8b6003",
+      "scores": {
+        "intentUnderstanding": {
+          "status": "scored",
+          "score": 3,
+          "rationale": "First and third are selected; the second is absent from the held reply.",
+          "uncertain": true
+        },
+        "relevance": {
+          "status": "scored",
+          "score": 3,
+          "rationale": "Literal fixture sources describe binoculars for birdwatching, though full fit is unresolved.",
+          "uncertain": true
+        },
+        "usefulness": {
+          "status": "scored",
+          "score": 2,
+          "rationale": "The source details compare observed prices but the visible lead mostly repeats assessment status.",
+          "uncertain": true
+        },
+        "reasoning": {
+          "status": "scored",
+          "score": 3,
+          "rationale": "No unsupported winner is declared and hard unknowns remain explicit.",
+          "uncertain": true
+        },
+        "naturalness": {
+          "status": "scored",
+          "score": 2,
+          "rationale": "Assessment and exact-variant language reads mechanically.",
+          "uncertain": true
+        },
+        "conciseness": {
+          "status": "scored",
+          "score": 3,
+          "rationale": "The qualified detail is collapsed and the visible lead stays concise.",
+          "uncertain": true
+        },
+        "adaptation": {
+          "status": "scored",
+          "score": 3,
+          "rationale": "The contextual comparison uses zero new provider dispatches.",
+          "uncertain": true
+        },
+        "clarificationNecessity": {
+          "status": "scored",
+          "score": 4,
+          "rationale": "No unnecessary clarification is added for a clear ordinal reference.",
+          "uncertain": true
+        }
+      },
+      "criticalFailures": [],
+      "overall": "uncertain"
+    },
+    {
+      "label": "c094bb5fd5b05f8365b0405e",
+      "packetHash": "de91fe0e1c8cd1be8774a3569adbf243e49c1ed35892d7e7a5c201d1b8cc6eb3",
+      "scores": {
+        "intentUnderstanding": {
+          "status": "scored",
+          "score": 4,
+          "rationale": "It compares exactly first and third and honors short length.",
+          "uncertain": true
+        },
+        "relevance": {
+          "status": "scored",
+          "score": 4,
+          "rationale": "Both alternatives are the requested binocular class in retained synthetic evidence.",
+          "uncertain": true
+        },
+        "usefulness": {
+          "status": "scored",
+          "score": 3,
+          "rationale": "The field-of-view versus weight tradeoff supports a conditional decision.",
+          "uncertain": true
+        },
+        "reasoning": {
+          "status": "scored",
+          "score": 3,
+          "rationale": "Wider view helping tracking is a plausible inference, not explicitly established by these source fragments; uncertainty remains.",
+          "uncertain": true
+        },
+        "naturalness": {
+          "status": "scored",
+          "score": 4,
+          "rationale": "The response reads like a direct contextual comparison.",
+          "uncertain": true
+        },
+        "conciseness": {
+          "status": "scored",
+          "score": 4,
+          "rationale": "It is concise and exposes the missing sharpness winner.",
+          "uncertain": true
+        },
+        "adaptation": {
+          "status": "scored",
+          "score": 4,
+          "rationale": "Held comparison spends zero new research calls and adapts to short length.",
+          "uncertain": true
+        },
+        "clarificationNecessity": {
+          "status": "scored",
+          "score": 4,
+          "rationale": "The clear reference needs no question.",
+          "uncertain": true
+        }
+      },
+      "criticalFailures": [],
+      "overall": "useful"
+    },
+    {
+      "label": "f256a5a3d0c685ebe1c40e53",
+      "packetHash": "d67684ebd9c8434698ba74173efcbf07a1d69e061da42dbb946a8f3ba377aac5",
+      "scores": {
+        "intentUnderstanding": {
+          "status": "scored",
+          "score": 1,
+          "rationale": "A quoted product price is interpreted as a new budget maximum despite no budget-change instruction.",
+          "uncertain": true
+        },
+        "relevance": {
+          "status": "not-observable",
+          "score": null,
+          "rationale": "The fixed input explicitly lacks a matching compact-printer profile.",
+          "uncertain": true
+        },
+        "usefulness": {
+          "status": "not-observable",
+          "score": null,
+          "rationale": "Unsuitable fixed product evidence prevents a fair completed-usefulness score.",
+          "uncertain": true
+        },
+        "reasoning": {
+          "status": "scored",
+          "score": 2,
+          "rationale": "The app withholds an unsupported choice but changes the monetary premise incorrectly.",
+          "uncertain": true
+        },
+        "naturalness": {
+          "status": "scored",
+          "score": 1,
+          "rationale": "The generic result does not acknowledge product selection or explain the membership condition.",
+          "uncertain": true
+        },
+        "conciseness": {
+          "status": "scored",
+          "score": 2,
+          "rationale": "Another result message replaces a direct contextual reply.",
+          "uncertain": true
+        },
+        "adaptation": {
+          "status": "scored",
+          "score": 0,
+          "rationale": "Accepted GBP maximum silently changes from 100 to 89.",
+          "uncertain": true
+        },
+        "clarificationNecessity": {
+          "status": "scored",
+          "score": 4,
+          "rationale": "No repeated clarification occurs.",
+          "uncertain": true
+        }
+      },
+      "criticalFailures": [
+        "Accepted maximum changes from GBP 100 to GBP 89 when the user merely refers to a product price."
+      ],
+      "overall": "not-useful"
+    }
+  ]
+}

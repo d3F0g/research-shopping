@@ -1,0 +1,27 @@
+{
+  "checks": 7,
+  "providerCalls": 7,
+  "cutObservation": {
+    "choice": null,
+    "eligible": false,
+    "sourceCut": true
+  },
+  "failures": [
+    {
+      "mode": "error",
+      "reason": "provider-error"
+    },
+    {
+      "mode": "malformed",
+      "reason": "invalid-response"
+    },
+    {
+      "mode": "empty",
+      "reason": "empty"
+    },
+    {
+      "mode": "hang",
+      "reason": "timeout"
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "status": "passed",
+  "proof": [
+    "desktop UI creates an account, keeps guest messages separate, saves both SGD30-40 bounds and fixture research, restores after refresh, isolates another account and deletes saved shopping data.",
+    "Mobile sign-out during actual SDK body consumption aborts the transport, preserves accepted context, and prevents late research publication.",
+    "mobile UI creates an account, keeps guest messages separate, saves both SGD30-40 bounds and fixture research, restores after refresh, isolates another account and deletes saved shopping data."
+  ],
+  "limits": [
+    "Actual browser, Hono, Better Auth, PostgreSQL and Exa SDK with an explicit local test substitute.",
+    "No live Exa operation or current merchant offer is established.",
+    "Author verification. Independent visual and security review remain required."
+  ]
+}

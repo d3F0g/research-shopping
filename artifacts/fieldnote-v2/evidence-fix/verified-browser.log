@@ -1,0 +1,5 @@
+
+> research-shopping@0.1.0 eval:browser
+> EXA_RESEARCH_ENABLED=false node --import tsx evals/v2/browser.ts
+
+{"artifact":"/Users/josiahwong/Documents/research-shopping-v2-evidence-fix/artifacts/fieldnote-v2/evidence-fix/verified-browser/proof.json","result":"passed","screenshots":15,"failures":[]}

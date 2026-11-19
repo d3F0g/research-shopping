@@ -1,0 +1,333 @@
+{
+  "repo": "/Users/josiahwong/Documents/research-shopping-v2",
+  "apiPort": 3273,
+  "webPort": 5383,
+  "artifacts": "/Users/josiahwong/Documents/research-shopping-v2-verification/artifacts/fieldnote-v2/verification-skill/attempt-03",
+  "commit": "d8a0971ba0ac0888e328234fa00de545ec0fe4be",
+  "worktreeStatus": "M AGENTS.md\n M package.json\n M src/client/App.tsx\n M src/client/ResearchAnswer.tsx\n?? artifacts/fieldnote-v2/accounts/restart.json\n?? artifacts/fieldnote-v2/desktop-empty.png\n?? artifacts/fieldnote-v2/desktop-evidence.png\n?? artifacts/fieldnote-v2/desktop-light-ordinary.png\n?? artifacts/fieldnote-v2/desktop-research.png\n?? artifacts/fieldnote-v2/mobile-empty.png\n?? artifacts/fieldnote-v2/mobile-evidence.png\n?? artifacts/fieldnote-v2/mobile-light-ordinary.png\n?? artifacts/fieldnote-v2/mobile-research.png\n?? src/client/useFieldnote.ts",
+  "composition": "Automated test only. Actual Hono + Exa SDK against owned loopback substitute.",
+  "result": "failed",
+  "cleanup": true,
+  "processes": [
+    {
+      "name": "test-api",
+      "pid": 55755
+    },
+    {
+      "name": "vite",
+      "pid": 55756
+    }
+  ],
+  "journeys": [
+    {
+      "viewport": {
+        "name": "desktop",
+        "width": 1440,
+        "height": 1000
+      },
+      "result": "passed",
+      "checks": [
+        "Fresh OS-light context defaults dark; light and dark selections survive refresh.",
+        "Typed currency preserves request and both bounds, automatically researches once, labels fixture evidence and places the leading recommendation inside the viewport before manual scrolling.",
+        "Evidence exposes literal fixture quotation and a safe retained source link; held comparison uses zero provider calls; contextual editor updates maximum to 50 while retaining minimum 30, SGD and historical messages.",
+        "Provider failure retains the request without fixture fallback; Stop then New chat prevents a held browser research request from dispatching or publishing late results.",
+        "Separate browser context does not inherit or observe another session."
+      ],
+      "composer": {
+        "textbox": {
+          "x": 361,
+          "y": 853,
+          "width": 718,
+          "height": 64,
+          "right": 1079,
+          "bottom": 917,
+          "viewportWidth": 1440,
+          "viewportHeight": 1000,
+          "clipTop": 0,
+          "clipBottom": 1000
+        },
+        "send": {
+          "x": 1037,
+          "y": 923,
+          "width": 32,
+          "height": 32,
+          "right": 1069,
+          "bottom": 955,
+          "viewportWidth": 1440,
+          "viewportHeight": 1000,
+          "clipTop": 0,
+          "clipBottom": 1000
+        }
+      },
+      "initialGeometry": {
+        "answer": {
+          "x": 361,
+          "y": 81.25,
+          "width": 718,
+          "height": 45.5,
+          "right": 1079,
+          "bottom": 126.75,
+          "viewportWidth": 1440,
+          "viewportHeight": 1000,
+          "clipTop": 56,
+          "clipBottom": 840
+        },
+        "title": {
+          "x": 372,
+          "y": 186.75,
+          "width": 180,
+          "height": 19.25,
+          "right": 552,
+          "bottom": 206,
+          "viewportWidth": 1440,
+          "viewportHeight": 1000,
+          "clipTop": 56,
+          "clipBottom": 840
+        },
+        "composer": {
+          "textbox": {
+            "x": 361,
+            "y": 853,
+            "width": 718,
+            "height": 64,
+            "right": 1079,
+            "bottom": 917,
+            "viewportWidth": 1440,
+            "viewportHeight": 1000,
+            "clipTop": 0,
+            "clipBottom": 1000
+          },
+          "send": {
+            "x": 1037,
+            "y": 923,
+            "width": 32,
+            "height": 32,
+            "right": 1069,
+            "bottom": 955,
+            "viewportWidth": 1440,
+            "viewportHeight": 1000,
+            "clipTop": 0,
+            "clipBottom": 1000
+          }
+        }
+      }
+    },
+    {
+      "viewport": {
+        "name": "mobile",
+        "width": 390,
+        "height": 844
+      },
+      "result": "passed",
+      "checks": [
+        "Fresh OS-light context defaults dark; light and dark selections survive refresh.",
+        "Typed currency preserves request and both bounds, automatically researches once, labels fixture evidence and places the leading recommendation inside the viewport before manual scrolling.",
+        "Evidence exposes literal fixture quotation and a safe retained source link; held comparison uses zero provider calls; contextual editor updates maximum to 50 while retaining minimum 30, SGD and historical messages.",
+        "Provider failure retains the request without fixture fallback; Stop then New chat prevents a held browser research request from dispatching or publishing late results.",
+        "Separate browser context does not inherit or observe another session."
+      ],
+      "composer": {
+        "textbox": {
+          "x": 13,
+          "y": 681,
+          "width": 364,
+          "height": 64,
+          "right": 377,
+          "bottom": 745,
+          "viewportWidth": 390,
+          "viewportHeight": 844,
+          "clipTop": 0,
+          "clipBottom": 844
+        },
+        "send": {
+          "x": 335,
+          "y": 751,
+          "width": 32,
+          "height": 32,
+          "right": 367,
+          "bottom": 783,
+          "viewportWidth": 390,
+          "viewportHeight": 844,
+          "clipTop": 0,
+          "clipBottom": 844
+        }
+      },
+      "initialGeometry": {
+        "answer": {
+          "x": 17,
+          "y": 81,
+          "width": 356,
+          "height": 68.25,
+          "right": 373,
+          "bottom": 149.25,
+          "viewportWidth": 390,
+          "viewportHeight": 844,
+          "clipTop": 56,
+          "clipBottom": 668
+        },
+        "title": {
+          "x": 28,
+          "y": 209.25,
+          "width": 180,
+          "height": 19.25,
+          "right": 208,
+          "bottom": 228.5,
+          "viewportWidth": 390,
+          "viewportHeight": 844,
+          "clipTop": 56,
+          "clipBottom": 668
+        },
+        "composer": {
+          "textbox": {
+            "x": 13,
+            "y": 681,
+            "width": 364,
+            "height": 64,
+            "right": 377,
+            "bottom": 745,
+            "viewportWidth": 390,
+            "viewportHeight": 844,
+            "clipTop": 0,
+            "clipBottom": 844
+          },
+          "send": {
+            "x": 335,
+            "y": 751,
+            "width": 32,
+            "height": 32,
+            "right": 367,
+            "bottom": 783,
+            "viewportWidth": 390,
+            "viewportHeight": 844,
+            "clipTop": 0,
+            "clipBottom": 844
+          }
+        }
+      }
+    },
+    {
+      "viewport": {
+        "name": "short-mobile",
+        "width": 390,
+        "height": 600
+      },
+      "result": "passed",
+      "checks": [
+        "Fresh OS-light context defaults dark; light and dark selections survive refresh.",
+        "Failed source illustration is removed; product, evidence and source link remain.",
+        "Typed currency preserves request and both bounds, automatically researches once, labels fixture evidence and places the leading recommendation inside the viewport before manual scrolling.",
+        "Evidence exposes literal fixture quotation and a safe retained source link; held comparison uses zero provider calls; contextual editor updates maximum to 50 while retaining minimum 30, SGD and historical messages.",
+        "Provider failure retains the request without fixture fallback; Stop then New chat prevents a held browser research request from dispatching or publishing late results.",
+        "Separate browser context does not inherit or observe another session."
+      ],
+      "composer": {
+        "textbox": {
+          "x": 13,
+          "y": 437,
+          "width": 364,
+          "height": 64,
+          "right": 377,
+          "bottom": 501,
+          "viewportWidth": 390,
+          "viewportHeight": 600,
+          "clipTop": 0,
+          "clipBottom": 600
+        },
+        "send": {
+          "x": 335,
+          "y": 507,
+          "width": 32,
+          "height": 32,
+          "right": 367,
+          "bottom": 539,
+          "viewportWidth": 390,
+          "viewportHeight": 600,
+          "clipTop": 0,
+          "clipBottom": 600
+        }
+      },
+      "initialGeometry": {
+        "answer": {
+          "x": 17,
+          "y": 81,
+          "width": 356,
+          "height": 68.25,
+          "right": 373,
+          "bottom": 149.25,
+          "viewportWidth": 390,
+          "viewportHeight": 600,
+          "clipTop": 56,
+          "clipBottom": 424
+        },
+        "title": {
+          "x": 28,
+          "y": 209.25,
+          "width": 180,
+          "height": 19.25,
+          "right": 208,
+          "bottom": 228.5,
+          "viewportWidth": 390,
+          "viewportHeight": 600,
+          "clipTop": 56,
+          "clipBottom": 424
+        },
+        "composer": {
+          "textbox": {
+            "x": 13,
+            "y": 437,
+            "width": 364,
+            "height": 64,
+            "right": 377,
+            "bottom": 501,
+            "viewportWidth": 390,
+            "viewportHeight": 600,
+            "clipTop": 0,
+            "clipBottom": 600
+          },
+          "send": {
+            "x": 335,
+            "y": 507,
+            "width": 32,
+            "height": 32,
+            "right": 367,
+            "bottom": 539,
+            "viewportWidth": 390,
+            "viewportHeight": 600,
+            "clipTop": 0,
+            "clipBottom": 600
+          }
+        }
+      }
+    }
+  ],
+  "limits": [
+    "No live Exa retrieval, billing, merchant reachability, inventory, semantic factuality, or PostgreSQL/account acceptance.",
+    "Cancellation at the browser transport boundary does not establish SDK socket cancellation. Run the package API tests.",
+    "Screenshots require independent visual inspection. This helper does not approve the final V2 PR."
+  ],
+  "environment": {
+    "inherited": [
+      "API_PORT",
+      "EXA_RESEARCH_ENABLED",
+      "HOME",
+      "LANG",
+      "LC_ALL",
+      "NODE_ENV",
+      "PATH",
+      "TMPDIR",
+      "VITE_API_PORT",
+      "WEB_PORT"
+    ],
+    "privateProviderAndDatabaseVariables": "not inherited",
+    "environmentFiles": "not loaded"
+  },
+  "health": {
+    "status": "ok",
+    "mode": "research",
+    "provider": "exa",
+    "automaticPaidChecks": false
+  },
+  "commitAfter": "d8a0971ba0ac0888e328234fa00de545ec0fe4be",
+  "worktreeStatusAfter": "M AGENTS.md\n M package.json\n M src/client/AccountControl.tsx\n M src/client/App.tsx\n M src/client/ResearchAnswer.tsx\n?? artifacts/fieldnote-v2/accounts/restart.json\n?? artifacts/fieldnote-v2/desktop-empty.png\n?? artifacts/fieldnote-v2/desktop-evidence.png\n?? artifacts/fieldnote-v2/desktop-light-ordinary.png\n?? artifacts/fieldnote-v2/desktop-research.png\n?? artifacts/fieldnote-v2/mobile-empty.png\n?? artifacts/fieldnote-v2/mobile-evidence.png\n?? artifacts/fieldnote-v2/mobile-light-ordinary.png\n?? artifacts/fieldnote-v2/mobile-research.png\n?? src/client/useFieldnote.ts",
+  "error": "AssertionError [ERR_ASSERTION]: Working-tree status changed during verification\n+ actual - expected\n\n  'M AGENTS.md\\n' +\n    ' M package.json\\n' +\n+   ' M src/client/AccountControl.tsx\\n' +\n    ' M src/client/App.tsx\\n' +\n    ' M src/client/ResearchAnswer.tsx\\n' +\n    '?? artifacts/fieldnote-v2/accounts/restart.json\\n' +\n    '?? artifacts/fieldnote-v2/desktop-empty.png\\n' +\n    '?? artifacts/fieldnote-v2/desktop-evidence.png\\n' +\n\n    at file:///Users/josiahwong/Documents/research-shopping-v2-verification/.agents/skills/verify-research-shopping/scripts/smoke.mjs:311:10"
+}

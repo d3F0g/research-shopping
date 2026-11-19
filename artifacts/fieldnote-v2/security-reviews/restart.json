@@ -1,0 +1,14 @@
+{
+  "status": "passed",
+  "scope": "Actual normal API entry point, Better Auth cookies and owned temporary PostgreSQL17",
+  "proof": [
+    "The actual API process restored the original typed currency draft after restart.",
+    "The actual server resumed SGD30-40, retained both bounds and saved an honest disabled-provider response without any paid call.",
+    "A PostgreSQL restart and a second API process restart preserved the same account, accepted intent and immutable messages.",
+    "Shopping deletion survived restart while the sign-in account remained valid."
+  ],
+  "limits": [
+    "Exa is disabled. This does not establish live research usefulness.",
+    "Independent security reviewer executed this process and database restart reproduction."
+  ]
+}

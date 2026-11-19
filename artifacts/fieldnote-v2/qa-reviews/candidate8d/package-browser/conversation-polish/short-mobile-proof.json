@@ -1,0 +1,69 @@
+{
+  "applicationCommit": "8d679f3a82663c4fc4b8d3533c0ea15ad000ce6d",
+  "sourceStatus": "?? .audit/fieldnote-v2/qa/",
+  "viewport": {
+    "name": "short-mobile",
+    "width": 390,
+    "height": 600
+  },
+  "composition": "Actual browser and Hono service with the Exa SDK using a local labeled substitute and in-memory quota.",
+  "heldCallsBefore": 20,
+  "heldCallsAfter": 20,
+  "battery": {
+    "id": "5785ec08-e1a4-4180-95e4-cfe389f436a5-reply",
+    "role": "assistant",
+    "text": "Fixture data. Fixture Powerbank Model A: Battery life: (AI source assessment supported, exact-variant)\nSame assessment status for Fixture Powerbank Model B and Fixture Powerbank Model C.\n\nFull findings and price conditions are in the details. Stock and delivery remain unverified.",
+    "detail": "Fixture data. Fixture Powerbank Model A: Battery life: Fixture data: the cited Model A passage supports this assessment. (supported). \"Fixture data: Fixture Powerbank Model A is a USB-C powerbank, 10000 mAh, with up to 12 hours battery life. Model A costs SGD 35 for one unit, tax included.\" (https://manufacturer.com/model-a) Observed SGD 35. tax included Fixture data: the cited Model A passage supports this assessment. (supported). \"Fixture data: Fixture Powerbank Model A is a USB-C powerbank, 10000 mAh, with up to 12 hours battery life. Model A costs SGD 35 for one unit, tax included.\" (https://manufacturer.com/model-a) Stock and delivery remain unverified.\n\nFixture Powerbank Model B: Battery life: Fixture data: the cited Model A passage supports this assessment. (supported). \"Fixture data: Fixture Powerbank Model B is a USB-C powerbank, 10000 mAh, with up to 12 hours battery life. Model B costs SGD 36 for one unit, tax included.\" (https://manufacturer.com/model-b) Observed SGD 36. tax included Fixture data: the cited Model A passage supports this assessment. (supported). \"Fixture data: Fixture Powerbank Model B is a USB-C powerbank, 10000 mAh, with up to 12 hours battery life. Model B costs SGD 36 for one unit, tax included.\" (https://manufacturer.com/model-b) Stock and delivery remain unverified.\n\nFixture Powerbank Model C: Battery life: Fixture data: the cited Model A passage supports this assessment. (supported). \"Fixture data: Fixture Powerbank Model C is a USB-C powerbank, 10000 mAh, with up to 12 hours battery life. Model C costs SGD 37 for one unit, tax included.\" (https://manufacturer.com/model-c) Observed SGD 37. tax included Fixture data: the cited Model A passage supports this assessment. (supported). \"Fixture data: Fixture Powerbank Model C is a USB-C powerbank, 10000 mAh, with up to 12 hours battery life. Model C costs SGD 37 for one unit, tax included.\" (https://manufacturer.com/model-c) Stock and delivery remain unverified."
+  },
+  "comparison": {
+    "id": "afb19f96-41dd-4193-b078-edd0c4b926c1-reply",
+    "role": "assistant",
+    "text": "Fixture data. Fixture Powerbank Model A: Battery life: (AI source assessment supported, exact-variant)\nSame assessment status for Fixture Powerbank Model B.\n\nFull findings and price conditions are in the details. Stock and delivery remain unverified.",
+    "detail": "Fixture data. Fixture Powerbank Model A: Battery life: Fixture data: the cited Model A passage supports this assessment. (supported). \"Fixture data: Fixture Powerbank Model A is a USB-C powerbank, 10000 mAh, with up to 12 hours battery life. Model A costs SGD 35 for one unit, tax included.\" (https://manufacturer.com/model-a) Observed SGD 35. tax included Fixture data: the cited Model A passage supports this assessment. (supported). \"Fixture data: Fixture Powerbank Model A is a USB-C powerbank, 10000 mAh, with up to 12 hours battery life. Model A costs SGD 35 for one unit, tax included.\" (https://manufacturer.com/model-a) Stock and delivery remain unverified.\n\nFixture Powerbank Model B: Battery life: Fixture data: the cited Model A passage supports this assessment. (supported). \"Fixture data: Fixture Powerbank Model B is a USB-C powerbank, 10000 mAh, with up to 12 hours battery life. Model B costs SGD 36 for one unit, tax included.\" (https://manufacturer.com/model-b) Observed SGD 36. tax included Fixture data: the cited Model A passage supports this assessment. (supported). \"Fixture data: Fixture Powerbank Model B is a USB-C powerbank, 10000 mAh, with up to 12 hours battery life. Model B costs SGD 36 for one unit, tax included.\" (https://manufacturer.com/model-b) Stock and delivery remain unverified."
+  },
+  "disclosureHitTest": {
+    "width": 195.609375,
+    "height": 28,
+    "unobscured": true
+  },
+  "acceptedIntentAfterBrandRelease": {
+    "intentVersion": 2,
+    "originalText": "I want to buy a powerbank around $30-40.",
+    "productDescription": "I want to buy a powerbank around $30-40.\nOnly USB-C.\nNo Sony.",
+    "requirements": [
+      {
+        "id": "request-c0688548-ace8-4682-9f2a-56b597e6f159",
+        "text": "I want to buy a powerbank around $30-40.",
+        "strength": "hard",
+        "originMessageId": "c0688548-ace8-4682-9f2a-56b597e6f159",
+        "kind": "request"
+      },
+      {
+        "id": "requirement-d7ab9f5b-5711-41b6-8219-5a525cfc6426",
+        "text": "Only USB-C.",
+        "strength": "hard",
+        "originMessageId": "d7ab9f5b-5711-41b6-8219-5a525cfc6426",
+        "kind": "preference"
+      },
+      {
+        "id": "requirement-d3b258f1-55a5-490b-9cd7-f5b8d9e57585",
+        "text": "No Sony.",
+        "strength": "hard",
+        "originMessageId": "d3b258f1-55a5-490b-9cd7-f5b8d9e57585",
+        "kind": "exclusion"
+      }
+    ],
+    "budget": {
+      "minimum": 30,
+      "maximum": 40,
+      "currency": "SGD"
+    },
+    "region": null,
+    "responseLength": "expanded"
+  },
+  "historicalSnapshotsUnchanged": true,
+  "limits": [
+    "No live Exa, semantic factuality, merchant availability or account persistence acceptance.",
+    "Independent visual review remains required."
+  ]
+}

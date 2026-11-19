@@ -1,0 +1,281 @@
+{
+  "head": "520a20dc81f0c0230d497ade0bc4f2bdd605f675",
+  "input": {
+    "answer": {
+      "products": [
+        {
+          "id": "model-a",
+          "name": "Fixture Powerbank Model A",
+          "variant": "Model A",
+          "identity": {
+            "status": "supported",
+            "scope": "exact-variant",
+            "rationale": "Fixture data: the cited Model A passage supports this assessment.",
+            "support": [
+              {
+                "url": "https://manufacturer.com/model-a",
+                "quote": "Fixture data: Fixture Powerbank Model A is a USB-C powerbank."
+              }
+            ]
+          },
+          "requestMatch": {
+            "status": "supported",
+            "scope": "exact-variant",
+            "rationale": "Fixture data: the cited Model A passage supports this assessment.",
+            "support": [
+              {
+                "url": "https://manufacturer.com/model-a",
+                "quote": "Fixture data: Fixture Powerbank Model A is a USB-C powerbank."
+              }
+            ]
+          },
+          "criteria": [
+            {
+              "criterionId": "request-06645256-9b41-4265-b2db-400e81162669",
+              "assessment": {
+                "status": "supported",
+                "scope": "exact-variant",
+                "rationale": "Fixture data: the cited Model A passage supports this assessment.",
+                "support": [
+                  {
+                    "url": "https://manufacturer.com/model-a",
+                    "quote": "Fixture data: Fixture Powerbank Model A is a USB-C powerbank."
+                  }
+                ]
+              }
+            }
+          ],
+          "attributes": [
+            {
+              "name": "Battery life",
+              "assessment": {
+                "status": "supported",
+                "scope": "exact-variant",
+                "rationale": "Fixture data: the cited Model A passage supports this assessment.",
+                "support": [
+                  {
+                    "url": "https://manufacturer.com/model-a",
+                    "quote": "Fixture data: Fixture Powerbank Model A is a USB-C powerbank."
+                  }
+                ]
+              }
+            }
+          ],
+          "price": {
+            "amount": 35,
+            "currency": "SGD",
+            "variant": "Model A",
+            "conditions": [
+              "tax included"
+            ],
+            "conditionsResolved": true,
+            "assessment": {
+              "status": "supported",
+              "scope": "exact-variant",
+              "rationale": "Fixture data: the cited Model A passage supports this assessment.",
+              "support": [
+                {
+                  "url": "https://manufacturer.com/model-a",
+                  "quote": "Fixture data: Fixture Powerbank Model A is a USB-C powerbank."
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "choice": {
+        "productId": "model-a"
+      },
+      "limitations": [
+        "Fixture data only. No live research or merchant verification."
+      ]
+    },
+    "citations": [
+      {
+        "url": "https://manufacturer.com/model-a",
+        "title": "Fixture data model page",
+        "text": "Fixture data: Fixture Powerbank Model A is a USB-C powerbank.",
+        "image": "https://manufacturer.com/model-a.png"
+      },
+      {
+        "url": "https://manufacturer.com/actual-price",
+        "title": "Fixture actual price",
+        "text": "Model A costs SGD 35 for one unit, tax included."
+      }
+    ],
+    "costDollars": {
+      "total": 0.005
+    },
+    "requestId": "fixture-request"
+  },
+  "result": {
+    "status": "ready",
+    "research": {
+      "version": 2,
+      "evidenceVersion": 2,
+      "dataKind": "web-research",
+      "retrievedAt": "2026-11-19T07:12:25.246Z",
+      "intent": {
+        "intentVersion": 2,
+        "originalText": "a USB-C powerbank between SGD30 and40",
+        "productDescription": "a USB-C powerbank between SGD30 and40",
+        "requirements": [
+          {
+            "id": "request-06645256-9b41-4265-b2db-400e81162669",
+            "text": "a USB-C powerbank between SGD30 and40",
+            "strength": "hard",
+            "originMessageId": "06645256-9b41-4265-b2db-400e81162669",
+            "kind": "request"
+          }
+        ],
+        "budget": {
+          "minimum": 30,
+          "maximum": 40,
+          "currency": "SGD"
+        },
+        "region": null,
+        "responseLength": "concise"
+      },
+      "summary": "Fixture Powerbank Model A is a source-supported option for your requirements. Fixture data: the cited Model A passage supports this assessment.",
+      "products": [
+        {
+          "id": "model-a",
+          "name": "Fixture Powerbank Model A",
+          "variant": "Model A",
+          "identity": {
+            "status": "supported",
+            "scope": "exact-variant",
+            "rationale": "Fixture data: the cited Model A passage supports this assessment.",
+            "support": [
+              {
+                "sourceId": "source-1",
+                "originalQuote": "Fixture data: Fixture Powerbank Model A is a USB-C powerbank.",
+                "originalStart": 0,
+                "originalEnd": 61,
+                "quote": "Fixture data: Fixture Powerbank Model A is a USB-C powerbank.",
+                "start": 0,
+                "end": 61
+              }
+            ]
+          },
+          "requestMatch": {
+            "status": "supported",
+            "scope": "exact-variant",
+            "rationale": "Fixture data: the cited Model A passage supports this assessment.",
+            "support": [
+              {
+                "sourceId": "source-1",
+                "originalQuote": "Fixture data: Fixture Powerbank Model A is a USB-C powerbank.",
+                "originalStart": 0,
+                "originalEnd": 61,
+                "quote": "Fixture data: Fixture Powerbank Model A is a USB-C powerbank.",
+                "start": 0,
+                "end": 61
+              }
+            ]
+          },
+          "requirements": [
+            {
+              "requirementId": "request-06645256-9b41-4265-b2db-400e81162669",
+              "assessment": {
+                "status": "supported",
+                "scope": "exact-variant",
+                "rationale": "Fixture data: the cited Model A passage supports this assessment.",
+                "support": [
+                  {
+                    "sourceId": "source-1",
+                    "originalQuote": "Fixture data: Fixture Powerbank Model A is a USB-C powerbank.",
+                    "originalStart": 0,
+                    "originalEnd": 61,
+                    "quote": "Fixture data: Fixture Powerbank Model A is a USB-C powerbank.",
+                    "start": 0,
+                    "end": 61
+                  }
+                ]
+              }
+            }
+          ],
+          "attributes": [
+            {
+              "name": "Battery life",
+              "assessment": {
+                "status": "supported",
+                "scope": "exact-variant",
+                "rationale": "Fixture data: the cited Model A passage supports this assessment.",
+                "support": [
+                  {
+                    "sourceId": "source-1",
+                    "originalQuote": "Fixture data: Fixture Powerbank Model A is a USB-C powerbank.",
+                    "originalStart": 0,
+                    "originalEnd": 61,
+                    "quote": "Fixture data: Fixture Powerbank Model A is a USB-C powerbank.",
+                    "start": 0,
+                    "end": 61
+                  }
+                ]
+              }
+            }
+          ],
+          "price": {
+            "amount": 35,
+            "currency": "SGD",
+            "variant": "Model A",
+            "conditions": [
+              "tax included"
+            ],
+            "conditionsResolved": true,
+            "assessment": {
+              "status": "supported",
+              "scope": "exact-variant",
+              "rationale": "Fixture data: the cited Model A passage supports this assessment.",
+              "support": [
+                {
+                  "sourceId": "source-1",
+                  "originalQuote": "Fixture data: Fixture Powerbank Model A is a USB-C powerbank.",
+                  "originalStart": 0,
+                  "originalEnd": 61,
+                  "quote": "Fixture data: Fixture Powerbank Model A is a USB-C powerbank.",
+                  "start": 0,
+                  "end": 61
+                }
+              ]
+            }
+          },
+          "stock": "unverified",
+          "eligible": true,
+          "blockers": []
+        }
+      ],
+      "choice": {
+        "productId": "model-a",
+        "rationale": "Fixture data: the cited Model A passage supports this assessment."
+      },
+      "sources": [
+        {
+          "id": "source-1",
+          "url": "https://manufacturer.com/model-a",
+          "title": "Fixture data model page",
+          "text": "Fixture data: Fixture Powerbank Model A is a USB-C powerbank.",
+          "originalLength": 61,
+          "textTruncated": false,
+          "imageUrl": "https://manufacturer.com/model-a.png"
+        },
+        {
+          "id": "source-2",
+          "url": "https://manufacturer.com/actual-price",
+          "title": "Fixture actual price",
+          "text": "Model A costs SGD 35 for one unit, tax included.",
+          "originalLength": 48,
+          "textTruncated": false
+        }
+      ],
+      "limitations": [
+        "Assessments are source-based AI interpretations. Quotations prove provenance, not semantic entailment.",
+        "Prices are unverified page observations. Stock, delivery and current merchant offers remain unknown.",
+        "Fixture data only. No live research or merchant verification."
+      ],
+      "requestId": "fixture-request",
+      "reportedCostUsd": 0.005
+    }
+  }
+}

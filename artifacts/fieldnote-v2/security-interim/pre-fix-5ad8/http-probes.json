@@ -1,0 +1,337 @@
+{
+  "head": "5ad8f4adc792aa423c5c1fcfa04dd531386fa5d0",
+  "checks": [
+    "Owned actual API and SDK upstream sockets bind 127.0.0.1.",
+    "Invalid JSON, UTF-8, media type, encoding, 16KiB streamed body, >2000 message, extra fields and inverted budget rejected.",
+    "Foreign Host/Origin and null Origin rejected; same-origin requests and preflight accepted.",
+    "Known cross-session prepared IDs denied; same-session concurrent dispatch and replay reserve/call once.",
+    "Provider 503, malformed envelope, empty evidence and SDK body timeout fail honestly with one call and no replacement research.",
+    "New chat aborts actual SDK body socket, settles unknown cost unsuccessfully and blocks stale publication.",
+    "Injected structured logger contains request IDs/status/duration only; synthetic message, key, cookie and provider-body sentinels absent."
+  ],
+  "failures": [
+    {
+      "mode": "error",
+      "reason": "provider-error"
+    },
+    {
+      "mode": "malformed",
+      "reason": "invalid-response"
+    },
+    {
+      "mode": "empty",
+      "reason": "empty"
+    },
+    {
+      "mode": "hang",
+      "reason": "timeout"
+    }
+  ],
+  "settlements": [
+    {
+      "id": "f272b55e-a490-49c4-ab00-bd3e76e3dfc8",
+      "cost": 0.005,
+      "success": true
+    },
+    {
+      "id": "b9a8e998-001e-4200-87b8-b101fc1b1d79",
+      "cost": null,
+      "success": false
+    },
+    {
+      "id": "633a6fe9-b1a4-4a47-ae7c-a4c4788c125c",
+      "cost": null,
+      "success": true
+    },
+    {
+      "id": "0e9ecbc9-58f5-4cb6-95aa-66c12c71a467",
+      "cost": 0.005,
+      "success": true
+    },
+    {
+      "id": "21da2924-cd6b-4bfc-ba8a-19490391daca",
+      "cost": null,
+      "success": false
+    },
+    {
+      "id": "8f1950cd-e287-40f2-bc9e-4b1e1e0b078f",
+      "cost": null,
+      "success": false
+    },
+    {
+      "id": "80ed2ac9-d583-4476-9fed-4a73cb955ee3",
+      "cost": 0.005,
+      "success": true
+    }
+  ],
+  "cutObservation": {
+    "choice": {
+      "productId": "model-a",
+      "rationale": "Fixture data: the cited Model A passage supports this assessment."
+    },
+    "eligible": true,
+    "priceConditionsResolved": true,
+    "sourceCut": true
+  },
+  "logs": [
+    {
+      "requestId": "9a02b54f-7192-4a44-9a51-379e1162a69f",
+      "route": "unknown",
+      "status": 200,
+      "durationMs": 1.34,
+      "outcomes": []
+    },
+    {
+      "requestId": "fa882f9a-d12b-4c62-800f-78d984875df4",
+      "route": "unknown",
+      "status": 200,
+      "durationMs": 0.24,
+      "outcomes": []
+    },
+    {
+      "requestId": "878c0e7f-7bc0-4030-9f1c-76170cbf151d",
+      "route": "/api/turn",
+      "status": 400,
+      "durationMs": 2.77,
+      "outcomes": []
+    },
+    {
+      "requestId": "47755e68-a859-4fd9-9cf6-a1625c91f9e6",
+      "route": "/api/turn",
+      "status": 415,
+      "durationMs": 0.19,
+      "outcomes": []
+    },
+    {
+      "requestId": "931f0d31-863c-400e-b104-a996fe092d9c",
+      "route": "/api/turn",
+      "status": 415,
+      "durationMs": 0.07,
+      "outcomes": []
+    },
+    {
+      "requestId": "dcc54f9f-fcdc-4065-b4c0-0433caad5816",
+      "route": "/api/turn",
+      "status": 413,
+      "durationMs": 0.49,
+      "outcomes": []
+    },
+    {
+      "requestId": "2df4b05e-2fe3-4a8e-8f5d-fd97cc40d475",
+      "route": "/api/turn",
+      "status": 400,
+      "durationMs": 0.52,
+      "outcomes": []
+    },
+    {
+      "requestId": "a631e6ec-aa63-4105-8461-3cd3d4b2a7a6",
+      "route": "/api/turn",
+      "status": 400,
+      "durationMs": 1.8,
+      "outcomes": []
+    },
+    {
+      "requestId": "101d4159-b6de-4a9e-ac63-463245e4102b",
+      "route": "/api/turn",
+      "status": 400,
+      "durationMs": 0.9,
+      "outcomes": []
+    },
+    {
+      "requestId": "7c78b04c-6bdd-490c-aa62-f3fbd5456f5d",
+      "route": "/api/turn",
+      "status": 400,
+      "durationMs": 0.6,
+      "outcomes": []
+    },
+    {
+      "requestId": "1de2d958-80a8-4c77-85e5-9aade6885193",
+      "route": "/api/turn",
+      "status": 400,
+      "durationMs": 1.01,
+      "outcomes": []
+    },
+    {
+      "requestId": "508df342-f766-49af-a764-1ec2cc8fbdee",
+      "route": "/api/turn",
+      "status": 413,
+      "durationMs": 0.31,
+      "outcomes": []
+    },
+    {
+      "requestId": "d09cf403-1a20-450d-a5f9-f9dc6537de38",
+      "route": "/api/health",
+      "status": 200,
+      "durationMs": 0.07,
+      "outcomes": []
+    },
+    {
+      "requestId": "7e053635-4bed-4878-ba1a-3bae66ca12d9",
+      "route": "unknown",
+      "status": 403,
+      "durationMs": 0.03,
+      "outcomes": []
+    },
+    {
+      "requestId": "1a2ba198-79da-4cdc-92a0-a41817b9d23f",
+      "route": "unknown",
+      "status": 403,
+      "durationMs": 0.03,
+      "outcomes": []
+    },
+    {
+      "requestId": "06b4fb6e-3198-4089-9f48-75d9bec1c45d",
+      "route": "/api/health",
+      "status": 403,
+      "durationMs": 0.05,
+      "outcomes": []
+    },
+    {
+      "requestId": "61f1c94a-04ff-4ab9-b644-045aa557d4d8",
+      "route": "/api/turn",
+      "status": 204,
+      "durationMs": 0.06,
+      "outcomes": []
+    },
+    {
+      "requestId": "ce788e1b-d3c2-48ca-8571-af30cf980e50",
+      "route": "/api/turn",
+      "status": 200,
+      "durationMs": 2.77,
+      "outcomes": []
+    },
+    {
+      "requestId": "90612b7f-1147-42be-bd5f-4880624d5298",
+      "route": "/api/turn",
+      "status": 200,
+      "durationMs": 0.33,
+      "outcomes": []
+    },
+    {
+      "requestId": "9d9b015a-61a3-46b4-bfff-894065165336",
+      "route": "unknown",
+      "status": 200,
+      "durationMs": 0.06,
+      "outcomes": []
+    },
+    {
+      "requestId": "6f10ed87-6820-4207-95c4-0a481906144e",
+      "route": "/api/turn",
+      "status": 200,
+      "durationMs": 12.56,
+      "outcomes": []
+    },
+    {
+      "requestId": "c73032ce-72ed-4376-bede-a1cf85688805",
+      "route": "/api/turn",
+      "status": 200,
+      "durationMs": 8.89,
+      "outcomes": []
+    },
+    {
+      "requestId": "38e94081-0a72-4d84-98a6-73e753c79744",
+      "route": "/api/turn",
+      "status": 200,
+      "durationMs": 0.36,
+      "outcomes": []
+    },
+    {
+      "requestId": "0c45ad3c-19d4-43e0-93d6-02eeaba202dc",
+      "route": "/api/turn",
+      "status": 200,
+      "durationMs": 1.98,
+      "outcomes": []
+    },
+    {
+      "requestId": "f7e9402e-9da5-4f1f-a7ca-2a6423887126",
+      "route": "/api/turn",
+      "status": 200,
+      "durationMs": 1.59,
+      "outcomes": []
+    },
+    {
+      "requestId": "ccc6a5a8-6a72-4d90-aa5a-9a0b04d2580e",
+      "route": "/api/turn",
+      "status": 200,
+      "durationMs": 0.78,
+      "outcomes": []
+    },
+    {
+      "requestId": "bab1fdf4-3ae3-46c6-b0fb-5218cd793e39",
+      "route": "/api/turn",
+      "status": 200,
+      "durationMs": 1.36,
+      "outcomes": []
+    },
+    {
+      "requestId": "3848bb44-cbdb-490a-80d4-a92f23c137e5",
+      "route": "/api/turn",
+      "status": 200,
+      "durationMs": 0.39,
+      "outcomes": []
+    },
+    {
+      "requestId": "4886becf-1449-4317-918e-9166f583f1ef",
+      "route": "/api/turn",
+      "status": 200,
+      "durationMs": 1.64,
+      "outcomes": []
+    },
+    {
+      "requestId": "e288550c-07c8-4d60-9862-29c192f0f013",
+      "route": "/api/turn",
+      "status": 200,
+      "durationMs": 0.52,
+      "outcomes": []
+    },
+    {
+      "requestId": "ea3af6fb-632c-4666-8cc7-1c42ad65e842",
+      "route": "/api/turn",
+      "status": 200,
+      "durationMs": 259.32,
+      "outcomes": []
+    },
+    {
+      "requestId": "55d1550c-1a06-43db-b9b2-642fbbde87e2",
+      "route": "/api/turn",
+      "status": 200,
+      "durationMs": 1.56,
+      "outcomes": []
+    },
+    {
+      "requestId": "50cb89e8-476d-4751-b632-7eb66b68d998",
+      "route": "unknown",
+      "status": 200,
+      "durationMs": 2.34,
+      "outcomes": []
+    },
+    {
+      "requestId": "7b662e18-c547-495c-bcbe-4f978c6bbc18",
+      "route": "/api/turn",
+      "status": 200,
+      "durationMs": 8.37,
+      "outcomes": []
+    },
+    {
+      "requestId": "769c9c0c-1f22-4d81-a074-f8077ccf170a",
+      "route": "unknown",
+      "status": 200,
+      "durationMs": 0.19,
+      "outcomes": []
+    },
+    {
+      "requestId": "0224346e-31cc-4f00-a512-dbe95add928a",
+      "route": "/api/turn",
+      "status": 200,
+      "durationMs": 1.04,
+      "outcomes": []
+    },
+    {
+      "requestId": "8d18b9b0-7fb9-4ed4-be92-0d2e52623d1f",
+      "route": "/api/turn",
+      "status": 200,
+      "durationMs": 7.32,
+      "outcomes": []
+    }
+  ]
+}

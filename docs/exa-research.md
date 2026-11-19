@@ -1,64 +1,45 @@
-# Use Exa for product context
+# Exa research in Fieldnote V2
 
-Fieldnote can retrieve web source highlights for a completed sample shortlist. The optional action uses Exa search. The sample catalog, prices, stock, ranking, claims, and manufacturer handoff stay synthetic. Retrieved excerpts do not establish current offers or verify sample facts.
+The normal development application uses Exa for real discovery and structured source-backed comparisons. Missing configuration, stopped accounting, errors, cancellation and empty evidence produce honest unavailable or unresolved results. They never select synthetic products. Production composition is disabled.
 
-## Run with a private development key
+## Documented integration
 
-Use Node.js 22.12 or newer and npm 11. The API development command reads the repository-root `.env` through Node's environment-file mechanism. Keep your existing `EXA_API_KEY` in that ignored file. Do not overwrite an existing `.env`, prefix the key with `VITE_`, paste it into a prompt, or add it to GitHub secrets for this feature. A fresh checkout can use `.env.example` as a guide without copying any real key into source control.
-
-```sh
-npx --yes npm@11.6.2 ci
-npm run dev
-```
-
-Submit a supported shopping request. After the sample shortlist appears, choose its web-context search action. The request sends catalog model names and the accepted shopping preferences to Exa. Source titles, public HTTPS links, and plain highlights appear separately from fixture evidence. Open a disclosure for more context. No source page opens automatically.
-
-Restart the API after changing the private environment file.
-
-Only explicit `NODE_ENV=development` or `test` can compose Exa. The API development command sets development mode; an unset environment or production mode keeps the adapter disabled even if a key exists. Set `EXA_RESEARCH_ENABLED=false` to disable it explicitly. Tests and the fixture verification helper set this override and inject local substitutes. They never require the real key or call Exa.
-
-Health keeps `mode: fixture` for commerce and reports whether the separate web capability is configured. `liveIntegrations` is true when Exa is enabled. Configuration is not proof that a search succeeded; use an actual response to establish that.
-
-## Retrieval behavior
-
-The server uses the official `exa-js` SDK. The initial integration resolves 2.28.0. One button action starts one search invocation. It sends a semantic query, a task objective, and `contents: { highlights: true }`. It does not set domain/category filters, result counts, freshness controls, summaries, or synthesized-output options. This follows the canonical build-with-exa guidance for a search-results-first interface.
-
-The API key stays in the server process. The endpoint accepts a bounded shortlist context, not a caller-supplied API URL, credential, or Exa options object. The SDK receives the incoming request signal and a bounded transport deadline, so disconnect and timeout cancel network work. The UI aborts stale work on edits, reset, new results, or handoff. A missing key, empty response, or provider failure leaves the sample comparison usable.
-
-Highlights may come from cached pages. A retrieval timestamp records this search, not the publication time, a live crawl, or an inventory observation. Source links are untrusted external context. Safe-link validation permits public HTTPS destinations without credentials; it does not certify a publisher or turn the link into a verified merchant offer. The browser renders titles and excerpts as text, never source HTML or executable instructions.
-
-## Follow the canonical Exa skill
-
-For Exa API changes, fetch and read the current skill output before editing call shapes.
+The rebuild ran and read the complete output of:
 
 ```sh
 npx skills use "https://github.com/exa-labs/agent-skills" --skill "build-with-exa"
 ```
 
-Read its complete output. Resolve relative references against the supporting-files directory printed by that run. Use the skill rather than remembered API options. The current feature uses `/search`; no Agent, Monitor, Webset, Answer, or OpenAI-compatible endpoint is needed for this interface.
+Supporting references were resolved from the directory printed by that command. Read the canonical skill again before changing request shapes. Current official references include [Answer](https://exa.ai/docs/reference/answer),[Search](https://exa.ai/docs/reference/search),[Agent](https://exa.ai/docs/agent/quickstart), and [pricing](https://exa.ai/docs/admin/pricing).
 
-The app currently has no LLM, system prompt, or model tool loop. If a future feature gives an LLM web search, prefer the SDK tool helpers and require both `query` and `objective`. Pass the model's objective unchanged. The required objective description is:
+One non-streaming `exa.answer` request uses `text:true`, `outputSchema`, `systemPrompt`, optional `userLocation`, and trailing `signal` and `timeout`. Answer combines retrieval and structured synthesis without another runtime model. Search's currently documented structured-schema limits do not fit the rich evidence contract. Agent adds asynchronous runs and paid follow-ups and is not composed.
 
-> Goal for this search turn; say which documents should rank first, which should be excluded, and what specific facts or figures to pull from them.
+The server owns context and constraints. Query text is the authoritative open description. The system prompt carries complete accepted intent and distinguishes shopper/source data from instructions. Returned native assessments remain source-based AI interpretations. The server separately checks URL/text provenance, money, scope, hard gates and recommendation eligibility.
 
-Add this exact sentence to the existing model system prompt, replacing `web_search` with the actual tool name:
+## Configure development
 
-> Call web_search before answering unless you're certain the answer can't have changed since your training cutoff.
+Keep `EXA_API_KEY` server-only in the existing ignored development environment. Never expose it through `VITE_`, browser responses, screenshots or logs. Do not copy private environment files into another worktree. All development checkouts using the key must share the existing absolute `EXA_RESEARCH_LEDGER_PATH`; another checkout is not a fresh allowance.
 
-Keep the rest of that system prompt. Do not add an unused prompt or a model dependency to the current deterministic application.
+`EXA_RESEARCH_ENABLED=false` disables dispatch. Missing key or ledger returns not-configured. `EXA_MANUAL_RESEARCH_GRANT_PATH` refers only to an already authorized private grant. Setting it cannot renew a stopped grant or authorize engineering scripts to spend.
 
-## Verify safely
+## Preserve billing evidence
 
-Run the normal package checks and project fixture verification skill. Those paths explicitly disable live composition. Adapter tests use a local HTTP service and a fake key to exercise the actual SDK transport, including disconnect and body-read cancellation. Browser tests inject source responses and check the explicit action, safe disclosures, stale/reset behavior, and desktop/mobile layouts.
+The conservative local policy reserves USD 0.05 per attempt, allows at most 40 attempts and USD 2 reserved exposure, and serializes active work. These are application limits, not remaining account credits. Admission is written before dispatch. Provider costs are recorded separately.
 
-A real development verification uses the existing private environment and a bounded explicit action through this project's API. Keep the key out of command arguments, response evidence, logs, traces, client builds, commits, and CI. Retain only sanitized result metadata and inspected UI screenshots. A successful live search establishes retrieval/authentication, not live merchant offers or broader language coverage.
+Unknown charges, cancellation without reported cost, process interruption or excessive settlement retain reservations and stop further dispatch. Do not reset, clear, refund, relabel, replace or restore old ledger snapshots. Trustworthy provider records are needed for reconciliation. The original OpenAI experiment's stopped historical receipt is also preserved; it is not a runtime dependency.
 
-The local leak-check tool can scan reachable Git objects, compressed traces, built assets, and an optional evidence directory without printing the key. Run it after building with the private development environment loaded. CI does not need this private-key check.
+The earlier November 19 manual continuation acknowledged a specific baseline and allowed at most 10 additional user submissions within USD 0.50 reserved usage. A subsequent uncertain attempt stopped that grant. It is not available for automated verification. New grants need fresh explicit authorization. Grant creation and inspection must never reserve an attempt or contact Exa. The existing operator CLI and historical records remain intact.
 
-```sh
-node --env-file=.env .codex/pstack-runs/exa-integration/verify-no-secret.mjs
-```
+Issue [#42](https://github.com/d3F0g/research-shopping/issues/42) tracks the exact billing blocker. This rebuild performs no new paid calls. Do not infer a timeout's charge from elapsed time, an empty result or an aggregate balance difference.
 
-## Current dependency advisory
+## Interpret observations
 
-The current full audit reports12 propagated high package findings from one inherited picomatch ReDoS advisory. Base and Exa candidate have the same finding set; no finding originates in exa-js. The primary [GHSA-fc5q-39xc-vjpf advisory](https://github.com/advisories/GHSA-fc5q-39xc-vjpf) currently lists no patched release. [Issue27](https://github.com/d3F0g/research-shopping/issues/27) tracks compatible remediation and actual untrusted-pattern reachability. Do not suppress this audit or represent earlier zero-audit installation records as the current result. The independent security verdict is required before shipping.
+Each candidate keeps source-linked identity, variant, request fit, requirements, attributes, observed money and unresolved tradeoffs. Native excerpts and expanded context retain separate exact offsets. Known adverse or conditional context cannot disappear through display packing. Both requested price bounds are numerical hard gates. Bare dollar signs, seller location and hostnames cannot establish currency or manufacturer proof.
+
+Citation images are attributed source illustrations. They do not establish an exact-variant photograph. Missing or failed images use a neutral absence rather than invented imagery. Observed prices are unverified with merchants. Source counts, retrieval timestamps and page text do not prove current inventory, delivery or payable offers. Authorized merchant verification remains externally blocked in issue [#36](https://github.com/d3F0g/research-shopping/issues/36).
+
+## Verify without spending
+
+Package unit/API tests, V2 evaluations and browser helpers use fake-key SDK requests to owned loopback services, isolated quota doubles or owned test ledgers. Synthetic claims remain visibly labeled. Recorded responses and derived historical source material retain their separate provenance. No fixture response establishes live usefulness.
+
+Use the [verification skill](../.agents/skills/verify-research-shopping/SKILL.md),[evaluation runner](../evals/v2/README.md), and final exact-head independent QA/security records. Genuine request-to-recommendation acceptance remains unverified until a legitimate bounded live proof succeeds.

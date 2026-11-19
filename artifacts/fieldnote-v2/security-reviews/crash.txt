@@ -1,0 +1,2 @@
+Database migrations applied.
+Actual process crash, duplicate replay, persistent reservation and recovery checks passed.

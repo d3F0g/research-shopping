@@ -1,0 +1,1315 @@
+{
+  "repo": "/Users/josiahwong/Documents/research-shopping-v2",
+  "apiPort": 3278,
+  "webPort": 5388,
+  "artifacts": "/Users/josiahwong/Documents/research-shopping-v2/artifacts/fieldnote-v2/root-final/skill",
+  "commit": "8fdc2b24707dee23493b0f3f51097bf222c86310",
+  "worktreeStatus": "M .codex/pstack-runs/fieldnote-v2/decisions.tsv\n M .codex/pstack-runs/fieldnote-v2/state.json\n M AGENTS.md\n M README.md\n M docs/architecture.md\n M docs/capability-gaps.md\n M docs/ci.md\n M docs/exa-research.md\n M docs/frontend-standard.md\n?? .audit/fieldnote-v2/comment-review-d858.md\n?? .audit/fieldnote-v2/qa-interim/\n?? .audit/fieldnote-v2/root-scroll-green.mjs\n?? .audit/fieldnote-v2/security-interim/\n?? .audit/fieldnote-v2/security/\n?? .codex/pstack-runs/fieldnote-v2/cleanup-disposition.md\n?? .codex/pstack-runs/fieldnote-v2/price-premise.md\n?? artifacts/fieldnote-v2/accounts/browser.json\n?? artifacts/fieldnote-v2/accounts/crash.json\n?? artifacts/fieldnote-v2/accounts/desktop-deleted.png\n?? artifacts/fieldnote-v2/accounts/desktop-saved-research.png\n?? artifacts/fieldnote-v2/accounts/mobile-deleted.png\n?? artifacts/fieldnote-v2/accounts/mobile-saved-research.png\n?? artifacts/fieldnote-v2/accounts/restart.json\n?? artifacts/fieldnote-v2/author-skill-final/\n?? artifacts/fieldnote-v2/desktop-empty.png\n?? artifacts/fieldnote-v2/desktop-evidence.png\n?? artifacts/fieldnote-v2/desktop-light-ordinary.png\n?? artifacts/fieldnote-v2/desktop-research.png\n?? artifacts/fieldnote-v2/mobile-empty.png\n?? artifacts/fieldnote-v2/mobile-evidence.png\n?? artifacts/fieldnote-v2/mobile-light-ordinary.png\n?? artifacts/fieldnote-v2/mobile-research.png\n?? artifacts/fieldnote-v2/qa-interim/\n?? artifacts/fieldnote-v2/root-scroll-green/\n?? artifacts/fieldnote-v2/security-interim/\n?? artifacts/fieldnote-v2/security/\n?? artifacts/fieldnote-v2/short-mobile-empty.png\n?? artifacts/fieldnote-v2/short-mobile-evidence.png\n?? artifacts/fieldnote-v2/short-mobile-light-ordinary.png\n?? artifacts/fieldnote-v2/short-mobile-research.png",
+  "sourceState": {
+    "status": "M .codex/pstack-runs/fieldnote-v2/decisions.tsv\n M .codex/pstack-runs/fieldnote-v2/state.json\n M AGENTS.md\n M README.md\n M docs/architecture.md\n M docs/capability-gaps.md\n M docs/ci.md\n M docs/exa-research.md\n M docs/frontend-standard.md\n?? .audit/fieldnote-v2/comment-review-d858.md\n?? .audit/fieldnote-v2/qa-interim/extended.mjs\n?? .audit/fieldnote-v2/qa-interim/playwright.config.ts\n?? .audit/fieldnote-v2/qa-interim/review-d858ca7.md\n?? .audit/fieldnote-v2/qa-interim/v2-chat.spec.ts\n?? .audit/fieldnote-v2/qa-interim/verify-personalization-browser.mjs\n?? .audit/fieldnote-v2/qa-interim/verify-personalization-crash.mjs\n?? .audit/fieldnote-v2/qa-interim/verify-personalization-restart.mjs\n?? .audit/fieldnote-v2/qa-interim/vite.mjs\n?? .audit/fieldnote-v2/root-scroll-green.mjs\n?? .audit/fieldnote-v2/security-interim/account-http.mjs\n?? .audit/fieldnote-v2/security-interim/account-test-runtime.mjs\n?? .audit/fieldnote-v2/security-interim/browser-inert.ts\n?? .audit/fieldnote-v2/security-interim/evidence-probes.ts\n?? .audit/fieldnote-v2/security-interim/http-probes.ts\n?? .audit/fieldnote-v2/security-interim/price-variants.ts\n?? .audit/fieldnote-v2/security-interim/restart-repro.mjs\n?? .audit/fieldnote-v2/security-interim/review.md\n?? .audit/fieldnote-v2/security-interim/variant-probes.ts\n?? .audit/fieldnote-v2/security-interim/verify-personalization-browser.mjs\n?? .audit/fieldnote-v2/security-interim/verify-personalization-crash.mjs\n?? .audit/fieldnote-v2/security/evidence-probes.ts\n?? .audit/fieldnote-v2/security/price-variants.ts\n?? .audit/fieldnote-v2/security/variant-probes.ts\n?? .codex/pstack-runs/fieldnote-v2/cleanup-disposition.md\n?? .codex/pstack-runs/fieldnote-v2/price-premise.md",
+    "diffSha256": "7ef11f41a0431940a7a4b8152b3e5ddc3fa4facbd4a48b5454b9814c396b5cf8"
+  },
+  "composition": "Automated test only. Actual Hono + Exa SDK against owned loopback substitute.",
+  "result": "passed",
+  "cleanup": true,
+  "processes": [
+    {
+      "name": "test-api",
+      "pid": 34832
+    },
+    {
+      "name": "vite",
+      "pid": 34833
+    }
+  ],
+  "journeys": [
+    {
+      "viewport": {
+        "name": "desktop",
+        "width": 1440,
+        "height": 1000
+      },
+      "result": "passed",
+      "checks": [
+        "Fresh OS-light context defaults dark; light and dark selections survive refresh.",
+        "Typed currency preserves request and both bounds, automatically researches once, labels fixture evidence and places the leading recommendation inside the viewport before manual scrolling.",
+        "Evidence exposes literal fixture quotation and a safe retained source link; held comparison uses zero provider calls; contextual editor updates maximum to 50 while retaining minimum 30, SGD and historical messages.",
+        "Provider failure retains the request without fixture fallback; Stop then New chat prevents a held browser research request from dispatching or publishing late results.",
+        "Separate browser context does not inherit or observe another session."
+      ],
+      "composer": {
+        "textbox": {
+          "x": 361,
+          "y": 853,
+          "width": 718,
+          "height": 64,
+          "right": 1079,
+          "bottom": 917,
+          "viewportWidth": 1440,
+          "viewportHeight": 1000,
+          "clipTop": 0,
+          "clipBottom": 1000
+        },
+        "send": {
+          "x": 1037,
+          "y": 923,
+          "width": 32,
+          "height": 32,
+          "right": 1069,
+          "bottom": 955,
+          "viewportWidth": 1440,
+          "viewportHeight": 1000,
+          "clipTop": 0,
+          "clipBottom": 1000
+        }
+      },
+      "currencyResolution": {
+        "originalRequest": "I want to buy a powerbank around $30-40.",
+        "pendingMinimum": 30,
+        "pendingMaximum": 40,
+        "acceptedBudget": {
+          "minimum": 30,
+          "maximum": 40,
+          "currency": "SGD"
+        },
+        "localCallsBefore": 0,
+        "localCallsAfter": 1,
+        "dataKind": "test-fixture",
+        "choice": {
+          "productId": "model-a",
+          "rationale": "Fixture data: the cited Model A passage supports this assessment."
+        }
+      },
+      "initialSourceControl": {
+        "rect": {
+          "x": 372,
+          "y": 527.75,
+          "width": 180.234375,
+          "height": 32
+        },
+        "visible": {
+          "left": 372,
+          "top": 527.75,
+          "right": 552.234375,
+          "bottom": 559.75
+        },
+        "floating": [
+          {
+            "name": "Scroll to end",
+            "rect": {
+              "x": 1396,
+              "y": 796,
+              "width": 28,
+              "height": 28
+            },
+            "intersection": {
+              "width": 0,
+              "height": 0,
+              "area": 0
+            }
+          }
+        ],
+        "hits": [
+          {
+            "x": 378,
+            "y": 533.75,
+            "targetReached": true,
+            "hit": "A",
+            "slot": "button"
+          },
+          {
+            "x": 378,
+            "y": 543.75,
+            "targetReached": true,
+            "hit": "A",
+            "slot": "button"
+          },
+          {
+            "x": 378,
+            "y": 553.75,
+            "targetReached": true,
+            "hit": "A",
+            "slot": "button"
+          },
+          {
+            "x": 462.1171875,
+            "y": 533.75,
+            "targetReached": true,
+            "hit": "A",
+            "slot": "button"
+          },
+          {
+            "x": 462.1171875,
+            "y": 543.75,
+            "targetReached": true,
+            "hit": "A",
+            "slot": "button"
+          },
+          {
+            "x": 462.1171875,
+            "y": 553.75,
+            "targetReached": true,
+            "hit": "A",
+            "slot": "button"
+          },
+          {
+            "x": 546.234375,
+            "y": 533.75,
+            "targetReached": true,
+            "hit": "A",
+            "slot": "button"
+          },
+          {
+            "x": 546.234375,
+            "y": 543.75,
+            "targetReached": true,
+            "hit": "A",
+            "slot": "button"
+          },
+          {
+            "x": 546.234375,
+            "y": 553.75,
+            "targetReached": true,
+            "hit": "A",
+            "slot": "button"
+          }
+        ]
+      },
+      "initialGeometry": {
+        "answer": {
+          "x": 361,
+          "y": 81.25,
+          "width": 686,
+          "height": 45.5,
+          "right": 1047,
+          "bottom": 126.75,
+          "viewportWidth": 1440,
+          "viewportHeight": 1000,
+          "clipTop": 56,
+          "clipBottom": 840
+        },
+        "title": {
+          "x": 372,
+          "y": 186.75,
+          "width": 180,
+          "height": 19.25,
+          "right": 552,
+          "bottom": 206,
+          "viewportWidth": 1440,
+          "viewportHeight": 1000,
+          "clipTop": 56,
+          "clipBottom": 840
+        },
+        "composer": {
+          "textbox": {
+            "x": 361,
+            "y": 853,
+            "width": 718,
+            "height": 64,
+            "right": 1079,
+            "bottom": 917,
+            "viewportWidth": 1440,
+            "viewportHeight": 1000,
+            "clipTop": 0,
+            "clipBottom": 1000
+          },
+          "send": {
+            "x": 1037,
+            "y": 923,
+            "width": 32,
+            "height": 32,
+            "right": 1069,
+            "bottom": 955,
+            "viewportWidth": 1440,
+            "viewportHeight": 1000,
+            "clipTop": 0,
+            "clipBottom": 1000
+          }
+        }
+      },
+      "sourceLink": "https://manufacturer.com/model-a",
+      "preferenceEdit": {
+        "acceptedBudget": {
+          "minimum": 30,
+          "maximum": 50,
+          "currency": "SGD"
+        },
+        "heldComparisonCallsBefore": 1,
+        "callsAfterHeldComparison": 1,
+        "callsAfterEdit": 2,
+        "retainedMessages": 6
+      }
+    },
+    {
+      "viewport": {
+        "name": "mobile",
+        "width": 390,
+        "height": 844
+      },
+      "result": "passed",
+      "checks": [
+        "Fresh OS-light context defaults dark; light and dark selections survive refresh.",
+        "Typed currency preserves request and both bounds, automatically researches once, labels fixture evidence and places the leading recommendation inside the viewport before manual scrolling.",
+        "Evidence exposes literal fixture quotation and a safe retained source link; held comparison uses zero provider calls; contextual editor updates maximum to 50 while retaining minimum 30, SGD and historical messages.",
+        "Provider failure retains the request without fixture fallback; Stop then New chat prevents a held browser research request from dispatching or publishing late results.",
+        "Separate browser context does not inherit or observe another session."
+      ],
+      "composer": {
+        "textbox": {
+          "x": 13,
+          "y": 681,
+          "width": 364,
+          "height": 64,
+          "right": 377,
+          "bottom": 745,
+          "viewportWidth": 390,
+          "viewportHeight": 844,
+          "clipTop": 0,
+          "clipBottom": 844
+        },
+        "send": {
+          "x": 335,
+          "y": 751,
+          "width": 32,
+          "height": 32,
+          "right": 367,
+          "bottom": 783,
+          "viewportWidth": 390,
+          "viewportHeight": 844,
+          "clipTop": 0,
+          "clipBottom": 844
+        }
+      },
+      "currencyResolution": {
+        "originalRequest": "I want to buy a powerbank around $30-40.",
+        "pendingMinimum": 30,
+        "pendingMaximum": 40,
+        "acceptedBudget": {
+          "minimum": 30,
+          "maximum": 40,
+          "currency": "SGD"
+        },
+        "localCallsBefore": 3,
+        "localCallsAfter": 4,
+        "dataKind": "test-fixture",
+        "choice": {
+          "productId": "model-a",
+          "rationale": "Fixture data: the cited Model A passage supports this assessment."
+        }
+      },
+      "initialSourceControl": {
+        "rect": {
+          "x": 28,
+          "y": 660.25,
+          "width": 180.234375,
+          "height": 32
+        },
+        "visible": {
+          "left": 28,
+          "top": 660.25,
+          "right": 208.234375,
+          "bottom": 668
+        },
+        "floating": [
+          {
+            "name": "Scroll to end",
+            "rect": {
+              "x": 346,
+              "y": 624,
+              "width": 28,
+              "height": 28
+            },
+            "intersection": {
+              "width": 0,
+              "height": 0,
+              "area": 0
+            }
+          }
+        ],
+        "hits": []
+      },
+      "initialGeometry": {
+        "answer": {
+          "x": 17,
+          "y": 81,
+          "width": 316,
+          "height": 91,
+          "right": 333,
+          "bottom": 172,
+          "viewportWidth": 390,
+          "viewportHeight": 844,
+          "clipTop": 56,
+          "clipBottom": 668
+        },
+        "title": {
+          "x": 28,
+          "y": 232,
+          "width": 180,
+          "height": 19.25,
+          "right": 208,
+          "bottom": 251.25,
+          "viewportWidth": 390,
+          "viewportHeight": 844,
+          "clipTop": 56,
+          "clipBottom": 668
+        },
+        "composer": {
+          "textbox": {
+            "x": 13,
+            "y": 681,
+            "width": 364,
+            "height": 64,
+            "right": 377,
+            "bottom": 745,
+            "viewportWidth": 390,
+            "viewportHeight": 844,
+            "clipTop": 0,
+            "clipBottom": 844
+          },
+          "send": {
+            "x": 335,
+            "y": 751,
+            "width": 32,
+            "height": 32,
+            "right": 367,
+            "bottom": 783,
+            "viewportWidth": 390,
+            "viewportHeight": 844,
+            "clipTop": 0,
+            "clipBottom": 844
+          }
+        }
+      },
+      "sourceLink": "https://manufacturer.com/model-a",
+      "preferenceEdit": {
+        "acceptedBudget": {
+          "minimum": 30,
+          "maximum": 50,
+          "currency": "SGD"
+        },
+        "heldComparisonCallsBefore": 4,
+        "callsAfterHeldComparison": 4,
+        "callsAfterEdit": 5,
+        "retainedMessages": 6
+      }
+    },
+    {
+      "viewport": {
+        "name": "short-mobile",
+        "width": 390,
+        "height": 600
+      },
+      "result": "passed",
+      "checks": [
+        "Fresh OS-light context defaults dark; light and dark selections survive refresh.",
+        "Failed source illustration is removed; product, evidence and source link remain.",
+        "Typed currency preserves request and both bounds, automatically researches once, labels fixture evidence and places the leading recommendation inside the viewport before manual scrolling.",
+        "Evidence exposes literal fixture quotation and a safe retained source link; held comparison uses zero provider calls; contextual editor updates maximum to 50 while retaining minimum 30, SGD and historical messages.",
+        "Provider failure retains the request without fixture fallback; Stop then New chat prevents a held browser research request from dispatching or publishing late results.",
+        "Separate browser context does not inherit or observe another session."
+      ],
+      "composer": {
+        "textbox": {
+          "x": 13,
+          "y": 437,
+          "width": 364,
+          "height": 64,
+          "right": 377,
+          "bottom": 501,
+          "viewportWidth": 390,
+          "viewportHeight": 600,
+          "clipTop": 0,
+          "clipBottom": 600
+        },
+        "send": {
+          "x": 335,
+          "y": 507,
+          "width": 32,
+          "height": 32,
+          "right": 367,
+          "bottom": 539,
+          "viewportWidth": 390,
+          "viewportHeight": 600,
+          "clipTop": 0,
+          "clipBottom": 600
+        }
+      },
+      "currencyResolution": {
+        "originalRequest": "I want to buy a powerbank around $30-40.",
+        "pendingMinimum": 30,
+        "pendingMaximum": 40,
+        "acceptedBudget": {
+          "minimum": 30,
+          "maximum": 40,
+          "currency": "SGD"
+        },
+        "localCallsBefore": 6,
+        "localCallsAfter": 7,
+        "dataKind": "test-fixture",
+        "choice": {
+          "productId": "model-a",
+          "rationale": "Fixture data: the cited Model A passage supports this assessment."
+        }
+      },
+      "initialSourceControl": {
+        "rect": {
+          "x": 28,
+          "y": 500.25,
+          "width": 180.234375,
+          "height": 32
+        },
+        "visible": {
+          "left": 28,
+          "top": 500.25,
+          "right": 208.234375,
+          "bottom": 424
+        },
+        "floating": [
+          {
+            "name": "Scroll to end",
+            "rect": {
+              "x": 346,
+              "y": 380,
+              "width": 28,
+              "height": 28
+            },
+            "intersection": {
+              "width": 0,
+              "height": 0,
+              "area": 0
+            }
+          }
+        ],
+        "hits": []
+      },
+      "initialGeometry": {
+        "answer": {
+          "x": 17,
+          "y": 81,
+          "width": 316,
+          "height": 91,
+          "right": 333,
+          "bottom": 172,
+          "viewportWidth": 390,
+          "viewportHeight": 600,
+          "clipTop": 56,
+          "clipBottom": 424
+        },
+        "title": {
+          "x": 28,
+          "y": 232,
+          "width": 180,
+          "height": 19.25,
+          "right": 208,
+          "bottom": 251.25,
+          "viewportWidth": 390,
+          "viewportHeight": 600,
+          "clipTop": 56,
+          "clipBottom": 424
+        },
+        "composer": {
+          "textbox": {
+            "x": 13,
+            "y": 437,
+            "width": 364,
+            "height": 64,
+            "right": 377,
+            "bottom": 501,
+            "viewportWidth": 390,
+            "viewportHeight": 600,
+            "clipTop": 0,
+            "clipBottom": 600
+          },
+          "send": {
+            "x": 335,
+            "y": 507,
+            "width": 32,
+            "height": 32,
+            "right": 367,
+            "bottom": 539,
+            "viewportWidth": 390,
+            "viewportHeight": 600,
+            "clipTop": 0,
+            "clipBottom": 600
+          }
+        }
+      },
+      "sourceLink": "https://manufacturer.com/model-a",
+      "preferenceEdit": {
+        "acceptedBudget": {
+          "minimum": 30,
+          "maximum": 50,
+          "currency": "SGD"
+        },
+        "heldComparisonCallsBefore": 7,
+        "callsAfterHeldComparison": 7,
+        "callsAfterEdit": 8,
+        "retainedMessages": 6
+      }
+    }
+  ],
+  "limits": [
+    "No live Exa retrieval, billing, merchant reachability, inventory, semantic factuality, or PostgreSQL/account acceptance.",
+    "Cancellation at the browser transport boundary does not establish SDK socket cancellation. Run the package API tests.",
+    "Screenshots require independent visual inspection. This helper does not approve the final V2 PR."
+  ],
+  "environment": {
+    "inherited": [
+      "API_PORT",
+      "EXA_RESEARCH_ENABLED",
+      "HOME",
+      "LANG",
+      "LC_ALL",
+      "NODE_ENV",
+      "PATH",
+      "TMPDIR",
+      "VITE_API_PORT",
+      "WEB_PORT"
+    ],
+    "privateProviderAndDatabaseVariables": "not inherited",
+    "environmentFiles": "not loaded"
+  },
+  "health": {
+    "status": "ok",
+    "mode": "research",
+    "provider": "exa",
+    "automaticPaidChecks": false
+  },
+  "controlChecks": [
+    {
+      "label": "Initial source link",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "rect": {
+        "x": 372,
+        "y": 527.75,
+        "width": 180.234375,
+        "height": 32
+      },
+      "visible": {
+        "left": 372,
+        "top": 527.75,
+        "right": 552.234375,
+        "bottom": 559.75
+      },
+      "floating": [
+        {
+          "name": "Scroll to end",
+          "rect": {
+            "x": 1396,
+            "y": 796,
+            "width": 28,
+            "height": 28
+          },
+          "intersection": {
+            "width": 0,
+            "height": 0,
+            "area": 0
+          }
+        }
+      ],
+      "hits": [
+        {
+          "x": 378,
+          "y": 533.75,
+          "targetReached": true,
+          "hit": "A",
+          "slot": "button"
+        },
+        {
+          "x": 378,
+          "y": 543.75,
+          "targetReached": true,
+          "hit": "A",
+          "slot": "button"
+        },
+        {
+          "x": 378,
+          "y": 553.75,
+          "targetReached": true,
+          "hit": "A",
+          "slot": "button"
+        },
+        {
+          "x": 462.1171875,
+          "y": 533.75,
+          "targetReached": true,
+          "hit": "A",
+          "slot": "button"
+        },
+        {
+          "x": 462.1171875,
+          "y": 543.75,
+          "targetReached": true,
+          "hit": "A",
+          "slot": "button"
+        },
+        {
+          "x": 462.1171875,
+          "y": 553.75,
+          "targetReached": true,
+          "hit": "A",
+          "slot": "button"
+        },
+        {
+          "x": 546.234375,
+          "y": 533.75,
+          "targetReached": true,
+          "hit": "A",
+          "slot": "button"
+        },
+        {
+          "x": 546.234375,
+          "y": 543.75,
+          "targetReached": true,
+          "hit": "A",
+          "slot": "button"
+        },
+        {
+          "x": 546.234375,
+          "y": 553.75,
+          "targetReached": true,
+          "hit": "A",
+          "slot": "button"
+        }
+      ]
+    },
+    {
+      "label": "Scrolled source link",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "rect": {
+        "x": 372,
+        "y": 431.5,
+        "width": 180.234375,
+        "height": 32
+      },
+      "visible": {
+        "left": 372,
+        "top": 431.5,
+        "right": 552.234375,
+        "bottom": 463.5
+      },
+      "floating": [
+        {
+          "name": "Scroll to end",
+          "rect": {
+            "x": 1396,
+            "y": 796,
+            "width": 28,
+            "height": 28
+          },
+          "intersection": {
+            "width": 0,
+            "height": 0,
+            "area": 0
+          }
+        }
+      ],
+      "hits": [
+        {
+          "x": 378,
+          "y": 437.5,
+          "targetReached": true,
+          "hit": "A",
+          "slot": "button"
+        },
+        {
+          "x": 378,
+          "y": 447.5,
+          "targetReached": true,
+          "hit": "A",
+          "slot": "button"
+        },
+        {
+          "x": 378,
+          "y": 457.5,
+          "targetReached": true,
+          "hit": "A",
+          "slot": "button"
+        },
+        {
+          "x": 462.1171875,
+          "y": 437.5,
+          "targetReached": true,
+          "hit": "A",
+          "slot": "button"
+        },
+        {
+          "x": 462.1171875,
+          "y": 447.5,
+          "targetReached": true,
+          "hit": "A",
+          "slot": "button"
+        },
+        {
+          "x": 462.1171875,
+          "y": 457.5,
+          "targetReached": true,
+          "hit": "A",
+          "slot": "button"
+        },
+        {
+          "x": 546.234375,
+          "y": 437.5,
+          "targetReached": true,
+          "hit": "A",
+          "slot": "button"
+        },
+        {
+          "x": 546.234375,
+          "y": 447.5,
+          "targetReached": true,
+          "hit": "A",
+          "slot": "button"
+        },
+        {
+          "x": 546.234375,
+          "y": 457.5,
+          "targetReached": true,
+          "hit": "A",
+          "slot": "button"
+        }
+      ]
+    },
+    {
+      "label": "Apply preferences",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "rect": {
+        "x": 372,
+        "y": 551.5,
+        "width": 149.625,
+        "height": 32
+      },
+      "visible": {
+        "left": 372,
+        "top": 551.5,
+        "right": 521.625,
+        "bottom": 583.5
+      },
+      "floating": [],
+      "hits": [
+        {
+          "x": 378,
+          "y": 557.5,
+          "targetReached": true,
+          "hit": "BUTTON",
+          "slot": "button"
+        },
+        {
+          "x": 378,
+          "y": 567.5,
+          "targetReached": true,
+          "hit": "BUTTON",
+          "slot": "button"
+        },
+        {
+          "x": 378,
+          "y": 577.5,
+          "targetReached": true,
+          "hit": "BUTTON",
+          "slot": "button"
+        },
+        {
+          "x": 446.8125,
+          "y": 557.5,
+          "targetReached": true,
+          "hit": "BUTTON",
+          "slot": "button"
+        },
+        {
+          "x": 446.8125,
+          "y": 567.5,
+          "targetReached": true,
+          "hit": "BUTTON",
+          "slot": "button"
+        },
+        {
+          "x": 446.8125,
+          "y": 577.5,
+          "targetReached": true,
+          "hit": "BUTTON",
+          "slot": "button"
+        },
+        {
+          "x": 515.625,
+          "y": 557.5,
+          "targetReached": true,
+          "hit": "BUTTON",
+          "slot": "button"
+        },
+        {
+          "x": 515.625,
+          "y": 567.5,
+          "targetReached": true,
+          "hit": "BUTTON",
+          "slot": "button"
+        },
+        {
+          "x": 515.625,
+          "y": 577.5,
+          "targetReached": true,
+          "hit": "BUTTON",
+          "slot": "button"
+        }
+      ]
+    },
+    {
+      "label": "Initial source link",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 28,
+        "y": 660.25,
+        "width": 180.234375,
+        "height": 32
+      },
+      "visible": {
+        "left": 28,
+        "top": 660.25,
+        "right": 208.234375,
+        "bottom": 668
+      },
+      "floating": [
+        {
+          "name": "Scroll to end",
+          "rect": {
+            "x": 346,
+            "y": 624,
+            "width": 28,
+            "height": 28
+          },
+          "intersection": {
+            "width": 0,
+            "height": 0,
+            "area": 0
+          }
+        }
+      ],
+      "hits": []
+    },
+    {
+      "label": "Scrolled source link",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 28,
+        "y": 345.5,
+        "width": 180.234375,
+        "height": 32
+      },
+      "visible": {
+        "left": 28,
+        "top": 345.5,
+        "right": 208.234375,
+        "bottom": 377.5
+      },
+      "floating": [
+        {
+          "name": "Scroll to end",
+          "rect": {
+            "x": 346,
+            "y": 624,
+            "width": 28,
+            "height": 28
+          },
+          "intersection": {
+            "width": 0,
+            "height": 0,
+            "area": 0
+          }
+        }
+      ],
+      "hits": [
+        {
+          "x": 34,
+          "y": 351.5,
+          "targetReached": true,
+          "hit": "A",
+          "slot": "button"
+        },
+        {
+          "x": 34,
+          "y": 361.5,
+          "targetReached": true,
+          "hit": "A",
+          "slot": "button"
+        },
+        {
+          "x": 34,
+          "y": 371.5,
+          "targetReached": true,
+          "hit": "A",
+          "slot": "button"
+        },
+        {
+          "x": 118.1171875,
+          "y": 351.5,
+          "targetReached": true,
+          "hit": "A",
+          "slot": "button"
+        },
+        {
+          "x": 118.1171875,
+          "y": 361.5,
+          "targetReached": true,
+          "hit": "A",
+          "slot": "button"
+        },
+        {
+          "x": 118.1171875,
+          "y": 371.5,
+          "targetReached": true,
+          "hit": "A",
+          "slot": "button"
+        },
+        {
+          "x": 202.234375,
+          "y": 351.5,
+          "targetReached": true,
+          "hit": "A",
+          "slot": "button"
+        },
+        {
+          "x": 202.234375,
+          "y": 361.5,
+          "targetReached": true,
+          "hit": "A",
+          "slot": "button"
+        },
+        {
+          "x": 202.234375,
+          "y": 371.5,
+          "targetReached": true,
+          "hit": "A",
+          "slot": "button"
+        }
+      ]
+    },
+    {
+      "label": "Apply preferences",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 28,
+        "y": 345.5,
+        "width": 149.625,
+        "height": 32
+      },
+      "visible": {
+        "left": 28,
+        "top": 345.5,
+        "right": 177.625,
+        "bottom": 377.5
+      },
+      "floating": [],
+      "hits": [
+        {
+          "x": 34,
+          "y": 351.5,
+          "targetReached": true,
+          "hit": "BUTTON",
+          "slot": "button"
+        },
+        {
+          "x": 34,
+          "y": 361.5,
+          "targetReached": true,
+          "hit": "BUTTON",
+          "slot": "button"
+        },
+        {
+          "x": 34,
+          "y": 371.5,
+          "targetReached": true,
+          "hit": "BUTTON",
+          "slot": "button"
+        },
+        {
+          "x": 102.8125,
+          "y": 351.5,
+          "targetReached": true,
+          "hit": "BUTTON",
+          "slot": "button"
+        },
+        {
+          "x": 102.8125,
+          "y": 361.5,
+          "targetReached": true,
+          "hit": "BUTTON",
+          "slot": "button"
+        },
+        {
+          "x": 102.8125,
+          "y": 371.5,
+          "targetReached": true,
+          "hit": "BUTTON",
+          "slot": "button"
+        },
+        {
+          "x": 171.625,
+          "y": 351.5,
+          "targetReached": true,
+          "hit": "BUTTON",
+          "slot": "button"
+        },
+        {
+          "x": 171.625,
+          "y": 361.5,
+          "targetReached": true,
+          "hit": "BUTTON",
+          "slot": "button"
+        },
+        {
+          "x": 171.625,
+          "y": 371.5,
+          "targetReached": true,
+          "hit": "BUTTON",
+          "slot": "button"
+        }
+      ]
+    },
+    {
+      "label": "Initial source link",
+      "viewport": {
+        "width": 390,
+        "height": 600
+      },
+      "rect": {
+        "x": 28,
+        "y": 500.25,
+        "width": 180.234375,
+        "height": 32
+      },
+      "visible": {
+        "left": 28,
+        "top": 500.25,
+        "right": 208.234375,
+        "bottom": 424
+      },
+      "floating": [
+        {
+          "name": "Scroll to end",
+          "rect": {
+            "x": 346,
+            "y": 380,
+            "width": 28,
+            "height": 28
+          },
+          "intersection": {
+            "width": 0,
+            "height": 0,
+            "area": 0
+          }
+        }
+      ],
+      "hits": []
+    },
+    {
+      "label": "Scrolled source link",
+      "viewport": {
+        "width": 390,
+        "height": 600
+      },
+      "rect": {
+        "x": 28,
+        "y": 223.5,
+        "width": 180.234375,
+        "height": 32
+      },
+      "visible": {
+        "left": 28,
+        "top": 223.5,
+        "right": 208.234375,
+        "bottom": 255.5
+      },
+      "floating": [
+        {
+          "name": "Scroll to end",
+          "rect": {
+            "x": 346,
+            "y": 380,
+            "width": 28,
+            "height": 28
+          },
+          "intersection": {
+            "width": 0,
+            "height": 0,
+            "area": 0
+          }
+        }
+      ],
+      "hits": [
+        {
+          "x": 34,
+          "y": 229.5,
+          "targetReached": true,
+          "hit": "A",
+          "slot": "button"
+        },
+        {
+          "x": 34,
+          "y": 239.5,
+          "targetReached": true,
+          "hit": "A",
+          "slot": "button"
+        },
+        {
+          "x": 34,
+          "y": 249.5,
+          "targetReached": true,
+          "hit": "A",
+          "slot": "button"
+        },
+        {
+          "x": 118.1171875,
+          "y": 229.5,
+          "targetReached": true,
+          "hit": "A",
+          "slot": "button"
+        },
+        {
+          "x": 118.1171875,
+          "y": 239.5,
+          "targetReached": true,
+          "hit": "A",
+          "slot": "button"
+        },
+        {
+          "x": 118.1171875,
+          "y": 249.5,
+          "targetReached": true,
+          "hit": "A",
+          "slot": "button"
+        },
+        {
+          "x": 202.234375,
+          "y": 229.5,
+          "targetReached": true,
+          "hit": "A",
+          "slot": "button"
+        },
+        {
+          "x": 202.234375,
+          "y": 239.5,
+          "targetReached": true,
+          "hit": "A",
+          "slot": "button"
+        },
+        {
+          "x": 202.234375,
+          "y": 249.5,
+          "targetReached": true,
+          "hit": "A",
+          "slot": "button"
+        }
+      ]
+    },
+    {
+      "label": "Apply preferences",
+      "viewport": {
+        "width": 390,
+        "height": 600
+      },
+      "rect": {
+        "x": 28,
+        "y": 329.5,
+        "width": 149.625,
+        "height": 32
+      },
+      "visible": {
+        "left": 28,
+        "top": 329.5,
+        "right": 177.625,
+        "bottom": 361.5
+      },
+      "floating": [],
+      "hits": [
+        {
+          "x": 34,
+          "y": 335.5,
+          "targetReached": true,
+          "hit": "BUTTON",
+          "slot": "button"
+        },
+        {
+          "x": 34,
+          "y": 345.5,
+          "targetReached": true,
+          "hit": "BUTTON",
+          "slot": "button"
+        },
+        {
+          "x": 34,
+          "y": 355.5,
+          "targetReached": true,
+          "hit": "BUTTON",
+          "slot": "button"
+        },
+        {
+          "x": 102.8125,
+          "y": 335.5,
+          "targetReached": true,
+          "hit": "BUTTON",
+          "slot": "button"
+        },
+        {
+          "x": 102.8125,
+          "y": 345.5,
+          "targetReached": true,
+          "hit": "BUTTON",
+          "slot": "button"
+        },
+        {
+          "x": 102.8125,
+          "y": 355.5,
+          "targetReached": true,
+          "hit": "BUTTON",
+          "slot": "button"
+        },
+        {
+          "x": 171.625,
+          "y": 335.5,
+          "targetReached": true,
+          "hit": "BUTTON",
+          "slot": "button"
+        },
+        {
+          "x": 171.625,
+          "y": 345.5,
+          "targetReached": true,
+          "hit": "BUTTON",
+          "slot": "button"
+        },
+        {
+          "x": 171.625,
+          "y": 355.5,
+          "targetReached": true,
+          "hit": "BUTTON",
+          "slot": "button"
+        }
+      ]
+    }
+  ],
+  "commitAfter": "8fdc2b24707dee23493b0f3f51097bf222c86310",
+  "worktreeStatusAfter": "M .codex/pstack-runs/fieldnote-v2/decisions.tsv\n M .codex/pstack-runs/fieldnote-v2/state.json\n M AGENTS.md\n M README.md\n M docs/architecture.md\n M docs/capability-gaps.md\n M docs/ci.md\n M docs/exa-research.md\n M docs/frontend-standard.md\n?? .audit/fieldnote-v2/comment-review-d858.md\n?? .audit/fieldnote-v2/qa-interim/\n?? .audit/fieldnote-v2/root-scroll-green.mjs\n?? .audit/fieldnote-v2/security-interim/\n?? .audit/fieldnote-v2/security/\n?? .codex/pstack-runs/fieldnote-v2/cleanup-disposition.md\n?? .codex/pstack-runs/fieldnote-v2/price-premise.md\n?? artifacts/fieldnote-v2/accounts/browser.json\n?? artifacts/fieldnote-v2/accounts/crash.json\n?? artifacts/fieldnote-v2/accounts/desktop-deleted.png\n?? artifacts/fieldnote-v2/accounts/desktop-saved-research.png\n?? artifacts/fieldnote-v2/accounts/mobile-deleted.png\n?? artifacts/fieldnote-v2/accounts/mobile-saved-research.png\n?? artifacts/fieldnote-v2/accounts/restart.json\n?? artifacts/fieldnote-v2/author-skill-final/\n?? artifacts/fieldnote-v2/desktop-empty.png\n?? artifacts/fieldnote-v2/desktop-evidence.png\n?? artifacts/fieldnote-v2/desktop-light-ordinary.png\n?? artifacts/fieldnote-v2/desktop-research.png\n?? artifacts/fieldnote-v2/mobile-empty.png\n?? artifacts/fieldnote-v2/mobile-evidence.png\n?? artifacts/fieldnote-v2/mobile-light-ordinary.png\n?? artifacts/fieldnote-v2/mobile-research.png\n?? artifacts/fieldnote-v2/qa-interim/\n?? artifacts/fieldnote-v2/root-final/\n?? artifacts/fieldnote-v2/root-scroll-green/\n?? artifacts/fieldnote-v2/security-interim/\n?? artifacts/fieldnote-v2/security/\n?? artifacts/fieldnote-v2/short-mobile-empty.png\n?? artifacts/fieldnote-v2/short-mobile-evidence.png\n?? artifacts/fieldnote-v2/short-mobile-light-ordinary.png\n?? artifacts/fieldnote-v2/short-mobile-research.png\n?? artifacts/product-evals/v2-final/",
+  "sourceStateAfter": {
+    "status": "M .codex/pstack-runs/fieldnote-v2/decisions.tsv\n M .codex/pstack-runs/fieldnote-v2/state.json\n M AGENTS.md\n M README.md\n M docs/architecture.md\n M docs/capability-gaps.md\n M docs/ci.md\n M docs/exa-research.md\n M docs/frontend-standard.md\n?? .audit/fieldnote-v2/comment-review-d858.md\n?? .audit/fieldnote-v2/qa-interim/extended.mjs\n?? .audit/fieldnote-v2/qa-interim/playwright.config.ts\n?? .audit/fieldnote-v2/qa-interim/review-d858ca7.md\n?? .audit/fieldnote-v2/qa-interim/v2-chat.spec.ts\n?? .audit/fieldnote-v2/qa-interim/verify-personalization-browser.mjs\n?? .audit/fieldnote-v2/qa-interim/verify-personalization-crash.mjs\n?? .audit/fieldnote-v2/qa-interim/verify-personalization-restart.mjs\n?? .audit/fieldnote-v2/qa-interim/vite.mjs\n?? .audit/fieldnote-v2/root-scroll-green.mjs\n?? .audit/fieldnote-v2/security-interim/account-http.mjs\n?? .audit/fieldnote-v2/security-interim/account-test-runtime.mjs\n?? .audit/fieldnote-v2/security-interim/browser-inert.ts\n?? .audit/fieldnote-v2/security-interim/evidence-probes.ts\n?? .audit/fieldnote-v2/security-interim/http-probes.ts\n?? .audit/fieldnote-v2/security-interim/price-variants.ts\n?? .audit/fieldnote-v2/security-interim/restart-repro.mjs\n?? .audit/fieldnote-v2/security-interim/review.md\n?? .audit/fieldnote-v2/security-interim/variant-probes.ts\n?? .audit/fieldnote-v2/security-interim/verify-personalization-browser.mjs\n?? .audit/fieldnote-v2/security-interim/verify-personalization-crash.mjs\n?? .audit/fieldnote-v2/security/evidence-probes.ts\n?? .audit/fieldnote-v2/security/price-variants.ts\n?? .audit/fieldnote-v2/security/variant-probes.ts\n?? .codex/pstack-runs/fieldnote-v2/cleanup-disposition.md\n?? .codex/pstack-runs/fieldnote-v2/price-premise.md",
+    "diffSha256": "7ef11f41a0431940a7a4b8152b3e5ddc3fa4facbd4a48b5454b9814c396b5cf8"
+  },
+  "cleanCandidate": false,
+  "acceptance": "Diagnostic only. Dirty application source is not commit acceptance."
+}

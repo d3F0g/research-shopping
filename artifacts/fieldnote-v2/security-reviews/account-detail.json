@@ -1,0 +1,11 @@
+{
+  "head": "8fdc2b24707dee23493b0f3f51097bf222c86310",
+  "status": "passed",
+  "beforeRestartProviderCalls": 1,
+  "detailLength": 666,
+  "checks": [
+    "Real account persisted optional detail without altering original research snapshot.",
+    "Held detail used no additional provider call.",
+    "Detail and accepted state survived actual API restart."
+  ]
+}

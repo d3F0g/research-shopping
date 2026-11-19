@@ -1,0 +1,32 @@
+RUN scripts/test-postgres.mjs
+
+[1m[30m[46m RUN [49m[39m[22m [36mv4.1.12 [39m[90m/Users/josiahwong/Documents/research-shopping-v2-qa[39m
+
+ [32m✓[39m tests/postgres/workspace.test.ts [2m([22m[2m27 tests[22m[2m)[22m[33m 1721[2mms[22m[39m
+     [33m[2m✓[22m[39m rejects publication if the session expires while waiting for its lock [33m 310[2mms[22m[39m
+     [33m[2m✓[22m[39m rejects publication if a valid session expires while waiting for a workspace lock [33m 315[2mms[22m[39m
+     [33m[2m✓[22m[39m rate limits password attempts despite forged forwarding headers [33m 326[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m27 passed[39m[22m[90m (27)[39m
+[2m   Start at [22m 14:51:05
+[2m   Duration [22m 2.17s[2m (transform 99ms, setup 0ms, import 358ms, tests 1.72s, environment 0ms)[22m
+
+EXIT 0
+RUN .audit/fieldnote-v2/qa/verify-personalization-restart.mjs
+Database migrations applied.
+The actual API process restored the original typed currency draft after restart.
+The actual server resumed SGD30-40, retained both bounds and saved an honest disabled-provider response without any paid call.
+A PostgreSQL restart and a second API process restart preserved the same account, accepted intent and immutable messages.
+Shopping deletion survived restart while the sign-in account remained valid.
+EXIT 0
+RUN .audit/fieldnote-v2/qa/verify-personalization-crash.mjs
+Database migrations applied.
+Actual process crash, duplicate replay, persistent reservation and recovery checks passed.
+EXIT 0
+RUN .audit/fieldnote-v2/qa/verify-personalization-browser.mjs
+Database migrations applied.
+desktop UI creates an account, keeps guest messages separate, saves both SGD30-40 bounds and fixture research, restores after refresh, isolates another account and deletes saved shopping data.
+Mobile sign-out during actual SDK body consumption aborts the transport, preserves accepted context, and prevents late research publication.
+mobile UI creates an account, keeps guest messages separate, saves both SGD30-40 bounds and fixture research, restores after refresh, isolates another account and deletes saved shopping data.
+EXIT 0

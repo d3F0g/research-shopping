@@ -1,0 +1,138 @@
+[
+  {
+    "text": "Fixture data: Fixture Powerbank Model A is a USB-C powerbank. Model A costs SGD 35, not tax included.",
+    "result": {
+      "choice": {
+        "productId": "model-a",
+        "rationale": "Fixture data: the cited Model A passage supports this assessment."
+      },
+      "price": {
+        "amount": 35,
+        "currency": "SGD",
+        "variant": "Model A",
+        "conditions": [
+          "tax included"
+        ],
+        "conditionsResolved": true,
+        "assessment": {
+          "status": "supported",
+          "scope": "exact-variant",
+          "rationale": "Fixture data: the cited Model A passage supports this assessment.",
+          "support": [
+            {
+              "sourceId": "source-1",
+              "originalQuote": "Fixture data: Fixture Powerbank Model A is a USB-C powerbank. Model A costs SGD 35, not tax included.",
+              "originalStart": 0,
+              "originalEnd": 101,
+              "quote": "Fixture data: Fixture Powerbank Model A is a USB-C powerbank. Model A costs SGD 35, not tax included.",
+              "start": 0,
+              "end": 101
+            }
+          ]
+        }
+      }
+    }
+  },
+  {
+    "text": "Fixture data: Fixture Powerbank Model A is a USB-C powerbank. Model A costs SGD 35, tax included.\n\nFixture data: technical details follow.\n\nFixture data: Model A requires SGD 15 shipping in addition to the displayed price.",
+    "result": {
+      "choice": {
+        "productId": "model-a",
+        "rationale": "Fixture data: the cited Model A passage supports this assessment."
+      },
+      "price": {
+        "amount": 35,
+        "currency": "SGD",
+        "variant": "Model A",
+        "conditions": [
+          "tax included"
+        ],
+        "conditionsResolved": true,
+        "assessment": {
+          "status": "supported",
+          "scope": "exact-variant",
+          "rationale": "Fixture data: the cited Model A passage supports this assessment.",
+          "support": [
+            {
+              "sourceId": "source-1",
+              "originalQuote": "Fixture data: Fixture Powerbank Model A is a USB-C powerbank. Model A costs SGD 35, tax included.\n\nFixture data: technical details follow.\n\nFixture data: Model A requires SGD 15 shipping in addition to the displayed price.",
+              "originalStart": 0,
+              "originalEnd": 222,
+              "quote": "Fixture data: Fixture Powerbank Model A is a USB-C powerbank. Model A costs SGD 35, tax included.\n\nFixture data: technical details follow.\n\nFixture data: Model A requires SGD 15 shipping in addition to the displayed price.",
+              "start": 0,
+              "end": 222
+            }
+          ]
+        }
+      }
+    }
+  },
+  {
+    "text": "Fixture data: Fixture Powerbank Model A is a USB-C powerbank. Model A costs SGD 35 without tax included.",
+    "result": {
+      "choice": {
+        "productId": "model-a",
+        "rationale": "Fixture data: the cited Model A passage supports this assessment."
+      },
+      "price": {
+        "amount": 35,
+        "currency": "SGD",
+        "variant": "Model A",
+        "conditions": [
+          "tax included"
+        ],
+        "conditionsResolved": true,
+        "assessment": {
+          "status": "supported",
+          "scope": "exact-variant",
+          "rationale": "Fixture data: the cited Model A passage supports this assessment.",
+          "support": [
+            {
+              "sourceId": "source-1",
+              "originalQuote": "Fixture data: Fixture Powerbank Model A is a USB-C powerbank. Model A costs SGD 35 without tax included.",
+              "originalStart": 0,
+              "originalEnd": 104,
+              "quote": "Fixture data: Fixture Powerbank Model A is a USB-C powerbank. Model A costs SGD 35 without tax included.",
+              "start": 0,
+              "end": 104
+            }
+          ]
+        }
+      }
+    }
+  },
+  {
+    "text": "Fixture data: Fixture Powerbank Model A is a USB-C powerbank. Model A costs SGD 35 for one unit, tax included.",
+    "result": {
+      "choice": {
+        "productId": "model-a",
+        "rationale": "Fixture data: the cited Model A passage supports this assessment."
+      },
+      "price": {
+        "amount": 35,
+        "currency": "SGD",
+        "variant": "Model A",
+        "conditions": [
+          "tax included"
+        ],
+        "conditionsResolved": true,
+        "assessment": {
+          "status": "supported",
+          "scope": "exact-variant",
+          "rationale": "Fixture data: the cited Model A passage supports this assessment.",
+          "support": [
+            {
+              "sourceId": "source-1",
+              "originalQuote": "Fixture data: Fixture Powerbank Model A is a USB-C powerbank. Model A costs SGD 35 for one unit, tax included.",
+              "originalStart": 0,
+              "originalEnd": 110,
+              "quote": "Fixture data: Fixture Powerbank Model A is a USB-C powerbank. Model A costs SGD 35 for one unit, tax included.",
+              "start": 0,
+              "end": 110
+            }
+          ]
+        }
+      }
+    }
+  }
+]

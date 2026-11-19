@@ -1,5 +1,5 @@
 {
-  "milestone": 9,
+  "milestone": 13,
   "completed": [
     1,
     2
@@ -8,15 +8,13 @@
   "branch": "rebuild/fieldnote-v2",
   "worktree": "/Users/josiahwong/Documents/research-shopping-v2",
   "agents": {
-    "v2_application_owner": "UI scroll, editor, account integration and lifecycle; reducer handover pending",
-    "v2_eval_owner": "finalizing eval checkpoint and evidence",
-    "v2_verification_owner": "only project verification skill and smoke adaptation"
+    "v2_context_safety": "two QAmeaning defects +boundedCIartifactuploadpath"
   },
   "blockers": [
     "Live Exa proof blocked by uncertain billing and no valid automated allowance",
     "Authorized merchant integration unavailable"
   ],
-  "next": "Focused reducer owner fixes26behavior gaps while main owner fixesUI/account; run full eval and independentQA/security",
+  "next": "Integratecontext-safetyfix,reverifyQA/security/commentdelta, finalremoteCI and unmergedPR",
   "tracking_issue": "https://github.com/d3F0g/research-shopping/issues/51",
   "autonomous_continuation": "No supported task heartbeat scheduling tool exposed. Continue active turn and preserve resume capsule; no future wake armed.",
   "contracts_commit": "cc2e8ce",
@@ -43,7 +41,7 @@
     "infrastructure_errors": 0,
     "notes": "36 exact-quotation equality checks differ after retained paragraph expansion;19 other critical state/budget/criterion failures remain. Frozen assertions unchanged."
   },
-  "app_commit": "cdf008b",
+  "app_commit": "8fdc2b2",
   "eval_code_commit": "48632fc",
   "account_commits": [
     "2317135",
@@ -62,5 +60,26 @@
     "#52 initial mobile result scrolls past leading answer",
     "26 additional locally actionable conversation/evaluation gaps",
     "Account integrated runtime/restart/crash/browser review pending"
-  ]
+  ],
+  "review_verdicts": {
+    "security": "PASS8fd for local reviewed scope,97 codeblob manifest",
+    "qa": "ISSUES8fd: heldsourcequestion dispatch andquotedproductprice budgetshadow",
+    "comment": "PASS8d, k conversionreachableandtested"
+  },
+  "root_checks": {
+    "code_commit": "8fdc2b2",
+    "unit_api": 162,
+    "eval_integrity": 20,
+    "typechecks": "passed",
+    "build": "passed with538.11kB chunkwarning",
+    "full60": {
+      "pass": 11,
+      "fail": 0,
+      "blocked": 48,
+      "unsupported": 1,
+      "critical": 0,
+      "infra": 0
+    },
+    "project_skill": "passed3viewports cleanuptrue"
+  }
 }

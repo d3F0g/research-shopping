@@ -1,0 +1,5 @@
+
+> research-shopping@0.1.0 verify:registry
+> node scripts/verify-official-components.mjs
+
+18 official component files match the recorded CLI output.

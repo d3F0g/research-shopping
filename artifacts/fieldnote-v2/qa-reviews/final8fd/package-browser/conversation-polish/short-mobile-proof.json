@@ -1,0 +1,69 @@
+{
+  "applicationCommit": "8fdc2b24707dee23493b0f3f51097bf222c86310",
+  "sourceStatus": "?? .audit/fieldnote-v2/qa/",
+  "viewport": {
+    "name": "short-mobile",
+    "width": 390,
+    "height": 600
+  },
+  "composition": "Actual browser and Hono service with the Exa SDK using a local labeled substitute and in-memory quota.",
+  "heldCallsBefore": 20,
+  "heldCallsAfter": 20,
+  "battery": {
+    "id": "f2b8c51b-1518-4090-b685-268cc42dfbab-reply",
+    "role": "assistant",
+    "text": "Fixture data. Fixture Powerbank Model A: Battery life: (AI source assessment supported, exact-variant) Fixture data: the cited Model A passage supports this assessment.\nSame assessment status for Fixture Powerbank Model B and Fixture Powerbank Model C.\n\nFull findings and price conditions are in the details. Stock and delivery remain unverified.",
+    "detail": "Fixture data. Fixture Powerbank Model A: Battery life: Fixture data: the cited Model A passage supports this assessment. (supported). \"Fixture data: Fixture Powerbank Model A is a USB-C powerbank, 10000 mAh, with up to 12 hours battery life. Model A costs SGD 35 for one unit, tax included.\" (https://manufacturer.com/model-a) Observed SGD 35. tax included Fixture data: the cited Model A passage supports this assessment. (supported). \"Fixture data: Fixture Powerbank Model A is a USB-C powerbank, 10000 mAh, with up to 12 hours battery life. Model A costs SGD 35 for one unit, tax included.\" (https://manufacturer.com/model-a) Stock and delivery remain unverified.\n\nFixture Powerbank Model B: Battery life: Fixture data: the cited Model A passage supports this assessment. (supported). \"Fixture data: Fixture Powerbank Model B is a USB-C powerbank, 10000 mAh, with up to 12 hours battery life. Model B costs SGD 36 for one unit, tax included.\" (https://manufacturer.com/model-b) Observed SGD 36. tax included Fixture data: the cited Model A passage supports this assessment. (supported). \"Fixture data: Fixture Powerbank Model B is a USB-C powerbank, 10000 mAh, with up to 12 hours battery life. Model B costs SGD 36 for one unit, tax included.\" (https://manufacturer.com/model-b) Stock and delivery remain unverified.\n\nFixture Powerbank Model C: Battery life: Fixture data: the cited Model A passage supports this assessment. (supported). \"Fixture data: Fixture Powerbank Model C is a USB-C powerbank, 10000 mAh, with up to 12 hours battery life. Model C costs SGD 37 for one unit, tax included.\" (https://manufacturer.com/model-c) Observed SGD 37. tax included Fixture data: the cited Model A passage supports this assessment. (supported). \"Fixture data: Fixture Powerbank Model C is a USB-C powerbank, 10000 mAh, with up to 12 hours battery life. Model C costs SGD 37 for one unit, tax included.\" (https://manufacturer.com/model-c) Stock and delivery remain unverified."
+  },
+  "comparison": {
+    "id": "90a1a0c9-001e-489b-b9dd-3e2606ba9db7-reply",
+    "role": "assistant",
+    "text": "Fixture data. Fixture Powerbank Model A: Battery life: (AI source assessment supported, exact-variant) Fixture data: the cited Model A passage supports this assessment.\nSame assessment status for Fixture Powerbank Model B.\n\nFull findings and price conditions are in the details. Stock and delivery remain unverified.",
+    "detail": "Fixture data. Fixture Powerbank Model A: Battery life: Fixture data: the cited Model A passage supports this assessment. (supported). \"Fixture data: Fixture Powerbank Model A is a USB-C powerbank, 10000 mAh, with up to 12 hours battery life. Model A costs SGD 35 for one unit, tax included.\" (https://manufacturer.com/model-a) Observed SGD 35. tax included Fixture data: the cited Model A passage supports this assessment. (supported). \"Fixture data: Fixture Powerbank Model A is a USB-C powerbank, 10000 mAh, with up to 12 hours battery life. Model A costs SGD 35 for one unit, tax included.\" (https://manufacturer.com/model-a) Stock and delivery remain unverified.\n\nFixture Powerbank Model B: Battery life: Fixture data: the cited Model A passage supports this assessment. (supported). \"Fixture data: Fixture Powerbank Model B is a USB-C powerbank, 10000 mAh, with up to 12 hours battery life. Model B costs SGD 36 for one unit, tax included.\" (https://manufacturer.com/model-b) Observed SGD 36. tax included Fixture data: the cited Model A passage supports this assessment. (supported). \"Fixture data: Fixture Powerbank Model B is a USB-C powerbank, 10000 mAh, with up to 12 hours battery life. Model B costs SGD 36 for one unit, tax included.\" (https://manufacturer.com/model-b) Stock and delivery remain unverified."
+  },
+  "disclosureHitTest": {
+    "width": 195.609375,
+    "height": 28,
+    "unobscured": true
+  },
+  "acceptedIntentAfterBrandRelease": {
+    "intentVersion": 2,
+    "originalText": "I want to buy a powerbank around $30-40.",
+    "productDescription": "I want to buy a powerbank around $30-40.\nOnly USB-C.\nNo Sony.",
+    "requirements": [
+      {
+        "id": "request-f3e9060f-51e7-4629-9764-fdd90481099d",
+        "text": "I want to buy a powerbank around $30-40.",
+        "strength": "hard",
+        "originMessageId": "f3e9060f-51e7-4629-9764-fdd90481099d",
+        "kind": "request"
+      },
+      {
+        "id": "requirement-23840377-7ba2-408d-9277-a1239679fc38",
+        "text": "Only USB-C.",
+        "strength": "hard",
+        "originMessageId": "23840377-7ba2-408d-9277-a1239679fc38",
+        "kind": "preference"
+      },
+      {
+        "id": "requirement-250e8690-fcfa-414d-80dd-7c6f5670d702",
+        "text": "No Sony.",
+        "strength": "hard",
+        "originMessageId": "250e8690-fcfa-414d-80dd-7c6f5670d702",
+        "kind": "exclusion"
+      }
+    ],
+    "budget": {
+      "minimum": 30,
+      "maximum": 40,
+      "currency": "SGD"
+    },
+    "region": null,
+    "responseLength": "expanded"
+  },
+  "historicalSnapshotsUnchanged": true,
+  "limits": [
+    "No live Exa, semantic factuality, merchant availability or account persistence acceptance.",
+    "Independent visual review remains required."
+  ]
+}

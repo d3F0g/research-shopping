@@ -1,0 +1,34 @@
+{
+  "candidate": "0d5d7e1ca8efcde0140cfb72b8b060a4bddd472d",
+  "portableDeltaCommits": [
+    "bd43f50",
+    "1b779bd",
+    "0d5d7e1"
+  ],
+  "contextOnlyCommit": "0b07319",
+  "applicationDirty": false,
+  "suiteDirty": false,
+  "unitApiTests": 160,
+  "evalTests": 20,
+  "eval": {
+    "executed": 60,
+    "passed": 11,
+    "failed": 0,
+    "blocked": 48,
+    "unsupported": 1,
+    "infrastructureErrors": 0,
+    "criticalFailures": 0,
+    "acceptance": "inconclusive"
+  },
+  "browser": {
+    "result": "passed",
+    "checks": 29,
+    "screenshots": 15,
+    "cleanup": true
+  },
+  "verificationSkill": {
+    "result": "passed",
+    "cleanup": true
+  },
+  "limits": "Bounded price grammar. Synthetic offline evidence only. Live product usefulness and merchant verification remain unestablished."
+}
