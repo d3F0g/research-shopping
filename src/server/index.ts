@@ -1,12 +1,17 @@
 import { serve } from "@hono/node-server";
+import { isAbsolute } from "node:path";
 import { createApp } from "./app";
 import { configFromEnvironment } from "./config";
-import { createExaWebResearchFromEnvironment } from "./exa-research";
+import { createExaProductResearch } from "./exa-research";
+import { createResearchQuota } from "./research-quota";
+import { createConversationService } from "./conversations";
 
 const config = configFromEnvironment(process.env);
-const app = createApp({
-  webResearch: createExaWebResearchFromEnvironment(process.env),
-  logger: (event) => process.stdout.write(`${JSON.stringify(event)}\n`),
-}, config);
+const enabled = process.env.NODE_ENV === "development" && process.env.EXA_RESEARCH_ENABLED !== "false";
+const key = process.env.EXA_API_KEY?.trim();
+const ledger = process.env.EXA_RESEARCH_LEDGER_PATH;
+const configured = enabled && key && ledger && isAbsolute(ledger);
+const conversations = createConversationService(configured ? { research: createExaProductResearch(key), quota: createResearchQuota(ledger, { manualGrantPath: process.env.EXA_MANUAL_RESEARCH_GRANT_PATH }) } : { unavailableReason: enabled ? "not-configured" : "disabled" });
+const app = createApp({ conversations });
 serve({ fetch: app.fetch, hostname: "127.0.0.1", port: config.apiPort });
-process.stdout.write(`Research + Shopping fixture API listening on http://127.0.0.1:${config.apiPort}\n`);
+process.stdout.write(`Fieldnote V2 Exa research API listening on http://127.0.0.1:${config.apiPort}\n`);

@@ -1,11 +1,11 @@
 import { z } from "zod";
 import type { ResearchSnapshot } from "./research";
 
-export const MoneySchema = z.number().finite().positive().max(1_000_000).refine((n) => Math.round(n * 100) === n * 100);
+export const MoneySchema = z.number().finite().positive().max(1_000_000).refine((n) => Math.round(n * 100) / 100 === n);
 export const CurrencySchema = z.string().regex(/^[A-Z]{3}$/);
 export const BudgetSchema = z.strictObject({ minimum: MoneySchema.optional(), maximum: MoneySchema.optional(), currency: CurrencySchema }).refine((b) => (b.minimum !== undefined || b.maximum !== undefined) && (b.minimum === undefined || b.maximum === undefined || b.minimum <= b.maximum));
 export const RequirementSchema = z.strictObject({ id: z.string().max(80), text: z.string().min(1).max(2000), strength: z.enum(["hard", "flexible"]), originMessageId: z.string().max(80), kind: z.enum(["request", "brand", "exclusion", "preference"]) });
-export const ShoppingIntentSchema = z.strictObject({ originalText: z.string().max(2000), productDescription: z.string().max(6000), requirements: z.array(RequirementSchema).max(24), budget: BudgetSchema.nullable(), region: z.string().regex(/^[A-Z]{2}$/).nullable(), responseLength: z.enum(["concise", "expanded"]) });
+export const ShoppingIntentSchema = z.strictObject({ intentVersion: z.literal(2), originalText: z.string().max(2000), productDescription: z.string().max(6000), requirements: z.array(RequirementSchema).max(24).refine((r) => new Set(r.map((v) => v.id)).size === r.length), budget: BudgetSchema.nullable(), region: z.string().regex(/^[A-Z]{2}$/).nullable(), responseLength: z.enum(["concise", "expanded"]) });
 export type ShoppingIntent = z.infer<typeof ShoppingIntentSchema>;
 export type Budget = z.infer<typeof BudgetSchema>;
 export type Requirement = z.infer<typeof RequirementSchema>;
@@ -20,5 +20,5 @@ export type PrepareInput = z.infer<typeof PrepareInputSchema>;
 export type TurnResponse = { kind: "prepared"; preparedId: string; state: ConversationState } | { kind: "message" | "clarification"; message: string; state: ConversationState } | { kind: "research"; research: ResearchSnapshot; state: ConversationState } | { kind: "research-unavailable"; reason: string; message: string; state: ConversationState };
 
 export function initialConversation(): ConversationState {
-  return { version: 2, revision: 0, intent: { originalText: "", productDescription: "", requirements: [], budget: null, region: null, responseLength: "concise" }, pending: null, messages: [] };
+  return { version: 2, revision: 0, intent: { intentVersion: 2, originalText: "", productDescription: "", requirements: [], budget: null, region: null, responseLength: "concise" }, pending: null, messages: [] };
 }

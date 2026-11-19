@@ -1,51 +1,18 @@
 import { randomUUID } from "node:crypto";
 import { Hono } from "hono";
-import {
-  BudgetSchema, PreferencesSchema, SelectionRequestSchema, SelectionResultSchema,
-  TurnRequestSchema, TurnResponseSchema,
-} from "../domain/contracts";
-import {
-  ShortlistResearchRequestSchema,
-  WebResearchResponseSchema,
-  type WebResearchOperation,
-} from "../domain/web-research";
-import type { ProviderEvent, Providers } from "../domain/providers";
-import { catalog } from "../domain/catalog";
-import { validBudgetAmount } from "../domain/preferences";
-import { createShoppingEngine } from "../domain/shopping";
-import { createFixtureProviders } from "./fixtures";
+import { getCookie, setCookie } from "hono/cookie";
+import { TurnInputSchema } from "../domain/conversation";
+import { createConversationService, type ConversationService } from "./conversations";
 import { resolveServerConfig, type ServerConfig } from "./config";
 
-const PreferenceInput = PreferencesSchema.extend({
-  hard: PreferencesSchema.shape.hard.extend({ budget: BudgetSchema.strict().refine((budget) => validBudgetAmount(budget.amount)).nullable() }).strict(),
-  soft: PreferencesSchema.shape.soft.strict(),
-}).strict();
-const TurnInput = TurnRequestSchema.extend({ preferences: PreferenceInput }).strict();
-const SelectionInput = SelectionRequestSchema.extend({ preferences: PreferenceInput }).strict();
-const WebResearchInput = ShortlistResearchRequestSchema.extend({ preferences: PreferenceInput }).strict();
-const MAX_BODY_BYTES = 16_384;
-
-export type RequestLog = {
-  requestId: string;
-  route: "/api/health" | "/api/turn" | "/api/select" | "/api/research" | "unknown";
-  status: number;
-  durationMs: number;
-  outcomes: ProviderEvent[];
-};
-export type AppDependencies = {
-  providers?: Providers;
-  providerTimeoutMs?: number;
-  webResearch?: WebResearchOperation;
-  logger?: (event: RequestLog) => void;
-};
-
+const MAX_BODY_BYTES = 16384;
+export type AppDependencies = { conversations?: ConversationService; logger?: (event: { requestId: string; route: string; status: number; durationMs: number; outcomes: unknown[] }) => void };
 export function createApp(dependencies: AppDependencies = {}, configuration: Partial<ServerConfig> = {}) {
   const config = resolveServerConfig(configuration);
-  const providers = dependencies.providers ?? createFixtureProviders();
+  const conversations = dependencies.conversations ?? createConversationService();
   const hosts = new Set([config.apiPort, config.webPort].flatMap((port) => [`127.0.0.1:${port}`, `localhost:${port}`]));
   const origins = new Set([...hosts].map((host) => `http://${host}`));
-  const app = new Hono<{ Variables: { requestId: string; outcomes: ProviderEvent[]; payload: unknown } }>();
-
+  const app = new Hono<{ Variables: { requestId: string; outcomes: unknown[]; payload: unknown; sessionId: string } }>();
   app.use("*", async (context, next) => {
     const startedAt = performance.now();
     const requestId = randomUUID();
@@ -116,49 +83,27 @@ export function createApp(dependencies: AppDependencies = {}, configuration: Par
     await next();
   });
 
-  app.get("/api/health", (context) => context.json({
-    status: "ok",
-    mode: "fixture",
-    liveIntegrations: Boolean(dependencies.webResearch),
-    webResearch: dependencies.webResearch ? "enabled" : "disabled",
-  }));
+  app.use("/api/*", async (context, next) => {
+    let id = getCookie(context, "fieldnote-session");
+    if (!id || !conversations.has(id)) {
+      id = conversations.create();
+      setCookie(context, "fieldnote-session", id, { httpOnly: true, sameSite: "Strict", path: "/", maxAge: 86400 });
+    }
+    context.set("sessionId", id);
+    await next();
+  });
+  app.get("/api/health", (context) => context.json({ status: "ok", mode: "research", provider: "exa", automaticPaidChecks: false }));
+  app.get("/api/session", (context) => context.json({ responseVersion: 2, state: conversations.state(context.get("sessionId")) }));
   app.post("/api/turn", async (context) => {
-    const parsed = TurnInput.safeParse(context.get("payload"));
-    if (!parsed.success) return context.json({ error: "Invalid JSON or request fields", requestId: context.get("requestId") }, 400);
-    const engine = createShoppingEngine(providers, {
-      providerTimeoutMs: dependencies.providerTimeoutMs,
-      onProviderEvent: (event) => { if (context.get("outcomes").length < 20) context.get("outcomes").push(event); },
-    });
-    const result = await engine.turn(parsed.data.message, parsed.data.preferences, { signal: context.req.raw.signal });
-    const toolActivity = context.get("outcomes").slice(0, 20);
-    return context.json(TurnResponseSchema.parse({ ...result, toolActivity }));
+    const parsed = TurnInputSchema.safeParse(context.get("payload"));
+    if (!parsed.success) return context.json({ error: "Invalid JSON or request fields" }, 400);
+    const id = context.get("sessionId");
+    const result = parsed.data.phase === "prepare" ? conversations.prepare(id, parsed.data) : await conversations.research(id, parsed.data.preparedId, context.req.raw.signal);
+    return context.json({ responseVersion: 2, ...result });
   });
-  app.post("/api/select", async (context) => {
-    const parsed = SelectionInput.safeParse(context.get("payload"));
-    if (!parsed.success) return context.json({ error: "Invalid JSON or request fields", requestId: context.get("requestId") }, 400);
-    const engine = createShoppingEngine(providers, {
-      providerTimeoutMs: dependencies.providerTimeoutMs,
-      onProviderEvent: (event) => { if (context.get("outcomes").length < 20) context.get("outcomes").push(event); },
-    });
-    const result = await engine.select(parsed.data.productId, parsed.data.preferences, { signal: context.req.raw.signal });
-    return context.json(SelectionResultSchema.parse(result));
-  });
-  app.post("/api/research", async (context) => {
-    const parsed = WebResearchInput.safeParse(context.get("payload"));
-    if (!parsed.success || parsed.data.productIds.some((productId) => !(productId in catalog))) {
-      return context.json({ error: "Invalid JSON or request fields", requestId: context.get("requestId") }, 400);
-    }
-    if (!dependencies.webResearch) return context.json({ status: "disabled" });
-
-    try {
-      const result = await dependencies.webResearch(parsed.data, context.req.raw.signal);
-      return context.json(WebResearchResponseSchema.parse(result));
-    } catch {
-      if (context.req.raw.signal.aborted) return context.body(null, 204);
-      return context.json({ status: "unavailable", reason: "provider-error" });
-    }
-  });
-  app.notFound((context) => context.json({ error: "Not found", requestId: context.get("requestId") }, 404));
+  app.post("/api/cancel", (context) => context.json({ responseVersion: 2, state: conversations.cancel(context.get("sessionId")) }));
+  app.post("/api/new-chat", (context) => context.json({ responseVersion: 2, state: conversations.reset(context.get("sessionId")) }));
+  app.notFound((context) => context.json({ error: "Not found" }, 404));
   app.onError((_error, context) => context.json({ error: "The request could not be completed", requestId: context.get("requestId") }, 500));
   return app;
 }
