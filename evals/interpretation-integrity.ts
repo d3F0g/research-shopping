@@ -6,7 +6,16 @@ const object = (value: Json) => value as Record<string, Json>;
 export function validateInterpretation(observation: Observation, report: RunReport) {
   const input = observation.interpretation;
   const invocations = observation.events.filter((event) => event.kind === "interpreter-request");
-  if (!input || input.openAIHttpRequests !== 0 || input.invocations !== invocations.length) throw new Error("interpretation provenance mismatch");
+  if (!input || input.openAIHttpRequests !== 0 || input.ollamaHttpRequests !== 0 || input.invocations !== invocations.length) throw new Error("interpretation provenance mismatch");
+  const consumedTurns = invocations.map((event) => event.turn);
+  const supplied = input.suppliedTurns as IntentTurn[];
+  if (hash(input.consumedTurns) !== hash(consumedTurns) || hash(input.unconsumedTurns) !== hash(supplied.filter((turn) => !consumedTurns.includes(turn.turnIndex)).map((turn) => turn.turnIndex))) throw new Error("consumed interpretation coverage mismatch");
+  for (const turn of observation.turns) {
+    const prepared = observation.events.find((event) => event.kind === "app-response" && event.turn === turn.index);
+    const body = prepared ? object(object(prepared.body).body!) : null;
+    const handling = turn.action.kind === "reset" || turn.action.kind === "repeat-research" ? "not-prepared" : consumedTurns.includes(turn.index) ? "synthetic-fallback" : body?.kind === "research-unavailable" && body.reason === "intent-unavailable" ? "unavailable" : "local";
+    if (turn.intentHandling !== handling) throw new Error("reported local or fallback handling differs from transport events");
+  }
   if (input.mode === "unavailable") {
     if (input.inputHash !== null || invocations.length || input.suppliedTurns.length || input.limitations.length) throw new Error("unavailable interpretation cannot contain supplied inputs");
     return;

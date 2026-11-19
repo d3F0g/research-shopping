@@ -7,8 +7,9 @@ import { scenarioMaterial } from "./inputs/materials";
 import { makeReport, summaryMarkdown, compareReports, caseResult, validateReport } from "./report";
 import type { CaseResult, RunReport } from "./contracts";
 
-const { values } = parseArgs({ options: { out: { type: "string", default: "artifacts/product-evals/current" }, case: { type: "string" }, "application-commit": { type: "string" }, gate: { type: "string", default: "report" }, baseline: { type: "string" }, candidate: { type: "string" }, compare: { type: "boolean" }, "issue-drafts": { type: "boolean" } }, strict: true });
+const { values } = parseArgs({ options: { out: { type: "string", default: "artifacts/product-evals/current" }, case: { type: "string" }, "application-commit": { type: "string" }, gate: { type: "string", default: "report" }, baseline: { type: "string" }, candidate: { type: "string" }, compare: { type: "boolean" }, "issue-drafts": { type: "boolean" }, "intent-mode": { type: "string", default: "fixed-fallback" } }, strict: true });
 if (!["report", "critical", "all"].includes(values.gate!)) throw new Error("Use --gate report, critical or all");
+if (!["fixed-fallback", "local-only"].includes(values["intent-mode"]!)) throw new Error("Use --intent-mode fixed-fallback or local-only");
 const output = resolve(values.out!);
 await mkdir(output, { recursive: true });
 if (values.compare) {
@@ -30,7 +31,7 @@ if (values.compare) {
     for (const scenario of selected) {
       const input = scenarioMaterial(scenario.provider, scenario.id);
       try {
-        const observation = await observe({ id: scenario.id, actions: scenario.actions, provider: scenario.provider }, input, guard);
+        const observation = await observe({ id: scenario.id, actions: scenario.actions, provider: scenario.provider }, input, guard, values["intent-mode"] === "local-only" ? { intent: null } : {});
         cases.push(caseResult(scenario, input, observation));
         await writeFile(join(output, `${scenario.id}.trace.json`), JSON.stringify(observation, null, 2));
       } catch (error) {

@@ -53,12 +53,20 @@ test("v5 client carries complete typed question identity, returned preferences a
     assert.equal(requests[1]!.questionId, question.id);
     assert.equal(hash(requests[1]!.preferences), hash(result.turns[0]!.finalPreferences));
     assert.notEqual(requests[2]!.operationId, requests[1]!.operationId);
-    assert.equal(result.interpretation.invocations, 1);
+    assert.equal(result.interpretation.invocations, 0);
+    assert.deepEqual(result.interpretation.consumedTurns, []);
+    assert.deepEqual(result.interpretation.unconsumedTurns, [0, 1]);
+    assert(result.turns.every((turn) => turn.intentHandling === "local"));
     assert.equal(result.interpretation.openAIHttpRequests, 0);
     assert.equal(result.turns[1]!.providerCalls, 1);
     assert.equal(result.events.filter((event) => event.kind === "provider-request").length, 1);
     assert(!grade(scenario, result).some((check) => check.status === "fail"));
-    const unavailable = await observe(scenario, material("powerbank"), guard, { intent: null });
+    const local = await observe(scenario, material("powerbank"), guard, { intent: null });
+    assert.equal(local.turns[1]!.response!.kind, "research");
+    assert.equal(hash(local.finalPreferences), hash(result.finalPreferences));
+    assert.equal(local.interpretation.invocations, 0);
+    const unsupported = (await loadDataset()).scenarios.find((row) => row.id === "FN-CU-002")!;
+    const unavailable = await observe(unsupported, material("empty"), guard, { intent: null });
     assert.equal(unavailable.turns[0]!.response!.reason, "intent-unavailable");
     assert.equal(unavailable.interpretation.mode, "unavailable");
     assert.equal(unavailable.turns.reduce((sum, turn) => sum + turn.providerCalls, 0), 0);
@@ -110,7 +118,7 @@ test("stale questions bypass supplied interpretations and do not dispatch resear
       const result = await app.request({ ...request("SGD"), preferences: first.preferences, questionId: "stale-question" });
       assert.equal(result.kind, "message");
       assert.equal(hash(first.preferences), hash(result.preferences));
-      assert.equal(app.interpretation().invocations, 1);
+      assert.equal(app.interpretation().invocations, 0);
       assert.equal(app.providerCalls, 0);
     } finally { await app.close(); }
   } finally { guard.close(); }
@@ -127,5 +135,29 @@ test("opposite brand proposals retain their polarity through the actual applicat
       assert.equal(result.finalPreferences.criteria[0]!.wording, wording);
       assert.equal(result.finalPreferences.criteria[0]!.strength, "hard");
     }
+  } finally { guard.close(); }
+});
+
+test("local-only execution completes a supported request with no matching fixed input or optional interpreter", async () => {
+  const guard = offlineNetwork();
+  try {
+    const { observe } = await import("../adapter");
+    const { makeReport, validateReport } = await import("../report");
+    const result = await observe({ id: "deliberately-absent-from-fixed-inputs", provider: "powerbank", actions: [{ kind: "message", text: "I need a power bank under SGD40" }] }, material("powerbank"), guard, { intent: null });
+    assert.equal(result.applicationError, null);
+    assert.equal(result.turns[0]!.intentHandling, "local");
+    assert.equal(result.turns[0]!.response!.kind, "research");
+    assert.equal(result.turns[0]!.providerCalls, 1);
+    assert.equal(result.interpretation.invocations, 0);
+    assert.equal(result.interpretation.inputHash, null);
+    assert.deepEqual(result.interpretation.suppliedTurns, []);
+    const scenario = (await loadDataset()).scenarios[0]!;
+    const actual = await observe(scenario, material("powerbank"), guard, { intent: null });
+    const { caseResult } = await import("../report");
+    const report = await makeReport([caseResult(scenario, actual.material, actual)], [scenario]);
+    validateReport(report);
+    assert.equal(report.configuration.interpretationMode, "local-only");
+    assert(report.implementationInputs.adapter.every((input) => !input.path.endsWith(".json")));
+    assert.equal(report.configuration.ollamaHttpRequests, 0);
   } finally { guard.close(); }
 });

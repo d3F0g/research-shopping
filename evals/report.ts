@@ -4,7 +4,9 @@ import { join } from "node:path";
 import { ADAPTER_VERSION, ASSERTION_VERSION, DATASET_VERSION, categories, type CaseResult, type Check, type Metric, type RunReport, type ScenarioContract, type Material, type Observation } from "./contracts";
 import { validateReport as validateFrozenReport } from "./frozen-v2/report";
 import type { RunReport as FrozenReport } from "./frozen-v2/contracts";
-export type AnyReport = RunReport | FrozenReport;
+import { validateReport as validateFrozenV3 } from "./frozen-v3/report";
+import type { RunReport as FrozenV3 } from "./frozen-v3/contracts";
+export type AnyReport = RunReport | FrozenReport | FrozenV3;
 import { validateInterpretation } from "./interpretation-integrity";
 import { grade } from "./assertions";
 import { hash, materialPayloadHash } from "./hash";
@@ -13,6 +15,13 @@ const implementationPaths = {
   grading: ["assertions.ts", "contracts.ts", "hash.ts", "dataset.ts", "dataset/milestones.ts", "report.ts", "interpretation-integrity.ts"],
   adapter: ["adapter.ts", "network.ts", "inputs/materials.ts", "inputs/intent.ts", "inputs/intent-proposals.v1.json", "inputs/intent-proposals.v2.json", "inputs/public-conversations.v1.json"],
 } as const;
+function interpretationMode(cases: CaseResult[]): RunReport["configuration"]["interpretationMode"] {
+  const modes = new Set(cases.flatMap((row) => row.observation ? [row.observation.interpretation.mode] : []));
+  return !modes.size ? "unexecuted" : modes.size > 1 ? "mixed" : modes.has("fixed-proposals") ? "fixed-fallback" : "local-only";
+}
+function adapterPaths(mode: RunReport["configuration"]["interpretationMode"]) {
+  return mode === "local-only" ? implementationPaths.adapter.filter((path) => !path.endsWith(".json")) : [...implementationPaths.adapter];
+}
 const git = (...args: string[]) => execFileSync("git", args, { encoding: "utf8" }).trim();
 async function sourceHash(directory: string): Promise<string> {
   const files: string[] = [];
@@ -62,12 +71,14 @@ export function caseResult(contract: ScenarioContract, material: Material, obser
 }
 export function validateReport(report: AnyReport): void {
   if (report?.schemaVersion === 2) { validateFrozenReport(report); return; }
-  if (report?.schemaVersion !== 3 || report.assertionVersion !== ASSERTION_VERSION || report.adapterVersion !== ADAPTER_VERSION) throw new Error("Unsupported report schema or assertion semantics. Use the explicit frozen v2 or current v3 contract.");
+  if (report?.schemaVersion === 3) { validateFrozenV3(report); return; }
+  if (report?.schemaVersion !== 4 || report.assertionVersion !== ASSERTION_VERSION || report.adapterVersion !== ADAPTER_VERSION) throw new Error("Unsupported report schema or assertion semantics. Use explicit frozen v2/v3 or current v4 contracts.");
   try {
     if (!Array.isArray(report.datasetContracts) || hash(report.datasetContracts) !== report.datasetHash || new Set(report.datasetContracts.map((item) => item.id)).size !== report.datasetContracts.length) throw new Error("dataset contract hash mismatch");
     for (const kind of ["grading", "adapter"] as const) {
       const inputs = report.implementationInputs[kind];
-      if (inputs.length !== implementationPaths[kind].length || inputs.some((input, index) => input.path !== implementationPaths[kind][index] || typeof input.text !== "string" || input.text.length > 1_000_000) || hash(inputs) !== report.implementationHashes[kind]) throw new Error(`${kind} implementation input hash mismatch`);
+      const expectedPaths = kind === "adapter" ? adapterPaths(report.configuration.interpretationMode) : implementationPaths[kind];
+      if (inputs.length !== expectedPaths.length || inputs.some((input, index) => input.path !== expectedPaths[index] || typeof input.text !== "string" || input.text.length > 1_000_000) || hash(inputs) !== report.implementationHashes[kind]) throw new Error(`${kind} implementation input hash mismatch`);
     }
     if (report.implementationHashes.suite !== hash({ grading: report.implementationHashes.grading, adapter: report.implementationHashes.adapter, datasetHash: report.datasetHash })) throw new Error("suite hash mismatch");
     if (new Set(report.cases.map((item) => item.id)).size !== report.cases.length) throw new Error("duplicate case IDs");
@@ -85,7 +96,8 @@ export function validateReport(report: AnyReport): void {
       if (hash(row) !== hash(recomputed)) throw new Error(`${row.id} case hashes, expectations, checks or verdict differ from deterministic grading`);
     }
     if (hash(report.summary) !== hash(summarize(report.cases))) throw new Error("summary differs from deterministic grading");
-    if (report.configuration.exaCreditsConsumed !== 0 || report.configuration.openAIHttpRequests !== 0) throw new Error("offline report cannot claim paid execution");
+    if (report.configuration.interpretationMode !== interpretationMode(report.cases)) throw new Error("interpretation composition differs from observations");
+    if (report.configuration.exaCreditsConsumed !== 0 || report.configuration.openAIHttpRequests !== 0 || report.configuration.ollamaHttpRequests !== 0) throw new Error("offline report cannot claim paid execution");
   } catch (error) { throw new Error(`Invalid report integrity. ${error instanceof Error ? error.message : String(error)}`); }
 }
 export async function makeReport(cases: CaseResult[], datasetContracts: ScenarioContract[], applicationCommit?: string): Promise<RunReport> {
@@ -94,23 +106,27 @@ export async function makeReport(cases: CaseResult[], datasetContracts: Scenario
   const appCommit = applicationCommit ?? commit;
   if (!/^[a-f0-9]{40}$/.test(appCommit)) throw new Error("Application commit must be a full SHA");
   if (git("diff", appCommit, "--", "src").length) throw new Error("The claimed application commit differs from the current src tree");
+  const mode = interpretationMode(cases);
   const implementationInputs = {
     grading: await Promise.all(implementationPaths.grading.map(async (path) => ({ path, text: await readFile(new URL(path, import.meta.url), "utf8") }))),
-    adapter: await Promise.all(implementationPaths.adapter.map(async (path) => ({ path, text: await readFile(new URL(path, import.meta.url), "utf8") }))),
+    adapter: await Promise.all(adapterPaths(mode).map(async (path) => ({ path, text: await readFile(new URL(path, import.meta.url), "utf8") }))),
   };
   const grading = hash(implementationInputs.grading);
   const adapter = hash(implementationInputs.adapter);
   return {
     implementationInputs, implementationHashes: { grading, adapter, suite: hash({ grading, adapter, datasetHash }) },
-    schemaVersion: 3, datasetContracts, createdAt: new Date().toISOString(), runId: hash({ time: Date.now(), commit }).slice(0, 24), datasetVersion: DATASET_VERSION, datasetHash, assertionVersion: ASSERTION_VERSION, adapterVersion: ADAPTER_VERSION,
+    schemaVersion: 4, datasetContracts, createdAt: new Date().toISOString(), runId: hash({ time: Date.now(), commit }).slice(0, 24), datasetVersion: DATASET_VERSION, datasetHash, assertionVersion: ASSERTION_VERSION, adapterVersion: ADAPTER_VERSION,
     application: { commit: appCommit, tree: git("rev-parse", `${appCommit}:src`), dirty: git("status", "--porcelain", "--", "src").length > 0, sourceHash: await sourceHash("src") },
     suite: { commit, dirty: git("status", "--porcelain", "--", "evals", "package.json", ".github/workflows/product-evals.yml").length > 0 },
-    configuration: { provider: "Actual exa-js SDK against fixed synthetic loopback HTTP responses", model: null, exaCreditsConsumed: 0, composition: "Normal Hono research mode with isolated in-memory quota double. No .env or shared ledger.", interpretation: "Independently fixed literal-span proposals injected at IntentInterpreter. Actual applyIntentActions executes. This does not test model understanding.", openAIHttpRequests: 0 },
-    cases, summary: summarize(cases), limitations: ["provider-request, providerCalls, bounded-dispatch and research-after-prepare count Exa research only. The frozen no-provider-during-prepare assertion means no Exa call; production v5 may interpret during prepare. Main-lane OpenAI HTTP is zero, and interpretation invocations are counted separately.", "The main lane supplies independently authored synthetic interpretations and makes zero OpenAI HTTP calls. It measures conditional technical behavior, not NLU accuracy or live usefulness. Input coverage limitations are explicit and never repaired from expected states.", "Offline synthetic provider inputs do not establish real Exa discovery, live product relevance, current prices, stock or merchant authorization.", "No raw original current-schema Exa answer recordings were available. Historical excerpts are not presented as genuine answer replays.", "Semantic scores remain absent until a separately supplied independent judge returns packet-bound judgments. Human calibration is pending.", "Criterion-presence checks establish structured strength and literal phrases, with explicit brand polarity where specified. They do not establish complete semantic equivalence or entailment.", "Application commit and source hash are external execution provenance. Reports do not cryptographically authenticate execution, and embedded evaluator source is never executed.", "Browser acceptance is a separate artifact; deterministic transport runs do not establish UI quality.", "Unsupported capabilities and blocked evidence remain outside assessed denominators. Observed failures retain their original expectations."] };
+    configuration: { provider: "Actual exa-js SDK against fixed synthetic loopback HTTP responses", model: null, exaCreditsConsumed: 0, composition: "Normal Hono research mode with isolated in-memory quota double. No .env or shared ledger.", interpretation: mode === "local-only" ? "Actual local parsing and typed controls. Optional interpreter absent. No fixed proposal file is read for this lane." : "Actual local parsing and typed controls run first. Independently fixed literal-span proposals are consumed only if the application invokes its optional IntentInterpreter. This does not test model understanding.", interpretationMode: mode, openAIHttpRequests: 0, ollamaHttpRequests: 0 },
+    cases, summary: summarize(cases), limitations: ["provider-request, providerCalls, bounded-dispatch and research-after-prepare count Exa research only. The frozen no-provider-during-prepare assertion means no Exa call; production v5 may interpret during prepare. Main-lane OpenAI and Ollama HTTP counts are zero. Synthetic fallback invocations and local handling are recorded separately.", "The main lane uses actual local parsing before optional independently authored synthetic interpretations. The supplemental local-only lane has no optional interpreter. Neither lane performs OpenAI or Ollama HTTP inference. It measures conditional technical behavior, not NLU accuracy or live usefulness. Input coverage limitations are explicit and never repaired from expected states.", "Offline synthetic provider inputs do not establish real Exa discovery, live product relevance, current prices, stock or merchant authorization.", "No raw original current-schema Exa answer recordings were available. Historical excerpts are not presented as genuine answer replays.", "Semantic scores remain absent until a separately supplied independent judge returns packet-bound judgments. Human calibration is pending.", "Criterion-presence checks establish structured strength and literal phrases, with explicit brand polarity where specified. They do not establish complete semantic equivalence or entailment.", "Application commit and source hash are external execution provenance. Reports do not cryptographically authenticate execution, and embedded evaluator source is never executed.", "Browser acceptance is a separate artifact; deterministic transport runs do not establish UI quality.", "Unsupported capabilities and blocked evidence remain outside assessed denominators. Observed failures retain their original expectations."] };
 }
 export function summaryMarkdown(report: RunReport): string {
   const s = report.summary;
-  const lines = ["# Fieldnote product evaluation", "", `Application ${report.application.commit}. Dataset ${report.datasetVersion}. Assertion contract ${report.assertionVersion}.`, "", `Executed ${s.executed}/${s.total}. Passed ${s.passed}. Failed ${s.failed}. Blocked ${s.blocked}. Unsupported ${s.unsupported}. Infrastructure errors ${s.infrastructureErrors}.`, `Critical assertion failures ${s.criticalFailures} across ${s.criticalScenarios} scenarios. Technical scenario acceptance ${s.acceptance}.`, "", "Synthetic offline input. Exa credits consumed 0. These results do not establish real shopping usefulness.", "", "| Category | Passed | Assessed | Unassessed | Rate |", "| --- | ---: | ---: | ---: | ---: |", ...Object.entries(s.categories).map(([category, value]) => `| ${category} | ${value.passed} | ${value.assessed} | ${value.unassessed} | ${value.rate === null ? "not assessed" : `${(value.rate * 100).toFixed(1)}%`} |`), "", "## Observed failures", ""];
+  const turns = report.cases.flatMap((row) => row.observation?.turns ?? []);
+  const handling = ["local", "synthetic-fallback", "unavailable", "not-prepared"].map((kind) => `${kind} ${turns.filter((turn) => turn.intentHandling === kind).length}`).join(". ");
+  const exa = report.cases.reduce((sum, row) => sum + (row.observation?.events.filter((event) => event.kind === "provider-request").length ?? 0), 0);
+  const lines = ["# Fieldnote product evaluation", "", `Application ${report.application.commit}. Dataset ${report.datasetVersion}. Assertion contract ${report.assertionVersion}.`, "", `Executed ${s.executed}/${s.total}. Passed ${s.passed}. Failed ${s.failed}. Blocked ${s.blocked}. Unsupported ${s.unsupported}. Infrastructure errors ${s.infrastructureErrors}.`, `Critical assertion failures ${s.criticalFailures} across ${s.criticalScenarios} scenarios. Technical scenario acceptance ${s.acceptance}.`, "", `Preparation handling. ${handling}. Exa SDK loopback requests ${exa}. OpenAI HTTP 0. Ollama HTTP 0.`, "", "Synthetic offline input. Exa credits consumed 0. These results do not establish real shopping usefulness.", "", "| Category | Passed | Assessed | Unassessed | Rate |", "| --- | ---: | ---: | ---: | ---: |", ...Object.entries(s.categories).map(([category, value]) => `| ${category} | ${value.passed} | ${value.assessed} | ${value.unassessed} | ${value.rate === null ? "not assessed" : `${(value.rate * 100).toFixed(1)}%`} |`), "", "## Observed failures", ""];
   for (const item of report.cases.filter((item) => item.verdict === "fail" || item.execution === "infrastructure-error")) {
     lines.push(`- ${item.id}. ${item.checks.filter((check) => check.status === "fail").map((check) => check.id).join(", ") || item.error}. Reproduce with \`${item.reproduction}\`.`);
   }
@@ -120,7 +136,7 @@ export function summaryMarkdown(report: RunReport): string {
 export function compareReports(baseline: AnyReport, candidate: AnyReport) {
   validateReport(baseline);
   validateReport(candidate);
-  const compatible = baseline.datasetVersion === candidate.datasetVersion && baseline.datasetHash === candidate.datasetHash && baseline.assertionVersion === candidate.assertionVersion && baseline.adapterVersion === candidate.adapterVersion && baseline.implementationHashes.grading === candidate.implementationHashes.grading && baseline.implementationHashes.adapter === candidate.implementationHashes.adapter;
+  const compatible = baseline.datasetVersion === candidate.datasetVersion && baseline.datasetHash === candidate.datasetHash && baseline.assertionVersion === candidate.assertionVersion && baseline.adapterVersion === candidate.adapterVersion && baseline.implementationHashes.grading === candidate.implementationHashes.grading && baseline.implementationHashes.adapter === candidate.implementationHashes.adapter && (baseline.schemaVersion !== 4 || candidate.schemaVersion !== 4 || baseline.configuration.interpretationMode === candidate.configuration.interpretationMode);
   const result = { compatible, capabilityTransitions: [] as { id: string; from: string; to: string }[], newlyPassing: [] as string[], newlyFailing: [] as string[], regressionCount: 0, unchangedFailures: [] as string[], criticalRegressions: [] as string[], notComparable: [] as string[], added: [] as string[], removed: [] as string[] };
   for (const row of candidate.cases) {
     const old = baseline.cases.find((item) => item.id === row.id);

@@ -156,6 +156,9 @@ test("report ingestion recomputes payload bindings, checks, verdict and summary"
     (value) => { value.cases[0]!.observation!.interpretation.inputHash = "forged"; },
     (value) => { const response = value.cases[0]!.observation!.events.find((event) => event.kind === "interpreter-response")!; object(response.body).interpretation = { disposition: "acknowledge", actions: [] }; },
     (value) => { value.configuration.openAIHttpRequests = 1 as 0; },
+    (value) => { value.configuration.ollamaHttpRequests = 1 as 0; },
+    (value) => { value.cases[0]!.observation!.interpretation.consumedTurns = []; },
+    (value) => { value.cases[0]!.observation!.turns[0]!.intentHandling = "local"; },
   ];
   for (const mutate of mutations) { const bad = structuredClone(report); mutate(bad); assert.throws(() => compareReports(report, bad), /Invalid report integrity/); }
   assert.throws(() => compareReports({ ...report, schemaVersion: 1 } as unknown as RunReport, report), /Unsupported report schema/);

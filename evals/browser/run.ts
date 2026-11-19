@@ -19,7 +19,7 @@ if (!["report", "strict", "smoke"].includes(values.mode!)) throw new Error("Use 
 const output = resolve(values.out!);
 await mkdir(output, { recursive: true });
 const guard = offlineNetwork();
-const proof = { schemaVersion: 2, feature: "normal-shopping-conversation", commit: execFileSync("git", ["rev-parse", "HEAD"], { encoding: "utf8" }).trim(), worktreeStatus: execFileSync("git", ["status", "--porcelain"], { encoding: "utf8" }).trim(), mode: values.mode, label: "Actual browser, Vite, Hono and Exa SDK HTTP with entirely synthetic fake-key loopback research. Fixed synthetic intent proposals and supplemental synthetic citation images. Zero OpenAI HTTP, zero Exa credits; no model understanding, real shopping usefulness or merchant verification.", result: "failed", cleanup: false, interrupted: false, actions: [] as string[], checks: [] as { name: string; result: "pass" | "fail" | "unsupported"; expected: string; observed: Json }[], screenshots: [] as string[], traces: [] as string[], browserRequests: [] as Json[], browserResponses: [] as Json[], deniedBrowserRequests: [] as string[], pageErrors: [] as string[], providerEvents: [] as Json[], syntheticImages: [] as Json[], interpretation: null as Json, owned: {} as Record<string, Json> };
+const proof = { schemaVersion: 3, feature: "normal-shopping-conversation", commit: execFileSync("git", ["rev-parse", "HEAD"], { encoding: "utf8" }).trim(), worktreeStatus: execFileSync("git", ["status", "--porcelain"], { encoding: "utf8" }).trim(), mode: values.mode, label: "Actual browser, Vite, Hono and Exa SDK HTTP with entirely synthetic fake-key loopback research. Actual local parsing and fixed synthetic optional fallback proposals, with supplemental synthetic citation images. Zero OpenAI/Ollama HTTP and zero Exa credits; no model understanding, real shopping usefulness or merchant verification.", result: "failed", cleanup: false, interrupted: false, actions: [] as string[], checks: [] as { name: string; result: "pass" | "fail" | "unsupported"; expected: string; observed: Json }[], screenshots: [] as string[], traces: [] as string[], browserRequests: [] as Json[], browserResponses: [] as Json[], deniedBrowserRequests: [] as string[], pageErrors: [] as string[], providerEvents: [] as Json[], syntheticImages: [] as Json[], interpretation: null as Json, owned: {} as Record<string, Json> };
 let browser: Browser | undefined;
 let web: ReturnType<typeof spawn> | undefined;
 let app: Awaited<ReturnType<typeof import("../adapter")["ownedApplication"]>> | undefined;
@@ -149,6 +149,8 @@ try {
   browser = await chromium.launch();
   const page = await pageFor("chat-and-theme");
   await expect(page.locator("html")).toHaveClass(/dark/);
+  await expect(page.getByText("Shopping requests may use one paid Exa call.", { exact: true })).toBeVisible();
+  await expect(page.getByText(/paid OpenAI/)).toHaveCount(0);
   await expect(page.getByRole("complementary")).toHaveCount(0);
   await expect(page.getByRole("article")).toHaveCount(0);
   await expect(page.locator(".preferences-panel")).toHaveCount(0);
@@ -258,6 +260,7 @@ try {
     await Promise.all(pendingResponses);
     const currencyRequests = proof.browserRequests.filter((value) => typeof value === "object" && value !== null && !Array.isArray(value) && value.journey === "powerbank-currency") as Record<string, Json>[];
     const answerRequest = currencyRequests.map((value) => value.body as Record<string, Json>).find((body) => body.message === "SGD")!;
+    checked("currency-uses-local-handling", !app.events.some((event) => event.kind === "interpreter-request" && (event.turn === 3 || event.turn === 4)), "Supported initial request and typed currency answer bypass optional interpretation", app.interpretation().consumedTurns);
     checked("typed-question-identity-and-enter-submit", answerRequest.questionId === initialQuestion.id && initialQuestion.kind === "money" && initialQuestion.missingSlot === "currency", "Enter submits the typed answer once with its actual pending question identity", { question: initialQuestion, answerRequest });
     const responses = proof.browserResponses.filter((value) => typeof value === "object" && value !== null && !Array.isArray(value) && value.journey === "powerbank-currency") as Record<string, Json>[];
     const latest = responses.at(-1)?.body as Record<string, Json> | undefined;

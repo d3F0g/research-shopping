@@ -21,26 +21,28 @@ export async function ownedApplication(input: Material, guard: Guard, options: {
   let providerCalls = 0;
   let interpreterCalls = 0;
   const inputLimitations: string[] = [];
-  const record = (kind: Event["kind"], body: unknown) => events.push({ sequence: events.length + 1, turn: currentTurn, kind, elapsedMs: Math.round((performance.now() - started) * 100) / 100, body: JSON.parse(JSON.stringify(body)) as Json });
+  const recordAt = (turn: number, kind: Event["kind"], body: unknown) => events.push({ sequence: events.length + 1, turn, kind, elapsedMs: Math.round((performance.now() - started) * 100) / 100, body: JSON.parse(JSON.stringify(body)) as Json });
+  const record = (kind: Event["kind"], body: unknown) => recordAt(currentTurn, kind, body);
   const providerResponses = new Set<ServerResponse>();
   const provider = createServer((request, response) => {
+    const requestTurn = currentTurn;
     providerResponses.add(response);
     response.once("close", () => providerResponses.delete(response));
     let body = "";
     request.on("data", (chunk) => { body += String(chunk); });
     request.on("end", () => {
       providerCalls++;
-      record("provider-request", { path: request.url, body: JSON.parse(body) });
+      recordAt(requestTurn, "provider-request", { path: request.url, body: JSON.parse(body) });
       const reply = () => {
         if (response.destroyed) return;
-        record("provider-response", { status: input.status, materialId: input.id, materialHash: input.sha256 });
+        recordAt(requestTurn, "provider-response", { status: input.status, materialId: input.id, materialHash: input.sha256 });
         response.writeHead(input.status, { "content-type": "application/json" });
         response.end(JSON.stringify(input.body));
       };
       const timer = input.delayMs ? setTimeout(reply, input.delayMs) : undefined;
       response.on("close", () => {
         if (timer) clearTimeout(timer);
-        if (!response.writableFinished) record("provider-aborted", { materialId: input.id });
+        if (!response.writableFinished) recordAt(requestTurn, "provider-aborted", { materialId: input.id });
       });
       if (!timer) reply();
     });
@@ -49,15 +51,15 @@ export async function ownedApplication(input: Material, guard: Guard, options: {
   await once(provider, "listening");
   const providerOrigin = `http://127.0.0.1:${(provider.address() as AddressInfo).port}`;
   guard.allow(providerOrigin);
-  const seen = new Set<string>();
+  const seen = new Map<string, number>();
   const quota = {
     async reserve(operationId: string, digest: string) {
       const outcome = seen.has(operationId) ? "duplicate" as const : "admitted" as const;
-      seen.add(operationId);
+      if (!seen.has(operationId)) seen.set(operationId, currentTurn);
       record("admission", { operationId, digest, outcome, label: "Isolated in-memory quota double; no persistent ledger" });
       return outcome;
     },
-    async settle(operationId: string, cost: number | null, successful: boolean) { record("settlement", { operationId, cost, successful, label: "Synthetic provider-reported amount, no billable request" }); },
+    async settle(operationId: string, cost: number | null, successful: boolean) { recordAt(seen.get(operationId)!, "settlement", { operationId, cost, successful, label: "Synthetic provider-reported amount, no billable request" }); },
   };
   let app: ReturnType<typeof createApp>;
   const appRequests = new Set<Promise<Response>>();
@@ -74,31 +76,33 @@ export async function ownedApplication(input: Material, guard: Guard, options: {
   app = createApp({ researchTurns: createResearchTurns({
     ...(options.intent ? { interpretIntent: async (request, signal) => {
       signal.throwIfAborted();
+      const interpretationTurn = currentTurn;
       interpreterCalls++;
-      record("interpreter-request", { operationId: request.operationId, message: request.message, questionId: request.questionId ?? null, inputHash: options.intent!.hash, label: options.intent!.label });
+      recordAt(interpretationTurn, "interpreter-request", { operationId: request.operationId, message: request.message, questionId: request.questionId ?? null, inputHash: options.intent!.hash, label: options.intent!.label });
       try {
         if (options.intentDelayMs) await delay(options.intentDelayMs, undefined, { signal });
-        const proposed = options.intent!.propose(currentTurn, request);
-        record("interpreter-response", { status: "ready", ...proposed });
+        const proposed = options.intent!.propose(interpretationTurn, request);
+        recordAt(interpretationTurn, "interpreter-response", { status: "ready", ...proposed });
         return { status: "ready" as const, interpretation: proposed.interpretation };
       } catch (error) {
         if (!(error instanceof InputCoverageError)) throw error;
         inputLimitations.push(error.message);
-        record("input-limitation", { message: error.message });
-        record("interpreter-response", { status: "unavailable" });
+        recordAt(interpretationTurn, "input-limitation", { message: error.message });
+        recordAt(interpretationTurn, "interpreter-response", { status: "unavailable" });
         return { status: "unavailable" as const };
       }
     } } : {}), ...(input.id === "missing-config" ? {} : { research: createExaProductResearch("fake-offline-evaluation-key", { baseUrl: providerOrigin, timeoutMs: input.id === "timeout" ? 150 : 2000 }), quota }) }) }, { apiPort, webPort: options.webPort ?? apiPort });
   return {
     origin, events,
-    interpretation() { return { mode: options.intent ? "fixed-proposals" as const : "unavailable" as const, inputHash: options.intent?.hash ?? null, openAIHttpRequests: 0 as const, invocations: interpreterCalls, suppliedTurns: structuredClone(options.intent?.turns ?? []) as Json[], limitations: [...inputLimitations] }; },
+    interpretation() { return { mode: options.intent ? "fixed-proposals" as const : "unavailable" as const, inputHash: options.intent?.hash ?? null, openAIHttpRequests: 0 as const, ollamaHttpRequests: 0 as const, consumedTurns: events.filter((event) => event.kind === "interpreter-request").map((event) => event.turn), unconsumedTurns: (options.intent?.turns ?? []).filter((turn) => !events.some((event) => event.kind === "interpreter-request" && event.turn === turn.turnIndex)).map((turn) => turn.turnIndex), invocations: interpreterCalls, suppliedTurns: structuredClone(options.intent?.turns ?? []) as Json[], limitations: [...inputLimitations] }; },
     setTurn(turn: number) { currentTurn = turn; },
     get providerCalls() { return providerCalls; },
     async request(body: unknown, signal?: AbortSignal) {
-      record("app-request", body);
+      const requestTurn = currentTurn;
+      recordAt(requestTurn, "app-request", body);
       const response = await fetch(`${origin}/api/turn`, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(body), signal });
       const raw = await response.json();
-      record("app-response", { status: response.status, body: raw });
+      recordAt(requestTurn, "app-response", { status: response.status, body: raw });
       if (!response.ok) throw new Error(`Application HTTP ${response.status}: ${JSON.stringify(raw)}`);
       return TurnTransportResponseSchema.parse(raw);
     },
@@ -132,6 +136,7 @@ export async function observe(scenario: PublicScenario, input: Material, guard: 
       const beforeCalls = app.providerCalls;
       let response: Record<string, Json> | null = null;
       let cancelled = false;
+      let intentHandling: TurnObservation["intentHandling"] = "not-prepared";
       if (action.kind === "reset") {
         preferences = defaultIntent();
         lastOperation = undefined;
@@ -145,6 +150,7 @@ export async function observe(scenario: PublicScenario, input: Material, guard: 
         const operationId = randomUUID();
         const message = action.kind === "skip-budget" ? "Skip budget" : action.text;
         const prepared = await app.request({ phase: "prepare", message, preferences, operationId, ...(preferences.pendingChange ? { questionId: preferences.pendingChange.id } : {}), ...(action.kind === "skip-budget" ? { skipBudget: true } : {}) });
+        intentHandling = app.events.some((event) => event.turn === index && event.kind === "interpreter-request") ? "synthetic-fallback" : prepared.kind === "research-unavailable" && prepared.reason === "intent-unavailable" ? "unavailable" : "local";
         preferences = prepared.preferences;
         response = prepared as unknown as Record<string, Json>;
         if (prepared.kind === "prepared") {
@@ -166,7 +172,7 @@ export async function observe(scenario: PublicScenario, input: Material, guard: 
           }
         }
       }
-      turns.push({ index, action, initialPreferences: before as Intent, finalPreferences: structuredClone(preferences) as Intent, response, providerCalls: app.providerCalls - beforeCalls, cancelled });
+      turns.push({ index, action, initialPreferences: before as Intent, finalPreferences: structuredClone(preferences) as Intent, response, intentHandling, providerCalls: app.providerCalls - beforeCalls, cancelled });
     }
   } catch (error) {
     applicationError = error instanceof Error ? error.message : String(error);

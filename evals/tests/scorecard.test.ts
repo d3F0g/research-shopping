@@ -118,3 +118,14 @@ test("alternate and missing interpretation treatments cannot enter comparable im
     assert.equal(absent.rows[0]!.assertionChanges, null);
   } finally { guard.close(); }
 });
+
+test("historical authored v5 report v3 remains independently validated and comparable without relabeling", async () => {
+  const historical = JSON.parse(await readFile(new URL("../../artifacts/product-evals/candidate-v5/report.json", import.meta.url), "utf8"));
+  validateReport(historical);
+  assert.equal(compareReports(historical, structuredClone(historical)).compatible, true);
+  const bridge = await crossContractScorecard(baseline, historical);
+  assert.equal(bridge.rows.length, 60);
+  assert.equal(bridge.incomparableInputs.length, 0);
+  assert.equal(bridge.candidate.schemaVersion, 3);
+  assert.throws(() => validateReport({ ...historical, schemaVersion: 4 }), /Unsupported report schema/);
+});

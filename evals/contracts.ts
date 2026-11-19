@@ -1,6 +1,6 @@
 export const DATASET_VERSION = "1.0.0";
-export const ASSERTION_VERSION = "3.0.0";
-export const ADAPTER_VERSION = "normal-v5.1-authored-intent";
+export const ASSERTION_VERSION = "4.0.0";
+export const ADAPTER_VERSION = "normal-v5.2-local-fixed-fallback";
 export const categories = ["conversational-understanding", "preference-extraction", "contextual-clarification", "budget-currency", "preference-retention", "corrections-dissatisfaction", "research-selection", "product-relevance", "comparison-quality", "evidence-honesty", "chat-interaction", "recovery-safety"] as const;
 export type Category = typeof categories[number];
 export type Json = null | boolean | number | string | Json[] | { [key: string]: Json };
@@ -78,6 +78,7 @@ export type TurnObservation = {
   initialPreferences: Intent;
   finalPreferences: Intent;
   response: Record<string, Json> | null;
+  intentHandling: "local" | "synthetic-fallback" | "unavailable" | "not-prepared";
   providerCalls: number;
   cancelled: boolean;
 };
@@ -89,7 +90,7 @@ export type Observation = {
   turns: TurnObservation[];
   events: Event[];
   network: { denied: string[]; allowedOriginCount: number; externalRequests: 0 };
-  interpretation: { mode: "fixed-proposals" | "unavailable"; inputHash: string | null; openAIHttpRequests: 0; invocations: number; suppliedTurns: Json[]; limitations: string[] };
+  interpretation: { mode: "fixed-proposals" | "unavailable"; inputHash: string | null; openAIHttpRequests: 0; ollamaHttpRequests: 0; consumedTurns: number[]; unconsumedTurns: number[]; invocations: number; suppliedTurns: Json[]; limitations: string[] };
   cleanup: boolean;
   applicationError: string | null;
 };
@@ -121,7 +122,7 @@ export type CaseResult = {
 };
 export type Metric = { passed: number; assessed: number; unassessed: number; rate: number | null };
 export type RunReport = {
-  schemaVersion: 3;
+  schemaVersion: 4;
   datasetContracts: ScenarioContract[];
   createdAt: string;
   runId: string;
@@ -133,7 +134,7 @@ export type RunReport = {
   implementationHashes: { grading: string; adapter: string; suite: string };
   application: { commit: string; tree: string; dirty: boolean; sourceHash: string };
   suite: { commit: string; dirty: boolean };
-  configuration: { provider: string; model: null; exaCreditsConsumed: 0; composition: string; interpretation: string; openAIHttpRequests: 0 };
+  configuration: { provider: string; model: null; exaCreditsConsumed: 0; composition: string; interpretation: string; interpretationMode: "fixed-fallback" | "local-only" | "mixed" | "unexecuted"; openAIHttpRequests: 0; ollamaHttpRequests: 0 };
   cases: CaseResult[];
   summary: {
     total: number; executed: number; passed: number; failed: number; blocked: number; unsupported: number; infrastructureErrors: number; criticalFailures: number; criticalScenarios: number; observedTurns: number; observedClarifications: number;

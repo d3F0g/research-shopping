@@ -1,5 +1,4 @@
-import type { Check, CaseResult, RunReport, ScenarioContract } from "./contracts";
-import type { RunReport as FrozenReport } from "./frozen-v2/contracts";
+import type { Check, CaseResult, ScenarioContract } from "./contracts";
 import { validateReport, type AnyReport } from "./report";
 import { hash } from "./hash";
 import { INTENT_TAPE_SHA256 } from "./inputs/intent";
@@ -37,7 +36,8 @@ function requirements(contract: ScenarioContract, row: { checks: Check[] }) {
 export async function crossContractScorecard(baseline: AnyReport, candidate: AnyReport) {
   validateReport(baseline);
   validateReport(candidate);
-  if (baseline.schemaVersion !== 2 || baseline.adapterVersion !== "normal-v4.1" || candidate.schemaVersion !== 3 || candidate.adapterVersion !== "normal-v5.1-authored-intent") throw new Error("This bridge accepts frozen v4 report v2 and authored-intent v5 report v3 only");
+  if (baseline.schemaVersion !== 2 || baseline.adapterVersion !== "normal-v4.1" || !(candidate.schemaVersion === 3 && candidate.adapterVersion === "normal-v5.1-authored-intent" || candidate.schemaVersion === 4 && candidate.adapterVersion === "normal-v5.2-local-fixed-fallback")) throw new Error("This bridge accepts frozen v4 report v2 against the explicit authored-intent v3 or local-first v4 report contracts only");
+  const localFirst = candidate.schemaVersion === 4;
   const canonical = (await loadDataset()).scenarios;
   if (canonical.length !== 60 || hash(baseline.datasetContracts) !== hash(canonical) || hash(candidate.datasetContracts) !== hash(canonical)) throw new Error("Cross-contract comparison requires the unchanged sixty canonical scenario contracts");
   const ids = canonical.map((row) => row.id).sort();
@@ -63,6 +63,7 @@ export async function crossContractScorecard(baseline: AnyReport, candidate: Any
       sharedRequirements,
       assertionChanges: comparableTechnicalInputs ? assessmentTransitions(before.checks, after.checks) : null,
       interpretation: after.observation?.interpretation ?? null,
+      interpretationRoutes: after.observation?.turns.map((turn) => ({ turn: turn.index, handling: "intentHandling" in turn ? turn.intentHandling : "historical-not-recorded" })) ?? [],
       unassessed: { v4: before.checks.filter((check) => !assessed(check.status)), v5: after.checks.filter((check) => !assessed(check.status)) },
       expectationDebt: contract.milestones.flatMap((milestone) => milestone.requirements.flatMap((requirement, index) => {
         const check = after.checks.find((item) => item.id === `${requirement.kind}:${milestone.after}:${index}`);
@@ -77,13 +78,14 @@ export async function crossContractScorecard(baseline: AnyReport, candidate: Any
   const named = (name: Exclude<keyof ReturnType<typeof assessmentTransitions>, "transitions">) => comparable.flatMap((row) => row.assertionChanges![name].map((item) => ({ scenarioId: row.id, ...item })));
   const paired = comparable.flatMap((row) => row.assertionChanges!.transitions.filter((item) => assessed(item.before) && assessed(item.after)));
   const pairedAssessed = { denominator: paired.length, v4: { passed: paired.filter((item) => item.before === "pass").length, failed: paired.filter((item) => item.before === "fail").length }, v5: { passed: paired.filter((item) => item.after === "pass").length, failed: paired.filter((item) => item.after === "fail").length }, label: "Same assertions assessed in both reports under different interpretation composition. Conditional technical comparison only." };
-  const reportBinding = (report: FrozenReport | RunReport) => ({ digest: hash(report), schemaVersion: report.schemaVersion, adapterVersion: report.adapterVersion, assertionVersion: report.assertionVersion, application: report.application, implementationHashes: report.implementationHashes, configuration: report.configuration, summary: report.summary });
+  const reportBinding = (report: AnyReport) => ({ digest: hash(report), schemaVersion: report.schemaVersion, adapterVersion: report.adapterVersion, assertionVersion: report.assertionVersion, application: report.application, implementationHashes: report.implementationHashes, configuration: report.configuration, summary: report.summary });
   return {
-    schemaVersion: 1, bridge: "fieldnote-v4-v5-descriptive-1.0.0", datasetHash: hash(canonical),
+    schemaVersion: 2, bridge: "fieldnote-v4-v5-descriptive-2.0.0", datasetHash: hash(canonical),
     baseline: reportBinding(baseline), candidate: reportBinding(candidate),
-    interpretation: "Descriptive conditional technical comparison. V4 used its parser; v5 receives independently authored synthetic operations. This cannot establish a causal model-quality or NLU improvement, live discovery, relevance or shopping usefulness.",
-    compositionDifferences: ["V4 normal-v4.1 parser preparation versus v5 actual applyIntentActions with fixed IntentInterpreter proposals.", "provider-request, providerCalls, bounded-dispatch and research-after-prepare count Exa research only. They do not measure combined OpenAI and Exa paid usage. Interpretation invocation events are separate.", "V5 preserves typed pending questions and client question IDs, and uses a distinct fresh research operation ID.", "V5 can research a useful objective without the old optional-budget gate. Frozen timing expectations remain unchanged.", "Main v5 OpenAI HTTP requests are zero. Production OpenAI transport and image controls are separate supplemental evidence."],
+    interpretation: "Descriptive conditional technical comparison. V4 used its parser; v5 uses the declared interpretation composition, with independently authored synthetic operations only where its supplied optional boundary runs. This cannot establish a causal model-quality or NLU improvement, live discovery, relevance or shopping usefulness.",
+    compositionDifferences: [localFirst ? "V4 normal-v4.1 parser preparation versus v5 local-first parsing and typed controls, with fixed proposals only when the application invokes its optional interpreter." : "Historical v5 authored-intent lane invokes fixed proposals without the newer local shopping parser.", "provider-request, providerCalls, bounded-dispatch and research-after-prepare count Exa research only. They do not measure combined OpenAI and Exa paid usage. Interpretation invocation events are separate.", "V5 preserves typed pending questions and client question IDs, and uses a distinct fresh research operation ID.", "V5 can research a useful objective without the old optional-budget gate. Frozen timing expectations remain unchanged.", localFirst ? "Main OpenAI and Ollama HTTP counts are zero. Actual Ollama adapter controls use a separate fake loopback server, with no model installation or inference." : "Historical v5 OpenAI HTTP requests were zero; its former adapter controls remain historical evidence."],
     rows,
+    candidatePreparationHandling: Object.fromEntries(["local", "synthetic-fallback", "unavailable", "not-prepared", "historical-not-recorded"].map((kind) => [kind, rows.flatMap((row) => row.interpretationRoutes).filter((route) => route.handling === kind).length])),
     pairedAssessed,
     totals: { v4: counts(baseline.cases.flatMap((row) => row.checks)), v5: counts(candidate.cases.flatMap((row) => row.checks)) },
     scenarioChanges: {
