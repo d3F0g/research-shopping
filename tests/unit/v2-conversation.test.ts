@@ -2,6 +2,8 @@ import { randomUUID } from "node:crypto";
 import { describe, expect, it } from "vitest";
 import { initialConversation, MoneySchema, type ConversationState } from "../../src/domain/conversation";
 import { reduceTurn } from "../../src/domain/turn-reducer";
+import { projectExaAnswer } from "../../src/server/exa-research";
+import { nativeMaterial } from "../helpers/v2-material";
 const turn = (state: ConversationState, message: string) => reduceTurn(state, { phase: "prepare", operationId: randomUUID(), message });
 describe("V2 contextual conversation", () => {
   it("preserves original request and both budget bounds through a typed currency answer", () => {
@@ -95,5 +97,90 @@ describe("free contextual operations", () => {
     const next = turn(first.state, "It has an 8 mm screw fitting. USD 25 max.");
     expect(next.kind).toBe("research");
     expect(next.state.intent.requirements.some((r) => r.text.includes("8 mm screw"))).toBe(true);
+  });
+});
+
+
+describe("retained snapshot answers", () => {
+  function researched() {
+    const state = turn(initialConversation(), "A USB-C powerbank between SGD30 and40.").state;
+    const projected = projectExaAnswer(nativeMaterial(state.intent), state.intent);
+    if (projected.status !== "ready") throw new Error("Fixture research was not projected");
+    const research = projected.research;
+    research.products = [0, 1, 2].map((index) => ({ ...structuredClone(research.products[0]!), id: `fixture-${index}`, name: `Fixture option ${index + 1}` }));
+    research.choice = { productId: "fixture-0", rationale: "Fixture data: this option has supported USB-C evidence." };
+    state.messages.push({ id: "fixture-response", role: "assistant", text: "Fixture data comparison", research });
+    return state;
+  }
+  it("compares exact displayed ordinals and retains their evidence provenance", () => {
+    const state = researched();
+    const result = turn(state, "Compare the first and third options");
+    expect(result.kind).toBe("message");
+    expect(result.state.messages.at(-1)?.text).toContain("Fixture option 1");
+    expect(result.state.messages.at(-1)?.text).toContain("Fixture option 3");
+    expect(result.state.messages.at(-1)?.text).not.toContain("Fixture option 2");
+    expect(result.state.messages.at(-1)?.text).toContain("https://manufacturer.com/model-a");
+    const firstTwo = turn(state, "Compare the first two").state.messages.at(-1)?.text;
+    expect(firstTwo).toContain("Fixture option 1");
+    expect(firstTwo).toContain("Fixture option 2");
+    expect(firstTwo).not.toContain("Fixture option 3");
+  });
+  it("asks for an ambiguous referent and answers only the chosen option with unknown attributes", () => {
+    const state = researched();
+    const ambiguous = turn(state, "Is that one good for denim?");
+    expect(ambiguous.kind).toBe("message");
+    expect(ambiguous.state.messages.at(-1)?.text).toMatch(/Which displayed option/);
+    const resolved = turn(ambiguous.state, "I mean the second machine.");
+    expect(resolved.kind).toBe("message");
+    const answer = resolved.state.messages.at(-1)?.text;
+    expect(answer).toContain("Fixture option 2");
+    expect(answer).not.toContain("Fixture option 1");
+    expect(answer).toContain("Missing attributes remain unknown");
+  });
+  it("rechecks budget and changed hard wording before repeating a recommendation", () => {
+    const state = researched();
+    expect(turn(state, "Just show me the best one").state.messages.at(-1)?.text).toContain("Fixture option 1");
+    state.intent.budget = { minimum: 10, maximum: 20, currency: "SGD" };
+    expect(turn(state, "Just show me the best one").state.messages.at(-1)?.text).toContain("cannot choose a compliant best");
+    state.intent.budget = { minimum: 30, maximum: 40, currency: "SGD" };
+    state.intent.requirements[0]!.text += " Must be waterproof.";
+    expect(turn(state, "Just show me the best one").state.messages.at(-1)?.text).toContain("changed requirements");
+  });
+});
+
+describe("complete contextual changes", () => {
+  it("retains unknown compound operations without accepting a partial command", () => {
+    const state = turn(initialConversation(), "I need a USB-C charger between SGD30 and40. No wireless charging.").state;
+    const result = turn(state, "Compare the first two and change my budget to SGD80");
+    expect(result.kind).toBe("clarification");
+    expect(result.state.intent).toEqual(state.intent);
+    expect(result.state.pending).toMatchObject({ kind: "edit", message: "Compare the first two and change my budget to SGD80" });
+  });
+  it("preserves the typed currency draft when a combined currency edit cannot be applied", () => {
+    const state = turn(initialConversation(), "I need an archival book cradle around $30-40").state;
+    const result = turn(state, "SGD and remove the minimum");
+    expect(result.kind).toBe("clarification");
+    expect(result.state.pending).toEqual(state.pending);
+    expect(result.state.intent).toEqual(state.intent);
+    const resolved = turn(result.state, "SGD");
+    expect(resolved.kind).toBe("research");
+    expect(resolved.state.intent.budget).toMatchObject({ minimum: 30, maximum: 40, currency: "SGD" });
+  });
+  it("replaces the objective while preserving unmentioned hard criteria and both bounds", () => {
+    const state = turn(initialConversation(), "I need a desktop microphone between SGD100 and150. It must work without a phone app.").state;
+    const next = turn(state, "Actually I need a portable recorder under SGD200.");
+    expect(next.kind).toBe("research");
+    expect(next.state.intent.originalText).toContain("portable recorder");
+    expect(next.state.intent.requirements.some((r) => r.text.includes("without a phone app"))).toBe(true);
+    expect(next.state.intent.budget).toEqual({ minimum: 100, maximum: 200, currency: "SGD" });
+    expect(next.state.messages[0]?.text).toContain("desktop microphone");
+  });
+  it("discards constraints only when the whole previous objective is explicitly abandoned", () => {
+    const state = turn(initialConversation(), "Find a desk lamp between SGD60 and100. It must clamp onto the desk.").state;
+    const next = turn(state, "Actually forget the lamp. I need a floor lamp under SGD180; freestanding is essential.");
+    expect(next.kind).toBe("research");
+    expect(next.state.intent.requirements.some((r) => r.text.includes("clamp"))).toBe(false);
+    expect(next.state.intent.budget).toEqual({ maximum: 180, currency: "SGD" });
+    expect(next.state.messages[0]?.text).toContain("clamp");
   });
 });

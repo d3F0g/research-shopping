@@ -64,8 +64,8 @@ function heldReply(state: ConversationState, mode: "compare" | "best" | "detail"
   if (/\bthat one\b/i.test(subject) && !ordinals.length && research.products.length > 1) return "Which displayed option do you mean, the first, second, or third? I will use its retained evidence.";
   const selected = ordinals.length ? research.products.filter((_, index) => ordinals.includes(index)) : research.products;
   if (!selected.length || ordinals.some((index) => !research.products[index])) return "That option is not present in the retained comparison.";
+  const unchanged = state.intent.requirements.filter((requirement) => requirement.strength === "hard").every((requirement) => research.intent.requirements.some((prior) => prior.id === requirement.id && prior.text === requirement.text && prior.strength === "hard"));
   const current = selected.map((product) => {
-    const unchanged = state.intent.requirements.filter((requirement) => requirement.strength === "hard").every((requirement) => research.intent.requirements.some((prior) => prior.id === requirement.id && prior.text === requirement.text && prior.strength === "hard"));
     const assessed = assessProduct(product, state.intent);
     return unchanged ? assessed : { ...assessed, eligible: false, blockers: [...assessed.blockers, "The retained evidence has not assessed the changed requirements."] };
   });
@@ -118,6 +118,9 @@ export function reduceTurn(previous: ConversationState, input: PrepareInput): Tu
   if (["hi", "hello", "hey"].includes(command)) return reply("Hi. What are you looking to buy?");
   if (["thanks", "thank you", "ok", "okay"].includes(command)) return reply("You're welcome. Tell me what you would like to change.");
   const operation = localOperations.find((operation) => operation.matches.test(command))?.kind;
+  const changeText = command.replace(/don't change my existing budget/g, "");
+  const unsupportedCompound = /\b(?:and|but|also|then)\b|[.;!?]\s+/.test(changeText) && /\b(?:make it|change|remove|drop|budget|currency|must|need|only|without|no longer)\b/.test(changeText);
+  if (operation && !["theme", "error", "remember"].includes(operation) && unsupportedCompound) return pendingEdit("I kept the complete combined instruction pending because it includes a request change I cannot safely combine with this operation. No part was applied.");
   if (operation === "short" || operation === "detail") {
     state.intent.responseLength = operation === "detail" ? "expanded" : "concise";
     return reply(operation === "detail" ? heldReply(state, "detail", text) : "I'll keep replies short.");
@@ -146,10 +149,11 @@ export function reduceTurn(previous: ConversationState, input: PrepareInput): Tu
     const answer = /^(?:actually,?\s*)?(SGD|USD|EUR|GBP|AUD|CAD|MYR|JPY|INR)\b[.,;!?]?\s*(.*)$/i.exec(text);
     const resolved = answer ? currency(answer[1]!) : null;
     if (!resolved) return reply("Which currency applies to the saved amount? For example, SGD or USD.", "clarification");
+    if (answer?.[2] && /\b(?:remove|drop|change|budget|make it|currency)\b/i.test(answer[2])) return reply("The currency and saved amount remain pending. Give only the currency first, then submit the complete change separately.", "clarification");
     const draft = state.pending;
     state.intent = { ...draft.draft, budget: BudgetSchema.parse({ minimum: draft.minimum, maximum: draft.maximum, currency: resolved }) };
     state.pending = null;
-    if (answer?.[2]) { state.intent.requirements.push({ id: `requirement-${userId}`, text: answer[2], strength: "hard", originMessageId: userId, kind: "preference" }); state.intent.productDescription += `\n${answer[2]}`; }
+    if (answer?.[2]) { state.intent.requirements.push(...requirementClauses(answer[2], userId, false)); state.intent.productDescription += `\n${answer[2]}`; }
     return { state, kind: "research" };
   }
   if (state.pending?.kind === "edit") return reply(`${state.pending.explanation} You can explicitly discard the pending change to keep your accepted request.`, "clarification");
@@ -162,24 +166,31 @@ export function reduceTurn(previous: ConversationState, input: PrepareInput): Tu
     return { state, kind: "research" };
   }
   if (["remove budget", "remove the budget", "no budget limit", "no budget"].includes(command)) { state.intent.budget = null; return { state, kind: "research" }; }
+  const abandoning = /^(?:actually[, ]+)?(?:forget|abandon|discard) (?:the |that |my )?.+?[.!;]\s*(?:i (?:want|need|would like)|find|recommend)/i.test(text);
+  const newObjective = abandoning || /^(?:actually[, ]+)?(?:i (?:want|need|would like)|find|recommend|looking for)\b/i.test(text);
+  const requestIntent: ShoppingIntent = abandoning ? { ...state.intent, originalText: "", productDescription: "", requirements: [], budget: null, region: null } : structuredClone(state.intent);
+  if (!requestIntent.originalText || newObjective) {
+    const retainedHard = requestIntent.requirements.filter((requirement) => requirement.kind === "request").flatMap((requirement) => {
+      const clauses = requirement.text.match(/\b(?:must|without|no|only|excluding|at least|with)\b[^.;]+/gi) ?? [];
+      return clauses.map((clause, index) => ({ ...requirement, id: `${userId}-retained-${index}`, text: clause, kind: "preference" as const }));
+    });
+    requestIntent.originalText = text;
+    requestIntent.requirements = [...requestIntent.requirements.filter((requirement) => requirement.kind !== "request"), ...retainedHard, ...requirementClauses(text, userId, true)];
+    requestIntent.productDescription = requestIntent.requirements.map((requirement) => requirement.text).join("\n");
+  }
   const quotedObservation = state.intent.originalText && /\b(?:page|source|seller|website|says|shows|quote|advertis)\b/i.test(text);
   const money = quotedObservation ? null : monetaryDraft(editText);
   if (money) {
     if ((money.minimum !== undefined && !MoneySchema.safeParse(money.minimum).success) || (money.maximum !== undefined && !MoneySchema.safeParse(money.maximum).success) || (money.minimum !== undefined && money.maximum !== undefined && money.minimum > money.maximum)) return pendingEdit("That budget is not a valid positive range. Your accepted budget is unchanged. Discard this pending change, then state a valid amount.");
-    const exactBudgetEdit = /^(?:make it|under|below|up to|at most|budget(?: is| of)?|maximum(?: of)?|max|around|at least|minimum(?: of)?|between|from|SGD|USD|EUR|GBP|AUD|CAD|MYR|JPY|INR|S\$|US\$|\$|€|£|\d)/i.test(editText);
-    const draft: ShoppingIntent = structuredClone(state.intent);
-    if (!draft.originalText || (!exactBudgetEdit && !state.intent.originalText)) {
-      draft.originalText = text;
-      draft.productDescription = text;
-      draft.requirements = [...draft.requirements.filter((r) => r.kind !== "request"), ...requirementClauses(text, userId, true)];
-    }
+    const draft = requestIntent;
     const unit = money.currency ?? draft.budget?.currency;
     const bounds = { minimum: money.minimum ?? draft.budget?.minimum, maximum: money.maximum ?? draft.budget?.maximum };
     const extra = money.remainder.replace(/^[.,;!?\s]+|[.,;!?\s]+$/g, "").trim() ? text : "";
-    if (extra && state.intent.originalText) { draft.requirements.push(...requirementClauses(extra, userId, false)); draft.productDescription += `\n${extra}`; }
+    if (extra && state.intent.originalText && !newObjective) { draft.requirements.push(...requirementClauses(extra, userId, false)); draft.productDescription += `\n${extra}`; }
     if (bounds.minimum !== undefined && bounds.maximum !== undefined && bounds.minimum > bounds.maximum) return pendingEdit("The new budget would put the maximum below the retained minimum. State both bounds or explicitly remove the old minimum. No budget change was applied.");
+    if (draft.requirements.length > 24) return pendingEdit("This complete change exceeds the requirement limit. Your accepted request is unchanged.");
     if (!unit) {
-      state.intent = { ...draft, budget: state.intent.budget };
+      state.intent = { ...draft, budget: abandoning ? null : state.intent.budget };
       state.pending = { kind: "currency", id: userId, originalRequest: draft.originalText, draft, ...bounds };
       return reply("Which currency, for example SGD or USD?", "clarification");
     }
@@ -199,10 +210,8 @@ export function reduceTurn(previous: ConversationState, input: PrepareInput): Tu
     state.intent.productDescription = state.intent.requirements.map((r) => r.text).join("\n");
     return { state, kind: "research" };
   }
-  if (!state.intent.originalText || /^(?:i (?:want|need|would like)|find|recommend|looking for)\b/i.test(text)) {
-    const retainedHard = state.intent.requirements.filter((r) => r.kind === "request").flatMap((r) => { const clauses = r.text.match(/\b(?:must|without|no|only|excluding|at least|with)\b[^.;]+/gi) ?? []; return clauses.map((clause, i) => ({ ...r, id: `${userId}-retained-${i}`, text: clause, kind: "preference" as const })); });
-    state.intent.originalText = text;
-    state.intent.requirements = [...state.intent.requirements.filter((r) => r.kind !== "request"), ...retainedHard, ...requirementClauses(text, userId, true)];
+  if (!state.intent.originalText || newObjective) {
+    state.intent = requestIntent;
   } else {
     const brand = /^only\s+([^,;.!?]+)$/i.exec(text);
     const kind = brand && !/\b(?:and|or|with|without|must)\b/i.test(brand[1]!) ? "brand" : /^(?:no|avoid|exclude|without)\b/i.test(text) ? "exclusion" : "preference";
