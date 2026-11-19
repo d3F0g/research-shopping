@@ -3,6 +3,7 @@ import { initialConversation } from "../../src/domain/conversation";
 import { ResearchSnapshotSchema, type ResearchSnapshot } from "../../src/domain/research";
 import { projectExaAnswer } from "../../src/server/exa-research";
 import { catalogMaterial } from "../helpers/v3-catalog-material";
+import { nativeMaterial } from "../helpers/v2-material";
 
 const intent = { ...initialConversation().intent, productDescription: "Fixture sunglasses", budget: { minimum: 800, maximum: 1000, currency: "SGD" } };
 function project(material = catalogMaterial(intent)) {
@@ -137,5 +138,56 @@ describe("current snapshot binding validation", () => {
     expect(ResearchSnapshotSchema.safeParse(snapshot).success).toBe(true);
     mutate(snapshot);
     expect(ResearchSnapshotSchema.safeParse(snapshot).success).toBe(false);
+  });
+});
+
+
+describe("money-only request evidence", () => {
+  const variants = ["SGD 35", "35 SGD", "35SGD", "35", "S$35", "35 S$", "$35", "35.00", "SGD 35.00"];
+  for (const budget of [null, { minimum: 30, maximum: 40, currency: "SGD" }]) {
+    it.each(variants)(`keeps %s unknown with ${budget ? "bounded" : "no"} budget`, (quote) => {
+      const request = { ...initialConversation().intent, productDescription: "Fixture USB-C powerbank", budget };
+      const raw = nativeMaterial(request);
+      const sourceMoney = ["35", "35.00"].includes(quote) ? `SGD ${quote}` : quote;
+      const material = JSON.parse(JSON.stringify(raw).replaceAll("SGD 35", sourceMoney));
+      material.answer.products[0].requestMatch = { ...material.answer.products[0].requestMatch, support: [{ url: material.citations[0].url, quote }] };
+      const result = projectExaAnswer(material, request);
+      if (result.status !== "ready") throw new Error("Expected fixture comparison");
+      expect(result.research.products[0]!.identity.status).toBe("supported");
+      expect(result.research.products[0]!.requestMatch.status).toBe("unknown");
+      expect(result.research.products[0]!.eligible).toBe(false);
+      expect(result.research.choice).toBeNull();
+    });
+    it(`retains whole-objective sentence evidence with ${budget ? "bounded" : "no"} budget`, () => {
+      const request = { ...initialConversation().intent, productDescription: "Fixture USB-C powerbank", budget };
+      const result = projectExaAnswer(nativeMaterial(request), request);
+      if (result.status !== "ready") throw new Error("Expected fixture comparison");
+      expect(result.research.products[0]!.requestMatch.status).toBe("supported");
+      expect(result.research.choice?.productId).toBe("model-a");
+    });
+  }
+});
+
+describe("ambiguous catalog headings", () => {
+  it.each([
+    "Fixture Meridian Sunglasses - Silver",
+    "Fixture Meridian Sunglasses -  Silver",
+    "fixture meridian sunglasses - silver",
+    "Fixture Meridian Sunglasses",
+    "Meridian Sunglasses - Silver",
+    "Silver",
+    " silver ",
+  ])("retains unresolved target heading %j as adverse context", (heading) => {
+    const material = catalogMaterial(intent);
+    material.citations[0]!.text += `\n\n${heading}\n\nSGD 999`;
+    const result = project(material);
+    expect(result.products[0]!.price).toBeNull();
+    expect(result.sources[0]!.text).toBe(material.citations[0]!.text);
+    expect(result.choice).toBeNull();
+  });
+  it("retains a distinct full heading sharing only the selected color", () => {
+    const material = catalogMaterial(intent);
+    material.citations[0]!.text += "\n\nFixture Other Silver Sunglasses\n\nSGD 999 SGD 499 (50% off)";
+    expect(project(material).products[0]!.price).toMatchObject({ amount: 868, conditionsResolved: false });
   });
 });

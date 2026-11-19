@@ -4,7 +4,8 @@ import { readFile } from "node:fs/promises";
 import { randomUUID } from "node:crypto";
 import { initialConversation, type TurnResponse } from "../../../src/domain/conversation";
 import { loadDataset } from "../../dataset";
-import { hash } from "../../hash";
+import { hash, materialPayloadHash } from "../../hash";
+import { summarize } from "../../frozen-v4/report";
 import { material } from "../../inputs/materials";
 import type { Scenario } from "../../frozen-v4/contracts";
 import { grade } from "../assertions";
@@ -103,4 +104,38 @@ test("frozen V2 evidence projects its actual original quotation without reinterp
   const support = research.products[0]!.identity.support[0]!;
   assert.deepEqual(identity.support[0], { ...support, quote: support.originalQuote, start: support.originalStart, end: support.originalEnd });
   assert.deepEqual(research, original);
+});
+
+
+test("archived Fieldnote reports reject forged grading and self-consistent hash changes", async () => {
+  const original: RunReport = JSON.parse(await readFile("artifacts/fieldnote-v2/conversation-polish/full60/report.json", "utf8"));
+  validateReport(original);
+  const mutations: Array<[string, (report: RunReport) => void]> = [
+    ["erased checks", (report) => { for (const row of report.cases) row.checks = []; }],
+    ["all-pass checks", (report) => { for (const row of report.cases) for (const check of row.checks) check.status = "pass"; }],
+    ["invented check", (report) => { report.cases[0]!.checks.push({ id: "fixture-invented", turn: null, status: "pass", critical: true, expected: true, observed: true, evidence: [] }); }],
+    ["expected value", (report) => { report.cases[0]!.checks[0]!.expected = "Fixture forged expectation"; }],
+    ["observed value", (report) => { report.cases[0]!.checks[0]!.observed = "Fixture forged observation"; }],
+    ["evidence references", (report) => { report.cases.flatMap((row) => row.checks).find((check) => check.evidence.length)!.evidence = []; }],
+    ["material provenance", (report) => {
+      const row = report.cases[0]!;
+      row.material.provenance.push("Fixture forged provenance");
+      row.material.sha256 = materialPayloadHash(row.material);
+      row.materialHash = hash(row.material);
+      if (row.observation) row.observation.material = structuredClone(row.material);
+    }],
+    ["embedded grader", (report) => {
+      report.implementationInputs.grading[0]!.text += "\nFixture forged grader";
+      report.implementationHashes.grading = hash(report.implementationInputs.grading);
+      report.implementationHashes.suite = hash({ grading: report.implementationHashes.grading, adapter: report.implementationHashes.adapter, datasetHash: report.datasetHash });
+    }],
+  ];
+  for (const [name, mutate] of mutations) {
+    const value = structuredClone(original);
+    mutate(value);
+    for (const row of value.cases) row.verdict = !row.observation ? "blocked" : row.checks.some((check) => check.status === "fail") ? "fail" : row.checks.some((check) => check.status === "blocked") ? "blocked" : row.checks.some((check) => check.status === "unsupported") ? "unsupported" : "pass";
+    value.summary = summarize(value.cases);
+    assert.notEqual(hash(value), hash(original), name);
+    assert.throws(() => validateReport(value), undefined, name);
+  }
 });
