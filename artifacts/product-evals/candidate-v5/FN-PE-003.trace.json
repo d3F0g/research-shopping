@@ -1,0 +1,752 @@
+{
+  "scenarioId": "FN-PE-003",
+  "initialPreferences": {
+    "version": 5,
+    "productDescription": "",
+    "criteria": [],
+    "budget": null,
+    "budgetClarified": false,
+    "pendingChange": null,
+    "region": "SG",
+    "responseLength": "concise",
+    "revision": 0
+  },
+  "finalPreferences": {
+    "version": 5,
+    "productDescription": "",
+    "criteria": [
+      {
+        "id": "criterion-1",
+        "wording": "it must work without a phone app",
+        "strength": "hard",
+        "origin": {
+          "kind": "message",
+          "text": "it must work without a phone app"
+        }
+      }
+    ],
+    "budget": {
+      "amount": 180,
+      "currency": "USD"
+    },
+    "budgetClarified": true,
+    "pendingChange": null,
+    "region": "SG",
+    "responseLength": "concise",
+    "revision": 3
+  },
+  "material": {
+    "id": "mixed-fit:FN-PE-003",
+    "kind": "synthetic",
+    "label": "Explicit synthetic provider double. Not genuine Exa research.",
+    "capturedAt": null,
+    "provenance": [
+      "Independently fixed test input before application execution",
+      "No current product or market claim",
+      "Original independent provider recipe mixed-fit; fixed profile FN-PE-003.",
+      "Synthetic claims, prices and availability statements remain visibly labeled. No live research or inventory."
+    ],
+    "sha256": "a11165d65cddc083be19fa17106837f10b89f095964b3781cb024502e0b1a8f3",
+    "body": {
+      "requestId": "synthetic-FN-PE-003",
+      "costDollars": {
+        "total": 0.005
+      },
+      "citations": [
+        {
+          "url": "https://fixture.example.com/synthetic-touch-1",
+          "title": "Synthetic Touch 1 synthetic fixture",
+          "text": "Synthetic Touch 1 standard is a portable Braille label maker.\nSynthetic Touch 1 standard costs USD 110.00 for one unit, tax included.\nSynthetic input. Stock and delivery are not established."
+        },
+        {
+          "url": "https://fixture.example.com/synthetic-touch-2",
+          "title": "Synthetic Touch 2 synthetic fixture",
+          "text": "Synthetic Touch 2 standard is a portable Braille label maker.\nSynthetic Touch 2 standard costs USD 140.00 for one unit, tax included.\nSynthetic input. Stock and delivery are not established.\nSynthetic Touch 2 standard is a non-functional display model and cannot be used as an operational product."
+        },
+        {
+          "url": "https://fixture.example.com/synthetic-touch-3",
+          "title": "Synthetic Touch 3 synthetic fixture",
+          "text": "Synthetic Touch 3 standard is a portable Braille label maker.\nSynthetic Touch 3 standard costs USD 170.00 for one unit, tax included.\nSynthetic input. Stock and delivery are not established."
+        }
+      ],
+      "answer": {
+        "products": [
+          {
+            "id": "synthetic-touch-1",
+            "name": "Synthetic Touch 1",
+            "variant": "standard",
+            "identity": {
+              "status": "supported",
+              "scope": "exact-variant",
+              "rationale": "Synthetic source-based test interpretation, not a live product claim.",
+              "support": [
+                {
+                  "url": "https://fixture.example.com/synthetic-touch-1",
+                  "quote": "Synthetic Touch 1 standard is a portable Braille label maker."
+                }
+              ]
+            },
+            "requestMatch": {
+              "status": "supported",
+              "scope": "exact-variant",
+              "rationale": "Synthetic source-based test interpretation, not a live product claim.",
+              "support": [
+                {
+                  "url": "https://fixture.example.com/synthetic-touch-1",
+                  "quote": "Synthetic Touch 1 standard is a portable Braille label maker."
+                }
+              ]
+            },
+            "criteria": [],
+            "attributes": [
+              {
+                "name": "Use",
+                "assessment": {
+                  "status": "supported",
+                  "scope": "exact-variant",
+                  "rationale": "Synthetic source-based test interpretation, not a live product claim.",
+                  "support": [
+                    {
+                      "url": "https://fixture.example.com/synthetic-touch-1",
+                      "quote": "Synthetic Touch 1 standard is a portable Braille label maker."
+                    }
+                  ]
+                }
+              }
+            ],
+            "price": {
+              "amount": 110,
+              "currency": "USD",
+              "conditions": [
+                "One unit",
+                "Tax included"
+              ],
+              "conditionsResolved": true,
+              "variant": "standard",
+              "assessment": {
+                "status": "supported",
+                "scope": "exact-variant",
+                "rationale": "Synthetic source-based test interpretation, not a live product claim.",
+                "support": [
+                  {
+                    "url": "https://fixture.example.com/synthetic-touch-1",
+                    "quote": "Synthetic Touch 1 standard costs USD 110.00 for one unit, tax included."
+                  }
+                ]
+              }
+            },
+            "budget": {
+              "status": "supported",
+              "scope": "exact-variant",
+              "rationale": "Synthetic source-based test interpretation, not a live product claim.",
+              "support": [
+                {
+                  "url": "https://fixture.example.com/synthetic-touch-1",
+                  "quote": "Synthetic Touch 1 standard costs USD 110.00 for one unit, tax included."
+                }
+              ]
+            }
+          },
+          {
+            "id": "synthetic-touch-2",
+            "name": "Synthetic Touch 2",
+            "variant": "standard",
+            "identity": {
+              "status": "supported",
+              "scope": "exact-variant",
+              "rationale": "Synthetic source-based test interpretation, not a live product claim.",
+              "support": [
+                {
+                  "url": "https://fixture.example.com/synthetic-touch-2",
+                  "quote": "Synthetic Touch 2 standard is a portable Braille label maker."
+                }
+              ]
+            },
+            "requestMatch": {
+              "status": "contradicted",
+              "scope": "exact-variant",
+              "rationale": "Synthetic negative fit observation. The exact use remains a semantic assessment.",
+              "support": [
+                {
+                  "url": "https://fixture.example.com/synthetic-touch-2",
+                  "quote": "Synthetic Touch 2 standard is a non-functional display model and cannot be used as an operational product."
+                }
+              ]
+            },
+            "criteria": [],
+            "attributes": [
+              {
+                "name": "Use",
+                "assessment": {
+                  "status": "supported",
+                  "scope": "exact-variant",
+                  "rationale": "Synthetic source-based test interpretation, not a live product claim.",
+                  "support": [
+                    {
+                      "url": "https://fixture.example.com/synthetic-touch-2",
+                      "quote": "Synthetic Touch 2 standard is a portable Braille label maker."
+                    }
+                  ]
+                }
+              }
+            ],
+            "price": {
+              "amount": 140,
+              "currency": "USD",
+              "conditions": [
+                "One unit",
+                "Tax included"
+              ],
+              "conditionsResolved": true,
+              "variant": "standard",
+              "assessment": {
+                "status": "supported",
+                "scope": "exact-variant",
+                "rationale": "Synthetic source-based test interpretation, not a live product claim.",
+                "support": [
+                  {
+                    "url": "https://fixture.example.com/synthetic-touch-2",
+                    "quote": "Synthetic Touch 2 standard costs USD 140.00 for one unit, tax included."
+                  }
+                ]
+              }
+            },
+            "budget": {
+              "status": "supported",
+              "scope": "exact-variant",
+              "rationale": "Synthetic source-based test interpretation, not a live product claim.",
+              "support": [
+                {
+                  "url": "https://fixture.example.com/synthetic-touch-2",
+                  "quote": "Synthetic Touch 2 standard costs USD 140.00 for one unit, tax included."
+                }
+              ]
+            }
+          },
+          {
+            "id": "synthetic-touch-3",
+            "name": "Synthetic Touch 3",
+            "variant": "standard",
+            "identity": {
+              "status": "supported",
+              "scope": "exact-variant",
+              "rationale": "Synthetic source-based test interpretation, not a live product claim.",
+              "support": [
+                {
+                  "url": "https://fixture.example.com/synthetic-touch-3",
+                  "quote": "Synthetic Touch 3 standard is a portable Braille label maker."
+                }
+              ]
+            },
+            "requestMatch": {
+              "status": "unknown",
+              "scope": "unclear",
+              "rationale": "Synthetic input intentionally lacks qualifying evidence.",
+              "support": []
+            },
+            "criteria": [],
+            "attributes": [
+              {
+                "name": "Use",
+                "assessment": {
+                  "status": "supported",
+                  "scope": "exact-variant",
+                  "rationale": "Synthetic source-based test interpretation, not a live product claim.",
+                  "support": [
+                    {
+                      "url": "https://fixture.example.com/synthetic-touch-3",
+                      "quote": "Synthetic Touch 3 standard is a portable Braille label maker."
+                    }
+                  ]
+                }
+              }
+            ],
+            "price": {
+              "amount": 170,
+              "currency": "USD",
+              "conditions": [
+                "One unit",
+                "Tax included"
+              ],
+              "conditionsResolved": true,
+              "variant": "standard",
+              "assessment": {
+                "status": "supported",
+                "scope": "exact-variant",
+                "rationale": "Synthetic source-based test interpretation, not a live product claim.",
+                "support": [
+                  {
+                    "url": "https://fixture.example.com/synthetic-touch-3",
+                    "quote": "Synthetic Touch 3 standard costs USD 170.00 for one unit, tax included."
+                  }
+                ]
+              }
+            },
+            "budget": {
+              "status": "supported",
+              "scope": "exact-variant",
+              "rationale": "Synthetic source-based test interpretation, not a live product claim.",
+              "support": [
+                {
+                  "url": "https://fixture.example.com/synthetic-touch-3",
+                  "quote": "Synthetic Touch 3 standard costs USD 170.00 for one unit, tax included."
+                }
+              ]
+            }
+          }
+        ],
+        "choice": {
+          "productId": "synthetic-touch-1",
+          "reasons": [
+            {
+              "kind": "field",
+              "name": "identity"
+            },
+            {
+              "kind": "field",
+              "name": "price"
+            }
+          ]
+        },
+        "limitations": [
+          "Entirely synthetic fixed provider material, including every product, claim and price. No inventory or merchant proof. Missing criteria remain unknown."
+        ]
+      }
+    },
+    "status": 200
+  },
+  "interpretation": {
+    "mode": "fixed-proposals",
+    "inputHash": "ba136b479052387d0ab913a7bb4d802eebe4f7e17be79846d908e5fd87c4044a",
+    "openAIHttpRequests": 0,
+    "invocations": 2,
+    "suppliedTurns": [
+      {
+        "turnIndex": 0,
+        "message": "I want a label maker for tactile labels in my workshop. Braille output is essential; portability would be nice.",
+        "proposal": {
+          "disposition": "research",
+          "actions": [
+            {
+              "kind": "start-request",
+              "source": {
+                "start": 9,
+                "end": 54,
+                "text": "label maker for tactile labels in my workshop"
+              }
+            },
+            {
+              "kind": "add-criterion",
+              "source": {
+                "start": 56,
+                "end": 83,
+                "text": "Braille output is essential"
+              },
+              "strength": "hard"
+            },
+            {
+              "kind": "add-criterion",
+              "source": {
+                "start": 85,
+                "end": 110,
+                "text": "portability would be nice"
+              },
+              "strength": "flexible"
+            }
+          ]
+        },
+        "limitations": [
+          "Hard strength follows the literal requirement, including essential, needs, or a specific required specification. The proposal does not rewrite wording to satisfy a lexical guard."
+        ]
+      },
+      {
+        "turnIndex": 1,
+        "message": "Under USD 180, and it must work without a phone app.",
+        "proposal": {
+          "disposition": "research",
+          "actions": [
+            {
+              "kind": "budget",
+              "source": {
+                "start": 0,
+                "end": 13,
+                "text": "Under USD 180"
+              },
+              "operation": "set-maximum",
+              "draft": {
+                "amount": 180,
+                "minimum": null,
+                "currency": "USD"
+              }
+            },
+            {
+              "kind": "add-criterion",
+              "source": {
+                "start": 19,
+                "end": 51,
+                "text": "it must work without a phone app"
+              },
+              "strength": "hard"
+            }
+          ]
+        }
+      }
+    ],
+    "limitations": []
+  },
+  "turns": [
+    {
+      "index": 0,
+      "action": {
+        "kind": "message",
+        "text": "I want a label maker for tactile labels in my workshop. Braille output is essential; portability would be nice."
+      },
+      "initialPreferences": {
+        "version": 5,
+        "productDescription": "",
+        "criteria": [],
+        "budget": null,
+        "budgetClarified": false,
+        "pendingChange": null,
+        "region": "SG",
+        "responseLength": "concise",
+        "revision": 0
+      },
+      "finalPreferences": {
+        "version": 5,
+        "productDescription": "",
+        "criteria": [],
+        "budget": null,
+        "budgetClarified": false,
+        "pendingChange": null,
+        "region": "SG",
+        "responseLength": "concise",
+        "revision": 0
+      },
+      "response": {
+        "responseVersion": 5,
+        "preferences": {
+          "version": 5,
+          "productDescription": "",
+          "criteria": [],
+          "budget": null,
+          "budgetClarified": false,
+          "pendingChange": null,
+          "region": "SG",
+          "responseLength": "concise",
+          "revision": 0
+        },
+        "notes": [],
+        "kind": "research-unavailable",
+        "message": "I could not interpret that request right now. Your accepted preferences and any pending answer are retained. Try again after intent interpretation is available.",
+        "reason": "intent-unavailable"
+      },
+      "providerCalls": 0,
+      "cancelled": false
+    },
+    {
+      "index": 1,
+      "action": {
+        "kind": "message",
+        "text": "Under USD 180, and it must work without a phone app."
+      },
+      "initialPreferences": {
+        "version": 5,
+        "productDescription": "",
+        "criteria": [],
+        "budget": null,
+        "budgetClarified": false,
+        "pendingChange": null,
+        "region": "SG",
+        "responseLength": "concise",
+        "revision": 0
+      },
+      "finalPreferences": {
+        "version": 5,
+        "productDescription": "",
+        "criteria": [
+          {
+            "id": "criterion-1",
+            "wording": "it must work without a phone app",
+            "strength": "hard",
+            "origin": {
+              "kind": "message",
+              "text": "it must work without a phone app"
+            }
+          }
+        ],
+        "budget": {
+          "amount": 180,
+          "currency": "USD"
+        },
+        "budgetClarified": true,
+        "pendingChange": null,
+        "region": "SG",
+        "responseLength": "concise",
+        "revision": 3
+      },
+      "response": {
+        "responseVersion": 5,
+        "preferences": {
+          "version": 5,
+          "productDescription": "",
+          "criteria": [
+            {
+              "id": "criterion-1",
+              "wording": "it must work without a phone app",
+              "strength": "hard",
+              "origin": {
+                "kind": "message",
+                "text": "it must work without a phone app"
+              }
+            }
+          ],
+          "budget": {
+            "amount": 180,
+            "currency": "USD"
+          },
+          "budgetClarified": true,
+          "pendingChange": null,
+          "region": "SG",
+          "responseLength": "concise",
+          "revision": 3
+        },
+        "notes": [],
+        "kind": "clarification",
+        "message": "What are you shopping for? Describe the product and what matters to you.",
+        "reason": "description"
+      },
+      "providerCalls": 0,
+      "cancelled": false
+    }
+  ],
+  "events": [
+    {
+      "sequence": 1,
+      "turn": 0,
+      "kind": "app-request",
+      "elapsedMs": 1.17,
+      "body": {
+        "phase": "prepare",
+        "message": "I want a label maker for tactile labels in my workshop. Braille output is essential; portability would be nice.",
+        "preferences": {
+          "version": 5,
+          "productDescription": "",
+          "criteria": [],
+          "budget": null,
+          "budgetClarified": false,
+          "pendingChange": null,
+          "region": "SG",
+          "responseLength": "concise",
+          "revision": 0
+        },
+        "operationId": "a156059a-557b-4600-b576-2e3c670a5fc8"
+      }
+    },
+    {
+      "sequence": 2,
+      "turn": 0,
+      "kind": "interpreter-request",
+      "elapsedMs": 2.03,
+      "body": {
+        "operationId": "a156059a-557b-4600-b576-2e3c670a5fc8",
+        "message": "I want a label maker for tactile labels in my workshop. Braille output is essential; portability would be nice.",
+        "questionId": null,
+        "inputHash": "ba136b479052387d0ab913a7bb4d802eebe4f7e17be79846d908e5fd87c4044a",
+        "label": "Independently authored synthetic proposals. Conditional technical behavior only."
+      }
+    },
+    {
+      "sequence": 3,
+      "turn": 0,
+      "kind": "interpreter-response",
+      "elapsedMs": 2.07,
+      "body": {
+        "status": "ready",
+        "interpretation": {
+          "disposition": "research",
+          "actions": [
+            {
+              "kind": "start-request",
+              "source": {
+                "start": 9,
+                "end": 54,
+                "text": "label maker for tactile labels in my workshop"
+              }
+            },
+            {
+              "kind": "add-criterion",
+              "source": {
+                "start": 56,
+                "end": 83,
+                "text": "Braille output is essential"
+              },
+              "strength": "hard"
+            },
+            {
+              "kind": "add-criterion",
+              "source": {
+                "start": 85,
+                "end": 110,
+                "text": "portability would be nice"
+              },
+              "strength": "flexible"
+            }
+          ]
+        },
+        "bindings": [],
+        "limitations": [
+          "Hard strength follows the literal requirement, including essential, needs, or a specific required specification. The proposal does not rewrite wording to satisfy a lexical guard."
+        ]
+      }
+    },
+    {
+      "sequence": 4,
+      "turn": 0,
+      "kind": "app-response",
+      "elapsedMs": 2.47,
+      "body": {
+        "status": 200,
+        "body": {
+          "responseVersion": 5,
+          "preferences": {
+            "version": 5,
+            "productDescription": "",
+            "criteria": [],
+            "budget": null,
+            "budgetClarified": false,
+            "pendingChange": null,
+            "region": "SG",
+            "responseLength": "concise",
+            "revision": 0
+          },
+          "notes": [],
+          "kind": "research-unavailable",
+          "message": "I could not interpret that request right now. Your accepted preferences and any pending answer are retained. Try again after intent interpretation is available.",
+          "reason": "intent-unavailable"
+        }
+      }
+    },
+    {
+      "sequence": 5,
+      "turn": 1,
+      "kind": "app-request",
+      "elapsedMs": 2.5,
+      "body": {
+        "phase": "prepare",
+        "message": "Under USD 180, and it must work without a phone app.",
+        "preferences": {
+          "version": 5,
+          "productDescription": "",
+          "criteria": [],
+          "budget": null,
+          "budgetClarified": false,
+          "pendingChange": null,
+          "region": "SG",
+          "responseLength": "concise",
+          "revision": 0
+        },
+        "operationId": "1199519e-591d-4252-bc47-7203d9895117"
+      }
+    },
+    {
+      "sequence": 6,
+      "turn": 1,
+      "kind": "interpreter-request",
+      "elapsedMs": 3.04,
+      "body": {
+        "operationId": "1199519e-591d-4252-bc47-7203d9895117",
+        "message": "Under USD 180, and it must work without a phone app.",
+        "questionId": null,
+        "inputHash": "ba136b479052387d0ab913a7bb4d802eebe4f7e17be79846d908e5fd87c4044a",
+        "label": "Independently authored synthetic proposals. Conditional technical behavior only."
+      }
+    },
+    {
+      "sequence": 7,
+      "turn": 1,
+      "kind": "interpreter-response",
+      "elapsedMs": 3.07,
+      "body": {
+        "status": "ready",
+        "interpretation": {
+          "disposition": "research",
+          "actions": [
+            {
+              "kind": "budget",
+              "source": {
+                "start": 0,
+                "end": 13,
+                "text": "Under USD 180"
+              },
+              "operation": "set-maximum",
+              "draft": {
+                "amount": 180,
+                "minimum": null,
+                "currency": "USD"
+              }
+            },
+            {
+              "kind": "add-criterion",
+              "source": {
+                "start": 19,
+                "end": 51,
+                "text": "it must work without a phone app"
+              },
+              "strength": "hard"
+            }
+          ]
+        },
+        "bindings": [],
+        "limitations": []
+      }
+    },
+    {
+      "sequence": 8,
+      "turn": 1,
+      "kind": "app-response",
+      "elapsedMs": 3.6,
+      "body": {
+        "status": 200,
+        "body": {
+          "responseVersion": 5,
+          "preferences": {
+            "version": 5,
+            "productDescription": "",
+            "criteria": [
+              {
+                "id": "criterion-1",
+                "wording": "it must work without a phone app",
+                "strength": "hard",
+                "origin": {
+                  "kind": "message",
+                  "text": "it must work without a phone app"
+                }
+              }
+            ],
+            "budget": {
+              "amount": 180,
+              "currency": "USD"
+            },
+            "budgetClarified": true,
+            "pendingChange": null,
+            "region": "SG",
+            "responseLength": "concise",
+            "revision": 3
+          },
+          "notes": [],
+          "kind": "clarification",
+          "message": "What are you shopping for? Describe the product and what matters to you.",
+          "reason": "description"
+        }
+      }
+    }
+  ],
+  "network": {
+    "denied": [],
+    "allowedOriginCount": 2,
+    "externalRequests": 0
+  },
+  "cleanup": true,
+  "applicationError": null
+}

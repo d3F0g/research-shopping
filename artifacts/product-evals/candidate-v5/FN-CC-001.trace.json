@@ -1,0 +1,536 @@
+{
+  "scenarioId": "FN-CC-001",
+  "initialPreferences": {
+    "version": 5,
+    "productDescription": "",
+    "criteria": [],
+    "budget": null,
+    "budgetClarified": false,
+    "pendingChange": null,
+    "region": "SG",
+    "responseLength": "concise",
+    "revision": 0
+  },
+  "finalPreferences": {
+    "version": 5,
+    "productDescription": "",
+    "criteria": [],
+    "budget": null,
+    "budgetClarified": false,
+    "pendingChange": null,
+    "region": "SG",
+    "responseLength": "concise",
+    "revision": 0
+  },
+  "material": {
+    "id": "mixed-fit:FN-CC-001",
+    "kind": "synthetic",
+    "label": "Explicit synthetic provider double. Not genuine Exa research.",
+    "capturedAt": null,
+    "provenance": [
+      "Independently fixed test input before application execution",
+      "No current product or market claim",
+      "Original independent provider recipe mixed-fit; fixed profile powerbank.",
+      "Synthetic claims, prices and availability statements remain visibly labeled. No live research or inventory.",
+      "Input suitability gap: no matching product profile. Relevance and recommendation usefulness are unassessed, never counted as a shopping success."
+    ],
+    "sha256": "884f895f25e5064618973b7354b7824f231770a515a778ec390584f9e1569fd6",
+    "body": {
+      "requestId": "synthetic-offline-input",
+      "costDollars": {
+        "total": 0.005
+      },
+      "citations": [
+        {
+          "url": "https://fixture.example.com/powerbank",
+          "title": "Synthetic fixture power bank",
+          "text": "Synthetic Anker Pocket 10 black is a portable power bank with USB-C fast charging.\nSynthetic Anker Pocket 10 black costs SGD 35.00 for one unit, tax included."
+        }
+      ],
+      "answer": {
+        "products": [
+          {
+            "id": "synthetic-pocket-10",
+            "name": "Synthetic Anker Pocket 10",
+            "variant": "black",
+            "identity": {
+              "status": "supported",
+              "scope": "exact-variant",
+              "rationale": "Synthetic test assessment, not a live product claim.",
+              "support": [
+                {
+                  "url": "https://fixture.example.com/powerbank",
+                  "quote": "Synthetic Anker Pocket 10 black is a portable power bank with USB-C fast charging."
+                }
+              ]
+            },
+            "requestMatch": {
+              "status": "supported",
+              "scope": "exact-variant",
+              "rationale": "Synthetic test assessment, not a live product claim.",
+              "support": [
+                {
+                  "url": "https://fixture.example.com/powerbank",
+                  "quote": "Synthetic Anker Pocket 10 black is a portable power bank with USB-C fast charging."
+                }
+              ]
+            },
+            "criteria": [],
+            "attributes": [
+              {
+                "name": "Charging",
+                "assessment": {
+                  "status": "supported",
+                  "scope": "exact-variant",
+                  "rationale": "Synthetic test assessment, not a live product claim.",
+                  "support": [
+                    {
+                      "url": "https://fixture.example.com/powerbank",
+                      "quote": "Synthetic Anker Pocket 10 black is a portable power bank with USB-C fast charging."
+                    }
+                  ]
+                }
+              }
+            ],
+            "price": {
+              "amount": 35,
+              "currency": "SGD",
+              "conditions": [
+                "One unit",
+                "Tax included"
+              ],
+              "conditionsResolved": true,
+              "variant": "black",
+              "assessment": {
+                "status": "supported",
+                "scope": "exact-variant",
+                "rationale": "Synthetic test assessment, not a live product claim.",
+                "support": [
+                  {
+                    "url": "https://fixture.example.com/powerbank",
+                    "quote": "Synthetic Anker Pocket 10 black costs SGD 35.00 for one unit, tax included."
+                  }
+                ]
+              }
+            },
+            "budget": {
+              "status": "supported",
+              "scope": "exact-variant",
+              "rationale": "Synthetic test assessment, not a live product claim.",
+              "support": [
+                {
+                  "url": "https://fixture.example.com/powerbank",
+                  "quote": "Synthetic Anker Pocket 10 black costs SGD 35.00 for one unit, tax included."
+                }
+              ]
+            }
+          }
+        ],
+        "choice": {
+          "productId": "synthetic-pocket-10",
+          "reasons": [
+            {
+              "kind": "field",
+              "name": "identity"
+            },
+            {
+              "kind": "field",
+              "name": "price"
+            }
+          ]
+        },
+        "limitations": [
+          "Synthetic provider double for automated evaluation. No real products, current prices, availability or merchant verification."
+        ]
+      }
+    },
+    "status": 200
+  },
+  "interpretation": {
+    "mode": "fixed-proposals",
+    "inputHash": "ba136b479052387d0ab913a7bb4d802eebe4f7e17be79846d908e5fd87c4044a",
+    "openAIHttpRequests": 0,
+    "invocations": 2,
+    "suppliedTurns": [
+      {
+        "turnIndex": 0,
+        "message": "I'd like a torque screwdriver for bicycle work, about $60 to $90.",
+        "proposal": {
+          "disposition": "research",
+          "actions": [
+            {
+              "kind": "start-request",
+              "source": {
+                "start": 11,
+                "end": 46,
+                "text": "torque screwdriver for bicycle work"
+              }
+            },
+            {
+              "kind": "budget",
+              "source": {
+                "start": 48,
+                "end": 64,
+                "text": "about $60 to $90"
+              },
+              "operation": "clarify",
+              "draft": {
+                "amount": 90,
+                "minimum": 60,
+                "currency": null
+              }
+            }
+          ]
+        }
+      },
+      {
+        "turnIndex": 1,
+        "message": "USD. Adjustable from 2 to 8 Nm is essential.",
+        "proposal": {
+          "disposition": "research",
+          "actions": [
+            {
+              "kind": "budget",
+              "source": {
+                "start": 0,
+                "end": 3,
+                "text": "USD"
+              },
+              "operation": "replace-range",
+              "draft": {
+                "amount": 90,
+                "minimum": 60,
+                "currency": "USD"
+              }
+            },
+            {
+              "kind": "add-criterion",
+              "source": {
+                "start": 5,
+                "end": 44,
+                "text": "Adjustable from 2 to 8 Nm is essential."
+              },
+              "strength": "hard"
+            }
+          ]
+        },
+        "limitations": [
+          "Hard strength follows the literal requirement, including essential, needs, or a specific required specification. The proposal does not rewrite wording to satisfy a lexical guard."
+        ]
+      }
+    ],
+    "limitations": []
+  },
+  "turns": [
+    {
+      "index": 0,
+      "action": {
+        "kind": "message",
+        "text": "I'd like a torque screwdriver for bicycle work, about $60 to $90."
+      },
+      "initialPreferences": {
+        "version": 5,
+        "productDescription": "",
+        "criteria": [],
+        "budget": null,
+        "budgetClarified": false,
+        "pendingChange": null,
+        "region": "SG",
+        "responseLength": "concise",
+        "revision": 0
+      },
+      "finalPreferences": {
+        "version": 5,
+        "productDescription": "",
+        "criteria": [],
+        "budget": null,
+        "budgetClarified": false,
+        "pendingChange": null,
+        "region": "SG",
+        "responseLength": "concise",
+        "revision": 0
+      },
+      "response": {
+        "responseVersion": 5,
+        "preferences": {
+          "version": 5,
+          "productDescription": "",
+          "criteria": [],
+          "budget": null,
+          "budgetClarified": false,
+          "pendingChange": null,
+          "region": "SG",
+          "responseLength": "concise",
+          "revision": 0
+        },
+        "notes": [],
+        "kind": "research-unavailable",
+        "message": "I could not interpret that request right now. Your accepted preferences and any pending answer are retained. Try again after intent interpretation is available.",
+        "reason": "intent-unavailable"
+      },
+      "providerCalls": 0,
+      "cancelled": false
+    },
+    {
+      "index": 1,
+      "action": {
+        "kind": "message",
+        "text": "USD. Adjustable from 2 to 8 Nm is essential."
+      },
+      "initialPreferences": {
+        "version": 5,
+        "productDescription": "",
+        "criteria": [],
+        "budget": null,
+        "budgetClarified": false,
+        "pendingChange": null,
+        "region": "SG",
+        "responseLength": "concise",
+        "revision": 0
+      },
+      "finalPreferences": {
+        "version": 5,
+        "productDescription": "",
+        "criteria": [],
+        "budget": null,
+        "budgetClarified": false,
+        "pendingChange": null,
+        "region": "SG",
+        "responseLength": "concise",
+        "revision": 0
+      },
+      "response": {
+        "responseVersion": 5,
+        "preferences": {
+          "version": 5,
+          "productDescription": "",
+          "criteria": [],
+          "budget": null,
+          "budgetClarified": false,
+          "pendingChange": null,
+          "region": "SG",
+          "responseLength": "concise",
+          "revision": 0
+        },
+        "notes": [],
+        "kind": "research-unavailable",
+        "message": "I could not interpret that request right now. Your accepted preferences and any pending answer are retained. Try again after intent interpretation is available.",
+        "reason": "intent-unavailable"
+      },
+      "providerCalls": 0,
+      "cancelled": false
+    }
+  ],
+  "events": [
+    {
+      "sequence": 1,
+      "turn": 0,
+      "kind": "app-request",
+      "elapsedMs": 3.28,
+      "body": {
+        "phase": "prepare",
+        "message": "I'd like a torque screwdriver for bicycle work, about $60 to $90.",
+        "preferences": {
+          "version": 5,
+          "productDescription": "",
+          "criteria": [],
+          "budget": null,
+          "budgetClarified": false,
+          "pendingChange": null,
+          "region": "SG",
+          "responseLength": "concise",
+          "revision": 0
+        },
+        "operationId": "f3b1619e-4ee5-486f-9cb3-06fa51112ad5"
+      }
+    },
+    {
+      "sequence": 2,
+      "turn": 0,
+      "kind": "interpreter-request",
+      "elapsedMs": 4.12,
+      "body": {
+        "operationId": "f3b1619e-4ee5-486f-9cb3-06fa51112ad5",
+        "message": "I'd like a torque screwdriver for bicycle work, about $60 to $90.",
+        "questionId": null,
+        "inputHash": "ba136b479052387d0ab913a7bb4d802eebe4f7e17be79846d908e5fd87c4044a",
+        "label": "Independently authored synthetic proposals. Conditional technical behavior only."
+      }
+    },
+    {
+      "sequence": 3,
+      "turn": 0,
+      "kind": "interpreter-response",
+      "elapsedMs": 4.15,
+      "body": {
+        "status": "ready",
+        "interpretation": {
+          "disposition": "research",
+          "actions": [
+            {
+              "kind": "start-request",
+              "source": {
+                "start": 11,
+                "end": 46,
+                "text": "torque screwdriver for bicycle work"
+              }
+            },
+            {
+              "kind": "budget",
+              "source": {
+                "start": 48,
+                "end": 64,
+                "text": "about $60 to $90"
+              },
+              "operation": "clarify",
+              "draft": {
+                "amount": 90,
+                "minimum": 60,
+                "currency": null
+              }
+            }
+          ]
+        },
+        "bindings": [],
+        "limitations": []
+      }
+    },
+    {
+      "sequence": 4,
+      "turn": 0,
+      "kind": "app-response",
+      "elapsedMs": 4.45,
+      "body": {
+        "status": 200,
+        "body": {
+          "responseVersion": 5,
+          "preferences": {
+            "version": 5,
+            "productDescription": "",
+            "criteria": [],
+            "budget": null,
+            "budgetClarified": false,
+            "pendingChange": null,
+            "region": "SG",
+            "responseLength": "concise",
+            "revision": 0
+          },
+          "notes": [],
+          "kind": "research-unavailable",
+          "message": "I could not interpret that request right now. Your accepted preferences and any pending answer are retained. Try again after intent interpretation is available.",
+          "reason": "intent-unavailable"
+        }
+      }
+    },
+    {
+      "sequence": 5,
+      "turn": 1,
+      "kind": "app-request",
+      "elapsedMs": 4.48,
+      "body": {
+        "phase": "prepare",
+        "message": "USD. Adjustable from 2 to 8 Nm is essential.",
+        "preferences": {
+          "version": 5,
+          "productDescription": "",
+          "criteria": [],
+          "budget": null,
+          "budgetClarified": false,
+          "pendingChange": null,
+          "region": "SG",
+          "responseLength": "concise",
+          "revision": 0
+        },
+        "operationId": "9e96525d-8f04-45b8-8d2c-1d15683d09ed"
+      }
+    },
+    {
+      "sequence": 6,
+      "turn": 1,
+      "kind": "interpreter-request",
+      "elapsedMs": 4.95,
+      "body": {
+        "operationId": "9e96525d-8f04-45b8-8d2c-1d15683d09ed",
+        "message": "USD. Adjustable from 2 to 8 Nm is essential.",
+        "questionId": null,
+        "inputHash": "ba136b479052387d0ab913a7bb4d802eebe4f7e17be79846d908e5fd87c4044a",
+        "label": "Independently authored synthetic proposals. Conditional technical behavior only."
+      }
+    },
+    {
+      "sequence": 7,
+      "turn": 1,
+      "kind": "interpreter-response",
+      "elapsedMs": 4.96,
+      "body": {
+        "status": "ready",
+        "interpretation": {
+          "disposition": "research",
+          "actions": [
+            {
+              "kind": "budget",
+              "source": {
+                "start": 0,
+                "end": 3,
+                "text": "USD"
+              },
+              "operation": "replace-range",
+              "draft": {
+                "amount": 90,
+                "minimum": 60,
+                "currency": "USD"
+              }
+            },
+            {
+              "kind": "add-criterion",
+              "source": {
+                "start": 5,
+                "end": 44,
+                "text": "Adjustable from 2 to 8 Nm is essential."
+              },
+              "strength": "hard"
+            }
+          ]
+        },
+        "bindings": [],
+        "limitations": [
+          "Hard strength follows the literal requirement, including essential, needs, or a specific required specification. The proposal does not rewrite wording to satisfy a lexical guard."
+        ]
+      }
+    },
+    {
+      "sequence": 8,
+      "turn": 1,
+      "kind": "app-response",
+      "elapsedMs": 5.2,
+      "body": {
+        "status": 200,
+        "body": {
+          "responseVersion": 5,
+          "preferences": {
+            "version": 5,
+            "productDescription": "",
+            "criteria": [],
+            "budget": null,
+            "budgetClarified": false,
+            "pendingChange": null,
+            "region": "SG",
+            "responseLength": "concise",
+            "revision": 0
+          },
+          "notes": [],
+          "kind": "research-unavailable",
+          "message": "I could not interpret that request right now. Your accepted preferences and any pending answer are retained. Try again after intent interpretation is available.",
+          "reason": "intent-unavailable"
+        }
+      }
+    }
+  ],
+  "network": {
+    "denied": [],
+    "allowedOriginCount": 2,
+    "externalRequests": 0
+  },
+  "cleanup": true,
+  "applicationError": null
+}

@@ -1,0 +1,245 @@
+{
+  "recordedAt": "2026-11-19T05:13:20.411753+00:00",
+  "adapterCommit": "ee6d33850d4849ccc155f2fcdee291bd15de9118",
+  "applicationCommit": "fd9d13793342cdd7e37686b09ae6c9ffd88bb69f",
+  "reportSha256": "563fdbeef71e331f8f21d4311a2807ec3493427a9badf48c34da7a625daf29e3",
+  "scorecardSha256": "fa6bc79232c864aeaf4ec40d537e753a653c513a90e0c513c20ca90496150a51",
+  "summary": {
+    "total": 60,
+    "executed": 60,
+    "passed": 4,
+    "failed": 37,
+    "blocked": 18,
+    "unsupported": 1,
+    "infrastructureErrors": 0,
+    "criticalFailures": 52,
+    "criticalScenarios": 28,
+    "observedTurns": 140,
+    "observedClarifications": 14,
+    "categories": {
+      "conversational-understanding": {
+        "passed": 1,
+        "assessed": 5,
+        "unassessed": 0,
+        "rate": 0.2
+      },
+      "preference-extraction": {
+        "passed": 1,
+        "assessed": 5,
+        "unassessed": 0,
+        "rate": 0.2
+      },
+      "contextual-clarification": {
+        "passed": 0,
+        "assessed": 5,
+        "unassessed": 0,
+        "rate": 0
+      },
+      "budget-currency": {
+        "passed": 0,
+        "assessed": 4,
+        "unassessed": 1,
+        "rate": 0
+      },
+      "preference-retention": {
+        "passed": 0,
+        "assessed": 4,
+        "unassessed": 1,
+        "rate": 0
+      },
+      "corrections-dissatisfaction": {
+        "passed": 1,
+        "assessed": 5,
+        "unassessed": 0,
+        "rate": 0.2
+      },
+      "research-selection": {
+        "passed": 0,
+        "assessed": 2,
+        "unassessed": 3,
+        "rate": 0
+      },
+      "product-relevance": {
+        "passed": 0,
+        "assessed": 5,
+        "unassessed": 0,
+        "rate": 0
+      },
+      "comparison-quality": {
+        "passed": 0,
+        "assessed": 1,
+        "unassessed": 4,
+        "rate": 0
+      },
+      "evidence-honesty": {
+        "passed": 0,
+        "assessed": 2,
+        "unassessed": 3,
+        "rate": 0
+      },
+      "chat-interaction": {
+        "passed": 0,
+        "assessed": 1,
+        "unassessed": 4,
+        "rate": 0
+      },
+      "recovery-safety": {
+        "passed": 1,
+        "assessed": 2,
+        "unassessed": 3,
+        "rate": 0.5
+      }
+    },
+    "metrics": {
+      "conversational-task-success": {
+        "passed": 0,
+        "assessed": 0,
+        "unassessed": 60,
+        "rate": null
+      },
+      "deterministic-case-contract": {
+        "passed": 4,
+        "assessed": 41,
+        "unassessed": 19,
+        "rate": 0.0975609756097561
+      },
+      "unnecessary-clarification-rate": {
+        "passed": 0,
+        "assessed": 0,
+        "unassessed": 14,
+        "rate": null
+      },
+      "hard-constraint-preservation": {
+        "passed": 214,
+        "assessed": 268,
+        "unassessed": 0,
+        "rate": 0.7985074626865671
+      },
+      "citation-price-attribution": {
+        "passed": 289,
+        "assessed": 289,
+        "unassessed": 0,
+        "rate": 1
+      },
+      "research-call-restraint": {
+        "passed": 203,
+        "assessed": 207,
+        "unassessed": 0,
+        "rate": 0.9806763285024155
+      },
+      "research-usefulness": {
+        "passed": 0,
+        "assessed": 0,
+        "unassessed": 60,
+        "rate": null
+      },
+      "product-relevance": {
+        "passed": 0,
+        "assessed": 0,
+        "unassessed": 60,
+        "rate": null
+      },
+      "user-experience": {
+        "passed": 0,
+        "assessed": 0,
+        "unassessed": 60,
+        "rate": null
+      }
+    },
+    "acceptance": "fail"
+  },
+  "scenarioChanges": {
+    "newlyPassing": [
+      "FN-CU-001",
+      "FN-PE-001",
+      "FN-CD-001",
+      "FN-ER-001"
+    ],
+    "stillFailing": [
+      "FN-CU-002",
+      "FN-CU-005",
+      "FN-PE-002",
+      "FN-PE-003",
+      "FN-PE-004",
+      "FN-PE-005",
+      "FN-CC-001",
+      "FN-CC-003",
+      "FN-CC-004",
+      "FN-CC-005",
+      "FN-BC-001",
+      "FN-MR-001",
+      "FN-MR-003",
+      "FN-MR-004",
+      "FN-MR-005",
+      "FN-CD-002",
+      "FN-CD-003",
+      "FN-CD-005",
+      "FN-RT-001",
+      "FN-RT-003",
+      "FN-PR-004",
+      "FN-PQ-002",
+      "FN-UI-005"
+    ],
+    "regressions": [],
+    "newlyObservedFailures": [
+      "FN-CU-003",
+      "FN-CU-004",
+      "FN-CC-002",
+      "FN-BC-002",
+      "FN-BC-003",
+      "FN-BC-004",
+      "FN-CD-004",
+      "FN-PR-001",
+      "FN-PR-002",
+      "FN-PR-003",
+      "FN-PR-005",
+      "FN-EH-001",
+      "FN-EH-004",
+      "FN-ER-005"
+    ],
+    "failedToUnassessed": [
+      "FN-RT-002",
+      "FN-PQ-001",
+      "FN-EH-003",
+      "FN-UI-001",
+      "FN-UI-004",
+      "FN-ER-003",
+      "FN-ER-004"
+    ],
+    "lostAssessment": [
+      "FN-RT-002",
+      "FN-PQ-001",
+      "FN-EH-003",
+      "FN-UI-001",
+      "FN-UI-004",
+      "FN-ER-003",
+      "FN-ER-004"
+    ]
+  },
+  "assertionTransitionCounts": {
+    "newlyPassing": 25,
+    "newlyAssessedPasses": 48,
+    "stillFailing": 36,
+    "regressions": 48,
+    "newlyObservedFailures": 0,
+    "lostAssessment": 598,
+    "failedToUnassessed": 0,
+    "criticalRegressions": 22
+  },
+  "pairedAssessed": {
+    "denominator": 918,
+    "v4": {
+      "passed": 857,
+      "failed": 61
+    },
+    "v5": {
+      "passed": 834,
+      "failed": 84
+    },
+    "label": "Same assertions assessed in both reports under different interpretation composition. Conditional technical comparison only."
+  },
+  "independentReview": "pending final verdict",
+  "CI": "pending push",
+  "liveUsefulness": "not established",
+  "manualGrantUsed": false
+}
