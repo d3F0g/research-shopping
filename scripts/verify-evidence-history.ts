@@ -98,9 +98,17 @@ try {
       await cdp.send("Network.emulateNetworkConditionsByRule", { matchedNetworkConditions: [{ urlPattern: `${runtime.origin}/api/account`, latency: 5500, downloadThroughput: -1, uploadThroughput: -1 }] });
     }
     try {
-      await page.reload();
-      reloadEvents.push({ event: "page-loaded", at: Date.now() });
+      const [restoredResponse] = await Promise.all([
+        page.waitForResponse((response) => response.url() === `${runtime.origin}/api/account` && response.request().method() === "GET"),
+        page.reload().then(() => reloadEvents.push({ event: "page-loaded", at: Date.now() })),
+      ]);
+      assert.equal(restoredResponse.status(), 200);
+      const restored = await restoredResponse.json();
+      assert.equal(restored.status, "signed-in");
+      assert.deepEqual(restored.workspace, saved.workspace);
+      reloadEvents.push({ event: "account-validated", at: Date.now() });
       await expect(page.getByText("SGD 868.00", { exact: true })).toBeVisible();
+      await writeFile(`${directory}/${viewport.width}-reload.json`, JSON.stringify({ status: "passed", accountLatencyMs: viewport.width === 390 ? 5500 : 0, events: reloadEvents }, null, 2) + "\n");
     } catch (error) {
       await writeFile(`${directory}/${viewport.width}-reload-failure.json`, JSON.stringify({ events: reloadEvents, bodyTextPrefix: (await page.locator("body").innerText()).slice(0, 30000) }, null, 2) + "\n");
       const failurePath = `${directory}/${viewport.width}-reload-failure.png`;
