@@ -1,7 +1,7 @@
 import { z } from "zod";
 import type { ResearchSnapshot } from "./research";
 import type { StoredResearchV2 } from "./workspace-history-v2";
-export type DeepReadonly<T> = { readonly [Key in keyof T]: T[Key] extends object ? DeepReadonly<T[Key]> : T[Key] };
+export type DeepReadonly<T> = T extends object ? { readonly [Key in keyof T]: DeepReadonly<T[Key]> } : T;
 export type RenderableResearch = DeepReadonly<ResearchSnapshot | StoredResearchV2>;
 
 export const MoneySchema = z
