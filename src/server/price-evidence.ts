@@ -112,7 +112,7 @@ export function isMonetaryOnlyEvidence(text: string, currencies: readonly string
     .replace(/[0-9]+(?:[.,][0-9]+)*/gu, " ")
     .replace(phrase(["is priced at", "has a price of", "from", "to", "between", "and"]), " ")
     .replace(new RegExp(monetaryContext.source, "giu"), " ");
-  return /^[\s\p{P}+−]*$/u.test(remainder);
+  return /^[\s\p{P}\p{Sm}]*$/u.test(remainder);
 }
 
 export function assessPriceContext(
