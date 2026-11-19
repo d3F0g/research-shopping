@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { defaultIntent } from "../../src/domain/contracts";
+import { MoneyDraftSchema, defaultIntent } from "../../src/domain/contracts";
 import { updateIntent } from "../../src/domain/preferences";
 
 describe("answers to pending money questions", () => {
@@ -39,4 +39,8 @@ describe("local versus general intent routing", () => {
     expect(resolveLocalIntent("make it 50; only Anker", previous)).toBeNull();
     expect(resolveLocalIntent("under SGD50; prefer lighter", { ...previous, pendingChange: null })).toBeNull();
   });
+});
+
+it("rejects inverted pending bounds at the state boundary", () => {
+  expect(MoneyDraftSchema.safeParse({ amount: 20, minimum: 30, currency: null }).success).toBe(false);
 });

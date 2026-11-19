@@ -45,7 +45,7 @@ export const MoneyDraftSchema = z.strictObject({
   amount: MoneyAmountSchema.nullable(),
   minimum: MoneyAmountSchema.nullable(),
   currency: CurrencySchema.nullable(),
-});
+}).refine((draft) => draft.amount === null || draft.minimum === null || draft.minimum <= draft.amount, { message: "Draft minimum cannot exceed maximum" });
 const QuestionBase = {
   id: z.string().min(1).max(80),
   message: z.string().min(1).max(2000),
