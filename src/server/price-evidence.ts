@@ -46,10 +46,17 @@ function conditionProof(tail: string): Set<string> | null {
 
 function conditionalProof(tail: string): string[] | null {
   const conditions: string[] = [];
-  for (const part of conditionParts(tail)) {
-    if (conditionKinds.has(part.toLowerCase())) continue;
-    if (!/^(?:(?:only )?with (?:a )?(?:membership(?: voucher)?|voucher|coupon)|(?:membership|voucher|coupon|subscription) (?:is )?required|(?:for )?members only|only available with membership|(?:not|without) tax included|excluding (?:tax|GST|VAT)|mandatory shipping charges)$/iu.test(part)) return null;
-    conditions.push(part);
+  const buyerRestriction = /^this price requires (?:a )?(?:membership|subscription|voucher|coupon)(?: and (?:a )?(?:membership|subscription|voucher|coupon))*$/iu;
+  for (const chunk of tail.trim().replace(/^[,;]\s*/u, "").split(/\s*[,;]\s*/u)) {
+    if (buyerRestriction.test(chunk)) {
+      conditions.push(chunk);
+      continue;
+    }
+    for (const part of conditionParts(chunk)) {
+      if (conditionKinds.has(part.toLowerCase())) continue;
+      if (!/^(?:(?:only )?with (?:a )?(?:membership(?: voucher)?|voucher|coupon)|(?:membership|voucher|coupon|subscription) (?:is )?required|(?:for )?members only|only available with membership|(?:not|without) tax included|excluding (?:tax|GST|VAT)|mandatory shipping charges)$/iu.test(part)) return null;
+      conditions.push(part);
+    }
   }
   return conditions.length ? conditions : null;
 }
@@ -135,6 +142,7 @@ export function assessPriceContext(
         "iu",
       )
     : null;
+  const ordinaryPrice = new RegExp(`^the ordinary (?:${subjects.map(literal).join("|")}) price is ${money}$`, "iu");
   let relevant = false;
   let observed = false;
   let complete = true;
@@ -154,6 +162,17 @@ export function assessPriceContext(
     if (!match) {
       const other = otherAssertion?.exec(clause);
       if (other && conditionProof(other[3]!) !== null) continue;
+      const conditional = observed ? conditionalProof(clause) : null;
+      if (conditional) {
+        unresolved.push(...conditional);
+        complete = false;
+        continue;
+      }
+      if (observed && unresolved.length && ordinaryPrice.test(clause)) {
+        unresolved.push(clause);
+        complete = false;
+        continue;
+      }
     }
     relevant = true;
     if (
