@@ -219,3 +219,26 @@ describe("unique catalog heading binding", () => {
     expect(project(material).products[0]!.price).toBeNull();
   });
 });
+
+describe("monetary grammar and open product descriptions", () => {
+  it.each(["RTX4080", "USB3", "ABC35", "USDock35", "Fixture Orinth lunar spectrometer 7"])("does not classify %s as currency by its letter count", (name) => {
+    const request = { ...initialConversation().intent, productDescription: `Fixture ${name}`, budget: null };
+    const material = JSON.parse(JSON.stringify(nativeMaterial(request)).replaceAll("Model A", name));
+    material.answer.products[0].requestMatch = { ...material.answer.products[0].requestMatch, support: [{ url: material.citations[0].url, quote: name }] };
+    const result = projectExaAnswer(material, request);
+    if (result.status !== "ready") throw new Error("Expected fixture comparison");
+    expect(result.research.products[0]!.requestMatch.status).toBe("supported");
+    expect(result.research.products[0]!.requestMatch.support[0]!.literal.text).toBe(name);
+  });
+  it.each(["tax included", "including GST", "per unit", "for one unit", "membership required", "this price requires a voucher and a coupon", "mandatory shipping charges", "only available with membership"])("downgrades money with the existing condition %s", (condition) => {
+    const request = { ...initialConversation().intent, productDescription: "Fixture powerbank", budget: null };
+    const quote = `CHF35, ${condition}`;
+    const material = JSON.parse(JSON.stringify(nativeMaterial(request)).replaceAll("SGD 35", quote));
+    material.answer.products[0].price.currency = "CHF";
+    material.answer.products[0].requestMatch = { ...material.answer.products[0].requestMatch, support: [{ url: material.citations[0].url, quote }] };
+    const result = projectExaAnswer(material, request);
+    if (result.status !== "ready") throw new Error("Expected fixture comparison");
+    expect(result.research.products[0]!.requestMatch.status).toBe("unknown");
+    expect(result.research.choice).toBeNull();
+  });
+});
