@@ -3,6 +3,7 @@ import { isAbsolute } from "node:path";
 import { createApp } from "./app";
 import { configFromEnvironment } from "./config";
 import { createExaProductResearch } from "./exa-research";
+import { createExaDiagnosticWriter } from "./exa-diagnostics";
 import { createResearchQuota } from "./research-quota";
 import { createConversationService } from "./conversations";
 import { accountConfiguration, configuredAccounts } from "./accounts";
@@ -18,7 +19,9 @@ const ledger = process.env.EXA_RESEARCH_LEDGER_PATH;
 const configured = enabled && key && ledger && isAbsolute(ledger);
 const researchDependencies = configured
   ? {
-      research: createExaProductResearch(key),
+      research: createExaProductResearch(key, {
+        diagnostics: createExaDiagnosticWriter(process.env.FIELDNOTE_EXA_DIAGNOSTIC_DIR),
+      }),
       quota: createResearchQuota(ledger, {
         manualGrantPath: process.env.EXA_MANUAL_RESEARCH_GRANT_PATH,
       }),

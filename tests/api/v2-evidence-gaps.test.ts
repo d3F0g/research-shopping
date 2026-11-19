@@ -1,5 +1,11 @@
 import { createServer, type Server } from "node:http";
 import { randomUUID } from "node:crypto";
+import { chmod, mkdtemp, readFile, readdir, realpath, rm } from "node:fs/promises";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
+import { createExaDiagnosticWriter } from "../../src/server/exa-diagnostics";
+import { createApp } from "../../src/server/app";
+import { createConversationService } from "../../src/server/conversations";
 import { afterEach, describe, expect, it } from "vitest";
 import { initialConversation, type ShoppingIntent } from "../../src/domain/conversation";
 import { reduceTurn } from "../../src/domain/turn-reducer";
@@ -7,7 +13,9 @@ import { createExaProductResearch, projectExaAnswer } from "../../src/server/exa
 import { nativeMaterial } from "../helpers/v2-material";
 
 const servers: Server[] = [];
+const directories: string[] = [];
 afterEach(async () => {
+  for (const path of directories.splice(0)) await rm(path, { recursive: true, force: true });
   for (const server of servers.splice(0)) {
     server.closeAllConnections();
     await new Promise<void>((resolve) => server.close(() => resolve()));
@@ -160,5 +168,72 @@ describe("shopping retrieval and ordinary source price blocks", () => {
     if (result.status !== "ready") throw new Error("No comparison");
     expect(result.research.choice).toBeNull();
     expect(result.research.products[0]!.eligible).toBe(false);
+  });
+});
+
+describe("private projection diagnostics at the SDK boundary", () => {
+  async function endpoint(material: unknown) {
+    let calls = 0;
+    const server = createServer((_req, res) => {
+      calls++;
+      res.setHeader("content-type", "application/json");
+      res.end(JSON.stringify(material));
+    });
+    servers.push(server);
+    await new Promise<void>((resolve) => server.listen(0, "127.0.0.1", resolve));
+    const address = server.address();
+    if (!address || typeof address === "string") throw new Error("No socket");
+    return { baseUrl: `http://127.0.0.1:${address.port}`, calls: () => calls };
+  }
+  it("captures exact schema failure privately while normal HTTP returns only honest unavailability", async () => {
+    const path = await realpath(await mkdtemp(join(tmpdir(), "fieldnote-sdk-capture-test-")));
+    directories.push(path);
+    await chmod(path, 0o700);
+    const material = nativeMaterial(sunglassesIntent());
+    material.answer.products[0]!.identity.status = "unexpected-fixture-status";
+    const sdk = await endpoint(material);
+    let reservations = 0;
+    const settlements: unknown[] = [];
+    const app = createApp({ conversations: createConversationService({
+      research: createExaProductResearch("fixture-private-key", { baseUrl: sdk.baseUrl, diagnostics: createExaDiagnosticWriter(path) }),
+      quota: { reserve: async () => { reservations++; return "admitted"; }, settle: async (...args) => { settlements.push(args); } },
+    }) });
+    const headers = { "Content-Type": "application/json", Origin: "http://127.0.0.1:5173" };
+    const prepared = await app.request("http://127.0.0.1:3000/api/turn", { method: "POST", headers, body: JSON.stringify({ phase: "prepare", operationId: randomUUID(), message: "Find sunglasses between SGD800 and1000" }) });
+    expect(prepared.status).toBe(200);
+    const data = await prepared.json();
+    expect(data.kind).toBe("prepared");
+    const response = await app.request("http://127.0.0.1:3000/api/turn", { method: "POST", headers: { ...headers, Cookie: prepared.headers.get("set-cookie")!.split(";")[0]! }, body: JSON.stringify({ phase: "research", preparedId: data.preparedId }) });
+    expect(response.status).toBe(200);
+    const text = await response.text();
+    expect(text).toContain("could not be validated");
+    expect(text).not.toContain("unexpected-fixture-status");
+    expect(text).not.toContain("projection");
+    expect(text).not.toContain("fixture-private-key");
+    expect(reservations).toBe(1);
+    expect(settlements).toHaveLength(1);
+    expect(settlements[0]).toEqual([expect.any(String), 0.005, true]);
+    expect(sdk.calls()).toBe(1);
+    const names = await readdir(path);
+    expect(names).toHaveLength(1);
+    const saved = JSON.parse(await readFile(join(path, names[0]!), "utf8"));
+    expect(saved.projection.stage).toBe("answer-schema");
+    expect(saved.projection.issues).toContainEqual({ path: ["products", "0", "identity", "status"], code: "invalid_value" });
+    expect(saved.raw.response).toEqual(material);
+    expect(saved.intent.budget).toEqual({ minimum: 800, maximum: 1000, currency: "SGD" });
+  });
+  it.each(["throws", "never-settles"])("does not let a diagnostic observer that %s change paid result or retry", async (behavior) => {
+    const current = sunglassesIntent();
+    const sdk = await endpoint(nativeMaterial(current));
+    let captures = 0;
+    const result = await createExaProductResearch("fixture-private-key", {
+      baseUrl: sdk.baseUrl,
+      diagnostics: async () => { captures++; if (behavior === "throws") throw new Error("Fixture capture failure"); return new Promise<void>(() => undefined); },
+    })({ intent: current }, new AbortController().signal);
+    expect(result.status).toBe("ready");
+    if (result.status !== "ready") throw new Error("No comparison");
+    expect(result.research.reportedCostUsd).toBe(0.005);
+    expect(captures).toBe(1);
+    expect(sdk.calls()).toBe(1);
   });
 });

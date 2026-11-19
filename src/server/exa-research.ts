@@ -296,7 +296,27 @@ function bindPrice(
     },
   };
 }
-export function projectExaAnswer(raw: unknown, intent: ShoppingIntent) {
+export type ExaProjectionDiagnostic = {
+  stage: "envelope" | "answer-json" | "answer-schema" | "sources" | "snapshot" | "ready";
+  issues: { path: string[]; code: string }[];
+};
+export type ExaDiagnosticRecord = {
+  capturedAt: string;
+  query: string;
+  intent: ShoppingIntent;
+  response: unknown;
+  projection: ExaProjectionDiagnostic;
+};
+function issues(error: z.ZodError): ExaProjectionDiagnostic["issues"] {
+  return error.issues.slice(0, 16).map((issue) => ({
+    path: issue.path.slice(0, 12).map((part) => String(part).slice(0, 128)),
+    code: issue.code,
+  }));
+}
+function projectAnswer(raw: unknown, intent: ShoppingIntent): {
+  result: Awaited<ReturnType<ResearchOperation>>;
+  projection: ExaProjectionDiagnostic;
+} {
   const envelope = Envelope.safeParse(raw);
   const reported =
     typeof raw === "object" && raw !== null && "costDollars" in raw
@@ -305,28 +325,27 @@ export function projectExaAnswer(raw: unknown, intent: ShoppingIntent) {
           .safeParse(raw.costDollars)
       : null;
   const cost = reported?.success ? reported.data.total : null;
-  const unavailable = (reason: "invalid-response" | "empty") => ({
-    status: "unavailable" as const,
-    reason,
-    ...(cost !== null ? { reportedCostUsd: cost } : {}),
+  const unavailable = (reason: "invalid-response" | "empty", stage: ExaProjectionDiagnostic["stage"], error?: z.ZodError) => ({
+    result: { status: "unavailable" as const, reason, ...(cost !== null ? { reportedCostUsd: cost } : {}) },
+    projection: { stage, issues: error ? issues(error) : [] },
   });
-  if (!envelope.success) return unavailable("invalid-response");
+  if (!envelope.success) return unavailable("invalid-response", "envelope", envelope.error);
   let answer = envelope.data.answer;
   try {
     if (typeof answer === "string")
       answer = answer.length <= 128000 ? JSON.parse(answer) : null;
   } catch {
-    return unavailable("invalid-response");
+    return unavailable("invalid-response", "answer-json");
   }
   const native = NativeAnswerSchema.safeParse(answer);
-  if (!native.success) return unavailable("invalid-response");
+  if (!native.success) return unavailable("invalid-response", "answer-schema", native.error);
   const { sources, complete } = retainSources(envelope.data.citations);
-  if (!sources.length) return unavailable("empty");
+  if (!sources.length) return unavailable("empty", "sources");
   if (
     new Set(native.data.products.map((p) => p.id)).size !==
     native.data.products.length
   )
-    return unavailable("invalid-response");
+    return unavailable("invalid-response", "answer-schema");
   const products = native.data.products.map((p) =>
     assessProduct(
       {
@@ -467,25 +486,39 @@ export function projectExaAnswer(raw: unknown, intent: ShoppingIntent) {
     reportedCostUsd: cost,
   });
   return result.success
-    ? { status: "ready" as const, research: result.data }
-    : unavailable("invalid-response");
+    ? { result: { status: "ready" as const, research: result.data }, projection: { stage: "ready", issues: [] } }
+    : unavailable("invalid-response", "snapshot", result.error);
+}
+export function projectExaAnswer(raw: unknown, intent: ShoppingIntent) {
+  return projectAnswer(raw, intent).result;
+}
+async function capture(observer: ((record: ExaDiagnosticRecord) => Promise<void>) | undefined, record: ExaDiagnosticRecord) {
+  if (!observer) return;
+  let timer: ReturnType<typeof setTimeout> | undefined;
+  try {
+    await Promise.race([
+      Promise.resolve().then(() => observer(record)),
+      new Promise<void>((resolve) => { timer = setTimeout(resolve, 500); }),
+    ]);
+  } catch {} finally { clearTimeout(timer); }
 }
 export function createExaProductResearch(
   apiKey: string,
-  options: { baseUrl?: string; timeoutMs?: number } = {},
+  options: { baseUrl?: string; timeoutMs?: number; diagnostics?: (record: ExaDiagnosticRecord) => Promise<void> } = {},
 ): ResearchOperation {
   if (!apiKey.trim()) throw new Error("An Exa API key is required");
   const exa = new Exa(apiKey.trim(), options.baseUrl, { warnings: "silent" });
   return async ({ intent }, signal) => {
     signal.throwIfAborted();
     try {
+      const query = JSON.stringify({
+        productDescription: intent.productDescription,
+        budget: intent.budget,
+        requirements: intent.requirements.map(({ text, strength }) => ({ text, strength })),
+        region: intent.region,
+      });
       const response = await exa.answer(
-        JSON.stringify({
-          productDescription: intent.productDescription,
-          budget: intent.budget,
-          requirements: intent.requirements.map(({ text, strength }) => ({ text, strength })),
-          region: intent.region,
-        }),
+        query,
         {
           text: true,
           outputSchema: z.toJSONSchema(NativeAnswerSchema),
@@ -495,7 +528,12 @@ export function createExaProductResearch(
         { signal, timeout: options.timeoutMs ?? 30_000 },
       );
       signal.throwIfAborted();
-      return projectExaAnswer(response, intent);
+      const projected = projectAnswer(response, intent);
+      await capture(options.diagnostics, {
+        capturedAt: new Date().toISOString(), query, intent, response,
+        projection: projected.projection,
+      });
+      return projected.result;
     } catch (error) {
       if (signal.aborted) throw error;
       return {
