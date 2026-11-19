@@ -1,0 +1,426 @@
+{
+  "scenarioId": "FN-ER-005",
+  "initialPreferences": {
+    "version": 5,
+    "productDescription": "",
+    "criteria": [],
+    "budget": null,
+    "budgetClarified": false,
+    "pendingChange": null,
+    "region": "SG",
+    "responseLength": "concise",
+    "revision": 0
+  },
+  "finalPreferences": {
+    "version": 5,
+    "productDescription": "",
+    "criteria": [],
+    "budget": null,
+    "budgetClarified": false,
+    "pendingChange": null,
+    "region": "SG",
+    "responseLength": "concise",
+    "revision": 1
+  },
+  "material": {
+    "id": "empty",
+    "kind": "synthetic",
+    "label": "Explicit synthetic provider double. Not genuine Exa research.",
+    "capturedAt": null,
+    "provenance": [
+      "Independently fixed test input before application execution",
+      "No current product or market claim"
+    ],
+    "sha256": "4367307fe7df566c52448db0d1a752ca33fcb1a2fbef0720f8f3317e35776391",
+    "body": {
+      "answer": {
+        "products": [],
+        "choice": null,
+        "limitations": [
+          "Synthetic empty evidence"
+        ]
+      },
+      "citations": [],
+      "costDollars": {
+        "total": 0.005
+      }
+    },
+    "status": 200
+  },
+  "interpretation": {
+    "mode": "fixed-proposals",
+    "inputHash": "ba136b479052387d0ab913a7bb4d802eebe4f7e17be79846d908e5fd87c4044a",
+    "openAIHttpRequests": 0,
+    "ollamaHttpRequests": 0,
+    "consumedTurns": [
+      0,
+      1
+    ],
+    "unconsumedTurns": [],
+    "invocations": 2,
+    "suppliedTurns": [
+      {
+        "turnIndex": 0,
+        "message": "Find a battery-powered mug warmer under EUR 25. It must keep a full mug at 60 C for eight hours.",
+        "proposal": {
+          "disposition": "research",
+          "actions": [
+            {
+              "kind": "start-request",
+              "source": {
+                "start": 7,
+                "end": 33,
+                "text": "battery-powered mug warmer"
+              }
+            },
+            {
+              "kind": "budget",
+              "source": {
+                "start": 34,
+                "end": 46,
+                "text": "under EUR 25"
+              },
+              "operation": "clarify",
+              "draft": {
+                "amount": 25,
+                "minimum": null,
+                "currency": null
+              }
+            },
+            {
+              "kind": "add-criterion",
+              "source": {
+                "start": 48,
+                "end": 96,
+                "text": "It must keep a full mug at 60 C for eight hours."
+              },
+              "strength": "hard"
+            }
+          ]
+        },
+        "limitations": [
+          "The stated currency is unsupported by the allowed SGD/USD draft. Its numeric amount is retained with currency null. No currency conversion or substitute currency is proposed."
+        ]
+      },
+      {
+        "turnIndex": 1,
+        "message": "If nothing meets that, say so. Don't relax those requirements.",
+        "proposal": {
+          "disposition": "acknowledge",
+          "actions": []
+        },
+        "limitations": [
+          "This preserves all earlier requirements and requests honest absence reporting. It supplies no new evidence, money edit, or authority to relax a constraint."
+        ]
+      }
+    ],
+    "limitations": []
+  },
+  "turns": [
+    {
+      "index": 0,
+      "action": {
+        "kind": "message",
+        "text": "Find a battery-powered mug warmer under EUR 25. It must keep a full mug at 60 C for eight hours."
+      },
+      "initialPreferences": {
+        "version": 5,
+        "productDescription": "",
+        "criteria": [],
+        "budget": null,
+        "budgetClarified": false,
+        "pendingChange": null,
+        "region": "SG",
+        "responseLength": "concise",
+        "revision": 0
+      },
+      "finalPreferences": {
+        "version": 5,
+        "productDescription": "",
+        "criteria": [],
+        "budget": null,
+        "budgetClarified": false,
+        "pendingChange": null,
+        "region": "SG",
+        "responseLength": "concise",
+        "revision": 0
+      },
+      "response": {
+        "responseVersion": 5,
+        "preferences": {
+          "version": 5,
+          "productDescription": "",
+          "criteria": [],
+          "budget": null,
+          "budgetClarified": false,
+          "pendingChange": null,
+          "region": "SG",
+          "responseLength": "concise",
+          "revision": 0
+        },
+        "notes": [],
+        "kind": "research-unavailable",
+        "message": "I could not safely interpret the complete message, so no part of it was applied. Your accepted preferences and any pending question are unchanged. This message needs additional interpretation, which is unavailable right now.",
+        "reason": "intent-unavailable"
+      },
+      "intentHandling": "synthetic-fallback",
+      "providerCalls": 0,
+      "cancelled": false
+    },
+    {
+      "index": 1,
+      "action": {
+        "kind": "message",
+        "text": "If nothing meets that, say so. Don't relax those requirements."
+      },
+      "initialPreferences": {
+        "version": 5,
+        "productDescription": "",
+        "criteria": [],
+        "budget": null,
+        "budgetClarified": false,
+        "pendingChange": null,
+        "region": "SG",
+        "responseLength": "concise",
+        "revision": 0
+      },
+      "finalPreferences": {
+        "version": 5,
+        "productDescription": "",
+        "criteria": [],
+        "budget": null,
+        "budgetClarified": false,
+        "pendingChange": null,
+        "region": "SG",
+        "responseLength": "concise",
+        "revision": 1
+      },
+      "response": {
+        "responseVersion": 5,
+        "preferences": {
+          "version": 5,
+          "productDescription": "",
+          "criteria": [],
+          "budget": null,
+          "budgetClarified": false,
+          "pendingChange": null,
+          "region": "SG",
+          "responseLength": "concise",
+          "revision": 1
+        },
+        "notes": [],
+        "kind": "message",
+        "message": "Your preferences and earlier research are still here."
+      },
+      "intentHandling": "synthetic-fallback",
+      "providerCalls": 0,
+      "cancelled": false
+    }
+  ],
+  "events": [
+    {
+      "sequence": 1,
+      "turn": 0,
+      "kind": "app-request",
+      "attemptId": "ebc56553-2f55-4eb0-9a57-f52824b08663",
+      "elapsedMs": 2.43,
+      "body": {
+        "phase": "prepare",
+        "message": "Find a battery-powered mug warmer under EUR 25. It must keep a full mug at 60 C for eight hours.",
+        "preferences": {
+          "version": 5,
+          "productDescription": "",
+          "criteria": [],
+          "budget": null,
+          "budgetClarified": false,
+          "pendingChange": null,
+          "region": "SG",
+          "responseLength": "concise",
+          "revision": 0
+        },
+        "operationId": "86ea5e55-6f75-4276-9f08-b57d79ef8e1c"
+      }
+    },
+    {
+      "sequence": 2,
+      "turn": 0,
+      "kind": "interpreter-request",
+      "attemptId": "ebc56553-2f55-4eb0-9a57-f52824b08663",
+      "elapsedMs": 6.36,
+      "body": {
+        "operationId": "86ea5e55-6f75-4276-9f08-b57d79ef8e1c",
+        "message": "Find a battery-powered mug warmer under EUR 25. It must keep a full mug at 60 C for eight hours.",
+        "questionId": null,
+        "inputHash": "ba136b479052387d0ab913a7bb4d802eebe4f7e17be79846d908e5fd87c4044a",
+        "label": "Independently authored synthetic proposals. Conditional technical behavior only."
+      }
+    },
+    {
+      "sequence": 3,
+      "turn": 0,
+      "kind": "interpreter-response",
+      "attemptId": "ebc56553-2f55-4eb0-9a57-f52824b08663",
+      "elapsedMs": 6.41,
+      "body": {
+        "status": "ready",
+        "interpretation": {
+          "disposition": "research",
+          "actions": [
+            {
+              "kind": "start-request",
+              "source": {
+                "start": 7,
+                "end": 33,
+                "text": "battery-powered mug warmer"
+              }
+            },
+            {
+              "kind": "budget",
+              "source": {
+                "start": 34,
+                "end": 46,
+                "text": "under EUR 25"
+              },
+              "operation": "clarify",
+              "draft": {
+                "amount": 25,
+                "minimum": null,
+                "currency": null
+              }
+            },
+            {
+              "kind": "add-criterion",
+              "source": {
+                "start": 48,
+                "end": 96,
+                "text": "It must keep a full mug at 60 C for eight hours."
+              },
+              "strength": "hard"
+            }
+          ]
+        },
+        "bindings": [],
+        "limitations": [
+          "The stated currency is unsupported by the allowed SGD/USD draft. Its numeric amount is retained with currency null. No currency conversion or substitute currency is proposed."
+        ]
+      }
+    },
+    {
+      "sequence": 4,
+      "turn": 0,
+      "kind": "app-response",
+      "attemptId": "ebc56553-2f55-4eb0-9a57-f52824b08663",
+      "elapsedMs": 7.06,
+      "body": {
+        "status": 200,
+        "body": {
+          "responseVersion": 5,
+          "preferences": {
+            "version": 5,
+            "productDescription": "",
+            "criteria": [],
+            "budget": null,
+            "budgetClarified": false,
+            "pendingChange": null,
+            "region": "SG",
+            "responseLength": "concise",
+            "revision": 0
+          },
+          "notes": [],
+          "kind": "research-unavailable",
+          "message": "I could not safely interpret the complete message, so no part of it was applied. Your accepted preferences and any pending question are unchanged. This message needs additional interpretation, which is unavailable right now.",
+          "reason": "intent-unavailable"
+        }
+      }
+    },
+    {
+      "sequence": 5,
+      "turn": 1,
+      "kind": "app-request",
+      "attemptId": "5c54e76c-dacf-4de3-b983-e939e73365da",
+      "elapsedMs": 7.11,
+      "body": {
+        "phase": "prepare",
+        "message": "If nothing meets that, say so. Don't relax those requirements.",
+        "preferences": {
+          "version": 5,
+          "productDescription": "",
+          "criteria": [],
+          "budget": null,
+          "budgetClarified": false,
+          "pendingChange": null,
+          "region": "SG",
+          "responseLength": "concise",
+          "revision": 0
+        },
+        "operationId": "92eafee0-889c-48aa-be7a-0681bb370e35"
+      }
+    },
+    {
+      "sequence": 6,
+      "turn": 1,
+      "kind": "interpreter-request",
+      "attemptId": "5c54e76c-dacf-4de3-b983-e939e73365da",
+      "elapsedMs": 8.07,
+      "body": {
+        "operationId": "92eafee0-889c-48aa-be7a-0681bb370e35",
+        "message": "If nothing meets that, say so. Don't relax those requirements.",
+        "questionId": null,
+        "inputHash": "ba136b479052387d0ab913a7bb4d802eebe4f7e17be79846d908e5fd87c4044a",
+        "label": "Independently authored synthetic proposals. Conditional technical behavior only."
+      }
+    },
+    {
+      "sequence": 7,
+      "turn": 1,
+      "kind": "interpreter-response",
+      "attemptId": "5c54e76c-dacf-4de3-b983-e939e73365da",
+      "elapsedMs": 8.08,
+      "body": {
+        "status": "ready",
+        "interpretation": {
+          "disposition": "acknowledge",
+          "actions": []
+        },
+        "bindings": [],
+        "limitations": [
+          "This preserves all earlier requirements and requests honest absence reporting. It supplies no new evidence, money edit, or authority to relax a constraint."
+        ]
+      }
+    },
+    {
+      "sequence": 8,
+      "turn": 1,
+      "kind": "app-response",
+      "attemptId": "5c54e76c-dacf-4de3-b983-e939e73365da",
+      "elapsedMs": 8.9,
+      "body": {
+        "status": 200,
+        "body": {
+          "responseVersion": 5,
+          "preferences": {
+            "version": 5,
+            "productDescription": "",
+            "criteria": [],
+            "budget": null,
+            "budgetClarified": false,
+            "pendingChange": null,
+            "region": "SG",
+            "responseLength": "concise",
+            "revision": 1
+          },
+          "notes": [],
+          "kind": "message",
+          "message": "Your preferences and earlier research are still here."
+        }
+      }
+    }
+  ],
+  "network": {
+    "denied": [],
+    "allowedOriginCount": 2,
+    "externalRequests": 0
+  },
+  "cleanup": true,
+  "applicationError": null
+}

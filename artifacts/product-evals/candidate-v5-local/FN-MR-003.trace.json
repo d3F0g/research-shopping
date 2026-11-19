@@ -1,0 +1,895 @@
+{
+  "scenarioId": "FN-MR-003",
+  "initialPreferences": {
+    "version": 5,
+    "productDescription": "",
+    "criteria": [],
+    "budget": null,
+    "budgetClarified": false,
+    "pendingChange": null,
+    "region": "SG",
+    "responseLength": "concise",
+    "revision": 0
+  },
+  "finalPreferences": {
+    "version": 5,
+    "productDescription": "",
+    "criteria": [
+      {
+        "id": "criterion-1",
+        "wording": "Make it quieter.",
+        "strength": "flexible",
+        "origin": {
+          "kind": "message",
+          "text": "Make it quieter."
+        }
+      }
+    ],
+    "budget": null,
+    "budgetClarified": false,
+    "pendingChange": null,
+    "region": "SG",
+    "responseLength": "concise",
+    "revision": 3
+  },
+  "material": {
+    "id": "mixed-fit:FN-MR-003",
+    "kind": "synthetic",
+    "label": "Explicit synthetic provider double. Not genuine Exa research.",
+    "capturedAt": null,
+    "provenance": [
+      "Independently fixed test input before application execution",
+      "No current product or market claim",
+      "Original independent provider recipe mixed-fit; fixed profile FN-MR-003.",
+      "Synthetic claims, prices and availability statements remain visibly labeled. No live research or inventory."
+    ],
+    "sha256": "7ac586e0491b7260e0cf6ca7acc621dda98be09c1e5dfaba74690e7051a449f1",
+    "body": {
+      "requestId": "synthetic-FN-MR-003",
+      "costDollars": {
+        "total": 0.005
+      },
+      "citations": [
+        {
+          "url": "https://fixture.example.com/synthetic-wire-1",
+          "title": "Synthetic Wire 1 synthetic fixture",
+          "text": "Synthetic Wire 1 standard is a tenkeyless keyboard with USB data operation.\nSynthetic Wire 1 standard costs USD 75.00 for one unit, tax included.\nSynthetic input. Stock and delivery are not established."
+        },
+        {
+          "url": "https://fixture.example.com/synthetic-wire-2",
+          "title": "Synthetic Wire 2 synthetic fixture",
+          "text": "Synthetic Wire 2 standard is a tenkeyless keyboard with USB data operation.\nSynthetic Wire 2 standard costs USD 90.00 for one unit, tax included.\nSynthetic input. Stock and delivery are not established.\nSynthetic Wire 2 standard is a non-functional display model and cannot be used as an operational product."
+        },
+        {
+          "url": "https://fixture.example.com/synthetic-wire-3",
+          "title": "Synthetic Wire 3 synthetic fixture",
+          "text": "Synthetic Wire 3 standard is a tenkeyless keyboard with USB data operation.\nSynthetic Wire 3 standard costs USD 105.00 for one unit, tax included.\nSynthetic input. Stock and delivery are not established."
+        }
+      ],
+      "answer": {
+        "products": [
+          {
+            "id": "synthetic-wire-1",
+            "name": "Synthetic Wire 1",
+            "variant": "standard",
+            "identity": {
+              "status": "supported",
+              "scope": "exact-variant",
+              "rationale": "Synthetic source-based test interpretation, not a live product claim.",
+              "support": [
+                {
+                  "url": "https://fixture.example.com/synthetic-wire-1",
+                  "quote": "Synthetic Wire 1 standard is a tenkeyless keyboard with USB data operation."
+                }
+              ]
+            },
+            "requestMatch": {
+              "status": "supported",
+              "scope": "exact-variant",
+              "rationale": "Synthetic source-based test interpretation, not a live product claim.",
+              "support": [
+                {
+                  "url": "https://fixture.example.com/synthetic-wire-1",
+                  "quote": "Synthetic Wire 1 standard is a tenkeyless keyboard with USB data operation."
+                }
+              ]
+            },
+            "criteria": [],
+            "attributes": [
+              {
+                "name": "Use",
+                "assessment": {
+                  "status": "supported",
+                  "scope": "exact-variant",
+                  "rationale": "Synthetic source-based test interpretation, not a live product claim.",
+                  "support": [
+                    {
+                      "url": "https://fixture.example.com/synthetic-wire-1",
+                      "quote": "Synthetic Wire 1 standard is a tenkeyless keyboard with USB data operation."
+                    }
+                  ]
+                }
+              }
+            ],
+            "price": {
+              "amount": 75,
+              "currency": "USD",
+              "conditions": [
+                "One unit",
+                "Tax included"
+              ],
+              "conditionsResolved": true,
+              "variant": "standard",
+              "assessment": {
+                "status": "supported",
+                "scope": "exact-variant",
+                "rationale": "Synthetic source-based test interpretation, not a live product claim.",
+                "support": [
+                  {
+                    "url": "https://fixture.example.com/synthetic-wire-1",
+                    "quote": "Synthetic Wire 1 standard costs USD 75.00 for one unit, tax included."
+                  }
+                ]
+              }
+            },
+            "budget": {
+              "status": "supported",
+              "scope": "exact-variant",
+              "rationale": "Synthetic source-based test interpretation, not a live product claim.",
+              "support": [
+                {
+                  "url": "https://fixture.example.com/synthetic-wire-1",
+                  "quote": "Synthetic Wire 1 standard costs USD 75.00 for one unit, tax included."
+                }
+              ]
+            }
+          },
+          {
+            "id": "synthetic-wire-2",
+            "name": "Synthetic Wire 2",
+            "variant": "standard",
+            "identity": {
+              "status": "supported",
+              "scope": "exact-variant",
+              "rationale": "Synthetic source-based test interpretation, not a live product claim.",
+              "support": [
+                {
+                  "url": "https://fixture.example.com/synthetic-wire-2",
+                  "quote": "Synthetic Wire 2 standard is a tenkeyless keyboard with USB data operation."
+                }
+              ]
+            },
+            "requestMatch": {
+              "status": "contradicted",
+              "scope": "exact-variant",
+              "rationale": "Synthetic negative fit observation. The exact use remains a semantic assessment.",
+              "support": [
+                {
+                  "url": "https://fixture.example.com/synthetic-wire-2",
+                  "quote": "Synthetic Wire 2 standard is a non-functional display model and cannot be used as an operational product."
+                }
+              ]
+            },
+            "criteria": [],
+            "attributes": [
+              {
+                "name": "Use",
+                "assessment": {
+                  "status": "supported",
+                  "scope": "exact-variant",
+                  "rationale": "Synthetic source-based test interpretation, not a live product claim.",
+                  "support": [
+                    {
+                      "url": "https://fixture.example.com/synthetic-wire-2",
+                      "quote": "Synthetic Wire 2 standard is a tenkeyless keyboard with USB data operation."
+                    }
+                  ]
+                }
+              }
+            ],
+            "price": {
+              "amount": 90,
+              "currency": "USD",
+              "conditions": [
+                "One unit",
+                "Tax included"
+              ],
+              "conditionsResolved": true,
+              "variant": "standard",
+              "assessment": {
+                "status": "supported",
+                "scope": "exact-variant",
+                "rationale": "Synthetic source-based test interpretation, not a live product claim.",
+                "support": [
+                  {
+                    "url": "https://fixture.example.com/synthetic-wire-2",
+                    "quote": "Synthetic Wire 2 standard costs USD 90.00 for one unit, tax included."
+                  }
+                ]
+              }
+            },
+            "budget": {
+              "status": "supported",
+              "scope": "exact-variant",
+              "rationale": "Synthetic source-based test interpretation, not a live product claim.",
+              "support": [
+                {
+                  "url": "https://fixture.example.com/synthetic-wire-2",
+                  "quote": "Synthetic Wire 2 standard costs USD 90.00 for one unit, tax included."
+                }
+              ]
+            }
+          },
+          {
+            "id": "synthetic-wire-3",
+            "name": "Synthetic Wire 3",
+            "variant": "standard",
+            "identity": {
+              "status": "supported",
+              "scope": "exact-variant",
+              "rationale": "Synthetic source-based test interpretation, not a live product claim.",
+              "support": [
+                {
+                  "url": "https://fixture.example.com/synthetic-wire-3",
+                  "quote": "Synthetic Wire 3 standard is a tenkeyless keyboard with USB data operation."
+                }
+              ]
+            },
+            "requestMatch": {
+              "status": "unknown",
+              "scope": "unclear",
+              "rationale": "Synthetic input intentionally lacks qualifying evidence.",
+              "support": []
+            },
+            "criteria": [],
+            "attributes": [
+              {
+                "name": "Use",
+                "assessment": {
+                  "status": "supported",
+                  "scope": "exact-variant",
+                  "rationale": "Synthetic source-based test interpretation, not a live product claim.",
+                  "support": [
+                    {
+                      "url": "https://fixture.example.com/synthetic-wire-3",
+                      "quote": "Synthetic Wire 3 standard is a tenkeyless keyboard with USB data operation."
+                    }
+                  ]
+                }
+              }
+            ],
+            "price": {
+              "amount": 105,
+              "currency": "USD",
+              "conditions": [
+                "One unit",
+                "Tax included"
+              ],
+              "conditionsResolved": true,
+              "variant": "standard",
+              "assessment": {
+                "status": "supported",
+                "scope": "exact-variant",
+                "rationale": "Synthetic source-based test interpretation, not a live product claim.",
+                "support": [
+                  {
+                    "url": "https://fixture.example.com/synthetic-wire-3",
+                    "quote": "Synthetic Wire 3 standard costs USD 105.00 for one unit, tax included."
+                  }
+                ]
+              }
+            },
+            "budget": {
+              "status": "supported",
+              "scope": "exact-variant",
+              "rationale": "Synthetic source-based test interpretation, not a live product claim.",
+              "support": [
+                {
+                  "url": "https://fixture.example.com/synthetic-wire-3",
+                  "quote": "Synthetic Wire 3 standard costs USD 105.00 for one unit, tax included."
+                }
+              ]
+            }
+          }
+        ],
+        "choice": {
+          "productId": "synthetic-wire-1",
+          "reasons": [
+            {
+              "kind": "field",
+              "name": "identity"
+            },
+            {
+              "kind": "field",
+              "name": "price"
+            }
+          ]
+        },
+        "limitations": [
+          "Entirely synthetic fixed provider material, including every product, claim and price. No inventory or merchant proof. Missing criteria remain unknown."
+        ]
+      }
+    },
+    "status": 200
+  },
+  "interpretation": {
+    "mode": "fixed-proposals",
+    "inputHash": "ba136b479052387d0ab913a7bb4d802eebe4f7e17be79846d908e5fd87c4044a",
+    "openAIHttpRequests": 0,
+    "ollamaHttpRequests": 0,
+    "consumedTurns": [
+      0,
+      1
+    ],
+    "unconsumedTurns": [
+      2
+    ],
+    "invocations": 2,
+    "suppliedTurns": [
+      {
+        "turnIndex": 0,
+        "message": "I need a tenkeyless keyboard, USD 70 to 110. It must work over USB without Bluetooth.",
+        "proposal": {
+          "disposition": "research",
+          "actions": [
+            {
+              "kind": "start-request",
+              "source": {
+                "start": 9,
+                "end": 28,
+                "text": "tenkeyless keyboard"
+              }
+            },
+            {
+              "kind": "budget",
+              "source": {
+                "start": 30,
+                "end": 43,
+                "text": "USD 70 to 110"
+              },
+              "operation": "replace-range",
+              "draft": {
+                "amount": 110,
+                "minimum": 70,
+                "currency": "USD"
+              }
+            },
+            {
+              "kind": "add-criterion",
+              "source": {
+                "start": 45,
+                "end": 85,
+                "text": "It must work over USB without Bluetooth."
+              },
+              "strength": "hard"
+            }
+          ]
+        }
+      },
+      {
+        "turnIndex": 1,
+        "message": "Make it quieter.",
+        "proposal": {
+          "disposition": "research",
+          "actions": [
+            {
+              "kind": "add-criterion",
+              "source": {
+                "start": 0,
+                "end": 16,
+                "text": "Make it quieter."
+              },
+              "strength": "flexible"
+            }
+          ]
+        }
+      },
+      {
+        "turnIndex": 2,
+        "message": "Don't change my existing budget",
+        "proposal": {
+          "disposition": "acknowledge",
+          "actions": []
+        },
+        "limitations": [
+          "Budget preservation requests no action and no numeric replacement."
+        ]
+      }
+    ],
+    "limitations": []
+  },
+  "turns": [
+    {
+      "index": 0,
+      "action": {
+        "kind": "message",
+        "text": "I need a tenkeyless keyboard, USD 70 to 110. It must work over USB without Bluetooth."
+      },
+      "initialPreferences": {
+        "version": 5,
+        "productDescription": "",
+        "criteria": [],
+        "budget": null,
+        "budgetClarified": false,
+        "pendingChange": null,
+        "region": "SG",
+        "responseLength": "concise",
+        "revision": 0
+      },
+      "finalPreferences": {
+        "version": 5,
+        "productDescription": "",
+        "criteria": [],
+        "budget": null,
+        "budgetClarified": false,
+        "pendingChange": null,
+        "region": "SG",
+        "responseLength": "concise",
+        "revision": 0
+      },
+      "response": {
+        "responseVersion": 5,
+        "preferences": {
+          "version": 5,
+          "productDescription": "",
+          "criteria": [],
+          "budget": null,
+          "budgetClarified": false,
+          "pendingChange": null,
+          "region": "SG",
+          "responseLength": "concise",
+          "revision": 0
+        },
+        "notes": [],
+        "kind": "research-unavailable",
+        "message": "I could not safely interpret the complete message, so no part of it was applied. Your accepted preferences and any pending question are unchanged. This message needs additional interpretation, which is unavailable right now.",
+        "reason": "intent-unavailable"
+      },
+      "intentHandling": "synthetic-fallback",
+      "providerCalls": 0,
+      "cancelled": false
+    },
+    {
+      "index": 1,
+      "action": {
+        "kind": "message",
+        "text": "Make it quieter."
+      },
+      "initialPreferences": {
+        "version": 5,
+        "productDescription": "",
+        "criteria": [],
+        "budget": null,
+        "budgetClarified": false,
+        "pendingChange": null,
+        "region": "SG",
+        "responseLength": "concise",
+        "revision": 0
+      },
+      "finalPreferences": {
+        "version": 5,
+        "productDescription": "",
+        "criteria": [
+          {
+            "id": "criterion-1",
+            "wording": "Make it quieter.",
+            "strength": "flexible",
+            "origin": {
+              "kind": "message",
+              "text": "Make it quieter."
+            }
+          }
+        ],
+        "budget": null,
+        "budgetClarified": false,
+        "pendingChange": null,
+        "region": "SG",
+        "responseLength": "concise",
+        "revision": 3
+      },
+      "response": {
+        "responseVersion": 5,
+        "preferences": {
+          "version": 5,
+          "productDescription": "",
+          "criteria": [
+            {
+              "id": "criterion-1",
+              "wording": "Make it quieter.",
+              "strength": "flexible",
+              "origin": {
+                "kind": "message",
+                "text": "Make it quieter."
+              }
+            }
+          ],
+          "budget": null,
+          "budgetClarified": false,
+          "pendingChange": null,
+          "region": "SG",
+          "responseLength": "concise",
+          "revision": 3
+        },
+        "notes": [],
+        "kind": "clarification",
+        "message": "What are you shopping for? Describe the product and what matters to you.",
+        "reason": "description"
+      },
+      "intentHandling": "synthetic-fallback",
+      "providerCalls": 0,
+      "cancelled": false
+    },
+    {
+      "index": 2,
+      "action": {
+        "kind": "message",
+        "text": "Don't change my existing budget"
+      },
+      "initialPreferences": {
+        "version": 5,
+        "productDescription": "",
+        "criteria": [
+          {
+            "id": "criterion-1",
+            "wording": "Make it quieter.",
+            "strength": "flexible",
+            "origin": {
+              "kind": "message",
+              "text": "Make it quieter."
+            }
+          }
+        ],
+        "budget": null,
+        "budgetClarified": false,
+        "pendingChange": null,
+        "region": "SG",
+        "responseLength": "concise",
+        "revision": 3
+      },
+      "finalPreferences": {
+        "version": 5,
+        "productDescription": "",
+        "criteria": [
+          {
+            "id": "criterion-1",
+            "wording": "Make it quieter.",
+            "strength": "flexible",
+            "origin": {
+              "kind": "message",
+              "text": "Make it quieter."
+            }
+          }
+        ],
+        "budget": null,
+        "budgetClarified": false,
+        "pendingChange": null,
+        "region": "SG",
+        "responseLength": "concise",
+        "revision": 3
+      },
+      "response": {
+        "responseVersion": 5,
+        "preferences": {
+          "version": 5,
+          "productDescription": "",
+          "criteria": [
+            {
+              "id": "criterion-1",
+              "wording": "Make it quieter.",
+              "strength": "flexible",
+              "origin": {
+                "kind": "message",
+                "text": "Make it quieter."
+              }
+            }
+          ],
+          "budget": null,
+          "budgetClarified": false,
+          "pendingChange": null,
+          "region": "SG",
+          "responseLength": "concise",
+          "revision": 3
+        },
+        "notes": [],
+        "kind": "message",
+        "message": "Your budget has not changed. Your preferences and earlier research are still here."
+      },
+      "intentHandling": "local",
+      "providerCalls": 0,
+      "cancelled": false
+    }
+  ],
+  "events": [
+    {
+      "sequence": 1,
+      "turn": 0,
+      "kind": "app-request",
+      "attemptId": "f6e3356f-f1bf-4f13-8338-b33917eacd45",
+      "elapsedMs": 1.51,
+      "body": {
+        "phase": "prepare",
+        "message": "I need a tenkeyless keyboard, USD 70 to 110. It must work over USB without Bluetooth.",
+        "preferences": {
+          "version": 5,
+          "productDescription": "",
+          "criteria": [],
+          "budget": null,
+          "budgetClarified": false,
+          "pendingChange": null,
+          "region": "SG",
+          "responseLength": "concise",
+          "revision": 0
+        },
+        "operationId": "a278280e-ac4c-4592-8e22-0e68d31661e9"
+      }
+    },
+    {
+      "sequence": 2,
+      "turn": 0,
+      "kind": "interpreter-request",
+      "attemptId": "f6e3356f-f1bf-4f13-8338-b33917eacd45",
+      "elapsedMs": 2.62,
+      "body": {
+        "operationId": "a278280e-ac4c-4592-8e22-0e68d31661e9",
+        "message": "I need a tenkeyless keyboard, USD 70 to 110. It must work over USB without Bluetooth.",
+        "questionId": null,
+        "inputHash": "ba136b479052387d0ab913a7bb4d802eebe4f7e17be79846d908e5fd87c4044a",
+        "label": "Independently authored synthetic proposals. Conditional technical behavior only."
+      }
+    },
+    {
+      "sequence": 3,
+      "turn": 0,
+      "kind": "interpreter-response",
+      "attemptId": "f6e3356f-f1bf-4f13-8338-b33917eacd45",
+      "elapsedMs": 2.65,
+      "body": {
+        "status": "ready",
+        "interpretation": {
+          "disposition": "research",
+          "actions": [
+            {
+              "kind": "start-request",
+              "source": {
+                "start": 9,
+                "end": 28,
+                "text": "tenkeyless keyboard"
+              }
+            },
+            {
+              "kind": "budget",
+              "source": {
+                "start": 30,
+                "end": 43,
+                "text": "USD 70 to 110"
+              },
+              "operation": "replace-range",
+              "draft": {
+                "amount": 110,
+                "minimum": 70,
+                "currency": "USD"
+              }
+            },
+            {
+              "kind": "add-criterion",
+              "source": {
+                "start": 45,
+                "end": 85,
+                "text": "It must work over USB without Bluetooth."
+              },
+              "strength": "hard"
+            }
+          ]
+        },
+        "bindings": [],
+        "limitations": []
+      }
+    },
+    {
+      "sequence": 4,
+      "turn": 0,
+      "kind": "app-response",
+      "attemptId": "f6e3356f-f1bf-4f13-8338-b33917eacd45",
+      "elapsedMs": 3.03,
+      "body": {
+        "status": 200,
+        "body": {
+          "responseVersion": 5,
+          "preferences": {
+            "version": 5,
+            "productDescription": "",
+            "criteria": [],
+            "budget": null,
+            "budgetClarified": false,
+            "pendingChange": null,
+            "region": "SG",
+            "responseLength": "concise",
+            "revision": 0
+          },
+          "notes": [],
+          "kind": "research-unavailable",
+          "message": "I could not safely interpret the complete message, so no part of it was applied. Your accepted preferences and any pending question are unchanged. This message needs additional interpretation, which is unavailable right now.",
+          "reason": "intent-unavailable"
+        }
+      }
+    },
+    {
+      "sequence": 5,
+      "turn": 1,
+      "kind": "app-request",
+      "attemptId": "b55b484c-bff3-4763-96d4-096080eac805",
+      "elapsedMs": 3.06,
+      "body": {
+        "phase": "prepare",
+        "message": "Make it quieter.",
+        "preferences": {
+          "version": 5,
+          "productDescription": "",
+          "criteria": [],
+          "budget": null,
+          "budgetClarified": false,
+          "pendingChange": null,
+          "region": "SG",
+          "responseLength": "concise",
+          "revision": 0
+        },
+        "operationId": "70380879-0181-4674-8964-cd18b1b821e2"
+      }
+    },
+    {
+      "sequence": 6,
+      "turn": 1,
+      "kind": "interpreter-request",
+      "attemptId": "b55b484c-bff3-4763-96d4-096080eac805",
+      "elapsedMs": 3.64,
+      "body": {
+        "operationId": "70380879-0181-4674-8964-cd18b1b821e2",
+        "message": "Make it quieter.",
+        "questionId": null,
+        "inputHash": "ba136b479052387d0ab913a7bb4d802eebe4f7e17be79846d908e5fd87c4044a",
+        "label": "Independently authored synthetic proposals. Conditional technical behavior only."
+      }
+    },
+    {
+      "sequence": 7,
+      "turn": 1,
+      "kind": "interpreter-response",
+      "attemptId": "b55b484c-bff3-4763-96d4-096080eac805",
+      "elapsedMs": 3.66,
+      "body": {
+        "status": "ready",
+        "interpretation": {
+          "disposition": "research",
+          "actions": [
+            {
+              "kind": "add-criterion",
+              "source": {
+                "start": 0,
+                "end": 16,
+                "text": "Make it quieter."
+              },
+              "strength": "flexible"
+            }
+          ]
+        },
+        "bindings": [],
+        "limitations": []
+      }
+    },
+    {
+      "sequence": 8,
+      "turn": 1,
+      "kind": "app-response",
+      "attemptId": "b55b484c-bff3-4763-96d4-096080eac805",
+      "elapsedMs": 3.97,
+      "body": {
+        "status": 200,
+        "body": {
+          "responseVersion": 5,
+          "preferences": {
+            "version": 5,
+            "productDescription": "",
+            "criteria": [
+              {
+                "id": "criterion-1",
+                "wording": "Make it quieter.",
+                "strength": "flexible",
+                "origin": {
+                  "kind": "message",
+                  "text": "Make it quieter."
+                }
+              }
+            ],
+            "budget": null,
+            "budgetClarified": false,
+            "pendingChange": null,
+            "region": "SG",
+            "responseLength": "concise",
+            "revision": 3
+          },
+          "notes": [],
+          "kind": "clarification",
+          "message": "What are you shopping for? Describe the product and what matters to you.",
+          "reason": "description"
+        }
+      }
+    },
+    {
+      "sequence": 9,
+      "turn": 2,
+      "kind": "app-request",
+      "attemptId": "180cec37-42f9-4682-98ce-1272be4075c7",
+      "elapsedMs": 4.01,
+      "body": {
+        "phase": "prepare",
+        "message": "Don't change my existing budget",
+        "preferences": {
+          "version": 5,
+          "productDescription": "",
+          "criteria": [
+            {
+              "id": "criterion-1",
+              "wording": "Make it quieter.",
+              "strength": "flexible",
+              "origin": {
+                "kind": "message",
+                "text": "Make it quieter."
+              }
+            }
+          ],
+          "budget": null,
+          "budgetClarified": false,
+          "pendingChange": null,
+          "region": "SG",
+          "responseLength": "concise",
+          "revision": 3
+        },
+        "operationId": "ca7291dd-f38e-4f56-a0db-1622adb1c6e5"
+      }
+    },
+    {
+      "sequence": 10,
+      "turn": 2,
+      "kind": "app-response",
+      "attemptId": "180cec37-42f9-4682-98ce-1272be4075c7",
+      "elapsedMs": 4.87,
+      "body": {
+        "status": 200,
+        "body": {
+          "responseVersion": 5,
+          "preferences": {
+            "version": 5,
+            "productDescription": "",
+            "criteria": [
+              {
+                "id": "criterion-1",
+                "wording": "Make it quieter.",
+                "strength": "flexible",
+                "origin": {
+                  "kind": "message",
+                  "text": "Make it quieter."
+                }
+              }
+            ],
+            "budget": null,
+            "budgetClarified": false,
+            "pendingChange": null,
+            "region": "SG",
+            "responseLength": "concise",
+            "revision": 3
+          },
+          "notes": [],
+          "kind": "message",
+          "message": "Your budget has not changed. Your preferences and earlier research are still here."
+        }
+      }
+    }
+  ],
+  "network": {
+    "denied": [],
+    "allowedOriginCount": 2,
+    "externalRequests": 0
+  },
+  "cleanup": true,
+  "applicationError": null
+}

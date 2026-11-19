@@ -1,0 +1,522 @@
+{
+  "scenarioId": "FN-EH-003",
+  "initialPreferences": {
+    "version": 5,
+    "productDescription": "",
+    "criteria": [],
+    "budget": null,
+    "budgetClarified": false,
+    "pendingChange": null,
+    "region": "SG",
+    "responseLength": "concise",
+    "revision": 0
+  },
+  "finalPreferences": {
+    "version": 5,
+    "productDescription": "",
+    "criteria": [],
+    "budget": null,
+    "budgetClarified": false,
+    "pendingChange": null,
+    "region": "SG",
+    "responseLength": "concise",
+    "revision": 0
+  },
+  "material": {
+    "id": "bare-currency:FN-EH-003",
+    "kind": "synthetic",
+    "label": "Explicit synthetic provider double. Not genuine Exa research.",
+    "capturedAt": null,
+    "provenance": [
+      "Independently fixed test input before application execution",
+      "No current product or market claim",
+      "Original independent provider recipe bare-currency; fixed profile FN-EH-003.",
+      "Synthetic claims, prices and availability statements remain visibly labeled. No live research or inventory."
+    ],
+    "sha256": "30176ea8e12c0df92ae9518d3b3e5d1916509af2054f449d0ebfccd7588e736c",
+    "body": {
+      "requestId": "synthetic-FN-EH-003",
+      "costDollars": {
+        "total": 0.005
+      },
+      "citations": [
+        {
+          "url": "https://fixture.example.com/synthetic-point-1",
+          "title": "Synthetic Point 1 synthetic fixture",
+          "text": "Synthetic Point 1 standard is a electric pencil sharpener.\nSynthetic Point 1 standard costs $20 for one unit."
+        },
+        {
+          "url": "https://fixture.example.com/synthetic-point-2",
+          "title": "Synthetic Point 2 synthetic fixture",
+          "text": "Synthetic Point 2 standard is a electric pencil sharpener.\nSynthetic Point 2 standard costs SGD 30.00 for one unit, tax included.\nSynthetic input. Stock and delivery are not established."
+        },
+        {
+          "url": "https://fixture.example.com/synthetic-point-3",
+          "title": "Synthetic Point 3 synthetic fixture",
+          "text": "Synthetic Point 3 standard is a electric pencil sharpener.\nSynthetic Point 3 standard costs SGD 35.00 for one unit, tax included.\nSynthetic input. Stock and delivery are not established."
+        }
+      ],
+      "answer": {
+        "products": [
+          {
+            "id": "synthetic-point-1",
+            "name": "Synthetic Point 1",
+            "variant": "standard",
+            "identity": {
+              "status": "supported",
+              "scope": "exact-variant",
+              "rationale": "Synthetic source-based test interpretation, not a live product claim.",
+              "support": [
+                {
+                  "url": "https://fixture.example.com/synthetic-point-1",
+                  "quote": "Synthetic Point 1 standard is a electric pencil sharpener."
+                }
+              ]
+            },
+            "requestMatch": {
+              "status": "supported",
+              "scope": "exact-variant",
+              "rationale": "Synthetic source-based test interpretation, not a live product claim.",
+              "support": [
+                {
+                  "url": "https://fixture.example.com/synthetic-point-1",
+                  "quote": "Synthetic Point 1 standard is a electric pencil sharpener."
+                }
+              ]
+            },
+            "criteria": [],
+            "attributes": [
+              {
+                "name": "Use",
+                "assessment": {
+                  "status": "supported",
+                  "scope": "exact-variant",
+                  "rationale": "Synthetic source-based test interpretation, not a live product claim.",
+                  "support": [
+                    {
+                      "url": "https://fixture.example.com/synthetic-point-1",
+                      "quote": "Synthetic Point 1 standard is a electric pencil sharpener."
+                    }
+                  ]
+                }
+              }
+            ],
+            "price": {
+              "amount": 20,
+              "currency": "SGD",
+              "conditions": [
+                "One unit",
+                "Tax included"
+              ],
+              "conditionsResolved": true,
+              "variant": "standard",
+              "assessment": {
+                "status": "supported",
+                "scope": "exact-variant",
+                "rationale": "Synthetic adverse native currency interpretation, not established by source.",
+                "support": [
+                  {
+                    "url": "https://fixture.example.com/synthetic-point-1",
+                    "quote": "Synthetic Point 1 standard costs $20 for one unit."
+                  }
+                ]
+              }
+            },
+            "budget": {
+              "status": "supported",
+              "scope": "exact-variant",
+              "rationale": "Synthetic source-based test interpretation, not a live product claim.",
+              "support": [
+                {
+                  "url": "https://fixture.example.com/synthetic-point-1",
+                  "quote": "Synthetic Point 1 standard costs SGD 20.00 for one unit, tax included."
+                }
+              ]
+            }
+          },
+          {
+            "id": "synthetic-point-2",
+            "name": "Synthetic Point 2",
+            "variant": "standard",
+            "identity": {
+              "status": "supported",
+              "scope": "exact-variant",
+              "rationale": "Synthetic source-based test interpretation, not a live product claim.",
+              "support": [
+                {
+                  "url": "https://fixture.example.com/synthetic-point-2",
+                  "quote": "Synthetic Point 2 standard is a electric pencil sharpener."
+                }
+              ]
+            },
+            "requestMatch": {
+              "status": "supported",
+              "scope": "exact-variant",
+              "rationale": "Synthetic source-based test interpretation, not a live product claim.",
+              "support": [
+                {
+                  "url": "https://fixture.example.com/synthetic-point-2",
+                  "quote": "Synthetic Point 2 standard is a electric pencil sharpener."
+                }
+              ]
+            },
+            "criteria": [],
+            "attributes": [
+              {
+                "name": "Use",
+                "assessment": {
+                  "status": "supported",
+                  "scope": "exact-variant",
+                  "rationale": "Synthetic source-based test interpretation, not a live product claim.",
+                  "support": [
+                    {
+                      "url": "https://fixture.example.com/synthetic-point-2",
+                      "quote": "Synthetic Point 2 standard is a electric pencil sharpener."
+                    }
+                  ]
+                }
+              }
+            ],
+            "price": {
+              "amount": 30,
+              "currency": "SGD",
+              "conditions": [
+                "One unit",
+                "Tax included"
+              ],
+              "conditionsResolved": true,
+              "variant": "standard",
+              "assessment": {
+                "status": "supported",
+                "scope": "exact-variant",
+                "rationale": "Synthetic source-based test interpretation, not a live product claim.",
+                "support": [
+                  {
+                    "url": "https://fixture.example.com/synthetic-point-2",
+                    "quote": "Synthetic Point 2 standard costs SGD 30.00 for one unit, tax included."
+                  }
+                ]
+              }
+            },
+            "budget": {
+              "status": "supported",
+              "scope": "exact-variant",
+              "rationale": "Synthetic source-based test interpretation, not a live product claim.",
+              "support": [
+                {
+                  "url": "https://fixture.example.com/synthetic-point-2",
+                  "quote": "Synthetic Point 2 standard costs SGD 30.00 for one unit, tax included."
+                }
+              ]
+            }
+          },
+          {
+            "id": "synthetic-point-3",
+            "name": "Synthetic Point 3",
+            "variant": "standard",
+            "identity": {
+              "status": "supported",
+              "scope": "exact-variant",
+              "rationale": "Synthetic source-based test interpretation, not a live product claim.",
+              "support": [
+                {
+                  "url": "https://fixture.example.com/synthetic-point-3",
+                  "quote": "Synthetic Point 3 standard is a electric pencil sharpener."
+                }
+              ]
+            },
+            "requestMatch": {
+              "status": "supported",
+              "scope": "exact-variant",
+              "rationale": "Synthetic source-based test interpretation, not a live product claim.",
+              "support": [
+                {
+                  "url": "https://fixture.example.com/synthetic-point-3",
+                  "quote": "Synthetic Point 3 standard is a electric pencil sharpener."
+                }
+              ]
+            },
+            "criteria": [],
+            "attributes": [
+              {
+                "name": "Use",
+                "assessment": {
+                  "status": "supported",
+                  "scope": "exact-variant",
+                  "rationale": "Synthetic source-based test interpretation, not a live product claim.",
+                  "support": [
+                    {
+                      "url": "https://fixture.example.com/synthetic-point-3",
+                      "quote": "Synthetic Point 3 standard is a electric pencil sharpener."
+                    }
+                  ]
+                }
+              }
+            ],
+            "price": {
+              "amount": 35,
+              "currency": "SGD",
+              "conditions": [
+                "One unit",
+                "Tax included"
+              ],
+              "conditionsResolved": true,
+              "variant": "standard",
+              "assessment": {
+                "status": "supported",
+                "scope": "exact-variant",
+                "rationale": "Synthetic source-based test interpretation, not a live product claim.",
+                "support": [
+                  {
+                    "url": "https://fixture.example.com/synthetic-point-3",
+                    "quote": "Synthetic Point 3 standard costs SGD 35.00 for one unit, tax included."
+                  }
+                ]
+              }
+            },
+            "budget": {
+              "status": "supported",
+              "scope": "exact-variant",
+              "rationale": "Synthetic source-based test interpretation, not a live product claim.",
+              "support": [
+                {
+                  "url": "https://fixture.example.com/synthetic-point-3",
+                  "quote": "Synthetic Point 3 standard costs SGD 35.00 for one unit, tax included."
+                }
+              ]
+            }
+          }
+        ],
+        "choice": null,
+        "limitations": [
+          "Entirely synthetic fixed provider material, including every product, claim and price. No inventory or merchant proof. Missing criteria remain unknown."
+        ]
+      }
+    },
+    "status": 200
+  },
+  "interpretation": {
+    "mode": "unavailable",
+    "inputHash": null,
+    "openAIHttpRequests": 0,
+    "ollamaHttpRequests": 0,
+    "consumedTurns": [],
+    "unconsumedTurns": [],
+    "invocations": 0,
+    "suppliedTurns": [],
+    "limitations": []
+  },
+  "turns": [
+    {
+      "index": 0,
+      "action": {
+        "kind": "message",
+        "text": "Find an electric pencil sharpener under SGD 40."
+      },
+      "initialPreferences": {
+        "version": 5,
+        "productDescription": "",
+        "criteria": [],
+        "budget": null,
+        "budgetClarified": false,
+        "pendingChange": null,
+        "region": "SG",
+        "responseLength": "concise",
+        "revision": 0
+      },
+      "finalPreferences": {
+        "version": 5,
+        "productDescription": "",
+        "criteria": [],
+        "budget": null,
+        "budgetClarified": false,
+        "pendingChange": null,
+        "region": "SG",
+        "responseLength": "concise",
+        "revision": 0
+      },
+      "response": {
+        "responseVersion": 5,
+        "preferences": {
+          "version": 5,
+          "productDescription": "",
+          "criteria": [],
+          "budget": null,
+          "budgetClarified": false,
+          "pendingChange": null,
+          "region": "SG",
+          "responseLength": "concise",
+          "revision": 0
+        },
+        "notes": [],
+        "kind": "research-unavailable",
+        "message": "I could not safely interpret the complete message, so no part of it was applied. Your accepted preferences and any pending question are unchanged. This message needs additional interpretation, which is unavailable right now.",
+        "reason": "intent-unavailable"
+      },
+      "intentHandling": "unavailable",
+      "providerCalls": 0,
+      "cancelled": false
+    },
+    {
+      "index": 1,
+      "action": {
+        "kind": "message",
+        "text": "This Singapore page says $35. Does that fit?"
+      },
+      "initialPreferences": {
+        "version": 5,
+        "productDescription": "",
+        "criteria": [],
+        "budget": null,
+        "budgetClarified": false,
+        "pendingChange": null,
+        "region": "SG",
+        "responseLength": "concise",
+        "revision": 0
+      },
+      "finalPreferences": {
+        "version": 5,
+        "productDescription": "",
+        "criteria": [],
+        "budget": null,
+        "budgetClarified": false,
+        "pendingChange": null,
+        "region": "SG",
+        "responseLength": "concise",
+        "revision": 0
+      },
+      "response": {
+        "responseVersion": 5,
+        "preferences": {
+          "version": 5,
+          "productDescription": "",
+          "criteria": [],
+          "budget": null,
+          "budgetClarified": false,
+          "pendingChange": null,
+          "region": "SG",
+          "responseLength": "concise",
+          "revision": 0
+        },
+        "notes": [],
+        "kind": "research-unavailable",
+        "message": "I could not safely interpret the complete message, so no part of it was applied. Your accepted preferences and any pending question are unchanged. This message needs additional interpretation, which is unavailable right now.",
+        "reason": "intent-unavailable"
+      },
+      "intentHandling": "unavailable",
+      "providerCalls": 0,
+      "cancelled": false
+    }
+  ],
+  "events": [
+    {
+      "sequence": 1,
+      "turn": 0,
+      "kind": "app-request",
+      "attemptId": "0751f20c-b87a-43d6-8741-9d09a909cbdc",
+      "elapsedMs": 1.49,
+      "body": {
+        "phase": "prepare",
+        "message": "Find an electric pencil sharpener under SGD 40.",
+        "preferences": {
+          "version": 5,
+          "productDescription": "",
+          "criteria": [],
+          "budget": null,
+          "budgetClarified": false,
+          "pendingChange": null,
+          "region": "SG",
+          "responseLength": "concise",
+          "revision": 0
+        },
+        "operationId": "10b7d9a3-e5ed-4b3b-8267-4a9206484daf"
+      }
+    },
+    {
+      "sequence": 2,
+      "turn": 0,
+      "kind": "app-response",
+      "attemptId": "0751f20c-b87a-43d6-8741-9d09a909cbdc",
+      "elapsedMs": 3.02,
+      "body": {
+        "status": 200,
+        "body": {
+          "responseVersion": 5,
+          "preferences": {
+            "version": 5,
+            "productDescription": "",
+            "criteria": [],
+            "budget": null,
+            "budgetClarified": false,
+            "pendingChange": null,
+            "region": "SG",
+            "responseLength": "concise",
+            "revision": 0
+          },
+          "notes": [],
+          "kind": "research-unavailable",
+          "message": "I could not safely interpret the complete message, so no part of it was applied. Your accepted preferences and any pending question are unchanged. This message needs additional interpretation, which is unavailable right now.",
+          "reason": "intent-unavailable"
+        }
+      }
+    },
+    {
+      "sequence": 3,
+      "turn": 1,
+      "kind": "app-request",
+      "attemptId": "bec41250-d137-447e-b83d-a62083e196e8",
+      "elapsedMs": 3.07,
+      "body": {
+        "phase": "prepare",
+        "message": "This Singapore page says $35. Does that fit?",
+        "preferences": {
+          "version": 5,
+          "productDescription": "",
+          "criteria": [],
+          "budget": null,
+          "budgetClarified": false,
+          "pendingChange": null,
+          "region": "SG",
+          "responseLength": "concise",
+          "revision": 0
+        },
+        "operationId": "737948d4-a647-4293-b969-64fefb75548d"
+      }
+    },
+    {
+      "sequence": 4,
+      "turn": 1,
+      "kind": "app-response",
+      "attemptId": "bec41250-d137-447e-b83d-a62083e196e8",
+      "elapsedMs": 4.14,
+      "body": {
+        "status": 200,
+        "body": {
+          "responseVersion": 5,
+          "preferences": {
+            "version": 5,
+            "productDescription": "",
+            "criteria": [],
+            "budget": null,
+            "budgetClarified": false,
+            "pendingChange": null,
+            "region": "SG",
+            "responseLength": "concise",
+            "revision": 0
+          },
+          "notes": [],
+          "kind": "research-unavailable",
+          "message": "I could not safely interpret the complete message, so no part of it was applied. Your accepted preferences and any pending question are unchanged. This message needs additional interpretation, which is unavailable right now.",
+          "reason": "intent-unavailable"
+        }
+      }
+    }
+  ],
+  "network": {
+    "denied": [],
+    "allowedOriginCount": 2,
+    "externalRequests": 0
+  },
+  "cleanup": true,
+  "applicationError": null
+}

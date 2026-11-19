@@ -1,0 +1,535 @@
+{
+  "scenarioId": "FN-CU-005",
+  "initialPreferences": {
+    "version": 5,
+    "productDescription": "",
+    "criteria": [],
+    "budget": null,
+    "budgetClarified": false,
+    "pendingChange": null,
+    "region": "SG",
+    "responseLength": "concise",
+    "revision": 0
+  },
+  "finalPreferences": {
+    "version": 5,
+    "productDescription": "",
+    "criteria": [],
+    "budget": null,
+    "budgetClarified": false,
+    "pendingChange": null,
+    "region": "SG",
+    "responseLength": "concise",
+    "revision": 0
+  },
+  "material": {
+    "id": "supported:FN-CU-005",
+    "kind": "synthetic",
+    "label": "Explicit synthetic provider double. Not genuine Exa research.",
+    "capturedAt": null,
+    "provenance": [
+      "Independently fixed test input before application execution",
+      "No current product or market claim",
+      "Per-turn suitability limitation: this fixed input describes the final corrected objective and can be irrelevant to earlier turns. Earlier-turn product relevance and discovery usefulness are not assessable from this substitute.",
+      "Original independent provider recipe supported; fixed profile FN-CU-005.",
+      "Synthetic claims, prices and availability statements remain visibly labeled. No live research or inventory."
+    ],
+    "sha256": "41669643574c1d9747cf363e1df8fdd65f38e555c6ffc294248c611d6bb31cbd",
+    "body": {
+      "requestId": "synthetic-FN-CU-005",
+      "costDollars": {
+        "total": 0.005
+      },
+      "citations": [
+        {
+          "url": "https://fixture.example.com/synthetic-floor-1",
+          "title": "Synthetic Floor 1 synthetic fixture",
+          "text": "Synthetic Floor 1 standard is a freestanding floor lamp.\nSynthetic Floor 1 standard costs SGD 110.00 for one unit, tax included.\nSynthetic input. Stock and delivery are not established."
+        },
+        {
+          "url": "https://fixture.example.com/synthetic-floor-2",
+          "title": "Synthetic Floor 2 synthetic fixture",
+          "text": "Synthetic Floor 2 standard is a freestanding floor lamp.\nSynthetic Floor 2 standard costs SGD 140.00 for one unit, tax included.\nSynthetic input. Stock and delivery are not established."
+        },
+        {
+          "url": "https://fixture.example.com/synthetic-floor-3",
+          "title": "Synthetic Floor 3 synthetic fixture",
+          "text": "Synthetic Floor 3 standard is a freestanding floor lamp.\nSynthetic Floor 3 standard costs SGD 170.00 for one unit, tax included.\nSynthetic input. Stock and delivery are not established."
+        }
+      ],
+      "answer": {
+        "products": [
+          {
+            "id": "synthetic-floor-1",
+            "name": "Synthetic Floor 1",
+            "variant": "standard",
+            "identity": {
+              "status": "supported",
+              "scope": "exact-variant",
+              "rationale": "Synthetic source-based test interpretation, not a live product claim.",
+              "support": [
+                {
+                  "url": "https://fixture.example.com/synthetic-floor-1",
+                  "quote": "Synthetic Floor 1 standard is a freestanding floor lamp."
+                }
+              ]
+            },
+            "requestMatch": {
+              "status": "supported",
+              "scope": "exact-variant",
+              "rationale": "Synthetic source-based test interpretation, not a live product claim.",
+              "support": [
+                {
+                  "url": "https://fixture.example.com/synthetic-floor-1",
+                  "quote": "Synthetic Floor 1 standard is a freestanding floor lamp."
+                }
+              ]
+            },
+            "criteria": [],
+            "attributes": [
+              {
+                "name": "Use",
+                "assessment": {
+                  "status": "supported",
+                  "scope": "exact-variant",
+                  "rationale": "Synthetic source-based test interpretation, not a live product claim.",
+                  "support": [
+                    {
+                      "url": "https://fixture.example.com/synthetic-floor-1",
+                      "quote": "Synthetic Floor 1 standard is a freestanding floor lamp."
+                    }
+                  ]
+                }
+              }
+            ],
+            "price": {
+              "amount": 110,
+              "currency": "SGD",
+              "conditions": [
+                "One unit",
+                "Tax included"
+              ],
+              "conditionsResolved": true,
+              "variant": "standard",
+              "assessment": {
+                "status": "supported",
+                "scope": "exact-variant",
+                "rationale": "Synthetic source-based test interpretation, not a live product claim.",
+                "support": [
+                  {
+                    "url": "https://fixture.example.com/synthetic-floor-1",
+                    "quote": "Synthetic Floor 1 standard costs SGD 110.00 for one unit, tax included."
+                  }
+                ]
+              }
+            },
+            "budget": {
+              "status": "supported",
+              "scope": "exact-variant",
+              "rationale": "Synthetic source-based test interpretation, not a live product claim.",
+              "support": [
+                {
+                  "url": "https://fixture.example.com/synthetic-floor-1",
+                  "quote": "Synthetic Floor 1 standard costs SGD 110.00 for one unit, tax included."
+                }
+              ]
+            }
+          },
+          {
+            "id": "synthetic-floor-2",
+            "name": "Synthetic Floor 2",
+            "variant": "standard",
+            "identity": {
+              "status": "supported",
+              "scope": "exact-variant",
+              "rationale": "Synthetic source-based test interpretation, not a live product claim.",
+              "support": [
+                {
+                  "url": "https://fixture.example.com/synthetic-floor-2",
+                  "quote": "Synthetic Floor 2 standard is a freestanding floor lamp."
+                }
+              ]
+            },
+            "requestMatch": {
+              "status": "supported",
+              "scope": "exact-variant",
+              "rationale": "Synthetic source-based test interpretation, not a live product claim.",
+              "support": [
+                {
+                  "url": "https://fixture.example.com/synthetic-floor-2",
+                  "quote": "Synthetic Floor 2 standard is a freestanding floor lamp."
+                }
+              ]
+            },
+            "criteria": [],
+            "attributes": [
+              {
+                "name": "Use",
+                "assessment": {
+                  "status": "supported",
+                  "scope": "exact-variant",
+                  "rationale": "Synthetic source-based test interpretation, not a live product claim.",
+                  "support": [
+                    {
+                      "url": "https://fixture.example.com/synthetic-floor-2",
+                      "quote": "Synthetic Floor 2 standard is a freestanding floor lamp."
+                    }
+                  ]
+                }
+              }
+            ],
+            "price": {
+              "amount": 140,
+              "currency": "SGD",
+              "conditions": [
+                "One unit",
+                "Tax included"
+              ],
+              "conditionsResolved": true,
+              "variant": "standard",
+              "assessment": {
+                "status": "supported",
+                "scope": "exact-variant",
+                "rationale": "Synthetic source-based test interpretation, not a live product claim.",
+                "support": [
+                  {
+                    "url": "https://fixture.example.com/synthetic-floor-2",
+                    "quote": "Synthetic Floor 2 standard costs SGD 140.00 for one unit, tax included."
+                  }
+                ]
+              }
+            },
+            "budget": {
+              "status": "supported",
+              "scope": "exact-variant",
+              "rationale": "Synthetic source-based test interpretation, not a live product claim.",
+              "support": [
+                {
+                  "url": "https://fixture.example.com/synthetic-floor-2",
+                  "quote": "Synthetic Floor 2 standard costs SGD 140.00 for one unit, tax included."
+                }
+              ]
+            }
+          },
+          {
+            "id": "synthetic-floor-3",
+            "name": "Synthetic Floor 3",
+            "variant": "standard",
+            "identity": {
+              "status": "supported",
+              "scope": "exact-variant",
+              "rationale": "Synthetic source-based test interpretation, not a live product claim.",
+              "support": [
+                {
+                  "url": "https://fixture.example.com/synthetic-floor-3",
+                  "quote": "Synthetic Floor 3 standard is a freestanding floor lamp."
+                }
+              ]
+            },
+            "requestMatch": {
+              "status": "supported",
+              "scope": "exact-variant",
+              "rationale": "Synthetic source-based test interpretation, not a live product claim.",
+              "support": [
+                {
+                  "url": "https://fixture.example.com/synthetic-floor-3",
+                  "quote": "Synthetic Floor 3 standard is a freestanding floor lamp."
+                }
+              ]
+            },
+            "criteria": [],
+            "attributes": [
+              {
+                "name": "Use",
+                "assessment": {
+                  "status": "supported",
+                  "scope": "exact-variant",
+                  "rationale": "Synthetic source-based test interpretation, not a live product claim.",
+                  "support": [
+                    {
+                      "url": "https://fixture.example.com/synthetic-floor-3",
+                      "quote": "Synthetic Floor 3 standard is a freestanding floor lamp."
+                    }
+                  ]
+                }
+              }
+            ],
+            "price": {
+              "amount": 170,
+              "currency": "SGD",
+              "conditions": [
+                "One unit",
+                "Tax included"
+              ],
+              "conditionsResolved": true,
+              "variant": "standard",
+              "assessment": {
+                "status": "supported",
+                "scope": "exact-variant",
+                "rationale": "Synthetic source-based test interpretation, not a live product claim.",
+                "support": [
+                  {
+                    "url": "https://fixture.example.com/synthetic-floor-3",
+                    "quote": "Synthetic Floor 3 standard costs SGD 170.00 for one unit, tax included."
+                  }
+                ]
+              }
+            },
+            "budget": {
+              "status": "supported",
+              "scope": "exact-variant",
+              "rationale": "Synthetic source-based test interpretation, not a live product claim.",
+              "support": [
+                {
+                  "url": "https://fixture.example.com/synthetic-floor-3",
+                  "quote": "Synthetic Floor 3 standard costs SGD 170.00 for one unit, tax included."
+                }
+              ]
+            }
+          }
+        ],
+        "choice": {
+          "productId": "synthetic-floor-1",
+          "reasons": [
+            {
+              "kind": "field",
+              "name": "identity"
+            },
+            {
+              "kind": "field",
+              "name": "price"
+            }
+          ]
+        },
+        "limitations": [
+          "Entirely synthetic fixed provider material, including every product, claim and price. No inventory or merchant proof. Missing criteria remain unknown."
+        ]
+      }
+    },
+    "status": 200
+  },
+  "interpretation": {
+    "mode": "unavailable",
+    "inputHash": null,
+    "openAIHttpRequests": 0,
+    "ollamaHttpRequests": 0,
+    "consumedTurns": [],
+    "unconsumedTurns": [],
+    "invocations": 0,
+    "suppliedTurns": [],
+    "limitations": []
+  },
+  "turns": [
+    {
+      "index": 0,
+      "action": {
+        "kind": "message",
+        "text": "Find a desk lamp under SGD 100. It must clamp onto the desk."
+      },
+      "initialPreferences": {
+        "version": 5,
+        "productDescription": "",
+        "criteria": [],
+        "budget": null,
+        "budgetClarified": false,
+        "pendingChange": null,
+        "region": "SG",
+        "responseLength": "concise",
+        "revision": 0
+      },
+      "finalPreferences": {
+        "version": 5,
+        "productDescription": "",
+        "criteria": [],
+        "budget": null,
+        "budgetClarified": false,
+        "pendingChange": null,
+        "region": "SG",
+        "responseLength": "concise",
+        "revision": 0
+      },
+      "response": {
+        "responseVersion": 5,
+        "preferences": {
+          "version": 5,
+          "productDescription": "",
+          "criteria": [],
+          "budget": null,
+          "budgetClarified": false,
+          "pendingChange": null,
+          "region": "SG",
+          "responseLength": "concise",
+          "revision": 0
+        },
+        "notes": [],
+        "kind": "research-unavailable",
+        "message": "I could not safely interpret the complete message, so no part of it was applied. Your accepted preferences and any pending question are unchanged. This message needs additional interpretation, which is unavailable right now.",
+        "reason": "intent-unavailable"
+      },
+      "intentHandling": "unavailable",
+      "providerCalls": 0,
+      "cancelled": false
+    },
+    {
+      "index": 1,
+      "action": {
+        "kind": "message",
+        "text": "Actually forget the lamp. I need a floor lamp under SGD 180; freestanding is essential."
+      },
+      "initialPreferences": {
+        "version": 5,
+        "productDescription": "",
+        "criteria": [],
+        "budget": null,
+        "budgetClarified": false,
+        "pendingChange": null,
+        "region": "SG",
+        "responseLength": "concise",
+        "revision": 0
+      },
+      "finalPreferences": {
+        "version": 5,
+        "productDescription": "",
+        "criteria": [],
+        "budget": null,
+        "budgetClarified": false,
+        "pendingChange": null,
+        "region": "SG",
+        "responseLength": "concise",
+        "revision": 0
+      },
+      "response": {
+        "responseVersion": 5,
+        "preferences": {
+          "version": 5,
+          "productDescription": "",
+          "criteria": [],
+          "budget": null,
+          "budgetClarified": false,
+          "pendingChange": null,
+          "region": "SG",
+          "responseLength": "concise",
+          "revision": 0
+        },
+        "notes": [],
+        "kind": "research-unavailable",
+        "message": "I could not safely interpret the complete message, so no part of it was applied. Your accepted preferences and any pending question are unchanged. This message needs additional interpretation, which is unavailable right now.",
+        "reason": "intent-unavailable"
+      },
+      "intentHandling": "unavailable",
+      "providerCalls": 0,
+      "cancelled": false
+    }
+  ],
+  "events": [
+    {
+      "sequence": 1,
+      "turn": 0,
+      "kind": "app-request",
+      "attemptId": "0d059cd3-d6a0-4435-9ca3-14d89766d158",
+      "elapsedMs": 2.03,
+      "body": {
+        "phase": "prepare",
+        "message": "Find a desk lamp under SGD 100. It must clamp onto the desk.",
+        "preferences": {
+          "version": 5,
+          "productDescription": "",
+          "criteria": [],
+          "budget": null,
+          "budgetClarified": false,
+          "pendingChange": null,
+          "region": "SG",
+          "responseLength": "concise",
+          "revision": 0
+        },
+        "operationId": "d74aa302-2c17-4089-985c-4ec1aec150aa"
+      }
+    },
+    {
+      "sequence": 2,
+      "turn": 0,
+      "kind": "app-response",
+      "attemptId": "0d059cd3-d6a0-4435-9ca3-14d89766d158",
+      "elapsedMs": 3.67,
+      "body": {
+        "status": 200,
+        "body": {
+          "responseVersion": 5,
+          "preferences": {
+            "version": 5,
+            "productDescription": "",
+            "criteria": [],
+            "budget": null,
+            "budgetClarified": false,
+            "pendingChange": null,
+            "region": "SG",
+            "responseLength": "concise",
+            "revision": 0
+          },
+          "notes": [],
+          "kind": "research-unavailable",
+          "message": "I could not safely interpret the complete message, so no part of it was applied. Your accepted preferences and any pending question are unchanged. This message needs additional interpretation, which is unavailable right now.",
+          "reason": "intent-unavailable"
+        }
+      }
+    },
+    {
+      "sequence": 3,
+      "turn": 1,
+      "kind": "app-request",
+      "attemptId": "506b6200-7cac-424a-801e-1294082be1a0",
+      "elapsedMs": 3.72,
+      "body": {
+        "phase": "prepare",
+        "message": "Actually forget the lamp. I need a floor lamp under SGD 180; freestanding is essential.",
+        "preferences": {
+          "version": 5,
+          "productDescription": "",
+          "criteria": [],
+          "budget": null,
+          "budgetClarified": false,
+          "pendingChange": null,
+          "region": "SG",
+          "responseLength": "concise",
+          "revision": 0
+        },
+        "operationId": "14743f55-f8e8-4619-928a-19129bd33c42"
+      }
+    },
+    {
+      "sequence": 4,
+      "turn": 1,
+      "kind": "app-response",
+      "attemptId": "506b6200-7cac-424a-801e-1294082be1a0",
+      "elapsedMs": 4.71,
+      "body": {
+        "status": 200,
+        "body": {
+          "responseVersion": 5,
+          "preferences": {
+            "version": 5,
+            "productDescription": "",
+            "criteria": [],
+            "budget": null,
+            "budgetClarified": false,
+            "pendingChange": null,
+            "region": "SG",
+            "responseLength": "concise",
+            "revision": 0
+          },
+          "notes": [],
+          "kind": "research-unavailable",
+          "message": "I could not safely interpret the complete message, so no part of it was applied. Your accepted preferences and any pending question are unchanged. This message needs additional interpretation, which is unavailable right now.",
+          "reason": "intent-unavailable"
+        }
+      }
+    }
+  ],
+  "network": {
+    "denied": [],
+    "allowedOriginCount": 2,
+    "externalRequests": 0
+  },
+  "cleanup": true,
+  "applicationError": null
+}

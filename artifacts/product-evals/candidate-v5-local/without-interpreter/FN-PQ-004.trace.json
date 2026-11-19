@@ -1,0 +1,373 @@
+{
+  "scenarioId": "FN-PQ-004",
+  "initialPreferences": {
+    "version": 5,
+    "productDescription": "",
+    "criteria": [],
+    "budget": null,
+    "budgetClarified": false,
+    "pendingChange": null,
+    "region": "SG",
+    "responseLength": "concise",
+    "revision": 0
+  },
+  "finalPreferences": {
+    "version": 5,
+    "productDescription": "",
+    "criteria": [],
+    "budget": null,
+    "budgetClarified": false,
+    "pendingChange": null,
+    "region": "SG",
+    "responseLength": "concise",
+    "revision": 0
+  },
+  "material": {
+    "id": "held-comparison:FN-PQ-004",
+    "kind": "synthetic",
+    "label": "Explicit synthetic provider double. Not genuine Exa research.",
+    "capturedAt": null,
+    "provenance": [
+      "Independently fixed test input before application execution",
+      "No current product or market claim",
+      "Original independent provider recipe held-comparison; fixed profile powerbank.",
+      "Synthetic claims, prices and availability statements remain visibly labeled. No live research or inventory.",
+      "Input suitability gap: no matching product profile. Relevance and recommendation usefulness are unassessed, never counted as a shopping success."
+    ],
+    "sha256": "884f895f25e5064618973b7354b7824f231770a515a778ec390584f9e1569fd6",
+    "body": {
+      "requestId": "synthetic-offline-input",
+      "costDollars": {
+        "total": 0.005
+      },
+      "citations": [
+        {
+          "url": "https://fixture.example.com/powerbank",
+          "title": "Synthetic fixture power bank",
+          "text": "Synthetic Anker Pocket 10 black is a portable power bank with USB-C fast charging.\nSynthetic Anker Pocket 10 black costs SGD 35.00 for one unit, tax included."
+        }
+      ],
+      "answer": {
+        "products": [
+          {
+            "id": "synthetic-pocket-10",
+            "name": "Synthetic Anker Pocket 10",
+            "variant": "black",
+            "identity": {
+              "status": "supported",
+              "scope": "exact-variant",
+              "rationale": "Synthetic test assessment, not a live product claim.",
+              "support": [
+                {
+                  "url": "https://fixture.example.com/powerbank",
+                  "quote": "Synthetic Anker Pocket 10 black is a portable power bank with USB-C fast charging."
+                }
+              ]
+            },
+            "requestMatch": {
+              "status": "supported",
+              "scope": "exact-variant",
+              "rationale": "Synthetic test assessment, not a live product claim.",
+              "support": [
+                {
+                  "url": "https://fixture.example.com/powerbank",
+                  "quote": "Synthetic Anker Pocket 10 black is a portable power bank with USB-C fast charging."
+                }
+              ]
+            },
+            "criteria": [],
+            "attributes": [
+              {
+                "name": "Charging",
+                "assessment": {
+                  "status": "supported",
+                  "scope": "exact-variant",
+                  "rationale": "Synthetic test assessment, not a live product claim.",
+                  "support": [
+                    {
+                      "url": "https://fixture.example.com/powerbank",
+                      "quote": "Synthetic Anker Pocket 10 black is a portable power bank with USB-C fast charging."
+                    }
+                  ]
+                }
+              }
+            ],
+            "price": {
+              "amount": 35,
+              "currency": "SGD",
+              "conditions": [
+                "One unit",
+                "Tax included"
+              ],
+              "conditionsResolved": true,
+              "variant": "black",
+              "assessment": {
+                "status": "supported",
+                "scope": "exact-variant",
+                "rationale": "Synthetic test assessment, not a live product claim.",
+                "support": [
+                  {
+                    "url": "https://fixture.example.com/powerbank",
+                    "quote": "Synthetic Anker Pocket 10 black costs SGD 35.00 for one unit, tax included."
+                  }
+                ]
+              }
+            },
+            "budget": {
+              "status": "supported",
+              "scope": "exact-variant",
+              "rationale": "Synthetic test assessment, not a live product claim.",
+              "support": [
+                {
+                  "url": "https://fixture.example.com/powerbank",
+                  "quote": "Synthetic Anker Pocket 10 black costs SGD 35.00 for one unit, tax included."
+                }
+              ]
+            }
+          }
+        ],
+        "choice": {
+          "productId": "synthetic-pocket-10",
+          "reasons": [
+            {
+              "kind": "field",
+              "name": "identity"
+            },
+            {
+              "kind": "field",
+              "name": "price"
+            }
+          ]
+        },
+        "limitations": [
+          "Synthetic provider double for automated evaluation. No real products, current prices, availability or merchant verification."
+        ]
+      }
+    },
+    "status": 200
+  },
+  "interpretation": {
+    "mode": "unavailable",
+    "inputHash": null,
+    "openAIHttpRequests": 0,
+    "ollamaHttpRequests": 0,
+    "consumedTurns": [],
+    "unconsumedTurns": [],
+    "invocations": 0,
+    "suppliedTurns": [],
+    "limitations": []
+  },
+  "turns": [
+    {
+      "index": 0,
+      "action": {
+        "kind": "message",
+        "text": "Find a folding music stand under EUR 45. Low weight and a sturdy tray both matter."
+      },
+      "initialPreferences": {
+        "version": 5,
+        "productDescription": "",
+        "criteria": [],
+        "budget": null,
+        "budgetClarified": false,
+        "pendingChange": null,
+        "region": "SG",
+        "responseLength": "concise",
+        "revision": 0
+      },
+      "finalPreferences": {
+        "version": 5,
+        "productDescription": "",
+        "criteria": [],
+        "budget": null,
+        "budgetClarified": false,
+        "pendingChange": null,
+        "region": "SG",
+        "responseLength": "concise",
+        "revision": 0
+      },
+      "response": {
+        "responseVersion": 5,
+        "preferences": {
+          "version": 5,
+          "productDescription": "",
+          "criteria": [],
+          "budget": null,
+          "budgetClarified": false,
+          "pendingChange": null,
+          "region": "SG",
+          "responseLength": "concise",
+          "revision": 0
+        },
+        "notes": [],
+        "kind": "research-unavailable",
+        "message": "I could not safely interpret the complete message, so no part of it was applied. Your accepted preferences and any pending question are unchanged. This message needs additional interpretation, which is unavailable right now.",
+        "reason": "intent-unavailable"
+      },
+      "intentHandling": "unavailable",
+      "providerCalls": 0,
+      "cancelled": false
+    },
+    {
+      "index": 1,
+      "action": {
+        "kind": "message",
+        "text": "Which one is best overall?"
+      },
+      "initialPreferences": {
+        "version": 5,
+        "productDescription": "",
+        "criteria": [],
+        "budget": null,
+        "budgetClarified": false,
+        "pendingChange": null,
+        "region": "SG",
+        "responseLength": "concise",
+        "revision": 0
+      },
+      "finalPreferences": {
+        "version": 5,
+        "productDescription": "",
+        "criteria": [],
+        "budget": null,
+        "budgetClarified": false,
+        "pendingChange": null,
+        "region": "SG",
+        "responseLength": "concise",
+        "revision": 0
+      },
+      "response": {
+        "responseVersion": 5,
+        "preferences": {
+          "version": 5,
+          "productDescription": "",
+          "criteria": [],
+          "budget": null,
+          "budgetClarified": false,
+          "pendingChange": null,
+          "region": "SG",
+          "responseLength": "concise",
+          "revision": 0
+        },
+        "notes": [],
+        "kind": "research-unavailable",
+        "message": "I could not safely interpret the complete message, so no part of it was applied. Your accepted preferences and any pending question are unchanged. This message needs additional interpretation, which is unavailable right now.",
+        "reason": "intent-unavailable"
+      },
+      "intentHandling": "unavailable",
+      "providerCalls": 0,
+      "cancelled": false
+    }
+  ],
+  "events": [
+    {
+      "sequence": 1,
+      "turn": 0,
+      "kind": "app-request",
+      "attemptId": "87995f49-a17a-41a6-9b40-6aefe35c62b1",
+      "elapsedMs": 1.35,
+      "body": {
+        "phase": "prepare",
+        "message": "Find a folding music stand under EUR 45. Low weight and a sturdy tray both matter.",
+        "preferences": {
+          "version": 5,
+          "productDescription": "",
+          "criteria": [],
+          "budget": null,
+          "budgetClarified": false,
+          "pendingChange": null,
+          "region": "SG",
+          "responseLength": "concise",
+          "revision": 0
+        },
+        "operationId": "3fc07ff3-d3bd-47cd-a8f3-164ffb896f0e"
+      }
+    },
+    {
+      "sequence": 2,
+      "turn": 0,
+      "kind": "app-response",
+      "attemptId": "87995f49-a17a-41a6-9b40-6aefe35c62b1",
+      "elapsedMs": 2.69,
+      "body": {
+        "status": 200,
+        "body": {
+          "responseVersion": 5,
+          "preferences": {
+            "version": 5,
+            "productDescription": "",
+            "criteria": [],
+            "budget": null,
+            "budgetClarified": false,
+            "pendingChange": null,
+            "region": "SG",
+            "responseLength": "concise",
+            "revision": 0
+          },
+          "notes": [],
+          "kind": "research-unavailable",
+          "message": "I could not safely interpret the complete message, so no part of it was applied. Your accepted preferences and any pending question are unchanged. This message needs additional interpretation, which is unavailable right now.",
+          "reason": "intent-unavailable"
+        }
+      }
+    },
+    {
+      "sequence": 3,
+      "turn": 1,
+      "kind": "app-request",
+      "attemptId": "9e593ad8-0861-4489-9225-2b216540f934",
+      "elapsedMs": 2.72,
+      "body": {
+        "phase": "prepare",
+        "message": "Which one is best overall?",
+        "preferences": {
+          "version": 5,
+          "productDescription": "",
+          "criteria": [],
+          "budget": null,
+          "budgetClarified": false,
+          "pendingChange": null,
+          "region": "SG",
+          "responseLength": "concise",
+          "revision": 0
+        },
+        "operationId": "3d961980-8527-44ea-9e3e-43033190bcae"
+      }
+    },
+    {
+      "sequence": 4,
+      "turn": 1,
+      "kind": "app-response",
+      "attemptId": "9e593ad8-0861-4489-9225-2b216540f934",
+      "elapsedMs": 3.72,
+      "body": {
+        "status": 200,
+        "body": {
+          "responseVersion": 5,
+          "preferences": {
+            "version": 5,
+            "productDescription": "",
+            "criteria": [],
+            "budget": null,
+            "budgetClarified": false,
+            "pendingChange": null,
+            "region": "SG",
+            "responseLength": "concise",
+            "revision": 0
+          },
+          "notes": [],
+          "kind": "research-unavailable",
+          "message": "I could not safely interpret the complete message, so no part of it was applied. Your accepted preferences and any pending question are unchanged. This message needs additional interpretation, which is unavailable right now.",
+          "reason": "intent-unavailable"
+        }
+      }
+    }
+  ],
+  "network": {
+    "denied": [],
+    "allowedOriginCount": 2,
+    "externalRequests": 0
+  },
+  "cleanup": true,
+  "applicationError": null
+}

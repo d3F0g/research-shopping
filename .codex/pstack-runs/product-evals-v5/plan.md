@@ -18,9 +18,9 @@ Goal. Run the unchanged sixty scenarios against current PR38 v5 and produce an h
 - [x] Ground v5 interpretation, question identity and evidence structures; compare two adapter/comparison designs.
 - [x] Integrate pinned upstream source into the dedicated eval branch without editing application functionality. Preserve all frozen v4 files byte-for-byte.
 - [x] Delegate a single owner for v5 provider adapters, immutable observations and comparison bridge. Runtime receives organic actions and fixed provider inputs only.
-- [ ] Run all sixty cases, paired boundary controls, actual browser journeys and independent semantic checks where observable.
-- [ ] Publish side-by-side technical outcomes, unchanged failures, regressions and explicit incomparable or unassessed dimensions.
-- [ ] Obtain fresh exact-head QA and security, fix reproducible infrastructure defects and reverify.
+- [x] Run all sixty cases, paired boundary controls, actual browser journeys and independent semantic checks where observable.
+- [x] Publish side-by-side technical outcomes, unchanged failures, regressions and explicit incomparable or unassessed dimensions.
+- [x] Obtain fresh exact-head QA and security, fix reproducible infrastructure defects and reverify.
 - [ ] Update existing product issues, PR47 and CI; keep draft while PR38 remains changing/unmerged. Integrate final trunk only after PR38 lands.
 
 ## Data shape
@@ -38,3 +38,7 @@ Recorded original provider responses are distinct from synthetic local doubles. 
 ## Upstream change during verification
 
 The completed fd9 OpenAI-era run is frozen in becee3c. While independent reviews completed, PR38 advanced to4e42bee with supported local parsing and optional local Ollama. Root integrated it through32c0811 without app edits. Retain every original v4 and first v5 artifact. Adapt only the evaluation boundary, run all60 again under local-first plus synthetic fallback and a separately labeled no-interpreter lane, and repeat independent review. No model installation or paid inference is authorized. Fix the independently observed harness timeout-event turn attribution while preserving old evidence.
+
+## Verified latest candidate
+
+Code f04068e against application4e42bee passed60 evaluation controls, both typechecks,45 actual browser checks and30 smoke checks. Independent QA/security/cleanup pass for the bound evaluator and results. Root separately passed811 application tests and build on the same application tree. Issue50 has independent RED at2bf and GREEN atf040 for immediate overlap, preparation, duplicate retries, delayed completion and cancellation. Main60 remains5/36/18/1 with49 critical failures; local-only60 is1/50/8/1 with94. Live usefulness remains unassessed. Root GitHub updates/CI are recorded on PR47; final integration after parent38 merges remains intentionally pending.

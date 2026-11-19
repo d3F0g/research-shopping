@@ -1,0 +1,668 @@
+{
+  "scenarioId": "FN-UI-003",
+  "initialPreferences": {
+    "version": 5,
+    "productDescription": "",
+    "criteria": [],
+    "budget": null,
+    "budgetClarified": false,
+    "pendingChange": null,
+    "region": "SG",
+    "responseLength": "concise",
+    "revision": 0
+  },
+  "finalPreferences": {
+    "version": 5,
+    "productDescription": "",
+    "criteria": [],
+    "budget": null,
+    "budgetClarified": false,
+    "pendingChange": null,
+    "region": "SG",
+    "responseLength": "concise",
+    "revision": 2
+  },
+  "material": {
+    "id": "held-comparison:FN-UI-003",
+    "kind": "synthetic",
+    "label": "Explicit synthetic provider double. Not genuine Exa research.",
+    "capturedAt": null,
+    "provenance": [
+      "Independently fixed test input before application execution",
+      "No current product or market claim",
+      "Original independent provider recipe held-comparison; fixed profile powerbank.",
+      "Synthetic claims, prices and availability statements remain visibly labeled. No live research or inventory.",
+      "Input suitability gap: no matching product profile. Relevance and recommendation usefulness are unassessed, never counted as a shopping success."
+    ],
+    "sha256": "884f895f25e5064618973b7354b7824f231770a515a778ec390584f9e1569fd6",
+    "body": {
+      "requestId": "synthetic-offline-input",
+      "costDollars": {
+        "total": 0.005
+      },
+      "citations": [
+        {
+          "url": "https://fixture.example.com/powerbank",
+          "title": "Synthetic fixture power bank",
+          "text": "Synthetic Anker Pocket 10 black is a portable power bank with USB-C fast charging.\nSynthetic Anker Pocket 10 black costs SGD 35.00 for one unit, tax included."
+        }
+      ],
+      "answer": {
+        "products": [
+          {
+            "id": "synthetic-pocket-10",
+            "name": "Synthetic Anker Pocket 10",
+            "variant": "black",
+            "identity": {
+              "status": "supported",
+              "scope": "exact-variant",
+              "rationale": "Synthetic test assessment, not a live product claim.",
+              "support": [
+                {
+                  "url": "https://fixture.example.com/powerbank",
+                  "quote": "Synthetic Anker Pocket 10 black is a portable power bank with USB-C fast charging."
+                }
+              ]
+            },
+            "requestMatch": {
+              "status": "supported",
+              "scope": "exact-variant",
+              "rationale": "Synthetic test assessment, not a live product claim.",
+              "support": [
+                {
+                  "url": "https://fixture.example.com/powerbank",
+                  "quote": "Synthetic Anker Pocket 10 black is a portable power bank with USB-C fast charging."
+                }
+              ]
+            },
+            "criteria": [],
+            "attributes": [
+              {
+                "name": "Charging",
+                "assessment": {
+                  "status": "supported",
+                  "scope": "exact-variant",
+                  "rationale": "Synthetic test assessment, not a live product claim.",
+                  "support": [
+                    {
+                      "url": "https://fixture.example.com/powerbank",
+                      "quote": "Synthetic Anker Pocket 10 black is a portable power bank with USB-C fast charging."
+                    }
+                  ]
+                }
+              }
+            ],
+            "price": {
+              "amount": 35,
+              "currency": "SGD",
+              "conditions": [
+                "One unit",
+                "Tax included"
+              ],
+              "conditionsResolved": true,
+              "variant": "black",
+              "assessment": {
+                "status": "supported",
+                "scope": "exact-variant",
+                "rationale": "Synthetic test assessment, not a live product claim.",
+                "support": [
+                  {
+                    "url": "https://fixture.example.com/powerbank",
+                    "quote": "Synthetic Anker Pocket 10 black costs SGD 35.00 for one unit, tax included."
+                  }
+                ]
+              }
+            },
+            "budget": {
+              "status": "supported",
+              "scope": "exact-variant",
+              "rationale": "Synthetic test assessment, not a live product claim.",
+              "support": [
+                {
+                  "url": "https://fixture.example.com/powerbank",
+                  "quote": "Synthetic Anker Pocket 10 black costs SGD 35.00 for one unit, tax included."
+                }
+              ]
+            }
+          }
+        ],
+        "choice": {
+          "productId": "synthetic-pocket-10",
+          "reasons": [
+            {
+              "kind": "field",
+              "name": "identity"
+            },
+            {
+              "kind": "field",
+              "name": "price"
+            }
+          ]
+        },
+        "limitations": [
+          "Synthetic provider double for automated evaluation. No real products, current prices, availability or merchant verification."
+        ]
+      }
+    },
+    "status": 200
+  },
+  "interpretation": {
+    "mode": "fixed-proposals",
+    "inputHash": "ba136b479052387d0ab913a7bb4d802eebe4f7e17be79846d908e5fd87c4044a",
+    "openAIHttpRequests": 0,
+    "ollamaHttpRequests": 0,
+    "consumedTurns": [
+      0,
+      1,
+      2
+    ],
+    "unconsumedTurns": [],
+    "invocations": 3,
+    "suppliedTurns": [
+      {
+        "turnIndex": 0,
+        "message": "Find a pocket digital scale under EUR 30. It must measure in 0.1 g increments.",
+        "proposal": {
+          "disposition": "research",
+          "actions": [
+            {
+              "kind": "start-request",
+              "source": {
+                "start": 7,
+                "end": 27,
+                "text": "pocket digital scale"
+              }
+            },
+            {
+              "kind": "budget",
+              "source": {
+                "start": 28,
+                "end": 40,
+                "text": "under EUR 30"
+              },
+              "operation": "clarify",
+              "draft": {
+                "amount": 30,
+                "minimum": null,
+                "currency": null
+              }
+            },
+            {
+              "kind": "add-criterion",
+              "source": {
+                "start": 42,
+                "end": 78,
+                "text": "It must measure in 0.1 g increments."
+              },
+              "strength": "hard"
+            }
+          ]
+        },
+        "limitations": [
+          "The stated currency is unsupported by the allowed SGD/USD draft. Its numeric amount is retained with currency null. No currency conversion or substitute currency is proposed."
+        ]
+      },
+      {
+        "turnIndex": 1,
+        "message": "Show the comparison.",
+        "proposal": {
+          "disposition": "acknowledge",
+          "actions": []
+        },
+        "limitations": [
+          "The action contract has no held-evidence answer or comparison operation. Acknowledge requests no new research and does not fabricate comparison content."
+        ]
+      },
+      {
+        "turnIndex": 2,
+        "message": "Can you explain the first option's limitations?",
+        "proposal": {
+          "disposition": "acknowledge",
+          "actions": []
+        },
+        "limitations": [
+          "The action contract has no held-evidence answer or comparison operation. Acknowledge requests no new research and does not fabricate comparison content."
+        ]
+      }
+    ],
+    "limitations": []
+  },
+  "turns": [
+    {
+      "index": 0,
+      "action": {
+        "kind": "message",
+        "text": "Find a pocket digital scale under EUR 30. It must measure in 0.1 g increments."
+      },
+      "initialPreferences": {
+        "version": 5,
+        "productDescription": "",
+        "criteria": [],
+        "budget": null,
+        "budgetClarified": false,
+        "pendingChange": null,
+        "region": "SG",
+        "responseLength": "concise",
+        "revision": 0
+      },
+      "finalPreferences": {
+        "version": 5,
+        "productDescription": "",
+        "criteria": [],
+        "budget": null,
+        "budgetClarified": false,
+        "pendingChange": null,
+        "region": "SG",
+        "responseLength": "concise",
+        "revision": 0
+      },
+      "response": {
+        "responseVersion": 5,
+        "preferences": {
+          "version": 5,
+          "productDescription": "",
+          "criteria": [],
+          "budget": null,
+          "budgetClarified": false,
+          "pendingChange": null,
+          "region": "SG",
+          "responseLength": "concise",
+          "revision": 0
+        },
+        "notes": [],
+        "kind": "research-unavailable",
+        "message": "I could not safely interpret the complete message, so no part of it was applied. Your accepted preferences and any pending question are unchanged. This message needs additional interpretation, which is unavailable right now.",
+        "reason": "intent-unavailable"
+      },
+      "intentHandling": "synthetic-fallback",
+      "providerCalls": 0,
+      "cancelled": false
+    },
+    {
+      "index": 1,
+      "action": {
+        "kind": "message",
+        "text": "Show the comparison."
+      },
+      "initialPreferences": {
+        "version": 5,
+        "productDescription": "",
+        "criteria": [],
+        "budget": null,
+        "budgetClarified": false,
+        "pendingChange": null,
+        "region": "SG",
+        "responseLength": "concise",
+        "revision": 0
+      },
+      "finalPreferences": {
+        "version": 5,
+        "productDescription": "",
+        "criteria": [],
+        "budget": null,
+        "budgetClarified": false,
+        "pendingChange": null,
+        "region": "SG",
+        "responseLength": "concise",
+        "revision": 1
+      },
+      "response": {
+        "responseVersion": 5,
+        "preferences": {
+          "version": 5,
+          "productDescription": "",
+          "criteria": [],
+          "budget": null,
+          "budgetClarified": false,
+          "pendingChange": null,
+          "region": "SG",
+          "responseLength": "concise",
+          "revision": 1
+        },
+        "notes": [],
+        "kind": "message",
+        "message": "Your preferences and earlier research are still here."
+      },
+      "intentHandling": "synthetic-fallback",
+      "providerCalls": 0,
+      "cancelled": false
+    },
+    {
+      "index": 2,
+      "action": {
+        "kind": "message",
+        "text": "Can you explain the first option's limitations?"
+      },
+      "initialPreferences": {
+        "version": 5,
+        "productDescription": "",
+        "criteria": [],
+        "budget": null,
+        "budgetClarified": false,
+        "pendingChange": null,
+        "region": "SG",
+        "responseLength": "concise",
+        "revision": 1
+      },
+      "finalPreferences": {
+        "version": 5,
+        "productDescription": "",
+        "criteria": [],
+        "budget": null,
+        "budgetClarified": false,
+        "pendingChange": null,
+        "region": "SG",
+        "responseLength": "concise",
+        "revision": 2
+      },
+      "response": {
+        "responseVersion": 5,
+        "preferences": {
+          "version": 5,
+          "productDescription": "",
+          "criteria": [],
+          "budget": null,
+          "budgetClarified": false,
+          "pendingChange": null,
+          "region": "SG",
+          "responseLength": "concise",
+          "revision": 2
+        },
+        "notes": [],
+        "kind": "message",
+        "message": "Your preferences and earlier research are still here."
+      },
+      "intentHandling": "synthetic-fallback",
+      "providerCalls": 0,
+      "cancelled": false
+    }
+  ],
+  "events": [
+    {
+      "sequence": 1,
+      "turn": 0,
+      "kind": "app-request",
+      "attemptId": "e3fbeb04-ef5c-4450-b2b0-0d62d744a411",
+      "elapsedMs": 2.01,
+      "body": {
+        "phase": "prepare",
+        "message": "Find a pocket digital scale under EUR 30. It must measure in 0.1 g increments.",
+        "preferences": {
+          "version": 5,
+          "productDescription": "",
+          "criteria": [],
+          "budget": null,
+          "budgetClarified": false,
+          "pendingChange": null,
+          "region": "SG",
+          "responseLength": "concise",
+          "revision": 0
+        },
+        "operationId": "581f152f-b15d-47e6-8a41-17846b46a969"
+      }
+    },
+    {
+      "sequence": 2,
+      "turn": 0,
+      "kind": "interpreter-request",
+      "attemptId": "e3fbeb04-ef5c-4450-b2b0-0d62d744a411",
+      "elapsedMs": 3.63,
+      "body": {
+        "operationId": "581f152f-b15d-47e6-8a41-17846b46a969",
+        "message": "Find a pocket digital scale under EUR 30. It must measure in 0.1 g increments.",
+        "questionId": null,
+        "inputHash": "ba136b479052387d0ab913a7bb4d802eebe4f7e17be79846d908e5fd87c4044a",
+        "label": "Independently authored synthetic proposals. Conditional technical behavior only."
+      }
+    },
+    {
+      "sequence": 3,
+      "turn": 0,
+      "kind": "interpreter-response",
+      "attemptId": "e3fbeb04-ef5c-4450-b2b0-0d62d744a411",
+      "elapsedMs": 3.67,
+      "body": {
+        "status": "ready",
+        "interpretation": {
+          "disposition": "research",
+          "actions": [
+            {
+              "kind": "start-request",
+              "source": {
+                "start": 7,
+                "end": 27,
+                "text": "pocket digital scale"
+              }
+            },
+            {
+              "kind": "budget",
+              "source": {
+                "start": 28,
+                "end": 40,
+                "text": "under EUR 30"
+              },
+              "operation": "clarify",
+              "draft": {
+                "amount": 30,
+                "minimum": null,
+                "currency": null
+              }
+            },
+            {
+              "kind": "add-criterion",
+              "source": {
+                "start": 42,
+                "end": 78,
+                "text": "It must measure in 0.1 g increments."
+              },
+              "strength": "hard"
+            }
+          ]
+        },
+        "bindings": [],
+        "limitations": [
+          "The stated currency is unsupported by the allowed SGD/USD draft. Its numeric amount is retained with currency null. No currency conversion or substitute currency is proposed."
+        ]
+      }
+    },
+    {
+      "sequence": 4,
+      "turn": 0,
+      "kind": "app-response",
+      "attemptId": "e3fbeb04-ef5c-4450-b2b0-0d62d744a411",
+      "elapsedMs": 4.15,
+      "body": {
+        "status": 200,
+        "body": {
+          "responseVersion": 5,
+          "preferences": {
+            "version": 5,
+            "productDescription": "",
+            "criteria": [],
+            "budget": null,
+            "budgetClarified": false,
+            "pendingChange": null,
+            "region": "SG",
+            "responseLength": "concise",
+            "revision": 0
+          },
+          "notes": [],
+          "kind": "research-unavailable",
+          "message": "I could not safely interpret the complete message, so no part of it was applied. Your accepted preferences and any pending question are unchanged. This message needs additional interpretation, which is unavailable right now.",
+          "reason": "intent-unavailable"
+        }
+      }
+    },
+    {
+      "sequence": 5,
+      "turn": 1,
+      "kind": "app-request",
+      "attemptId": "91cdda4d-4fdd-4d75-8af8-4075c56b5197",
+      "elapsedMs": 4.19,
+      "body": {
+        "phase": "prepare",
+        "message": "Show the comparison.",
+        "preferences": {
+          "version": 5,
+          "productDescription": "",
+          "criteria": [],
+          "budget": null,
+          "budgetClarified": false,
+          "pendingChange": null,
+          "region": "SG",
+          "responseLength": "concise",
+          "revision": 0
+        },
+        "operationId": "077d7d07-2ad0-4b19-bb17-6835e8959632"
+      }
+    },
+    {
+      "sequence": 6,
+      "turn": 1,
+      "kind": "interpreter-request",
+      "attemptId": "91cdda4d-4fdd-4d75-8af8-4075c56b5197",
+      "elapsedMs": 5.22,
+      "body": {
+        "operationId": "077d7d07-2ad0-4b19-bb17-6835e8959632",
+        "message": "Show the comparison.",
+        "questionId": null,
+        "inputHash": "ba136b479052387d0ab913a7bb4d802eebe4f7e17be79846d908e5fd87c4044a",
+        "label": "Independently authored synthetic proposals. Conditional technical behavior only."
+      }
+    },
+    {
+      "sequence": 7,
+      "turn": 1,
+      "kind": "interpreter-response",
+      "attemptId": "91cdda4d-4fdd-4d75-8af8-4075c56b5197",
+      "elapsedMs": 5.24,
+      "body": {
+        "status": "ready",
+        "interpretation": {
+          "disposition": "acknowledge",
+          "actions": []
+        },
+        "bindings": [],
+        "limitations": [
+          "The action contract has no held-evidence answer or comparison operation. Acknowledge requests no new research and does not fabricate comparison content."
+        ]
+      }
+    },
+    {
+      "sequence": 8,
+      "turn": 1,
+      "kind": "app-response",
+      "attemptId": "91cdda4d-4fdd-4d75-8af8-4075c56b5197",
+      "elapsedMs": 5.75,
+      "body": {
+        "status": 200,
+        "body": {
+          "responseVersion": 5,
+          "preferences": {
+            "version": 5,
+            "productDescription": "",
+            "criteria": [],
+            "budget": null,
+            "budgetClarified": false,
+            "pendingChange": null,
+            "region": "SG",
+            "responseLength": "concise",
+            "revision": 1
+          },
+          "notes": [],
+          "kind": "message",
+          "message": "Your preferences and earlier research are still here."
+        }
+      }
+    },
+    {
+      "sequence": 9,
+      "turn": 2,
+      "kind": "app-request",
+      "attemptId": "32a2db2b-aec4-47d0-9318-06fc0e476e46",
+      "elapsedMs": 5.8,
+      "body": {
+        "phase": "prepare",
+        "message": "Can you explain the first option's limitations?",
+        "preferences": {
+          "version": 5,
+          "productDescription": "",
+          "criteria": [],
+          "budget": null,
+          "budgetClarified": false,
+          "pendingChange": null,
+          "region": "SG",
+          "responseLength": "concise",
+          "revision": 1
+        },
+        "operationId": "c1d006c8-fc00-4faa-8db8-b52c6043cb70"
+      }
+    },
+    {
+      "sequence": 10,
+      "turn": 2,
+      "kind": "interpreter-request",
+      "attemptId": "32a2db2b-aec4-47d0-9318-06fc0e476e46",
+      "elapsedMs": 6.6,
+      "body": {
+        "operationId": "c1d006c8-fc00-4faa-8db8-b52c6043cb70",
+        "message": "Can you explain the first option's limitations?",
+        "questionId": null,
+        "inputHash": "ba136b479052387d0ab913a7bb4d802eebe4f7e17be79846d908e5fd87c4044a",
+        "label": "Independently authored synthetic proposals. Conditional technical behavior only."
+      }
+    },
+    {
+      "sequence": 11,
+      "turn": 2,
+      "kind": "interpreter-response",
+      "attemptId": "32a2db2b-aec4-47d0-9318-06fc0e476e46",
+      "elapsedMs": 6.62,
+      "body": {
+        "status": "ready",
+        "interpretation": {
+          "disposition": "acknowledge",
+          "actions": []
+        },
+        "bindings": [],
+        "limitations": [
+          "The action contract has no held-evidence answer or comparison operation. Acknowledge requests no new research and does not fabricate comparison content."
+        ]
+      }
+    },
+    {
+      "sequence": 12,
+      "turn": 2,
+      "kind": "app-response",
+      "attemptId": "32a2db2b-aec4-47d0-9318-06fc0e476e46",
+      "elapsedMs": 6.99,
+      "body": {
+        "status": 200,
+        "body": {
+          "responseVersion": 5,
+          "preferences": {
+            "version": 5,
+            "productDescription": "",
+            "criteria": [],
+            "budget": null,
+            "budgetClarified": false,
+            "pendingChange": null,
+            "region": "SG",
+            "responseLength": "concise",
+            "revision": 2
+          },
+          "notes": [],
+          "kind": "message",
+          "message": "Your preferences and earlier research are still here."
+        }
+      }
+    }
+  ],
+  "network": {
+    "denied": [],
+    "allowedOriginCount": 2,
+    "externalRequests": 0
+  },
+  "cleanup": true,
+  "applicationError": null
+}

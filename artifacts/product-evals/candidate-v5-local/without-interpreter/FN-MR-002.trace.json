@@ -1,0 +1,630 @@
+{
+  "scenarioId": "FN-MR-002",
+  "initialPreferences": {
+    "version": 5,
+    "productDescription": "",
+    "criteria": [],
+    "budget": null,
+    "budgetClarified": false,
+    "pendingChange": null,
+    "region": "SG",
+    "responseLength": "concise",
+    "revision": 0
+  },
+  "finalPreferences": {
+    "version": 5,
+    "productDescription": "",
+    "criteria": [],
+    "budget": null,
+    "budgetClarified": false,
+    "pendingChange": null,
+    "region": "SG",
+    "responseLength": "concise",
+    "revision": 0
+  },
+  "material": {
+    "id": "mixed-fit:FN-MR-002",
+    "kind": "synthetic",
+    "label": "Explicit synthetic provider double. Not genuine Exa research.",
+    "capturedAt": null,
+    "provenance": [
+      "Independently fixed test input before application execution",
+      "No current product or market claim",
+      "Original independent provider recipe mixed-fit; fixed profile FN-MR-002.",
+      "Synthetic claims, prices and availability statements remain visibly labeled. No live research or inventory."
+    ],
+    "sha256": "e507b6044c2cfed56befcad2f556deb16a04c2c3d984040b2d5e6d11f1ba6af6",
+    "body": {
+      "requestId": "synthetic-FN-MR-002",
+      "costDollars": {
+        "total": 0.005
+      },
+      "citations": [
+        {
+          "url": "https://fixture.example.com/synthetic-heat-1",
+          "title": "Synthetic Heat 1 synthetic fixture",
+          "text": "Synthetic Heat 1 standard is a temperature-controlled soldering station.\nSynthetic Heat 1 standard costs SGD 100.00 for one unit, tax included.\nSynthetic input. Stock and delivery are not established."
+        },
+        {
+          "url": "https://fixture.example.com/synthetic-heat-2",
+          "title": "Synthetic Heat 2 synthetic fixture",
+          "text": "Synthetic Heat 2 standard is a temperature-controlled soldering station.\nSynthetic Heat 2 standard costs SGD 130.00 for one unit, tax included.\nSynthetic input. Stock and delivery are not established.\nSynthetic Heat 2 standard is a non-functional display model and cannot be used as an operational product."
+        },
+        {
+          "url": "https://fixture.example.com/synthetic-heat-3",
+          "title": "Synthetic Heat 3 synthetic fixture",
+          "text": "Synthetic Heat 3 standard is a temperature-controlled soldering station.\nSynthetic Heat 3 standard costs SGD 160.00 for one unit, tax included.\nSynthetic input. Stock and delivery are not established."
+        }
+      ],
+      "answer": {
+        "products": [
+          {
+            "id": "synthetic-heat-1",
+            "name": "Synthetic Heat 1",
+            "variant": "standard",
+            "identity": {
+              "status": "supported",
+              "scope": "exact-variant",
+              "rationale": "Synthetic source-based test interpretation, not a live product claim.",
+              "support": [
+                {
+                  "url": "https://fixture.example.com/synthetic-heat-1",
+                  "quote": "Synthetic Heat 1 standard is a temperature-controlled soldering station."
+                }
+              ]
+            },
+            "requestMatch": {
+              "status": "supported",
+              "scope": "exact-variant",
+              "rationale": "Synthetic source-based test interpretation, not a live product claim.",
+              "support": [
+                {
+                  "url": "https://fixture.example.com/synthetic-heat-1",
+                  "quote": "Synthetic Heat 1 standard is a temperature-controlled soldering station."
+                }
+              ]
+            },
+            "criteria": [],
+            "attributes": [
+              {
+                "name": "Use",
+                "assessment": {
+                  "status": "supported",
+                  "scope": "exact-variant",
+                  "rationale": "Synthetic source-based test interpretation, not a live product claim.",
+                  "support": [
+                    {
+                      "url": "https://fixture.example.com/synthetic-heat-1",
+                      "quote": "Synthetic Heat 1 standard is a temperature-controlled soldering station."
+                    }
+                  ]
+                }
+              }
+            ],
+            "price": {
+              "amount": 100,
+              "currency": "SGD",
+              "conditions": [
+                "One unit",
+                "Tax included"
+              ],
+              "conditionsResolved": true,
+              "variant": "standard",
+              "assessment": {
+                "status": "supported",
+                "scope": "exact-variant",
+                "rationale": "Synthetic source-based test interpretation, not a live product claim.",
+                "support": [
+                  {
+                    "url": "https://fixture.example.com/synthetic-heat-1",
+                    "quote": "Synthetic Heat 1 standard costs SGD 100.00 for one unit, tax included."
+                  }
+                ]
+              }
+            },
+            "budget": {
+              "status": "supported",
+              "scope": "exact-variant",
+              "rationale": "Synthetic source-based test interpretation, not a live product claim.",
+              "support": [
+                {
+                  "url": "https://fixture.example.com/synthetic-heat-1",
+                  "quote": "Synthetic Heat 1 standard costs SGD 100.00 for one unit, tax included."
+                }
+              ]
+            }
+          },
+          {
+            "id": "synthetic-heat-2",
+            "name": "Synthetic Heat 2",
+            "variant": "standard",
+            "identity": {
+              "status": "supported",
+              "scope": "exact-variant",
+              "rationale": "Synthetic source-based test interpretation, not a live product claim.",
+              "support": [
+                {
+                  "url": "https://fixture.example.com/synthetic-heat-2",
+                  "quote": "Synthetic Heat 2 standard is a temperature-controlled soldering station."
+                }
+              ]
+            },
+            "requestMatch": {
+              "status": "contradicted",
+              "scope": "exact-variant",
+              "rationale": "Synthetic negative fit observation. The exact use remains a semantic assessment.",
+              "support": [
+                {
+                  "url": "https://fixture.example.com/synthetic-heat-2",
+                  "quote": "Synthetic Heat 2 standard is a non-functional display model and cannot be used as an operational product."
+                }
+              ]
+            },
+            "criteria": [],
+            "attributes": [
+              {
+                "name": "Use",
+                "assessment": {
+                  "status": "supported",
+                  "scope": "exact-variant",
+                  "rationale": "Synthetic source-based test interpretation, not a live product claim.",
+                  "support": [
+                    {
+                      "url": "https://fixture.example.com/synthetic-heat-2",
+                      "quote": "Synthetic Heat 2 standard is a temperature-controlled soldering station."
+                    }
+                  ]
+                }
+              }
+            ],
+            "price": {
+              "amount": 130,
+              "currency": "SGD",
+              "conditions": [
+                "One unit",
+                "Tax included"
+              ],
+              "conditionsResolved": true,
+              "variant": "standard",
+              "assessment": {
+                "status": "supported",
+                "scope": "exact-variant",
+                "rationale": "Synthetic source-based test interpretation, not a live product claim.",
+                "support": [
+                  {
+                    "url": "https://fixture.example.com/synthetic-heat-2",
+                    "quote": "Synthetic Heat 2 standard costs SGD 130.00 for one unit, tax included."
+                  }
+                ]
+              }
+            },
+            "budget": {
+              "status": "supported",
+              "scope": "exact-variant",
+              "rationale": "Synthetic source-based test interpretation, not a live product claim.",
+              "support": [
+                {
+                  "url": "https://fixture.example.com/synthetic-heat-2",
+                  "quote": "Synthetic Heat 2 standard costs SGD 130.00 for one unit, tax included."
+                }
+              ]
+            }
+          },
+          {
+            "id": "synthetic-heat-3",
+            "name": "Synthetic Heat 3",
+            "variant": "standard",
+            "identity": {
+              "status": "supported",
+              "scope": "exact-variant",
+              "rationale": "Synthetic source-based test interpretation, not a live product claim.",
+              "support": [
+                {
+                  "url": "https://fixture.example.com/synthetic-heat-3",
+                  "quote": "Synthetic Heat 3 standard is a temperature-controlled soldering station."
+                }
+              ]
+            },
+            "requestMatch": {
+              "status": "unknown",
+              "scope": "unclear",
+              "rationale": "Synthetic input intentionally lacks qualifying evidence.",
+              "support": []
+            },
+            "criteria": [],
+            "attributes": [
+              {
+                "name": "Use",
+                "assessment": {
+                  "status": "supported",
+                  "scope": "exact-variant",
+                  "rationale": "Synthetic source-based test interpretation, not a live product claim.",
+                  "support": [
+                    {
+                      "url": "https://fixture.example.com/synthetic-heat-3",
+                      "quote": "Synthetic Heat 3 standard is a temperature-controlled soldering station."
+                    }
+                  ]
+                }
+              }
+            ],
+            "price": {
+              "amount": 160,
+              "currency": "SGD",
+              "conditions": [
+                "One unit",
+                "Tax included"
+              ],
+              "conditionsResolved": true,
+              "variant": "standard",
+              "assessment": {
+                "status": "supported",
+                "scope": "exact-variant",
+                "rationale": "Synthetic source-based test interpretation, not a live product claim.",
+                "support": [
+                  {
+                    "url": "https://fixture.example.com/synthetic-heat-3",
+                    "quote": "Synthetic Heat 3 standard costs SGD 160.00 for one unit, tax included."
+                  }
+                ]
+              }
+            },
+            "budget": {
+              "status": "supported",
+              "scope": "exact-variant",
+              "rationale": "Synthetic source-based test interpretation, not a live product claim.",
+              "support": [
+                {
+                  "url": "https://fixture.example.com/synthetic-heat-3",
+                  "quote": "Synthetic Heat 3 standard costs SGD 160.00 for one unit, tax included."
+                }
+              ]
+            }
+          }
+        ],
+        "choice": {
+          "productId": "synthetic-heat-1",
+          "reasons": [
+            {
+              "kind": "field",
+              "name": "identity"
+            },
+            {
+              "kind": "field",
+              "name": "price"
+            }
+          ]
+        },
+        "limitations": [
+          "Entirely synthetic fixed provider material, including every product, claim and price. No inventory or merchant proof. Missing criteria remain unknown."
+        ]
+      }
+    },
+    "status": 200
+  },
+  "interpretation": {
+    "mode": "unavailable",
+    "inputHash": null,
+    "openAIHttpRequests": 0,
+    "ollamaHttpRequests": 0,
+    "consumedTurns": [],
+    "unconsumedTurns": [],
+    "invocations": 0,
+    "suppliedTurns": [],
+    "limitations": []
+  },
+  "turns": [
+    {
+      "index": 0,
+      "action": {
+        "kind": "message",
+        "text": "Find a temperature-controlled soldering station under SGD 180."
+      },
+      "initialPreferences": {
+        "version": 5,
+        "productDescription": "",
+        "criteria": [],
+        "budget": null,
+        "budgetClarified": false,
+        "pendingChange": null,
+        "region": "SG",
+        "responseLength": "concise",
+        "revision": 0
+      },
+      "finalPreferences": {
+        "version": 5,
+        "productDescription": "",
+        "criteria": [],
+        "budget": null,
+        "budgetClarified": false,
+        "pendingChange": null,
+        "region": "SG",
+        "responseLength": "concise",
+        "revision": 0
+      },
+      "response": {
+        "responseVersion": 5,
+        "preferences": {
+          "version": 5,
+          "productDescription": "",
+          "criteria": [],
+          "budget": null,
+          "budgetClarified": false,
+          "pendingChange": null,
+          "region": "SG",
+          "responseLength": "concise",
+          "revision": 0
+        },
+        "notes": [],
+        "kind": "research-unavailable",
+        "message": "I could not safely interpret the complete message, so no part of it was applied. Your accepted preferences and any pending question are unchanged. This message needs additional interpretation, which is unavailable right now.",
+        "reason": "intent-unavailable"
+      },
+      "intentHandling": "unavailable",
+      "providerCalls": 0,
+      "cancelled": false
+    },
+    {
+      "index": 1,
+      "action": {
+        "kind": "message",
+        "text": "Only products suitable for Singapore"
+      },
+      "initialPreferences": {
+        "version": 5,
+        "productDescription": "",
+        "criteria": [],
+        "budget": null,
+        "budgetClarified": false,
+        "pendingChange": null,
+        "region": "SG",
+        "responseLength": "concise",
+        "revision": 0
+      },
+      "finalPreferences": {
+        "version": 5,
+        "productDescription": "",
+        "criteria": [],
+        "budget": null,
+        "budgetClarified": false,
+        "pendingChange": null,
+        "region": "SG",
+        "responseLength": "concise",
+        "revision": 0
+      },
+      "response": {
+        "responseVersion": 5,
+        "preferences": {
+          "version": 5,
+          "productDescription": "",
+          "criteria": [],
+          "budget": null,
+          "budgetClarified": false,
+          "pendingChange": null,
+          "region": "SG",
+          "responseLength": "concise",
+          "revision": 0
+        },
+        "notes": [],
+        "kind": "research-unavailable",
+        "message": "I could not safely interpret the complete message, so no part of it was applied. Your accepted preferences and any pending question are unchanged. This message needs additional interpretation, which is unavailable right now.",
+        "reason": "intent-unavailable"
+      },
+      "intentHandling": "unavailable",
+      "providerCalls": 0,
+      "cancelled": false
+    },
+    {
+      "index": 2,
+      "action": {
+        "kind": "message",
+        "text": "It must have a Type G plug and support 230 V. Show the smaller ones first."
+      },
+      "initialPreferences": {
+        "version": 5,
+        "productDescription": "",
+        "criteria": [],
+        "budget": null,
+        "budgetClarified": false,
+        "pendingChange": null,
+        "region": "SG",
+        "responseLength": "concise",
+        "revision": 0
+      },
+      "finalPreferences": {
+        "version": 5,
+        "productDescription": "",
+        "criteria": [],
+        "budget": null,
+        "budgetClarified": false,
+        "pendingChange": null,
+        "region": "SG",
+        "responseLength": "concise",
+        "revision": 0
+      },
+      "response": {
+        "responseVersion": 5,
+        "preferences": {
+          "version": 5,
+          "productDescription": "",
+          "criteria": [],
+          "budget": null,
+          "budgetClarified": false,
+          "pendingChange": null,
+          "region": "SG",
+          "responseLength": "concise",
+          "revision": 0
+        },
+        "notes": [],
+        "kind": "research-unavailable",
+        "message": "I could not safely interpret the complete message, so no part of it was applied. Your accepted preferences and any pending question are unchanged. This message needs additional interpretation, which is unavailable right now.",
+        "reason": "intent-unavailable"
+      },
+      "intentHandling": "unavailable",
+      "providerCalls": 0,
+      "cancelled": false
+    }
+  ],
+  "events": [
+    {
+      "sequence": 1,
+      "turn": 0,
+      "kind": "app-request",
+      "attemptId": "9a4e41e6-d753-44ad-9587-d05d2ba05d3e",
+      "elapsedMs": 1.27,
+      "body": {
+        "phase": "prepare",
+        "message": "Find a temperature-controlled soldering station under SGD 180.",
+        "preferences": {
+          "version": 5,
+          "productDescription": "",
+          "criteria": [],
+          "budget": null,
+          "budgetClarified": false,
+          "pendingChange": null,
+          "region": "SG",
+          "responseLength": "concise",
+          "revision": 0
+        },
+        "operationId": "1b97379b-5388-47ba-aff9-19d3b61335e2"
+      }
+    },
+    {
+      "sequence": 2,
+      "turn": 0,
+      "kind": "app-response",
+      "attemptId": "9a4e41e6-d753-44ad-9587-d05d2ba05d3e",
+      "elapsedMs": 2.91,
+      "body": {
+        "status": 200,
+        "body": {
+          "responseVersion": 5,
+          "preferences": {
+            "version": 5,
+            "productDescription": "",
+            "criteria": [],
+            "budget": null,
+            "budgetClarified": false,
+            "pendingChange": null,
+            "region": "SG",
+            "responseLength": "concise",
+            "revision": 0
+          },
+          "notes": [],
+          "kind": "research-unavailable",
+          "message": "I could not safely interpret the complete message, so no part of it was applied. Your accepted preferences and any pending question are unchanged. This message needs additional interpretation, which is unavailable right now.",
+          "reason": "intent-unavailable"
+        }
+      }
+    },
+    {
+      "sequence": 3,
+      "turn": 1,
+      "kind": "app-request",
+      "attemptId": "85dcfa55-eb83-446d-8a2c-95b1ca2d8fa1",
+      "elapsedMs": 2.95,
+      "body": {
+        "phase": "prepare",
+        "message": "Only products suitable for Singapore",
+        "preferences": {
+          "version": 5,
+          "productDescription": "",
+          "criteria": [],
+          "budget": null,
+          "budgetClarified": false,
+          "pendingChange": null,
+          "region": "SG",
+          "responseLength": "concise",
+          "revision": 0
+        },
+        "operationId": "9e35d8e1-38af-4cd1-8560-1b4f925a713e"
+      }
+    },
+    {
+      "sequence": 4,
+      "turn": 1,
+      "kind": "app-response",
+      "attemptId": "85dcfa55-eb83-446d-8a2c-95b1ca2d8fa1",
+      "elapsedMs": 3.86,
+      "body": {
+        "status": 200,
+        "body": {
+          "responseVersion": 5,
+          "preferences": {
+            "version": 5,
+            "productDescription": "",
+            "criteria": [],
+            "budget": null,
+            "budgetClarified": false,
+            "pendingChange": null,
+            "region": "SG",
+            "responseLength": "concise",
+            "revision": 0
+          },
+          "notes": [],
+          "kind": "research-unavailable",
+          "message": "I could not safely interpret the complete message, so no part of it was applied. Your accepted preferences and any pending question are unchanged. This message needs additional interpretation, which is unavailable right now.",
+          "reason": "intent-unavailable"
+        }
+      }
+    },
+    {
+      "sequence": 5,
+      "turn": 2,
+      "kind": "app-request",
+      "attemptId": "d00d6852-bda9-4fd9-b310-95056dac5fb5",
+      "elapsedMs": 3.89,
+      "body": {
+        "phase": "prepare",
+        "message": "It must have a Type G plug and support 230 V. Show the smaller ones first.",
+        "preferences": {
+          "version": 5,
+          "productDescription": "",
+          "criteria": [],
+          "budget": null,
+          "budgetClarified": false,
+          "pendingChange": null,
+          "region": "SG",
+          "responseLength": "concise",
+          "revision": 0
+        },
+        "operationId": "00ff5b40-288b-44ff-b9b0-06e6c08e92d4"
+      }
+    },
+    {
+      "sequence": 6,
+      "turn": 2,
+      "kind": "app-response",
+      "attemptId": "d00d6852-bda9-4fd9-b310-95056dac5fb5",
+      "elapsedMs": 4.66,
+      "body": {
+        "status": 200,
+        "body": {
+          "responseVersion": 5,
+          "preferences": {
+            "version": 5,
+            "productDescription": "",
+            "criteria": [],
+            "budget": null,
+            "budgetClarified": false,
+            "pendingChange": null,
+            "region": "SG",
+            "responseLength": "concise",
+            "revision": 0
+          },
+          "notes": [],
+          "kind": "research-unavailable",
+          "message": "I could not safely interpret the complete message, so no part of it was applied. Your accepted preferences and any pending question are unchanged. This message needs additional interpretation, which is unavailable right now.",
+          "reason": "intent-unavailable"
+        }
+      }
+    }
+  ],
+  "network": {
+    "denied": [],
+    "allowedOriginCount": 2,
+    "externalRequests": 0
+  },
+  "cleanup": true,
+  "applicationError": null
+}
