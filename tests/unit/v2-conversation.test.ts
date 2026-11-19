@@ -252,3 +252,17 @@ describe("text cancellation effect", () => {
     expect(quota.settle).toHaveBeenCalledWith(expect.any(String), 0.005, false);
   });
 });
+
+
+describe("complete nonnumeric corrections", () => {
+  it.each([
+    "I meant manual, sorry. No batteries or mains power.",
+    "Actually other brands are fine, but still no Sony.",
+  ])("retains every new hard clause in %s", (message) => {
+    const state = turn(initialConversation(), "Find an unfamiliar hand tool under USD180.").state;
+    const next = turn(state, message);
+    expect(next.kind).toBe("research");
+    expect(next.state.intent.requirements.at(-1)).toMatchObject({ text: message, strength: "hard" });
+    expect(next.state.intent.budget).toEqual(state.intent.budget);
+  });
+});

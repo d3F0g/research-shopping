@@ -215,7 +215,7 @@ export function reduceTurn(previous: ConversationState, input: PrepareInput): Tu
     state.intent.productDescription = state.intent.requirements.map((r) => r.text).join("\n");
     return { state, kind: "research" };
   }
-  if (!newObjective && /^(?:actually|i meant)\b/i.test(text)) {
+  if (!newObjective && /^(?:actually|i meant)\b/i.test(text) && /\d/.test(text)) {
     const correction = /^(?:actually|i meant)[, ]+([a-z][a-z -]{0,39}?)\s+(\d{1,9}(?:\.\d{1,6})?)\s*([a-z%]{0,8})[.!?]?$/i.exec(text);
     if (!correction) return pendingEdit("I kept this complete correction pending. Open Edit preferences to change the intended criterion, or discard this pending change. Your accepted requirements are unchanged.");
     const name = correction[1]!.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
