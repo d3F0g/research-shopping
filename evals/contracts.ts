@@ -68,6 +68,7 @@ export type Material = {
 export type Event = {
   sequence: number;
   turn: number;
+  attemptId?: string;
   kind: "app-request" | "app-response" | "provider-request" | "provider-response" | "admission" | "settlement" | "cancelled" | "provider-aborted" | "reset" | "interpreter-request" | "interpreter-response" | "input-limitation";
   elapsedMs: number;
   body: Json;

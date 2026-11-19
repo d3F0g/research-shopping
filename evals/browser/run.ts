@@ -19,7 +19,7 @@ if (!["report", "strict", "smoke"].includes(values.mode!)) throw new Error("Use 
 const output = resolve(values.out!);
 await mkdir(output, { recursive: true });
 const guard = offlineNetwork();
-const proof = { schemaVersion: 3, feature: "normal-shopping-conversation", commit: execFileSync("git", ["rev-parse", "HEAD"], { encoding: "utf8" }).trim(), worktreeStatus: execFileSync("git", ["status", "--porcelain"], { encoding: "utf8" }).trim(), mode: values.mode, label: "Actual browser, Vite, Hono and Exa SDK HTTP with entirely synthetic fake-key loopback research. Actual local parsing and fixed synthetic optional fallback proposals, with supplemental synthetic citation images. Zero OpenAI/Ollama HTTP and zero Exa credits; no model understanding, real shopping usefulness or merchant verification.", result: "failed", cleanup: false, interrupted: false, actions: [] as string[], checks: [] as { name: string; result: "pass" | "fail" | "unsupported"; expected: string; observed: Json }[], screenshots: [] as string[], traces: [] as string[], browserRequests: [] as Json[], browserResponses: [] as Json[], deniedBrowserRequests: [] as string[], pageErrors: [] as string[], providerEvents: [] as Json[], syntheticImages: [] as Json[], interpretation: null as Json, owned: {} as Record<string, Json> };
+const proof = { schemaVersion: 3, feature: "normal-shopping-conversation", commit: execFileSync("git", ["rev-parse", "HEAD"], { encoding: "utf8" }).trim(), worktreeStatus: execFileSync("git", ["status", "--porcelain"], { encoding: "utf8" }).trim(), mode: values.mode, label: "Actual browser, Vite, Hono and Exa SDK HTTP with entirely synthetic fake-key loopback research. Actual local parsing and fixed synthetic optional fallback proposals, with supplemental synthetic citation images. Harness-only HTTP attempt headers bind event ownership without changing application or SDK request bodies. Zero OpenAI/Ollama HTTP and zero Exa credits; no model understanding, real shopping usefulness or merchant verification.", result: "failed", cleanup: false, interrupted: false, actions: [] as string[], checks: [] as { name: string; result: "pass" | "fail" | "unsupported"; expected: string; observed: Json }[], screenshots: [] as string[], traces: [] as string[], browserRequests: [] as Json[], browserResponses: [] as Json[], deniedBrowserRequests: [] as string[], pageErrors: [] as string[], providerEvents: [] as Json[], syntheticImages: [] as Json[], interpretation: null as Json, owned: {} as Record<string, Json> };
 let browser: Browser | undefined;
 let web: ReturnType<typeof spawn> | undefined;
 let app: Awaited<ReturnType<typeof import("../adapter")["ownedApplication"]>> | undefined;
@@ -53,6 +53,18 @@ async function pageFor(name: string, viewport = { width: 1440, height: 1000 }) {
   await doctor();
   const context = await browser!.newContext({ viewport, colorScheme: "light", reducedMotion: "reduce", serviceWorkers: "block" });
   contexts.push(context);
+  await context.addInitScript(() => {
+    const state = globalThis as typeof globalThis & { fieldnoteEvaluationTurn: number };
+    state.fieldnoteEvaluationTurn = -1;
+    const originalFetch = globalThis.fetch;
+    globalThis.fetch = (input, init) => {
+      const url = new URL(typeof input === "string" ? input : input instanceof URL ? input.href : input.url, location.origin);
+      if (url.origin !== location.origin || url.pathname !== "/api/turn") return originalFetch(input, init);
+      const headers = new Headers(init?.headers ?? (input instanceof Request ? input.headers : undefined));
+      headers.set("x-fieldnote-eval-origin-turn", String(state.fieldnoteEvaluationTurn));
+      return originalFetch(input, { ...init, headers });
+    };
+  });
   await context.tracing.start({ screenshots: true, snapshots: true, sources: true });
   await context.route("**/*", async (route) => {
     const url = new URL(route.request().url());
@@ -62,7 +74,12 @@ async function pageFor(name: string, viewport = { width: 1440, height: 1000 }) {
     } else if (url.href === "https://fixture.example.com/images/synthetic-broken.png") {
       proof.syntheticImages.push({ url: url.href, response: "Deliberate local 404 for load-error fallback" });
       await route.fulfill({ status: 404, body: "Synthetic missing image" });
-    } else if (url.origin !== origin) { proof.deniedBrowserRequests.push(`${url.origin}${url.pathname}`); await route.abort("blockedbyclient"); } else await route.continue();
+    } else if (url.origin !== origin) { proof.deniedBrowserRequests.push(`${url.origin}${url.pathname}`); await route.abort("blockedbyclient"); } else if (url.pathname === "/api/turn") {
+      const headers = route.request().headers();
+      const turn = Number(headers["x-fieldnote-eval-origin-turn"]);
+      delete headers["x-fieldnote-eval-origin-turn"];
+      await route.continue({ headers: { ...headers, ...app!.requestHeaders(turn) } });
+    } else await route.continue();
   });
   const page = await context.newPage();
   page.setDefaultTimeout(8000);
@@ -103,7 +120,7 @@ async function screenshot(page: Page, name: string, subject?: Locator) {
   checked(`screenshot-layout-stable:${name}`, geometry.stable, "Responsive composer reaches stable visible geometry within 2000 ms before capture", geometry);
 }
 async function send(page: Page, text: string, pending = false) {
-  app!.setTurn(nextTurn++);
+  await page.evaluate((turn) => { (globalThis as typeof globalThis & { fieldnoteEvaluationTurn: number }).fieldnoteEvaluationTurn = turn; }, nextTurn++);
   await page.getByLabel("Message", { exact: true }).fill(text);
   await page.getByRole("button", { name: "Send message", exact: true }).click();
   if (!pending) {
@@ -252,7 +269,7 @@ try {
     await regression.setViewportSize({ width: 1440, height: 1000 });
     const pendingQuestion = proof.browserResponses.filter((value) => typeof value === "object" && value !== null && !Array.isArray(value) && value.journey === "powerbank-currency").at(-1) as Record<string, Json>;
     const initialQuestion = ((pendingQuestion.body as Record<string, Json>).preferences as Record<string, Json>).pendingChange as Record<string, Json>;
-    app.setTurn(nextTurn++);
+    await regression.evaluate((turn) => { (globalThis as typeof globalThis & { fieldnoteEvaluationTurn: number }).fieldnoteEvaluationTurn = turn; }, nextTurn++);
     await regression.getByLabel("Message", { exact: true }).fill("SGD");
     await regression.getByLabel("Message", { exact: true }).press("Enter");
     await expect(regression.getByRole("button", { name: "Send message", exact: true })).toBeVisible();

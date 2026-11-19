@@ -4,6 +4,15 @@ import type { Json, Observation, RunReport } from "./contracts";
 import type { PrepareTurnRequest } from "../src/domain/contracts";
 const object = (value: Json) => value as Record<string, Json>;
 export function validateInterpretation(observation: Observation, report: RunReport) {
+  const attempts = new Map(observation.events.filter((event) => event.kind === "app-request").map((event) => [event.attemptId, event]));
+  if (attempts.size !== observation.events.filter((event) => event.kind === "app-request").length) throw new Error("duplicate HTTP attempt identity");
+  for (const event of observation.events) {
+    if (event.kind === "reset" || event.kind === "cancelled") continue;
+    const origin = attempts.get(event.attemptId);
+    if (!event.attemptId || !/^[a-f0-9-]{36}$/.test(event.attemptId) || !origin || origin.turn !== event.turn) throw new Error("event differs from its originating HTTP attempt");
+    if (["admission", "settlement", "provider-request", "provider-response", "provider-aborted"].includes(event.kind) && object(origin.body).phase !== "research") throw new Error("research lifecycle event belongs to a non-research attempt");
+    if ((event.kind === "admission" || event.kind === "settlement") && object(event.body).operationId !== object(origin.body).operationId) throw new Error("research operation differs from originating attempt");
+  }
   const input = observation.interpretation;
   const invocations = observation.events.filter((event) => event.kind === "interpreter-request");
   if (!input || input.openAIHttpRequests !== 0 || input.ollamaHttpRequests !== 0 || input.invocations !== invocations.length) throw new Error("interpretation provenance mismatch");
