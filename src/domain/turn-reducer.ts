@@ -219,12 +219,13 @@ export function reduceTurn(previous: ConversationState, input: PrepareInput): Tu
     const correction = /^(?:actually|i meant)[, ]+([a-z][a-z -]{0,39}?)\s+(\d{1,9}(?:\.\d{1,6})?)\s*([a-z%]{0,8})[.!?]?$/i.exec(text);
     if (!correction) return pendingEdit("I kept this complete correction pending. Open Edit preferences to change the intended criterion, or discard this pending change. Your accepted requirements are unchanged.");
     const name = correction[1]!.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-    const pattern = new RegExp(`\\b${name}\\s+(\\d+(?:\\.\\d+)?)(?![\\d.])`, "gi");
+    const pattern = new RegExp(`\\b${name}\\s+(\\d+(?:\\.\\d+)?)(?!\\d|\\.\\d)`, "gi");
     const targets = state.intent.requirements.flatMap((requirement) => [...requirement.text.matchAll(pattern)].map((match) => ({ requirement, match })));
     if (targets.length !== 1) return pendingEdit(`Which single ${correction[1]} criterion should change? Open Edit preferences to identify it, or discard this pending change. No part was applied.`);
     const { requirement, match } = targets[0]!;
     const valueStart = match.index! + match[0].length - match[1]!.length;
     const suffix = requirement.text.slice(valueStart + match[1]!.length);
+    if (/^\s*(?:[a-z%]{1,8}\s*)?(?:[-–/]|\b(?:to|or|and)\s+\d)/i.test(suffix)) return pendingEdit("The retained attribute contains a range or alternative, rather than one scalar. Open Edit preferences to specify the complete criterion. No part was applied.");
     if (correction[3] && !new RegExp(`^\\s*${correction[3]}\\b`, "i").test(suffix)) return pendingEdit("The requested unit does not match the retained scalar. Open Edit preferences to specify the complete criterion. No part was applied.");
     requirement.text = requirement.text.slice(0, valueStart) + correction[2]! + suffix;
     requirement.originMessageId = userId;

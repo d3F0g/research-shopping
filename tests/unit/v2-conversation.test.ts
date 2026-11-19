@@ -210,11 +210,19 @@ describe("bounded named scalar corrections", () => {
     expect(next.state.intent.productDescription).toContain("opening angle 140 degrees");
     expect(next.state.intent.budget).toEqual(state.intent.budget);
   });
+  it("updates a scalar immediately before sentence punctuation", () => {
+    const state = turn(initialConversation(), "I need an archival cradle with opening angle 120.").state;
+    const next = turn(state, "Actually opening angle 140.");
+    expect(next.kind).toBe("research");
+    expect(next.state.intent.productDescription).toContain("opening angle 140.");
+  });
   it.each([
     ["Find a stand with height 42 cm. It must have height 55 cm when extended.", "Actually height 43 cm."],
     ["Find a stand with height 42 cm.", "Actually width 43 cm."],
     ["Find a stand with height 42 cm.", "Actually height 43 kg."],
     ["Find a stand with height 42 cm.", "Actually height 43 cm and remove the budget."],
+    ["Find a stand with height 42 to 55 cm.", "Actually height 43."],
+    ["Find a stand with height 42 cm or 55 cm.", "Actually height 43 cm."],
   ])("retains a complete ambiguous or unsupported scalar correction", (request, message) => {
     const state = turn(initialConversation(), request).state;
     const next = turn(state, message);
