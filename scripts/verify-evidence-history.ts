@@ -52,7 +52,16 @@ try {
       await cdp.send("Network.emulateNetworkConditionsByRule", { matchedNetworkConditions: [{ urlPattern: `${runtime.origin}/api/account`, latency: 5500, downloadThroughput: -1, uploadThroughput: -1 }] });
     }
     try {
-      await page.goto(runtime.origin).then(() => initialEvents.push({ event: "page-loaded", at: Date.now() }));
+      const [initialResponse] = await Promise.all([
+        page.waitForResponse((response) => response.url() === `${runtime.origin}/api/account` && response.request().method() === "GET"),
+        page.goto(runtime.origin).then(() => initialEvents.push({ event: "page-loaded", at: Date.now() })),
+      ]);
+      assert.equal(initialResponse.status(), 200);
+      const initial = await initialResponse.json();
+      assert.equal(initial.status, "signed-in");
+      assert.deepEqual(initial.workspace.state.messages, old.state.messages);
+      assert.equal(initial.workspace.pendingPreparedId, null);
+      initialEvents.push({ event: "account-validated", at: Date.now() });
       await expect(page.getByText(historicalName, { exact: true }).first()).toBeVisible();
       await writeFile(`${directory}/${viewport.width}-initial.json`, JSON.stringify({ status: "passed", accountLatencyMs: viewport.width === 390 ? 5500 : 0, events: initialEvents }, null, 2) + "\n");
     } catch (error) {
