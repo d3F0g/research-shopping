@@ -38,7 +38,7 @@ export function exportPackets(report: RunReport, limit: number, anchors: Anchor[
       conversation.push({ role: "assistant", text: turn.response?.message ?? turn.response?.answer ?? "No completed assistant response was observed.", products: research.products ?? [], choice: research.choice ?? null, structuredPreferences: { productDescription: turn.finalPreferences.productDescription, budget: turn.finalPreferences.budget, criteria: turn.finalPreferences.criteria, responseLength: turn.finalPreferences.responseLength }, providerDispatchCount: turn.providerCalls });
       if (Array.isArray(research.sources)) sources.push(...research.sources);
     }
-    add(conversation, sources, observation.material.label, { caseId: row.id, calibrationId: null, referenceScores: null, disputes: null });
+    add(conversation, sources, [observation.material.label, ...observation.material.provenance.filter((value) => value.startsWith("Per-turn suitability") || value.startsWith("Input suitability gap"))].join(" "), { caseId: row.id, calibrationId: null, referenceScores: null, disputes: null });
   }
   for (const anchor of anchors) add({ userTurns: anchor.userTurns, assistantBeforeFinalTurn: anchor.assistantBeforeFinalTurn ?? null, observedFinalResponse: anchor.observedFinalResponse, observedEvents: anchor.observedEvents ?? [] }, anchor.heldEvidence ?? [], "Evaluation-author example. Human review pending.", { caseId: anchor.id, calibrationId: anchor.id, referenceScores: anchor.referenceScores, disputes: anchor.disagreementToRecord ?? null });
   packets.sort((a, b) => a.label.localeCompare(b.label));

@@ -86,7 +86,7 @@ export function scenarioMaterial(recipe: string, scenarioId: string): Material {
   if (recipe === "delayed") return make(recipe, base, 200, 250);
   if (recipe === "mixed-fit") {
     if (products[1]) {
-      const quote = `${products[1].name} ${products[1].variant} is not suitable for the intended use described for this product.`;
+      const quote = `${products[1].name} ${products[1].variant} is a non-functional display model and cannot be used as an operational product.`;
       sources[1]!.text += `\n${quote}`;
       products[1].requestMatch = { status: "contradicted", scope: "exact-variant", rationale: "Synthetic negative fit observation. The exact use remains a semantic assessment.", support: [{ url: sources[1]!.url!, quote }] };
     }
@@ -131,6 +131,7 @@ export function scenarioMaterial(recipe: string, scenarioId: string): Material {
     throw new Error(`Unimplemented dataset provider recipe ${recipe}`);
   }
   const input = make(`${recipe}:${scenarioId}`, base);
+  if (["FN-CU-005", "FN-CD-002", "FN-UI-005", "FN-RT-004"].includes(scenarioId)) input.provenance.push("Per-turn suitability limitation: this fixed input describes the final corrected objective and can be irrelevant to earlier turns. Earlier-turn product relevance and discovery usefulness are not assessable from this substitute.");
   input.provenance.push(`Original independent provider recipe ${recipe}; fixed profile ${profile ? scenarioId : "powerbank"}.`, "Synthetic claims, prices and availability statements remain visibly labeled. No live research or inventory.");
   if (!profile && scenarioId !== "FN-CU-001" && scenarioId !== "FN-PE-002") input.provenance.push("Input suitability gap: no matching product profile. Relevance and recommendation usefulness are unassessed, never counted as a shopping success.");
   return input;

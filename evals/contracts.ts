@@ -128,7 +128,7 @@ export type RunReport = {
   configuration: { provider: string; model: null; exaCreditsConsumed: 0; composition: string };
   cases: CaseResult[];
   summary: {
-    total: number; executed: number; passed: number; failed: number; blocked: number; unsupported: number; infrastructureErrors: number; criticalFailures: number;
+    total: number; executed: number; passed: number; failed: number; blocked: number; unsupported: number; infrastructureErrors: number; criticalFailures: number; criticalScenarios: number; observedTurns: number; observedClarifications: number;
     categories: Record<string, Metric>;
     metrics: Record<string, Metric>;
     acceptance: "pass" | "fail" | "inconclusive";
