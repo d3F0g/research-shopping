@@ -1,27 +1,11 @@
-# Research requests
+# Research lifecycle
 
-Users describe a shopping objective in chat. The assistant returns an ordinary message, a contextual question, a fixture shortlist or an honest limitation.
+V2 uses POST `/api/turn` twice for a shopping request. `phase: prepare` validates and stores intent. A prepared identifier authorizes `phase: research`. Ordinary messages, clarification answers that remain incomplete, held comparisons, and presentation changes do not spend a provider call.
 
-## Drive a request
+Use the explicit `tests/helpers/browser-server.ts` composition for automation. It runs Hono, conversation state, executor, Exa SDK, and normalization against owned loopback HTTP. Fixture data stays visibly labeled. The helper counts `/api/test-stats` before and after actions. Those are local substitute calls, never paid usage.
 
-Start at the owned app in a fresh context. Submit `Wireless headphones for long flights, under S$500` through the composer. Observe the actual POST `/api/turn` response. Require headphones, SGD offers at most 500, fixture labels, and recommendation content inside its assistant turn. No category or budget question is needed for this message.
+Verify a complete unfamiliar product request can progress without a fixed catalog gate. A hard requirement missing evidence remains unknown. Both budget bounds, currency, conditions, variant, identity, relevance, and hard-fit evidence govern eligibility. A real product alone does not prove a suitable recommendation.
 
-Exercise each visible starter separately if starters changed. A starter must submit its displayed intent rather than silently installing unrelated preferences. It is an optional shortcut, not a form prerequisite.
+Keep provider-error, empty, invalid-response, timeout, missing configuration, cancellation, quota, duplicate dispatch, and stale preparation cases distinct. No error path may select a fixture. Tests for the actual SDK use local HTTP transports. Check `tests/api/v2-exa.test.ts` and `tests/api/v2-app.test.ts` for the current covered branches.
 
-In a fresh conversation, submit `Something good for work`. Require a targeted material-preference question and no fabricated product cards. Use its quick choice to continue. Submit `Noise cancelling headphones under S$100` and require the honest no-match response with the 100 cap retained. Submit a supported laptop request and require laptop results or an explicit limitation.
-
-Submit an ordinary greeting or acknowledgment. Require a normal assistant message with no new shortlist or invented activity. Unsupported categories and requirements must still receive an honest clarification.
-
-## Retain the conversation
-
-Submit a second natural shopping message. Require both submitted messages and accepted assistant responses to remain visible in history. Current results must use the latest accepted preferences. Typing must cancel obsolete work without deleting completed exchanges.
-
-Scope each `.product-card`, evidence, comparison and selection action to its message. A global first-card locator can select an earlier shortlist. Use the latest actionable turn for current-behavior assertions.
-
-## Recorded activity
-
-The transport returns complete JSON. While waiting, require no invented tool stages, timings, reasoning or recorded outcomes. After the response arrives, open its actual activity control and compare every visible provider/outcome with `toolActivity` in that response. Ordinary messages and clarifications with an empty array have no recorded activity control.
-
-## Limits
-
-Only headphones and laptops are supported. Fixture prices, claims and stock remain labeled as samples with fixed timestamps. A current screenshot date or Exa retrieval timestamp cannot make those fixtures current evidence. No source excerpt establishes merchant inventory.
+Activity reflects pending HTTP work. Complete JSON is not token streaming or reasoning. Preserve the failed request and accepted intent with honest recovery and no automatic retry. Live usefulness requires separately authorized genuine Exa evidence and independent product QA.
