@@ -5,11 +5,11 @@ import type {
   ResearchTurns,
   ResearchUnavailableReason,
 } from "../domain/research";
-import { applyIntentActions, type IntentInterpreter } from "../domain/intent-actions";
+import { applyIntentActions, parseLocalIntentActions, type IntentInterpreter } from "../domain/intent-actions";
 import type { ResearchQuota } from "./research-quota";
 
 const unavailableMessages: Record<ResearchUnavailableReason, string> = {
-  "intent-unavailable": "I could not interpret that request right now. Your accepted preferences and any pending answer are retained. Try again after intent interpretation is available.",
+  "intent-unavailable": "I could not safely interpret the complete message. Your accepted preferences and any pending question are unchanged. For a new search, submit the product on its own, then add requirements through the preference controls before requesting research.",
   "not-configured":
     "Live research is not configured. No product results are available.",
   disabled:
@@ -61,6 +61,10 @@ export function createResearchTurns(dependencies: {
               : resolveLocalIntent(request.message, request.preferences)
           : { preferences: request.preferences, notes: [] };
       if (!update && request.phase === "prepare") {
+        const localActions = parseLocalIntentActions(request.message, request.preferences);
+        if (localActions) update = applyIntentActions(request.preferences, request.message, localActions);
+      }
+      if (!update && request.phase === "prepare") {
         try {
           const result = await dependencies.interpretIntent?.(request, signal);
           signal.throwIfAborted();
@@ -68,7 +72,7 @@ export function createResearchTurns(dependencies: {
         } catch (error) {
           if (signal.aborted) throw error;
         }
-        if (!update) return { responseVersion: 5, kind: "research-unavailable", reason: "intent-unavailable", message: unavailableMessages["intent-unavailable"], preferences: request.preferences, notes: [] };
+        if (!update) return { responseVersion: 5, kind: "research-unavailable", reason: "intent-unavailable", message: request.preferences.pendingChange ? `I could not safely apply that message. Your accepted preferences and pending question are unchanged. ${request.preferences.pendingChange.explanation}` : unavailableMessages["intent-unavailable"], preferences: request.preferences, notes: [] };
       }
       if (!update) throw new Error("Missing intent update");
       const preferences = update.preferences;

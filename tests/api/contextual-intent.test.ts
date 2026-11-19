@@ -22,7 +22,7 @@ describe("contextual request preparation", () => {
     const result = await submitTurn(turns, { ...request(answer, first.preferences), questionId: first.preferences.pendingChange!.id }, signal());
     expect(result).toMatchObject({ kind: "research-unavailable", reason: "empty", preferences: { budget: { currency: "SGD", minimum: 30, amount: 40 }, pendingChange: null } });
     expect(seen).toHaveLength(1);
-    expect(interpretIntent).toHaveBeenCalledTimes(1);
+    expect(interpretIntent).not.toHaveBeenCalled();
     expect(seen[0]!.productDescription).toBe(message);
   });
   it("preserves a resolved pending answer with the interpreter absent", async () => {
