@@ -1,4 +1,4 @@
-import { hash } from "../hash";
+import { materialPayloadHash } from "../hash";
 import type { Json, Material } from "../contracts";
 
 const url = "https://fixture.example.com/powerbank";
@@ -12,7 +12,7 @@ const body = {
 };
 function make(id: string, payload: unknown, status = 200, delayMs?: number): Material {
   const json = JSON.parse(JSON.stringify(payload)) as Json;
-  return { id, kind: "synthetic", label: "Explicit synthetic provider double. Not genuine Exa research.", capturedAt: null, provenance: ["Independently fixed test input before application execution", "No current product or market claim"], sha256: hash({ payload: json, status, delayMs: delayMs ?? 0 }), body: json, status, ...(delayMs ? { delayMs } : {}) };
+  return { id, kind: "synthetic", label: "Explicit synthetic provider double. Not genuine Exa research.", capturedAt: null, provenance: ["Independently fixed test input before application execution", "No current product or market claim"], sha256: materialPayloadHash({ body: json, status, delayMs }), body: json, status, ...(delayMs ? { delayMs } : {}) };
 }
 export function material(id: "powerbank" | "slow" | "empty"): Material {
   if (id === "empty") return make(id, { answer: { products: [], choice: null, limitations: ["Synthetic empty evidence"] }, citations: [], costDollars: { total: 0.005 } });

@@ -6,7 +6,7 @@ import { makeReport } from "../report";
 
 const anchor: Anchor = { id: "calibration", userTurns: ["Find binoculars", "Compare the first and third"], heldEvidence: ["Synthetic A weighs 400 g. Synthetic C weighs 300 g."], observedFinalResponse: "C is lighter; other performance remains unknown.", referenceScores: Object.fromEntries(dimensions.map((dimension) => [dimension, dimension === "relevance" ? null : 3])) };
 async function fixture() {
-  const report = await makeReport([], "synthetic-test-dataset");
+  const report = await makeReport([], []);
   const exported = exportPackets(report, 1, [anchor]);
   const raw = { schemaVersion: 1, judge: { identity: "synthetic-test-judge", provider: "local-test-double", independentOfImplementation: true, identityEvidence: "Explicit synthetic contract test, no real judge claim.", implementationAuthorIdentity: "synthetic-implementation-author", calibrationStatus: "pending-human-review" }, judgments: exported.packets.map((packet) => ({ label: packet.label, packetHash: packet.packetHash, scores: Object.fromEntries(dimensions.map((dimension) => [dimension, { status: "not-observable", score: null, rationale: "Synthetic contract test deliberately leaves this dimension unassessed.", uncertain: true }])), criticalFailures: [], overall: "uncertain" })) };
   return { ...exported, raw };

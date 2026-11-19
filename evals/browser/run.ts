@@ -8,7 +8,8 @@ import { parseArgs } from "node:util";
 import { chromium, expect, type Browser, type BrowserContext, type Page } from "@playwright/test";
 import { offlineNetwork } from "../network";
 import { scenarioMaterial } from "../inputs/materials";
-import { hash } from "../hash";
+import { materialPayloadHash } from "../hash";
+import { stableComposerGeometry } from "./layout";
 import type { Json } from "../contracts";
 
 const { values } = parseArgs({ options: { out: { type: "string", default: "artifacts/product-evals/browser" }, mode: { type: "string", default: "report" } } });
@@ -69,8 +70,10 @@ async function pageFor(name: string, viewport = { width: 1440, height: 1000 }) {
 }
 async function screenshot(page: Page, name: string) {
   const filename = `${name}.png`;
+  const geometry = await stableComposerGeometry(page);
   await page.screenshot({ path: join(output, filename), animations: "disabled" });
   proof.screenshots.push(filename);
+  checked(`screenshot-layout-stable:${name}`, geometry.stable, "Responsive composer reaches stable visible geometry within 2000 ms before capture", geometry);
 }
 async function send(page: Page, text: string, pending = false) {
   app!.setTurn(proof.browserRequests.length);
@@ -83,16 +86,19 @@ async function send(page: Page, text: string, pending = false) {
   }
 }
 async function composerGeometry(page: Page) {
-  const viewport = page.viewportSize()!;
-  const box = await page.getByLabel("Message", { exact: true }).boundingBox();
-  const width = await page.evaluate(() => document.documentElement.scrollWidth);
-  checked("composer-visible-no-horizontal-overflow", Boolean(box && box.x >= 0 && box.y >= 0 && box.y + box.height <= viewport.height && width <= viewport.width), "Composer stays within the viewport with no horizontal page overflow", { box: box as unknown as Json, viewport, documentWidth: width });
+  const geometry = await stableComposerGeometry(page);
+  if (!geometry.stable) {
+    const filename = `unstable-composer-${proof.screenshots.length}.png`;
+    await page.screenshot({ path: join(output, filename), animations: "disabled" });
+    proof.screenshots.push(filename);
+  }
+  checked("composer-visible-no-horizontal-overflow", geometry.stable && geometry.fits, "Composer reaches stable visible geometry with no overflow within 2000 ms", geometry);
 }
 try {
   const webPort = await freePort();
   const input = scenarioMaterial("supported", "FN-RT-002");
   input.delayMs = 650;
-  input.sha256 = hash({ body: input.body, status: input.status, delayMs: input.delayMs });
+  input.sha256 = materialPayloadHash(input);
   const { ownedApplication } = await import("../adapter");
   app = await ownedApplication(input, guard, { webPort });
   origin = `http://127.0.0.1:${webPort}`;

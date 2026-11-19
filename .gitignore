@@ -158,3 +158,15 @@ artifacts/screenshots/web-research-mobile.png
 artifacts/product-evals/current/
 artifacts/product-evals/ci/
 artifacts/product-evals/ci-browser/
+artifacts/product-evals/first/
+artifacts/product-evals/root-*/
+artifacts/product-evals/candidate-*/
+artifacts/product-evals/browser-first/
+artifacts/product-evals/comparison-*/
+artifacts/product-evals/cli-proof-*/
+artifacts/product-evals/independent-qa/
+artifacts/product-evals/independent-security/
+artifacts/product-evals/judge-demo/
+artifacts/product-evals/verification-repaired/
+artifacts/product-evals/interrupted-smoke/
+artifacts/product-evals/integrity-fix-owner/

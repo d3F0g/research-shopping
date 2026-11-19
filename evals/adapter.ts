@@ -1,6 +1,6 @@
 import { once } from "node:events";
 import { randomUUID } from "node:crypto";
-import { createServer } from "node:http";
+import { createServer, type ServerResponse } from "node:http";
 import type { AddressInfo } from "node:net";
 import { serve } from "@hono/node-server";
 import { defaultIntent, type ShoppingIntent } from "../src/domain/contracts";
@@ -18,7 +18,10 @@ export async function ownedApplication(input: Material, guard: Guard, options: {
   let currentTurn = 0;
   let providerCalls = 0;
   const record = (kind: Event["kind"], body: unknown) => events.push({ sequence: events.length + 1, turn: currentTurn, kind, elapsedMs: Math.round((performance.now() - started) * 100) / 100, body: JSON.parse(JSON.stringify(body)) as Json });
+  const providerResponses = new Set<ServerResponse>();
   const provider = createServer((request, response) => {
+    providerResponses.add(response);
+    response.once("close", () => providerResponses.delete(response));
     let body = "";
     request.on("data", (chunk) => { body += String(chunk); });
     request.on("end", () => {
@@ -53,7 +56,13 @@ export async function ownedApplication(input: Material, guard: Guard, options: {
     async settle(operationId: string, cost: number | null, successful: boolean) { record("settlement", { operationId, cost, successful, label: "Synthetic provider-reported amount, no billable request" }); },
   };
   let app: ReturnType<typeof createApp>;
-  const api = serve({ fetch: (request, env) => app.fetch(request, env), hostname: "127.0.0.1", port: 0 });
+  const appRequests = new Set<Promise<Response>>();
+  const api = serve({ fetch: (request, env) => {
+    const pending = Promise.resolve(app.fetch(request, env));
+    appRequests.add(pending);
+    void pending.then(() => appRequests.delete(pending), () => appRequests.delete(pending));
+    return pending;
+  }, hostname: "127.0.0.1", port: 0 });
   await once(api, "listening");
   const apiPort = (api.address() as AddressInfo).port;
   const origin = `http://127.0.0.1:${apiPort}`;
@@ -72,9 +81,11 @@ export async function ownedApplication(input: Material, guard: Guard, options: {
       return TurnTransportResponseSchema.parse(raw);
     },
     async close() {
+      const responsesClosed = Promise.all([...providerResponses].map((response) => once(response, "close")));
       if ("closeAllConnections" in api) api.closeAllConnections();
       provider.closeAllConnections();
-      await Promise.all([new Promise<void>((resolve, reject) => api.close((error) => error ? reject(error) : resolve())), new Promise<void>((resolve, reject) => provider.close((error) => error ? reject(error) : resolve()))]);
+      await Promise.all([responsesClosed, new Promise<void>((resolve, reject) => api.close((error) => error ? reject(error) : resolve())), new Promise<void>((resolve, reject) => provider.close((error) => error ? reject(error) : resolve()))]);
+      await Promise.allSettled([...appRequests]);
       guard.forget(origin);
       guard.forget(providerOrigin);
     },
@@ -139,5 +150,5 @@ export async function observe(scenario: PublicScenario, input: Material, guard: 
     await app.close();
     cleanup = true;
   }
-  return { scenarioId: scenario.id, initialPreferences, finalPreferences: preferences, material: input, turns, events: app.events, network: guard.snapshot(), cleanup, applicationError };
+  return structuredClone({ scenarioId: scenario.id, initialPreferences, finalPreferences: preferences, material: input, turns, events: app.events, network: guard.snapshot(), cleanup, applicationError });
 }

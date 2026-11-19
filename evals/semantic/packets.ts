@@ -2,6 +2,7 @@ import { randomBytes } from "node:crypto";
 import { z } from "zod";
 import { hash } from "../hash";
 import type { Json, RunReport } from "../contracts";
+import { validateReport } from "../report";
 import { dimensions } from "./rubric";
 
 export const ScoreSchema = z.discriminatedUnion("status", [
@@ -19,6 +20,7 @@ export type Manifest = { schemaVersion: 1; applicationCommit: string; reportRunI
 export type Anchor = { id: string; userTurns: string[]; assistantBeforeFinalTurn?: string; observedFinalResponse: string; observedEvents?: string[]; heldEvidence?: string[]; referenceScores: Record<string, number | null>; disagreementToRecord?: string };
 function object(value: Json | undefined): Record<string, Json> { return value && typeof value === "object" && !Array.isArray(value) ? value : {}; }
 export function exportPackets(report: RunReport, limit: number, anchors: Anchor[] = []) {
+  validateReport(report);
   const packets: Packet[] = [];
   const manifest: Manifest = { schemaVersion: 1, applicationCommit: report.application.commit, reportRunId: report.runId, entries: [] };
   const add = (conversation: Json, supportingSources: Json, materialLabel: string, entry: Omit<Manifest["entries"][number], "label" | "packetHash">) => {

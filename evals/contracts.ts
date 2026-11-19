@@ -1,5 +1,5 @@
 export const DATASET_VERSION = "1.0.0";
-export const ASSERTION_VERSION = "1.0.0";
+export const ASSERTION_VERSION = "2.0.0";
 export const ADAPTER_VERSION = "normal-v4.1";
 export const categories = ["conversational-understanding", "preference-extraction", "contextual-clarification", "budget-currency", "preference-retention", "corrections-dissatisfaction", "research-selection", "product-relevance", "comparison-quality", "evidence-honesty", "chat-interaction", "recovery-safety"] as const;
 export type Category = typeof categories[number];
@@ -38,7 +38,8 @@ export type Requirement =
   | { kind: "cancelled" }
   | { kind: "unassessed"; capability: string; reason: string };
 export type Milestone = { after: number; requirements: Requirement[] };
-export type Scenario = {
+export type CriterionChange = { after: number; priorWordingIncludes: string; reason: string };
+export type ScenarioContract = {
   id: string;
   revision: number;
   category: Category;
@@ -47,9 +48,11 @@ export type Scenario = {
   provider: string;
   expectedBehavior: string[];
   milestones: Milestone[];
+  criterionChanges?: CriterionChange[];
   review: { status: "author-drafted" | "independently-reviewed"; reference: string };
   issue?: number;
 };
+export type Scenario = ScenarioContract;
 export type PublicScenario = Pick<Scenario, "id" | "actions" | "provider">;
 export type Material = {
   id: string;
@@ -101,6 +104,8 @@ export type Check = {
 export type CaseResult = {
   id: string;
   category: Category;
+  contract: ScenarioContract;
+  material: Material;
   scenarioHash: string;
   expectationHash: string;
   materialHash: string;
@@ -115,13 +120,15 @@ export type CaseResult = {
 };
 export type Metric = { passed: number; assessed: number; unassessed: number; rate: number | null };
 export type RunReport = {
-  schemaVersion: 1;
+  schemaVersion: 2;
+  datasetContracts: ScenarioContract[];
   createdAt: string;
   runId: string;
   datasetVersion: string;
   datasetHash: string;
   assertionVersion: string;
   adapterVersion: string;
+  implementationInputs: { grading: { path: string; text: string }[]; adapter: { path: string; text: string }[] };
   implementationHashes: { grading: string; adapter: string; suite: string };
   application: { commit: string; tree: string; dirty: boolean; sourceHash: string };
   suite: { commit: string; dirty: boolean };

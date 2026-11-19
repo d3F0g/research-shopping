@@ -1,9 +1,18 @@
+import { isIP } from "node:net";
+import { hash } from "./hash";
 import type { Check, Json, Observation, Requirement, Scenario, TurnObservation } from "./contracts";
 
 function record(value: Json | undefined): Record<string, Json> {
   return value && typeof value === "object" && !Array.isArray(value) ? value : {};
 }
 function list(value: Json | undefined): Json[] { return Array.isArray(value) ? value : []; }
+function promptContainsIntent(prompt: string, intent: TurnObservation["finalPreferences"]): boolean {
+  return prompt.split("\n").some((line) => {
+    const start = line.indexOf("{");
+    if (start < 0) return false;
+    try { return hash(JSON.parse(line.slice(start))) === hash(intent); } catch { return false; }
+  });
+}
 function exact(value: Json | undefined): boolean {
   const item = record(value);
   return item.status === "supported" && item.scope === "exact-variant";
@@ -11,8 +20,11 @@ function exact(value: Json | undefined): boolean {
 export function safeSourceUrl(value: string): boolean {
   try {
     const url = new URL(value);
-    const host = url.hostname.toLowerCase();
-    return url.protocol === "https:" && !url.username && !url.password && !url.port && host.includes(".") && !host.endsWith(".local") && !host.endsWith(".localhost") && !/^(?:\d+\.){3}\d+$/.test(host) && !host.includes(":") && host !== "localhost";
+    const authority = value.match(/^https:\/\/([^/?#]+)/i)?.[1] ?? "";
+    const host = url.hostname.toLowerCase().replace(/\.$/, "");
+    const labels = host.split(".");
+    const specialUse = ["localhost", "local", "internal", "localdomain", "home", "lan", "invalid", "test", "example", "onion", "arpa", "alt"];
+    return authority.length > 0 && !/[\u0000-\u0020\u007f]/.test(value) && !value.includes("\\") && url.protocol === "https:" && !authority.includes("@") && !authority.includes(":") && !url.username && !url.password && !url.port && !isIP(host) && host.length <= 253 && labels.length >= 2 && labels.every((label) => /^[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?$/.test(label)) && !specialUse.some((ending) => host === ending || host.endsWith(`.${ending}`));
   } catch { return false; }
 }
 export function literalMoney(quote: string, currency: string, amount: number): boolean {
@@ -32,7 +44,7 @@ function checkRequirement(requirement: Requirement, turn: TurnObservation, obser
     case "preserve": {
       const previous = observation.turns[requirement.from]?.finalPreferences;
       const fields = requirement.fields;
-      return { ok: Boolean(previous) && fields.every((field) => JSON.stringify(prefs[field]) === JSON.stringify(previous![field])), expected: previous ? Object.fromEntries(fields.map((field) => [field, previous[field]])) as Json : null, observed: Object.fromEntries(fields.map((field) => [field, prefs[field]])) as Json };
+      return { ok: Boolean(previous) && fields.every((field) => hash(prefs[field]) === hash(previous![field])), expected: previous ? Object.fromEntries(fields.map((field) => [field, previous[field]])) as Json : null, observed: Object.fromEntries(fields.map((field) => [field, prefs[field]])) as Json };
     }
     case "criterion": return { ok: prefs.criteria.some((criterion) => criterion.strength === requirement.strength && normalize(criterion.wording).includes(normalize(requirement.includes)) && (requirement.meaning !== "exclude" || /\b(?:no|exclude|avoid|without|excluding)\b/i.test(criterion.wording) && !/\b(?:not|don.t)\s+(?:exclude|avoid)/i.test(criterion.wording)) && (requirement.meaning !== "only" || /\bonly\b/i.test(criterion.wording) && !/\bnot\s+only\b/i.test(criterion.wording))), expected: { wordingIncludes: requirement.includes, strength: requirement.strength, meaning: requirement.meaning ?? "literal-phrase-only" }, observed: prefs.criteria as Json };
     case "response": return { ok: requirement.kinds.includes(String(turn.response?.kind)) && (!requirement.reasons || requirement.reasons.includes(String(turn.response?.reason ?? turn.response?.question))), expected: { kinds: requirement.kinds, ...(requirement.reasons ? { reasons: requirement.reasons } : {}) }, observed: { kind: turn.response?.kind ?? null, reason: turn.response?.reason ?? turn.response?.question ?? null } };
@@ -51,6 +63,29 @@ function checkRequirement(requirement: Requirement, turn: TurnObservation, obser
   }
 }
 function evidence(observation: Observation, turn: number): number[] { return observation.events.filter((event) => event.turn === turn).map((event) => event.sequence); }
+function assessmentFields(product: Record<string, Json>): Map<string, Record<string, Json>> {
+  return new Map([
+    ["identity", record(product.identity)], ["requestMatch", record(product.requestMatch)],
+    ...list(product.criteria).map((item): [string, Record<string, Json>] => [`criterion:${record(item).criterionId}`, record(record(item).assessment)]),
+    ...list(product.attributes).map((item): [string, Record<string, Json>] => [`attribute:${record(item).name}`, record(record(item).assessment)]),
+    ["price", record(record(product.price).assessment)], ["budget", record(product.budget)],
+  ]);
+}
+function hardCriterionRetention(scenario: Scenario, observation: Observation): Check[] {
+  let retained = observation.initialPreferences.criteria.filter((criterion) => criterion.strength === "hard");
+  const checks: Check[] = [];
+  for (const turn of observation.turns) {
+    const changes = scenario.criterionChanges?.filter((change) => change.after === turn.index) ?? [];
+    retained = turn.action.kind === "reset" ? [] : retained.filter((prior) => !changes.some((change) => normalize(prior.wording).includes(normalize(change.priorWordingIncludes))));
+    checks.push({ id: `hard-criterion-retention:${turn.index}`, turn: turn.index, critical: true,
+      status: retained.every((prior) => turn.finalPreferences.criteria.some((current) => current.strength === "hard" && normalize(current.wording) === normalize(prior.wording))) ? "pass" : "fail",
+      expected: structuredClone(retained) as Json, observed: turn.finalPreferences.criteria as Json, evidence: evidence(observation, turn.index) });
+    for (const criterion of turn.finalPreferences.criteria.filter((item) => item.strength === "hard")) {
+      if (!retained.some((prior) => normalize(prior.wording) === normalize(criterion.wording))) retained.push(criterion);
+    }
+  }
+  return checks;
+}
 function checksForResearch(observation: Observation, turn: TurnObservation): Check[] {
   const snapshot = record(turn.response?.research);
   if (!Object.keys(snapshot).length) return [];
@@ -67,6 +102,17 @@ function checksForResearch(observation: Observation, turn: TurnObservation): Che
   emit("fabricated-products", products.every((product) => upstreamProducts.some((item) => item.id === product.id && item.name === product.name && item.variant === product.variant)), "Every published identity originates in the fixed provider input", products.map((product) => ({ id: product.id ?? null, name: product.name ?? null, variant: product.variant ?? null })));
   for (const product of products) {
     const upstreamProduct = upstreamProducts.find((item) => item.id === product.id);
+    if (upstreamProduct) {
+      const published = assessmentFields(product);
+      for (const [field, prior] of assessmentFields(upstreamProduct)) {
+        if (!["contradicted", "conflict"].includes(String(prior.status))) continue;
+        const passages = list(prior.support).map(record).filter((span) => typeof span.url === "string" && typeof span.quote === "string" && upstreamSources.some((source) => source.url === span.url && typeof source.text === "string" && source.text.includes(String(span.quote))));
+        const current = published.get(field) ?? {};
+        const preserved = passages.length > 0 && (current.status === prior.status || prior.status === "contradicted" && current.status === "conflict") && passages.every((span) => list(current.support).map(record).some((support) => support.quote === span.quote && sourceMap.get(String(support.sourceId))?.url === span.url && String(sourceMap.get(String(support.sourceId))?.text ?? "").includes(String(span.quote))));
+        const blocksChoice = field === "identity" || field === "requestMatch" || field.startsWith("criterion:") && turn.finalPreferences.criteria.some((criterion) => criterion.strength === "hard" && field === `criterion:${criterion.id}`) || (field === "price" || field === "budget") && turn.finalPreferences.budget !== null;
+        emit(`adverse-evidence:${product.id}:${field}`, preserved && (!blocksChoice || record(snapshot.choice).productId !== product.id), "Source-linked adverse status and complete passages survive publication. Adverse identity, request or applicable hard fit prevents recommendation", { supplied: prior, published: current, blocksChoice, chosen: record(snapshot.choice).productId === product.id });
+      }
+    }
     const assessments = [product.identity, product.requestMatch, ...list(product.criteria).map((item) => record(item).assessment), ...list(product.attributes).map((item) => record(item).assessment), ...(product.price ? [record(product.price).assessment] : []), ...(product.budget ? [product.budget] : [])];
     const support = assessments.flatMap((item) => list(record(item).support).map(record));
     emit(`quote-containment:${product.id}`, support.every((span) => {
@@ -97,7 +143,7 @@ function checksForResearch(observation: Observation, turn: TurnObservation): Che
   return result;
 }
 export function grade(scenario: Scenario, observation: Observation): Check[] {
-  const checks: Check[] = [];
+  const checks: Check[] = hardCriterionRetention(scenario, observation);
   for (const milestone of scenario.milestones) {
     const turn = observation.turns[milestone.after];
     if (!turn) {
@@ -119,9 +165,10 @@ export function grade(scenario: Scenario, observation: Observation): Check[] {
       const query = String(payload.query ?? "");
       const prompt = String(payload.systemPrompt ?? "");
       const prefs = turn.finalPreferences;
-      const intentRetained = query === prefs.productDescription && prompt.includes(JSON.stringify(prefs));
+      const intentIncluded = promptContainsIntent(prompt, prefs);
+      const intentRetained = query === prefs.productDescription && intentIncluded;
       const firstResearch = events.find((event) => event.kind === "app-request" && record(event.body).phase === "research");
-      checks.push({ id: `research-query-intent:${turn.index}`, turn: turn.index, status: intentRetained ? "pass" : "fail", critical: true, expected: "Actual accepted open objective and complete structured intent reach provider", observed: { query, intentIncluded: prompt.includes(JSON.stringify(prefs)) }, evidence: [request.sequence] });
+      checks.push({ id: `research-query-intent:${turn.index}`, turn: turn.index, status: intentRetained ? "pass" : "fail", critical: true, expected: "Actual accepted open objective and complete structured intent reach provider", observed: { query, intentIncluded }, evidence: [request.sequence] });
       checks.push({ id: `research-after-prepare:${turn.index}`, turn: turn.index, status: firstResearch && firstResearch.sequence < request.sequence ? "pass" : "fail", critical: true, expected: "No provider call during prepare", observed: { researchEvent: firstResearch?.sequence ?? null, providerEvent: request.sequence }, evidence: [request.sequence] });
     }
     checks.push(...checksForResearch(observation, turn));

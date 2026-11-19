@@ -1,7 +1,7 @@
 import { readFile } from "node:fs/promises";
 import { z } from "zod";
 import { categories, type Scenario } from "./contracts";
-import { milestones } from "./dataset/milestones";
+import { criterionChanges, milestones } from "./dataset/milestones";
 import { hash } from "./hash";
 const RawScenario = z.object({ id: z.string().regex(/^FN-[A-Z]{2}-\d{3}$/), dimension: z.string(), turns: z.array(z.string().min(1)).min(2), hard: z.array(z.string()).min(1), expect: z.array(z.string()).min(1), critical: z.array(z.string()).min(1), provider: z.string() }).strict();
 const aliases: Record<string, typeof categories[number]> = {
@@ -16,7 +16,7 @@ export async function loadDataset() {
     const category = aliases[row.dimension] ?? row.dimension;
     if (!categories.includes(category as typeof categories[number])) throw new Error(`Unknown dimension ${row.dimension}`);
     if (!milestones[row.id]?.length) throw new Error(`Missing executable expectations for ${row.id}`);
-    return { id: row.id, revision: 1, category: category as typeof categories[number], title: row.turns[0]!, actions: row.turns.map((text) => ({ kind: "message" as const, text })), provider: row.provider, expectedBehavior: [...row.hard.map((value) => `Hard requirement. ${value}`), ...row.expect, ...row.critical.map((value) => `Critical failure. ${value}`)], milestones: milestones[row.id]!, review: { status: "author-drafted", reference: "Independent original dataset author; executable translation awaiting independent final review" }, ...(row.id === "FN-CU-001" ? { issue: 44 } : {}) };
+    return { id: row.id, revision: 1, category: category as typeof categories[number], title: row.turns[0]!, actions: row.turns.map((text) => ({ kind: "message" as const, text })), provider: row.provider, expectedBehavior: [...row.hard.map((value) => `Hard requirement. ${value}`), ...row.expect, ...row.critical.map((value) => `Critical failure. ${value}`)], milestones: milestones[row.id]!, ...(criterionChanges[row.id] ? { criterionChanges: criterionChanges[row.id] } : {}), review: { status: "author-drafted", reference: "Independent original dataset author; executable translation awaiting independent final review" }, ...(row.id === "FN-CU-001" ? { issue: 44 } : {}) };
   });
-  return { scenarios, hash: hash({ source, milestones }), originalSha256: hash(source) };
+  return { scenarios, hash: hash(scenarios), originalSha256: hash(source) };
 }

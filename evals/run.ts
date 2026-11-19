@@ -1,12 +1,10 @@
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { resolve, join } from "node:path";
 import { parseArgs } from "node:util";
-import { hash } from "./hash";
 import { offlineNetwork } from "./network";
 import { loadDataset } from "./dataset";
-import { grade } from "./assertions";
 import { scenarioMaterial } from "./inputs/materials";
-import { makeReport, summaryMarkdown, compareReports } from "./report";
+import { makeReport, summaryMarkdown, compareReports, caseResult, validateReport } from "./report";
 import type { CaseResult, RunReport } from "./contracts";
 
 const { values } = parseArgs({ options: { out: { type: "string", default: "artifacts/product-evals/current" }, case: { type: "string" }, "application-commit": { type: "string" }, gate: { type: "string", default: "report" }, baseline: { type: "string" }, candidate: { type: "string" }, compare: { type: "boolean" }, "issue-drafts": { type: "boolean" } }, strict: true });
@@ -17,7 +15,6 @@ if (values.compare) {
   if (!values.baseline || !values.candidate) throw new Error("Comparison requires --baseline and --candidate report paths");
   const baseline = JSON.parse(await readFile(values.baseline, "utf8")) as RunReport;
   const candidate = JSON.parse(await readFile(values.candidate, "utf8")) as RunReport;
-  if (baseline.schemaVersion !== 1 || candidate.schemaVersion !== 1) throw new Error("Unsupported report schema");
   const comparison = compareReports(baseline, candidate);
   await writeFile(join(output, "comparison.json"), JSON.stringify(comparison, null, 2));
   console.log(JSON.stringify(comparison));
@@ -32,21 +29,18 @@ if (values.compare) {
     const { observe } = await import("./adapter");
     for (const scenario of selected) {
       const input = scenarioMaterial(scenario.provider, scenario.id);
-      const common = { id: scenario.id, category: scenario.category, scenarioHash: hash({ id: scenario.id, revision: scenario.revision, actions: scenario.actions, expectedBehavior: scenario.expectedBehavior, provider: scenario.provider }), expectationHash: hash(scenario.milestones), materialHash: input.sha256, expectedBehavior: scenario.expectedBehavior, semantic: { status: "not-run" as const, reason: "Independent judge unavailable in deterministic execution. Human calibration pending.", scores: null }, reproduction: `npm run eval -- --case ${scenario.id} --out artifacts/product-evals/reproduce-${scenario.id}` };
       try {
         const observation = await observe({ id: scenario.id, actions: scenario.actions, provider: scenario.provider }, input, guard);
-        const checks = grade(scenario, observation);
-        if (input.provenance.some((value) => value.startsWith("Input suitability gap"))) checks.push({ id: "provider-material-suitability", turn: null, status: "blocked", critical: false, expected: "Matching independently fixed product evidence", observed: "Current input lacks a matching product profile; relevance and recommendation usefulness cannot be assessed", evidence: [] });
-        const verdict = checks.some((check) => check.status === "fail") ? "fail" as const : checks.some((check) => check.status === "blocked") ? "blocked" as const : checks.some((check) => check.status === "unsupported") ? "unsupported" as const : "pass" as const;
-        cases.push({ ...common, execution: "executed", verdict, observation, checks });
+        cases.push(caseResult(scenario, input, observation));
         await writeFile(join(output, `${scenario.id}.trace.json`), JSON.stringify(observation, null, 2));
       } catch (error) {
         const message = error instanceof Error ? error.message : String(error);
-        cases.push({ ...common, execution: "infrastructure-error", verdict: "blocked", observation: null, checks: [], error: message });
+        cases.push(caseResult(scenario, input, null, message));
       }
     }
   } finally { guard.close(); }
-  const report = await makeReport(cases, dataset.hash, values["application-commit"]);
+  const report = await makeReport(cases, dataset.scenarios, values["application-commit"]);
+  validateReport(report);
   await writeFile(join(output, "report.json"), JSON.stringify(report, null, 2));
   await writeFile(join(output, "summary.md"), summaryMarkdown(report));
   if (values["issue-drafts"]) {

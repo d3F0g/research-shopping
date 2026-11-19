@@ -79,11 +79,11 @@ test("unknown scores and blocked evidence cannot become a product pass", () => {
   assert.equal(summary.metrics["unnecessary-clarification-rate"]!.rate, null);
 });
 test("comparison refuses changed assertions or expectations", async () => {
-  const baseline = await makeReport([], "dataset");
+  const baseline = await makeReport([], []);
   const same = structuredClone(baseline);
   assert.equal(compareReports(baseline, same).compatible, true);
   same.implementationHashes.grading = "weakened-check";
-  assert.equal(compareReports(baseline, same).compatible, false);
+  assert.throws(() => compareReports(baseline, same), /implementation input hash mismatch/);
 });
 test("a repeated operation does not reach the SDK twice", async () => {
   const guard = offlineNetwork();
