@@ -1,79 +1,789 @@
 {
-  "archive": "history-reload-issue56.tar.gz",
-  "sha256": "d4bebb4162c0506fd9863f24b76910b9b6b6b7c0cb67a9beefae90d50af6207c",
-  "red": "3525db9177d66af0b77831b9ca9e884aceef7305",
-  "fix": "44d2ec292f49dadda80a7ca58897808a7fcbbb44",
-  "scope": "Owned test-only browser account bootstrap synchronization; appunchanged",
+  "version": 2,
+  "path": "history-reload-issue56.tar.gz",
+  "bytes": 16455227,
+  "sha256": "29d50f38d9572cae8c61282984ef15ba1d77602201671ce40a85349f65158047",
   "members": [
     {
-      "path": "artifacts/fieldnote-v4/history-reload-ci-red/390-reload-failure.json",
-      "sha256": "6e0c757a9c756c78f4f57b1df95771215217c790caf36a4074d996135ba7a16a",
-      "bytes": 409
-    },
-    {
-      "path": "artifacts/fieldnote-v4/history-reload-ci-red/run.log",
-      "sha256": "b829c02a0fd039c54cc298e0cb4e204fff8f3c43f8ca717fedd8dcc0f9c0b633",
-      "bytes": 2564
-    },
-    {
-      "path": "artifacts/fieldnote-v4/history-reload-ci-red/390-reload-failure.png",
-      "sha256": "28d4e3e618717058f94ce4f8980ba0c5a8eb913015f3ae782e67704d95ba8922",
-      "bytes": 17507
-    },
-    {
-      "path": "artifacts/fieldnote-v4/history-reload-ci-red/source.diff",
-      "sha256": "37fb4788f2972be56ea9eac7c75aa11b09c79a2b97c784dd99db3de324b4a209",
-      "bytes": 2605
-    },
-    {
-      "path": "artifacts/fieldnote-v4/history-reload-ci-red/proof.json",
-      "sha256": "0952a249b3425b20350df77dd0904fa481d1262edcf01bcccf01d60726f8395d",
-      "bytes": 1095
-    },
-    {
-      "path": "artifacts/fieldnote-v4/history-reload-ci-fix/types.log",
-      "sha256": "6d54aea70781581ceabcb7da2d4b8aaed0fe7d4253ad1705edca787108cb6461",
-      "bytes": 53
-    },
-    {
       "path": "artifacts/fieldnote-v4/history-reload-ci-fix/1440-reload.json",
-      "sha256": "7472b28d26696a08eb3250b514747d35342326bdc19b90acc1cf7c17e7a4fb74",
-      "bytes": 548
-    },
-    {
-      "path": "artifacts/fieldnote-v4/history-reload-ci-fix/fix.log",
-      "sha256": "36af5ff31a117225962425f380839f1b3f99defa2e3642d8e7221a177a3b82d0",
-      "bytes": 1282
-    },
-    {
-      "path": "artifacts/fieldnote-v4/history-reload-ci-fix/report.md",
-      "sha256": "7c91d90dc3b5d06fda8b87e2281d256910f78f904e48c9251165019047a1e5b5",
-      "bytes": 4299
-    },
-    {
-      "path": "artifacts/fieldnote-v4/history-reload-ci-fix/scope.json",
-      "sha256": "087911238881a8574a8752ee2749c844ce1c2cbd21c9556027fae62fd047f32a",
-      "bytes": 459
-    },
-    {
-      "path": "artifacts/fieldnote-v4/history-reload-ci-fix/original-ci-proof.json",
-      "sha256": "c85629b5135a63cdc34dc2926d91a178363e5220f35396d79137cac95a9ec970",
-      "bytes": 1117
+      "bytes": 548,
+      "sha256": "7472b28d26696a08eb3250b514747d35342326bdc19b90acc1cf7c17e7a4fb74"
     },
     {
       "path": "artifacts/fieldnote-v4/history-reload-ci-fix/390-reload.json",
-      "sha256": "e27063d8b6f508273bf55865536b91d5b678db7fb35cee68d888b08cb68c4d33",
-      "bytes": 551
+      "bytes": 551,
+      "sha256": "e27063d8b6f508273bf55865536b91d5b678db7fb35cee68d888b08cb68c4d33"
     },
     {
       "path": "artifacts/fieldnote-v4/history-reload-ci-fix/e2e.log",
-      "sha256": "8e0a66534dde97724b300124da4278b6b3c4bf838d4740e6b2114b94de4f590c",
-      "bytes": 2091
+      "bytes": 2091,
+      "sha256": "8e0a66534dde97724b300124da4278b6b3c4bf838d4740e6b2114b94de4f590c"
+    },
+    {
+      "path": "artifacts/fieldnote-v4/history-reload-ci-fix/fix.log",
+      "bytes": 1282,
+      "sha256": "36af5ff31a117225962425f380839f1b3f99defa2e3642d8e7221a177a3b82d0"
+    },
+    {
+      "path": "artifacts/fieldnote-v4/history-reload-ci-fix/original-ci-proof.json",
+      "bytes": 1117,
+      "sha256": "c85629b5135a63cdc34dc2926d91a178363e5220f35396d79137cac95a9ec970"
     },
     {
       "path": "artifacts/fieldnote-v4/history-reload-ci-fix/proof.json",
-      "sha256": "aa5edaa34608c0beaff2296916b1fcab5b6f1f68d409e52b0ddf9855e8a09398",
-      "bytes": 1197
+      "bytes": 1197,
+      "sha256": "aa5edaa34608c0beaff2296916b1fcab5b6f1f68d409e52b0ddf9855e8a09398"
+    },
+    {
+      "path": "artifacts/fieldnote-v4/history-reload-ci-fix/report.md",
+      "bytes": 4299,
+      "sha256": "7c91d90dc3b5d06fda8b87e2281d256910f78f904e48c9251165019047a1e5b5"
+    },
+    {
+      "path": "artifacts/fieldnote-v4/history-reload-ci-fix/scope.json",
+      "bytes": 459,
+      "sha256": "087911238881a8574a8752ee2749c844ce1c2cbd21c9556027fae62fd047f32a"
+    },
+    {
+      "path": "artifacts/fieldnote-v4/history-reload-ci-fix/types.log",
+      "bytes": 53,
+      "sha256": "6d54aea70781581ceabcb7da2d4b8aaed0fe7d4253ad1705edca787108cb6461"
+    },
+    {
+      "path": "artifacts/fieldnote-v4/history-reload-ci-red/390-reload-failure.json",
+      "bytes": 409,
+      "sha256": "6e0c757a9c756c78f4f57b1df95771215217c790caf36a4074d996135ba7a16a"
+    },
+    {
+      "path": "artifacts/fieldnote-v4/history-reload-ci-red/390-reload-failure.png",
+      "bytes": 17507,
+      "sha256": "28d4e3e618717058f94ce4f8980ba0c5a8eb913015f3ae782e67704d95ba8922"
+    },
+    {
+      "path": "artifacts/fieldnote-v4/history-reload-ci-red/proof.json",
+      "bytes": 1095,
+      "sha256": "0952a249b3425b20350df77dd0904fa481d1262edcf01bcccf01d60726f8395d"
+    },
+    {
+      "path": "artifacts/fieldnote-v4/history-reload-ci-red/run.log",
+      "bytes": 2564,
+      "sha256": "b829c02a0fd039c54cc298e0cb4e204fff8f3c43f8ca717fedd8dcc0f9c0b633"
+    },
+    {
+      "path": "artifacts/fieldnote-v4/history-reload-ci-red/source.diff",
+      "bytes": 2605,
+      "sha256": "37fb4788f2972be56ea9eac7c75aa11b09c79a2b97c784dd99db3de324b4a209"
+    },
+    {
+      "path": "continuation/diagnostic-owner/artifacts/fieldnote-v4/bootstrap-34-ci-handoff.md",
+      "bytes": 7773,
+      "sha256": "7b26a749239ac9431e20bf670a81a150a7358b20c0b2f943052911446044949b"
+    },
+    {
+      "path": "continuation/diagnostic-owner/artifacts/fieldnote-v4/bootstrap-controlled-red/1440-current-observation.png",
+      "bytes": 99399,
+      "sha256": "9766a093863270bb20af29058a4a954a58d95b778080382fa00340489bac6041"
+    },
+    {
+      "path": "continuation/diagnostic-owner/artifacts/fieldnote-v4/bootstrap-controlled-red/1440-initial-bootstrap.json",
+      "bytes": 83594,
+      "sha256": "f8a1e81acb2fae213354908bed73030c17be20268c6543e460c2b4a978a89bc2"
+    },
+    {
+      "path": "continuation/diagnostic-owner/artifacts/fieldnote-v4/bootstrap-controlled-red/1440-initial.json",
+      "bytes": 548,
+      "sha256": "4579bdd37aec57ed0ecadad32e64172e2a2cf169d17381805e8fe519e7219d9d"
+    },
+    {
+      "path": "continuation/diagnostic-owner/artifacts/fieldnote-v4/bootstrap-controlled-red/1440-literal-evidence.png",
+      "bytes": 120661,
+      "sha256": "38e3284ab036f850a5af361cfe832054c9aaa5ea64d72bc9292d823f8ca9d9d8"
+    },
+    {
+      "path": "continuation/diagnostic-owner/artifacts/fieldnote-v4/bootstrap-controlled-red/1440-reload-bootstrap.json",
+      "bytes": 83925,
+      "sha256": "053794e1f5381c9c1f44bbbaf1fdd0baf039a33a5ec08fec7aa98d9897990a2e"
+    },
+    {
+      "path": "continuation/diagnostic-owner/artifacts/fieldnote-v4/bootstrap-controlled-red/1440-reload.json",
+      "bytes": 548,
+      "sha256": "755f2a284dccbc14955910950e9ac06284fe1346f14453d8a2730f5dc19c484b"
+    },
+    {
+      "path": "continuation/diagnostic-owner/artifacts/fieldnote-v4/bootstrap-controlled-red/390-initial-bootstrap.json",
+      "bytes": 8172,
+      "sha256": "0071b8bb54fb02f553a0eaccba581a177925e762c04f0b7dca9b5bfaa44cb8b1"
+    },
+    {
+      "path": "continuation/diagnostic-owner/artifacts/fieldnote-v4/bootstrap-controlled-red/390-initial-failure.json",
+      "bytes": 114,
+      "sha256": "bd9df3cd40ecd9b4e46379ac3fc16499a304a75294ff684de333fd5e3c99b3ff"
+    },
+    {
+      "path": "continuation/diagnostic-owner/artifacts/fieldnote-v4/bootstrap-controlled-red/390-initial-failure.png",
+      "bytes": 2740,
+      "sha256": "fb32313e11bc8ffbd5310a1660e630b64cedb4622f8462a5eae2d5464ac8279e"
+    },
+    {
+      "path": "continuation/diagnostic-owner/artifacts/fieldnote-v4/bootstrap-controlled-red/diagnostic-sensitivity-proof.json",
+      "bytes": 2824,
+      "sha256": "80f0ac50ec9f939542e90d5bbd7384c536353f161dcf813db04606ad24ea5301"
+    },
+    {
+      "path": "continuation/diagnostic-owner/artifacts/fieldnote-v4/bootstrap-controlled-red/listener-cleanup.json",
+      "bytes": 82,
+      "sha256": "434dc8ea8d9ce8e53998f7efb842da0376aaf83e80a6ae13cb0b10fff6d956b0"
+    },
+    {
+      "path": "continuation/diagnostic-owner/artifacts/fieldnote-v4/bootstrap-controlled-red/proof.json",
+      "bytes": 978,
+      "sha256": "acf42662d30e6bee2879e7e1baa7809dbd89dedf3356ed7eb75fb421698bbe03"
+    },
+    {
+      "path": "continuation/diagnostic-owner/artifacts/fieldnote-v4/bootstrap-controlled-red/verifier-with-controlled-entry-failure.ts",
+      "bytes": 20625,
+      "sha256": "a25fb92d120dd323fb0fb6580ca11e37f71f247bce3e514ca4b35f6df00786f2"
+    },
+    {
+      "path": "continuation/diagnostic-owner/artifacts/fieldnote-v4/bootstrap-diagnostic-report.json",
+      "bytes": 3123,
+      "sha256": "db4b61f0d098155c82e29875c65e7087a4936efe2c1849542eb68641e319d169"
+    },
+    {
+      "path": "continuation/diagnostic-owner/artifacts/fieldnote-v4/history-browser/1440-current-observation.png",
+      "bytes": 99330,
+      "sha256": "d7c565dc6a6798596716b725a01278642c4d51be4e38255b1f57b3d306629a85"
+    },
+    {
+      "path": "continuation/diagnostic-owner/artifacts/fieldnote-v4/history-browser/1440-initial-bootstrap.json",
+      "bytes": 83594,
+      "sha256": "39d24f6229c285e5de4cf92b00bfad5f108df8ece85807d898870b605eb2b79f"
+    },
+    {
+      "path": "continuation/diagnostic-owner/artifacts/fieldnote-v4/history-browser/1440-initial.json",
+      "bytes": 548,
+      "sha256": "7e99e9efec4af1fc5fabde3eb08ca7fb4a311cff50503cd0bf553c927d14a4c9"
+    },
+    {
+      "path": "continuation/diagnostic-owner/artifacts/fieldnote-v4/history-browser/1440-literal-evidence.png",
+      "bytes": 120661,
+      "sha256": "38e3284ab036f850a5af361cfe832054c9aaa5ea64d72bc9292d823f8ca9d9d8"
+    },
+    {
+      "path": "continuation/diagnostic-owner/artifacts/fieldnote-v4/history-browser/1440-reload-bootstrap.json",
+      "bytes": 83925,
+      "sha256": "b0431fff450f8648025ad892818134fb177364eda07128676886c5bdf54809a6"
+    },
+    {
+      "path": "continuation/diagnostic-owner/artifacts/fieldnote-v4/history-browser/1440-reload.json",
+      "bytes": 548,
+      "sha256": "cd2ab003701e218d71e50b1e0f610b45bdd780cee338b7af308366b61f80223b"
+    },
+    {
+      "path": "continuation/diagnostic-owner/artifacts/fieldnote-v4/history-browser/390-current-observation.png",
+      "bytes": 68983,
+      "sha256": "7986e50ad0091157c633bff5d73b78a0343fc4202e0163d333c2a71317df8745"
+    },
+    {
+      "path": "continuation/diagnostic-owner/artifacts/fieldnote-v4/history-browser/390-initial-bootstrap.json",
+      "bytes": 84322,
+      "sha256": "00f182e23ba7bcaace1b6338fe168518e152dcd8092b1a84a812eb508bbeff70"
+    },
+    {
+      "path": "continuation/diagnostic-owner/artifacts/fieldnote-v4/history-browser/390-initial.json",
+      "bytes": 551,
+      "sha256": "7dd1caaf5c6d3774573a275b572f94bd1b319118ddfa3af505e90f64f751e095"
+    },
+    {
+      "path": "continuation/diagnostic-owner/artifacts/fieldnote-v4/history-browser/390-literal-evidence.png",
+      "bytes": 61318,
+      "sha256": "cc86070ea64243b8fb6135c57f62c4de3dc397608a082316a9d465151f3511a5"
+    },
+    {
+      "path": "continuation/diagnostic-owner/artifacts/fieldnote-v4/history-browser/390-reload-bootstrap.json",
+      "bytes": 84477,
+      "sha256": "8750497f7c8b28f26233d35dbce5443368d5d76ba6bc9e181ba587464caa7889"
+    },
+    {
+      "path": "continuation/diagnostic-owner/artifacts/fieldnote-v4/history-browser/390-reload.json",
+      "bytes": 551,
+      "sha256": "01a6e55b8ae4056cfb8a8ec1d64805bae0cf2cd70c1784770707f9d36ace6027"
+    },
+    {
+      "path": "continuation/diagnostic-owner/artifacts/fieldnote-v4/history-browser/proof.json",
+      "bytes": 1194,
+      "sha256": "d0a79c37633fe0fc6ae29a5889510882d4ab9e98b94ea282839db449d395f945"
+    },
+    {
+      "path": "continuation/failed-ci/fieldnote-df32-pr-ci-artifact/fieldnote-v2/accounts/browser.json",
+      "bytes": 867,
+      "sha256": "27799810edde987cd8dd5bf04d9c8c79ebeab08d4d72b7cd52f093e7ad323675"
+    },
+    {
+      "path": "continuation/failed-ci/fieldnote-df32-pr-ci-artifact/fieldnote-v2/accounts/crash.json",
+      "bytes": 624,
+      "sha256": "b1808143114da177e74e6c9632e5d2aec4591d4306e6311806e1e3311fd90aca"
+    },
+    {
+      "path": "continuation/failed-ci/fieldnote-df32-pr-ci-artifact/fieldnote-v2/accounts/desktop-deleted.png",
+      "bytes": 60591,
+      "sha256": "34d1115d00859ac58120df0a7204c229038fdf5afe493d8e8bee5dd7e11f8500"
+    },
+    {
+      "path": "continuation/failed-ci/fieldnote-df32-pr-ci-artifact/fieldnote-v2/accounts/desktop-late-account-failure.png",
+      "bytes": 23542,
+      "sha256": "5fb06f1ae5b77260ca1dc89633da87da36fa312d61e1efb32c028def4093be45"
+    },
+    {
+      "path": "continuation/failed-ci/fieldnote-df32-pr-ci-artifact/fieldnote-v2/accounts/desktop-late-account-success.png",
+      "bytes": 23494,
+      "sha256": "ca73d610b7339bd8aaef1248dca00b10fea0e90ebaa798057c786aa6efb485ba"
+    },
+    {
+      "path": "continuation/failed-ci/fieldnote-df32-pr-ci-artifact/fieldnote-v2/accounts/desktop-late-session-failure.png",
+      "bytes": 23399,
+      "sha256": "5647e2a920b22f55fab571d80b37cfb55191b16d2eb3b669a940b601058c555a"
+    },
+    {
+      "path": "continuation/failed-ci/fieldnote-df32-pr-ci-artifact/fieldnote-v2/accounts/desktop-late-session-success.png",
+      "bytes": 23348,
+      "sha256": "e16cccfb64fd7ad25a0b552e5d4b4a5d9fceab604282099b179b674adf1dd365"
+    },
+    {
+      "path": "continuation/failed-ci/fieldnote-df32-pr-ci-artifact/fieldnote-v2/accounts/desktop-late-stop-new-chat-failure.png",
+      "bytes": 23279,
+      "sha256": "3b12cf225b8745334fad82e4e29c4ba00d8ae7400f4698d3ce89f04d2abba53b"
+    },
+    {
+      "path": "continuation/failed-ci/fieldnote-df32-pr-ci-artifact/fieldnote-v2/accounts/desktop-late-stop-new-chat-success.png",
+      "bytes": 23272,
+      "sha256": "84c13a6579d10e3a29b32d53eb3e7ddae259b6a4ff7a2b9da25efa64a1fc57bc"
+    },
+    {
+      "path": "continuation/failed-ci/fieldnote-df32-pr-ci-artifact/fieldnote-v2/accounts/desktop-late-stop-sign-in-failure.png",
+      "bytes": 23283,
+      "sha256": "fd6c42e423e0217940631ce468d319c1eef707720c6117ca07b354a30cc4003e"
+    },
+    {
+      "path": "continuation/failed-ci/fieldnote-df32-pr-ci-artifact/fieldnote-v2/accounts/desktop-late-stop-sign-in-success.png",
+      "bytes": 23279,
+      "sha256": "3b12cf225b8745334fad82e4e29c4ba00d8ae7400f4698d3ce89f04d2abba53b"
+    },
+    {
+      "path": "continuation/failed-ci/fieldnote-df32-pr-ci-artifact/fieldnote-v2/accounts/desktop-saved-research.png",
+      "bytes": 57493,
+      "sha256": "6eeff6071c9713d7d89c372cdaec3f4d9f9f739ffaaf35e76b2f635856dc8eda"
+    },
+    {
+      "path": "continuation/failed-ci/fieldnote-df32-pr-ci-artifact/fieldnote-v2/accounts/desktop-stop-reset-conflict-recovered.png",
+      "bytes": 22974,
+      "sha256": "2dde61eb223e20f4c3123277d261431c6d53899b5c8e52215d45acf78e6ac352"
+    },
+    {
+      "path": "continuation/failed-ci/fieldnote-df32-pr-ci-artifact/fieldnote-v2/accounts/desktop-stop-reset-conflict.png",
+      "bytes": 34524,
+      "sha256": "5ade1278438b6299b5ce2ebaa15bad1bbf448478c6585c9e9227fc0fb0c8f767"
+    },
+    {
+      "path": "continuation/failed-ci/fieldnote-df32-pr-ci-artifact/fieldnote-v2/accounts/mobile-deleted.png",
+      "bytes": 42930,
+      "sha256": "acd51585fdaa1643eaee2bb17a9ca54e270a4c4b4046f51d2e7c6930b95fed12"
+    },
+    {
+      "path": "continuation/failed-ci/fieldnote-df32-pr-ci-artifact/fieldnote-v2/accounts/mobile-late-account-failure.png",
+      "bytes": 35965,
+      "sha256": "0d2bc792a55730fa502c5db79f2a9892b47b239bc60297622992e4d3b8caa6f8"
+    },
+    {
+      "path": "continuation/failed-ci/fieldnote-df32-pr-ci-artifact/fieldnote-v2/accounts/mobile-late-account-success.png",
+      "bytes": 19639,
+      "sha256": "d6b8dd8868d50b71549d9f52adf5f323f28138cb548cfb3c82897e5fb45195ea"
+    },
+    {
+      "path": "continuation/failed-ci/fieldnote-df32-pr-ci-artifact/fieldnote-v2/accounts/mobile-late-session-failure.png",
+      "bytes": 19658,
+      "sha256": "936034f404996a8e86e3d10aec823fceec777bd6054dc9a7319c2761f9c01808"
+    },
+    {
+      "path": "continuation/failed-ci/fieldnote-df32-pr-ci-artifact/fieldnote-v2/accounts/mobile-late-session-success.png",
+      "bytes": 19639,
+      "sha256": "d6b8dd8868d50b71549d9f52adf5f323f28138cb548cfb3c82897e5fb45195ea"
+    },
+    {
+      "path": "continuation/failed-ci/fieldnote-df32-pr-ci-artifact/fieldnote-v2/accounts/mobile-late-stop-new-chat-failure.png",
+      "bytes": 18717,
+      "sha256": "cb74dff8aff081d32d6cab3a670c6c1f50215f9f2ae36b1804b8c1d7a1568988"
+    },
+    {
+      "path": "continuation/failed-ci/fieldnote-df32-pr-ci-artifact/fieldnote-v2/accounts/mobile-late-stop-new-chat-success.png",
+      "bytes": 18626,
+      "sha256": "7c90205e08261172bb19fdb042bb3c8a164b73317c4f8cfeac8224ed6b38fcd8"
+    },
+    {
+      "path": "continuation/failed-ci/fieldnote-df32-pr-ci-artifact/fieldnote-v2/accounts/mobile-late-stop-sign-in-failure.png",
+      "bytes": 18731,
+      "sha256": "feaf5586d585c69c701262fc0a04937631d7170fc0fe050e5c897c70d28a6c43"
+    },
+    {
+      "path": "continuation/failed-ci/fieldnote-df32-pr-ci-artifact/fieldnote-v2/accounts/mobile-late-stop-sign-in-success.png",
+      "bytes": 18615,
+      "sha256": "cfc6aa97538437d607597627a46b8b20b6ad3ef2b539cdda4163d22d1c58554f"
+    },
+    {
+      "path": "continuation/failed-ci/fieldnote-df32-pr-ci-artifact/fieldnote-v2/accounts/mobile-saved-research.png",
+      "bytes": 50529,
+      "sha256": "016dbfc07f16657d2b1b18131d197cf71c58800c605f9d65b46e00d3de94350b"
+    },
+    {
+      "path": "continuation/failed-ci/fieldnote-df32-pr-ci-artifact/fieldnote-v2/accounts/postgres.txt",
+      "bytes": 242,
+      "sha256": "dfb82b02184d17dbce8a3b9b1313c4ba433971538c362b581453861d0e6be282"
+    },
+    {
+      "path": "continuation/failed-ci/fieldnote-df32-pr-ci-artifact/fieldnote-v2/accounts/provenance-postgres.txt",
+      "bytes": 240,
+      "sha256": "6b301f281b43fc68b1f51c5f67a8d7cfb9c65ed05f2fc04620108ea875f39a1c"
+    },
+    {
+      "path": "continuation/failed-ci/fieldnote-df32-pr-ci-artifact/fieldnote-v2/accounts/restart.json",
+      "bytes": 755,
+      "sha256": "2cd0b406b66d00d20d579a13544bf93d5500ac7e7f298d0e0fce6223ac171d7a"
+    },
+    {
+      "path": "continuation/failed-ci/fieldnote-df32-pr-ci-artifact/fieldnote-v2/conversation-polish/desktop-battery-concise.png",
+      "bytes": 44975,
+      "sha256": "e571dd3472acc5d877e06566d229fc19b28584fc9aa7ca99922c0c9319940502"
+    },
+    {
+      "path": "continuation/failed-ci/fieldnote-df32-pr-ci-artifact/fieldnote-v2/conversation-polish/desktop-battery-details.png",
+      "bytes": 180303,
+      "sha256": "a15b780a78633baf76ed1951e9f328a7d5bbeb35a5758a1ae18a0c942e8a7a2d"
+    },
+    {
+      "path": "continuation/failed-ci/fieldnote-df32-pr-ci-artifact/fieldnote-v2/conversation-polish/desktop-comparison-concise.png",
+      "bytes": 42366,
+      "sha256": "4fae33a671a9c85e4df9a8b9f9affcb41d246dfea0b26ee8da55e00a34fa8e8a"
+    },
+    {
+      "path": "continuation/failed-ci/fieldnote-df32-pr-ci-artifact/fieldnote-v2/conversation-polish/desktop-proof.json",
+      "bytes": 5901,
+      "sha256": "cda637a0cb5b292803ddf4abe65e31a4ed16ad9da3c59bdbc98e399608e635e5"
+    },
+    {
+      "path": "continuation/failed-ci/fieldnote-df32-pr-ci-artifact/fieldnote-v2/conversation-polish/mobile-battery-concise.png",
+      "bytes": 38793,
+      "sha256": "9c7b5ee772b5da7eee4597ad54a1f6a796c3dc6630cc2901397f27e037a6f5e2"
+    },
+    {
+      "path": "continuation/failed-ci/fieldnote-df32-pr-ci-artifact/fieldnote-v2/conversation-polish/mobile-battery-details.png",
+      "bytes": 77752,
+      "sha256": "aa3b9a4f4cc222e5eada9f8fd178b354bddeb49fc7393433a14dc5433387534f"
+    },
+    {
+      "path": "continuation/failed-ci/fieldnote-df32-pr-ci-artifact/fieldnote-v2/conversation-polish/mobile-comparison-concise.png",
+      "bytes": 36801,
+      "sha256": "cda2cba608591df18ed64aa4ec5d8cbff4432b69f2f3ad405014195f96a4dc94"
+    },
+    {
+      "path": "continuation/failed-ci/fieldnote-df32-pr-ci-artifact/fieldnote-v2/conversation-polish/mobile-proof.json",
+      "bytes": 5898,
+      "sha256": "f7a23848a5d87288064ae900ac949b894904c9bf191bdef124fa21affe9ad425"
+    },
+    {
+      "path": "continuation/failed-ci/fieldnote-df32-pr-ci-artifact/fieldnote-v2/conversation-polish/short-mobile-battery-concise.png",
+      "bytes": 37321,
+      "sha256": "862325ce15c5f125151f1ceade03ecae235e6f9f498744fb2927aa484be8660d"
+    },
+    {
+      "path": "continuation/failed-ci/fieldnote-df32-pr-ci-artifact/fieldnote-v2/conversation-polish/short-mobile-battery-details.png",
+      "bytes": 50119,
+      "sha256": "167320f54aa7cee31fe5d258a9da7dc0c0d06f03c1e471fbd87588986baf9e7b"
+    },
+    {
+      "path": "continuation/failed-ci/fieldnote-df32-pr-ci-artifact/fieldnote-v2/conversation-polish/short-mobile-comparison-concise.png",
+      "bytes": 35527,
+      "sha256": "d84f2d77ead058f04c971f63a017dc6dce3d5f0055ee9a8a60d12effaca9ac20"
+    },
+    {
+      "path": "continuation/failed-ci/fieldnote-df32-pr-ci-artifact/fieldnote-v2/conversation-polish/short-mobile-proof.json",
+      "bytes": 5906,
+      "sha256": "c55b354ead35823cbd04a4034fdc3caf701077a1b8c2cee93b65afb0310060a1"
+    },
+    {
+      "path": "continuation/failed-ci/fieldnote-df32-pr-ci-artifact/fieldnote-v2/desktop-empty.png",
+      "bytes": 22023,
+      "sha256": "8721f02eb577d33d1079555a5b155ce045f3fa52a33bbc06b9bc6ca849cbac29"
+    },
+    {
+      "path": "continuation/failed-ci/fieldnote-df32-pr-ci-artifact/fieldnote-v2/desktop-evidence.png",
+      "bytes": 79826,
+      "sha256": "cfae8da1a01cb50e4106f048d9ca16ebed236178e7582bb6a1a8fa3893522b05"
+    },
+    {
+      "path": "continuation/failed-ci/fieldnote-df32-pr-ci-artifact/fieldnote-v2/desktop-light-ordinary.png",
+      "bytes": 22586,
+      "sha256": "d27a6f85c23b6c9bec681c2ef743a97113ce3bc93177ee142438eae84c4f6bff"
+    },
+    {
+      "path": "continuation/failed-ci/fieldnote-df32-pr-ci-artifact/fieldnote-v2/desktop-research.png",
+      "bytes": 79604,
+      "sha256": "d826b9e06c61512355c4917251449f1445baf4ab7afac79a547ae5bf4c3f5f65"
+    },
+    {
+      "path": "continuation/failed-ci/fieldnote-df32-pr-ci-artifact/fieldnote-v2/mobile-empty.png",
+      "bytes": 17507,
+      "sha256": "28d4e3e618717058f94ce4f8980ba0c5a8eb913015f3ae782e67704d95ba8922"
+    },
+    {
+      "path": "continuation/failed-ci/fieldnote-df32-pr-ci-artifact/fieldnote-v2/mobile-evidence.png",
+      "bytes": 52279,
+      "sha256": "0d89af979dff4f0fec050c57b6ad9720e2c50b28d68ae4f18058a0f91f3fc4bf"
+    },
+    {
+      "path": "continuation/failed-ci/fieldnote-df32-pr-ci-artifact/fieldnote-v2/mobile-light-ordinary.png",
+      "bytes": 18020,
+      "sha256": "523fb18af5dc418f1b45e4fc5d5e2101c0217e1338df61d15a8918b770b8ad59"
+    },
+    {
+      "path": "continuation/failed-ci/fieldnote-df32-pr-ci-artifact/fieldnote-v2/mobile-research.png",
+      "bytes": 51964,
+      "sha256": "be7d4cc5a76e950b79953968181b1f3addc32a4c49f8452a1b13cf77e8e70549"
+    },
+    {
+      "path": "continuation/failed-ci/fieldnote-df32-pr-ci-artifact/fieldnote-v2/short-mobile-empty.png",
+      "bytes": 16302,
+      "sha256": "7d038d0c2fc57679e6b5b0a97a9468fc222e8b46df68091a9da3e7ad61cb9695"
+    },
+    {
+      "path": "continuation/failed-ci/fieldnote-df32-pr-ci-artifact/fieldnote-v2/short-mobile-evidence.png",
+      "bytes": 35250,
+      "sha256": "7fc7eb95629a17775c1254c14891bcdd08bb980a82f53a6778d4577d320942d3"
+    },
+    {
+      "path": "continuation/failed-ci/fieldnote-df32-pr-ci-artifact/fieldnote-v2/short-mobile-light-ordinary.png",
+      "bytes": 16857,
+      "sha256": "5a014441190253353bd4ad2bb1ec5852d9a067aa512a1a119719f2c4860db85f"
+    },
+    {
+      "path": "continuation/failed-ci/fieldnote-df32-pr-ci-artifact/fieldnote-v2/short-mobile-research.png",
+      "bytes": 34005,
+      "sha256": "e4a15b08c75dd8819cf234bcd9e0ff0b276f45b214ac6f4c904b803cac97210d"
+    },
+    {
+      "path": "continuation/failed-ci/fieldnote-f3c-pr-ci-artifact/fieldnote-v2/accounts/browser.json",
+      "bytes": 867,
+      "sha256": "27799810edde987cd8dd5bf04d9c8c79ebeab08d4d72b7cd52f093e7ad323675"
+    },
+    {
+      "path": "continuation/failed-ci/fieldnote-f3c-pr-ci-artifact/fieldnote-v2/accounts/crash.json",
+      "bytes": 624,
+      "sha256": "b1808143114da177e74e6c9632e5d2aec4591d4306e6311806e1e3311fd90aca"
+    },
+    {
+      "path": "continuation/failed-ci/fieldnote-f3c-pr-ci-artifact/fieldnote-v2/accounts/desktop-deleted.png",
+      "bytes": 60399,
+      "sha256": "96268e5feb5e4777b718d291c29af3d34da4f719dcf7523bd53ba3143bea85f6"
+    },
+    {
+      "path": "continuation/failed-ci/fieldnote-f3c-pr-ci-artifact/fieldnote-v2/accounts/desktop-saved-research.png",
+      "bytes": 61552,
+      "sha256": "3ca62d27c59bf64b7b4a070ddf4cf1b4de783596f61a331a084eb39be0ab0e3e"
+    },
+    {
+      "path": "continuation/failed-ci/fieldnote-f3c-pr-ci-artifact/fieldnote-v2/accounts/mobile-deleted.png",
+      "bytes": 52579,
+      "sha256": "cbb61ff4eb17c7f6093e9a44793217be187cd7176cb86745a32314d5240a90e7"
+    },
+    {
+      "path": "continuation/failed-ci/fieldnote-f3c-pr-ci-artifact/fieldnote-v2/accounts/mobile-saved-research.png",
+      "bytes": 47423,
+      "sha256": "58be4223c06dcf164cdec84b2b4aeafe922a595dba9dd74c9299e2ca89b21e9a"
+    },
+    {
+      "path": "continuation/failed-ci/fieldnote-f3c-pr-ci-artifact/fieldnote-v2/accounts/postgres.txt",
+      "bytes": 242,
+      "sha256": "dfb82b02184d17dbce8a3b9b1313c4ba433971538c362b581453861d0e6be282"
+    },
+    {
+      "path": "continuation/failed-ci/fieldnote-f3c-pr-ci-artifact/fieldnote-v2/accounts/provenance-postgres.txt",
+      "bytes": 240,
+      "sha256": "6b301f281b43fc68b1f51c5f67a8d7cfb9c65ed05f2fc04620108ea875f39a1c"
+    },
+    {
+      "path": "continuation/failed-ci/fieldnote-f3c-pr-ci-artifact/fieldnote-v2/accounts/restart.json",
+      "bytes": 755,
+      "sha256": "2cd0b406b66d00d20d579a13544bf93d5500ac7e7f298d0e0fce6223ac171d7a"
+    },
+    {
+      "path": "continuation/failed-ci/fieldnote-f3c-pr-ci-artifact/fieldnote-v2/conversation-polish/desktop-battery-concise.png",
+      "bytes": 44975,
+      "sha256": "e571dd3472acc5d877e06566d229fc19b28584fc9aa7ca99922c0c9319940502"
+    },
+    {
+      "path": "continuation/failed-ci/fieldnote-f3c-pr-ci-artifact/fieldnote-v2/conversation-polish/desktop-battery-details.png",
+      "bytes": 180303,
+      "sha256": "a15b780a78633baf76ed1951e9f328a7d5bbeb35a5758a1ae18a0c942e8a7a2d"
+    },
+    {
+      "path": "continuation/failed-ci/fieldnote-f3c-pr-ci-artifact/fieldnote-v2/conversation-polish/desktop-comparison-concise.png",
+      "bytes": 42366,
+      "sha256": "4fae33a671a9c85e4df9a8b9f9affcb41d246dfea0b26ee8da55e00a34fa8e8a"
+    },
+    {
+      "path": "continuation/failed-ci/fieldnote-f3c-pr-ci-artifact/fieldnote-v2/conversation-polish/desktop-proof.json",
+      "bytes": 5901,
+      "sha256": "cda637a0cb5b292803ddf4abe65e31a4ed16ad9da3c59bdbc98e399608e635e5"
+    },
+    {
+      "path": "continuation/failed-ci/fieldnote-f3c-pr-ci-artifact/fieldnote-v2/conversation-polish/mobile-battery-concise.png",
+      "bytes": 38793,
+      "sha256": "9c7b5ee772b5da7eee4597ad54a1f6a796c3dc6630cc2901397f27e037a6f5e2"
+    },
+    {
+      "path": "continuation/failed-ci/fieldnote-f3c-pr-ci-artifact/fieldnote-v2/conversation-polish/mobile-battery-details.png",
+      "bytes": 77752,
+      "sha256": "aa3b9a4f4cc222e5eada9f8fd178b354bddeb49fc7393433a14dc5433387534f"
+    },
+    {
+      "path": "continuation/failed-ci/fieldnote-f3c-pr-ci-artifact/fieldnote-v2/conversation-polish/mobile-comparison-concise.png",
+      "bytes": 36801,
+      "sha256": "cda2cba608591df18ed64aa4ec5d8cbff4432b69f2f3ad405014195f96a4dc94"
+    },
+    {
+      "path": "continuation/failed-ci/fieldnote-f3c-pr-ci-artifact/fieldnote-v2/conversation-polish/mobile-proof.json",
+      "bytes": 5898,
+      "sha256": "f7a23848a5d87288064ae900ac949b894904c9bf191bdef124fa21affe9ad425"
+    },
+    {
+      "path": "continuation/failed-ci/fieldnote-f3c-pr-ci-artifact/fieldnote-v2/conversation-polish/short-mobile-battery-concise.png",
+      "bytes": 37321,
+      "sha256": "862325ce15c5f125151f1ceade03ecae235e6f9f498744fb2927aa484be8660d"
+    },
+    {
+      "path": "continuation/failed-ci/fieldnote-f3c-pr-ci-artifact/fieldnote-v2/conversation-polish/short-mobile-battery-details.png",
+      "bytes": 50119,
+      "sha256": "167320f54aa7cee31fe5d258a9da7dc0c0d06f03c1e471fbd87588986baf9e7b"
+    },
+    {
+      "path": "continuation/failed-ci/fieldnote-f3c-pr-ci-artifact/fieldnote-v2/conversation-polish/short-mobile-comparison-concise.png",
+      "bytes": 35527,
+      "sha256": "d84f2d77ead058f04c971f63a017dc6dce3d5f0055ee9a8a60d12effaca9ac20"
+    },
+    {
+      "path": "continuation/failed-ci/fieldnote-f3c-pr-ci-artifact/fieldnote-v2/conversation-polish/short-mobile-proof.json",
+      "bytes": 5906,
+      "sha256": "c55b354ead35823cbd04a4034fdc3caf701077a1b8c2cee93b65afb0310060a1"
+    },
+    {
+      "path": "continuation/failed-ci/fieldnote-f3c-pr-ci-artifact/fieldnote-v2/desktop-empty.png",
+      "bytes": 22023,
+      "sha256": "8721f02eb577d33d1079555a5b155ce045f3fa52a33bbc06b9bc6ca849cbac29"
+    },
+    {
+      "path": "continuation/failed-ci/fieldnote-f3c-pr-ci-artifact/fieldnote-v2/desktop-evidence.png",
+      "bytes": 79826,
+      "sha256": "cfae8da1a01cb50e4106f048d9ca16ebed236178e7582bb6a1a8fa3893522b05"
+    },
+    {
+      "path": "continuation/failed-ci/fieldnote-f3c-pr-ci-artifact/fieldnote-v2/desktop-light-ordinary.png",
+      "bytes": 22586,
+      "sha256": "d27a6f85c23b6c9bec681c2ef743a97113ce3bc93177ee142438eae84c4f6bff"
+    },
+    {
+      "path": "continuation/failed-ci/fieldnote-f3c-pr-ci-artifact/fieldnote-v2/desktop-research.png",
+      "bytes": 79604,
+      "sha256": "d826b9e06c61512355c4917251449f1445baf4ab7afac79a547ae5bf4c3f5f65"
+    },
+    {
+      "path": "continuation/failed-ci/fieldnote-f3c-pr-ci-artifact/fieldnote-v2/mobile-empty.png",
+      "bytes": 17507,
+      "sha256": "28d4e3e618717058f94ce4f8980ba0c5a8eb913015f3ae782e67704d95ba8922"
+    },
+    {
+      "path": "continuation/failed-ci/fieldnote-f3c-pr-ci-artifact/fieldnote-v2/mobile-evidence.png",
+      "bytes": 52279,
+      "sha256": "0d89af979dff4f0fec050c57b6ad9720e2c50b28d68ae4f18058a0f91f3fc4bf"
+    },
+    {
+      "path": "continuation/failed-ci/fieldnote-f3c-pr-ci-artifact/fieldnote-v2/mobile-light-ordinary.png",
+      "bytes": 18020,
+      "sha256": "523fb18af5dc418f1b45e4fc5d5e2101c0217e1338df61d15a8918b770b8ad59"
+    },
+    {
+      "path": "continuation/failed-ci/fieldnote-f3c-pr-ci-artifact/fieldnote-v2/mobile-research.png",
+      "bytes": 51964,
+      "sha256": "be7d4cc5a76e950b79953968181b1f3addc32a4c49f8452a1b13cf77e8e70549"
+    },
+    {
+      "path": "continuation/failed-ci/fieldnote-f3c-pr-ci-artifact/fieldnote-v2/short-mobile-empty.png",
+      "bytes": 16302,
+      "sha256": "7d038d0c2fc57679e6b5b0a97a9468fc222e8b46df68091a9da3e7ad61cb9695"
+    },
+    {
+      "path": "continuation/failed-ci/fieldnote-f3c-pr-ci-artifact/fieldnote-v2/short-mobile-evidence.png",
+      "bytes": 35250,
+      "sha256": "7fc7eb95629a17775c1254c14891bcdd08bb980a82f53a6778d4577d320942d3"
+    },
+    {
+      "path": "continuation/failed-ci/fieldnote-f3c-pr-ci-artifact/fieldnote-v2/short-mobile-light-ordinary.png",
+      "bytes": 16857,
+      "sha256": "5a014441190253353bd4ad2bb1ec5852d9a067aa512a1a119719f2c4860db85f"
+    },
+    {
+      "path": "continuation/failed-ci/fieldnote-f3c-pr-ci-artifact/fieldnote-v2/short-mobile-research.png",
+      "bytes": 34005,
+      "sha256": "e4a15b08c75dd8819cf234bcd9e0ff0b276f45b214ac6f4c904b803cac97210d"
+    },
+    {
+      "path": "continuation/failed-ci/fieldnote-f3c-pr-ci-artifact/fieldnote-v4/history-browser/1440-current-observation.png",
+      "bytes": 88742,
+      "sha256": "3c6c69243d7d5c73636507198ff91f594927dac366a50db7a53a8c38d203662b"
+    },
+    {
+      "path": "continuation/failed-ci/fieldnote-f3c-pr-ci-artifact/fieldnote-v4/history-browser/1440-initial.json",
+      "bytes": 548,
+      "sha256": "246438ac1f4db804c950d1f40ce4c6993ee832422d02f2d5a0a776cc4eddbc49"
+    },
+    {
+      "path": "continuation/failed-ci/fieldnote-f3c-pr-ci-artifact/fieldnote-v4/history-browser/1440-literal-evidence.png",
+      "bytes": 107135,
+      "sha256": "600d38045d24d97dc022c96034498d9ce104d1c2343221039b4b24c78578d3f0"
+    },
+    {
+      "path": "continuation/failed-ci/fieldnote-f3c-pr-ci-artifact/fieldnote-v4/history-browser/1440-reload.json",
+      "bytes": 548,
+      "sha256": "1227ffaf8eed5153d838b6ffb5fa679b009a4e22679091efb870c1d581fcebff"
+    },
+    {
+      "path": "continuation/failed-ci/fieldnote-f3c-pr-ci-artifact/fieldnote-v4/history-browser/390-initial-failure.json",
+      "bytes": 114,
+      "sha256": "47d39562aa4fecc01ee7bb733dec13f0ebae6893ab995d0e373b3f123aec8936"
+    },
+    {
+      "path": "continuation/failed-ci/fieldnote-f3c-pr-ci-artifact/fieldnote-v4/history-browser/390-initial-failure.png",
+      "bytes": 2740,
+      "sha256": "fb32313e11bc8ffbd5310a1660e630b64cedb4622f8462a5eae2d5464ac8279e"
+    },
+    {
+      "path": "continuation/failed-ci/fieldnote-f3c-pr-ci-artifact/fieldnote-v4/history-browser/proof.json",
+      "bytes": 1042,
+      "sha256": "fd8b057f7478ea798e1d45955a67a12225ae009dbe338be22adb6ae1ffe96a42"
+    },
+    {
+      "path": "continuation/hosted-bootstrap-protocol/attempt-1/artifact.zip",
+      "bytes": 3267200,
+      "sha256": "e92d2cf5bf42a648d2dab5c0a056f2525689fbc6ec269402a2e769446e0e6c2e"
+    },
+    {
+      "path": "continuation/hosted-bootstrap-protocol/attempt-1/job.log",
+      "bytes": 110757,
+      "sha256": "45b49016c28da2586fcfbf3ce43041050c147977025338bc566c5796f92ea043"
+    },
+    {
+      "path": "continuation/hosted-bootstrap-protocol/attempt-1/receipt.json",
+      "bytes": 1036,
+      "sha256": "2b52d1382b5025bbedbf2fa4aa0532002c2f745ed91bb379f7d0553208af5239"
+    },
+    {
+      "path": "continuation/hosted-bootstrap-protocol/attempt-2/artifact.zip",
+      "bytes": 3266717,
+      "sha256": "4c4767403f94667060a40c6aa2bf0e89184738bfe2a960b3d03c7f25ddf4d07d"
+    },
+    {
+      "path": "continuation/hosted-bootstrap-protocol/attempt-2/job.log",
+      "bytes": 111065,
+      "sha256": "2e0541daf458fa2048ea1b48b08efe8213598fdf367ca07aac93438c45825bd4"
+    },
+    {
+      "path": "continuation/hosted-bootstrap-protocol/attempt-2/receipt.json",
+      "bytes": 1054,
+      "sha256": "dc041fc3784315c51e05b657c09d83a61f893615af21befc849fec5901d81c9e"
+    },
+    {
+      "path": "continuation/hosted-bootstrap-protocol/attempt-3/artifact.zip",
+      "bytes": 3265425,
+      "sha256": "22cd1a84a1e3d247d7437709c095e2ad56be0fd35ef8689138e6638e64cf8652"
+    },
+    {
+      "path": "continuation/hosted-bootstrap-protocol/attempt-3/job.log",
+      "bytes": 111331,
+      "sha256": "d591237d14ec70bb463e17ec003c540e2a909c30d4fe4c699dbf9d88b1dad718"
+    },
+    {
+      "path": "continuation/hosted-bootstrap-protocol/attempt-3/receipt.json",
+      "bytes": 1036,
+      "sha256": "b97697e64d234ca80ea1e6a7664bd941a437c1d1970e700e1858108863645b23"
+    },
+    {
+      "path": "continuation/hosted-bootstrap-protocol/attempt-3/run.json",
+      "bytes": 14571,
+      "sha256": "5055a4c8f51464a9ae3167fc6f1f33b3043e00730a0c5f105949e7c057d6a540"
+    },
+    {
+      "path": "continuation/hosted-bootstrap-protocol/attempt-4/artifact.zip",
+      "bytes": 3255133,
+      "sha256": "d9f95d8046149e08238a462f914f53d52ade4d817cc20baa09cb14336079785d"
+    },
+    {
+      "path": "continuation/hosted-bootstrap-protocol/attempt-4/job.log",
+      "bytes": 109709,
+      "sha256": "5d47233b2e66071f25fba2e76fd2445ad3a7e4e095848bf8683cf76b54654084"
+    },
+    {
+      "path": "continuation/hosted-bootstrap-protocol/attempt-4/receipt.json",
+      "bytes": 1036,
+      "sha256": "314264317a93902a8308b95bdcd89f93a96a4982be01024ebe17cfc421fc7ac0"
+    },
+    {
+      "path": "continuation/hosted-bootstrap-protocol/attempt-4/run.json",
+      "bytes": 14571,
+      "sha256": "28bacca8e067dae4421413f91d9e3eff4205772ac2216402f38f4c1066cfe0a7"
+    },
+    {
+      "path": "continuation/hosted-bootstrap-protocol/protocol.json",
+      "bytes": 573,
+      "sha256": "596605b4b4aed0569fe60101a6b630d114eea0c17a8fee51c79cb9ca7db1f3c7"
+    },
+    {
+      "path": "continuation/hosted-bootstrap-protocol/summary.json",
+      "bytes": 5220,
+      "sha256": "3aeadf767ccb211b75ab1d735fa256487a63456171364264086efb7525fc13eb"
+    },
+    {
+      "path": "continuation/reviews/fieldnote-bootstrap-diagnostic-security-review.md",
+      "bytes": 6257,
+      "sha256": "bd88a266bd03af835a3309eac3807e6966bd270e8c726d9076559c56eac7ec25"
+    },
+    {
+      "path": "continuation/reviews/fieldnote-bootstrap-diagnostic-security-source.json",
+      "bytes": 6069,
+      "sha256": "2e06f2d2ec46aaca7bd14ab2975b3c9c61d2f99f66f588da1302ccd2026f5a42"
+    },
+    {
+      "path": "continuation/reviews/fieldnote-bootstrap-pr34-analysis.json",
+      "bytes": 25002,
+      "sha256": "04dee494d23d37f73ab612155dd132dd4e971dbdccc52bc5a048589ec01c312a"
+    },
+    {
+      "path": "continuation/reviews/fieldnote-df32-pr-ci-failed.log",
+      "bytes": 12634,
+      "sha256": "c8e8e604e74878dfa5d3ffa6f1a8391b24b649c2947042b53afe8d7ee788fe99"
+    },
+    {
+      "path": "continuation/reviews/fieldnote-f3c-pr-ci-failed.log",
+      "bytes": 3050,
+      "sha256": "6f049544d660594a691b11c5cad53750ca7d5ba58667d69adc5d462efe14a6f3"
+    },
+    {
+      "path": "preserved/original-history-reload-issue56-manifest.json",
+      "bytes": 3033,
+      "sha256": "50517594a18a7ac01ba47e67c2bb8774ae94b4b5d8fddf9100e3063a45f0c133"
+    },
+    {
+      "path": "preserved/original-history-reload-issue56.tar.gz",
+      "bytes": 21784,
+      "sha256": "d4bebb4162c0506fd9863f24b76910b9b6b6b7c0cb67a9beefae90d50af6207c"
     }
-  ]
+  ],
+  "scope": "Original reload proof plus bounded diagnostic continuation; original cause remains unknown."
 }

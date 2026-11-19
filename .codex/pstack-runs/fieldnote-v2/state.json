@@ -1,6 +1,6 @@
 {
-  "milestone": "Evidence4 application scoped PASS; initial and reload history verifier independently under final review; hostedCI/live/history gates remain",
-  "source": "fd1f505c116e5112af5597292c5f6c1d9499b824",
+  "milestone": "Reviewed application df32 running locally; verifier2b QA/security and all hosted workflows pass; live/history gates remain",
+  "source": "df32c4b3be6b09280369fc4eb38bf4e127312d41",
   "base": "33fadc7e3cfde2207528adb32b650287e758d343",
   "trunk_base": "9d2a3c5e336a6652ec6b02e0c3deff6617fb7d11",
   "branch": "rebuild/fieldnote-v2",
@@ -41,32 +41,49 @@
     "acceptance": "INCONCLUSIVE"
   },
   "reviews": {
-    "qa": "CODE/VISUAL SCOPEDPASSfd1, .audit/fieldnote-v2/evidence-gap/qa-fd1f505.md; variedliveacceptanceOUTSTANDING",
-    "security": "ScopedPASSfd1, .audit/fieldnote-v2/evidence-gap/security-fd1f505.md",
-    "cleanup_trail": "Noadditionalappcleanupblocker, distinctmodelgpt-6-astra; staleproseflagfixedbyrootpostreviewbinding"
+    "qa": "Final exactdf32 PASS; 456unit29eval28PG24E2E, 18registry, 3viewportskill/history,23accountitems,12adversarial; new verifier2b23matrix+controlsPASS",
+    "security": "Final exactdf32 PASS, 13adversarial+456unit24E2E23accountitems; new verifier2b strict200/409+negativecontrolsPASS",
+    "publication": "Current continuation metadata requires fresh exact-tree review before push; old7f history remains"
   },
   "hosted_ci": {
     "authority": "https://github.com/d3F0g/research-shopping/pull/53/checks",
     "policy": "Inspect actual current-head workflow jobs before landing. Local proofs are not hostedCI.",
-    "receipt_checkpoint": "4af pushCI44545860500 and Product evaluation44545892591 passed; PRCI44545892487 failed initial history matcher before reload. Final new-head results recorded on PR53."
+    "receipt_checkpoint": "f3 pushCI44547663196 and Product evaluation44547693265 passed; PRCI44547693260 failed initial browser account-response wait. Actual mobile artifact shows page-loaded only, no account requests, empty body and white screenshot. Identical-tree proposal d11 CI44547917562 passed. No failed check dismissed.",
+    "current_code_head": "2b17471229a29e28f2ec0bc05211b3eff3b62466",
+    "current_code_runs": {
+      "push_ci": {
+        "id": 44570356420,
+        "conclusion": "success"
+      },
+      "pr_ci": {
+        "id": 44570387703,
+        "conclusion": "success"
+      },
+      "product_evaluation": {
+        "id": 44570387817,
+        "conclusion": "success"
+      }
+    },
+    "inspection": "Actual workflow jobs/steps inspected, including account browser, mixed history/restart and24E2E. New metadata head will need its own CI."
   },
   "preview": {
-    "application": "fd1f505c116e5112af5597292c5f6c1d9499b824",
+    "application": "df32c4b3be6b09280369fc4eb38bf4e127312d41",
     "api": "http://127.0.0.1:3190",
     "web": "http://127.0.0.1:5290",
-    "owned_session": 50458,
+    "owned_session": 2797,
     "automaticPaidChecks": false,
-    "health": "200ok providerexa automaticPaidChecksfalse",
-    "manual_grant_latest": "7 requests/USD0.35reserved; acknowledgedhistoricalunknown2 unchanged"
+    "health": "API/web200 providerexa automaticPaidChecksfalse",
+    "manual_grant_latest": "5 requests/USD0.25reserved; acknowledgedhistoricalunknown2 unchanged",
+    "sourceEquivalentHead": "2b17471229a29e28f2ec0bc05211b3eff3b62466"
   },
-  "manual_allowance_checkpoint": "7manualrequests/USD0.35reservedready; acknowledgedhistoricalunknown2 unchanged;0agentpaidcalls",
-  "human_acceptance": "Asyncuserrequestedrefreshedsunglassesplusanotherrealshoppingneed; resultspending; variedliveacceptanceunverified",
+  "manual_allowance_checkpoint": "5manualrequests/USD0.25reservedready; acknowledgedhistoricalunknown2 unchanged;0agentpaidcalls",
+  "human_acceptance": "New manual sunglasses result shows source amount but unknown variant; varied watches request failed invalid native answer. Offline replay confirms invalid-response. Product acceptance not established.",
   "blockers": [
-    "Current-head hosted CI after initial and reload Issue56 fixes pending",
-    "Varied live product acceptance pending manual results",
-    "Removing earlier shared metadata commits requires separate explicit authorization"
+    "Final metadata publication review and actual new-head hostedCI remain",
+    "Varied live Exa product acceptance pending one requested human watches result",
+    "Removing earlier shared metadata ancestry requires explicit guarded-ref authorization"
   ],
-  "next": "Verify Issue56 currentCI and clean publication tree. Prepare exact sanitized-history candidate; request only guarded feature-branch rewrite approval. Do not force-push without it.",
+  "next": "Review exact metadata/archives and prepared identical-tree clean branch; push reviewed final notes and inspect actual CI. Continue requested manual result; ask only separately required guarded history authorization after all unblocked preparation. No paid automation, no repeated appearance approval, no ref rewrite without it.",
   "historical_program_checkpoints": {
     "milestone": "Final V4 candidate passes package and class regressions; independent reviews and hostedCI pending",
     "completed": [
@@ -194,7 +211,8 @@
     "status": "Sanitized current tree independently passes; earlier shared metadata remains in Git history",
     "scope": "Captured-response detail and private diagnostic paths appeared in earlier resume. No raw capture file was committed.",
     "safe_action": "Sanitized resume/state/decision tree passes targeted QA/security and public archive scan",
-    "history": "Removing earlier shared commits requires separate explicit authorization; do not force-push."
+    "history": "Removing earlier shared commits requires separate explicit authorization; do not force-push.",
+    "proposal": "Local323269b clean code branch tree equals2b exactly, excludes exposed7f ancestry. Existing remote proposal remainsd11 until final reviewed metadata is fast-forwarded; shared PR ref remains unchanged."
   },
   "verification_fix": {
     "issue": 56,
@@ -209,6 +227,31 @@
       "fix": "a123f1afe8253835aadd3dd59ee7881df88c990b",
       "root_runtime": "Exact red failed original five-second initial matcher; exact fix passed both actual owned PG/API/SDK/browser journeys, cleanup true",
       "scope": "Verifier only; initial exact browser GET readiness, original DOM assertions and reload checks retained; original hosted timing unproven"
+    },
+    "blank_bootstrap_followup": {
+      "owner_worktree": "/Users/josiahwong/Documents/research-shopping-history-bootstrap",
+      "branch": "fix/history-blank-bootstrap",
+      "base": "f3c1cf413b21b88b8707815f627d7b1a7442a0aa",
+      "status": "Bounded frozen34 protocol complete: original plus three additional hosted attempts all pass with complete observed traces. No further repeats; old blank cause unknown, instrumentation may perturb timing. Issue56 open.",
+      "premise": "Controlled delayed account requests do not explain a blank page with no account request. Inspect document/module/browser and owned process diagnostics before fixing.",
+      "ci_run": 44550970924,
+      "total_attempts": 4
     }
-  }
+  },
+  "integration": {
+    "worktree": "/Users/josiahwong/Documents/research-shopping-v4-integration",
+    "branch": "integrate/fieldnote-v4-draft7-card",
+    "head": "2b17471229a29e28f2ec0bc05211b3eff3b62466",
+    "server_author": "9e902bb388bda3bf1b1f6df033208b02faf51a8f",
+    "card_author": "01d7bc0215e50a58682e2d6b4a4c3e19e26d98b2",
+    "status": "Final independent df32 QA/security PASS; verifier2b separate QA/security PASS, app bytes identical",
+    "dependencies": "Own copied node_modules excluding shared Vite caches; reviewed human preview now rootdf32 application bytes",
+    "new_chat_fix": "Historical783e9ec red then afd9502 fixed reset; finaldf32 also fixes later Stop/bootstrap publishers"
+  },
+  "verifier_source": "2b17471229a29e28f2ec0bc05211b3eff3b62466",
+  "capability_gaps": [
+    "Issue56 original blank cause unproven after bounded four observed passes, no further repeats",
+    "Issue62 signed-in revision conflict retains data but needs explicit browser refresh; no cross-refresh draft promise",
+    "Original live malformed response remains rejected; Draft7 request correction has no claimed causal/live guarantee"
+  ]
 }
