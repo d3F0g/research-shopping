@@ -5,8 +5,53 @@ import { spawn, spawnSync } from "node:child_process";
 import net from "node:net";
 
 export async function fixtureDatabase() {
-  if (process.env.FIELDNOTE_TEST_DATABASE_URL)
-    throw new Error("Unset FIELDNOTE_TEST_DATABASE_URL. Tests create an owned temporary cluster.");
+  if (process.env.FIELDNOTE_TEST_DATABASE_URL) {
+    const expected =
+      "postgresql://fieldnote_fixture:fixture-only-password@127.0.0.1:5432/fieldnote_fixture";
+    if (
+      process.env.CI !== "true" ||
+      process.env.FIELDNOTE_TEST_DATABASE_URL !== expected
+    )
+      throw new Error(
+        "Only the exact CI-owned PostgreSQL service is accepted. Local tests create an owned temporary cluster.",
+      );
+    return {
+      url: expected,
+      restart: async () => {
+        const container = process.env.FIELDNOTE_TEST_POSTGRES_CONTAINER_ID;
+        if (!container || !/^[a-f0-9]{12,64}$/.test(container))
+          throw new Error(
+            "CI restart requires the exact owned service container ID.",
+          );
+        const restarted = spawnSync("docker", ["restart", container], {
+          encoding: "utf8",
+        });
+        if (restarted.status !== 0)
+          throw new Error("CI-owned PostgreSQL service restart failed.");
+        for (let attempt = 0; attempt < 100; attempt++) {
+          const health = spawnSync(
+            "docker",
+            [
+              "exec",
+              container,
+              "pg_isready",
+              "-U",
+              "fieldnote_fixture",
+              "-d",
+              "fieldnote_fixture",
+            ],
+            { encoding: "utf8" },
+          );
+          if (health.status === 0) return;
+          await new Promise((resolve) => setTimeout(resolve, 100));
+        }
+        throw new Error(
+          "CI-owned PostgreSQL service did not recover after restart.",
+        );
+      },
+      stop: async () => {},
+    };
+  }
   const executable = (name) =>
     process.platform === "darwin" ? `/opt/homebrew/bin/${name}` : name;
   const version = spawnSync(executable("postgres"), ["--version"], {

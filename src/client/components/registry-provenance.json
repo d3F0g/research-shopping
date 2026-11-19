@@ -1,0 +1,32 @@
+{
+  "registry": "https://ui.shadcn.com",
+  "style": "base-nova",
+  "command": "npx shadcn@4.23.0 add message-scroller message bubble input-group button card badge collapsible hover-card trace input label alert sheet field native-select textarea --yes --overwrite",
+  "theme": "https://ui.shadcn.com/docs/theming.md#default-theme-css",
+  "patterns": [
+    "https://ui.shadcn.com/docs/ai-elements/base/chat",
+    "https://ui.shadcn.com/docs/ai-elements/base/prompt-input",
+    "https://ui.shadcn.com/docs/ai-elements/base/inline-citation",
+    "https://ui.shadcn.com/docs/ai-elements/base/tool"
+  ],
+  "unmodifiedFiles": {
+    "src/client/components/ui/message-scroller.tsx": "653012cfeefe555badfb7b7f2079bd758c21fbfc7123140cf0d0bdcb7d6ca349",
+    "src/client/components/ui/message.tsx": "64e9ae0f9d1e268b0ed7b738a53d374d273fe1e7e2dd7b35ad7417e50a9bbe6c",
+    "src/client/components/ui/bubble.tsx": "cef49b9490c90d90451037247adedb8671eae234d388f8c30c7b2eac37356983",
+    "src/client/components/ui/input-group.tsx": "492310e6d519441c3e2a3b11330b3f35da71bd37630672f749271b9585a88e64",
+    "src/client/components/ui/button.tsx": "313353436d0fcc8e44ab470adb614b9fd013d28626f624328ea0d66d41a6c81b",
+    "src/client/components/ui/card.tsx": "8ad3a18d36bda0598dc0e9aa96ea22854944d5443ee4946f1d173815e115375f",
+    "src/client/components/ui/badge.tsx": "d9fb280e266119c4b62a4c518e63152de27b094c68d3e5f8929d05bfb0c1bc6c",
+    "src/client/components/ui/collapsible.tsx": "3de60b605e64c835588cecc189fbcf907eb602b0158f970d614b067e868b491e",
+    "src/client/components/ui/hover-card.tsx": "dbac09bf55d501e4f22e52dffe298f009b8cce8f1539902b3104a5c029163d0c",
+    "src/client/components/ui/trace.tsx": "f03ab1824e7312d00623f052a611497372a654cb33f5e6683b19ac53952f93e0",
+    "src/client/components/ui/input.tsx": "dab990dfefa0ba78854ab6602ad074270dba9d7d1262184d9bfbb62bd990903b",
+    "src/client/components/ui/label.tsx": "86232709f634da7f357a8aaec0e815f3f562604bb67202c88997fae97659b450",
+    "src/client/components/ui/alert.tsx": "f253568242c1c69b343f12474002fdbe229f603158171c59e21c491ab79f2e6e",
+    "src/client/components/ui/sheet.tsx": "67ed95ab6bb4f61cdcee2cf2811a80b40a7e11adfec5d35eb71707b51f753598",
+    "src/client/components/ui/field.tsx": "8e54d2838051eeb741f6925863b690c98928b25bbb26f3cd26a5b75121d06acb",
+    "src/client/components/ui/native-select.tsx": "93262e9e6c108df664725a0043f0c06ef844e173088b18c0f807e753e2f86d22",
+    "src/client/components/ui/textarea.tsx": "82601c91ffc6c727d924162c78d7cb853114bcced4e2eb922a68ca12d4239c0f",
+    "src/client/components/ui/separator.tsx": "9a80ff8c110e0c55489509f4f82ebcc929c0174b59544047147b7134f86a54e7"
+  }
+}

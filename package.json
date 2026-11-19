@@ -12,7 +12,18 @@
     "test": "EXA_RESEARCH_ENABLED=false vitest run",
     "test:watch": "EXA_RESEARCH_ENABLED=false vitest",
     "test:e2e": "EXA_RESEARCH_ENABLED=false playwright test",
-    "verify:offline": "EXA_RESEARCH_ENABLED=false node .agents/skills/verify-research-shopping/scripts/smoke.mjs"
+    "verify:offline": "EXA_RESEARCH_ENABLED=false node .agents/skills/verify-research-shopping/scripts/smoke.mjs",
+    "test:postgres": "node scripts/test-postgres.mjs",
+    "db:migrate": "tsx src/server/database-command.ts migrate",
+    "db:cleanup": "tsx src/server/database-command.ts cleanup",
+    "eval": "EXA_RESEARCH_ENABLED=false node --import tsx evals/v2/run.ts",
+    "eval:typecheck": "tsc --noEmit -p evals/v2/tsconfig.json",
+    "eval:test": "EXA_RESEARCH_ENABLED=false node --import tsx --test evals/v2/tests/*.test.ts",
+    "eval:compare": "npm run eval -- --compare",
+    "eval:browser": "EXA_RESEARCH_ENABLED=false node --import tsx evals/v2/browser.ts",
+    "eval:scorecard": "EXA_RESEARCH_ENABLED=false node --import tsx evals/v2/scorecard-cli.ts",
+    "eval:judge": "EXA_RESEARCH_ENABLED=false node --import tsx evals/v2/semantic/run.ts",
+    "eval:preservation": "node evals/v2/verify-preservation.mjs"
   },
   "dependencies": {
     "@base-ui/react": "^1.9.0",

@@ -35,7 +35,7 @@ export function AccountControl({ account, onReload, onAuthenticated, onSignOut, 
           <SheetDescription>Sign in to save your conversation. Guest messages are never uploaded.</SheetDescription>
         </SheetHeader>
         <div className="flex flex-col gap-4 px-4 pb-4">
-          {account.status === "loading" ? <p role="status">Checking your account...</p> : account.status === "guest-only" ? <p>Accounts are not configured. Guest conversation stays in this tab until refresh.</p> : account.status === "unavailable" ? <>
+          {account.status === "loading" ? <p role="status">Checking your account...</p> : account.status === "guest-only" ? <p>Accounts are not configured. Guest conversation is kept in server memory for this browser session and is lost when the server restarts.</p> : account.status === "unavailable" ? <>
             <p>Account persistence is unavailable. Reconnect before editing saved conversation.</p>
             <Button variant="outline" disabled={busy} onClick={() => void perform(onReload)}>Reload account</Button>
           </> : account.status === "signed-in" ? <>
