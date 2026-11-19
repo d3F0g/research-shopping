@@ -4,7 +4,7 @@ The current editor accepts an open product description, Required and Flexible cr
 
 ## Contextual questions
 
-Submit a shopping request without a budget. Exercise the optional budget form through **Apply budget** and, in a separate conversation, **Skip budget**. Require accepted values or an explicit skip without inventing a budget. A complete request with a stated budget must not ask for it again. A generic skip must never clear an unresolved hard requirement.
+Submit a useful shopping request without a budget and require research to start without an optional budget form. Add or edit bounds through the current answer's preference disclosure. A complete request with a stated budget must not ask for it again. For ambiguous money, inspect the typed pending draft, original request and question identity. Answer the missing currency and require automatic research with both bounds retained. A generic skip must never clear an unresolved hard requirement.
 
 ## Edit accepted preferences
 
