@@ -64,3 +64,80 @@ for (const viewport of [{ width: 1440, height: 1000 }, { width: 390, height: 844
     await writeFile(`${directory}/${viewport.width}-proof.json`, JSON.stringify({ commit: execFileSync("git", ["rev-parse", "HEAD"], { encoding: "utf8" }).trim(), viewport, fixtureOnly: true, outcomes }, null, 2) + "\n");
   });
 }
+
+for (const viewport of [{ width: 1440, height: 1000 }, { width: 390, height: 844 }]) {
+  test(`${viewport.width}px separates AI fit claims and source previews from eligibility`, async ({ page }) => {
+    await page.setViewportSize(viewport);
+    const directory = "artifacts/fieldnote-v4/card-interpretation";
+    await mkdir(directory, { recursive: true });
+    const rationale = "Fixture AI claims the selected product fits the requested price range.";
+    const productName = "Fixture Meridian Sunglasses - Silver";
+    let unresolved = true;
+    let literal = "";
+    await page.route("https://manufacturer.com/**", (route) => route.fulfill({
+      contentType: "image/svg+xml",
+      body: '<svg xmlns="http://www.w3.org/2000/svg" width="180" height="100"><rect width="180" height="100" fill="#777"/><text x="90" y="55" text-anchor="middle" fill="white">Fixture page preview</text></svg>',
+    }));
+    await page.route("**/api/session", async (route) => {
+      const response = await route.fetch();
+      const body = await response.json();
+      if (unresolved) for (const message of body.state.messages) {
+        const snapshot = message.research;
+        if (!snapshot) continue;
+        const product = snapshot.products.find((entry: { name: string }) => entry.name === productName);
+        if (!product) continue;
+        product.requestMatch.rationale = rationale;
+        const source = snapshot.sources.find((entry: { id: string }) => entry.id === product.identity.support[0]?.sourceId);
+        if (source) source.imageUrl = "https://manufacturer.com/fixture-page-preview.svg";
+        literal = product.identity.support[0].context.text;
+      }
+      await route.fulfill({ response, json: body });
+    });
+    await page.goto("/");
+    const composer = page.getByRole("textbox", { name: "Message", exact: true });
+    await composer.fill("Find spaced catalog ambiguity fixture sunglasses between SGD800 and1000");
+    await page.getByRole("button", { name: "Send message", exact: true }).click();
+    const card = page.locator('[data-slot="card"]').filter({ has: page.getByText(productName, { exact: true }) });
+    await expect(card.getByText("SGD 868.00", { exact: true })).toBeVisible();
+    await expect(card.getByText(/^Applicability to the selected variant is unresolved/)).toBeVisible();
+    await expect(card.getByText(/^Unresolved:/)).toBeVisible();
+    await expect(card.getByText(rationale, { exact: false })).not.toBeVisible();
+    await expect(card.getByText("Source-supported option", { exact: true })).toHaveCount(0);
+    const preview = card.getByRole("img", { name: `Source page preview for ${productName}`, exact: true });
+    await expect(preview).toBeVisible();
+    await expect.poll(() => preview.evaluate((image: HTMLImageElement) => image.complete && image.naturalWidth > 0)).toBe(true);
+    await expect(card.getByText("Source page preview. Product image and exact variant unverified.", { exact: true })).toBeVisible();
+    await expect(page.getByText(productName, { exact: true })).toBeInViewport();
+    await expect(composer).toBeInViewport();
+    await page.screenshot({ path: `${directory}/${viewport.width}-unresolved.png` });
+    const disclosure = card.getByRole("button", { name: `Evidence and tradeoffs for ${productName}`, exact: true });
+    await disclosure.scrollIntoViewIfNeeded();
+    await disclosure.focus();
+    await disclosure.press("Enter");
+    const interpretation = card.getByText(rationale, { exact: false });
+    await expect(interpretation).toBeVisible();
+    await expect(interpretation).toContainText("AI assessment, unverified:");
+    await expect(card.locator("blockquote").first()).toHaveText(literal, { useInnerText: true });
+    await interpretation.scrollIntoViewIfNeeded();
+    await expect(composer).toBeInViewport();
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+    await page.screenshot({ path: `${directory}/${viewport.width}-assessment.png`, animations: "disabled" });
+    const original = await page.request.get("/api/session").then((response) => response.json());
+    const retained = original.state.messages.find((message: { research?: { products: { name: string }[] } }) => message.research?.products[0]?.name === productName).research;
+    expect(retained.products[0].price).toBeNull();
+    expect(retained.products[0].eligible).toBe(false);
+    expect(retained.choice).toBeNull();
+    expect(retained.products[0].identity.support[0].context.text).toBe(literal);
+    unresolved = false;
+    await page.getByRole("button", { name: "New chat", exact: true }).click();
+    await composer.fill("Find a fixture powerbank between SGD30 and40");
+    await page.getByRole("button", { name: "Send message", exact: true }).click();
+    const eligible = page.locator('[data-slot="card"]').filter({ has: page.getByText("Fixture Powerbank Model A", { exact: true }) });
+    await expect(eligible.getByText("Source-supported option", { exact: true })).toBeVisible();
+    await expect(eligible.getByRole("img", { name: "Source page preview for Fixture Powerbank Model A", exact: true })).toBeVisible();
+    await expect(page.getByText(/^Fixture Powerbank Model A is a source-supported option/)).toBeInViewport();
+    await expect(composer).toBeInViewport();
+    await page.screenshot({ path: `${directory}/${viewport.width}-eligible.png` });
+    await writeFile(`${directory}/${viewport.width}-proof.json`, JSON.stringify({ commit: execFileSync("git", ["rev-parse", "HEAD"], { encoding: "utf8" }).trim(), viewport, fixtureOnly: true, providerRationale: rationale, literalContext: literal, eligibilityUnchanged: true, keyboardDisclosure: true }, null, 2) + "\n");
+  });
+}
