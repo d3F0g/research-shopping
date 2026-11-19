@@ -1,4 +1,4 @@
-import { parseBudget } from "../../src/domain/budget";
+import { hasExplicitBudgetCurrency, parseBudget } from "../../src/domain/budget";
 import { unresolvedMoneyDraft } from "../../src/domain/preferences";
 import type { IntentActions, IntentInterpreter } from "../../src/domain/intent-actions";
 
@@ -11,7 +11,7 @@ export const fixtureIntentInterpreter: IntentInterpreter = async ({ message, pre
   const money = parseBudget(message, preferences.budget, preferences.region);
   if (money.kind === "updated" && money.budget) {
     const range = /(?:\d\s*(?:to|and|[-–—])\s*(?:(?:SGD|USD|S\$|US\$|\$)\s*)?\d)/i.test(message);
-    actions.push({ kind: "budget", source: source(message), operation: range ? "replace-range" : "set-maximum", draft: { amount: money.budget.amount, minimum: range ? money.budget.minimum ?? null : null, currency: /\b(?:SGD|USD)\b|S\$|US\$/i.test(message) ? money.budget.currency : null } });
+    actions.push({ kind: "budget", source: source(message), operation: range ? "replace-range" : "set-maximum", draft: { amount: money.budget.amount, minimum: range ? money.budget.minimum ?? null : null, currency: hasExplicitBudgetCurrency(message) ? money.budget.currency : null } });
   } else if (money.kind === "clarification") actions.push({ kind: "budget", source: source(message), operation: "clarify", draft: unresolvedMoneyDraft(message, preferences) });
   const clauses = message.split(/(?:[.;\n]+|(?=\b(?:must(?: have| be)?|require|exclude|avoid|prefer|prioriti[sz]e|compare)\b))/i).map((item) => item.trim()).filter(Boolean);
   for (const clause of clauses) {

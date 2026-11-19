@@ -44,3 +44,12 @@ describe("local versus general intent routing", () => {
 it("rejects inverted pending bounds at the state boundary", () => {
   expect(MoneyDraftSchema.safeParse({ amount: 20, minimum: 30, currency: null }).success).toBe(false);
 });
+
+it("cannot remove an accepted floor by confirming an already explicit replacement currency", () => {
+  const previous = { ...defaultIntent(), productDescription: "phone", budget: { minimum: 1000, amount: 2000, currency: "USD" as const } };
+  const first = updateIntent("under SGD1800", previous);
+  expect(first.preferences.budget).toEqual(previous.budget);
+  const second = updateIntent("SGD", first.preferences);
+  expect(second.preferences.budget).toEqual(previous.budget);
+  expect(second.clarification).toBeDefined();
+});

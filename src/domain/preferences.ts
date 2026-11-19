@@ -1,4 +1,4 @@
-import { isCompleteBudgetAmendment, parseBudget } from "./budget";
+import { hasExplicitBudgetCurrency, isCompleteBudgetAmendment, parseBudget } from "./budget";
 import {
   defaultIntent,
   ShoppingIntentSchema,
@@ -398,7 +398,8 @@ function retainPendingUpdate(
     (issue.reason === "currency" ||
       issue.reason === "budget" ||
       issue.reason === "constraint")
-  )
+  ) {
+    const draft = unresolvedMoneyDraft(message, result.preferences);
     result.preferences = {
       ...result.preferences,
       pendingChange: issue.reason === "constraint" ? {
@@ -415,11 +416,12 @@ function retainPendingUpdate(
         message,
         reason: issue.reason,
         explanation: issue.message,
-        missingSlot: issue.reason === "currency" ? "currency" : "range",
-        draft: unresolvedMoneyDraft(message, result.preferences),
+        missingSlot: issue.reason === "currency" && draft.currency === null ? "currency" : "range",
+        draft,
       },
       revision: result.preferences.revision + 1,
     };
+  }
   const pending = result.preferences.pendingChange;
   if (pending && !result.reply)
     return {
@@ -527,14 +529,14 @@ export function migrateVersion4Intent(
 export function unresolvedMoneyDraft(message: string, previous: ShoppingIntent): MoneyDraft {
   const candidate = parseBudget(message.replace(/(?:SGD\$|S\$|(?<![A-Z])\$)/gi, "SGD"), null, previous.region);
   return candidate.kind === "updated" && candidate.budget
-    ? { amount: candidate.budget.amount, minimum: candidate.budget.minimum ?? null, currency: /\b(?:SGD|USD)\b|S\$|US\$/i.test(message) ? candidate.budget.currency : null }
+    ? { amount: candidate.budget.amount, minimum: candidate.budget.minimum ?? null, currency: hasExplicitBudgetCurrency(message) ? candidate.budget.currency : null }
     : { amount: null, minimum: null, currency: null };
 }
 
 export function resolvePendingAnswer(message: string, previous: ShoppingIntent): IntentUpdate | null {
   const question = previous.pendingChange;
-  if (!question || question.kind !== "money" || question.missingSlot !== "currency" || question.draft.amount === null) return null;
-  if (/^make it\s/i.test(message.trim()) && isCompleteBudgetAmendment(message) && !/\b(?:SGD|USD)\b|S\$|US\$/i.test(message)) {
+  if (!question || question.kind !== "money" || question.missingSlot !== "currency" || question.draft.currency !== null || question.draft.amount === null) return null;
+  if (/^make it\s/i.test(message.trim()) && isCompleteBudgetAmendment(message) && !hasExplicitBudgetCurrency(message)) {
     const amended = parseBudget(message, { amount: question.draft.amount, currency: "SGD", ...(question.draft.minimum === null ? {} : { minimum: question.draft.minimum }) }, previous.region);
     if (amended.kind === "updated" && amended.budget) {
       const pendingChange = { ...question, message, id: `question-${previous.revision + 1}`, draft: { ...question.draft, amount: amended.budget.amount } };

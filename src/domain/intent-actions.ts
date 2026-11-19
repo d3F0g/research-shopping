@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { MoneyDraftSchema, ShoppingIntentSchema, type PrepareTurnRequest, type ShoppingIntent } from "./contracts";
-import { parseBudget } from "./budget";
+import { hasExplicitBudgetCurrency, parseBudget } from "./budget";
 import { editIntent, unresolvedMoneyDraft, type IntentUpdate } from "./preferences";
 
 const Span = z.strictObject({ start: z.number().int().nonnegative(), end: z.number().int().positive(), text: z.string().min(1).max(2000) });
@@ -27,7 +27,7 @@ const normalize = (text: string) => text.toLowerCase().replace(/[^\p{L}\p{N}]+/g
 const hasNegativeContext = (message: string, source: { start: number; end: number; text: string }) => {
   const before = message.slice(0, source.start).split(/[;.!?\n]/).at(-1) ?? "";
   const after = message.slice(source.end).split(/[;.!?\n]/)[0] ?? "";
-  return /\b(?:no|not|never|cannot|without|neither|nor|[a-z]+n't|refus\w*)\b/i.test(`${before}${source.text}${after}`.replace(/[’‘]/g, "'"));
+  return /\b(?:no|not|never|cannot|without|neither|nor|[a-z]+n't|avoid\w*|refus\w*)\b/i.test(`${before}${source.text}${after}`.replace(/[’‘]/g, "'"));
 };
 
 
@@ -44,7 +44,8 @@ export function applyIntentActions(previous: ShoppingIntent, message: string, ra
   if (budgetActions.length > 1 || (budgetActions.length && actions.some((action) => action.kind === "remove-budget"))) return null;
   const budgetAction = budgetActions[0];
   const pendingMoney = previous.pendingChange?.kind === "money" && previous.pendingChange.draft.amount !== null ? previous.pendingChange : null;
-  const moneyContext = starts.length ? null : pendingMoney ? {
+  const newDollarRange = starts.length > 0 && budgetAction?.operation !== "set-maximum" && /\$/.test(message) && !hasExplicitBudgetCurrency(message);
+  const moneyContext = newDollarRange ? null : pendingMoney ? {
     amount: pendingMoney.draft.amount!, currency: pendingMoney.draft.currency ?? "SGD",
     ...(pendingMoney.draft.minimum === null ? {} : { minimum: pendingMoney.draft.minimum }),
   } : previous.budget;
@@ -109,6 +110,7 @@ export function applyIntentActions(previous: ShoppingIntent, message: string, ra
         intent.pendingChange = null;
         break;
       case "set-region":
+        if (hasNegativeContext(message, action.source)) return null;
         if (!(action.value === "SG" ? /\b(?:SG|Singapore)\b/i : /\b(?:US|USA|United States)\b/i).test(source)) return null;
         intent.region = action.value;
         break;
@@ -116,7 +118,7 @@ export function applyIntentActions(previous: ShoppingIntent, message: string, ra
   }
   const budget = parsedMoney;
   const notes: string[] = [];
-  const currencyStillMissing = pendingMoney && !starts.length && pendingMoney.draft.currency === null && budgetAction?.draft.currency === null && !/\b(?:SGD|USD)\b|S\$|US\$/i.test(message);
+  const currencyStillMissing = pendingMoney && pendingMoney.draft.currency === null && budgetAction?.draft.currency === null && !hasExplicitBudgetCurrency(message);
   if (budget?.kind === "updated" && currencyStillMissing && budget.budget) {
     intent.pendingChange = {
       ...pendingMoney, message, id: `question-${previous.revision + 1}`,
@@ -129,11 +131,12 @@ export function applyIntentActions(previous: ShoppingIntent, message: string, ra
     if (budget.note) notes.push(budget.note);
   }
   if (budget?.kind === "clarification") {
+    const draft = unresolvedMoneyDraft(message, intent);
     intent.pendingChange = {
       kind: "money", id: `question-${previous.revision + 1}`, originalRequest: message,
       message, reason: budget.reason, explanation: budget.message,
-      missingSlot: budget.reason === "currency" ? "currency" : "range",
-      draft: unresolvedMoneyDraft(message, intent),
+      missingSlot: budget.reason === "currency" && draft.currency === null ? "currency" : "range",
+      draft,
     };
   }
   intent.revision = Math.max(intent.revision, previous.revision) + 1;

@@ -65,3 +65,43 @@ describe("validated model operations", () => {
     expect(apply(text, [{ kind: "remove-budget", bound: "all", source: span(text) }])).toBeNull();
   });
 });
+
+
+describe("authority for contextual mutations", () => {
+  it("retains an accepted USD floor when a new objective changes only the ceiling", () => {
+    const previous = { ...defaultIntent(), productDescription: "phone", budget: { minimum: 1000, amount: 2000, currency: "USD" as const } };
+    const message = "Instead I want a laptop under 1800";
+    const result = applyIntentActions(previous, message, { disposition: "research", actions: [
+      { kind: "start-request", source: span(message) },
+      { kind: "budget", source: span(message), operation: "set-maximum", draft: { amount: 1800, minimum: null, currency: null } },
+    ] });
+    expect(result?.preferences).toMatchObject({ productDescription: message, budget: { minimum: 1000, amount: 1800, currency: "USD" } });
+  });
+  it("retains accepted currency when a new objective supplies both replacement bounds", () => {
+    const previous = { ...defaultIntent(), productDescription: "phone", budget: { minimum: 1000, amount: 2000, currency: "USD" as const } };
+    const message = "Instead I want a laptop between 1200 and 1800";
+    const result = applyIntentActions(previous, message, { disposition: "research", actions: [
+      { kind: "start-request", source: span(message) },
+      { kind: "budget", source: span(message), operation: "replace-range", draft: { amount: 1800, minimum: 1200, currency: null } },
+    ] });
+    expect(result?.preferences.budget).toEqual({ minimum: 1200, amount: 1800, currency: "USD" });
+  });
+  it("does not supply a currency when a new objective amends a pending ceiling", () => {
+    const pending = updateIntent("powerbank $30-40", defaultIntent()).preferences;
+    const message = "Instead I want a flashlight under 50";
+    const result = applyIntentActions(pending, message, { disposition: "research", actions: [
+      { kind: "start-request", source: span(message) },
+      { kind: "budget", source: span(message), operation: "set-maximum", draft: { amount: 50, minimum: null, currency: null } },
+    ] });
+    expect(result?.preferences.budget).toBeNull();
+    expect(result?.preferences.pendingChange).toMatchObject({ draft: { minimum: 30, amount: 50, currency: null } });
+  });
+  it.each(["Do not switch to US", "I don't want to switch to US", "Avoid switching to US"])("does not apply a positive region fragment from %s", (message) => {
+    expect(apply(message, [{ kind: "set-region", source: span(message, "US"), value: "US" }])).toBeNull();
+  });
+  it("applies an affirmative region change while preserving monetary constraints", () => {
+    const message = "Switch to US";
+    const result = apply(message, [{ kind: "set-region", source: span(message, "US"), value: "US" }]);
+    expect(result?.preferences).toMatchObject({ region: "US", budget: previous().budget, criteria: previous().criteria });
+  });
+});

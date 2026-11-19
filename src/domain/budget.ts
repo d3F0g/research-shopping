@@ -304,3 +304,7 @@ const completeAmendment = new RegExp(String.raw`^(?:make it|(?:set|change|raise|
 export function isCompleteBudgetAmendment(message: string): boolean {
   return completeAmendment.test(message.trim());
 }
+
+export function hasExplicitBudgetCurrency(message: string): boolean {
+  return /(?:^|[^a-z])(?:SGD|USD)(?=$|[^a-z])|(?:^|[^a-z])(?:S|US)\$/i.test(message);
+}
