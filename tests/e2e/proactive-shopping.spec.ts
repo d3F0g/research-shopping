@@ -57,6 +57,11 @@ test("shows actual preparation and search activity with an attributed source ill
     expect(imageRequests[0].headers().referer).toBeUndefined();
     expect(transport.interpretationRequests).toHaveLength(1);
     expect(transport.requests[1]).toHaveProperty("questionId", "question-1");
+    expect(transport.requests.find((turn) => turn.phase === "research")!.preferences).toMatchObject({
+      budget: { minimum: 30, amount: 40, currency: "SGD" },
+      criteria: [expect.objectContaining({ wording: "portability", strength: "flexible" })],
+      pendingChange: null,
+    });
     for (const viewport of [{ width: 1440, height: 900 }, { width: 390, height: 844 }, { width: 390, height: 600 }]) {
       await page.setViewportSize(viewport);
       await card.scrollIntoViewIfNeeded();
@@ -203,12 +208,12 @@ function powerbankAnswer() {
   return native;
 }
 
-for (const currency of ["SGD", "S$", "SGD$30"]) {
-  test(`retains the original 30 to 40 range after ${currency} and automatically researches`, async ({ page }, testInfo) => {
+for (const [currency, submittedRequest] of [["SGD", request], ["S$", request], ["SGD$30", request], ["SGD", `${request}.`]]) {
+  test(`retains the original 30 to 40 range after ${currency}${submittedRequest.endsWith(".") ? " with sentence punctuation" : ""} and automatically researches`, async ({ page }, testInfo) => {
     const transport = await actualComposition(page, testInfo, powerbankAnswer(), { interpretIntent: null });
     try {
       await page.goto(transport.baseUrl);
-      await send(page, request);
+      await send(page, submittedRequest);
       await expect(page.getByTestId("conversation-turn").last()).toContainText("SGD or USD");
       expect(transport.sdkRequests).toHaveLength(0);
       await send(page, currency);
@@ -220,7 +225,7 @@ for (const currency of ["SGD", "S$", "SGD$30"]) {
       expect(transport.requests.filter((turn) => turn.phase === "research")).toEqual([
         expect.objectContaining({ preferences: expect.objectContaining({ budget: { minimum: 30, amount: 40, currency: "SGD" }, pendingChange: null }) }),
       ]);
-      await expect(page.getByTestId("user-message")).toHaveText([request, currency]);
+      await expect(page.getByTestId("user-message")).toHaveText([submittedRequest, currency]);
       await expect(page.locator(".pending-change, .question-card")).toHaveCount(0);
       if (currency === "SGD") {
         for (const viewport of [{ width: 1440, height: 900 }, { width: 390, height: 600 }]) {
