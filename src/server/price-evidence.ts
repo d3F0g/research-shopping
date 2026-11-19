@@ -41,6 +41,31 @@ function conditionProof(tail: string): Set<string> | null {
   return proven;
 }
 
+function priceClauses(text: string, subjects: string[], money: string) {
+  const headings = new Set(subjects.map((subject) => subject.toLowerCase()));
+  const amountLine = new RegExp(`^(?:price\\s*:\\s*)?${money}(?=$|[\\s,.])([\\s\\S]*)$`, "iu");
+  const lines = text.split(/\r?\n/u);
+  const clauses: string[] = [];
+  for (let i = 0; i < lines.length; i++) {
+    const heading = lines[i]!.trim();
+    const amount = lines[i + 1]?.trim();
+    if (!headings.has(heading.toLowerCase()) || !amount || !amountLine.test(amount)) {
+      clauses.push(lines[i]!);
+      continue;
+    }
+    const tail: string[] = [];
+    let next = i + 2;
+    while (next < lines.length && lines[next]!.trim() && !headings.has(lines[next]!.trim().toLowerCase())) {
+      tail.push(lines[next]!.trim().replace(/^for (?:one|1) unit\b/iu, "one unit").replace(/[.!?]$/u, ""));
+      next++;
+    }
+    const observed = amount.replace(/^price\s*:\s*/iu, "").replace(/[.!?]$/u, "");
+    clauses.push(`${heading} costs ${observed}${tail.length ? `, ${tail.join(", ")}` : ""}`);
+    i = next - 1;
+  }
+  return clauses.flatMap((clause) => clause.split(/(?<=[.!?])\s+(?=[\p{Lu}\d])/u));
+}
+
 export function assessPriceContext(
   price: Price,
   productName: string,
@@ -101,7 +126,7 @@ export function assessPriceContext(
   let observed = false;
   let complete = true;
   const proven = new Set<string>();
-  for (const sentence of text.split(/(?<=[.!?])\s+(?=[\p{Lu}\d])|\n+/u)) {
+  for (const sentence of priceClauses(text, [...subjects, ...otherSubjects], money)) {
     const clause = sentence.trim().replace(/[.!?]$/, "");
     if (
       !clause ||

@@ -1,4 +1,5 @@
 import { createServer, type Server } from "node:http";
+import { getRequestListener } from "@hono/node-server";
 import { randomUUID } from "node:crypto";
 import { chmod, mkdtemp, readFile, readdir, realpath, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
@@ -142,11 +143,14 @@ describe("shopping retrieval and ordinary source price blocks", () => {
     material.citations.push({ ...material.citations[0]!, url: "https://manufacturer.com/", text: "Fixture data: Model A costs SGD65, not SGD35." });
     expect(projectExaAnswer(material, current).status).toBe("unavailable");
   });
-  it("retains a single exact product-heading price block as an observed price", () => {
+  it.each([
+    "Fixture Meridian Sunglasses AX1\nSGD 850.00\nFor one unit, tax included.",
+    "Fixture Meridian Sunglasses AX1\nPrice: SGD 850.00\nTax included.",
+    "AX1\nSGD 850.00\nTax included.",
+    "Fixture Meridian Sunglasses AX1\nPrice: SGD 850.00, tax included.",
+  ])("retains a single exact product-heading price block %s", (block) => {
     const intent = sunglassesIntent();
-    const result = projectExaAnswer(merchantMaterial(intent,
-      "Fixture Meridian Sunglasses AX1\nSGD 850.00\nFor one unit, tax included.",
-    ), intent);
+    const result = projectExaAnswer(merchantMaterial(intent, block), intent);
     expect(result.status).toBe("ready");
     if (result.status !== "ready") throw new Error("No comparison");
     expect(result.research.products[0]!.price).toMatchObject({
@@ -155,12 +159,34 @@ describe("shopping retrieval and ordinary source price blocks", () => {
     expect(result.research.products[0]!.eligible).toBe(true);
     expect(result.research.choice?.productId).toBe("model-a");
   });
+  it("keeps two uniquely scoped price cards usable without mixing their prices", () => {
+    const intent = sunglassesIntent();
+    const material = merchantMaterial(intent, "Fixture Meridian Sunglasses AX1\nPrice: SGD850\nTax included.\n\nFixture Meridian Sunglasses BX2\nPrice: SGD950\nTax included.");
+    const other = structuredClone(material.answer.products[0]!);
+    other.id = "model-b";
+    other.name = "Fixture Meridian Sunglasses BX2";
+    other.variant = "BX2";
+    other.price!.amount = 950;
+    other.price!.variant = "BX2";
+    material.answer.products.push(other);
+    const result = projectExaAnswer(material, intent);
+    if (result.status !== "ready") throw new Error("No comparison");
+    expect(result.research.products.map((product) => [product.id, product.price?.amount, product.eligible])).toEqual([
+      ["model-a", 850, true], ["model-b", 950, true],
+    ]);
+  });
   it.each([
     "Fixture Meridian Sunglasses AX1\nSGD 850.00\nOnly available with membership.",
     "Fixture Meridian Sunglasses AX2\nSGD 850.00\nFor one unit, tax included.",
     "Fixture Meridian Sunglasses AX1\nSGD 850.00–1200.00\nDepending on configuration.",
     "Fixture Meridian Sunglasses AX1\n$850.00\nFor one unit, tax included.",
     "Fixture Meridian Sunglasses AX1\nSGD 850.00\nShipping SGD 100 is mandatory.",
+    "Fixture Meridian Sunglasses AX1\nSGD 850.00\nNot tax included.",
+    "Fixture Meridian Sunglasses AX1\nSGD 850.00\nTax included, unless a voucher is unavailable.",
+    "Fixture Meridian Sunglasses AX1\nSGD 850.00\nFor AX2 only.",
+    "Fixture Meridian Sunglasses AX1\nSGD 850.00\nTax included.\n\nShipping costs SGD100.",
+    "Fixture Meridian Sunglasses AX1\nSGD 850.00\nTax included.\nMinimum purchase of three units.",
+    "Fixture Meridian Sunglasses AX1\nSGD 950.00\nTax included.",
   ])("does not recommend unresolved price block %s", (block) => {
     const intent = sunglassesIntent();
     const result = projectExaAnswer(merchantMaterial(intent, block), intent);
@@ -174,10 +200,13 @@ describe("shopping retrieval and ordinary source price blocks", () => {
 describe("private projection diagnostics at the SDK boundary", () => {
   async function endpoint(material: unknown) {
     let calls = 0;
-    const server = createServer((_req, res) => {
+    const server = createServer(async (req, res) => {
       calls++;
+      let body = "";
+      for await (const chunk of req) body += chunk;
+      const response = typeof material === "function" ? material(JSON.parse(body)) : material;
       res.setHeader("content-type", "application/json");
-      res.end(JSON.stringify(material));
+      res.end(JSON.stringify(response));
     });
     servers.push(server);
     await new Promise<void>((resolve) => server.listen(0, "127.0.0.1", resolve));
@@ -185,6 +214,36 @@ describe("private projection diagnostics at the SDK boundary", () => {
     if (!address || typeof address === "string") throw new Error("No socket");
     return { baseUrl: `http://127.0.0.1:${address.port}`, calls: () => calls };
   }
+  it.each(["complete", "membership"])("exercises %s source card through real API and SDK sockets", async (mode) => {
+    const block = `Fixture Meridian Sunglasses AX1\nPrice: SGD850\nTax included.${mode === "membership" ? "\nMembership required." : ""}`;
+    const sdk = await endpoint((request: { systemPrompt: string }) => merchantMaterial(
+      JSON.parse(request.systemPrompt.split("Current authoritative shopping intent: ")[1]!), block,
+    ));
+    let reservations = 0;
+    const server = createServer();
+    servers.push(server);
+    await new Promise<void>((resolve) => server.listen(0, "127.0.0.1", resolve));
+    const address = server.address();
+    if (!address || typeof address === "string") throw new Error("No API socket");
+    const app = createApp({ conversations: createConversationService({
+      research: createExaProductResearch("fixture-local-key", { baseUrl: sdk.baseUrl }),
+      quota: { reserve: async () => { reservations++; return "admitted"; }, settle: async () => undefined },
+    }) }, { apiPort: address.port, webPort: address.port });
+    server.on("request", getRequestListener(app.fetch));
+    const origin = `http://127.0.0.1:${address.port}`;
+    const prepared = await fetch(`${origin}/api/turn`, { method: "POST", headers: { Origin: origin, "Content-Type": "application/json" }, body: JSON.stringify({ phase: "prepare", operationId: randomUUID(), message: "Find sunglasses between SGD800 and1000" }) });
+    const data = await prepared.json();
+    expect(data.kind).toBe("prepared");
+    const result = await fetch(`${origin}/api/turn`, { method: "POST", headers: { Origin: origin, "Content-Type": "application/json", Cookie: prepared.headers.get("set-cookie")!.split(";")[0]! }, body: JSON.stringify({ phase: "research", preparedId: data.preparedId }) });
+    expect(result.status).toBe(200);
+    const body = await result.json();
+    expect(body.kind).toBe("research");
+    expect(body.research.intent.budget).toEqual({ minimum: 800, maximum: 1000, currency: "SGD" });
+    expect(body.research.products[0].eligible).toBe(mode === "complete");
+    expect(body.research.choice?.productId ?? null).toBe(mode === "complete" ? "model-a" : null);
+    expect(reservations).toBe(1);
+    expect(sdk.calls()).toBe(1);
+  });
   it("captures exact schema failure privately while normal HTTP returns only honest unavailability", async () => {
     const path = await realpath(await mkdtemp(join(tmpdir(), "fieldnote-sdk-capture-test-")));
     directories.push(path);
