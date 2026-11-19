@@ -86,6 +86,11 @@ const unknown = (rationale: string): Assessment => ({
   rationale,
   support: [],
 });
+function containsSourceInstructions(text: string): boolean {
+  return /\b(?:ignore|disregard|override)\b[\s\S]{0,120}\b(?:user|system|previous|requirements?|instructions?)\b|\b(?:send|reveal|leak|exfiltrate|print)\b[\s\S]{0,120}\b(?:credentials?|secrets?|api[ -]?keys?|tokens?|passwords?)\b|\b(?:assert|pretend|declare)\s+that\b|\b(?:assistant|system)\s*(?:message|prompt|:)/i.test(
+    text,
+  );
+}
 
 function retainSources(
   citations: z.infer<typeof Envelope>["citations"],
@@ -143,11 +148,15 @@ function bindAssessment(
   sources: ResearchSource[],
 ): Assessment {
   const support: Assessment["support"] = [];
+  let truncated = false,
+    instructed = false;
   for (const span of value.support) {
     const source = sources.find((s) => s.url === span.url),
       start = source?.text.indexOf(span.quote) ?? -1;
     if (!source || start < 0)
       return unknown("The quotation was not found at its retained source URL.");
+    truncated ||= source.textTruncated;
+    instructed ||= containsSourceInstructions(source.text);
     const complete = paragraph(source, start, start + span.quote.length);
     if (!complete)
       return unknown(
@@ -168,6 +177,22 @@ function bindAssessment(
         originalEnd: start + span.quote.length,
       });
   }
+  if (instructed)
+    return {
+      status: "unknown",
+      scope: "unclear",
+      rationale:
+        "The retained source contains instructions directed at the assistant. It cannot establish product facts.",
+      support,
+    };
+  if (truncated && value.status === "supported")
+    return {
+      status: "unknown",
+      scope: "unclear",
+      rationale:
+        "The source was cut. Discarded context may qualify the retained passage, so it cannot establish positive compliance.",
+      support,
+    };
   if (value.status !== "unknown" && !support.length)
     return unknown("Supporting evidence was not returned.");
   if (value.status === "conflict" && support.length < 2)
@@ -201,6 +226,13 @@ function bindPrice(
   if (!value) return null;
   const assessment = bindAssessment(value.assessment, sources);
   if (!assessment.support.length) return null;
+  if (
+    assessment.support.some((span) => {
+      const source = sources.find((s) => s.id === span.sourceId)!;
+      return source.textTruncated || containsSourceInstructions(source.text);
+    })
+  )
+    return null;
   const token =
     value.currency === "SGD"
       ? "(?:SGD|S\\$|Singapore dollars?)"
@@ -287,6 +319,17 @@ function bindPrice(
     }
   }
   if (!observed) return null;
+  const conditions = value.conditions.filter((condition) =>
+    contexts.some((span) =>
+      span.quote.toLowerCase().includes(condition.toLowerCase()),
+    ),
+  );
+  unresolved ||= conditions.length !== value.conditions.length;
+  unresolved ||= contexts.some((span) =>
+    /\b(?:exclud(?:e|es|ed|ing)|not includ(?:e|ed|ing)|before|plus|additional|mandatory|extra)\b[^.!?\n]{0,100}\b(?:tax|GST|VAT|shipping|delivery|fees?|charges?)\b|\b(?:tax|GST|VAT|shipping|delivery|fees?|charges?)\b[^.!?\n]{0,80}\b(?:extra|excluded|not included|additional|apply|calculated)\b/i.test(
+      span.quote,
+    ),
+  );
   unresolved ||= value.conditions.some(
     (c) =>
       !/^(?:one unit|per unit|tax included|including tax|gst included|sale price|standard price|regular price)[.!]?$/i.test(
@@ -301,8 +344,15 @@ function bindPrice(
     unresolved = true;
   return {
     ...value,
+    conditions,
     conditionsResolved: !unresolved,
-    assessment: { ...assessment, support: contexts },
+    assessment: {
+      ...assessment,
+      rationale: unresolved
+        ? "The complete price context has unresolved or conflicting conditions. Confirm the total and eligibility with the merchant."
+        : assessment.rationale,
+      support: contexts,
+    },
   };
 }
 export function projectExaAnswer(raw: unknown, intent: ShoppingIntent) {
