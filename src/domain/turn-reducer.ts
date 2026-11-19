@@ -1,3 +1,4 @@
+import { evidenceContext } from "./rendered-evidence";
 import { assessProduct } from "./research";
 import { BudgetSchema, MoneySchema, type ChatMessage, type ConversationState, type PrepareInput, type Requirement, type ShoppingIntent, type TurnDecision } from "./conversation";
 
@@ -99,14 +100,14 @@ function heldReply(state: ConversationState, mode: "compare" | "best" | "detail"
   const selected = ordinals.length ? research.products.filter((_, index) => ordinals.includes(index)) : research.products;
   if (!selected.length || ordinals.some((index) => !research.products[index])) return { text: "That option is not present in the retained comparison." };
   const unchanged = state.intent.requirements.filter((requirement) => requirement.strength === "hard").every((requirement) => research.intent.requirements.some((prior) => prior.id === requirement.id && prior.text === requirement.text && prior.strength === "hard"));
-  const current = selected.map((product) => {
+  const current = research.evidenceVersion === 3 ? research.products.filter((product) => selected.some((entry) => entry.id === product.id)).map((product) => {
     const assessed = assessProduct(product, state.intent);
     return unchanged ? assessed : { ...assessed, eligible: false, blockers: [...assessed.blockers, "The retained evidence has not assessed the changed requirements."] };
-  });
+  }) : selected.map((product) => ({ ...product, eligible: false, blockers: [...product.blockers, "Historical evidence is retained for reading and has not been reassessed under the current evidence contract."] }));
   const supportText = (assessment: typeof research.products[number]["identity"]) => {
     const spans = assessment.support.map((span) => {
       const source = research.sources.find((item) => item.id === span.sourceId);
-      return source ? ` "${span.quote}" (${source.url})` : "";
+      return source ? ` "${evidenceContext(span)}" (${source.url})` : "";
     }).join("");
     return `${assessment.rationale} (${assessment.status}).${spans}`;
   };

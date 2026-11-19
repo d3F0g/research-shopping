@@ -57,7 +57,7 @@ describe("complete atomic price evidence", () => {
       if (product.price) {
         expect(
           product.price.assessment.support.some((span) =>
-            span.quote.includes(text),
+            span.context.text.includes(text),
           ),
         ).toBe(true);
       }
@@ -88,9 +88,9 @@ describe("complete atomic price evidence", () => {
         (source) => source.id === support.sourceId,
       )!;
       expect(
-        source.text.slice(support.originalStart, support.originalEnd),
-      ).toBe(support.originalQuote);
-      expect(source.text.slice(support.start, support.end)).toBe(support.quote);
+        source.text.slice(support.literal.start, support.literal.end),
+      ).toBe(support.literal.text);
+      expect(source.text.slice(support.context.start, support.context.end)).toBe(support.context.text);
     },
   );
   it.each([29, 41])(
@@ -174,7 +174,7 @@ describe("complete atomic price evidence", () => {
         (span) => span.quote,
       );
     for (const span of research.products[0]!.price!.assessment.support)
-      expect(actualNativeQuotes).toContain(span.originalQuote);
+      expect(actualNativeQuotes).toContain(span.origin.kind === "provider" ? span.origin.reportedQuote : null);
   });
   it.each([
     ["Fixture Other Model B is a separate product.", true],
@@ -223,7 +223,7 @@ describe("complete atomic price evidence", () => {
         material.answer.products[0]!.price.assessment.support.map(
           (native) => native.quote,
         ),
-      ).toContain(span.originalQuote);
+      ).toContain(span.origin.kind === "provider" ? span.origin.reportedQuote : null);
   });
   it.each(["shared", "distinct"])(
     "keeps three products with %s variants usable on separate unambiguous pages",
@@ -270,7 +270,7 @@ describe("complete atomic price evidence", () => {
     material.answer.products[0]!.price.assessment.status = "contradicted";
     const research = project(material);
     expect(research.products[0]!.price?.assessment.status).toBe("contradicted");
-    expect(research.products[0]!.price?.assessment.support[0]!.quote).toContain(
+    expect(research.products[0]!.price?.assessment.support[0]!.context.text).toContain(
       "without tax included",
     );
     expect(research.choice).toBeNull();

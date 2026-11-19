@@ -1,5 +1,7 @@
 import { z } from "zod";
 import type { ResearchSnapshot } from "./research";
+import type { StoredResearchV2 } from "./workspace-history-v2";
+export type RenderableResearch = Readonly<ResearchSnapshot | StoredResearchV2>;
 
 export const MoneySchema = z
   .number()
@@ -61,7 +63,7 @@ export type ChatMessage = {
   role: "user" | "assistant";
   text: string;
   detail?: string;
-  research?: ResearchSnapshot;
+  research?: RenderableResearch;
 };
 export type ConversationState = {
   version: 2;

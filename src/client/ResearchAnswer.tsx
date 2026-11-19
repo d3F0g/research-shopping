@@ -24,11 +24,11 @@ import {
   TraceTitle,
   TraceIcon,
 } from "@/components/ui/trace";
-import type {
-  Assessment,
-  ResearchProduct,
-  ResearchSnapshot,
-} from "../domain/research";
+import type { RenderableResearch } from "../domain/conversation";
+import { evidenceContext, evidenceLabel } from "../domain/rendered-evidence";
+type ResearchProduct = RenderableResearch["products"][number];
+type Assessment = ResearchProduct["identity"];
+type ResearchSnapshot = RenderableResearch;
 
 function Citation({
   source,
@@ -73,7 +73,10 @@ function Evidence({
       {assessment.support.map((span, i) => {
         const source = snapshot.sources.find((s) => s.id === span.sourceId);
         return source ? (
-          <Citation key={i} source={source} quote={span.quote} />
+          <div key={i}>
+            <p className="text-xs text-muted-foreground">{evidenceLabel(span)}</p>
+            <Citation source={source} quote={evidenceContext(span)} />
+          </div>
         ) : null;
       })}
     </div>

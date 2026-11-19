@@ -15,7 +15,8 @@ import {
   type ResearchSource,
 } from "../domain/research";
 import { isSafeSourceUrl } from "../domain/safe-url";
-import { assessPriceContext } from "./price-evidence";
+import { bindReportedQuote, completeContext } from "../domain/evidence-binding-v3";
+import { assessPriceContext, observePrice, unresolvedConditions } from "./price-evidence";
 
 const NativeAssessment = z.object({
   status: z.enum(["supported", "unknown", "contradicted", "conflict"]),
@@ -135,23 +136,6 @@ function retainSources(citations: z.infer<typeof Envelope>["citations"]): {
       sources.every((source) => !source.textTruncated),
   };
 }
-function paragraph(source: ResearchSource, start: number, end: number) {
-  const before = source.text.lastIndexOf("\n\n", start),
-    after = source.text.indexOf("\n\n", end);
-  const left = before < 0 ? 0 : before + 2,
-    right = after < 0 ? source.text.length : after;
-  if (
-    (source.textTruncated && right === source.text.length) ||
-    right - left > 4000
-  )
-    return null;
-  return {
-    sourceId: source.id,
-    start: left,
-    end: right,
-    quote: source.text.slice(left, right),
-  };
-}
 function bindAssessment(
   value: z.infer<typeof NativeAssessment>,
   sources: ResearchSource[],
@@ -162,31 +146,13 @@ function bindAssessment(
     instructed = false;
   for (const span of value.support) {
     const url = isSafeSourceUrl(span.url) ? new URL(span.url).href : null;
-    const source = sources.find((s) => s.url === url),
-      start = source?.text.indexOf(span.quote) ?? -1;
-    if (!source || start < 0)
-      return unknown("The quotation was not found at its retained source URL.");
+    const source = sources.find((s) => s.url === url);
+    const bound = source && bindReportedQuote(source, span.quote);
+    if (!source || !bound)
+      return unknown("The quotation has no unique complete literal or whitespace-only binding at its retained source URL.");
     truncated ||= source.textTruncated;
     instructed ||= containsSourceInstructions(source.text);
-    const complete = paragraph(source, start, start + span.quote.length);
-    if (!complete)
-      return unknown(
-        "Cut or oversized source context cannot establish complete support.",
-      );
-    if (
-      !support.some(
-        (s) =>
-          s.sourceId === complete.sourceId &&
-          s.start === complete.start &&
-          s.end === complete.end,
-      )
-    )
-      support.push({
-        ...complete,
-        originalQuote: span.quote,
-        originalStart: start,
-        originalEnd: start + span.quote.length,
-      });
+    if (!support.some((s) => s.sourceId === bound.sourceId && s.literal.start === bound.literal.start && s.literal.end === bound.literal.end)) support.push(bound);
   }
   if (instructed)
     return {
@@ -212,7 +178,7 @@ function bindAssessment(
     value.status === "supported" &&
     support.some((s) =>
       /\b(?:not compatible|not suitable|does not support|doesn't support|cannot support|not waterproof|not included|no longer available)\b/i.test(
-        s.quote,
+        s.context.text,
       ),
     )
   )
@@ -230,10 +196,17 @@ function bindAssessment(
     support,
   };
 }
+function bindRequestMatch(value: z.infer<typeof NativeAssessment>, sources: ResearchSource[], completeSources: boolean): Assessment {
+  const assessment = bindAssessment(value, sources, completeSources);
+  if (assessment.status === "supported" && assessment.support.every((span) => /^(?:[A-Z]{3}|[A-Z]{0,2}[$€£])\s*\d[\d,.]*$/u.test(span.literal.text.trim())))
+    return { ...assessment, status: "unknown", rationale: "The provider's quotation establishes only a monetary observation. It does not establish fit to the complete shopping objective." };
+  return assessment;
+}
 function bindPrice(
   value: z.infer<typeof NativeProduct>["price"],
   productName: string,
   selectedVariant: string | null,
+  identity: Assessment,
   otherProducts: Pick<ResearchProduct, "name" | "variant">[],
   sources: ResearchSource[],
   completeSources: boolean,
@@ -251,20 +224,20 @@ function bindPrice(
   const support = assessment.support.map((span) => {
     const source = sources.find((source) => source.id === span.sourceId)!;
     return source.text.length <= 4000
-      ? { ...span, start: 0, end: source.text.length, quote: source.text }
+      ? { ...span, context: { start: 0, end: source.text.length, text: source.text } }
       : span;
   });
   const price = { ...value, assessment };
-  const published = support.map((span) =>
-    assessPriceContext(price, productName, span.quote, otherProducts),
-  );
-  const observation = published.find(
-    (proof) => proof.kind === "qualified" || proof.kind === "unresolved",
-  );
-  if (!observation) return null;
+  const published = support.map((span) => {
+    const source = sources.find((source) => source.id === span.sourceId)!;
+    return observePrice(price, productName, identity, source, otherProducts, span.context.text);
+  });
+  const observation = published.find((proof) => proof.kind === "observed");
+  if (!observation || observation.kind !== "observed") return null;
   const resolved =
     completeSources &&
-    published.some((proof) => proof.kind === "qualified") &&
+    value.conditionsResolved &&
+    published.some((proof) => proof.kind === "observed" && proof.applicability.kind === "qualified") &&
     sources.every((source) => {
       const proof = assessPriceContext(
         price,
@@ -279,10 +252,7 @@ function bindPrice(
     });
   return {
     ...value,
-    conditions:
-      resolved && observation.kind === "qualified"
-        ? observation.conditions
-        : observation.kind === "unresolved" ? observation.conditions : [],
+    conditions: resolved ? observation.applicability.conditions : unresolvedConditions(observation.applicability.conditions, value.conditions),
     conditionsResolved: resolved,
     assessment: {
       ...assessment,
@@ -347,14 +317,15 @@ function projectAnswer(raw: unknown, intent: ShoppingIntent): {
     native.data.products.length
   )
     return unavailable("invalid-response", "answer-schema");
-  const products = native.data.products.map((p) =>
-    assessProduct(
+  const products = native.data.products.map((p) => {
+    const identity = bindAssessment(p.identity, sources, complete);
+    return assessProduct(
       {
         id: p.id,
         name: p.name,
         variant: p.variant,
-        identity: bindAssessment(p.identity, sources, complete),
-        requestMatch: bindAssessment(p.requestMatch, sources, complete),
+        identity,
+        requestMatch: bindRequestMatch(p.requestMatch, sources, complete),
         requirements: intent.requirements.map((r) => ({
           requirementId: r.id,
           assessment:
@@ -376,6 +347,7 @@ function projectAnswer(raw: unknown, intent: ShoppingIntent): {
           p.price,
           p.name,
           p.variant,
+          identity,
           native.data.products.filter((other) => other.id !== p.id),
           sources,
           complete,
@@ -385,8 +357,8 @@ function projectAnswer(raw: unknown, intent: ShoppingIntent): {
         blockers: [],
       },
       intent,
-    ),
-  );
+    );
+  });
   for (const product of products) {
     if (product.requestMatch.status !== "supported") continue;
     const relevant = sources.filter(
@@ -403,18 +375,9 @@ function projectAnswer(raw: unknown, intent: ShoppingIntent): {
           )
         )
           continue;
-        const context = paragraph(
-          source,
-          match.index,
-          match.index + match[0].length,
-        );
-        if (context)
-          rows.push({
-            ...context,
-            originalQuote: match[0],
-            originalStart: match.index,
-            originalEnd: match.index + match[0].length,
-          });
+        const literal = { start: match.index, end: match.index + match[0].length, text: match[0] };
+        const context = completeContext(source, literal);
+        if (context) rows.push({ sourceId: source.id, origin: { kind: "source-context" }, literal, context });
       }
       return rows;
     });
@@ -471,7 +434,7 @@ function projectAnswer(raw: unknown, intent: ShoppingIntent): {
       : "The sources did not establish a usable product comparison.";
   const result = ResearchSnapshotSchema.safeParse({
     version: 2,
-    evidenceVersion: 2,
+    evidenceVersion: 3,
     dataKind: "web-research",
     retrievedAt: new Date().toISOString(),
     intent,

@@ -1,7 +1,7 @@
-import type { ResearchProduct } from "../domain/research";
+import type { Assessment, ResearchProduct, ResearchSource } from "../domain/research";
 
 type Price = NonNullable<ResearchProduct["price"]>;
-type PriceContext =
+export type PriceContext =
   | { kind: "absent" }
   | { kind: "unbound" }
   | { kind: "unresolved"; conditions: string[] }
@@ -30,7 +30,7 @@ function conditionParts(tail: string) {
         .trim()
         .replace(/^for (?:one|1) unit\b/iu, "one unit")
         .replace(/^[,;]\s*/u, "")
-        .split(/\s*[,;]\s*|\s+and\s+/iu)
+        .split(/\s*[,;\n]\s*|\s+and\s+/iu)
     : [];
   return parts;
 }
@@ -64,26 +64,32 @@ function conditionalProof(tail: string): string[] | null {
 function priceClauses(text: string, subjects: string[], money: string) {
   const headings = new Set(subjects.map((subject) => subject.toLowerCase()));
   const amountLine = new RegExp(`^(?:price\\s*:\\s*)?${money}(?=$|[\\s,.])([\\s\\S]*)$`, "iu");
-  const lines = text.split(/\r?\n/u);
+  const lines = [...text.matchAll(/[^\n]*(?:\n|$)/gu)].filter((line) => line[0]);
   const clauses: string[] = [];
-  for (let i = 0; i < lines.length; i++) {
-    const heading = lines[i]!.trim();
-    const amount = lines[i + 1]?.trim();
+  for (let index = 0; index < lines.length; index++) {
+    const heading = lines[index]![0].trim();
+    let amountIndex = index + 1;
+    while (amountIndex < lines.length && !lines[amountIndex]![0].trim()) amountIndex++;
+    const amount = lines[amountIndex]?.[0].trim();
     if (!headings.has(heading.toLowerCase()) || !amount || !amountLine.test(amount)) {
-      clauses.push(lines[i]!);
+      clauses.push(lines[index]![0]);
       continue;
     }
-    const tail: string[] = [];
-    let next = i + 2;
-    while (next < lines.length && lines[next]!.trim() && !headings.has(lines[next]!.trim().toLowerCase())) {
-      tail.push(lines[next]!.trim().replace(/^for (?:one|1) unit\b/iu, "one unit").replace(/[.!?]$/u, ""));
-      next++;
-    }
-    const observed = amount.replace(/^price\s*:\s*/iu, "").replace(/[.!?]$/u, "");
-    clauses.push(`${heading} costs ${observed}${tail.length ? `, ${tail.join(", ")}` : ""}`);
-    i = next - 1;
+    let next = amountIndex + 1;
+    while (next < lines.length && lines[next]![0].trim() && !headings.has(lines[next]![0].trim().toLowerCase())) next++;
+    const end = next < lines.length ? lines[next]!.index : text.length;
+    clauses.push(text.slice(lines[index]!.index, end));
+    index = next - 1;
   }
   return clauses.flatMap((clause) => clause.split(/(?<=[.!?])\s+(?=[\p{Lu}\d])/u));
+}
+function moneyPattern(currency: string) {
+  const denomination = currency === "SGD" ? "(?:SGD|S\\$|Singapore dollars?)"
+    : currency === "USD" ? "(?:USD|US\\$|U\\.S\\. dollars?|United States dollars?)"
+    : currency === "EUR" ? "(?:EUR|€|euros?)"
+    : currency === "GBP" ? "(?:GBP|£|pounds?)" : currency;
+  const number = "([0-9]+(?:,[0-9]{3})*(?:\\.[0-9]{1,2})?)";
+  return `(?:${denomination}\\s*${number}|${number}\\s*${denomination})(?![\\w.,]\\d|\\d)`;
 }
 
 export function assessPriceContext(
@@ -100,20 +106,9 @@ export function assessPriceContext(
     )
   )
     subjects.push(productName);
-  const currency =
-    price.currency === "SGD"
-      ? "(?:SGD|S\\$|Singapore dollars?)"
-      : price.currency === "USD"
-        ? "(?:USD|US\\$|U\\.S\\. dollars?|United States dollars?)"
-        : price.currency === "EUR"
-          ? "(?:EUR|€|euros?)"
-          : price.currency === "GBP"
-            ? "(?:GBP|£|pounds?)"
-            : price.currency;
-  const number = "([0-9]+(?:,[0-9]{3})*(?:\\.[0-9]{1,2})?)";
-  const money = `(?:${currency}\\s*${number}|${number}\\s*${currency})(?![\\w.,]\\d|\\d)`;
+  const money = moneyPattern(price.currency);
   const assertion = new RegExp(
-    `^(?:${subjects.map(literal).join("|")})\\s+(?:costs?|is priced at|has a price of)\\s*${money}(?=$|[\\s,.])([\\s\\S]*)$`,
+    `^(?:${subjects.map(literal).join("|")})(?:\\s+(?:costs?|is priced at|has a price of)\\s*|[ \t]*\\r?\\n\\s*(?:price\\s*:\\s*)?)${money}(?=$|[\\s,.])([\\s\\S]*)$`,
     "iu",
   );
   const otherSubjects = otherProducts.flatMap((product) => {
@@ -138,12 +133,11 @@ export function assessPriceContext(
   });
   const otherAssertion = otherSubjects.length
     ? new RegExp(
-        `^(?:${otherSubjects.map(literal).join("|")})\\s+(?:costs?|is priced at|has a price of)\\s*${money}(?=$|[\\s,.])([\\s\\S]*)$`,
+        `^(?:${otherSubjects.map(literal).join("|")})(?:\\s+(?:costs?|is priced at|has a price of)\\s*|[ \t]*\\r?\\n\\s*(?:price\\s*:\\s*)?)${money}(?=$|[\\s,.])([\\s\\S]*)$`,
         "iu",
       )
     : null;
   const ordinaryPrice = new RegExp(`^the ordinary (?:${subjects.map(literal).join("|")}) price is ${money}$`, "iu");
-  let relevant = false;
   let observed = false;
   let complete = true;
   const proven = new Set<string>();
@@ -174,7 +168,6 @@ export function assessPriceContext(
         continue;
       }
     }
-    relevant = true;
     if (
       !match ||
       Number((match[1] ?? match[2])!.replaceAll(",", "")) !== price.amount
@@ -190,7 +183,7 @@ export function assessPriceContext(
       complete = false;
     } else for (const condition of conditions) proven.add(condition);
   }
-  if (!observed) return { kind: relevant ? "unbound" : "absent" };
+  if (!observed) return { kind: "absent" };
   const conditions = price.conditions.filter((condition) => {
     const kind = conditionKinds.get(
       condition.trim().replace(/[.!]$/, "").toLowerCase(),
@@ -202,4 +195,51 @@ export function assessPriceContext(
     conditions.length === price.conditions.length
     ? { kind: "qualified", conditions }
     : { kind: "unresolved", conditions: [...new Set(unresolved)].slice(0, 8) };
+}
+
+export type PriceObservation =
+  | { kind: "absent" }
+  | { kind: "observed"; applicability: { kind: "qualified" | "unresolved"; conditions: string[] } };
+
+function namedCatalogObservation(price: Price, productName: string, identity: Assessment, source: ResearchSource): PriceObservation {
+  if (source.textTruncated || source.text.length > 4000 || identity.status !== "supported" || identity.scope !== "exact-variant") return { kind: "absent" };
+  if (!new RegExp(`(?:^|[^\\p{L}\\p{N}])${literal(price.variant)}(?=$|[^\\p{L}\\p{N}])`, "u").test(productName)) return { kind: "absent" };
+  const rows = [...source.text.matchAll(/^([^\r\n]+)\r?\n[\t \r\n]*([A-Z]{3}[\t ]+([0-9]+(?:,[0-9]{3})*(?:\.[0-9]{1,2})?))[\t ]*(?=\r?$)/gmu)];
+  const trimHeading = (text: string) => text.replace(/^[\t \u00a0]+|[\t \u00a0]+$/gu, "");
+  const selected = rows.filter((row) => trimHeading(row[1]!) === productName);
+  if (selected.length !== 1) return { kind: "absent" };
+  const row = selected[0]!;
+  const rowEnd = row.index + row[0].length;
+  const nameStart = row.index + row[1]!.indexOf(productName), nameEnd = nameStart + productName.length;
+  const moneyStart = row.index + row[0].lastIndexOf(row[2]!), moneyEnd = moneyStart + row[2]!.length;
+  if (row[2]!.slice(0, 3) !== price.currency || Number(row[3]!.replaceAll(",", "")) !== price.amount) return { kind: "absent" };
+  const identityBound = identity.support.some((span) => span.sourceId === source.id && span.literal.start <= nameStart && span.literal.end >= nameEnd);
+  const priceBound = price.assessment.support.some((span) => span.sourceId === source.id && span.literal.start >= nameStart && span.literal.start <= moneyStart && span.literal.end >= moneyEnd && span.literal.end <= rowEnd);
+  if (!identityBound || !priceBound) return { kind: "absent" };
+  const independent = rows.filter((other) => other !== row && trimHeading(other[1]!) !== productName && !other[1]!.includes(price.variant) && !monetaryContext.test(other[1]!) && !/\b(?:variant|configuration|range)\b/iu.test(other[1]!));
+  const removed = [row, ...independent].sort((a, b) => b.index - a.index);
+  let remainder = source.text;
+  for (const entry of removed) remainder = remainder.slice(0, entry.index) + "\n" + remainder.slice(entry.index + entry[0].length);
+  const conditions: string[] = [];
+  for (const clause of remainder.split(/\r?\n|(?<=[.!?])\s+/u).map((part) => part.trim().replace(/[.!?]$/u, ""))) {
+    if (!clause) continue;
+    if (/\p{Sc}|\b[A-Z]{3}\s*\d|\b\d[\d.,]*\s*[A-Z]{3}\b/u.test(clause)) return { kind: "absent" };
+    if (!monetaryContext.test(clause) && !/\b(?:variant|configuration|range)\b/iu.test(clause)) continue;
+    const conditional = conditionalProof(clause);
+    if (conditional) conditions.push(...conditional);
+    else if (conditionProof(clause) === null) return { kind: "absent" };
+  }
+  return { kind: "observed", applicability: { kind: "unresolved", conditions: [...new Set(conditions)] } };
+}
+
+export function observePrice(price: Price, productName: string, identity: Assessment, source: ResearchSource, otherProducts: Pick<ResearchProduct, "name" | "variant">[], contextText = source.text): PriceObservation {
+  const catalog = namedCatalogObservation(price, productName, identity, source);
+  const context = assessPriceContext(price, productName, contextText, otherProducts);
+  if (context.kind === "qualified" || context.kind === "unresolved") return { kind: "observed", applicability: context };
+  return catalog;
+}
+
+export function unresolvedConditions(sourceConditions: string[], reported: string[]): string[] {
+  const unproven = reported.filter((condition) => !conditionKinds.has(condition.trim().replace(/[.!]$/, "").toLowerCase()) && !sourceConditions.some((literal) => literal.toLowerCase() === condition.trim().replace(/[.!]$/, "").toLowerCase()));
+  return [...new Set([...sourceConditions, ...unproven.map((condition) => `Provider-reported, unverified: ${condition}`)])];
 }

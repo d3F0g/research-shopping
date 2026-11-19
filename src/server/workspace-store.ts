@@ -2,7 +2,7 @@ import { createHash, randomUUID } from "node:crypto";
 import type { Pool, PoolClient } from "pg";
 import type { ConversationState, PrepareInput, TurnDecision, TurnResponse } from "../domain/conversation";
 import type { ResearchOperation } from "../domain/research";
-import { boundWorkspace, emptyWorkspace, PENDING_MS, RETENTION_MS, WorkspaceDataSchema, type WorkspaceCommand, type WorkspaceData, type WorkspaceResult, type WorkspaceSnapshot } from "../domain/workspace";
+import { boundWorkspace, emptyWorkspace, PENDING_MS, RETENTION_MS, WORKSPACE_LIMIT, workspaceBytes, readWorkspaceData, WorkspaceDataSchema, type WorkspaceCommand, type WorkspaceData, type WorkspaceResult, type WorkspaceSnapshot } from "../domain/workspace";
 
 export type Identity = { userId: string; sessionId: string };
 export class AccountError extends Error {
@@ -49,7 +49,14 @@ function expire(row: Row, now: number): boolean {
 async function readRow(client: PoolClient, userId: string): Promise<Row | null> {
   const found = await client.query<{ revision: string; epoch: string; data: unknown }>("SELECT revision, epoch, data FROM fieldnote_v2_workspace WHERE user_id = $1 FOR UPDATE", [userId]);
   const row = found.rows[0];
-  return row ? { revision: Number(row.revision), epoch: Number(row.epoch), data: WorkspaceDataSchema.parse(row.data) } : null;
+  if (!row) return null;
+  const decoded = readWorkspaceData(row.data);
+  const current = { revision: Number(row.revision) + Number(decoded.migrated), epoch: Number(row.epoch) + Number(decoded.migrated), data: decoded.data };
+  if (decoded.migrated) {
+    if (workspaceBytes(current.data) > WORKSPACE_LIMIT) throw new AccountError(413, "The saved conversation cannot migrate within the storage limit.");
+    await client.query("UPDATE fieldnote_v2_workspace SET revision = $2, epoch = $3, data = $4::jsonb WHERE user_id = $1", [userId, current.revision, current.epoch, JSON.stringify(current.data)]);
+  }
+  return current;
 }
 async function save(client: PoolClient, userId: string, row: Row) {
   if (!boundWorkspace(row.data)) throw new AccountError(413, "This saved response exceeds the account storage limit.");

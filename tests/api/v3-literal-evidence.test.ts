@@ -16,7 +16,7 @@ describe("versioned literal source evidence", () => {
     expect(snapshot).toMatchObject({ version: 2, evidenceVersion: 3, choice: null });
     expect(product.identity.status).toBe("supported");
     expect(product.identity.support[0]).toMatchObject({ origin: { kind: "provider", reportedQuote: "Fixture Meridian Sunglasses - Silver SGD 868", match: "whitespace" }, literal: { text: "Fixture Meridian Sunglasses - Silver \n\n SGD 868" } });
-    expect(product.price).toMatchObject({ amount: 868, currency: "SGD", variant: "Silver", conditionsResolved: false, conditions: ["Price as listed on Fixture Index."] });
+    expect(product.price).toMatchObject({ amount: 868, currency: "SGD", variant: "Silver", conditionsResolved: false, conditions: ["Provider-reported, unverified: Price as listed on Fixture Index."] });
     expect(product.eligible).toBe(false);
     expect(snapshot.intent.budget).toEqual(intent.budget);
   });
@@ -29,5 +29,61 @@ describe("versioned literal source evidence", () => {
     const material = catalogMaterial(intent);
     material.citations[0]!.text += "\n\nFixture Meridian Sunglasses - Silver SGD 868";
     expect(project(material).products[0]!.identity.status).toBe("unknown");
+  });
+});
+
+describe("named catalog attribution boundaries", () => {
+  it.each([
+    ["SGD 868", "SGD 868–1200"],
+    ["SGD 868", "SGD 868 for three units"],
+    ["SGD 868", "SGD 868\nFor AX2 only."],
+    ["SGD 868", "SGD 868\n\nFor AX2."],
+    ["SGD 868", "SGD 868\n\nShipping costs SGD 100."],
+    ["SGD 868", "SGD 868\n\nPrice applies to another variant."],
+  ])("withholds attribution when selected amount has unsafe context %j", (from, to) => {
+    const material = catalogMaterial(intent);
+    material.citations[0]!.text = material.citations[0]!.text.replace(from, to);
+    expect(project(material).products[0]!.price).toBeNull();
+  });
+  it("never takes the neighboring row's amount", () => {
+    const material = catalogMaterial(intent);
+    const product = material.answer.products[0]!;
+    product.price.amount = 305;
+    product.price.assessment.support[0]!.quote = "SGD 305";
+    expect(project(material).products[0]!.price).toBeNull();
+  });
+  it.each(["Gold", "Sil", "Silverado"])("requires an explicit exact selected variant %s", (variant) => {
+    const material = catalogMaterial(intent);
+    material.answer.products[0]!.variant = variant;
+    material.answer.products[0]!.price.variant = variant;
+    expect(project(material).products[0]!.price).toBeNull();
+  });
+  it("does not turn money-only source support into complete request fit even without a budget", () => {
+    const material = catalogMaterial(intent);
+    const result = projectExaAnswer(material, { ...intent, budget: null });
+    if (result.status !== "ready") throw new Error("Expected fixture comparison");
+    expect(result.research.products[0]!.requestMatch.status).toBe("unknown");
+    expect(result.research.choice).toBeNull();
+  });
+  it("retains actual membership conditions and unresolved provider context distinctly", () => {
+    const material = catalogMaterial(intent);
+    material.citations[0]!.text += "\n\nMembership required.";
+    const product = project(material).products[0]!;
+    expect(product.price).toMatchObject({ conditionsResolved: false, conditions: ["Membership required", "Provider-reported, unverified: Price as listed on Fixture Index."] });
+  });
+  it("keeps the complete 300-character native condition with its provenance label", () => {
+    const material = catalogMaterial(intent);
+    material.answer.products[0]!.price.conditions = ["Fixture provider uncertainty. " + "x".repeat(270)];
+    const reported = material.answer.products[0]!.price.conditions[0]!;
+    expect(project(material).products[0]!.price?.conditions).toContain(`Provider-reported, unverified: ${reported}`);
+  });
+  it.each(["", "\n\nNot tax included."])("does not promote an unproven native tax-included claim %j", (tail) => {
+    const material = catalogMaterial(intent);
+    material.answer.products[0]!.price.conditions = ["tax included"];
+    material.citations[0]!.text += tail;
+    const product = project(material).products[0]!;
+    expect(product.price?.conditionsResolved).toBe(false);
+    expect(product.price?.conditions).not.toContain("tax included");
+    if (tail) expect(product.price?.conditions).toContain("Not tax included");
   });
 });
