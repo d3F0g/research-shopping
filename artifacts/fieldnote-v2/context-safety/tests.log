@@ -1,0 +1,13 @@
+
+> research-shopping@0.1.0 test
+> EXA_RESEARCH_ENABLED=false vitest run
+
+
+ RUN  v4.1.12 /Users/josiahwong/Documents/research-shopping-v2-context-safety
+
+
+ Test Files  7 passed (7)
+      Tests  183 passed (183)
+   Start at  15:38:28
+   Duration  967ms (transform 609ms, setup 0ms, import 1.35s, tests 2.08s, environment 0ms)
+
