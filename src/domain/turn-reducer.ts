@@ -5,21 +5,21 @@ const normalize = (value: string) => value.trim().replace(/[.!?]+$/, "").toLower
 const currency = (value: string) => ({ "s$": "SGD", "us$": "USD", "€": "EUR", "£": "GBP", "sgd": "SGD", "usd": "USD", "eur": "EUR", "gbp": "GBP", "aud": "AUD", "cad": "CAD", "myr": "MYR", "jpy": "JPY", "inr": "INR" }[value.toLowerCase()] ?? null);
 const amount = (value: string) => Number(value.replaceAll(",", "")) * (/k$/i.test(value) ? 1000 : 1);
 
-function monetaryDraft(text: string): { minimum?: number; maximum?: number; currency: string | null } | null {
+function monetaryDraft(text: string): { minimum?: number; maximum?: number; currency: string | null; remainder: string } | null {
   const token = "(?:SGD|USD|EUR|GBP|AUD|CAD|MYR|JPY|INR|US\\$|S\\$|\\$|€|£)";
   const number = "([0-9]+(?:,[0-9]{3})*(?:\\.[0-9]+)?)";
   const range = new RegExp(`(?:between|around|budget(?: of)?|from)?\\s*(${token})?\\s*${number}\\s*(?:-|–|to|and)\\s*(${token})?\\s*${number}\\s*(${token})?\\s*(?=$|[\\s.,;!?])`, "i").exec(text);
   if (range && (/[A-Za-z$€£]/.test(range[0].replace(/to|and/gi, "")) || /^\s*[\d$]/.test(text))) {
     const tokens = [range[1], range[3], range[5]].filter((v): v is string => !!v && v !== "$");
     const currencies = new Set(tokens.map((v) => currency(v)));
-    if (currencies.size > 1) return { minimum: NaN, maximum: NaN, currency: null };
-    return { minimum: amount(range[2]!), maximum: amount(range[4]!), currency: tokens.length ? currency(tokens[0]!) : null };
+    if (currencies.size > 1) return { minimum: NaN, maximum: NaN, currency: null, remainder: text };
+    return { minimum: amount(range[2]!), maximum: amount(range[4]!), currency: tokens.length ? currency(tokens[0]!) : null, remainder: text.slice(0, range.index) + text.slice(range.index + range[0].length) };
   }
   const single = new RegExp(`(?:under|below|up to|at most|budget(?: is| of)?|maximum(?: of)?|max|around|make it|at least|minimum(?: of)?)?\\s*(${token})\\s*${number}\\s*(?=$|[\\s.,;!?])|(?:under|below|up to|at most|budget(?: is| of)?|maximum(?: of)?|max|around|make it|at least|minimum(?: of)?)\\s*${number}\\s*(${token})?\\s*(?=$|[\\s.,;!?])|${number}\\s*(${token})\\s*(?=$|[\\s.,;!?])`, "i").exec(text);
   if (!single) return null;
   const value = single[2] ?? single[3] ?? single[5];
   const unit = single[1] ?? single[4] ?? single[6];
-  return /\b(?:at least|minimum)\b/i.test(single[0]) ? { minimum: amount(value!), currency: currency(unit ?? "") } : { maximum: amount(value!), currency: currency(unit ?? "") };
+  return /\b(?:at least|minimum)\b/i.test(single[0]) ? { minimum: amount(value!), currency: currency(unit ?? ""), remainder: text.slice(0, single.index) + text.slice(single.index + single[0].length) } : { maximum: amount(value!), currency: currency(unit ?? ""), remainder: text.slice(0, single.index) + text.slice(single.index + single[0].length) };
 }
 
 function lastResearch(state: ConversationState) { return [...state.messages].reverse().find((m) => m.research)?.research; }
@@ -52,6 +52,14 @@ export function reduceTurn(previous: ConversationState, input: PrepareInput): Tu
     return reply(explanation, "clarification");
   };
   if (input.questionId && input.questionId !== state.pending?.id) return reply("That question is no longer active. Your accepted request is unchanged.");
+  if (input.expectedRevision !== undefined && input.expectedRevision !== previous.revision) return reply("The request changed while the editor was open. Reopen it to edit current preferences.");
+  if (input.edit) {
+    const edit = input.edit;
+    const current = new Map(state.intent.requirements.map((r) => [r.id, r]));
+    state.intent = { ...state.intent, originalText: edit.description, productDescription: [edit.description, ...edit.requirements.map((r) => r.text)].join("\n"), budget: edit.budget, requirements: [{ id: `request-${userId}`, text: edit.description, strength: "hard", originMessageId: userId, kind: "request" }, ...edit.requirements.map((r) => ({ ...r, originMessageId: current.get(r.id)?.originMessageId ?? userId, kind: current.get(r.id)?.kind ?? "preference" as const }))] };
+    state.pending = null;
+    return { state, kind: "research" };
+  }
   if (["hi", "hello", "hey"].includes(command)) return reply("Hi. What are you looking to buy?");
   if (["thanks", "thank you", "ok", "okay"].includes(command)) return reply("You're welcome. Tell me what you would like to change.");
   if (["help", "what can you do", "how does this work"].includes(command)) return reply("Describe what you want to buy and any requirements. I research sources with Exa, compare evidence, and link to product pages. Research submissions can use paid Exa credits. Viewing existing evidence is free.");
@@ -98,7 +106,7 @@ export function reduceTurn(previous: ConversationState, input: PrepareInput): Tu
     }
     const unit = money.currency ?? draft.budget?.currency;
     const bounds = { minimum: money.minimum ?? draft.budget?.minimum, maximum: money.maximum ?? draft.budget?.maximum };
-    const extra = exactBudgetEdit ? "" : text;
+    const extra = money.remainder.replace(/^[.,;!?\s]+|[.,;!?\s]+$/g, "").trim() ? text : "";
     if (extra && state.intent.originalText) { draft.requirements.push({ id: `requirement-${userId}`, text: extra, strength: "hard", originMessageId: userId, kind: "preference" }); draft.productDescription += `\n${extra}`; }
     if (bounds.minimum !== undefined && bounds.maximum !== undefined && bounds.minimum > bounds.maximum) return pendingEdit("The new budget would put the maximum below the retained minimum. State both bounds or explicitly remove the old minimum. No budget change was applied.");
     if (!unit) {

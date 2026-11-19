@@ -13,7 +13,8 @@ export type PendingChange = { kind: "currency"; id: string; originalRequest: str
 export type ChatMessage = { id: string; role: "user" | "assistant"; text: string; research?: ResearchSnapshot };
 export type ConversationState = { version: 2; revision: number; intent: ShoppingIntent; pending: PendingChange | null; messages: ChatMessage[] };
 export type TurnDecision = { state: ConversationState; kind: "research" } | { state: ConversationState; kind: "message" | "clarification"; message: string };
-export const PrepareInputSchema = z.strictObject({ phase: z.literal("prepare"), operationId: z.string().uuid(), message: z.string().trim().min(1).max(2000), questionId: z.string().max(80).optional() });
+export const IntentEditSchema = z.strictObject({ description: z.string().trim().min(1).max(2000), requirements: z.array(z.strictObject({ id: z.string().max(80), text: z.string().trim().min(1).max(2000), strength: z.enum(["hard", "flexible"]) })).max(23).refine((r) => new Set(r.map((v) => v.id)).size === r.length), budget: BudgetSchema.nullable() });
+export const PrepareInputSchema = z.strictObject({ phase: z.literal("prepare"), operationId: z.string().uuid(), message: z.string().trim().min(1).max(2000), questionId: z.string().max(80).optional(), edit: IntentEditSchema.optional(), expectedRevision: z.number().int().nonnegative().optional() });
 export const ResearchInputSchema = z.strictObject({ phase: z.literal("research"), preparedId: z.string().uuid() });
 export const TurnInputSchema = z.discriminatedUnion("phase", [PrepareInputSchema, ResearchInputSchema]);
 export type PrepareInput = z.infer<typeof PrepareInputSchema>;

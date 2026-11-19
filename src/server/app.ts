@@ -4,9 +4,12 @@ import { getCookie, setCookie } from "hono/cookie";
 import { TurnInputSchema } from "../domain/conversation";
 import { createConversationService, type ConversationService } from "./conversations";
 import { resolveServerConfig, type ServerConfig } from "./config";
+import type { Accounts } from "./accounts";
+import { AccountError } from "./workspace-store";
+import { WorkspaceCommandSchema } from "../domain/workspace";
 
 const MAX_BODY_BYTES = 16384;
-export type AppDependencies = { conversations?: ConversationService; logger?: (event: { requestId: string; route: string; status: number; durationMs: number; outcomes: unknown[] }) => void };
+export type AppDependencies = { conversations?: ConversationService; accounts?: Accounts; accountCapability?: "configured" | "guest-only" | "unavailable"; logger?: (event: { requestId: string; route: string; status: number; durationMs: number; outcomes: unknown[] }) => void };
 export function createApp(dependencies: AppDependencies = {}, configuration: Partial<ServerConfig> = {}) {
   const config = resolveServerConfig(configuration);
   const conversations = dependencies.conversations ?? createConversationService();
@@ -53,7 +56,7 @@ export function createApp(dependencies: AppDependencies = {}, configuration: Par
   });
 
   app.use("/api/*", async (context, next) => {
-    if (context.req.method === "POST") {
+    if (context.req.method === "POST" && !context.req.path.startsWith("/api/auth/")) {
       const contentType = context.req.header("content-type")?.toLowerCase();
       if (!contentType || !/^application\/json(?:\s*;\s*charset=utf-8)?$/.test(contentType)) return context.json({ error: "Use application/json", requestId: context.get("requestId") }, 415);
       const encoding = context.req.header("content-encoding");
@@ -93,6 +96,23 @@ export function createApp(dependencies: AppDependencies = {}, configuration: Par
     await next();
   });
   app.get("/api/health", (context) => context.json({ status: "ok", mode: "research", provider: "exa", automaticPaidChecks: false }));
+  app.on(["GET", "POST"], "/api/auth/*", async (context) => {
+    if (!dependencies.accounts) return context.json({ error: "Accounts are unavailable" }, 503);
+    try { return await dependencies.accounts.handle(context.req.raw); }
+    catch (error) { return error instanceof AccountError ? context.json({ error: error.message }, error.status) : context.json({ error: "Account persistence is unavailable" }, 503); }
+  });
+  app.get("/api/account", async (context) => {
+    if (!dependencies.accounts) return context.json({ status: dependencies.accountCapability === "unavailable" ? "unavailable" : "guest-only" });
+    try { return context.json(await dependencies.accounts.state(context.req.raw.headers)); }
+    catch { return context.json({ status: "unavailable" }, 503); }
+  });
+  app.post("/api/workspace", async (context) => {
+    if (!dependencies.accounts) return context.json({ error: "Account persistence is unavailable" }, 503);
+    const input = WorkspaceCommandSchema.safeParse(context.get("payload"));
+    if (!input.success) return context.json({ error: "Invalid workspace command" }, 400);
+    try { return context.json(await dependencies.accounts.command(context.req.raw.headers, input.data, context.req.raw.signal)); }
+    catch (error) { return error instanceof AccountError ? context.json({ error: error.message }, error.status) : context.json({ error: "Account persistence is unavailable" }, 503); }
+  });
   app.get("/api/session", (context) => context.json({ responseVersion: 2, state: conversations.state(context.get("sessionId")) }));
   app.post("/api/turn", async (context) => {
     const parsed = TurnInputSchema.safeParse(context.get("payload"));

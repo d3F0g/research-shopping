@@ -18,6 +18,8 @@ for (const viewport of [{ name: "desktop", width: 1440, height: 1000 }, { name: 
     await expect(page.getByText("Fixture data. Automated test substitute.", { exact: true })).toBeVisible();
     await expect(page.getByText("Fixture Powerbank Model A", { exact: true })).toBeVisible();
     await expect(page.getByText("SGD 30–40", { exact: true })).toBeVisible();
+    await expect(page.getByText("Fixture Powerbank Model A", { exact: true })).toBeInViewport();
+    await expect(page.getByText(/^Fixture Powerbank Model A is a source-supported option/)).toBeInViewport();
     await page.screenshot({ path: `artifacts/fieldnote-v2/${viewport.name}-research.png` });
     await page.getByRole("button", { name: "Evidence and tradeoffs for Fixture Powerbank Model A", exact: true }).click();
     await expect(page.getByText(/^Product identity/).first()).toBeVisible();

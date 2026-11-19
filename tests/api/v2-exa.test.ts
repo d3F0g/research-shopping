@@ -1,4 +1,4 @@
-import { createServer, type Server } from "node:http";
+import { createServer, type Server, type IncomingMessage, type ServerResponse } from "node:http";
 import { randomUUID } from "node:crypto";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { createExaProductResearch, projectExaAnswer } from "../../src/server/exa-research";
@@ -10,7 +10,7 @@ import { isSafeSourceUrl } from "../../src/domain/safe-url";
 const intent = () => reduceTurn(initialConversation(), { phase: "prepare", operationId: randomUUID(), message: "a USB-C powerbank between SGD30 and40" }).state.intent;
 const servers: Server[] = [];
 afterEach(async () => { for (const server of servers.splice(0)) { server.closeAllConnections(); await new Promise<void>((resolve) => server.close(() => resolve())); } });
-async function listen(handler: Parameters<typeof createServer>[0]) {
+async function listen(handler: (req: IncomingMessage, res: ServerResponse) => void) {
   const server = createServer(handler); servers.push(server); await new Promise<void>((resolve) => server.listen(0, "127.0.0.1", resolve));
   const address = server.address(); if (!address || typeof address === "string") throw new Error("No address"); return `http://127.0.0.1:${address.port}`;
 }

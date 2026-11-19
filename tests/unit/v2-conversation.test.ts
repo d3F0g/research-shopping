@@ -45,4 +45,12 @@ describe("V2 contextual conversation", () => {
     expect(MoneySchema.safeParse(19.99).success).toBe(true);
     expect(MoneySchema.safeParse(19.999).success).toBe(false);
   });
+  it("retains complete hard follow-ups beside a budget and distinguishes specification numbers", () => {
+    const state = turn(initialConversation(), "I want a robot vacuum").state;
+    const next = turn(state, "Under USD180, and it must work without a phone app.");
+    expect(next.state.intent.originalText).toBe("I want a robot vacuum");
+    expect(next.state.intent.budget?.maximum).toBe(180);
+    expect(next.state.intent.requirements.at(-1)?.text).toBe("Under USD180, and it must work without a phone app.");
+    expect(turn(initialConversation(), "Find a USB-C charger under SGD70, at least 65 W.").state.intent.budget).toMatchObject({ maximum: 70, currency: "SGD" });
+  });
 });
