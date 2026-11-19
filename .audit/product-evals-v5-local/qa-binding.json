@@ -1,0 +1,883 @@
+{
+  "verdict": "PASS for evaluation compatibility; product acceptance ISSUES",
+  "head": "f04068e137c2ac9b242cf4c4ec8b5d7286a95734",
+  "application": "4e42bee347b4c7909c2d4ac96122a781e945bd82",
+  "reviewedBase": "32c08113f857f38138ca89d1cf4ac4eb9c7dc949",
+  "files": {
+    "baseline": {
+      "path": "artifacts/product-evals/baseline-v1/report.json",
+      "bytesSha256": "a9577869cd991fdd4713ef4bc5a6a5842b1d5839282d7e4a18a404cab2a32a56",
+      "canonicalDigest": "4bd357f8ff4ee0e711a8f3eb686b0296de290895ee091acf113a8c68b433151f"
+    },
+    "publishedCandidate": {
+      "path": "artifacts/product-evals/candidate-v5-local/report.json",
+      "bytesSha256": "b00b8d642ea57dd8b9953fc9fdf1053ec91aa8ed5816c9c75a3561d3dc04574d",
+      "canonicalDigest": "6b688d04a54d0cbf1cc8bb445de4702eb87b57f9dd2c5aea00883baeb268b9bf"
+    },
+    "publishedLocalOnly": {
+      "path": "artifacts/product-evals/candidate-v5-local/without-interpreter/report.json",
+      "bytesSha256": "21ad9720be8b3342f75d145fcaac2ae69b9e6669478bea67e5d2a8d828761bb0",
+      "canonicalDigest": "3c8ec678d14d78130f708caa193618710b510adfeb1dc1c38371bbe5f4b7f884"
+    },
+    "publishedComparison": {
+      "path": "artifacts/product-evals/comparison-v4-v5-local/scorecard.json",
+      "bytesSha256": "5a93091214df7452d9a9801017ab632fca2a3342b4c13cac2acd23df04ef8712",
+      "canonicalDigest": "77dca057e30328ebdb099015c91dac9b5b0456f7ae81813afd00181da4375125"
+    },
+    "independentCandidate": {
+      "path": "artifacts/product-evals/independent-qa/v5-local-final/reverified-f040/full60/report.json",
+      "bytesSha256": "d823efc9f2c0dd15ea85215f63f79a5a03ce2a14bfb666818891046cf862a441",
+      "canonicalDigest": "174e0881f07f295dbb99fba7fe2a00bebb28f4180ee87159d119563f7da3ea2b"
+    },
+    "independentLocalOnly": {
+      "path": "artifacts/product-evals/independent-qa/v5-local-final/reverified-f040/local-only/report.json",
+      "bytesSha256": "71e0b27895ec0e8163b368aa14066ad5f515a818cb82638dd4846e6aed35bfff",
+      "canonicalDigest": "e81af2ad4bc955186b11c4d34a70510a577920129fa0ba16aba2b10856557ae4"
+    },
+    "independentComparison": {
+      "path": "artifacts/product-evals/independent-qa/v5-local-final/reverified-f040/comparison/scorecard.json",
+      "bytesSha256": "a68baaf665115dd6f78bbd4f69c0328a3521f898487713e1a02b7287efacafbb",
+      "canonicalDigest": "8e64bdc15394dcd8553e07e57844d32dccfff64951118ba253f89f628c4163df"
+    },
+    "localOnlyComparison": {
+      "path": "artifacts/product-evals/independent-qa/v5-local-final/reverified-f040/local-only-comparison/scorecard.json",
+      "bytesSha256": "2e3387fbf5284945aec613d86f8f6a302aea12669834e937b15e0f9f02216fc7",
+      "canonicalDigest": "9b61cedc4dfc3243acbbde49814bd777b2f28e599ce0646d88078f027eb2817a"
+    },
+    "browser": {
+      "path": "artifacts/product-evals/independent-qa/v5-local-final/reverified-f040/browser/proof.json",
+      "bytesSha256": "ffd717e7d55779f0895b9926d55523ac9e08abf3b451d55f0121290af8a81ff4",
+      "canonicalDigest": "8c5ba29dea227a74ca2c254f68a73c6106b25103fcfb8fa092f94673a194951d"
+    },
+    "smoke": {
+      "path": "artifacts/product-evals/independent-qa/v5-local-final/reverified-f040/smoke/proof.json",
+      "bytesSha256": "62a2ed21d488550ddac840d2526a4b18d56b7acf37edbd9b78213420530bfd27",
+      "canonicalDigest": "935c7db8130671882c157793ae6dc4dd8c3634b356e4c1c118e6fb39c70941e3"
+    }
+  },
+  "auditedBlobs": [
+    {
+      "path": ".agents/skills/verify-research-shopping/SKILL.md",
+      "blob": "4267d177721d3406323a98acd001bc4a2ba6aa61"
+    },
+    {
+      "path": ".agents/skills/verify-research-shopping/features/README.md",
+      "blob": "3dea3d74b7ed67620b6d52c63d0e98df2e1517d3"
+    },
+    {
+      "path": ".agents/skills/verify-research-shopping/features/chat.md",
+      "blob": "9428c84c2f5abb1d3472daa10b894730c9e6f4a3"
+    },
+    {
+      "path": ".agents/skills/verify-research-shopping/features/evidence.md",
+      "blob": "4ffeb0190b4b0f26b7a2c296094c9c2de655c984"
+    },
+    {
+      "path": ".agents/skills/verify-research-shopping/features/preferences.md",
+      "blob": "b33149875c1649897c4204f1adba9f498ada4293"
+    },
+    {
+      "path": ".agents/skills/verify-research-shopping/features/research.md",
+      "blob": "1a7341ce1d741beaece1bf987848c3cf0abb7cd2"
+    },
+    {
+      "path": ".agents/skills/verify-research-shopping/features/selection.md",
+      "blob": "15df515b02f03238be4b9ff4b2eb6dc6693f9d7c"
+    },
+    {
+      "path": ".agents/skills/verify-research-shopping/features/session-recovery.md",
+      "blob": "1bbc0dd1d878ae6305249e54262a09c42f58c973"
+    },
+    {
+      "path": ".agents/skills/verify-research-shopping/features/web-research.md",
+      "blob": "798da57233052b5560868a37bd44d62d2194a9ce"
+    },
+    {
+      "path": ".agents/skills/verify-research-shopping/scripts/smoke.mjs",
+      "blob": "1caa13e00052b44be36a46680d25982f344c4da7"
+    },
+    {
+      "path": ".github/workflows/product-evals.yml",
+      "blob": "c03a10ec5dcdcafdfca7f20eb3013d22e8ccfe69"
+    },
+    {
+      "path": "evals/adapter.ts",
+      "blob": "64adde91d8494c3eb4aeffcd226111cbf0a7a7f2"
+    },
+    {
+      "path": "evals/assertions.ts",
+      "blob": "6a5ac89518dc8617d9ed4d157c8a95ca5db58904"
+    },
+    {
+      "path": "evals/browser/layout.ts",
+      "blob": "ff01580ab13d433f0d15c07f1202f42ad21576cc"
+    },
+    {
+      "path": "evals/browser/run.ts",
+      "blob": "14f59a216e319537cee3c23376d13e5785d1bcf0"
+    },
+    {
+      "path": "evals/browser/vite.config.ts",
+      "blob": "2ac892705615b1daa2b7817118a53a479b32f4d6"
+    },
+    {
+      "path": "evals/contracts.ts",
+      "blob": "37fcfda7d54b6594bd2ba954987f1e4a0279426d"
+    },
+    {
+      "path": "evals/dataset.ts",
+      "blob": "f86fcd534b63aee84d2c9851ebf3f48a67a21a2a"
+    },
+    {
+      "path": "evals/dataset/milestones.ts",
+      "blob": "c6494ecd48b6b3ac3dda7dc62cf754c610e1567f"
+    },
+    {
+      "path": "evals/dataset/recipes.v1.json",
+      "blob": "1a3e94e145a537db4547f8212dc03296564c407a"
+    },
+    {
+      "path": "evals/dataset/scenarios.v1.jsonl",
+      "blob": "e8e4a67e3cf09c437f09843ce2691081f055774f"
+    },
+    {
+      "path": "evals/frozen-v2/assertions.ts",
+      "blob": "732ba3848ad52ea25813d948e0f62a09bbb80b86"
+    },
+    {
+      "path": "evals/frozen-v2/contracts.ts",
+      "blob": "b37656644752eda69414fd512a85ec475b9064ed"
+    },
+    {
+      "path": "evals/frozen-v2/report.ts",
+      "blob": "257b9f563ba8d680a0a67d2803569c327ee93251"
+    },
+    {
+      "path": "evals/frozen-v3/assertions.ts",
+      "blob": "732ba3848ad52ea25813d948e0f62a09bbb80b86"
+    },
+    {
+      "path": "evals/frozen-v3/contracts.ts",
+      "blob": "6da4efc2bdf3634121e46eede5d444e0547efcce"
+    },
+    {
+      "path": "evals/frozen-v3/intent-input.ts",
+      "blob": "facf13152846bf559fb62fa2bdac2dd6a3c80ebe"
+    },
+    {
+      "path": "evals/frozen-v3/interpretation-integrity.ts",
+      "blob": "8a6c28c87fe5178c2a10c6233de61007ddd9e4e1"
+    },
+    {
+      "path": "evals/frozen-v3/report.ts",
+      "blob": "04a38daa3b530b60222308e9ea835d1389c41ed0"
+    },
+    {
+      "path": "evals/hash.ts",
+      "blob": "a45cba6f1c843f03a6054fbe1c43003f5f775f9b"
+    },
+    {
+      "path": "evals/inputs/controls.ts",
+      "blob": "fe68696545a2497ee51829f559509d62ccbb0d13"
+    },
+    {
+      "path": "evals/inputs/intent-proposals.v1.json",
+      "blob": "bed58fa039fe4b6069a689074ff2328e44dfac02"
+    },
+    {
+      "path": "evals/inputs/intent-proposals.v2.json",
+      "blob": "8746b962231384f9c6ff3eff3a0d676f20bb5663"
+    },
+    {
+      "path": "evals/inputs/intent.ts",
+      "blob": "c5f88d13ed2b90ecd64c414d59b9026b3559bd08"
+    },
+    {
+      "path": "evals/inputs/materials.ts",
+      "blob": "680109f89f1a5aad5ae295ebed09c15fabd2ec26"
+    },
+    {
+      "path": "evals/inputs/public-conversations.v1.json",
+      "blob": "3ab6ee85958a5831ce7e7121a428ae98454a8d61"
+    },
+    {
+      "path": "evals/interpretation-integrity.ts",
+      "blob": "1d406c180b4844bbc71573ef1789abbb34b48324"
+    },
+    {
+      "path": "evals/live.ts",
+      "blob": "94b02ba13326e825c6b4deeab5809c73a0983db2"
+    },
+    {
+      "path": "evals/network.ts",
+      "blob": "705a68f1755c1096e91cf23ba3787cc2fbf3b10f"
+    },
+    {
+      "path": "evals/report.ts",
+      "blob": "d934af008429d32ede7704a754a2069ebf376bc6"
+    },
+    {
+      "path": "evals/run.ts",
+      "blob": "cc2e526004ff61827411265cf48f2d19f9375b1b"
+    },
+    {
+      "path": "evals/scorecard-cli.ts",
+      "blob": "43e4a3185d6f4bfbc779064a88cb320088ef159d"
+    },
+    {
+      "path": "evals/scorecard.ts",
+      "blob": "b82fa8512e50e85baebf6fb3914b4c0dfce304a7"
+    },
+    {
+      "path": "evals/semantic/calibration.v1.json",
+      "blob": "918f36bc30b9377eda05d6a3c6ad0d964fece87a"
+    },
+    {
+      "path": "evals/semantic/packets.ts",
+      "blob": "5f7073d38d9da5216d2645bd03f7165f238db0d7"
+    },
+    {
+      "path": "evals/semantic/rubric.ts",
+      "blob": "86ec77427fb40b27f1704c4a2e6f6b21e7f8e6a0"
+    },
+    {
+      "path": "evals/semantic/run.ts",
+      "blob": "63b2ebba0e1c643a591f2530fefb5bcbfa206984"
+    },
+    {
+      "path": "evals/tests/async-attribution.test.ts",
+      "blob": "538ae16526ca6e609b819719aadd9886482c7cb8"
+    },
+    {
+      "path": "evals/tests/critical.test.ts",
+      "blob": "df8a6f9fb0aa2c7e6b99a7cc14c4a1f3824205b1"
+    },
+    {
+      "path": "evals/tests/integrity.test.ts",
+      "blob": "4ffc3d077c7f5bfa12bb139a3e93299f599cfeda"
+    },
+    {
+      "path": "evals/tests/ollama-boundary.test.ts",
+      "blob": "0019a06c1ea21436cb64557b65635c238695b441"
+    },
+    {
+      "path": "evals/tests/scorecard.test.ts",
+      "blob": "45825659a092361207096cf6e5730226a34ef80e"
+    },
+    {
+      "path": "evals/tests/semantic.test.ts",
+      "blob": "8f85d9bc0625cdf6ffd37cb22d1481491c2997c7"
+    },
+    {
+      "path": "evals/tests/v5-adapter.test.ts",
+      "blob": "5c630fa2f01c08dfede37f3462c09b28ed0eb04f"
+    },
+    {
+      "path": "evals/tsconfig.json",
+      "blob": "70c5b605f6a9d3bd0ad784dc9e2510e47a3c35be"
+    },
+    {
+      "path": "package.json",
+      "blob": "1b9b02f69474fb2a1f7d7ed64940fdbe6ba17785"
+    },
+    {
+      "path": "src/client/App.tsx",
+      "blob": "bf259ddba0b9b1760b26080195adf57f4ea8913d"
+    },
+    {
+      "path": "src/client/HistoricalResults.tsx",
+      "blob": "ec475472dc2359d36e37dfb4b4a72d667fbffca5"
+    },
+    {
+      "path": "src/client/LegacyResearchResults.tsx",
+      "blob": "179ef6fd0a857559a1058039291211a03351ab7d"
+    },
+    {
+      "path": "src/client/LiveResearchResults.tsx",
+      "blob": "ea576cfb865ec5fbd92d56b9926218b05715e513"
+    },
+    {
+      "path": "src/client/PreferencePanel.tsx",
+      "blob": "7b1ee7c550d847123fad759fe29425c8ec5ad77e"
+    },
+    {
+      "path": "src/client/PreferenceQuestion.tsx",
+      "blob": "a756478dcb8f48eded946565092ee5b107b943d2"
+    },
+    {
+      "path": "src/client/ResearchResults.tsx",
+      "blob": "9d2bbce3df20ba714ef24ae90c9d21dc7040b263"
+    },
+    {
+      "path": "src/client/api.ts",
+      "blob": "51ae7267ac1995abe302878aa8d4eba76e494e83"
+    },
+    {
+      "path": "src/client/components/ui/alert.tsx",
+      "blob": "17ba728c2b88426bb322e85db1f1bbed9b9a28e7"
+    },
+    {
+      "path": "src/client/components/ui/badge.tsx",
+      "blob": "6bc28c30ee309a4a5d53fe3e10e7394dd2034d1d"
+    },
+    {
+      "path": "src/client/components/ui/bubble.tsx",
+      "blob": "00acfaa1067ba5f89146a506ce71d475e3d052c3"
+    },
+    {
+      "path": "src/client/components/ui/button.tsx",
+      "blob": "997e0c70faa7661e825b80f1f4a96b7ddeefc2d5"
+    },
+    {
+      "path": "src/client/components/ui/card.tsx",
+      "blob": "cf02f4845b73e9895881a1a2e1b00a52bc576cd4"
+    },
+    {
+      "path": "src/client/components/ui/checkbox.tsx",
+      "blob": "d2c1b2f8397ba40fedec7ac708d781e667c63398"
+    },
+    {
+      "path": "src/client/components/ui/collapsible.tsx",
+      "blob": "4b242f71d4f7977093e6ab0e7340cd33c8e54e72"
+    },
+    {
+      "path": "src/client/components/ui/empty.tsx",
+      "blob": "e11ce349698e3cabfaee50d6b659544b37b317a1"
+    },
+    {
+      "path": "src/client/components/ui/field.tsx",
+      "blob": "e8dfaad9fc7b810851fb94e80b1aff736c43f28c"
+    },
+    {
+      "path": "src/client/components/ui/hover-card.tsx",
+      "blob": "d1b577cde0b7d6d3a7c1ce39c480eba01350bd64"
+    },
+    {
+      "path": "src/client/components/ui/input-group.tsx",
+      "blob": "08cd6aae5c652b6819655be191c77d1834577bb2"
+    },
+    {
+      "path": "src/client/components/ui/input.tsx",
+      "blob": "7c4ab5ab5ed4872687e2c7e41eac38d50c9e7bf5"
+    },
+    {
+      "path": "src/client/components/ui/label.tsx",
+      "blob": "ddfd2e16915f7435c3a7654add2e0f49d98612aa"
+    },
+    {
+      "path": "src/client/components/ui/message-scroller.tsx",
+      "blob": "d0270402017b08a5ce778b3007bf8aed4a7af570"
+    },
+    {
+      "path": "src/client/components/ui/message.tsx",
+      "blob": "765bb9bfd4d9499d74b76a5331fb18d7c0dc4cf9"
+    },
+    {
+      "path": "src/client/components/ui/native-select.tsx",
+      "blob": "aad5cd0d3d23f2887e39a7ca1e80d2275029dc16"
+    },
+    {
+      "path": "src/client/components/ui/separator.tsx",
+      "blob": "d69c13426761105ab42e5a6bd364dc54bd70f78c"
+    },
+    {
+      "path": "src/client/components/ui/sheet.tsx",
+      "blob": "17027140581c7931c95b067c8cce9509c881a6a0"
+    },
+    {
+      "path": "src/client/components/ui/table.tsx",
+      "blob": "3303320d4c27d30446bfd6a441d6d7d518b03fa7"
+    },
+    {
+      "path": "src/client/components/ui/textarea.tsx",
+      "blob": "5141de794cdc57aa317c8beba328a7284475d767"
+    },
+    {
+      "path": "src/client/components/ui/trace.tsx",
+      "blob": "ca5a1945d06df4d82a6b520a51f9c867fb278352"
+    },
+    {
+      "path": "src/client/lib/utils.ts",
+      "blob": "f815ded4d7865413255682a8b1f8f95beb620d0a"
+    },
+    {
+      "path": "src/client/main.tsx",
+      "blob": "cbab37c5094666578eeec4881729c1e2943ba47a"
+    },
+    {
+      "path": "src/client/styles.css",
+      "blob": "a378b8bced0354cbea37bd66f1cd4d4304afcb95"
+    },
+    {
+      "path": "src/client/theme-provider.tsx",
+      "blob": "10a57ef155feca7c971990498010a860dcf80dd6"
+    },
+    {
+      "path": "src/client/useConversation.ts",
+      "blob": "99173f509e7358f8e9e651b99e0f86ba650fa6ac"
+    },
+    {
+      "path": "src/domain/budget.ts",
+      "blob": "840fff55d18698ffbbcc5f26a728ff14558f7634"
+    },
+    {
+      "path": "src/domain/catalog.ts",
+      "blob": "174408cfd21ee20ddb6fbfb14350789ac20bcec9"
+    },
+    {
+      "path": "src/domain/contracts.ts",
+      "blob": "c48a96a83405c98a929e5c523ccd44ac45503f85"
+    },
+    {
+      "path": "src/domain/fixture-preferences.ts",
+      "blob": "4e5996ceb5a295cec1c50300715b7b93318271e0"
+    },
+    {
+      "path": "src/domain/intent-actions.ts",
+      "blob": "ae5dee502b0c34dffad3a049243c079252f378fb"
+    },
+    {
+      "path": "src/domain/legacy-contracts.ts",
+      "blob": "d646e95abf8e478e8b27e9878227a2946ca6bf20"
+    },
+    {
+      "path": "src/domain/merchant-links.ts",
+      "blob": "fbca32f82d42497d672c2736843757eb336e98b5"
+    },
+    {
+      "path": "src/domain/preferences.ts",
+      "blob": "cf7dbf9d7135f29d43b2a311c71f516903aaedf6"
+    },
+    {
+      "path": "src/domain/providers.ts",
+      "blob": "07f11e539cd774335576588238441e4580cc09c9"
+    },
+    {
+      "path": "src/domain/research-evidence-v2.ts",
+      "blob": "bb92e7abc2ee12d4ad8bea283cc69209fe4abff9"
+    },
+    {
+      "path": "src/domain/research-evidence-v3.ts",
+      "blob": "9c447c4c316ef65d9cef787060924a35c68bd0cc"
+    },
+    {
+      "path": "src/domain/research-evidence-v4.ts",
+      "blob": "421995cc9596c0f02da3abe681e9ecc82ed567ac"
+    },
+    {
+      "path": "src/domain/research-history-unversioned.ts",
+      "blob": "695ef87365e071de44924ec47d0fd8c27d64a97c"
+    },
+    {
+      "path": "src/domain/research-history.ts",
+      "blob": "18db5d272d0b0d1d8485086b641d9a010462b875"
+    },
+    {
+      "path": "src/domain/research-intent-v3.ts",
+      "blob": "c5cae5bbc601048dcffa96827c674addd45c7b8c"
+    },
+    {
+      "path": "src/domain/research-intent-v4.ts",
+      "blob": "b2400523c32e922b85043c4a9659a55a783ab857"
+    },
+    {
+      "path": "src/domain/research.ts",
+      "blob": "980cdd30a975b0ef754d8f3612e06567f4c2201b"
+    },
+    {
+      "path": "src/domain/shopping.ts",
+      "blob": "a23b9efb95e586df66cb1194e75b9e9ff31fcedd"
+    },
+    {
+      "path": "src/domain/web-research.ts",
+      "blob": "69ad4e580845625929d358883494c532f127fe29"
+    },
+    {
+      "path": "src/server/app.ts",
+      "blob": "78c38ffb5e62a7fb94a238e6a91365ea1a5d8cce"
+    },
+    {
+      "path": "src/server/config.ts",
+      "blob": "10c50bde36ab6cb0e8f4c34cba1ad0dd36ff7995"
+    },
+    {
+      "path": "src/server/exa-research.ts",
+      "blob": "2236b078a1fa322f00cd10d85ce3f4c33d5bd388"
+    },
+    {
+      "path": "src/server/fixture-web-research.ts",
+      "blob": "290db955ffdef9fa6ef7d1a7d1b5a1c8f9d5d964"
+    },
+    {
+      "path": "src/server/fixtures.ts",
+      "blob": "33e2da8d5b6cbb65d66d3924b724dd414cfa0c73"
+    },
+    {
+      "path": "src/server/index.ts",
+      "blob": "1b12016b376ada89062741dda566508977211f8e"
+    },
+    {
+      "path": "src/server/ollama-intent.ts",
+      "blob": "482d69a9a38f68f2962a48498409a44b80d6866e"
+    },
+    {
+      "path": "src/server/research-diagnostics.ts",
+      "blob": "a130be93503d72eb07c5d0af1dceae1fd208a161"
+    },
+    {
+      "path": "src/server/research-quota.ts",
+      "blob": "9d92aab2372c0ee03fe9f29547534ef5553b1bad"
+    },
+    {
+      "path": "src/server/research-turns.ts",
+      "blob": "a686c26f2c8b3611fcdec2720423072e66581c25"
+    },
+    {
+      "path": "src/server/test-fixture-app.ts",
+      "blob": "1ae3011064ae568e3812d4b23ea5bf70ce3be3e5"
+    }
+  ],
+  "mainSummary": {
+    "total": 60,
+    "executed": 60,
+    "passed": 5,
+    "failed": 36,
+    "blocked": 18,
+    "unsupported": 1,
+    "infrastructureErrors": 0,
+    "criticalFailures": 49,
+    "criticalScenarios": 26,
+    "observedTurns": 140,
+    "observedClarifications": 15,
+    "categories": {
+      "conversational-understanding": {
+        "passed": 1,
+        "assessed": 5,
+        "unassessed": 0,
+        "rate": 0.2
+      },
+      "preference-extraction": {
+        "passed": 1,
+        "assessed": 5,
+        "unassessed": 0,
+        "rate": 0.2
+      },
+      "contextual-clarification": {
+        "passed": 1,
+        "assessed": 5,
+        "unassessed": 0,
+        "rate": 0.2
+      },
+      "budget-currency": {
+        "passed": 0,
+        "assessed": 4,
+        "unassessed": 1,
+        "rate": 0
+      },
+      "preference-retention": {
+        "passed": 0,
+        "assessed": 4,
+        "unassessed": 1,
+        "rate": 0
+      },
+      "corrections-dissatisfaction": {
+        "passed": 1,
+        "assessed": 5,
+        "unassessed": 0,
+        "rate": 0.2
+      },
+      "research-selection": {
+        "passed": 0,
+        "assessed": 2,
+        "unassessed": 3,
+        "rate": 0
+      },
+      "product-relevance": {
+        "passed": 0,
+        "assessed": 5,
+        "unassessed": 0,
+        "rate": 0
+      },
+      "comparison-quality": {
+        "passed": 0,
+        "assessed": 1,
+        "unassessed": 4,
+        "rate": 0
+      },
+      "evidence-honesty": {
+        "passed": 0,
+        "assessed": 2,
+        "unassessed": 3,
+        "rate": 0
+      },
+      "chat-interaction": {
+        "passed": 0,
+        "assessed": 1,
+        "unassessed": 4,
+        "rate": 0
+      },
+      "recovery-safety": {
+        "passed": 1,
+        "assessed": 2,
+        "unassessed": 3,
+        "rate": 0.5
+      }
+    },
+    "metrics": {
+      "conversational-task-success": {
+        "passed": 0,
+        "assessed": 0,
+        "unassessed": 60,
+        "rate": null
+      },
+      "deterministic-case-contract": {
+        "passed": 5,
+        "assessed": 41,
+        "unassessed": 19,
+        "rate": 0.12195121951219512
+      },
+      "unnecessary-clarification-rate": {
+        "passed": 0,
+        "assessed": 0,
+        "unassessed": 15,
+        "rate": null
+      },
+      "hard-constraint-preservation": {
+        "passed": 217,
+        "assessed": 268,
+        "unassessed": 0,
+        "rate": 0.8097014925373134
+      },
+      "citation-price-attribution": {
+        "passed": 312,
+        "assessed": 312,
+        "unassessed": 0,
+        "rate": 1
+      },
+      "research-call-restraint": {
+        "passed": 205,
+        "assessed": 209,
+        "unassessed": 0,
+        "rate": 0.9808612440191388
+      },
+      "research-usefulness": {
+        "passed": 0,
+        "assessed": 0,
+        "unassessed": 60,
+        "rate": null
+      },
+      "product-relevance": {
+        "passed": 0,
+        "assessed": 0,
+        "unassessed": 60,
+        "rate": null
+      },
+      "user-experience": {
+        "passed": 0,
+        "assessed": 0,
+        "unassessed": 60,
+        "rate": null
+      }
+    },
+    "acceptance": "fail"
+  },
+  "localOnlySummary": {
+    "total": 60,
+    "executed": 60,
+    "passed": 1,
+    "failed": 50,
+    "blocked": 8,
+    "unsupported": 1,
+    "infrastructureErrors": 0,
+    "criticalFailures": 94,
+    "criticalScenarios": 42,
+    "observedTurns": 140,
+    "observedClarifications": 1,
+    "categories": {
+      "conversational-understanding": {
+        "passed": 1,
+        "assessed": 5,
+        "unassessed": 0,
+        "rate": 0.2
+      },
+      "preference-extraction": {
+        "passed": 0,
+        "assessed": 5,
+        "unassessed": 0,
+        "rate": 0
+      },
+      "contextual-clarification": {
+        "passed": 0,
+        "assessed": 5,
+        "unassessed": 0,
+        "rate": 0
+      },
+      "budget-currency": {
+        "passed": 0,
+        "assessed": 4,
+        "unassessed": 1,
+        "rate": 0
+      },
+      "preference-retention": {
+        "passed": 0,
+        "assessed": 5,
+        "unassessed": 0,
+        "rate": 0
+      },
+      "corrections-dissatisfaction": {
+        "passed": 0,
+        "assessed": 5,
+        "unassessed": 0,
+        "rate": 0
+      },
+      "research-selection": {
+        "passed": 0,
+        "assessed": 4,
+        "unassessed": 1,
+        "rate": 0
+      },
+      "product-relevance": {
+        "passed": 0,
+        "assessed": 5,
+        "unassessed": 0,
+        "rate": 0
+      },
+      "comparison-quality": {
+        "passed": 0,
+        "assessed": 3,
+        "unassessed": 2,
+        "rate": 0
+      },
+      "evidence-honesty": {
+        "passed": 0,
+        "assessed": 3,
+        "unassessed": 2,
+        "rate": 0
+      },
+      "chat-interaction": {
+        "passed": 0,
+        "assessed": 3,
+        "unassessed": 2,
+        "rate": 0
+      },
+      "recovery-safety": {
+        "passed": 0,
+        "assessed": 4,
+        "unassessed": 1,
+        "rate": 0
+      }
+    },
+    "metrics": {
+      "conversational-task-success": {
+        "passed": 0,
+        "assessed": 0,
+        "unassessed": 60,
+        "rate": null
+      },
+      "deterministic-case-contract": {
+        "passed": 1,
+        "assessed": 51,
+        "unassessed": 9,
+        "rate": 0.0196078431372549
+      },
+      "unnecessary-clarification-rate": {
+        "passed": 0,
+        "assessed": 0,
+        "unassessed": 1,
+        "rate": null
+      },
+      "hard-constraint-preservation": {
+        "passed": 154,
+        "assessed": 253,
+        "unassessed": 0,
+        "rate": 0.6086956521739131
+      },
+      "citation-price-attribution": {
+        "passed": 16,
+        "assessed": 16,
+        "unassessed": 0,
+        "rate": 1
+      },
+      "research-call-restraint": {
+        "passed": 176,
+        "assessed": 180,
+        "unassessed": 0,
+        "rate": 0.9777777777777777
+      },
+      "research-usefulness": {
+        "passed": 0,
+        "assessed": 0,
+        "unassessed": 60,
+        "rate": null
+      },
+      "product-relevance": {
+        "passed": 0,
+        "assessed": 0,
+        "unassessed": 60,
+        "rate": null
+      },
+      "user-experience": {
+        "passed": 0,
+        "assessed": 0,
+        "unassessed": 60,
+        "rate": null
+      }
+    },
+    "acceptance": "fail"
+  },
+  "independentOutcomesMatchPublished": true,
+  "bridgeTransitionsMatchPublished": true,
+  "tamperProbes": [
+    {
+      "what": "turn",
+      "rejected": true,
+      "error": "Invalid report integrity. event differs from its originating HTTP attempt"
+    },
+    {
+      "what": "attemptId",
+      "rejected": true,
+      "error": "Invalid report integrity. event differs from its originating HTTP attempt"
+    }
+  ],
+  "cleanupProbes": [
+    {
+      "origin": "http://127.0.0.1:57418",
+      "listening": false
+    },
+    {
+      "origin": "http://127.0.0.1:57547",
+      "listening": false
+    },
+    {
+      "origin": "http://127.0.0.1:57416",
+      "listening": false
+    },
+    {
+      "origin": "http://127.0.0.1:57542",
+      "listening": false
+    }
+  ],
+  "controlsPassed": 60,
+  "browserChecks": 45,
+  "smokeChecks": 30,
+  "screenshots": [
+    "01-dark-empty-desktop.png",
+    "02-dark-empty-mobile.png",
+    "03-light-persisted-mobile.png",
+    "04a-actual-preparation-progress-desktop.png",
+    "04-actual-research-progress-desktop.png",
+    "05b-synthetic-image-fallback-desktop.png",
+    "05-synthetic-recommendations-evidence-desktop.png",
+    "06-synthetic-cards-mobile.png",
+    "06b-synthetic-evidence-mobile.png",
+    "07-history-composer-mobile.png",
+    "08-contextual-preference-edit-desktop.png",
+    "09-no-budget-research-mobile.png",
+    "10a-powerbank-pending-question-mobile.png",
+    "10-powerbank-currency-desktop.png",
+    "11-powerbank-currency-mobile.png",
+    "12-held-comparison-desktop.png",
+    "13-cancelled-mobile.png",
+    "14-isolated-session-desktop.png"
+  ]
+}

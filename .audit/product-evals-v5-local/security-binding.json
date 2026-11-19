@@ -1,0 +1,358 @@
+{
+  "reviewedHead": "f04068e137c2ac9b242cf4c4ec8b5d7286a95734",
+  "observedHead": "f04068e137c2ac9b242cf4c4ec8b5d7286a95734",
+  "checks": [
+    "all three report generations validate statically and the final scorecard exactly recomputes",
+    "independent complete main/local runs reproduce every assertion outcome and all reported technical totals",
+    "exact-head browser/smoke proof completes with local images, no unexpected network, cleanup and bounded clean logs",
+    "cross-turn, absent-marker, duplicate-attempt and settlement-operation tampering are rejected",
+    "all150 protected files remain unchanged and src exactly matches assigned parent4e42bee"
+  ],
+  "digests": {
+    "baseline": {
+      "path": "artifacts/product-evals/baseline-v1/report.json",
+      "fileSha256": "a9577869cd991fdd4713ef4bc5a6a5842b1d5839282d7e4a18a404cab2a32a56",
+      "structuralDigest": "4bd357f8ff4ee0e711a8f3eb686b0296de290895ee091acf113a8c68b433151f"
+    },
+    "historical": {
+      "path": "artifacts/product-evals/candidate-v5/report.json",
+      "fileSha256": "563fdbeef71e331f8f21d4311a2807ec3493427a9badf48c34da7a625daf29e3",
+      "structuralDigest": "5a756fb7119d64496cc8faeeb86212df8ba37a3c16016c97ddd4c5028c18914f"
+    },
+    "main": {
+      "path": "artifacts/product-evals/candidate-v5-local/report.json",
+      "fileSha256": "b00b8d642ea57dd8b9953fc9fdf1053ec91aa8ed5816c9c75a3561d3dc04574d",
+      "structuralDigest": "6b688d04a54d0cbf1cc8bb445de4702eb87b57f9dd2c5aea00883baeb268b9bf"
+    },
+    "local": {
+      "path": "artifacts/product-evals/candidate-v5-local/without-interpreter/report.json",
+      "fileSha256": "21ad9720be8b3342f75d145fcaac2ae69b9e6669478bea67e5d2a8d828761bb0",
+      "structuralDigest": "3c8ec678d14d78130f708caa193618710b510adfeb1dc1c38371bbe5f4b7f884"
+    },
+    "scorecard": {
+      "path": "artifacts/product-evals/comparison-v4-v5-local/scorecard.json",
+      "fileSha256": "5a93091214df7452d9a9801017ab632fca2a3342b4c13cac2acd23df04ef8712",
+      "structuralDigest": "77dca057e30328ebdb099015c91dac9b5b0456f7ae81813afd00181da4375125"
+    },
+    "browser": {
+      "path": "artifacts/product-evals/candidate-v5-local/browser/proof.json",
+      "fileSha256": "c5d73e283eed5ff8fac6dd081364498ea4eec913fa8ffaf9809aa737bfb1baed",
+      "structuralDigest": "18b773f2706cc785e70fcecd268c65e75ada3a32647fb6edd0501155a6654fcc"
+    },
+    "smoke": {
+      "path": "artifacts/product-evals/candidate-v5-local/smoke/proof.json",
+      "fileSha256": "70481cb8d88a36e2a6763ea868192987c56ffc7257cc709a570c0b35c7764f20",
+      "structuralDigest": "0d4d9cedbdf7248d7a44437b46e986fd5a0fb88c92cdafdab80bafd5514af141"
+    }
+  },
+  "mainSummary": {
+    "total": 60,
+    "executed": 60,
+    "passed": 5,
+    "failed": 36,
+    "blocked": 18,
+    "unsupported": 1,
+    "infrastructureErrors": 0,
+    "criticalFailures": 49,
+    "criticalScenarios": 26,
+    "observedTurns": 140,
+    "observedClarifications": 15,
+    "categories": {
+      "conversational-understanding": {
+        "passed": 1,
+        "assessed": 5,
+        "unassessed": 0,
+        "rate": 0.2
+      },
+      "preference-extraction": {
+        "passed": 1,
+        "assessed": 5,
+        "unassessed": 0,
+        "rate": 0.2
+      },
+      "contextual-clarification": {
+        "passed": 1,
+        "assessed": 5,
+        "unassessed": 0,
+        "rate": 0.2
+      },
+      "budget-currency": {
+        "passed": 0,
+        "assessed": 4,
+        "unassessed": 1,
+        "rate": 0
+      },
+      "preference-retention": {
+        "passed": 0,
+        "assessed": 4,
+        "unassessed": 1,
+        "rate": 0
+      },
+      "corrections-dissatisfaction": {
+        "passed": 1,
+        "assessed": 5,
+        "unassessed": 0,
+        "rate": 0.2
+      },
+      "research-selection": {
+        "passed": 0,
+        "assessed": 2,
+        "unassessed": 3,
+        "rate": 0
+      },
+      "product-relevance": {
+        "passed": 0,
+        "assessed": 5,
+        "unassessed": 0,
+        "rate": 0
+      },
+      "comparison-quality": {
+        "passed": 0,
+        "assessed": 1,
+        "unassessed": 4,
+        "rate": 0
+      },
+      "evidence-honesty": {
+        "passed": 0,
+        "assessed": 2,
+        "unassessed": 3,
+        "rate": 0
+      },
+      "chat-interaction": {
+        "passed": 0,
+        "assessed": 1,
+        "unassessed": 4,
+        "rate": 0
+      },
+      "recovery-safety": {
+        "passed": 1,
+        "assessed": 2,
+        "unassessed": 3,
+        "rate": 0.5
+      }
+    },
+    "metrics": {
+      "conversational-task-success": {
+        "passed": 0,
+        "assessed": 0,
+        "unassessed": 60,
+        "rate": null
+      },
+      "deterministic-case-contract": {
+        "passed": 5,
+        "assessed": 41,
+        "unassessed": 19,
+        "rate": 0.12195121951219512
+      },
+      "unnecessary-clarification-rate": {
+        "passed": 0,
+        "assessed": 0,
+        "unassessed": 15,
+        "rate": null
+      },
+      "hard-constraint-preservation": {
+        "passed": 217,
+        "assessed": 268,
+        "unassessed": 0,
+        "rate": 0.8097014925373134
+      },
+      "citation-price-attribution": {
+        "passed": 312,
+        "assessed": 312,
+        "unassessed": 0,
+        "rate": 1
+      },
+      "research-call-restraint": {
+        "passed": 205,
+        "assessed": 209,
+        "unassessed": 0,
+        "rate": 0.9808612440191388
+      },
+      "research-usefulness": {
+        "passed": 0,
+        "assessed": 0,
+        "unassessed": 60,
+        "rate": null
+      },
+      "product-relevance": {
+        "passed": 0,
+        "assessed": 0,
+        "unassessed": 60,
+        "rate": null
+      },
+      "user-experience": {
+        "passed": 0,
+        "assessed": 0,
+        "unassessed": 60,
+        "rate": null
+      }
+    },
+    "acceptance": "fail"
+  },
+  "localSummary": {
+    "total": 60,
+    "executed": 60,
+    "passed": 1,
+    "failed": 50,
+    "blocked": 8,
+    "unsupported": 1,
+    "infrastructureErrors": 0,
+    "criticalFailures": 94,
+    "criticalScenarios": 42,
+    "observedTurns": 140,
+    "observedClarifications": 1,
+    "categories": {
+      "conversational-understanding": {
+        "passed": 1,
+        "assessed": 5,
+        "unassessed": 0,
+        "rate": 0.2
+      },
+      "preference-extraction": {
+        "passed": 0,
+        "assessed": 5,
+        "unassessed": 0,
+        "rate": 0
+      },
+      "contextual-clarification": {
+        "passed": 0,
+        "assessed": 5,
+        "unassessed": 0,
+        "rate": 0
+      },
+      "budget-currency": {
+        "passed": 0,
+        "assessed": 4,
+        "unassessed": 1,
+        "rate": 0
+      },
+      "preference-retention": {
+        "passed": 0,
+        "assessed": 5,
+        "unassessed": 0,
+        "rate": 0
+      },
+      "corrections-dissatisfaction": {
+        "passed": 0,
+        "assessed": 5,
+        "unassessed": 0,
+        "rate": 0
+      },
+      "research-selection": {
+        "passed": 0,
+        "assessed": 4,
+        "unassessed": 1,
+        "rate": 0
+      },
+      "product-relevance": {
+        "passed": 0,
+        "assessed": 5,
+        "unassessed": 0,
+        "rate": 0
+      },
+      "comparison-quality": {
+        "passed": 0,
+        "assessed": 3,
+        "unassessed": 2,
+        "rate": 0
+      },
+      "evidence-honesty": {
+        "passed": 0,
+        "assessed": 3,
+        "unassessed": 2,
+        "rate": 0
+      },
+      "chat-interaction": {
+        "passed": 0,
+        "assessed": 3,
+        "unassessed": 2,
+        "rate": 0
+      },
+      "recovery-safety": {
+        "passed": 0,
+        "assessed": 4,
+        "unassessed": 1,
+        "rate": 0
+      }
+    },
+    "metrics": {
+      "conversational-task-success": {
+        "passed": 0,
+        "assessed": 0,
+        "unassessed": 60,
+        "rate": null
+      },
+      "deterministic-case-contract": {
+        "passed": 1,
+        "assessed": 51,
+        "unassessed": 9,
+        "rate": 0.0196078431372549
+      },
+      "unnecessary-clarification-rate": {
+        "passed": 0,
+        "assessed": 0,
+        "unassessed": 1,
+        "rate": null
+      },
+      "hard-constraint-preservation": {
+        "passed": 154,
+        "assessed": 253,
+        "unassessed": 0,
+        "rate": 0.6086956521739131
+      },
+      "citation-price-attribution": {
+        "passed": 16,
+        "assessed": 16,
+        "unassessed": 0,
+        "rate": 1
+      },
+      "research-call-restraint": {
+        "passed": 176,
+        "assessed": 180,
+        "unassessed": 0,
+        "rate": 0.9777777777777777
+      },
+      "research-usefulness": {
+        "passed": 0,
+        "assessed": 0,
+        "unassessed": 60,
+        "rate": null
+      },
+      "product-relevance": {
+        "passed": 0,
+        "assessed": 0,
+        "unassessed": 60,
+        "rate": null
+      },
+      "user-experience": {
+        "passed": 0,
+        "assessed": 0,
+        "unassessed": 60,
+        "rate": null
+      }
+    },
+    "acceptance": "fail"
+  },
+  "pairedAssessed": {
+    "denominator": 918,
+    "v4": {
+      "passed": 857,
+      "failed": 61
+    },
+    "v5": {
+      "passed": 839,
+      "failed": 79
+    },
+    "label": "Same assertions assessed in both reports under different interpretation composition. Conditional technical comparison only."
+  },
+  "assertionTransitionCounts": {
+    "newlyPassing": 29,
+    "newlyAssessedPasses": 83,
+    "stillFailing": 32,
+    "regressions": 47,
+    "newlyObservedFailures": 0,
+    "lostAssessment": 598,
+    "failedToUnassessed": 0,
+    "criticalRegressions": 23
+  }
+}

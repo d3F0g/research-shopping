@@ -1,19 +1,21 @@
 {
-  "milestone": 2,
+  "milestone": 3,
   "completed": [
-    1
+    1,
+    2
   ],
   "base": "9d2a3c5e336a6652ec6b02e0c3deff6617fb7d11",
   "branch": "rebuild/fieldnote-v2",
   "worktree": "/Users/josiahwong/Documents/research-shopping-v2",
   "agents": {
-    "architecture_audit": "read-only Exa and core design",
-    "eval_audit": "read-only PR47 contracts",
-    "persistence_audit": "read-only PR41 integration"
+    "v2_application_owner": "src package tests scripts migrations in V2 worktree",
+    "v2_eval_owner": "evals and product-eval artifacts in V2-evals worktree"
   },
   "blockers": [
     "Live Exa proof blocked by uncertain billing and no valid automated allowance",
     "Authorized merchant integration unavailable"
   ],
-  "next": "architecture decision then implementation"
+  "next": "Application owner implements contracts and core checkpoints; eval owner preserves and adapts framework",
+  "tracking_issue": "https://github.com/d3F0g/research-shopping/issues/51",
+  "autonomous_continuation": "No supported task heartbeat scheduling tool exposed. Continue active turn and preserve resume capsule; no future wake armed."
 }
