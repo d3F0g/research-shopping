@@ -170,13 +170,22 @@ describe("V2 PostgreSQL account persistence", () => {
   });
   it("preserves ordinary presentation changes while a research request finishes", async () => {
     const running = await active();
-    const edit = await prepare(identities[0], "Keep it short");
+    const edit = await prepare(identities[0], "Keep it short", randomUUID(), running.prepared.workspace.revision);
     expect(edit.workspace.pendingPreparedId).toBe(running.prepared.workspace.pendingPreparedId);
     running.release();
     const complete = await running.response;
     expect(complete.workspace.state.messages.map((message) => message.text)).toContain("Keep it short");
     expect(complete.workspace.state.intent.responseLength).toBe("concise");
     expect(complete.response?.kind).toBe("research");
+  });
+  it("accepts Stop with the revision actually returned before dispatch", async () => {
+    const running = await active();
+    await command(identities[0], { phase: "cancel", revision: running.prepared.workspace.revision, operationId: randomUUID(), target: running.prepared.workspace.pendingOperationId! });
+    expect(observedSignal?.aborted).toBe(true);
+    const rejected = expect(running.response).rejects.toMatchObject({ status: 409 });
+    running.release(); await rejected;
+    expect(calls).toBe(1);
+    expect((await store.load(identities[0])).state.messages.some((m) => m.research)).toBe(false);
   });
   it("invalidates late results after new chat and keeps operation tombstones", async () => {
     const running = await active();

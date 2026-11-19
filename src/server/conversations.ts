@@ -154,7 +154,7 @@ export function createConversationService(
       const before = digestIntent(value.state.intent);
       const decision = reduceTurn(value.state, input);
       if (
-        decision.kind === "research" ||
+        decision.kind === "research" || decision.kind === "cancel" ||
         before !== digestIntent(decision.state.intent) ||
         decision.state.pending
       )
@@ -179,7 +179,7 @@ export function createConversationService(
         };
       } else
         response = {
-          kind: decision.kind,
+          kind: decision.kind === "cancel" ? "message" : decision.kind,
           message: decision.message,
           state: snapshot(value),
         };

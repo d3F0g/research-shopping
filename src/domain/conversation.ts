@@ -73,7 +73,7 @@ export type TurnDecision =
   | { state: ConversationState; kind: "research" }
   | {
       state: ConversationState;
-      kind: "message" | "clarification";
+      kind: "message" | "clarification" | "cancel";
       message: string;
     };
 export const IntentEditSchema = z.strictObject({

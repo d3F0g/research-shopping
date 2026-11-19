@@ -101,7 +101,7 @@ export function createWorkspaceStore(pool: Pool, dependencies: WorkspaceDependen
       const previous = structuredClone(row.data.state);
       const decision = dependencies.reduce(previous, input);
       const changed = intentDigest(row.data.state) !== intentDigest(decision.state);
-      if (decision.kind === "research" || changed || decision.state.pending) { interrupt(row); row.epoch++; }
+      if (decision.kind === "research" || decision.kind === "cancel" || changed || decision.state.pending) { interrupt(row); row.epoch++; }
       if (JSON.stringify(row.data.state.intent) !== JSON.stringify(decision.state.intent) || JSON.stringify(row.data.state.pending) !== JSON.stringify(decision.state.pending)) row.data.acceptedAt = new Date(now).toISOString();
       const known = new Set(row.data.state.messages.map((message) => message.id));
       const messageIds = decision.state.messages.filter((message) => !known.has(message.id)).map((message) => message.id);
@@ -114,7 +114,7 @@ export function createWorkspaceStore(pool: Pool, dependencies: WorkspaceDependen
         row.data.pending = { preparedId: randomUUID(), operationId: input.operationId, sessionId: identity.sessionId, revision: row.revision, epoch: row.epoch, intentDigest: intentDigest(row.data.state), deadline: new Date(now + PENDING_MS).toISOString(), status: "prepared" };
         row.data.receipts.at(-1)!.preparedId = row.data.pending.preparedId;
         response = { kind: "prepared", preparedId: row.data.pending.preparedId, state: structuredClone(row.data.state) };
-      } else response = { kind: decision.kind, message: decision.message, state: structuredClone(row.data.state) };
+      } else response = { kind: decision.kind === "cancel" ? "message" : decision.kind, message: decision.message, state: structuredClone(row.data.state) };
       await save(client, identity.userId, row);
       response.state = structuredClone(row.data.state);
       return result(row, input.operationId, response);
@@ -135,7 +135,6 @@ export function createWorkspaceStore(pool: Pool, dependencies: WorkspaceDependen
       if (row.revision !== input.revision || pending.intentDigest !== intentDigest(row.data.state)) return conflict();
       pending.status = "running";
       row.data.receipts.find((item) => item.operationId === pending.operationId)!.status = "running";
-      row.revision++;
       await save(client, identity.userId, row);
       operationKey = key(identity, pending);
       running.set(operationKey, { controller, sessionId: identity.sessionId });
