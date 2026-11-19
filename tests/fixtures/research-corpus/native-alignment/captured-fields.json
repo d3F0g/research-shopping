@@ -1,0 +1,896 @@
+{
+  "provenance": "Automated test replay of complete captured diagnostic fields from the second genuine call. Not current evidence or a full provider HTTP capture. The enclosing HTTP response is derived for tests only.",
+  "diagnosticSha256": "96e01bb3cbd6e195ff32d1daebc898b1a92eb4b0cf712e2dc9e80d6a0ce6f97c",
+  "fields": {
+    "provenance": "Exact JSON field values copied from the allowlisted diagnostic. This is not a provider HTTP response or a replay envelope.",
+    "native": {
+      "kind": "object",
+      "encoding": "json",
+      "text": "{\"observations\":[{\"identityQuote\":\"ATH-M50xBT2 \\n\\n SGD 380.41 \\n\\n From \\n\\n SGD 228.00\",\"priceQuote\":\"From: SALE SGD 228.00\",\"quotedFacts\":[\"Battery life of up to 50 hours on a continuous full charge\",\"45 mm large aperture drivers\",\"Compatible with high-quality LDAC and AAC codecs\"],\"url\":\"https://www.audio-technica.com/en-sea/headphones/type/wireless/ath-m50xbt2\",\"name\":\"ATH-M50xBT2 | Wireless Over-Ear Headphones | Audio-Technica\"},{\"quotedFacts\":[\"Up to 30 hours of battery life\",\"Industry-leading noise cancellation with multiple microphones and processors\",\"High-resolution audio with LDAC technology\"],\"identityQuote\":\"SONY WH-1000XM5 WIRELESS HEADSET - BLACK WH1000XM5/BME\",\"priceQuote\":\"S$329.00 Member's Get Extra S$33.00 Off Get 329 Family Member's Points U.P. S$589.00\",\"name\":\"WH-1000XM5 - Noise Cancelling, 30hr Battery, Sleek Design\",\"url\":\"https://www.gaincity.com/sony-wh-1000xm5-wireless-headset-black-wh1000xm5-bme-t0175256\"},{\"priceQuote\":\"S$ 349 was S$ 499\",\"url\":\"https://www.harveynorman.com.sg/tv-and-audio/headphones-en/over-ear-headphones-en-2/sennheiser-momentum-4-wireless-over-ear-headphones-teal-800073-q.html\",\"quotedFacts\":[\"High-fidelity 42 mm transducer system\",\"Up to 60 hours of playback on a full charge\",\"Advanced noise cancellation automatically adapts your sound to your surroundings\"],\"identityQuote\":\"Sennheiser MOMENTUM 4 Wireless Over-Ear Headphones - Teal (800073)\",\"name\":\"Sennheiser MOMENTUM 4 Wireless Over-Ear Headphones - Teal (800073) | Harvey Norman Singapore\"},{\"url\":\"https://www.stereo.com.sg/products/edifier-wh950nb-2025-edition-wireless-noise-cancelling-headphone\",\"priceQuote\":\"SGD 249.00 \\n\\n SGD 139.00\",\"quotedFacts\":[\"Up to 80 hours playtime\",\"Titanium-coated 40mm drivers deliver powerful, balanced sound\",\"LDAC support and Hi-Res Audio certified\"],\"identityQuote\":\"Edifier WH950NB (2025 edition) Wireless Noise Cancelling Headphone\",\"name\":\"Edifier WH950NB (2025 edition) Wireless Noise Cancelling Headphone – Stereo Electronics Pte Ltd\"}]}",
+      "originalLength": 2009,
+      "originalBytes": 2011,
+      "truncated": false,
+      "sha256": "85bd6ac7c6eda37c89ce740b162b4f1c5d7fe4fda84de246118495c57979d39f"
+    },
+    "results": [
+      {
+        "sourceIndex": 0,
+        "title": {
+          "text": "ATH-M50xBT2 | Wireless Over-Ear Headphones | Audio-Technica",
+          "originalLength": 59,
+          "originalBytes": 59,
+          "truncated": false,
+          "sha256": "b642695b34352f02cb4627fb8179d372b715e1173fd214a8165d3d3597dbc255"
+        },
+        "url": {
+          "text": "https://www.audio-technica.com/en-sea/headphones/type/wireless/ath-m50xbt2",
+          "originalLength": 74,
+          "originalBytes": 74,
+          "truncated": false,
+          "sha256": "424b8e95dced3762ca4450c57b7f4b1d7ce069b76c5e730f792ee4aabce93d91"
+        },
+        "highlightCount": 1,
+        "highlights": [
+          {
+            "highlight": 0,
+            "text": "# ATH-M50xBT2 \n\n SGD 380.41 \n\n From \n\n SGD 228.00 \n\n## ATH-M50xBT2 \n\n From: SALE SGD 228.00 \n\n Overview \n\n## ATH-M50xBT2 \n\nThe ATH-M50xBT2 is the second generation of our critically acclaimed M-Series wireless over-ear headphones. These headphones feature 45 mm large aperture drivers in a wireless design, so listeners will enjoy the same sonic signature of the legendary ATH-M50x studio headphones. With this update, we’ve also introduced several noticeable enhancements, such as improved vocal pickup for better call quality, an updated USB-C connection, and multipoint pairing mode.\n\nSo, whether you’re looking for high-fidelity audio for your commute to work, conference call setup, or just relaxing and enjoying the music, the ATH-M50xBT2 lets you go wireless whenever you need it.\n\nBuilding on the acclaimed sonic signature of the ATH-M50x headphones, the ATH-M50xBT2 headphones utilize Bluetooth wireless technology and offer the same studio-quality sound in a wireless package. The large-aperture drivers deliver deep and accurate bass response for an immersive listening experience, while the AK4331 advanced audio DAC and dedicated internal headphone amp provide superior clear, high-fidelity sound.\n\nThe ATH-M50xBT2 features dual microphones and beamforming technology, which provide improved vocal pickup ensuring crystal-clear audio call quality. Additionally, users can conveniently mute with the press of a button or access the built-in Amazon Alexa voice assistant, as well as Google Assistant and Siri.\n\nThese headphones have a battery life of up to 50 hours on a continuous full charge, with up to 3 hours of use on a 10-minute rapid charge via the USB-C connection, making them some of the longest-lasting wireless headphones available.\n\nThe multipoint pairing function allows users to stay connected to two Bluetooth devices at once, making it easier than ever to switch between tasks. You can also personalize and adjust the ATH-M50xBT2 to your preferences with the A-T Connect app. Adjust additional controls like activating low latency mode, adjust and save EQ to your headphones, change the L/R volume balance, select desired voice assistant, and more.\n\nIncluded Accessories: The ATH-M50xBT2 comes with a 1.2 m (3.9\") cable for an optional wired connection.\n\n...\n\n-\n\n...\n\n- Up to 50 hours of continuous use on a full charge and up to 3 hours of use on a 10-minute rapid charge (via USB-C connection) \n- Compatible with high-quality LDAC and AAC codecs \n- Over-ear design for excellent sound isolation in loud environments\n\n...\n\n## Specifications \n\n Headphones Specification Table \n\n| Headphones |\n| --- |\n| Type | Closed-back dynamic |\n| Driver Diameter | 45 mm |\n| Frequency Response | 15 - 28,000 Hz |\n| Sensitivity | 99 dB/mW |\n| Impedance | 38 ohms |\n| Battery | DC 3.7V lithium polymer battery |\n| Battery Life | Approx. 50 hours continuous use |\n| Charging Time | Approx. 3.5 hours |\n| Weight | Approx. 307g |\n| Microphone Type | MEMS type |\n| Microphone Sensitivity | -38 dB (1V/Pa at 1 kHz) |\n| Microphone Frequency Response | 85 -15,000 Hz |\n| Microphone Polar Pattern | Omnidirectional |\n| Accessories Included | USB charging cable（30cm､USB Type-A / USB Type-C), Audio cable (1.2m/ φ3.5mm stereo mini-plug), Pouch |\n\n Bluetooth® Specification Table \n\n| Bluetooth® |\n| --- |\n| Bluetooth® Version | Bluetooth Ver.5.0 |\n| Operating Range | Line of sight – approx. 10 m (33′) |\n| Compatible Bluetooth Profiles | A2DP, AVRCP, HFP, HSP |\n| Support Codec | LDAC / AAC, SBC |",
+            "originalLength": 3502,
+            "originalBytes": 3518,
+            "truncated": false,
+            "sha256": "552a926d3cd5884dfa3dabcede12c60a4534e23564b5061acf55a06a2208c75d"
+          }
+        ]
+      },
+      {
+        "sourceIndex": 1,
+        "title": {
+          "text": "WH-1000XM5 - Noise Cancelling, 30hr Battery, Sleek Design",
+          "originalLength": 57,
+          "originalBytes": 57,
+          "truncated": false,
+          "sha256": "998ecde7c647fe3f140ebb2fe9a697b51639389d43c00272275c9a63691f2d5b"
+        },
+        "url": {
+          "text": "https://www.gaincity.com/sony-wh-1000xm5-wireless-headset-black-wh1000xm5-bme-t0175256",
+          "originalLength": 86,
+          "originalBytes": 86,
+          "truncated": false,
+          "sha256": "849b637eed59045e36c465d66fac1b69fa523a2a9fdd4c5df64d5d9f8039f2eb"
+        },
+        "highlightCount": 1,
+        "highlights": [
+          {
+            "highlight": 0,
+            "text": "Brand: 926 \n\n In stock \n\nSONY WH-1000XM5 WIRELESS HEADSET - BLACK WH1000XM5/BME\n\n NOISE-CANCELLING \n\n NOISE-CANCELLING \n\nModel\n\n WH1000XM5/BME \n\n In stock \n\n S$329.00 Member's Get Extra S$33.00 Off Get 329 Family Member's Points U.P. S$589.00\n\n...\n\n### Product Description\n\nThe Sony WH-1000XM5 Wireless Headset offers unparalleled noise cancellation and high-resolution audio, making it perfect for music lovers and professionals. With up to 30 hours of battery life, quick charging, and a comfortable design, these headphones are designed for all-day use. Enjoy seamless connectivity and intuitive touch controls for an exceptional audio experience.\n\n### Key Features\n\n- Advanced Noise Cancelling: Experience industry-leading noise cancellation with multiple microphones and processors for a distraction-free listening experience.\n- High-Resolution Audio: Enjoy superior sound quality with LDAC technology, providing exceptional audio clarity both wired and wirelessly.\n- Long Battery Life: Up to 30 hours of battery life with quick charging capabilities, offering 3 hours of playback from just a 3-minute charge.\n- Comfortable Design: Lightweight with \"Soft fit leather\" for minimal pressure on the ears, ensuring all-day comfort.\n- Intuitive Touch Controls: Easily manage music playback, volume, and calls with touch sensor controls on the earcups.\n- Multipoint Connectivity: Pair with two Bluetooth devices simultaneously for seamless switching between devices.\n\n### Product Specifications\n\n- Size & Weight\n\n- Weight: Approx. 250g\n- General Features\n\n- Headphone Type: Closed, dynamic\n- Driver Unit: 30mm\n- Magnet: Neodymium\n- Impedance: 48 ohm (1kHz) when connecting via the headphone cable with the unit turned on\n- Frequency Response: 4 Hz - 40,000 Hz (JEITA)\n- Frequency Response (Bluetooth Communication): 20Hz-20,000Hz (44.1kHz sampling) 20Hz-40,000Hz (LDAC 96kHz sampling 990kbps)\n- Sensitivities (dB/mW): 102dB(1kHz) / mW (when connecting via the headphone cable with the unit turned on)\n- Volume Control: Touch Sensor\n- Cord Type: Single-sided (detachable)\n- Cord Length: approx. 1.2m\n- Plug: Gold-plated L-shaped stereo mini plug\n- Input(s): Stereo Mini Jack\n- Wearing Style: Over Ear\n- Battery\n\n- Battery Charge Time: Approx. 3.5 hrs\n- Battery Life (continuous music playback time): Max. 30 hrs (NC ON), Max. 40 hrs (NC OFF)\n- Bluetooth® Specification\n\n- Bluetooth® Version: Bluetooth Specification Version 5.2\n- Effective Range: 10m\n- Profile: A2DP, AVRCP, HFP, HSP\n- Supported Audio Format(s): SBC, AAC, LDAC\n- Supported Content Protection: SCMS-T\n- Noise Cancelling\n\n- Personal NC Optimizer: Auto NC Optimizer\n- Atmospheric Pressure Optimizing: Yes\n- Ambient Sound Mode: Yes\n- Quick Attention: Yes\n\n...\n\n- Dimensions (W x H x D): 22.5 x 26.4 x 7.7 cm\n- Weight: 0.25 Kg\n- Warranty: 1 Year(s)\n\n### Gain City Disclaimer\n\nWe strive to present the product information as accurate as possible by taking information directly from manufacturer's / agent's website. Information on this page is subjected to change without prior notice. Information on this page may not be accurate if there is change of specification. Consumers are highly recommended to check the manufacturer's site for latest specs and product information.",
+            "originalLength": 3234,
+            "originalBytes": 3236,
+            "truncated": false,
+            "sha256": "06f090e67376bc2043eeb363f491f85ee20ba2d3b91742b869225063f4e1b1f4"
+          }
+        ]
+      },
+      {
+        "sourceIndex": 2,
+        "title": {
+          "text": "Sennheiser MOMENTUM 4 Wireless Over-Ear Headphones - Teal (800073) | Harvey Norman Singapore",
+          "originalLength": 92,
+          "originalBytes": 92,
+          "truncated": false,
+          "sha256": "302b366f9f41d6f97fb91ed49774ed0bd3561d6cd067dbf2328e9aec0178b9f1"
+        },
+        "url": {
+          "text": "https://www.harveynorman.com.sg/tv-and-audio/headphones-en/over-ear-headphones-en-2/sennheiser-momentum-4-wireless-over-ear-headphones-teal-800073-q.html",
+          "originalLength": 153,
+          "originalBytes": 153,
+          "truncated": false,
+          "sha256": "093cd023d33dce600148ac0c28d9b3876070775b2db1fdb366c9ce3f1d809435"
+        },
+        "highlightCount": 1,
+        "highlights": [
+          {
+            "highlight": 0,
+            "text": "# Sennheiser MOMENTUM 4 Wireless Over-Ear Headphones - Teal (800073)\n\n \n\n S$ 349 was S$ 499 \n\nSGD\n\n You Save S$ 150\n\n...\n\n### Description\n\n Experience superb audio clarity, comfort, and endurance with the Sennheiser MOMENTUM 4 Wireless. Boasting a high-fidelity 42 mm transducer system and support for aptX Adaptive, these headphones deliver rich, detailed sound with excellent dynamics. You get up to 60 hours of playback on a full charge, making them ideal for long journeys or all-day listening sessions. \n\n#### Key Features\n\n- Sennheiser Signature Sound – Powered by Sennheiser’s audiophile-inspired 42mm transducer system for exceptional high-fidelity sound.\n- Top-Tier Battery Life – Outstanding battery life with up to 60 hours of play and playback time with fast charging.\n- Adaptive Noise Cancellation and Transparency Mode – Advanced noise cancellation automatically adapts your sound to your surroundings. Transparency Mode lets you hear external sounds without removing your headphones.\n- Premium Comfort – Lightweight design features a padded headband and deep cushioned earpads to ensure exceptional and long-lasting wearing comfort.\n- Customizable Sound – Listen your way with built-in EQ, presets, sound modes, and the Sound Personalization feature, which tailors the audio to your individual hearing – all accessible via the Sennheiser Smart Control App.\n- Crystal-clear Calls – Four digital beamforming microphones ensure high-quality voice pick-up and automatic wind noise suppression for optimized calls and easier voice assistant access (Siri and Google Assistant).\n\n...\n\nUp to 60 hours\n\n Let nothing stand in the way of your listening pleasure. \n\n Up to 60-hour battery life\n\n Keep on listening while you fly around the globe, with up to 60-hour battery life and fast charging capability that provides a further 6 hours of listening in just 10 minutes.\n\n...\n\n### Specifications\n\n###### General \n\n| Brand | Sennheiser |\n| --- | --- |\n| Colour | Teal |\n| Model | 800073 |\n| Product-Type | Wireless Over-Ear Headphones |\n\n###### Connectivity \n\n| Bluetooth | 5.2 |\n| --- | --- |",
+            "originalLength": 2096,
+            "originalBytes": 2112,
+            "truncated": false,
+            "sha256": "162e586936db74742fb7bc952710b2e1ad2eb034249a926ab45a0f1535372bd9"
+          }
+        ]
+      },
+      {
+        "sourceIndex": 3,
+        "title": {
+          "text": "Edifier WH950NB (2025 edition) Wireless Noise Cancelling Headphone – Stereo Electronics Pte Ltd",
+          "originalLength": 95,
+          "originalBytes": 97,
+          "truncated": false,
+          "sha256": "74b393d4e4a269d27e2d0d142ebf1655228ad66c01c301c302c3c79f84c1dbec"
+        },
+        "url": {
+          "text": "https://www.stereo.com.sg/products/edifier-wh950nb-2025-edition-wireless-noise-cancelling-headphone",
+          "originalLength": 99,
+          "originalBytes": 99,
+          "truncated": false,
+          "sha256": "6508acb1a82e2737e58084073c26c2919e77ee4d1f9c76f56f104783fa887724"
+        },
+        "highlightCount": 1,
+        "highlights": [
+          {
+            "highlight": 0,
+            "text": "# Edifier WH950NB (2025 edition) Wireless Noise Cancelling Headphone\n\nSGD 249.00\n\nSGD 139.00\n\nWireless Noise Cancelling Over-ear Headphones Hybrid noise cancellation with 4-mic blocks ambient and wind noise. Titanium-coated 40mm drivers deliver powerful, balanced sound. LDAC support and Hi-Res Audio certified for near-lossless quality....\n\n- Wireless Noise Cancelling Over-ear Headphones \n- Hybrid noise cancellation with 4-mic blocks ambient and wind noise. \n- Titanium-coated 40mm drivers deliver powerful, balanced sound. \n- LDAC support and Hi-Res Audio certified for near-lossless quality. \n- Clear calls with 4-mic voice pickup and noise reduction. \n- Up to 80 hours playtime, 13 hours from 15-minute fast charge. \n- Supports Google Fast Pair for Android users. \n- Choose preset or custom EQ in EDIFIER ConneX app.\n\nImmerse Yourself in Pure Sound\n\nEquipped with four high-performance microphones and cutting-edge noise cancellation algorithm, WH950NB effectively eliminates unwanted noise, delivering an immersive listening experience like never before. Need to stay aware? Switch to Ambient Sound Mode. Facing windy conditions? Wind Noise Reduction keeps your calls and audio crisp and clear. No matter where you are, experience sound the way it’s meant to be.\n\nPerfectly Balanced Sound\n\n40mm dynamic drivers feature an ultra-thin PET diaphragm reinforced with a titanium coating—delivering exceptional sensitivity for deep, punchy bass while maintaining the rigidity needed for clear, detailed highs. This combination ensures WH950NB delivers a perfectly balanced sound with rich mids, powerful lows, and sparkling highs.\n\nStudio-quality Audio\n\nWH950NB supports LDAC high-resolution audio decoding and is certified for Hi-Res Audio in both wired and wireless modes. With an extended frequency response up to 40kHz, it delivers stunning detail and clarity, bringing you closer to studio-quality, near-lossless audio.\n\n...\n\nNonstop Music\n\nWith an impressive 80-hour battery life, WH950NB is built to last through days of non-stop listening. In addition, fast-charging support gives you 13 hours of playtime in just 15-minute charging—so your music never has to wait.\n\n...\n\nCustomize EQ Setting\n\nChoose from a range of preset EQ options (EDIFIER, Jazz, Rock, Bass) to match your music style. For a more customized sound, fine-tune your audio with the adjustable EQ feature.",
+            "originalLength": 2380,
+            "originalBytes": 2386,
+            "truncated": false,
+            "sha256": "bbab3075b0e21e4829b40d4805caeaf7faabfda6a5a671fc385ce307f86068fe"
+          }
+        ]
+      },
+      {
+        "sourceIndex": 4,
+        "title": {
+          "text": "Sennheiser Momentum 4 Wireless Headphone – Stereo Electronics Pte Ltd",
+          "originalLength": 69,
+          "originalBytes": 71,
+          "truncated": false,
+          "sha256": "291ff76f0dc5436ad03dbaa77f4c67b0802a1cfed91285afce9e15aed6f3b89a"
+        },
+        "url": {
+          "text": "https://www.stereo.com.sg/products/sennheiser-momentum-4-wireless-headphone-graphite",
+          "originalLength": 84,
+          "originalBytes": 84,
+          "truncated": false,
+          "sha256": "05e50b8f1ed7a09b10f56fceeaf2eea75f35f51474971b7f4d31b1081a169e89"
+        },
+        "highlightCount": 1,
+        "highlights": [
+          {
+            "highlight": 0,
+            "text": "# Sennheiser Momentum 4 Wireless Headphone\n\nSGD 499.00\n\nSGD 299.00\n\n...\n\nSennheiser's Signature Sound\n\n- Discover best-in-class sound with our audiophile-inspired accoustic system.\n\nSuperior Sound\n\n- Enjoy your favorite music like never before with our audiophile-inspired 42mm transducer system that delivers brilliant dynamics, clarity and musicality.\n\nYour way\n\n- Make the sound perfect for you using the built-in EQ, presets, sound modes, and Sound Personalization feature, which tailors the audio to your individual hearing.\n\nNew Adaptive Noise Cancellation and Transparancy Mode\n\n- Go from total immersion to situational awareness with just a touch.\n\nFull immersion\n\n- Our next generation Adaptive Noise Cancellation automatically adapts to ambient noise so you can stay immersed and hear every detail, even in noisy environments.\n\nSituational awareness\n\n- Need to hear an announcement on the train or a question from your colleague? Just activate the versatile Transparency Mode at a touch to hear outside sounds without removing your headphones.\n\n...\n\nUp to 60-hour battery life\n\n- Keep on listening while you fly around the globe, with up to 60-hour battery life and fast charging capability that provides a further 6 hours listening in just 10 minutes.\n\nNever miss a beat",
+            "originalLength": 1281,
+            "originalBytes": 1281,
+            "truncated": false,
+            "sha256": "80347f2c2d7865fd83a11ef3d924a35e421a9f443e05f43757b68bd718fefa6d"
+          }
+        ]
+      }
+    ]
+  },
+  "oracles": [
+    {
+      "sourceId": "source-1",
+      "canonicalName": "ATH-M50xBT2",
+      "identity": {
+        "verdict": "admissible",
+        "evidence": [
+          {
+            "sourceId": "source-1",
+            "sourceIndex": 0,
+            "highlight": 0,
+            "start": 106,
+            "end": 121,
+            "offsetUnit": "UTF-16 code units; end exclusive",
+            "literal": "## ATH-M50xBT2 ",
+            "normalizedDisplayQuote": "## ATH-M50xBT2",
+            "sha256": "8b9ec7eda6554faf87eb33bf8e2c2c4491adc52d9599214e83a9f6ecf56a9cc2"
+          },
+          {
+            "sourceId": "source-1",
+            "sourceIndex": 0,
+            "highlight": 0,
+            "start": 123,
+            "end": 230,
+            "offsetUnit": "UTF-16 code units; end exclusive",
+            "literal": "The ATH-M50xBT2 is the second generation of our critically acclaimed M-Series wireless over-ear headphones.",
+            "normalizedDisplayQuote": "The ATH-M50xBT2 is the second generation of our critically acclaimed M-Series wireless over-ear headphones.",
+            "sha256": "85ead91529948c68feb1d3d605c6b5ff58817ccfe9f95584731d3f6cfa29d4d5"
+          }
+        ],
+        "reason": "Repeated literal one-token model heading plus a complete same-model definition proves the headphone category without relying on title metadata."
+      },
+      "facts": [
+        {
+          "id": "ath-driver",
+          "verdict": "admissible-complete-quote",
+          "evidence": {
+            "sourceId": "source-1",
+            "sourceIndex": 0,
+            "highlight": 0,
+            "start": 231,
+            "end": 400,
+            "offsetUnit": "UTF-16 code units; end exclusive",
+            "literal": "These headphones feature 45 mm large aperture drivers in a wireless design, so listeners will enjoy the same sonic signature of the legendary ATH-M50x studio headphones.",
+            "normalizedDisplayQuote": "These headphones feature 45 mm large aperture drivers in a wireless design, so listeners will enjoy the same sonic signature of the legendary ATH-M50x studio headphones.",
+            "sha256": "175808c94cdb82e27f9ebd96aca1783053968f3dca11d454f0305116e4462050"
+          },
+          "context": {
+            "sourceId": "source-1",
+            "sourceIndex": 0,
+            "highlight": 0,
+            "start": 106,
+            "end": 400,
+            "offsetUnit": "UTF-16 code units; end exclusive",
+            "literal": "## ATH-M50xBT2 \n\nThe ATH-M50xBT2 is the second generation of our critically acclaimed M-Series wireless over-ear headphones. These headphones feature 45 mm large aperture drivers in a wireless design, so listeners will enjoy the same sonic signature of the legendary ATH-M50x studio headphones.",
+            "normalizedDisplayQuote": "## ATH-M50xBT2 The ATH-M50xBT2 is the second generation of our critically acclaimed M-Series wireless over-ear headphones. These headphones feature 45 mm large aperture drivers in a wireless design, so listeners will enjoy the same sonic signature of the legendary ATH-M50x studio headphones.",
+            "sha256": "c5595d0619ef50c338c1d59473f4b246a1132478bfa5a9ddd9500e0f97b053c4"
+          },
+          "qualifiers": [
+            "wireless design",
+            "comparison to ATH-M50 studio headphones belongs to the quoted marketing statement"
+          ],
+          "prohibitedInference": "Do not attach ATH-M50 specifications to ATH-M50xBT2 or claim measured sound superiority."
+        },
+        {
+          "id": "ath-battery",
+          "verdict": "admissible-complete-quote",
+          "evidence": {
+            "sourceId": "source-1",
+            "sourceIndex": 0,
+            "highlight": 0,
+            "start": 1522,
+            "end": 1756,
+            "offsetUnit": "UTF-16 code units; end exclusive",
+            "literal": "These headphones have a battery life of up to 50 hours on a continuous full charge, with up to 3 hours of use on a 10-minute rapid charge via the USB-C connection, making them some of the longest-lasting wireless headphones available.",
+            "normalizedDisplayQuote": "These headphones have a battery life of up to 50 hours on a continuous full charge, with up to 3 hours of use on a 10-minute rapid charge via the USB-C connection, making them some of the longest-lasting wireless headphones available.",
+            "sha256": "9864c586cfd034b93cbff41a981b134244f720a869d4c2f8f718a195fb613881"
+          },
+          "context": {
+            "sourceId": "source-1",
+            "sourceIndex": 0,
+            "highlight": 0,
+            "start": 1212,
+            "end": 1756,
+            "offsetUnit": "UTF-16 code units; end exclusive",
+            "literal": "The ATH-M50xBT2 features dual microphones and beamforming technology, which provide improved vocal pickup ensuring crystal-clear audio call quality. Additionally, users can conveniently mute with the press of a button or access the built-in Amazon Alexa voice assistant, as well as Google Assistant and Siri.\n\nThese headphones have a battery life of up to 50 hours on a continuous full charge, with up to 3 hours of use on a 10-minute rapid charge via the USB-C connection, making them some of the longest-lasting wireless headphones available.",
+            "normalizedDisplayQuote": "The ATH-M50xBT2 features dual microphones and beamforming technology, which provide improved vocal pickup ensuring crystal-clear audio call quality. Additionally, users can conveniently mute with the press of a button or access the built-in Amazon Alexa voice assistant, as well as Google Assistant and Siri. These headphones have a battery life of up to 50 hours on a continuous full charge, with up to 3 hours of use on a 10-minute rapid charge via the USB-C connection, making them some of the longest-lasting wireless headphones available.",
+            "sha256": "bf2e3e972e40be25b184f487d05f73e6bd4ac7b586727443b94a117edeb968f1"
+          },
+          "qualifiers": [
+            "up to 50 hours",
+            "continuous full charge",
+            "up to 3 hours use",
+            "10-minute rapid charge",
+            "USB-C connection",
+            "longest-lasting wording is a source claim, not independent comparison"
+          ],
+          "reason": "Same-model descriptive section before the first explicit gap. Keep the entire statement rather than the native battery fragment."
+        },
+        {
+          "id": "ath-codecs",
+          "verdict": "withhold-for-selected-model",
+          "evidence": {
+            "sourceId": "source-1",
+            "sourceIndex": 0,
+            "highlight": 0,
+            "start": 2426,
+            "end": 2477,
+            "offsetUnit": "UTF-16 code units; end exclusive",
+            "literal": "- Compatible with high-quality LDAC and AAC codecs ",
+            "normalizedDisplayQuote": "- Compatible with high-quality LDAC and AAC codecs",
+            "sha256": "7f4c9f09d7a548f92a2ce764f4c9deb27a0d348c6724f362379170fd167dc42b"
+          },
+          "reason": "Literal native phrase exists after gaps at 2284 and 2292. No fresh exact-model anchor establishes the selected model in that excerpt segment."
+        }
+      ],
+      "price": {
+        "verdict": "admissible-unverified-starting-price-context",
+        "evidence": {
+          "sourceId": "source-1",
+          "sourceIndex": 0,
+          "highlight": 0,
+          "start": 70,
+          "end": 91,
+          "offsetUnit": "UTF-16 code units; end exclusive",
+          "literal": "From: SALE SGD 228.00",
+          "normalizedDisplayQuote": "From: SALE SGD 228.00",
+          "sha256": "70886083fa3ecfb5e65d77847304ef5d978c74105e491b2eb6397890ded672be"
+        },
+        "context": {
+          "sourceId": "source-1",
+          "sourceIndex": 0,
+          "highlight": 0,
+          "start": 0,
+          "end": 104,
+          "offsetUnit": "UTF-16 code units; end exclusive",
+          "literal": "# ATH-M50xBT2 \n\n SGD 380.41 \n\n From \n\n SGD 228.00 \n\n## ATH-M50xBT2 \n\n From: SALE SGD 228.00 \n\n Overview ",
+          "normalizedDisplayQuote": "# ATH-M50xBT2 SGD 380.41 From SGD 228.00 ## ATH-M50xBT2 From: SALE SGD 228.00 Overview",
+          "sha256": "e3dbfd6ede1eb3088ce838c4ec0612ad3863cd358147971ed0b4fad2ed08fba2"
+        },
+        "qualifiers": [
+          "From",
+          "SALE"
+        ],
+        "prohibitedInference": "No fixed payable price, affordability or sale/list role for the earlier unlabelled SGD 380.41."
+      },
+      "citationWindows": [
+        {
+          "sourceId": "source-1",
+          "sourceIndex": 0,
+          "highlight": 0,
+          "start": 0,
+          "end": 400,
+          "offsetUnit": "UTF-16 code units; end exclusive",
+          "literal": "# ATH-M50xBT2 \n\n SGD 380.41 \n\n From \n\n SGD 228.00 \n\n## ATH-M50xBT2 \n\n From: SALE SGD 228.00 \n\n Overview \n\n## ATH-M50xBT2 \n\nThe ATH-M50xBT2 is the second generation of our critically acclaimed M-Series wireless over-ear headphones. These headphones feature 45 mm large aperture drivers in a wireless design, so listeners will enjoy the same sonic signature of the legendary ATH-M50x studio headphones.",
+          "normalizedDisplayQuote": "# ATH-M50xBT2 SGD 380.41 From SGD 228.00 ## ATH-M50xBT2 From: SALE SGD 228.00 Overview ## ATH-M50xBT2 The ATH-M50xBT2 is the second generation of our critically acclaimed M-Series wireless over-ear headphones. These headphones feature 45 mm large aperture drivers in a wireless design, so listeners will enjoy the same sonic signature of the legendary ATH-M50x studio headphones.",
+          "sha256": "0e238494e017602e23f3804acd90baf918a96a53342178396f2c7ae1d697c8b7"
+        },
+        {
+          "sourceId": "source-1",
+          "sourceIndex": 0,
+          "highlight": 0,
+          "start": 1212,
+          "end": 1756,
+          "offsetUnit": "UTF-16 code units; end exclusive",
+          "literal": "The ATH-M50xBT2 features dual microphones and beamforming technology, which provide improved vocal pickup ensuring crystal-clear audio call quality. Additionally, users can conveniently mute with the press of a button or access the built-in Amazon Alexa voice assistant, as well as Google Assistant and Siri.\n\nThese headphones have a battery life of up to 50 hours on a continuous full charge, with up to 3 hours of use on a 10-minute rapid charge via the USB-C connection, making them some of the longest-lasting wireless headphones available.",
+          "normalizedDisplayQuote": "The ATH-M50xBT2 features dual microphones and beamforming technology, which provide improved vocal pickup ensuring crystal-clear audio call quality. Additionally, users can conveniently mute with the press of a button or access the built-in Amazon Alexa voice assistant, as well as Google Assistant and Siri. These headphones have a battery life of up to 50 hours on a continuous full charge, with up to 3 hours of use on a 10-minute rapid charge via the USB-C connection, making them some of the longest-lasting wireless headphones available.",
+          "sha256": "bf2e3e972e40be25b184f487d05f73e6bd4ac7b586727443b94a117edeb968f1"
+        }
+      ],
+      "lossMechanisms": [
+        "Current identity guard rejects a single-token name.",
+        "Body definition is richer than the current narrow category predicate grammar.",
+        "Native name is the full decorative page title.",
+        "Native driver and battery proposals are fragments; battery also changes initial case.",
+        "Current narrow fact grammar cannot publish these full prose statements."
+      ],
+      "url": "https://www.audio-technica.com/en-sea/headphones/type/wireless/ath-m50xbt2",
+      "stock": {
+        "verdict": "unverified"
+      },
+      "gaps": [
+        {
+          "start": 2284,
+          "end": 2287,
+          "literal": "..."
+        },
+        {
+          "start": 2292,
+          "end": 2295,
+          "literal": "..."
+        },
+        {
+          "start": 2548,
+          "end": 2551,
+          "literal": "..."
+        }
+      ]
+    },
+    {
+      "sourceId": "source-2",
+      "canonicalName": null,
+      "identity": {
+        "verdict": "source-only-acceptable-in-this-bounded-extension",
+        "evidence": [
+          {
+            "sourceId": "source-2",
+            "sourceIndex": 1,
+            "highlight": 0,
+            "start": 25,
+            "end": 79,
+            "offsetUnit": "UTF-16 code units; end exclusive",
+            "literal": "SONY WH-1000XM5 WIRELESS HEADSET - BLACK WH1000XM5/BME",
+            "normalizedDisplayQuote": "SONY WH-1000XM5 WIRELESS HEADSET - BLACK WH1000XM5/BME",
+            "sha256": "f97b2ace5e1aaa2c248940c16630e87da0e2370c851a727fd39f3449e6a1a194"
+          }
+        ],
+        "reason": "Full Black and WH1000XM5/BME designation is an unmarked line. It lacks the established heading pipeline. Later base-model prose follows a gap and does not prove that exact variant."
+      },
+      "facts": [
+        {
+          "id": "sony-base-description",
+          "verdict": "withhold-for-Black-SKU",
+          "evidence": {
+            "sourceId": "source-2",
+            "sourceIndex": 1,
+            "highlight": 0,
+            "start": 274,
+            "end": 430,
+            "offsetUnit": "UTF-16 code units; end exclusive",
+            "literal": "The Sony WH-1000XM5 Wireless Headset offers unparalleled noise cancellation and high-resolution audio, making it perfect for music lovers and professionals.",
+            "normalizedDisplayQuote": "The Sony WH-1000XM5 Wireless Headset offers unparalleled noise cancellation and high-resolution audio, making it perfect for music lovers and professionals.",
+            "sha256": "c9670ae753029a07d8515dfef8a2558a1fe4c57f42ec2d433fe496e0f896a45b"
+          },
+          "reason": "Complete base-model sentence appears after the first gap. No cross-gap binding to Black WH1000XM5/BME."
+        },
+        {
+          "id": "sony-battery",
+          "verdict": "withhold-for-Black-SKU",
+          "evidence": {
+            "sourceId": "source-2",
+            "sourceIndex": 1,
+            "highlight": 0,
+            "start": 971,
+            "end": 1114,
+            "offsetUnit": "UTF-16 code units; end exclusive",
+            "literal": "- Long Battery Life: Up to 30 hours of battery life with quick charging capabilities, offering 3 hours of playback from just a 3-minute charge.",
+            "normalizedDisplayQuote": "- Long Battery Life: Up to 30 hours of battery life with quick charging capabilities, offering 3 hours of playback from just a 3-minute charge.",
+            "sha256": "33141f5eafa6bc4c5f6da6026cc6480ccc3a94b665f012a47286370a1ef960ff"
+          },
+          "qualifiers": [
+            "up to 30 hours",
+            "quick charging",
+            "3 hours of playback",
+            "3-minute charge"
+          ],
+          "reason": "Native fragment omits charging qualification and is in a post-gap segment."
+        },
+        {
+          "id": "sony-conditional-runtime",
+          "verdict": "unbound-source-text-only",
+          "evidence": {
+            "sourceId": "source-2",
+            "sourceIndex": 1,
+            "highlight": 0,
+            "start": 2249,
+            "end": 2339,
+            "offsetUnit": "UTF-16 code units; end exclusive",
+            "literal": "- Battery Life (continuous music playback time): Max. 30 hrs (NC ON), Max. 40 hrs (NC OFF)",
+            "normalizedDisplayQuote": "- Battery Life (continuous music playback time): Max. 30 hrs (NC ON), Max. 40 hrs (NC OFF)",
+            "sha256": "03f62ba9496b01d3c2524e6c6c61c4d2a1d03db2bfd40d860ace70b765f89acd"
+          },
+          "qualifiers": [
+            "Max. 30 hrs (NC ON)",
+            "Max. 40 hrs (NC OFF)"
+          ],
+          "reason": "Never promote only one runtime number or remove NC conditions."
+        },
+        {
+          "id": "sony-ldac",
+          "verdict": "native-hint-not-contiguous",
+          "evidence": {
+            "sourceId": "source-2",
+            "sourceIndex": 1,
+            "highlight": 0,
+            "start": 832,
+            "end": 970,
+            "offsetUnit": "UTF-16 code units; end exclusive",
+            "literal": "- High-Resolution Audio: Enjoy superior sound quality with LDAC technology, providing exceptional audio clarity both wired and wirelessly.",
+            "normalizedDisplayQuote": "- High-Resolution Audio: Enjoy superior sound quality with LDAC technology, providing exceptional audio clarity both wired and wirelessly.",
+            "sha256": "1ab9d9966098a039df9279821214f931a2d52e1d4a2e30a96300572e3cf32899"
+          },
+          "reason": "Native High-resolution audio with LDAC technology is not a literal or case/whitespace-only match. It recomposes the source wording."
+        }
+      ],
+      "price": {
+        "verdict": "withhold",
+        "evidence": {
+          "sourceId": "source-2",
+          "sourceIndex": 1,
+          "highlight": 0,
+          "start": 157,
+          "end": 242,
+          "offsetUnit": "UTF-16 code units; end exclusive",
+          "literal": " S$329.00 Member's Get Extra S$33.00 Off Get 329 Family Member's Points U.P. S$589.00",
+          "normalizedDisplayQuote": "S$329.00 Member's Get Extra S$33.00 Off Get 329 Family Member's Points U.P. S$589.00",
+          "sha256": "04cc42a234616168db3e7f047cc13729bd20bc5aa7dfe9bf95be37014373e517"
+        },
+        "qualifiers": [
+          "Member's Get Extra S$33.00 Off",
+          "Get 329 Family Member's Points",
+          "U.P. S$589.00"
+        ],
+        "reason": "Member/reward context is payment-bearing; do not publish the first amount alone. Exact selected identity remains unbound."
+      },
+      "stock": {
+        "verdict": "unverified",
+        "rawOccurrences": [
+          {
+            "sourceId": "source-2",
+            "sourceIndex": 1,
+            "highlight": 0,
+            "start": 14,
+            "end": 22,
+            "offsetUnit": "UTF-16 code units; end exclusive",
+            "literal": "In stock",
+            "normalizedDisplayQuote": "In stock",
+            "sha256": "f66315eb0e3a2f61b670161d39f15066cca560e03c62ff9a0f4a254af35f917a"
+          },
+          {
+            "sourceId": "source-2",
+            "sourceIndex": 1,
+            "highlight": 0,
+            "start": 146,
+            "end": 154,
+            "offsetUnit": "UTF-16 code units; end exclusive",
+            "literal": "In stock",
+            "normalizedDisplayQuote": "In stock",
+            "sha256": "f66315eb0e3a2f61b670161d39f15066cca560e03c62ff9a0f4a254af35f917a"
+          }
+        ]
+      },
+      "lossMechanisms": [
+        "No supported marked product heading.",
+        "Marketing title differs from physical product designation.",
+        "Generic post-gap description cannot establish ownership for the complete Black/SKU variant."
+      ],
+      "url": "https://www.gaincity.com/sony-wh-1000xm5-wireless-headset-black-wh1000xm5-bme-t0175256",
+      "gaps": [
+        {
+          "start": 244,
+          "end": 247,
+          "literal": "..."
+        },
+        {
+          "start": 2717,
+          "end": 2720,
+          "literal": "..."
+        }
+      ]
+    },
+    {
+      "sourceId": "source-3",
+      "canonicalName": "Sennheiser MOMENTUM 4 Wireless Over-Ear Headphones - Teal (800073)",
+      "identity": {
+        "verdict": "admissible",
+        "evidence": [
+          {
+            "sourceId": "source-3",
+            "sourceIndex": 2,
+            "highlight": 0,
+            "start": 0,
+            "end": 68,
+            "offsetUnit": "UTF-16 code units; end exclusive",
+            "literal": "# Sennheiser MOMENTUM 4 Wireless Over-Ear Headphones - Teal (800073)",
+            "normalizedDisplayQuote": "# Sennheiser MOMENTUM 4 Wireless Over-Ear Headphones - Teal (800073)",
+            "sha256": "fe898eae3d6eaa6531e6eba2a16c1578cd70b3dd9603aa278b71d96f7befeb38"
+          }
+        ],
+        "reason": "Complete literal heading contains category, colour and model designation."
+      },
+      "facts": [
+        {
+          "id": "hn-driver-codec",
+          "verdict": "must-not-attach-to-Teal",
+          "evidence": {
+            "sourceId": "source-3",
+            "sourceIndex": 2,
+            "highlight": 0,
+            "start": 237,
+            "end": 387,
+            "offsetUnit": "UTF-16 code units; end exclusive",
+            "literal": "Boasting a high-fidelity 42 mm transducer system and support for aptX Adaptive, these headphones deliver rich, detailed sound with excellent dynamics.",
+            "normalizedDisplayQuote": "Boasting a high-fidelity 42 mm transducer system and support for aptX Adaptive, these headphones deliver rich, detailed sound with excellent dynamics.",
+            "sha256": "ae0661ed48713404d026f048df398642de47fd8890e921c2cb34e6bb5b74a343"
+          },
+          "reason": "After gap at117; nearby reference omits Teal and 800073."
+        },
+        {
+          "id": "hn-battery",
+          "verdict": "must-not-attach-to-Teal",
+          "evidence": {
+            "sourceId": "source-3",
+            "sourceIndex": 2,
+            "highlight": 0,
+            "start": 388,
+            "end": 507,
+            "offsetUnit": "UTF-16 code units; end exclusive",
+            "literal": "You get up to 60 hours of playback on a full charge, making them ideal for long journeys or all-day listening sessions.",
+            "normalizedDisplayQuote": "You get up to 60 hours of playback on a full charge, making them ideal for long journeys or all-day listening sessions.",
+            "sha256": "cf370f7e0401bb0eb18c4315931d879cb919efc47d453bb225ca4e83d833ddad"
+          },
+          "qualifiers": [
+            "up to 60 hours",
+            "on a full charge"
+          ],
+          "reason": "After gap at117 and shortened base-model reference."
+        },
+        {
+          "id": "hn-anc",
+          "verdict": "must-not-attach-to-Teal",
+          "evidence": {
+            "sourceId": "source-3",
+            "sourceIndex": 2,
+            "highlight": 0,
+            "start": 781,
+            "end": 916,
+            "offsetUnit": "UTF-16 code units; end exclusive",
+            "literal": "- Adaptive Noise Cancellation and Transparency Mode – Advanced noise cancellation automatically adapts your sound to your surroundings.",
+            "normalizedDisplayQuote": "- Adaptive Noise Cancellation and Transparency Mode – Advanced noise cancellation automatically adapts your sound to your surroundings.",
+            "sha256": "c07282180a9b125877f2f44756481b20c0f8fbc78c94206337fb7ad100822295"
+          },
+          "reason": "Post-gap statement. Literal native phrase does not establish variant ownership."
+        }
+      ],
+      "price": {
+        "verdict": "admissible-complete-unverified-context",
+        "evidence": {
+          "sourceId": "source-3",
+          "sourceIndex": 2,
+          "highlight": 0,
+          "start": 74,
+          "end": 115,
+          "offsetUnit": "UTF-16 code units; end exclusive",
+          "literal": "S$ 349 was S$ 499 \n\nSGD\n\n You Save S$ 150",
+          "normalizedDisplayQuote": "S$ 349 was S$ 499 SGD You Save S$ 150",
+          "sha256": "690e068e257c6488db3ca7a47a7a33c76dae715ae89ddeec972d4e6a2752ac37"
+        },
+        "qualifiers": [
+          "was S$ 499",
+          "SGD",
+          "You Save S$ 150"
+        ],
+        "requiredNormalizedQuote": "S$ 349 was S$ 499 SGD You Save S$ 150",
+        "reason": "All price records are contiguous before the first gap. The native proposal is only a prefix."
+      },
+      "citationWindows": [
+        {
+          "sourceId": "source-3",
+          "sourceIndex": 2,
+          "highlight": 0,
+          "start": 0,
+          "end": 117,
+          "offsetUnit": "UTF-16 code units; end exclusive",
+          "literal": "# Sennheiser MOMENTUM 4 Wireless Over-Ear Headphones - Teal (800073)\n\n \n\n S$ 349 was S$ 499 \n\nSGD\n\n You Save S$ 150\n\n",
+          "normalizedDisplayQuote": "# Sennheiser MOMENTUM 4 Wireless Over-Ear Headphones - Teal (800073) S$ 349 was S$ 499 SGD You Save S$ 150",
+          "sha256": "906816cdb5e000bc7c17ca2cec045c8ab4530f5be6fd64a67b2a977a41e3ba7f"
+        }
+      ],
+      "lossMechanisms": [
+        "Native name includes merchant suffix.",
+        "Native price omits currency line and complete savings context.",
+        "Diagnostic separately records unresolved-context for first multiline price fragment [73,92); renaming native alone cannot repair that price record.",
+        "Native facts remain unsafe even if names are reconciled."
+      ],
+      "url": "https://www.harveynorman.com.sg/tv-and-audio/headphones-en/over-ear-headphones-en-2/sennheiser-momentum-4-wireless-over-ear-headphones-teal-800073-q.html",
+      "stock": {
+        "verdict": "unverified"
+      },
+      "gaps": [
+        {
+          "start": 117,
+          "end": 120,
+          "literal": "..."
+        },
+        {
+          "start": 1588,
+          "end": 1591,
+          "literal": "..."
+        },
+        {
+          "start": 1876,
+          "end": 1879,
+          "literal": "..."
+        }
+      ]
+    },
+    {
+      "sourceId": "source-4",
+      "canonicalName": "Edifier WH950NB (2025 edition) Wireless Noise Cancelling Headphone",
+      "identity": {
+        "verdict": "admissible",
+        "evidence": [
+          {
+            "sourceId": "source-4",
+            "sourceIndex": 3,
+            "highlight": 0,
+            "start": 0,
+            "end": 68,
+            "offsetUnit": "UTF-16 code units; end exclusive",
+            "literal": "# Edifier WH950NB (2025 edition) Wireless Noise Cancelling Headphone",
+            "normalizedDisplayQuote": "# Edifier WH950NB (2025 edition) Wireless Noise Cancelling Headphone",
+            "sha256": "e6e2b96394c657550ca794d34f208fa44a32c02b1067b77c6f09bba1da973c87"
+          }
+        ],
+        "reason": "Complete literal heading preserves 2025 edition and contains singular Headphone. Category does not require invented metadata."
+      },
+      "facts": [
+        {
+          "id": "edifier-driver",
+          "verdict": "admissible-complete-quote",
+          "evidence": {
+            "sourceId": "source-4",
+            "sourceIndex": 3,
+            "highlight": 0,
+            "start": 208,
+            "end": 270,
+            "offsetUnit": "UTF-16 code units; end exclusive",
+            "literal": "Titanium-coated 40mm drivers deliver powerful, balanced sound.",
+            "normalizedDisplayQuote": "Titanium-coated 40mm drivers deliver powerful, balanced sound.",
+            "sha256": "7df74085a127458c2d5a88c3918552f2b97af7b72bd5ae491738e02629e13669"
+          },
+          "context": {
+            "sourceId": "source-4",
+            "sourceIndex": 3,
+            "highlight": 0,
+            "start": 0,
+            "end": 270,
+            "offsetUnit": "UTF-16 code units; end exclusive",
+            "literal": "# Edifier WH950NB (2025 edition) Wireless Noise Cancelling Headphone\n\nSGD 249.00\n\nSGD 139.00\n\nWireless Noise Cancelling Over-ear Headphones Hybrid noise cancellation with 4-mic blocks ambient and wind noise. Titanium-coated 40mm drivers deliver powerful, balanced sound.",
+            "normalizedDisplayQuote": "# Edifier WH950NB (2025 edition) Wireless Noise Cancelling Headphone SGD 249.00 SGD 139.00 Wireless Noise Cancelling Over-ear Headphones Hybrid noise cancellation with 4-mic blocks ambient and wind noise. Titanium-coated 40mm drivers deliver powerful, balanced sound.",
+            "sha256": "76aa3e5d181e37cbad9de221a5272101bd6495cfa31e8355dfe6a2ca0302b5de"
+          },
+          "qualifiers": [
+            "Titanium-coated",
+            "40mm",
+            "powerful, balanced sound is a merchant claim"
+          ],
+          "reason": "Complete source sentence before the first gap; native proposal omits only terminal punctuation."
+        },
+        {
+          "id": "edifier-codec",
+          "verdict": "ambiguous-terminal-period-and-gap-not-required-positive",
+          "evidence": {
+            "sourceId": "source-4",
+            "sourceIndex": 3,
+            "highlight": 0,
+            "start": 271,
+            "end": 340,
+            "offsetUnit": "UTF-16 code units; end exclusive",
+            "literal": "LDAC support and Hi-Res Audio certified for near-lossless quality....",
+            "normalizedDisplayQuote": "LDAC support and Hi-Res Audio certified for near-lossless quality....",
+            "sha256": "1606744b09e4436e040b541453a2dc7e78ef504eb1b06328f80a313a75596f01"
+          },
+          "qualifiers": [
+            "for near-lossless quality"
+          ],
+          "reason": "The raw terminal run has four periods. Do not publish cropped native phrase. A separately justified terminal-period-plus-three-dot tokenization could retain the full qualification, but this oracle does not require that new interpretation or count the claim toward minimum yield."
+        },
+        {
+          "id": "edifier-battery",
+          "verdict": "must-not-attach-to-2025-edition",
+          "evidence": {
+            "sourceId": "source-4",
+            "sourceIndex": 3,
+            "highlight": 0,
+            "start": 658,
+            "end": 722,
+            "offsetUnit": "UTF-16 code units; end exclusive",
+            "literal": "- Up to 80 hours playtime, 13 hours from 15-minute fast charge. ",
+            "normalizedDisplayQuote": "- Up to 80 hours playtime, 13 hours from 15-minute fast charge.",
+            "sha256": "675c1f022a7723926486a0d21d4b26f2ea959fb11a826f02a12d97e6f669f096"
+          },
+          "qualifiers": [
+            "13 hours from 15-minute fast charge"
+          ],
+          "reason": "First native occurrence is after the initial explicit gap; no complete 2025-edition re-anchor. Later WH950NB references omit edition."
+        },
+        {
+          "id": "edifier-later-codec",
+          "verdict": "must-not-attach-to-2025-edition",
+          "evidence": {
+            "sourceId": "source-4",
+            "sourceIndex": 3,
+            "highlight": 0,
+            "start": 1655,
+            "end": 1775,
+            "offsetUnit": "UTF-16 code units; end exclusive",
+            "literal": "WH950NB supports LDAC high-resolution audio decoding and is certified for Hi-Res Audio in both wired and wireless modes.",
+            "normalizedDisplayQuote": "WH950NB supports LDAC high-resolution audio decoding and is certified for Hi-Res Audio in both wired and wireless modes.",
+            "sha256": "26bd40ab16f90e286b927e0bc49174aa34d8efd30d812760ebea5d9ff7301578"
+          },
+          "qualifiers": [
+            "both wired and wireless modes"
+          ],
+          "reason": "After gap; shortened WH950NB does not prove the complete selected edition."
+        }
+      ],
+      "price": {
+        "verdict": "withhold-ambiguous-roles",
+        "evidence": {
+          "sourceId": "source-4",
+          "sourceIndex": 3,
+          "highlight": 0,
+          "start": 70,
+          "end": 92,
+          "offsetUnit": "UTF-16 code units; end exclusive",
+          "literal": "SGD 249.00\n\nSGD 139.00",
+          "normalizedDisplayQuote": "SGD 249.00 SGD 139.00",
+          "sha256": "883a9da387d7ae82abc0c6731913c96b80fd69356eda9705939ec604cc6bddcb"
+        },
+        "reason": "Two unlabelled amounts cannot be classified as sale/list/current price. Their presence must not erase ownership of the following complete same-product driver sentence."
+      },
+      "citationWindows": [
+        {
+          "sourceId": "source-4",
+          "sourceIndex": 3,
+          "highlight": 0,
+          "start": 0,
+          "end": 340,
+          "offsetUnit": "UTF-16 code units; end exclusive",
+          "literal": "# Edifier WH950NB (2025 edition) Wireless Noise Cancelling Headphone\n\nSGD 249.00\n\nSGD 139.00\n\nWireless Noise Cancelling Over-ear Headphones Hybrid noise cancellation with 4-mic blocks ambient and wind noise. Titanium-coated 40mm drivers deliver powerful, balanced sound. LDAC support and Hi-Res Audio certified for near-lossless quality....",
+          "normalizedDisplayQuote": "# Edifier WH950NB (2025 edition) Wireless Noise Cancelling Headphone SGD 249.00 SGD 139.00 Wireless Noise Cancelling Over-ear Headphones Hybrid noise cancellation with 4-mic blocks ambient and wind noise. Titanium-coated 40mm drivers deliver powerful, balanced sound. LDAC support and Hi-Res Audio certified for near-lossless quality....",
+          "sha256": "03a9a9026aa239e2213a5c0cc5f79b36fb23d4556f65ca557e50baf6dbd7cdd2"
+        }
+      ],
+      "lossMechanisms": [
+        "The en-dash site suffix is treated as part of titleName, causing raw heading mismatch.",
+        "The category grammar lacks singular Headphone.",
+        "Native name uses the full page title.",
+        "Unlabelled price records must not be converted to offers or used to clear an otherwise established source topic merely because their roles are unknown.",
+        "Native driver and codec quotes are incomplete statements."
+      ],
+      "url": "https://www.stereo.com.sg/products/edifier-wh950nb-2025-edition-wireless-noise-cancelling-headphone",
+      "stock": {
+        "verdict": "unverified"
+      },
+      "gaps": [
+        {
+          "start": 336,
+          "end": 340,
+          "literal": "...."
+        },
+        {
+          "start": 1927,
+          "end": 1930,
+          "literal": "..."
+        },
+        {
+          "start": 2176,
+          "end": 2179,
+          "literal": "..."
+        }
+      ]
+    },
+    {
+      "sourceId": "source-5",
+      "canonicalName": "Sennheiser Momentum 4 Wireless Headphone",
+      "identity": {
+        "verdict": "admissible-optional-identity-only",
+        "evidence": [
+          {
+            "sourceId": "source-5",
+            "sourceIndex": 4,
+            "highlight": 0,
+            "start": 0,
+            "end": 42,
+            "offsetUnit": "UTF-16 code units; end exclusive",
+            "literal": "# Sennheiser Momentum 4 Wireless Headphone",
+            "normalizedDisplayQuote": "# Sennheiser Momentum 4 Wireless Headphone",
+            "sha256": "7786e77a6d5e5886ddf0729e91cf25a0998d33464a254ce1cf5e379664e53018"
+          }
+        ],
+        "reason": "Complete literal singular-class heading. Do not append Graphite from URL or transfer Teal 800073. No native observation exists."
+      },
+      "facts": [],
+      "factsPolicy": "No fact extraction manufactured; remaining prose follows gap at68.",
+      "price": {
+        "verdict": "withhold-ambiguous-roles",
+        "evidence": {
+          "sourceId": "source-5",
+          "sourceIndex": 4,
+          "highlight": 0,
+          "start": 44,
+          "end": 66,
+          "offsetUnit": "UTF-16 code units; end exclusive",
+          "literal": "SGD 499.00\n\nSGD 299.00",
+          "normalizedDisplayQuote": "SGD 499.00 SGD 299.00",
+          "sha256": "dc61af75a68ab2de1a7ac9d7d4c8d21946352bc1b72d9000fa167fd8f3cb92fe"
+        },
+        "reason": "Two unlabelled amounts have no observed sale/list or selected payable-price roles."
+      },
+      "citationWindows": [
+        {
+          "sourceId": "source-5",
+          "sourceIndex": 4,
+          "highlight": 0,
+          "start": 0,
+          "end": 68,
+          "offsetUnit": "UTF-16 code units; end exclusive",
+          "literal": "# Sennheiser Momentum 4 Wireless Headphone\n\nSGD 499.00\n\nSGD 299.00\n\n",
+          "normalizedDisplayQuote": "# Sennheiser Momentum 4 Wireless Headphone SGD 499.00 SGD 299.00",
+          "sha256": "0f7c2f2b2226ba237fe886d39c690def5d1ae73f173f6c4e390fe48c6a62d063"
+        }
+      ],
+      "lossMechanisms": [
+        "En-dash merchant title suffix differs from the physical heading.",
+        "Singular Headphone is absent from current class grammar.",
+        "Missing native extraction must remain missing; identity-only source discovery is a distinct outcome."
+      ],
+      "url": "https://www.stereo.com.sg/products/sennheiser-momentum-4-wireless-headphone-graphite",
+      "stock": {
+        "verdict": "unverified"
+      },
+      "gaps": [
+        {
+          "start": 68,
+          "end": 71,
+          "literal": "..."
+        },
+        {
+          "start": 1055,
+          "end": 1058,
+          "literal": "..."
+        }
+      ]
+    }
+  ]
+}

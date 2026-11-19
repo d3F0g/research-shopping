@@ -1,0 +1,42 @@
+[
+  {
+    "id": "headphones-rtings-hd560s",
+    "dataKind": "historical-capture-fixture",
+    "category": "headphones",
+    "name": "Sennheiser HD 560S",
+    "url": "https://www.rtings.com/headphones/reviews/sennheiser/hd-560s",
+    "publisher": "RTINGS.com",
+    "sourceKind": "firsthand-product-review",
+    "captureDate": "2026-11-18",
+    "captureMethod": "Ordinary public-page browsing. Exact complete sentence with whitespace normalized only. No Exa request.",
+    "quote": "The Sennheiser HD 560S are open-back headphones designed for neutral listening.",
+    "contentSha256": "6ad1a9ae6e78adf0ef5acb58c2486a60599e758580418e1eafb42b5e168eb2ce",
+    "hashEncoding": "SHA-256 of the UTF-8 quote, without a trailing newline.",
+    "baselineCandidate": "81d1a5b79cf8b61dfd103343991c105ba18b7e7d",
+    "baselineAcceptedNames": [],
+    "expectedAcceptedNames": [
+      "Sennheiser HD 560S"
+    ],
+    "limitations": "Historical test fixture. This excerpt establishes a source-bound model and class observation only. It does not establish current specifications, price, stock, delivery, exact cross-source variant identity or merchant access."
+  },
+  {
+    "id": "laptop-rtings-swift3",
+    "dataKind": "historical-capture-fixture",
+    "category": "laptops",
+    "name": "Acer Swift 3 14 (2020)",
+    "url": "https://www.rtings.com/laptop/reviews/acer/swift-3-14-2020",
+    "publisher": "RTINGS.com",
+    "sourceKind": "firsthand-product-review",
+    "captureDate": "2026-11-18",
+    "captureMethod": "Ordinary public-page browsing. Exact complete sentence with whitespace normalized only. No Exa request.",
+    "quote": "The Acer Swift 3 14 (2020) is a 14-inch thin and light Windows laptop.",
+    "contentSha256": "7513aa67b53c7e3414a01a5b3b220962b314954cd508cac02a7c41db63d7c767",
+    "hashEncoding": "SHA-256 of the UTF-8 quote, without a trailing newline.",
+    "baselineCandidate": "81d1a5b79cf8b61dfd103343991c105ba18b7e7d",
+    "baselineAcceptedNames": [],
+    "expectedAcceptedNames": [
+      "Acer Swift 3 14 (2020)"
+    ],
+    "limitations": "Historical test fixture. This excerpt establishes a source-bound model and class observation only. It does not establish current specifications, price, stock, delivery, exact cross-source variant identity or merchant access."
+  }
+]

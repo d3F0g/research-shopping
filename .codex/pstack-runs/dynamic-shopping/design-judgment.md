@@ -1,0 +1,31 @@
+The shopper needs useful advice for arbitrary products and criteria. Choose [candidate B](/tmp/research-shopping-live/dynamic-design-b.md) with the corrections below. Start implementation after this judgment. Another design round is unnecessary.
+
+These scores evaluate the complete proposals against the [rubric](/Users/josiahwong/Documents/research-shopping-exa-primary/.codex/pstack-runs/dynamic-shopping/design-rubric.md), before corrections.
+
+| Criterion | A | B | Reason |
+| --- | --- | --- | --- |
+| Dynamic product value | 1 | 1 | Both preserve open wording but risk blocking unfamiliar language. |
+| Honest semantic boundary | 1 | 2 | A's identity is a support object without an assessment state. B models identity uncertainty explicitly. |
+| Simplicity and deletion | 1 | 1 | Both delete the grammar but leave schema bounds and intent interpretation underspecified. |
+| Preserved boundaries | 2 | 2 | Both retain lifecycle controls and freeze all historical shapes. |
+| Fast falsifiability | 2 | 2 | Both require real shopping journeys and recognize prototype limitations. |
+| Total | 7 | 8 | B supplies the clearer assessment contract. |
+
+Their `/answer` choice is consensus, not independent model-family confirmation. The family check did not run. Root's model family is unknown, and B used host inheritance because configured Luna was unavailable. Candidate labels imply no blindness.
+
+[A](/tmp/research-shopping-live/dynamic-design-a.md) proposes `/search` with flat observations and local deterministic ranking. That preserves field grounding but makes local code responsible for arbitrary qualitative comparison. B's alternative produces a grounded comparison document. It avoids local ranking but weakens machine-checkable hard-criterion coverage. Neither earns a second endpoint or fallback loop. Use one `/answer` call per explicit action, with the existing cancellation and accounting path.
+
+Adopt this implementation shape.
+
+1. `preferences.ts` owns one server-invoked edit reducer. Retain the complete initial request as the description. Extract only explicit budget, market, and strong generic requirement or preference cues. Unfamiliar nouns and criteria proceed to research. Delete both candidates' residual-word blockers. Clarify genuinely ambiguous edits or invalid budget and market values. Preserve stable criterion IDs, explicit removals, and immutable snapshots. Graft A's origin metadata and response-length field. The client submits edits without a second interpreter.
+2. `exa-research.ts` owns the private answer schema and citation binding. `research.ts` owns the public assessment and pure eligibility function. `research-turns.ts` retains lifecycle ownership. Use at most three products, four comparison attributes per product, two support passages per assessment, and one optional choice. Cover every retained hard criterion. Bound criteria and strings explicitly against request limits without silently dropping overflow. Use serializable arrays, not B's public `ReadonlyMap`. Do not introduce an observation framework, provider manager, or separate ranker.
+3. Keep B's supported, unknown, contradicted, and conflict assessments. Graft A's exact-variant, family, and unclear scope. Bind explicit citation URLs and contained passages to server-created source IDs. Reject invalid references. Never infer citation identity from numeric ordinals. Show AI synthesis separately from quotations, with qualifications and retained context. Containment proves provenance, not entailment. Eligibility is an auditable source-based AI judgment, never a claim of deterministic semantic verification.
+4. Permit a conditional choice only with supported identity and every hard criterion supported at adequate variant scope. Missing or conflicting support prevents eligibility. Require an observed qualifying price when a budget exists. Currency needs explicit source evidence. Bare `$`, location, seller, and hostname cannot supply currency or manufacturer proof. Preserve sale, membership, voucher, quantity, and variant conditions. Stock remains unverified. Choice reasons reference admitted assessments. Unresolved options remain useful comparisons but cannot masquerade as compliant recommendations.
+
+The [prototype](/tmp/research-shopping-live/dynamic-prototype/live-proof.json) returned three options and eight text-bearing citations for reported US$0.005. Its answer omitted explicit prices, overstated shared H13 compliance, and used unresolved citation numbers. Strongcore's source has bare-dollar prices. Tefal's retained page supports HEPA without establishing H13. This proves API feasibility, not this richer schema or shopping success. Wider-schema cost, latency, and omissions remain unmeasured.
+
+Freeze exact historical preferences, requests, questions, all response kinds, and pending, question, complete, and interrupted bodies before changing current contracts. Independently version intent, response, and evidence. Migrate only active preferences. Leave the auth worktree untouched. Delete the old live grammar, category maps, duplicate parser, native observations, fallback defaults, and count-based answers in the same caller migration. Preserve the cancellation, quota, privacy, fixture, and UI boundaries enumerated in [grounding](/Users/josiahwong/Documents/research-shopping-exa-primary/.codex/pstack-runs/dynamic-shopping/grounding-input.md).
+
+Prove the exact schema early, then run the three unchanged checkpoint requests and purifier request through the normal app. Require useful comparisons, justified choices or explicit failed-shopping outcomes, safe destinations, and desktop/mobile screenshots. Add focused unfamiliar-language, edit, history, adverse-evidence, currency, cancellation, quota, and isolation checks. Generated evidence remains synthetic. Unused grammar tests establish nothing. Product failure blocks completion even when transport succeeds.
+
+Model the Domain selects B's explicit assessments and one intent reducer. Boundary Discipline confines parsing and citation binding to ingress. Subtract Before You Add removes the grammar and duplicate interpretation. Prove It Works separates prototype feasibility from real product acceptance.

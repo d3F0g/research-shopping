@@ -1,0 +1,152 @@
+{
+  "kind": "research",
+  "answer": "I found source pages, but could not attribute product-specific details reliably. Review the excerpts below.",
+  "preferences": {
+    "hard": {
+      "category": "headphones",
+      "budget": {
+        "amount": 400,
+        "currency": "SGD"
+      },
+      "region": "SG",
+      "excludedBrands": [],
+      "requiredFeatures": [],
+      "pendingConstraint": null
+    },
+    "soft": {
+      "useCase": "",
+      "priorities": [
+        "value"
+      ],
+      "responseLength": "concise"
+    }
+  },
+  "notes": [],
+  "research": {
+    "dataKind": "web-research",
+    "retrievedAt": "2026-11-18T03:03:18.390Z",
+    "products": [],
+    "sources": [
+      {
+        "title": "JBL Tour One M3 | Wireless over-ear Noise Cancelling headphones",
+        "url": "https://www.jbl.com.sg/over-ear-headphones/TOUR-ONE-M3.html?dwvar_TOUR-ONE-M3_color=Black-GLOBAL-Current",
+        "highlights": [
+          "JBLTOURONEM3BLK # JBL Tour One M3 Premium wireless over-ear Noise Cancelling headphones with Hi-Res Audio and legendary JBL pro sound Variations * * [ Blue ](/on/demandware.store/Sites-JB-APAC-NCOM-Site/en_SG/Product-Variation?pid=TOUR-ONE-M3&cgid=over-ear-headphones&dwvar_TOUR-ONE-M3_color=Blue-GLOBAL-Current&source=detail) * [ Black ](/on/demandware.store/Sites-JB-APAC-NCOM-Site/en_SG/Product-Variation?pid=TOUR-ONE-M3&cgid=over-ear-headphones&dwvar_TOUR-ONE-M3_color=Black-GLOBAL-Current&source=detail) * [ Mocha ](/on/demandware.store/Sites-JB-APAC-NCOM-Site/en_SG/Product-Variation?pid=TOUR-ONE-M3&cgid=over-ear-headphones&dwvar_TOU"
+        ],
+        "id": "source-1"
+      },
+      {
+        "title": "Sennheiser MOMENTUM 4 Wireless Over-Ear Headphones - Teal (800073) | Harvey Norman Singapore",
+        "url": "https://www.harveynorman.com.sg/tv-and-audio/headphones-en/over-ear-headphones-en-2/sennheiser-momentum-4-wireless-over-ear-headphones-teal-800073-q.html",
+        "highlights": [
+          "# Sennheiser MOMENTUM 4 Wireless Over-Ear Headphones - Teal (800073) S$ 349 was S$ 499 SGD You Save S$ 150 ... ### Description Experience superb audio clarity, comfort, and endurance with the Sennheiser MOMENTUM 4 Wireless. Boasting a high-fidelity 42 mm transducer system and support for aptX Adaptive, these headphones deliver rich, detailed sound with excellent dynamics. You get up to 60 hours of playback on a full charge, making them ideal for long journeys or all-day listening sessions. #### Key Features - Sennheiser Signature Sound – Powered by Sennheiser’s audiophile-inspired 42mm transducer system for exceptional high-fidelity"
+        ],
+        "id": "source-2"
+      },
+      {
+        "title": "METAPOD SG Sennheiser Momentum 4 Wireless Headphones - Shop",
+        "url": "https://shop.com/products/7284764901572/sennheiser-momentum-4-wireless-headphones",
+        "highlights": [
+          "4.5 (123) # Sennheiser Momentum 4 Wireless Headphones 4.5 (1,234) Sold 100+ last 30 days SGD 349.00 SGD 599.00 42% off Language 4.8(1.1K) SGD 349.00 SGD 599.00 ## Highlights ## Description ... ## Specifications ## Reviews 5.0(4) 5.0 4 ratings"
+        ],
+        "id": "source-3"
+      },
+      {
+        "title": "BOSE EARPHONES/HEADPHONES/EARBUDS QC HP - CHILLED LILAC",
+        "url": "https://www.bestdenki.com.sg/0607397-bose-earphones-headphones-earbuds-qc-hp-chilled-lilac.html",
+        "highlights": [
+          "# BOSE EARPHONES/HEADPHONES/EARBUDS BOSE QUIETCOMFORT HEADPHONES CHILLED LILAC In stock Special Price $389.00 Regular Price $499.00 Availability: In stock BREAKTHROUGH BOSE IMMERSIVE AUDIO WORLD-CLASS NOISE CANCELLATION SOUND AND SILENCE TAILORED TO YOU SUPERIOR COMFORT PLAYS UP TO 6 HOURS¹ MODES FOR ANY MUSICAL MOOD SIMPLE TOUCH CONTROLS EARBUDS SWEAT AND WATER RESISTANT (IPX4) BATTERY LIFE: UP TO 6 HOURS Hurry! Only 12 left in stock days hrs mins secs In stock Availability: In stock Model: QC HP - CHILLED LILAC Iconic over-ear wireless headphones featuring world-class noise cancellation, customizable Quiet and Aware modes, up to 2"
+        ],
+        "id": "source-4"
+      },
+      {
+        "title": "What Are the Best Noise Cancelling Headphones in Singapore in 2026? | ShopBack Guides",
+        "url": "https://www.shopback.sg/guide/shopping/best-noise-cancelling-headphones-money-singapore",
+        "highlights": [
+          "Garry Shi Cashback Expert, ShopBack· 8 October 2026 ... ## What are the best noise-cancelling headphones for the money in Singapore? For most Singapore shoppers, value sits in the S$249 to S$349 earbud range, with the S$649 over-ear tier worth it mainly for frequent flyers. Here is how the main picks line up, using official Singapore list prices at the time of writing: - Samsung Galaxy Buds4, S$249 (Samsung Singapore). Samsung's spec sheet lists active noise cancellation with adaptive ANC, 6 microphones, IP54, and up to 5 hours of music with noise cancelling on (up to 30 hours total with the case and noise cancelling off). A sensibl"
+        ],
+        "id": "source-5"
+      }
+    ],
+    "limitations": [
+      "Page observations do not verify current price, stock, delivery or merchant offers.",
+      "No product had sufficiently attributable model, category and constraint evidence. Review the source excerpts instead."
+    ],
+    "requestId": "14e2fa601bf5dff98dc2a5057cb8bdd5",
+    "reportedCostUsd": 0.007,
+    "grounding": [
+      {
+        "field": "observations[0].url",
+        "sourceIds": [
+          "source-1"
+        ]
+      },
+      {
+        "field": "observations[0].priceQuote",
+        "sourceIds": [
+          "source-1"
+        ]
+      },
+      {
+        "field": "observations[0].name",
+        "sourceIds": [
+          "source-1"
+        ]
+      },
+      {
+        "field": "observations[0].quotedFacts",
+        "sourceIds": [
+          "source-1"
+        ]
+      },
+      {
+        "field": "observations[1].url",
+        "sourceIds": [
+          "source-2"
+        ]
+      },
+      {
+        "field": "observations[1].priceQuote",
+        "sourceIds": [
+          "source-2"
+        ]
+      },
+      {
+        "field": "observations[1].name",
+        "sourceIds": [
+          "source-2"
+        ]
+      },
+      {
+        "field": "observations[1].quotedFacts",
+        "sourceIds": [
+          "source-2"
+        ]
+      },
+      {
+        "field": "observations[2].quotedFacts",
+        "sourceIds": [
+          "source-4"
+        ]
+      },
+      {
+        "field": "observations[2].url",
+        "sourceIds": [
+          "source-4"
+        ]
+      },
+      {
+        "field": "observations[2].priceQuote",
+        "sourceIds": [
+          "source-4"
+        ]
+      },
+      {
+        "field": "observations[2].name",
+        "sourceIds": [
+          "source-4"
+        ]
+      }
+    ]
+  }
+}

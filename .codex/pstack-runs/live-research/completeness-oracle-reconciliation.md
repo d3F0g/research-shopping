@@ -1,0 +1,24 @@
+# A clipped open identity cannot be a scan-limit positive control
+
+At author1543/roota87, the older `negative-outside-retained-scan-end` expectation conflicts with the selected completeness contract and four fresh clipped-heading cases. Its retained prefix is `# Aster Wave 2\nWireless over-ear headphones\n` followed only by spaces through unit16384. Raw suffix contains a negative beyond the bound. That suffix must not be read, but neither can the unfinished category be declared complete. Replacing the hidden suffix with `cases.` produces the same permitted observations and cannot legitimately require a different identity result.
+
+Root inspected the exact original independent script at fresh-coverage-probes-v2.mts:66 and committed API scan-limit test. Root selects the stricter source-completeness contract. The original expectation of one lead is superseded, not silently made to pass. This is not permission to increase the bound or inspect hidden negative text.
+
+Preserve the original script/result byte-for-byte. Continue running it and report its one obsolete expectation separately. Change the committed API assertion for that exact open prefix to no product, and add an independently closed category before padding (a literal period) with the same hidden-negative suffix. That closed control must retain the lead. Keep the negative wholly inside the bound excluding a proven subject. Add genuine untruncated EOF and clipped qualifier pairs, so a parser rejecting all leads cannot pass.
+
+The root report must distinguish original preserved assertions, this explicitly superseded unsafe oracle, and reconciled paired controls. Do not call all403 original expectations green if one remains inconsistent. Independent security must judge the reconciliation and rerun the exact original plus corrected controls before approval. No other historical expectation, payload, corpus oracle, source capture or bound is changed by this decision.
+
+This decision preserves the actual task: never invent identity or claim compliance from missing source text. It does not treat the unseen negative as known. Root owns the routine contract correction under existing engineering authorization; no human design milestone is introduced.
+
+## Synthetic tests must establish the premise they intend to assess
+
+Root also inspected committed adverse-price tests182-190 and page-evidence test180. The former expects an identity from the same open category plus `For replacement pads.` when later Bluetooth/class/Specifications and price text are added. A later amount cannot erase that immediate qualifier. The latter uses arbitrary unmarked `Details` text to close the category while testing distant fact packing. Neither fixture establishes the independently complete category required for its original test purpose.
+
+Only these synthetic premise corrections are authorized: close the category with a literal period before the unchanged qualifier/bridges/prices or distant Details padding, retain the original price-withholding and no-disjoint-fact/packing assertions, and add the exact original open prefixes as no-identity controls. Do not add a capitalization fallback, broaden native/direct identity admission, or silently change product-count expectations. The owner must preserve original red results and provide the exhaustive affected-case table. Independent review must verify that corrected positive controls still establish the original price/packing behavior.
+
+No genuine captured wording, acquisition file, immutable coverage oracle, history record, or unrelated expectation is rewritten. A genuine positive that no longer admits remains an unmet criterion rather than being relabeled invalid. Exactly one original independent scan-limit expectation is currently known to be superseded; committed synthetic unit fixture premises are a separate, explicitly reviewed change. Counts must describe both accurately.
+
+
+## Final scoped addendum
+
+Independent security accepted the exhaustive170-input/18-pair addendum. Exactly three original independent expectations are superseded: the open clipped scan positive and the made/manufactured foreign-model positives. All403 original artifacts remain immutable; final accounting is400 valid originals plus3 recorded obsolete expectations. The18 reconciled positives/raw-open/own-negative controls are mandatory. The additional three unmarked inheritance fixtures close their category with a literal period while preserving foreign labels and appended exact-own exclusion controls. The foreign-price original withholds the unclosed amount; its positive inserts only an explicit Specifications section before the identical foreign sentence, retaining the same price quote. Price grammar is unchanged. Genuine captures and immutable coverage oracles remain untouched.

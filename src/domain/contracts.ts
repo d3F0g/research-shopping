@@ -1,218 +1,168 @@
 import { z } from "zod";
 
-export const ProductIdSchema = z.string().regex(/^[a-z0-9-]+$/).brand<"ProductId">();
-export const SourceIdSchema = z.string().regex(/^[a-z0-9-]+$/).brand<"SourceId">();
-
-export const CategorySchema = z.enum(["headphones", "laptops"]);
 export const CurrencySchema = z.enum(["SGD", "USD"]);
 export const RegionSchema = z.enum(["SG", "US"]);
 export const DetailModeSchema = z.enum(["concise", "expanded"]);
-export const FeatureSchema = z.enum([
-  "active-noise-cancelling",
-  "wireless",
-  "multipoint",
-  "long-battery-life",
-  "lightweight",
-  "oled-display",
-  "high-memory",
-  "long-battery",
-  "portable",
-]);
-export const PrioritySchema = z.enum([
-  "comfort",
-  "sound-quality",
-  "noise-cancelling",
-  "battery-life",
-  "portability",
-  "performance",
-  "display-quality",
-  "value",
-]);
-
-export const BudgetSchema = z.object({
-  amount: z.number().positive().finite(),
-  currency: CurrencySchema,
-});
-
-export const PreferencesSchema = z.object({
-  hard: z.object({
-    category: CategorySchema.nullable(),
-    budget: BudgetSchema.nullable(),
-    region: RegionSchema,
-    excludedBrands: z.array(z.string().trim().min(1).max(80)).max(20),
-    requiredFeatures: z.array(FeatureSchema).max(12),
-    pendingConstraint: z.string().trim().min(1).max(400).nullable().default(null),
-  }),
-  soft: z.object({
-    useCase: z.string().trim().max(160),
-    priorities: z.array(PrioritySchema).max(8),
-    responseLength: DetailModeSchema,
+export const MoneyAmountSchema = z
+  .number()
+  .finite()
+  .positive()
+  .max(1_000_000)
+  .refine((amount) => Math.abs(amount * 100 - Math.round(amount * 100)) < 1e-7);
+export const BudgetSchema = z
+  .strictObject({
+    amount: MoneyAmountSchema,
+    currency: CurrencySchema,
+    minimum: MoneyAmountSchema.optional(),
+  })
+  .refine(
+    (budget) => budget.minimum === undefined || budget.minimum <= budget.amount,
+    {
+      message: "Minimum budget cannot exceed maximum budget",
+    },
+  );
+export type Budget = z.infer<typeof BudgetSchema>;
+export function isWithinBudget(amount: number, budget: Budget): boolean {
+  return (
+    amount <= budget.amount &&
+    (budget.minimum === undefined || amount >= budget.minimum)
+  );
+}
+export const CriterionSchema = z.strictObject({
+  id: z
+    .string()
+    .regex(/^criterion-[1-9][0-9]*$/)
+    .max(40)
+    .refine((id) => Number.isSafeInteger(Number(id.slice(10)))),
+  wording: z.string().min(1).max(400),
+  strength: z.enum(["hard", "flexible"]),
+  origin: z.strictObject({
+    kind: z.enum(["message", "edit", "migration"]),
+    text: z.string().min(1).max(2000),
   }),
 });
-
-export const SourceSchema = z.object({
-  id: SourceIdSchema,
-  name: z.string().min(1).max(120),
-  url: z.string().url(),
-  kind: z.enum(["manufacturer-reference", "fixture-observation"]),
-  capturedAt: z.string().datetime(),
-});
-
-const SupportedClaimSchema = z.object({
-  status: z.literal("supported"),
-  key: z.string().min(1).max(80),
-  value: z.string().min(1).max(240),
-  sources: z.array(SourceSchema).min(1).max(5),
-});
-
-const UnknownClaimSchema = z.object({
-  status: z.literal("unknown"),
-  key: z.string().min(1).max(80),
-  note: z.string().min(1).max(240),
-});
-
-const ConflictingClaimSchema = z.object({
-  status: z.literal("conflict"),
-  key: z.string().min(1).max(80),
-  observations: z.array(z.object({
-    value: z.string().min(1).max(240),
-    source: SourceSchema,
-  })).min(2).max(5),
-});
-
-export const ClaimSchema = z.discriminatedUnion("status", [
-  SupportedClaimSchema,
-  UnknownClaimSchema,
-  ConflictingClaimSchema,
+export const MoneyDraftSchema = z.strictObject({
+  amount: MoneyAmountSchema.nullable(),
+  minimum: MoneyAmountSchema.nullable(),
+  currency: CurrencySchema.nullable(),
+}).refine((draft) => draft.amount === null || draft.minimum === null || draft.minimum <= draft.amount, { message: "Draft minimum cannot exceed maximum" });
+const QuestionBase = {
+  id: z.string().min(1).max(80),
+  message: z.string().min(1).max(2000),
+  originalRequest: z.string().min(1).max(4000),
+  explanation: z.string().min(1).max(600),
+};
+export const PendingChangeSchema = z.discriminatedUnion("kind", [
+  z.strictObject({
+    ...QuestionBase,
+    kind: z.literal("money"),
+    reason: z.enum(["currency", "budget"]),
+    missingSlot: z.enum(["currency", "amount", "range"]),
+    draft: MoneyDraftSchema,
+  }),
+  z.strictObject({
+    ...QuestionBase,
+    kind: z.literal("constraint"),
+    reason: z.literal("constraint"),
+  }),
+  z.strictObject({
+    ...QuestionBase,
+    kind: z.literal("legacy"),
+    reason: z.enum(["currency", "budget", "constraint"]),
+  }),
 ]);
-
-export const DiscoveryProductSchema = z.object({
-  id: ProductIdSchema,
-  category: CategorySchema,
-  brand: z.string().min(1).max(80),
-  name: z.string().min(1).max(160),
-  summary: z.string().min(1).max(240),
-  features: z.array(FeatureSchema),
-  manufacturer: z.string().min(1).max(120),
-  productUrl: z.string().url(),
-});
-
-export const ProductSchema = DiscoveryProductSchema.extend({ claims: z.array(ClaimSchema) });
-
-export const OfferSchema = z.object({
-  productId: ProductIdSchema,
-  merchant: z.string().min(1).max(120),
-  merchantHost: z.string().min(1).max(253),
-  productUrl: z.string().url(),
+export type MoneyDraft = z.infer<typeof MoneyDraftSchema>;
+export type PendingQuestion = z.infer<typeof PendingChangeSchema>;
+export const ShoppingIntentSchema = z.strictObject({
+  version: z.literal(5),
+  productDescription: z.string().max(4000),
+  criteria: z
+    .array(CriterionSchema)
+    .max(12)
+    .refine(
+      (items) => new Set(items.map((item) => item.id)).size === items.length,
+    ),
+  budget: BudgetSchema.nullable(),
+  budgetClarified: z.boolean(),
+  pendingChange: PendingChangeSchema.nullable(),
   region: RegionSchema,
-  price: z.object({ amount: z.number().positive().finite(), currency: CurrencySchema }),
-  availability: z.enum(["sample-in-stock", "sample-unavailable", "unknown"]),
-  observedAt: z.string().datetime(),
-  dataKind: z.literal("fixture"),
+  responseLength: DetailModeSchema,
+  revision: z.number().int().nonnegative().max(Number.MAX_SAFE_INTEGER),
 });
-
-export const CandidateSchema = z.object({
-  product: ProductSchema,
-  offer: OfferSchema,
-  reasons: z.array(z.string().min(1).max(180)).max(5),
-});
-
-export const TurnRequestSchema = z.object({
+const SingleIntentEditSchema = z.discriminatedUnion("kind", [
+  z.strictObject({ kind: z.literal("discard-pending") }),
+  z.strictObject({
+    kind: z.literal("set-description"),
+    value: z.string().min(1).max(4000),
+  }),
+  z.strictObject({
+    kind: z.literal("set-budget"),
+    value: BudgetSchema.nullable(),
+  }),
+  z.strictObject({ kind: z.literal("set-region"), value: RegionSchema }),
+  z.strictObject({
+    kind: z.literal("set-response-length"),
+    value: DetailModeSchema,
+  }),
+  z.strictObject({
+    kind: z.literal("add-criterion"),
+    wording: z.string().min(1).max(400),
+    strength: z.enum(["hard", "flexible"]),
+  }),
+  z.strictObject({
+    kind: z.literal("replace-criterion"),
+    id: CriterionSchema.shape.id,
+    wording: z.string().min(1).max(400),
+    strength: z.enum(["hard", "flexible"]),
+  }),
+  z.strictObject({
+    kind: z.literal("remove-criterion"),
+    id: CriterionSchema.shape.id,
+  }),
+]);
+export const IntentEditSchema = z.union([
+  SingleIntentEditSchema,
+  z.strictObject({
+    kind: z.literal("batch"),
+    edits: z.array(SingleIntentEditSchema).min(1).max(20),
+  }),
+]);
+export const PrepareTurnRequestSchema = z.strictObject({
+  phase: z.literal("prepare"),
   message: z.string().trim().min(1).max(2000),
-  preferences: PreferencesSchema,
+  preferences: ShoppingIntentSchema,
+  operationId: z.string().uuid(),
+  edit: IntentEditSchema.optional(),
+  skipBudget: z.boolean().optional(),
+  questionId: z.string().min(1).max(80).optional(),
 });
-
-export const SelectionRequestSchema = z.object({
-  productId: ProductIdSchema,
-  preferences: PreferencesSchema,
+export const ResearchTurnRequestSchema = z.strictObject({
+  phase: z.literal("research"),
+  preferences: ShoppingIntentSchema,
+  operationId: z.string().uuid(),
 });
-
-export const TurnErrorSchema = z.object({
-  kind: z.literal("error"),
-  code: z.enum(["provider-failed", "invalid-selection", "unsafe-link", "not-eligible"]),
-  message: z.string().min(1).max(400),
-  retryable: z.boolean(),
-  preferences: PreferencesSchema.nullable(),
-  notes: z.array(z.string().max(240)),
-});
-
-export const TurnResultSchema = z.discriminatedUnion("kind", [
-  z.object({
-    kind: z.literal("message"),
-    message: z.string().min(1).max(400),
-    preferences: PreferencesSchema,
-    notes: z.array(z.string().max(240)),
-  }),
-  z.object({
-    kind: z.literal("clarification"),
-    reason: z.enum(["category", "constraint", "feedback", "currency"]),
-    message: z.string().min(1).max(400),
-    preferences: PreferencesSchema,
-    notes: z.array(z.string().max(240)),
-  }),
-  z.object({
-    kind: z.literal("recommendations"),
-    answer: z.string().min(1).max(400),
-    preferences: PreferencesSchema,
-    notes: z.array(z.string().max(240)),
-    candidates: z.array(CandidateSchema).min(1).max(5),
-  }),
-  z.object({
-    kind: z.literal("no-match"),
-    message: z.string().min(1).max(400),
-    preferences: PreferencesSchema,
-    notes: z.array(z.string().max(240)),
-  }),
-  TurnErrorSchema,
+export const TurnRequestSchema = z.discriminatedUnion("phase", [
+  PrepareTurnRequestSchema,
+  ResearchTurnRequestSchema,
 ]);
-
-export const ProviderEventSchema = z.object({
-  provider: z.enum(["discovery", "research", "merchant"]),
-  outcome: z.enum(["ok", "failed", "timeout"]),
-});
-
-export const TurnResponseSchema = TurnResultSchema.and(z.object({
-  toolActivity: z.array(ProviderEventSchema).max(20),
-}));
-
-export const SelectionResultSchema = z.discriminatedUnion("kind", [
-  z.object({ kind: z.literal("handoff"), productId: ProductIdSchema, productName: z.string(), offer: OfferSchema, productUrl: z.string().url(), label: z.string() }),
-  TurnErrorSchema,
-]);
-
-export type Category = z.infer<typeof CategorySchema>;
+export type PrepareTurnRequest = z.infer<typeof PrepareTurnRequestSchema>;
+export type ResearchTurnRequest = z.infer<typeof ResearchTurnRequestSchema>;
 export type Currency = z.infer<typeof CurrencySchema>;
 export type Region = z.infer<typeof RegionSchema>;
-export type Feature = z.infer<typeof FeatureSchema>;
-export type Priority = z.infer<typeof PrioritySchema>;
-export type Preferences = z.infer<typeof PreferencesSchema>;
-export type ProductId = z.infer<typeof ProductIdSchema>;
-export type Source = z.infer<typeof SourceSchema>;
-export type Claim = z.infer<typeof ClaimSchema>;
-export type DiscoveryProduct = z.infer<typeof DiscoveryProductSchema>;
-export type Product = z.infer<typeof ProductSchema>;
-export type Offer = z.infer<typeof OfferSchema>;
-export type Candidate = z.infer<typeof CandidateSchema>;
+export type ShoppingIntent = z.infer<typeof ShoppingIntentSchema>;
+export type IntentEdit = z.infer<typeof IntentEditSchema>;
+export type Criterion = z.infer<typeof CriterionSchema>;
 export type TurnRequest = z.infer<typeof TurnRequestSchema>;
-export type TurnResult = z.infer<typeof TurnResultSchema>;
-export type ProviderEvent = z.infer<typeof ProviderEventSchema>;
-export type TurnResponse = z.infer<typeof TurnResponseSchema>;
-export type SelectionResult = z.infer<typeof SelectionResultSchema>;
-
-export function defaultPreferences(): Preferences {
+export function defaultIntent(): ShoppingIntent {
   return {
-    hard: {
-      category: null,
-      budget: null,
-      region: "SG",
-      excludedBrands: [],
-      requiredFeatures: [],
-      pendingConstraint: null,
-    },
-    soft: {
-      useCase: "",
-      priorities: ["value"],
-      responseLength: "concise",
-    },
+    version: 5,
+    productDescription: "",
+    criteria: [],
+    budget: null,
+    budgetClarified: false,
+    pendingChange: null,
+    region: "SG",
+    responseLength: "concise",
+    revision: 0,
   };
 }

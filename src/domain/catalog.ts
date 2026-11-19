@@ -1,4 +1,4 @@
-import type { Category, Feature } from "./contracts";
+import type { Category, Feature } from "./legacy-contracts";
 
 export const FIXTURE_OBSERVED_AT = "2025-01-15T00:00:00.000Z";
 export const FIXTURE_NOTICE = "Synthetic development samples. Scenario timestamp 15 Jan 2025, not observed prices, stock or specification research.";

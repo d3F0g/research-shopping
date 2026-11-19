@@ -3,9 +3,10 @@ import { createServer, type Server } from "node:http";
 import type { AddressInfo } from "node:net";
 import { serve } from "@hono/node-server";
 import { describe, expect, it } from "vitest";
-import { defaultPreferences, ProductIdSchema } from "../../src/domain/contracts";
+import { defaultPreferences, ProductIdSchema } from "../../src/domain/legacy-contracts";
 import type { ProviderContext, Providers } from "../../src/domain/providers";
-import { createApp, type AppDependencies, type RequestLog } from "../../src/server/app";
+import { createFixtureApp } from "../../src/server/test-fixture-app";
+import type { AppDependencies, RequestLog } from "../../src/server/app";
 import { createFixtureProviders } from "../../src/server/fixtures";
 
 function deferred<T = void>() {
@@ -37,7 +38,7 @@ async function mounted(dependencies: AppDependencies) {
   await once(reservation, "listening");
   const { port } = reservation.address() as AddressInfo;
   await close(reservation);
-  const app = createApp({ providerTimeoutMs: 2_000, ...dependencies }, { apiPort: port, webPort: port });
+  const app = createFixtureApp({ providerTimeoutMs: 2_000, ...dependencies }, { apiPort: port, webPort: port });
   const listening = deferred();
   const server = serve({ fetch: app.fetch, hostname: "127.0.0.1", port }, () => listening.resolve()) as Server;
   await listening.promise;

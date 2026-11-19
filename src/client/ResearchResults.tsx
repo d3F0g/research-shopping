@@ -10,15 +10,13 @@ import {
 import type {
   Candidate,
   ProviderEvent,
-  SelectionResult,
   Source,
   TurnResponse,
-} from "../domain/contracts";
+} from "../domain/legacy-contracts";
 import { isApprovedUrl } from "../domain/merchant-links";
-import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
-import { Button, buttonVariants } from "@/components/ui/button";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 import {
   Collapsible,
   CollapsibleContent,
@@ -219,15 +217,9 @@ function ClaimDetails({ candidate }: { candidate: Candidate }) {
 function ProductCard({
   candidate,
   index,
-  onSelect,
-  selecting,
-  active,
 }: {
   candidate: Candidate;
   index: number;
-  onSelect: () => void;
-  selecting: boolean;
-  active: boolean;
 }) {
   const { offer, product } = candidate;
   return (
@@ -285,17 +277,6 @@ function ProductCard({
         </div>
         <div className="product-actions">
           <ClaimDetails candidate={candidate} />
-          {active && (
-            <Button
-              className="select-product"
-              variant="ghost"
-              onClick={onSelect}
-              disabled={selecting}
-            >
-              {selecting ? "Checking sample link…" : "Select this product"}
-              <ArrowUpRight aria-hidden="true" />
-            </Button>
-          )}
         </div>
       </CardContent>
     </Card>
@@ -420,21 +401,7 @@ function PreferenceNotes({ notes }: { notes: string[] }) {
   );
 }
 
-export function Results({
-  outcome,
-  onSelect,
-  onRetry,
-  selectingId,
-  selectionError,
-  active,
-}: {
-  outcome: TurnResponse;
-  onSelect: (candidate: Candidate) => void;
-  onRetry: () => void;
-  selectingId: string | null;
-  selectionError: string | null;
-  active: boolean;
-}) {
+export function Results({ outcome }: { outcome: TurnResponse }) {
   if (outcome.kind === "message")
     return <p className="ordinary-message">{outcome.message}</p>;
   return (
@@ -455,25 +422,17 @@ export function Results({
                 key={candidate.product.id}
                 candidate={candidate}
                 index={index}
-                onSelect={() => onSelect(candidate)}
-                selecting={selectingId === candidate.product.id}
-                active={active}
               />
             ))}
           </div>
-          {selectionError && (
-            <Alert variant="destructive" className="selection-error">
-              <AlertDescription>{selectionError}</AlertDescription>
-            </Alert>
-          )}
           {outcome.candidates.length > 1 && (
             <Comparison candidates={outcome.candidates} />
           )}
-          {!active && (
+          {
             <p className="metadata historical-note">
               Earlier shortlist. Send a message to refresh these options.
             </p>
-          )}
+          }
         </>
       ) : (
         <div
@@ -488,11 +447,6 @@ export function Results({
                 : "Research paused"}
           </h2>
           <p>{outcome.message}</p>
-          {outcome.kind === "error" && active && outcome.retryable && (
-            <Button variant="outline" onClick={onRetry}>
-              Try again
-            </Button>
-          )}
         </div>
       )}
       <Collapsible className="response-details">
@@ -505,63 +459,5 @@ export function Results({
       </Collapsible>
       <ToolActivity events={outcome.toolActivity} />
     </section>
-  );
-}
-
-export function Handoff({
-  result,
-  active,
-}: {
-  result: Extract<SelectionResult, { kind: "handoff" }>;
-  active: boolean;
-}) {
-  const price = result.offer.price;
-  return (
-    <Card
-      className="handoff-panel"
-      role="region"
-      aria-label="Product page handoff"
-    >
-      <CardHeader>
-        <Badge className="w-fit" variant="secondary">
-          Product page handoff
-        </Badge>
-        <h2>{result.productName}</h2>
-        <p className="text-muted-foreground">{result.label}</p>
-      </CardHeader>
-      <CardContent className="space-y-4">
-        <div className="handoff-offer">
-          <strong>
-            {currencySymbol(price.currency)}
-            {price.amount.toLocaleString("en-SG")}
-          </strong>
-          <span className="metadata">Sample price · fixture only</span>
-        </div>
-        <p className="handoff-domain">
-          Merchant host <code>{new URL(result.productUrl).hostname}</code>
-        </p>
-        {active ? (
-          <a
-            href={result.productUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className={buttonVariants({
-              className: "merchant-link h-auto min-h-11 whitespace-normal py-2",
-            })}
-          >
-            Open manufacturer product page <ArrowUpRight aria-hidden="true" />
-            <span className="sr-only"> (opens in a new tab)</span>
-          </a>
-        ) : (
-          <p className="metadata">
-            Earlier product destination · {result.productUrl}
-          </p>
-        )}
-        <p className="metadata">
-          The link passed the demo's HTTPS and approved-host checks. The sample
-          price and stock were not checked live.
-        </p>
-      </CardContent>
-    </Card>
   );
 }

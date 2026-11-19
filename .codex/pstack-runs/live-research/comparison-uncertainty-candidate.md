@@ -1,0 +1,13 @@
+# Combined comparison and uncertainty candidate
+
+The shopper needs readable, attributable comparisons with explicit unknowns. The official-shadcn comparison correction `1116b4f4abe3b9bce8c7b4ed2c97f8e0202d159e` and private retained-battery correction `2e74f9f80dcf427db7728b29cf4043e1f5bd4e62` are integrated above the reviewed native evidence candidate `6a478ae`.
+
+The comparison uses two columns on desktop and one full-width card per product on mobile. Complete unverified price context stays visible. Whole specifications, citations and existing uncertainty notes remain behind per-product controls. No client topic parser or response field was added. The Linux disclosure test now waits for visible source text before clicking Research limits and asserts its expanded state, retaining the original exclusion/limitation assertions.
+
+Battery meaning stays private on resolved facts and survives only successful packing. Existing positive runtime grammar classifies the retained statement. Soft battery priority or the existing hard long-battery requirement requests an explicit note when comparable runtime was not established. The captured Edifier 2025 edition gets the note; ATH retains its full qualified quotation without it. Literal unsupported wording remains visible without claiming general semantic understanding. Public v2, native fields, source bounds, cancellation and the shared ledger remain unchanged. Two unused Scope fields were removed.
+
+Author evidence reports 937 unit/API and 74 browser checks passing for the UI, and 964 unit/API checks plus all 505 valid retained assertions for the battery correction. The same three obsolete original reds remain preserved. Three invalid new battery-test premises were diagnosed and retained before valid counterparts were added. These are author results, not independent combined-head acceptance.
+
+Independent static passes the UI/docs scope through `530490f`. Independent UI-only replay confirms mobile quotation width increased from approximately 113 to 334 pixels and the collapsed ATH comparison reduced from approximately 505 to 153 pixels. Final combined-head unit/runtime/visual, security, static and automatic CI gates remain pending. The initial two genuine calls still report US$0.014 total. No new paid call is authorized by this record, and auto-merge remains unarmed.
+
+Evidence is retained in the isolated UI worktree's `artifacts/comparison-ui/`, the battery worktree's `artifacts/battery-uncertainty/`, `/tmp/research-shopping-live/comparison-ui-independent-qa/` and `/tmp/research-shopping-live/comparison-ui-independent-comment-review.md`. Original captures, failed CI artifacts and earlier proof are unchanged.

@@ -1,18 +1,17 @@
+import { BudgetSchema } from "../domain/contracts";
 import { useId, useState } from "react";
-import type { Preferences } from "../domain/contracts";
-import { validBudgetAmount } from "../domain/preferences";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Field, FieldError, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 
 export function BudgetQuestion({
-  preferences,
+  currency,
   active,
   onReply,
   onSkip,
 }: {
-  preferences: Preferences;
+  currency: "SGD" | "USD";
   active: boolean;
   onReply: (message: string) => void;
   onSkip: () => void;
@@ -20,37 +19,27 @@ export function BudgetQuestion({
   const [amount, setAmount] = useState("");
   const [error, setError] = useState(false);
   const id = useId();
-  const currency = preferences.hard.region === "SG" ? "SGD" : "USD";
-  const caps =
-    preferences.hard.category === "laptops"
-      ? [1000, 1500, 2000]
-      : [150, 300, 500];
   return (
     <Card className="question-card">
       <CardContent>
         <h2>Any budget in mind?</h2>
-        <p className="metadata">
-          Optional. A cap helps narrow the sample options.
-        </p>
+        <p className="metadata">Optional. A cap helps narrow the options.</p>
         {active ? (
           <>
-            <div className="quick-choices">
-              {caps.map((cap) => (
-                <Button
-                  key={cap}
-                  variant="outline"
-                  onClick={() => onReply(`under ${currency} ${cap}`)}
-                >
-                  {currency} {cap.toLocaleString("en-SG")}
-                </Button>
-              ))}
-            </div>
             <form
+              noValidate
               className="budget-question-form"
               onSubmit={(event) => {
                 event.preventDefault();
-                if (!validBudgetAmount(Number(amount))) setError(true);
-                else onReply(`under ${currency} ${Number(amount)}`);
+                const budget = BudgetSchema.safeParse({
+                  amount: Number(amount),
+                  currency,
+                });
+                if (!budget.success) setError(true);
+                else
+                  onReply(
+                    `under ${budget.data.currency} ${budget.data.amount}`,
+                  );
               }}
             >
               <Field>
@@ -59,6 +48,9 @@ export function BudgetQuestion({
                   id={id}
                   type="number"
                   inputMode="decimal"
+                  min="0.01"
+                  max="1000000"
+                  step="0.01"
                   placeholder={`Custom ${currency} amount`}
                   value={amount}
                   onChange={(event) => {

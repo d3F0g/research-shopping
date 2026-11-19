@@ -1,6 +1,6 @@
 # Capability gaps and delivery gates
 
-These findings came from parallel architecture, shopping-capability, and security assessments. A provider's documented API is not evidence of working access in this application.
+The P0 rows record the original automated fixture milestone. Normal development now uses Exa research; these synthetic catalogs and offers are confined to explicit automated tests. The current research and merchant boundaries are described in [Application architecture](architecture.md). A documented API is not evidence of working access.
 
 | Priority | Capability | First implementation | Verification | Tracker |
 | --- | --- | --- | --- | --- |
@@ -15,18 +15,20 @@ These findings came from parallel architecture, shopping-capability, and securit
 | P0 | UI and usability | Responsive React comparison, accessible native controls and disclosures | Desktop/mobile browser journeys and screenshots | #1 |
 | P0 | Security and observability | Loopback, HTTP boundary validation, safe links, bounded logs and state | Runtime boundary tests and independent security review | #1 |
 | P0 | Engineering system | Native subagents, isolated owner worktree, independent reviewers, durable issues | Exact-commit review and tested pull request | #1 |
-| P1 | Live web research | Add credential-gated search provider retaining citations | Live smoke evidence with retrieval dates and exact cited URLs | #2 |
-| P1 | Live merchant data | Approved eBay access or configured Shopify store; refresh on selection | Exact variant, currency, region, price and stock checks | #2 |
+| P1 | Live web research | Normal Exa discovery with model-specific quotations, source links, observed prices and persistent admission limits | Independent runtime/security/visual checks and bounded genuine retrieval; useful comparison acceptance remains tracked | #2, #35 |
+| P1 | Live merchant data | Provider-independent verification interface; real adapters await authorized provider/store access | Genuine exact-variant, currency, region, price and availability proof; page excerpts cannot satisfy it | #2, #36 |
 | P1 | Durable personalization | Authentication and PostgreSQL when shared durable state is needed | Restart retention, ownership, deletion, migrations | #3 |
-| P1 | General language understanding | Structured model extraction behind provider boundary | Schema validation plus realistic semantic evaluations | #4 |
+| P2 | Language and evidence coverage | Bounded preference and source-evidence vocabulary with an independent corpus | Ambiguity, negative constraints, unsupported requests and cross-source conflicts; no arbitrary-language claim | #4 |
 | P2 | Broader categories | Add sourced specifications and reviewed relevance corpus | Cross-category and unsupported-category evaluations | #4 |
-| P2 | Cart handoff | Supported merchant cart only after product-link journey | Exact variant, quantity and region; no order placement | #2 |
+| Out of scope | Payments and order placement | No payment processing or automated purchases | Normal research exposes source links only | #2 |
 
 ## External dependencies
 
-[eBay production access](https://developer.ebay.com/api-docs/buy/static/buy-requirements.html) requires approval. [Shopify Storefront search](https://shopify.dev/docs/api/storefront/latest/queries/search) covers a configured shop. [Google Merchant API](https://developers.google.com/merchant/api/guides/products/overview) manages a merchant's catalog. None supplies an unrestricted shopping connector merely because its documentation is public.
+The user confirmed that no authorized eBay, Shopify or Best Buy integration is configured. Do not repeatedly request access. Continue Exa research and independently executable work while recording merchant verification as an external dependency.
 
-[OpenAI web search](https://developers.openai.com/api/docs/guides/tools-web-search) can supply research citations. Citations do not prove inventory. [Structured outputs](https://developers.openai.com/api/docs/guides/structured-outputs) can enforce output shape, but factual claims still require evidence.
+[eBay Buy access requirements](https://developer.ebay.com/api-docs/buy/static/buy-requirements.html) depend on the API and entitlement. [Shopify Storefront search](https://shopify.dev/docs/api/storefront/latest/queries/search) covers a configured shop. Public reachability alone does not establish permitted merchant use or working regional offers. The detailed [merchant evaluation](../.codex/pstack-runs/live-research/merchant-evaluation.md) records documentation evidence and its limits.
+
+Exa is the primary live product research API. Its returned page observations retain source links and complete quotations. A retrieval timestamp does not prove page freshness, stock, delivery or a current price. The initial Exa credit constraint is US$10; automated tests use local substitutes and spend no credits. Follow the orchestrator's separately recorded bounded live-proof allowance and never reset the shared ledger.
 
 ## Product principles as acceptance criteria
 

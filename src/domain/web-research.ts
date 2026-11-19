@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { PreferencesSchema, ProductIdSchema } from "./contracts";
+import { PreferencesSchema, ProductIdSchema } from "./legacy-contracts";
 
 const MAX_WEB_RESEARCH_RESULTS = 10;
 const MAX_WEB_RESEARCH_HIGHLIGHTS = 8_192;

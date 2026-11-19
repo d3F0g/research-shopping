@@ -1,6 +1,6 @@
 # Research + Shopping
 
-Fieldnote is a chat-first shopping assistant with fixture-backed comparisons and optional development-only Exa web context. It supports headphones and laptops in the Singapore sample catalog. Prices, availability, and product claims are labeled as synthetic data. The app does not read live inventory or place orders.
+Fieldnote is a chat-first product research assistant. Normal development requests use Exa to discover products and retrieve source-linked specifications and page-observed prices. Prices remain unverified observations. Stock, delivery and merchant offers are not verified. The app does not place orders or process payments.
 
 ## Run the app
 
@@ -10,6 +10,8 @@ Use Node.js 22.12 or newer. Use npm 11. The host npm 8 resolver crashed during t
 npx --yes npm@11.6.2 ci
 npm run dev
 ```
+
+Keep `EXA_API_KEY` in the ignored root `.env` and configure one absolute `EXA_RESEARCH_LEDGER_PATH` shared by all live checkouts. See [Exa setup](docs/exa-research.md). Missing configuration returns an honest unavailable response. It never substitutes sample products.
 
 Open `http://127.0.0.1:5173`. The API listens on `http://127.0.0.1:3000`.
 
@@ -33,7 +35,7 @@ Set `API_PORT` to change the Hono port. `PORT` is the API fallback. Set `WEB_POR
 
 ## Limits
 
-The deterministic parser understands a small set of product categories and constraints. The fixture catalog covers headphones and laptops in SGD for Singapore. US requests return an explicit limitation. Optional Exa web research returns source context separately from the sample catalog. The demo has no current merchant offers, shipping checks, saved account profile, payment, or order placement.
+The deterministic preference parser currently supports headphones and laptops with bounded constraints. Unsupported requirements remain explicit. Exa can return cached content; retrieval time does not establish page freshness or a current price. No authorized merchant API is configured, so live merchant verification remains open in [Issue #36](https://github.com/d3F0g/research-shopping/issues/36). The app has no current merchant offers, shipping checks, saved account profile, payment or order placement. Synthetic catalogs are restricted to automated tests.
 
 ## GitHub Actions CI
 
@@ -43,6 +45,6 @@ The workflow in [`.github/workflows/ci.yml`](.github/workflows/ci.yml) runs auto
 
 The conversation uses official shadcn/ui and AI Elements patterns with retained messages, contextual preference cards, a bottom composer, centralized themes, local Geist typography, concise product rows, expandable comparisons, safe citations and actual recorded provider outcomes. See [frontend architecture and provenance](docs/frontend-standard.md) and the [desktop/mobile screenshot gallery](artifacts/chat-first/gallery.md). The user approved PR #33's design. Routine changes follow the autonomous merge gates in AGENTS.md; future human design reviews require an explicitly designated milestone.
 
-## Exa web context
+## Exa research
 
-The API development process can read `EXA_API_KEY` from the ignored root `.env`. Use the explicit web-context action after a sample shortlist appears. Exa sources never change synthetic prices, stock, ranking, or merchant handoff. Production composition stays disabled. See [Exa setup and verification](docs/exa-research.md).
+A submitted research request makes at most one bounded Exa search. Ordinary replies, source disclosures and comparisons of held evidence make no paid requests. A durable local allowance protects development usage; it is not the Exa account balance or a provider-enforced charge cap. Production composition stays disabled. See [Exa setup and verification](docs/exa-research.md).
