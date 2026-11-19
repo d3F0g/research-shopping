@@ -90,6 +90,17 @@ describe("simple shopping without model interpretation", () => {
     expect(interpretIntent).not.toHaveBeenCalled();
   });
 
+  it.each([
+    "I want a power bank around S$30\u201340",
+    "I need a power bank around SGD30-40",
+    "I want a power bank about S$30\u201440",
+  ])("prepares explicit 30 to 40 money without model interpretation for %s", async (message) => {
+    const interpretIntent = vi.fn<IntentInterpreter>();
+    const result = await createResearchTurns({ interpretIntent }).turn({ phase: "prepare", message, preferences: defaultIntent(), operationId: randomUUID() }, new AbortController().signal);
+    expect(result).toMatchObject({ kind: "prepared", preferences: { productDescription: message, budget: { minimum: 30, amount: 40, currency: "SGD" }, pendingChange: null } });
+    expect(interpretIntent).not.toHaveBeenCalled();
+  });
+
   it("preserves both bounds and hard criteria when explicitly replacing the objective", async () => {
     const previous = {
       ...defaultIntent(),

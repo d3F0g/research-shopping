@@ -9,7 +9,7 @@ import { applyIntentActions, parseLocalIntentActions, type IntentInterpreter } f
 import type { ResearchQuota } from "./research-quota";
 
 const unavailableMessages: Record<ResearchUnavailableReason, string> = {
-  "intent-unavailable": "I could not safely interpret the complete message. Your accepted preferences and any pending question are unchanged. For a new search, submit the product on its own, then add requirements through the preference controls before requesting research.",
+  "intent-unavailable": "I could not safely interpret the complete message, so no part of it was applied. Your accepted preferences and any pending question are unchanged. This message needs additional interpretation, which is unavailable right now.",
   "not-configured":
     "Live research is not configured. No product results are available.",
   disabled:

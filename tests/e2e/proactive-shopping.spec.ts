@@ -11,7 +11,7 @@ async function send(page: Page, message: string) {
 }
 
 test("shows actual preparation and search activity with an attributed source illustration on desktop and mobile", async ({ page }, testInfo) => {
-  const preparationRequest = `${request}. Prefer portability.`;
+  const preparationRequest = "I want a powerbank; prefer portable; costs around $30-40";
   const native = powerbankAnswer();
   Object.assign(native.citations[0], { image: "https://images.example.com/synthetic-powerbank.svg" });
   const imageRequests: import("@playwright/test").Request[] = [];
