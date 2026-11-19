@@ -81,7 +81,12 @@ export function App() {
           >
             {theme === "dark" ? <Sun /> : <Moon />}
           </Button>
-          <Button variant="ghost" onClick={reset} aria-label="New chat">
+          <Button
+            variant="ghost"
+            onClick={reset}
+            disabled={!ready}
+            aria-label="New chat"
+          >
             <Plus />
             New chat
           </Button>
@@ -159,7 +164,7 @@ export function App() {
                           <Button
                             key={unit}
                             variant="outline"
-                            disabled={Boolean(activity)}
+                            disabled={!ready || Boolean(activity)}
                             onClick={() => send(unit, state.pending!.id)}
                           >
                             {unit}

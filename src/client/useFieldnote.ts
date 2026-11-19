@@ -21,6 +21,7 @@ export function useFieldnote() {
   );
   const [error, setError] = useState("");
   const [ready, setReady] = useState(false);
+  const [resetting, setResetting] = useState(false);
   const [focusMessage, setFocusMessage] = useState<string | null>(null);
   const accountRef = useRef(account);
   const generation = useRef(0);
@@ -81,7 +82,7 @@ export function useFieldnote() {
     edit?: PrepareInput["edit"],
     expectedRevision?: number,
   ) {
-    if (!text.trim() || !ready) return;
+    if (!text.trim() || !ready || resetting) return;
     preparing.current?.abort();
     const prepareController = new AbortController();
     preparing.current = prepareController;
@@ -178,6 +179,7 @@ export function useFieldnote() {
     preparing.current = null;
     active.current = null;
     setActivity(null);
+    setResetting(false);
   }
   async function stop() {
     interrupt();
@@ -204,28 +206,36 @@ export function useFieldnote() {
     }
   }
   async function reset() {
+    if (!ready || resetting) return;
     interrupt();
+    const ownGeneration = generation.current;
+    setResetting(true);
+    setDraft("");
+    setFocusMessage(null);
     setError("");
     try {
       const current = accountRef.current;
-      if (current.status === "signed-in")
-        acceptWorkspace(
-          await workspace({
-            phase: "new-chat",
-            revision: current.workspace.revision,
-            operationId: crypto.randomUUID(),
-          }),
+      if (current.status === "signed-in") {
+        const result = await workspace({
+          phase: "new-chat",
+          revision: current.workspace.revision,
+          operationId: crypto.randomUUID(),
+        });
+        if (ownGeneration === generation.current) acceptWorkspace(result);
+      } else {
+        const result = await api<{ state: ConversationState }>(
+          "/api/new-chat",
+          {},
         );
-      else
-        setState(
-          (await api<{ state: ConversationState }>("/api/new-chat", {})).state,
-        );
-      setDraft("");
-      setFocusMessage(null);
+        if (ownGeneration === generation.current) setState(result.state);
+      }
     } catch {
-      setError(
-        "The server could not start a new chat. Your history stays visible.",
-      );
+      if (ownGeneration === generation.current)
+        setError(
+          "The server could not start a new chat. Your history stays visible.",
+        );
+    } finally {
+      if (ownGeneration === generation.current) setResetting(false);
     }
   }
   async function authenticated() {
@@ -258,7 +268,7 @@ export function useFieldnote() {
     setDraft,
     activity,
     error,
-    ready,
+    ready: ready && !resetting,
     focusMessage,
     send,
     stop,

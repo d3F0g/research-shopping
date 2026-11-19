@@ -70,11 +70,15 @@ try {
     ).toHaveCount(0);
     await send(page, "hello");
     await expect(page.getByText("Hi. What are you looking to buy?", { exact: true })).toBeVisible();
+    const composer = page.getByRole("textbox", { name: "Message", exact: true });
+    await composer.fill("Fixture signed-in draft");
     const resetResponse = page.waitForResponse((response) => response.url().endsWith("/api/new-chat"));
     releaseReset();
     await resetResponse;
     await page.unroute("**/api/new-chat");
     await expect(page.getByText("Hi. What are you looking to buy?", { exact: true })).toBeVisible();
+    await expect(composer).toHaveValue("Fixture signed-in draft");
+    await expect(page.getByRole("button", { name: "Send message", exact: true })).toBeEnabled();
     const afterStaleReset = await page.request.get(`${runtime.origin}/api/account`).then((r) => r.json());
     assert.equal(afterStaleReset.status, "signed-in");
     assert.equal(afterStaleReset.workspace.state.messages.some((message) => message.text === "hello"), true);

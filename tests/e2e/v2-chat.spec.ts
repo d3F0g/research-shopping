@@ -291,7 +291,7 @@ for (const viewport of [
     page.on("request", (request) => {
       if (request.url().endsWith("/api/turn")) submissions.push(request.postDataJSON());
     });
-    await composer.fill("Fixture old unsent draft");
+    await composer.fill("SGD");
     await newChat.click();
     await held;
     try {
@@ -301,7 +301,7 @@ for (const viewport of [
       await expect(send).toBeDisabled();
       await expect(newChat).toBeDisabled();
       await composer.press("Enter");
-      await page.getByRole("button", { name: "SGD", exact: true }).click();
+      await expect(page.getByRole("button", { name: "SGD", exact: true })).toBeDisabled();
       await expect(composer).toHaveValue("SGD");
       expect(submissions).toEqual([]);
       expect(await calls()).toBe(baseline);
@@ -330,3 +330,37 @@ for (const viewport of [
     }
   });
 }
+
+test("a failed New chat keeps the new draft and history without retrying", async ({ page }) => {
+  await page.goto("/");
+  const composer = page.getByRole("textbox", { name: "Message", exact: true });
+  const send = page.getByRole("button", { name: "Send message", exact: true });
+  await composer.fill("hello");
+  await send.click();
+  await expect(page.getByText("Hi. What are you looking to buy?", { exact: true })).toBeVisible();
+  let release!: () => void;
+  let entered!: () => void;
+  let attempts = 0;
+  const held = new Promise<void>((resolve) => { entered = resolve; });
+  const gate = new Promise<void>((resolve) => { release = resolve; });
+  await page.route("**/api/new-chat", async (route) => {
+    attempts++;
+    entered();
+    await gate;
+    await route.fulfill({ status: 503, json: { error: "Fixture reset unavailable" } });
+  });
+  await page.getByRole("button", { name: "New chat", exact: true }).click();
+  await held;
+  try {
+    await composer.fill("Fixture draft after failed reset");
+    await expect(send).toBeDisabled();
+    release();
+    await expect(page.getByText("The server could not start a new chat. Your history stays visible.", { exact: true })).toBeVisible();
+    await expect(composer).toHaveValue("Fixture draft after failed reset");
+    await expect(page.getByText("Hi. What are you looking to buy?", { exact: true })).toBeVisible();
+    await expect(send).toBeEnabled();
+    expect(attempts).toBe(1);
+  } finally {
+    release();
+  }
+});
