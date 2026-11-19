@@ -46,21 +46,39 @@ export function useFieldnote() {
       setFocusMessage(result.workspace.state.messages.at(-1)?.id ?? null);
   }
   async function reload() {
+    const ownGeneration = generation.current;
+    const ownSubmission = submission.current;
     setReady(false);
     try {
       const next = await api<AccountState>("/api/account");
-      updateAccount(next);
+      if (
+        ownGeneration !== generation.current ||
+        ownSubmission !== submission.current
+      ) return;
       if (next.status === "unavailable") {
+        updateAccount(next);
         setError(
           "Account persistence is unavailable. Reload your account before continuing.",
         );
         return;
       }
-      if (next.status === "signed-in") setState(next.workspace.state);
-      else setState((await getSession()).state);
+      const nextState =
+        next.status === "signed-in"
+          ? next.workspace.state
+          : (await getSession()).state;
+      if (
+        ownGeneration !== generation.current ||
+        ownSubmission !== submission.current
+      ) return;
+      updateAccount(next);
+      setState(nextState);
       setError("");
       setReady(true);
     } catch {
+      if (
+        ownGeneration !== generation.current ||
+        ownSubmission !== submission.current
+      ) return;
       updateAccount({ status: "unavailable" });
       setError(
         "The server is unavailable. Your draft is retained. Reload your account when it returns.",
@@ -183,26 +201,31 @@ export function useFieldnote() {
   }
   async function stop() {
     interrupt();
+    const ownGeneration = generation.current;
     const current = accountRef.current;
     try {
       if (current.status === "signed-in") {
-        if (current.workspace.pendingOperationId)
-          acceptWorkspace(
-            await workspace({
-              phase: "cancel",
-              revision: current.workspace.revision,
-              operationId: crypto.randomUUID(),
-              target: current.workspace.pendingOperationId,
-            }),
-          );
-      } else
-        accept(
-          (await api<{ state: ConversationState }>("/api/cancel", {})).state,
+        if (current.workspace.pendingOperationId) {
+          const result = await workspace({
+            phase: "cancel",
+            revision: current.workspace.revision,
+            operationId: crypto.randomUUID(),
+            target: current.workspace.pendingOperationId,
+          });
+          if (ownGeneration === generation.current) acceptWorkspace(result);
+        }
+      } else {
+        const result = await api<{ state: ConversationState }>(
+          "/api/cancel",
+          {},
         );
+        if (ownGeneration === generation.current) accept(result.state);
+      }
     } catch {
-      setError(
-        "The server could not confirm cancellation. No automatic retry was sent.",
-      );
+      if (ownGeneration === generation.current)
+        setError(
+          "The server could not confirm cancellation. No automatic retry was sent.",
+        );
     }
   }
   async function reset() {
