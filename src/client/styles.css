@@ -936,3 +936,49 @@ button {
 .pending-change-actions button {
   white-space: normal;
 }
+.currency-choices {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+}
+.pending-message [data-slot="trace-title"] {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+.source-illustration {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 12px 0;
+}
+.source-illustration img,
+.source-illustration-fallback {
+  width: 64px;
+  height: 64px;
+  flex-shrink: 0;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--muted);
+  object-fit: contain;
+}
+.source-illustration-fallback {
+  display: grid;
+  place-items: center;
+  color: var(--muted-foreground);
+}
+.source-illustration-fallback svg {
+  width: 20px;
+  height: 20px;
+}
+.source-illustration figcaption {
+  min-width: 0;
+  font-size: 11px;
+  line-height: 1.5;
+  color: var(--muted-foreground);
+}
+.source-illustration figcaption > span {
+  display: block;
+}

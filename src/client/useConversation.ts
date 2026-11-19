@@ -15,12 +15,13 @@ import { runTurn } from "./api";
 
 type TurnBody =
   | { status: "cancelled" }
-  | { status: "pending"; key: number }
+  | { status: "pending"; key: number; phase: "prepare" | "research" }
   | { status: "complete"; value: ApplicationTurnResponse }
   | { status: "failed"; message: string };
 export type RequestSnapshot = Omit<PrepareTurnRequest, "phase" | "operationId">;
 export type ConversationTurn = {
   id: string;
+  operationId: string;
   request: RequestSnapshot;
   message: string;
   body: TurnBody;
@@ -54,7 +55,7 @@ type ConversationState = {
 export type ConversationCommand =
   | { type: "draft"; value: string }
   | { type: "submit"; message?: string }
-  | { type: "reply"; origin: string; message: string }
+  | { type: "reply"; origin: string; message: string; questionId?: string }
   | { type: "stop" | "reset" | "resolve-pending" | "discard-pending" }
   | {
       type: "retry" | "skip-budget" | "open-editor" | "compare";
@@ -122,6 +123,7 @@ export function useConversation() {
     [],
   );
   async function performTurn(id: string, request: RequestSnapshot) {
+    const turn = current.current.turns.find((item) => item.id === id)!;
     const pending = {
       key: ++sequence.current,
       controller: new AbortController(),
@@ -131,19 +133,23 @@ export function useConversation() {
       ...current.current,
       turns: current.current.turns.map((turn) =>
         turn.id === id
-          ? { ...turn, body: { status: "pending", key: pending.key } }
+          ? {
+              ...turn,
+              body: {
+                status: "pending",
+                key: pending.key,
+                phase: turn.prepared ? "research" : "prepare",
+              },
+            }
           : turn,
       ),
     });
     try {
-      const operationId = crypto.randomUUID();
-      let prepared = current.current.turns.find(
-        (turn) => turn.id === id,
-      )!.prepared;
+      let prepared = turn.prepared;
       let value =
         prepared ??
         (await runTurn(
-          { phase: "prepare", ...request, operationId },
+          { phase: "prepare", ...request, operationId: turn.operationId },
           pending.controller.signal,
         ));
       if (task.current?.key !== pending.key) return;
@@ -153,11 +159,21 @@ export function useConversation() {
           ...current.current,
           preferences: prepared.preferences,
           turns: current.current.turns.map((turn) =>
-            turn.id === id ? { ...turn, prepared } : turn,
+            turn.id === id
+              ? {
+                  ...turn,
+                  prepared,
+                  body: { status: "pending", key: pending.key, phase: "research" },
+                }
+              : turn,
           ),
         });
         value = await runTurn(
-          { phase: "research", preferences: prepared.preferences, operationId },
+          {
+            phase: "research",
+            preferences: prepared.preferences,
+            operationId: crypto.randomUUID(),
+          },
           pending.controller.signal,
         );
         if (task.current?.key !== pending.key) return;
@@ -171,7 +187,7 @@ export function useConversation() {
         ...current.current,
         preferences: value.preferences,
         activeTurnId: id,
-        retryTurnId: null,
+        retryTurnId: value.kind === "research-unavailable" && prepared ? id : null,
         turns: current.current.turns.map((turn) =>
           turn.id === id
             ? { ...turn, body: { status: "complete", value } }
@@ -210,6 +226,9 @@ export function useConversation() {
     const request: RequestSnapshot = {
       message: message.trim(),
       preferences: structuredClone(current.current.preferences),
+      ...(current.current.preferences.pendingChange
+        ? { questionId: current.current.preferences.pendingChange.id }
+        : {}),
       ...extra,
     };
     const id = `turn-${++turnSequence.current}`;
@@ -219,6 +238,7 @@ export function useConversation() {
         ...current.current.turns,
         {
           id,
+          operationId: crypto.randomUUID(),
           request,
           message: message.trim(),
           body: { status: "cancelled" },
@@ -241,7 +261,12 @@ export function useConversation() {
       case "submit":
         return submit(command.message ?? snapshot.draft);
       case "reply":
-        if (snapshot.activeTurnId === command.origin) submit(command.message);
+        if (
+          snapshot.activeTurnId === command.origin &&
+          (!command.questionId ||
+            command.questionId === snapshot.preferences.pendingChange?.id)
+        )
+          submit(command.message);
         return;
       case "compare":
         if (snapshot.activeTurnId === command.origin) submit("Compare options");

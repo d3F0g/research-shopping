@@ -1,4 +1,5 @@
-import { ArrowUpRight, BookOpen, ChevronDown, Search } from "lucide-react";
+import { useState } from "react";
+import { ArrowUpRight, BookOpen, ChevronDown, ImageOff, Search } from "lucide-react";
 import {
   choiceAssessment,
   eligibleForChoice,
@@ -9,6 +10,7 @@ import {
   type ResearchSource,
 } from "../domain/research";
 import type { ApplicationTurnResponse as Version3ApplicationTurnResponse } from "../domain/research-evidence-v3";
+import type { ApplicationTurnResponse as Version4ApplicationTurnResponse } from "../domain/research-evidence-v4";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -69,6 +71,36 @@ function Citation({ source }: { source: ResearchSource }) {
         <SourceLink source={source} />
       </HoverCardContent>
     </HoverCard>
+  );
+}
+function SourceIllustration({ source }: { source: ResearchSource | null }) {
+  const [failed, setFailed] = useState(false);
+  return (
+    <figure className="source-illustration">
+      {source?.imageUrl && !failed ? (
+        <img
+          src={source.imageUrl}
+          alt={`Source illustration from ${source.title}`}
+          loading="lazy"
+          referrerPolicy="no-referrer"
+          onError={() => setFailed(true)}
+        />
+      ) : (
+        <div className="source-illustration-fallback" role="img" aria-label="Source illustration unavailable">
+          <ImageOff aria-hidden="true" />
+        </div>
+      )}
+      <figcaption>
+        {source?.imageUrl && !failed ? (
+          <>
+            <SourceLink source={source} label="Source illustration" />
+            <span>Representative only. Exact variant unverified.</span>
+          </>
+        ) : (
+          <span>No source illustration available.</span>
+        )}
+      </figcaption>
+    </figure>
   );
 }
 const statusLabels: Record<Assessment["status"], string> = {
@@ -172,7 +204,7 @@ export function LiveResearchResults({
   outcome,
 }: {
   outcome: Extract<
-    ApplicationTurnResponse | Version3ApplicationTurnResponse,
+    ApplicationTurnResponse | Version3ApplicationTurnResponse | Version4ApplicationTurnResponse,
     { kind: "research" | "research-unavailable" }
   >;
 }) {
@@ -187,7 +219,7 @@ export function LiveResearchResults({
       </section>
     );
   const research = outcome.research;
-  const sourceById = new Map(
+  const sourceById = new Map<string, ResearchSource>(
     research.sources.map((source) => [source.id, source]),
   );
   const chosen = research.choice
@@ -226,7 +258,7 @@ export function LiveResearchResults({
         </div>
       ) : (
         <p className="assessment-summary" role="status">
-          {research.evidenceVersion === 4 &&
+          {research.evidenceVersion === 5 &&
           research.products.some((product) =>
             eligibleForChoice(product, research.intent),
           )
@@ -252,6 +284,11 @@ export function LiveResearchResults({
           const identitySource = product.identity.support[0]
             ? sourceById.get(product.identity.support[0].sourceId)!
             : null;
+          const illustrationSource = research.evidenceVersion === 5 && product.identity.status === "supported"
+            ? product.identity.support
+                .map((span) => sourceById.get(span.sourceId)!)
+                .find((source) => source.imageUrl) ?? null
+            : null;
           return (
             <Card
               className="product-card research-card"
@@ -268,6 +305,9 @@ export function LiveResearchResults({
                     </p>
                   </div>
                 </div>
+                {research.evidenceVersion === 5 && (
+                  <SourceIllustration source={illustrationSource} />
+                )}
                 <div className="observed-price">
                   <strong>
                     {exactPrice && product.price

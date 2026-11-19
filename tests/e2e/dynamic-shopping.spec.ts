@@ -7,7 +7,7 @@ import { syntheticComparison } from "./support/dynamic-fixture";
 
 function response(research = syntheticComparison()) {
   return {
-    responseVersion: 4 as const,
+    responseVersion: 5 as const,
     kind: "research" as const,
     answer: research.summary,
     preferences: research.intent,
@@ -179,7 +179,7 @@ test("sends original language without a client parser and asks only the server's
     return route.fulfill({
       json: incoming.skipBudget
         ? {
-            responseVersion: 4,
+            responseVersion: 5,
             kind: "research-unavailable",
             reason: "disabled",
             message: "Synthetic test. Research disabled.",
@@ -187,7 +187,7 @@ test("sends original language without a client parser and asks only the server's
             notes: [],
           }
         : {
-            responseVersion: 4,
+            responseVersion: 5,
             kind: "question",
             question: "budget",
             message: "Any budget in mind?",
@@ -248,7 +248,7 @@ test("saves explicit stable criterion edits without automatic research and keeps
     return route.fulfill({
       json: incoming.edit
         ? {
-            responseVersion: 4,
+            responseVersion: 5,
             kind: "message",
             message: "Synthetic test. Preferences updated without research.",
             preferences: edited,
@@ -257,7 +257,7 @@ test("saves explicit stable criterion edits without automatic research and keeps
         : requests.length === 1
           ? response(first)
           : {
-              responseVersion: 4,
+              responseVersion: 5,
               kind: "research-unavailable",
               message: "Synthetic test. Explicit comparison requested.",
               reason: "disabled",
@@ -361,7 +361,7 @@ test("blocks invalid budget drafts and removes only the explicit criterion", asy
     return route.fulfill({
       json: incoming.edit
         ? {
-            responseVersion: 4,
+            responseVersion: 5,
             kind: "message",
             message: "Synthetic edit accepted.",
             preferences: {
@@ -415,7 +415,7 @@ test("keeps ordinary replies ordinary and previous results immutable", async ({
         calls === 1
           ? response()
           : {
-              responseVersion: 4,
+              responseVersion: 5,
               kind: "message",
               message: "You're welcome.",
               preferences: syntheticComparison().intent,
@@ -553,7 +553,7 @@ test("keeps provider failure explicit without sample fallback or merchant action
   await page.route("**/api/turn", (route) =>
     route.fulfill({
       json: {
-        responseVersion: 4,
+        responseVersion: 5,
         kind: "research-unavailable",
         reason: "provider-error",
         message: "Synthetic provider error. No research result.",
@@ -644,7 +644,7 @@ test("recovers network failures with the original request snapshot and isolates 
     ).toBeVisible();
     expect(requests[1].message).toBe(requests[0].message);
     expect(requests[1].preferences).toEqual(requests[0].preferences);
-    expect(requests[1].operationId).not.toBe(requests[0].operationId);
+    expect(requests[1].operationId).toBe(requests[0].operationId);
     await other.goto("/");
     await expect(other.getByTestId("conversation-turn")).toHaveCount(0);
     await expect(
@@ -668,7 +668,7 @@ test("submits with Enter, retains Shift+Enter newlines and scrolls history witho
     requests.push(route.request().postDataJSON());
     return route.fulfill({
       json: {
-        responseVersion: 4,
+        responseVersion: 5,
         kind: "message",
         message: `Synthetic ordinary reply ${requests.length}. ${"Read the earlier conversation at your own pace. ".repeat(6)}`,
         preferences: defaultIntent(),
@@ -714,6 +714,9 @@ test("keeps pending-change controls and composer usable on short mobile screens 
 }, testInfo) => {
   await fixtureHealth(page);
   const pending = {
+    kind: "legacy" as const,
+    id: "synthetic-long-invalid-change",
+    originalRequest: "under 200CHF",
     message: `under 200CHF ${"with an unresolved qualifier ".repeat(55)}`,
     reason: "currency" as const,
     explanation:
@@ -731,14 +734,14 @@ test("keeps pending-change controls and composer usable on short mobile screens 
       json:
         incoming.edit?.kind === "discard-pending"
           ? {
-              responseVersion: 4,
+              responseVersion: 5,
               kind: "message",
               preferences: { ...preferences, pendingChange: null },
               notes: [],
               message: "Synthetic pending change explicitly discarded.",
             }
           : {
-              responseVersion: 4,
+              responseVersion: 5,
               kind: "clarification",
               preferences,
               notes: [],
@@ -806,7 +809,7 @@ test("does not accept a stale prepared intent or start research after its genera
     } else
       await route.fulfill({
         json: {
-          responseVersion: 4,
+          responseVersion: 5,
           kind: "message",
           message: "Synthetic ordinary acknowledgment.",
           preferences: defaultIntent(),

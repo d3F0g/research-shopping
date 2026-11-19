@@ -69,7 +69,7 @@ test("accepts necklace ranges through actual server and SDK, preserves editor bo
     expect(transport.requests[1]).toMatchObject({
       phase: "research",
       preferences: {
-        version: 4,
+        version: 5,
         budget: { minimum: 1000, amount: 2000, currency: "SGD" },
       },
     });
