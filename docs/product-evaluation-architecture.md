@@ -43,3 +43,15 @@ The project verification skill owns application-driving recipes and cleanup. The
 Baseline and later results pin application revision, evaluator revision, dataset and assertion versions, and provider material. A changed expectation is not a newly passing scenario. Comparison reports separate incompatible cases, newly passing cases, newly failing cases, unchanged failures and critical regressions.
 
 The first baseline is the unchanged normal application at `bb51c38748b35d838b44109d72ab4dc9a9847d8c`. The evaluation PR depends on application PR 38. It must integrate the eventual application head, rerun evaluation and receive independent exact-head verification before merging.
+
+## V5 separates interpretation from application behavior
+
+The current candidate is application `fd9d13793342cdd7e37686b09ae6c9ffd88bb69f`. V5 adds a structured intent interpreter, typed pending questions and versioned research responses. The original sixty conversations, milestones and every file under `baseline-v1/` remain frozen. Evaluation compatibility is implemented outside application source.
+
+The main offline run injects fixed intent operations through the application's public `IntentInterpreter` seam. An independent author received only the public conversations and operation schema. It did not receive expected states, grading rules, research replies or application outputs. The application still validates operations, resolves local answers, updates actual preferences and performs its normal Hono and Exa SDK workflow. Missing or mismatched proposals fail closed. Three declared symbolic removal targets may bind only to a unique actual prior criterion, with the binding recorded.
+
+These inputs supply interpretations rather than test model understanding. They also supply dispositions for feedback and held-evidence questions. An `acknowledge` proposal can avoid a research dispatch without answering the requested comparison. Such a result cannot establish improved conversational intelligence or useful comparison. Public-only input review records these limitations separately; it does not change frozen expectations to make the candidate pass.
+
+The sixty-case lane makes zero OpenAI HTTP requests. Separate bounded controls exercise the production OpenAI transport with fake credentials, loopback responses and isolated synthetic receipts. A receipt fixture is never rotated inside a dialog to evade its two-reservation limit. Neither lane reads the real environment, intent receipts or research ledger.
+
+The v4/v5 scorecard uses an explicit cross-contract bridge. Each report is validated by its own static validator, and embedded historical source remains audit data. The bridge requires all sixty unchanged cases and binds expectations, actions and research material. The existing same-contract comparator retains its stricter adapter and grading equality policy. The cross-contract result is descriptive because v4 used its parser and v5 receives supplied interpretations. Newly passing assertions under that changed treatment do not establish a causal improvement in model intelligence or live product usefulness.

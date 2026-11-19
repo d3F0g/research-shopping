@@ -45,9 +45,24 @@ The project [verification skill](../.agents/skills/verify-research-shopping/SKIL
 npm run eval:compare -- --baseline artifacts/product-evals/baseline-v1/report.json --candidate artifacts/product-evals/current/report.json --out artifacts/product-evals/comparison
 ```
 
-Reports use schema version 2 and assertion contract 2.0.0. Older provisional reports are rejected explicitly. Regenerate them instead of relabeling their schema. The comparison validates the bound contracts, material, checks and summary. Embedded evaluator source is audit data and is never executed. This consistency check does not cryptographically authenticate execution.
+The same-contract comparison validates bound contracts, material, checks and summary, and requires matching adapter and grading inputs. Embedded evaluator source is audit data and is never executed. This consistency check does not cryptographically authenticate execution. Never relabel a historical report or regenerate the frozen baseline to obtain compatibility.
 
 Read `comparison.json` for newly passing cases, newly failing cases, unchanged failures and critical regressions. Changed dataset, requirement, grading, adapter or material hashes make cases incompatible. Do not rename or weaken an expectation to claim improvement. A same-application comparison proves comparison mechanics, not product progress.
+
+## Compare the frozen v4 baseline with v5
+
+The frozen v4 report retains schema 2 and assertion contract 2.0.0. Current v5 reports use schema 3 and assertion contract 3.0.0. Use the explicit cross-contract bridge rather than weakening the same-contract comparator.
+
+```sh
+npm run eval -- --out artifacts/product-evals/candidate-v5 --application-commit fd9d13793342cdd7e37686b09ae6c9ffd88bb69f --issue-drafts
+npm run eval:scorecard -- --baseline artifacts/product-evals/baseline-v1/report.json --candidate artifacts/product-evals/candidate-v5/report.json --out artifacts/product-evals/comparison-v4-v5
+```
+
+Both reports must contain all sixty unchanged cases, expectations, actions and matching research material. Each report is validated separately. The scorecard retains original verdicts and distinguishes newly passing, still failing, pass-to-fail regressions, newly observed failures and lost assessment. Read per-case supplied-interpretation limitations as well as aggregate counts.
+
+The v5 lane supplies independently authored synthetic intent proposals through the public interpreter interface. It uses actual application state reduction, Hono requests and Exa SDK loopback transport, with zero OpenAI HTTP requests. Fixed proposals are not genuine model recordings. The v4/v5 comparison therefore describes different interpretation treatments. A newly passing technical assertion cannot establish better live understanding, tool selection, product discovery or useful recommendations. Separate fake-key transport controls exercise the production OpenAI boundary with isolated synthetic receipts.
+
+The original baseline, dataset and milestones stay byte-for-byte unchanged. Keep legacy failures caused by changed product policy, such as proactive no-budget research, in the frozen scorecard and discuss their interpretation separately. Never edit expectations to turn those results green.
 
 ## Obtain an independent semantic judgment
 
