@@ -66,9 +66,9 @@ jobs:
         with:
           name: research-shopping-browser-evidence
           path: |
-            artifacts/screenshots/
-            artifacts/chat-first/application/
             artifacts/playwright-results/
-            artifacts/fieldnote-v2/
-            artifacts/verification-skill/
+            artifacts/fieldnote-v2/accounts/
+            artifacts/fieldnote-v2/*.png
+            artifacts/fieldnote-v2/conversation-polish/*.png
+            artifacts/fieldnote-v2/conversation-polish/*-proof.json
           if-no-files-found: ignore
