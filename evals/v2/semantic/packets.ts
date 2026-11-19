@@ -38,7 +38,7 @@ export function exportPackets(report: RunReport, limit: number, anchors: Anchor[
     for (const turn of observation.turns) {
       conversation.push({ role: "user", text: turn.action.kind === "message" || turn.action.kind === "cancel" ? turn.action.text : turn.action.kind });
       const research = object(turn.response?.research);
-      conversation.push({ role: "assistant", text: turn.response?.message ?? turn.response?.answer ?? "No completed assistant response was observed.", products: research.products ?? [], choice: research.choice ?? null, structuredPreferences: { productDescription: turn.finalPreferences.productDescription, budget: turn.finalPreferences.budget, criteria: turn.finalPreferences.criteria, responseLength: turn.finalPreferences.responseLength }, providerDispatchCount: turn.providerCalls });
+      conversation.push({ role: "assistant", text: turn.response?.message ?? turn.response?.answer ?? research.summary ?? "No completed assistant response was observed.", products: research.products ?? [], choice: research.choice ?? null, structuredPreferences: { productDescription: turn.finalPreferences.productDescription, budget: turn.finalPreferences.budget, criteria: turn.finalPreferences.criteria, responseLength: turn.finalPreferences.responseLength }, providerDispatchCount: turn.providerCalls });
       if (Array.isArray(research.sources)) sources.push(...research.sources);
     }
     add(conversation, sources, [observation.material.label, ...observation.material.provenance.filter((value) => value.startsWith("Per-turn suitability") || value.startsWith("Input suitability gap"))].join(" "), { caseId: row.id, calibrationId: null, referenceScores: null, disputes: null });
