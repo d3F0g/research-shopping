@@ -47,7 +47,7 @@ test("semantic importer rejects unknown dimensions and omitted packets", async (
   assert.throws(() => importJudgments(raw, [...packets, { ...packets[0]!, label: "a".repeat(24) }], manifest), /Every exported packet/);
 });
 
-test("completed research packets retain actual response prose and bind it to their hash", async () => {
+test("research and held-reply packets retain actual prose, disclosures and hashes", async () => {
   const { scenarios } = await loadDataset();
   const scenario = scenarios.find((scenario) => scenario.id === "FN-RT-002")!;
   const input = scenarioMaterial(scenario.provider, scenario.id);
@@ -72,4 +72,20 @@ test("completed research packets retain actual response prose and bind it to the
   const changed = structuredClone(payload);
   (changed.conversation as Record<string, Json>[])[completed.index * 2 + 1]!.text = "Changed synthetic response";
   assert.notEqual(hash(changed), packetHash);
+  const held = observation.rawTurns.find((turn) => turn.response?.kind === "message" && turn.response.state.messages.at(-1)?.detail);
+  assert(held?.response?.kind === "message");
+  const message = held.response.state.messages.at(-1)!;
+  const exportedHeld = conversation[held.index * 2 + 1]!;
+  assert.equal(exportedHeld.text, held.response.message);
+  assert.notEqual(exportedHeld.text, message.detail);
+  assert.deepEqual(exportedHeld.disclosedDetail, { label: "Full evidence and conditions", visibility: "collapsed-by-default", text: message.detail });
+  const detailChanged = structuredClone(payload);
+  ((detailChanged.conversation as Record<string, Json>[])[held.index * 2 + 1]!.disclosedDetail as Record<string, Json>).text = "Changed synthetic disclosure";
+  assert.notEqual(hash(detailChanged), packetHash);
+  const mismatched = structuredClone(report);
+  const mismatchedResponse = mismatched.cases[0]!.observation!.turns.find((turn) => turn.index === held.index)!.response!;
+  const messages = (mismatchedResponse.state as Record<string, Json>).messages as Record<string, Json>[];
+  messages.at(-1)!.text = "A different visible reply";
+  assert.throws(() => exportPackets(mismatched, 1), /differs from actual V2 state/);
+  assert.equal(assistant.disclosedDetail, undefined);
 });
