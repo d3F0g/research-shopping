@@ -1,0 +1,16 @@
+{
+  "supported": "Three clearly labelled synthetic products. Exact product and variant identity, matching request evidence, complete quoted passages, explicit requested currency, resolved price conditions, valid safe HTTPS source URLs. Stock and delivery remain unknown. At least one candidate satisfies every explicit hard criterion.",
+  "mixed-fit": "Three clearly labelled synthetic products. One supported fit, one contradictory fit, one unknown fit. Each difference has source text. Do not construct the expected choice by invoking application eligibility code.",
+  "held-comparison": "Three distinctly named synthetic candidates with stable IDs, different supported tradeoffs, and retained safe source quotations. Capture actual displayed order before resolving ordinal references.",
+  "empty": "Successful provider response with no product evidence. Never replace it with fixture catalog results.",
+  "missing-config": "Provider composition unavailable. No network dispatch and no fallback catalog.",
+  "conflict": "Two retained complete source passages contradict one another about the same exact variant and criterion.",
+  "conditional-price": "An ordinary price outside budget and a lower members-only, voucher, subscription, quantity, or variant-dependent price whose eligibility is unresolved.",
+  "unknown": "Realistic synthetic product identity evidence exists, but specified request, hard criterion, specification, or price evidence is absent.",
+  "timeout": "Local provider double starts and then times out. Its dispatch and cancellation are observable. No billable provider is involved.",
+  "delayed": "Local provider double exposes start, abort, and late-resolution controls so cancellation can be tested.",
+  "hostile-source": "Explicitly synthetic source text contains prompt injection and unsafe links among ordinary evidence.",
+  "truncated": "Source payload records actual truncation before a material qualifier. Retained text cannot establish completeness.",
+  "bare-currency": "Source contains a dollar price without an explicit ISO currency or unambiguous currency name. Location and hostname are not currency proof.",
+  "variant-mismatch": "Product-family or sibling-variant evidence exists, but the selected variant lacks the claimed specification or qualifying price."
+}

@@ -12,7 +12,15 @@
     "test": "EXA_RESEARCH_ENABLED=false vitest run",
     "test:watch": "EXA_RESEARCH_ENABLED=false vitest",
     "test:e2e": "NODE_ENV=test FIELDNOTE_TEST_FIXTURES=true EXA_RESEARCH_ENABLED=false playwright test",
-    "verify:offline": "NODE_ENV=test FIELDNOTE_TEST_FIXTURES=true EXA_RESEARCH_ENABLED=false node .agents/skills/verify-research-shopping/scripts/smoke.mjs"
+    "verify:offline": "NODE_ENV=test FIELDNOTE_TEST_FIXTURES=true EXA_RESEARCH_ENABLED=false node .agents/skills/verify-research-shopping/scripts/smoke.mjs",
+    "eval": "EXA_RESEARCH_ENABLED=false node --import tsx evals/run.ts",
+    "eval:ci": "npm run eval:test && npm run eval -- --gate report",
+    "eval:typecheck": "tsc --noEmit -p evals/tsconfig.json",
+    "eval:test": "EXA_RESEARCH_ENABLED=false node --import tsx --test evals/tests/*.test.ts",
+    "eval:compare": "EXA_RESEARCH_ENABLED=false node --import tsx evals/run.ts --compare",
+    "eval:browser": "EXA_RESEARCH_ENABLED=false node --import tsx evals/browser/run.ts",
+    "eval:judge": "EXA_RESEARCH_ENABLED=false node --import tsx evals/semantic/run.ts",
+    "eval:live": "EXA_RESEARCH_ENABLED=false node --import tsx evals/live.ts"
   },
   "dependencies": {
     "@base-ui/react": "^1.9.0",
