@@ -1,7 +1,8 @@
 import { constants } from "node:fs";
 import { lstat, open, opendir, realpath, unlink } from "node:fs/promises";
 import { randomUUID } from "node:crypto";
-import { isAbsolute, join, resolve } from "node:path";
+import { basename, dirname, isAbsolute, join, relative, resolve, sep } from "node:path";
+import { fileURLToPath } from "node:url";
 import type { ExaDiagnosticRecord } from "./exa-research";
 
 const MAX_BYTES = 2 * 1024 * 1024;
@@ -81,10 +82,31 @@ function recordText(record: ExaDiagnosticRecord): string {
     }
   }
 }
+function within(path: string, parent: string) {
+  const child = relative(parent, path);
+  return child === "" || (child !== ".." && !child.startsWith(`..${sep}`) && !isAbsolute(child));
+}
+async function outsideRepositories(path: string) {
+  const project = await realpath(fileURLToPath(new URL("../../", import.meta.url)));
+  if (within(path, project) || within(path, await realpath(process.cwd()))) return false;
+  let ancestor = path;
+  while (true) {
+    if (["artifacts", "history", "public"].includes(basename(ancestor).toLowerCase())) return false;
+    try {
+      await lstat(join(ancestor, ".git"));
+      return false;
+    } catch (error) {
+      if ((error as NodeJS.ErrnoException).code !== "ENOENT") throw error;
+    }
+    const parent = dirname(ancestor);
+    if (parent === ancestor) return true;
+    ancestor = parent;
+  }
+}
 async function privateDirectory(path: string) {
   const stat = await lstat(path);
   return stat.isDirectory() && !stat.isSymbolicLink() && stat.uid === process.getuid?.() &&
-    (stat.mode & 0o7777) === 0o700 && await realpath(path) === resolve(path);
+    (stat.mode & 0o7777) === 0o700 && await realpath(path) === resolve(path) && await outsideRepositories(path);
 }
 async function existingCaptures(path: string): Promise<{ count: number; bytes: number } | null> {
   let count = 0;

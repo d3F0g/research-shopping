@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it } from "vitest";
-import { chmod, link, lstat, mkdtemp, readFile, readdir, realpath, rm, symlink, writeFile } from "node:fs/promises";
+import { chmod, link, lstat, mkdir, mkdtemp, readFile, readdir, realpath, rm, symlink, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { randomUUID } from "node:crypto";
@@ -109,6 +109,31 @@ describe("opt-in private Exa diagnostics", () => {
     await createExaDiagnosticWriter(path)!(record());
     expect(await readdir(path)).toHaveLength(1);
     expect(await readFile(outside, "utf8")).toBe("Fixture outside data");
+  });
+  it.each(["file", "directory", "symlink"])("rejects a capture under an ancestor .git %s", async (kind) => {
+    const root = await directory();
+    const path = join(root, "captures");
+    await mkdir(path, { mode: 0o700 });
+    if (kind === "file") await writeFile(join(root, ".git"), "gitdir: fixture", { mode: 0o600 });
+    if (kind === "directory") await mkdir(join(root, ".git"));
+    if (kind === "symlink") await symlink("fixture-missing-git", join(root, ".git"));
+    await createExaDiagnosticWriter(path)!(record());
+    expect(await readdir(path)).toEqual([]);
+  });
+  it.each(["artifacts", "history", "public"])("rejects the reserved %s ancestor outside a repository", async (name) => {
+    const root = await directory();
+    const path = join(root, name, "captures");
+    await mkdir(path, { mode: 0o700, recursive: true });
+    await chmod(path, 0o700);
+    await createExaDiagnosticWriter(path)!(record());
+    expect(await readdir(path)).toEqual([]);
+  });
+  it("rejects capture within the current source checkout", async () => {
+    const path = await mkdtemp(join(process.cwd(), ".diagnostic-test-"));
+    directories.push(path);
+    await chmod(path, 0o700);
+    await createExaDiagnosticWriter(path)!(record());
+    expect(await readdir(path)).toEqual([]);
   });
   it("serializes concurrent writers without exceeding the directory cap", async () => {
     const path = await directory();
