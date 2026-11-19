@@ -265,3 +265,39 @@ it("uses the explicit budget currency for monetary evidence when no native price
   expect(result.research.products[0]!.requestMatch.support).toHaveLength(1);
   expect(result.research.products[0]!.requestMatch.status).toBe("unknown");
 });
+
+describe("monetary token boundaries", () => {
+  const quotes = [
+    ...[" ", "\n", "\t", "\r\n", "\u00a0", "  \t"].flatMap((space) => [
+      `35 Singapore${space}dollars`,
+      `United${space}States${space}dollars35`,
+    ]),
+    "SGD35 x 3", "SGD35x3", "3 X SGD35", "SGD35 X 3 x 2",
+    "SGD35 per item", "SGD35 per piece", "SGD35 for one item", "SGD35 for 3 pieces",
+    "SGD35 per\nitem", "SGD35 for\t3\tunits", "SGD35 including\ntax",
+  ];
+  it.each(quotes)("withholds complete fit from monetary tokens %j without altering the reported quote", (quote) => {
+    const request = { ...initialConversation().intent, productDescription: "Fixture USB-C powerbank", budget: null };
+    const material = nativeMaterial(request);
+    material.citations[0]!.text += `\n\nFixture monetary note: ${quote}.`;
+    material.answer.products[0]!.requestMatch.support = [{ url: material.citations[0]!.url, quote }];
+    const result = projectExaAnswer(material, request);
+    if (result.status !== "ready") throw new Error("Expected fixture comparison");
+    const product = result.research.products[0]!;
+    expect(product.requestMatch.support[0]).toMatchObject({ origin: { kind: "provider", reportedQuote: quote }, literal: { text: quote } });
+    expect(product.requestMatch.status).toBe("unknown");
+    expect(product.eligible).toBe(false);
+    expect(result.research.choice).toBeNull();
+    expect(result.research.sources[0]!.text).toBe(material.citations[0]!.text);
+  });
+  it.each(["X35", "RTX4080x3", "35 X-ray", "Orinth 35 x 3 spectrometer", "SGD35 for Orinth lunar spectrometer"])("retains open objective or model text %j beside numeric and monetary tokens", (quote) => {
+    const request = { ...initialConversation().intent, productDescription: `Fixture ${quote}`, budget: null };
+    const material = nativeMaterial(request);
+    material.citations[0]!.text = `Fixture data. ${quote}.\n\n${material.citations[0]!.text}`;
+    material.answer.products[0]!.requestMatch.support = [{ url: material.citations[0]!.url, quote }];
+    const result = projectExaAnswer(material, request);
+    if (result.status !== "ready") throw new Error("Expected fixture comparison");
+    expect(result.research.products[0]!.requestMatch.status).toBe("supported");
+    expect(result.research.products[0]!.requestMatch.support[0]).toMatchObject({ origin: { reportedQuote: quote }, literal: { text: quote } });
+  });
+});
