@@ -2,6 +2,12 @@
 
 Use the repository's Node.js 22 and npm 11 environment. Run these commands from the evaluation checkout. All routine commands use fixed synthetic local inputs and block external research traffic. They do not load the private environment or use the persistent research ledger.
 
+Install Chromium before infrastructure tests or browser journeys if it is absent. The integrity tests include a real responsive-layout check.
+
+```sh
+npx playwright install chromium
+```
+
 ## Capture a run
 
 ```sh
@@ -38,6 +44,8 @@ The project [verification skill](../.agents/skills/verify-research-shopping/SKIL
 ```sh
 npm run eval:compare -- --baseline artifacts/product-evals/baseline-v1/report.json --candidate artifacts/product-evals/current/report.json --out artifacts/product-evals/comparison
 ```
+
+Reports use schema version 2 and assertion contract 2.0.0. Older provisional reports are rejected explicitly. Regenerate them instead of relabeling their schema. The comparison validates the bound contracts, material, checks and summary. Embedded evaluator source is audit data and is never executed. This consistency check does not cryptographically authenticate execution.
 
 Read `comparison.json` for newly passing cases, newly failing cases, unchanged failures and critical regressions. Changed dataset, requirement, grading, adapter or material hashes make cases incompatible. Do not rename or weaken an expectation to claim improvement. A same-application comparison proves comparison mechanics, not product progress.
 

@@ -170,3 +170,5 @@ artifacts/product-evals/judge-demo/
 artifacts/product-evals/verification-repaired/
 artifacts/product-evals/interrupted-smoke/
 artifacts/product-evals/integrity-fix-owner/
+
+artifacts/product-evals/baseline/existing-browser/
