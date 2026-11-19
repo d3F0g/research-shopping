@@ -161,7 +161,8 @@ function bindAssessment(
   let truncated = false,
     instructed = false;
   for (const span of value.support) {
-    const source = sources.find((s) => s.url === span.url),
+    const url = isSafeSourceUrl(span.url) ? new URL(span.url).href : null;
+    const source = sources.find((s) => s.url === url),
       start = source?.text.indexOf(span.quote) ?? -1;
     if (!source || start < 0)
       return unknown("The quotation was not found at its retained source URL.");
@@ -479,7 +480,12 @@ export function createExaProductResearch(
     signal.throwIfAborted();
     try {
       const response = await exa.answer(
-        intent.productDescription,
+        JSON.stringify({
+          productDescription: intent.productDescription,
+          budget: intent.budget,
+          requirements: intent.requirements.map(({ text, strength }) => ({ text, strength })),
+          region: intent.region,
+        }),
         {
           text: true,
           outputSchema: z.toJSONSchema(NativeAnswerSchema),

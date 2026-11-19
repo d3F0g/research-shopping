@@ -58,7 +58,12 @@ describe("real SDK transport and bounded evidence", () => {
       calls++;
       expect(req.url).toBe("/answer");
       const request = JSON.parse(body);
-      expect(request.query).toBe(current.productDescription);
+      expect(JSON.parse(request.query)).toEqual({
+        productDescription: current.productDescription,
+        budget: current.budget,
+        requirements: current.requirements.map(({ text, strength }) => ({ text, strength })),
+        region: current.region,
+      });
       expect(request.text).toBe(true);
       expect(request.outputSchema).toBeTruthy();
       expect(

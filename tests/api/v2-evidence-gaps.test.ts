@@ -111,6 +111,29 @@ describe("shopping retrieval and ordinary source price blocks", () => {
     expect(result.research.products[0]!.identity.status).toBe("supported");
     expect(result.research.choice?.productId).toBe("model-a");
   });
+  it.each(["https://user:password@manufacturer.com/", "https://manufacturer.com/?variant=other", "https://manufacturer.com/#other", "javascript:alert(1)"])(
+    "does not bind unsafe or distinct support URL %s", (url) => {
+      const current = reduceTurn(initialConversation(), {
+        phase: "prepare", operationId: randomUUID(), message: "a USB-C powerbank between SGD30 and40",
+      }).state.intent;
+      const material = nativeMaterial(current);
+      material.answer.products[0]!.identity.support[0]!.url = url;
+      const result = projectExaAnswer(material, current);
+      if (result.status !== "ready") throw new Error("No comparison");
+      expect(result.research.choice).toBeNull();
+      expect(result.research.products[0]!.identity.status).toBe("unknown");
+    },
+  );
+  it("does not erase conflicting text at equivalent canonical citation URLs", () => {
+    const current = reduceTurn(initialConversation(), {
+      phase: "prepare", operationId: randomUUID(), message: "a USB-C powerbank between SGD30 and40",
+    }).state.intent;
+    const material = nativeMaterial(current);
+    material.citations[0]!.url = "https://manufacturer.com";
+    material.answer.products[0]!.identity.support[0]!.url = "https://manufacturer.com/";
+    material.citations.push({ ...material.citations[0]!, url: "https://manufacturer.com/", text: "Fixture data: Model A costs SGD65, not SGD35." });
+    expect(projectExaAnswer(material, current).status).toBe("unavailable");
+  });
   it("retains a single exact product-heading price block as an observed price", () => {
     const intent = sunglassesIntent();
     const result = projectExaAnswer(merchantMaterial(intent,
