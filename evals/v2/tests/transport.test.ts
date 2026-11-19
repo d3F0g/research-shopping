@@ -235,3 +235,28 @@ test("whitespace bindings preserve actual native reports and expose the historic
     assert.equal(observed.cleanup, true);
   } finally { guard.close(); }
 });
+
+test("current provenance accepts equivalent object and JSON-string SDK answers", async () => {
+  const { catalogMaterial } = await import("../../../tests/helpers/v3-catalog-material");
+  const { initialConversation } = await import("../../../src/domain/conversation");
+  const { validCurrentProvenance } = await import("../provenance");
+  const native = catalogMaterial(initialConversation().intent);
+  const guard = offlineNetwork();
+  try {
+    for (const answer of [native.answer, JSON.stringify(native.answer)]) {
+      const input = { ...material("powerbank"), id: "fixture-answer-encoding", body: JSON.parse(JSON.stringify({ ...native, answer })) as Json };
+      input.sha256 = materialPayloadHash(input);
+      const observed = await observe(scenario(["Find fixture sunglasses between SGD800 and1000"]), input, guard);
+      const response = observed.rawTurns[0]!.response;
+      assert.equal(response?.kind, "research");
+      if (response?.kind !== "research") throw new Error("Expected fixture comparison");
+      const product = response.research.products[0]!;
+      assert.equal(validCurrentProvenance(response.research, product, input.body), true);
+      for (const invalid of ["{", "null", "[]", "{}", " ".repeat(128001) + JSON.stringify(native.answer)]) {
+        assert.equal(validCurrentProvenance(response.research, product, { ...native, answer: invalid } as unknown as Json), false);
+      }
+      assert.equal(observed.network.externalRequests, 0);
+      assert.equal(observed.cleanup, true);
+    }
+  } finally { guard.close(); }
+});
