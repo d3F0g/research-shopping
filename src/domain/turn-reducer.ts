@@ -1,5 +1,5 @@
 import { assessProduct } from "./research";
-import { BudgetSchema, MoneySchema, type ConversationState, type PrepareInput, type ShoppingIntent, type TurnDecision } from "./conversation";
+import { BudgetSchema, MoneySchema, type ConversationState, type PrepareInput, type Requirement, type ShoppingIntent, type TurnDecision } from "./conversation";
 
 const normalize = (value: string) => value.trim().replace(/[.!?]+$/, "").toLowerCase();
 const currency = (value: string) => ({ "s$": "SGD", "us$": "USD", "€": "EUR", "£": "GBP", "sgd": "SGD", "usd": "USD", "eur": "EUR", "gbp": "GBP", "aud": "AUD", "cad": "CAD", "myr": "MYR", "jpy": "JPY", "inr": "INR" }[value.toLowerCase()] ?? null);
@@ -23,16 +23,71 @@ function monetaryDraft(text: string): { minimum?: number; maximum?: number; curr
 }
 
 function lastResearch(state: ConversationState) { return [...state.messages].reverse().find((m) => m.research)?.research; }
-function heldReply(state: ConversationState, mode: "compare" | "best" | "battery"): string {
+
+type LocalOperation = "short" | "detail" | "compare" | "best" | "held-question" | "cheaper" | "selection" | "remember" | "sources" | "theme" | "help" | "error" | "cancel" | "status" | "dissatisfied" | "retry";
+const localOperations: { kind: LocalOperation; matches: RegExp }[] = [
+  { kind: "short", matches: /^(?:keep it short|shorter|less detail)$/i },
+  { kind: "detail", matches: /^(?:(?:show|give) me )?more details?$/i },
+  { kind: "theme", matches: /^(?:thanks[.,]?\s*)?(?:how do i|how can i) change the theme$/i },
+  { kind: "help", matches: /^(?:help|what can you do|how does this work)$/i },
+  { kind: "remember", matches: /^what do you remember about my (?:requirements|preferences)$/i },
+  { kind: "sources", matches: /^(?:open|show)(?: me)? (?:the )?(?:supporting )?sources?\b/i },
+  { kind: "error", matches: /^(?:the (?:search|research) failed[.,]?\s*)?(?:what happened|why did (?:the )?(?:search|research) fail)$/i },
+  { kind: "cancel", matches: /^(?:cancel that|stop(?: (?:the )?research)?)$/i },
+  { kind: "status", matches: /^(?:did it stop|has it stopped|is it cancelled)$/i },
+  { kind: "retry", matches: /^(?:retry|try again(?: once)?|refresh|research again)$/i },
+  { kind: "dissatisfied", matches: /^(?:i (?:don't|do not) like (?:any of )?(?:these|those)|not happy with (?:these|those))$/i },
+  { kind: "best", matches: /^(?:(?:just )?(?:give|show) me the best one|best one|which(?: one)? is best(?: overall)?)$/i },
+  { kind: "compare", matches: /^compare (?:the |their |them|these|current )/i },
+  { kind: "cheaper", matches: /^(?:something cheaper|the lower-priced options within that range are fine)$/i },
+  { kind: "selection", matches: /^(?:i like .+|don't change my existing budget)(?:[.,].*)?$/i },
+  { kind: "held-question", matches: /^(?:what about |which (?:one |has |is |of )|why is |is that one |i mean the |battery life$)/i },
+];
+
+function requirementClauses(text: string, userId: string, request: boolean): Requirement[] {
+  const clauses = text.split(/(?<=[.!?;])\s+/);
+  const flexible = (clause: string) => /\b(?:would be nice|(?:i(?:'d| would)? )?prefer|rather avoid)\b/i.test(clause) && !/\b(?:must|essential|required|no |without|only )\b/i.test(clause);
+  const soft = clauses.filter(flexible);
+  const hard = clauses.filter((clause) => !flexible(clause)).join(" ");
+  return [
+    ...(hard ? [{ id: `${request ? "request" : "requirement"}-${userId}`, text: hard, strength: "hard" as const, originMessageId: userId, kind: request ? "request" as const : /^(?:no|avoid|exclude|without)\b/i.test(hard) ? "exclusion" as const : "preference" as const }] : []),
+    ...soft.map((clause, index) => ({ id: `flexible-${userId}-${index}`, text: clause, strength: "flexible" as const, originMessageId: userId, kind: "preference" as const })),
+  ];
+}
+
+function heldReply(state: ConversationState, mode: "compare" | "best" | "detail" | "held-question" | "cheaper", question = ""): string {
   const research = lastResearch(state);
-  if (!research) return "There is no research in this conversation yet. Tell me what you want to buy.";
-  if (mode === "best" && JSON.stringify({ ...research.intent, responseLength: null }) !== JSON.stringify({ ...state.intent, responseLength: null })) return "The retained comparison belongs to earlier requirements. I cannot reuse its recommendation for your current request.";
-  if (mode === "best") return research.choice && assessProduct(research.products.find((p) => p.id === research.choice!.productId)!, state.intent).eligible ? `${research.products.find((p) => p.id === research.choice!.productId)!.name}. ${research.choice.rationale}` : "I cannot choose a compliant best option from this evidence. The unresolved requirements are shown with each product.";
-  const products = mode === "compare" ? research.products.slice(0, 2) : research.products;
-  return products.map((p) => {
-    const rows = mode === "battery" ? p.attributes.filter((a) => /battery|runtime|hours/i.test(a.name)) : p.attributes.slice(0, 2);
-    return `${p.name}: ${rows.length ? rows.map((a) => `${a.name}: ${a.assessment.rationale} (${a.assessment.status})`).join("; ") : "No supported detail was retained for this question."}${p.blockers.length ? ` Unresolved: ${p.blockers.join(" ")}` : ""}`;
-  }).join("\n\n");
+  if (!research) return "There is no retained research for this question. Your request is unchanged. Submit research explicitly when you want new evidence.";
+  const previousQuestion = [...state.messages].reverse().find((message) => message.role === "user" && message.text !== question)?.text ?? "";
+  const subject = /^i mean the /i.test(question) ? `${previousQuestion} ${question}` : question;
+  const ordinals = /\bfirst two\b/i.test(subject) ? [0, 1] : [...subject.matchAll(/\b(first|second|third)\b/gi)].map((match) => ({ first: 0, second: 1, third: 2 }[match[1]!.toLowerCase()]!));
+  if (/\bthat one\b/i.test(subject) && !ordinals.length && research.products.length > 1) return "Which displayed option do you mean, the first, second, or third? I will use its retained evidence.";
+  const selected = ordinals.length ? research.products.filter((_, index) => ordinals.includes(index)) : research.products;
+  if (!selected.length || ordinals.some((index) => !research.products[index])) return "That option is not present in the retained comparison.";
+  const current = selected.map((product) => {
+    const unchanged = state.intent.requirements.filter((requirement) => requirement.strength === "hard").every((requirement) => research.intent.requirements.some((prior) => prior.id === requirement.id && prior.text === requirement.text && prior.strength === "hard"));
+    const assessed = assessProduct(product, state.intent);
+    return unchanged ? assessed : { ...assessed, eligible: false, blockers: [...assessed.blockers, "The retained evidence has not assessed the changed requirements."] };
+  });
+  const supportText = (assessment: typeof research.products[number]["identity"]) => {
+    const spans = assessment.support.map((span) => {
+      const source = research.sources.find((item) => item.id === span.sourceId);
+      return source ? ` "${span.quote}" (${source.url})` : "";
+    }).join("");
+    return `${assessment.rationale} (${assessment.status}).${spans}`;
+  };
+  if (mode === "best") {
+    const chosen = current.find((product) => product.id === research.choice?.productId && product.eligible);
+    return chosen ? `${research.dataKind === "test-fixture" ? "Fixture data. " : ""}${chosen.name}. ${research.choice!.rationale} ${supportText(chosen.requestMatch)}` : "I cannot choose a compliant best option from the retained evidence for your current requirements. " + current.map((product) => `${product.name}: ${product.blockers.join(" ")}`).join(" ");
+  }
+  const ordered = mode === "cheaper" ? [...current].sort((a, b) => a.eligible !== b.eligible ? Number(b.eligible) - Number(a.eligible) : a.eligible && a.price && b.price && a.price.currency === b.price.currency ? a.price.amount - b.price.amount : 0) : current;
+  return `${research.dataKind === "test-fixture" ? "Fixture data. " : ""}${ordered.map((product) => {
+    const topics = subject.toLowerCase().match(/[a-z][a-z-]{3,}/g)?.filter((word) => !["what", "about", "which", "their", "compare", "first", "second", "third", "options", "machine", "mean", "good", "stronger", "evidence"].includes(word)) ?? [];
+    const rows = mode === "held-question" || /their /i.test(question) ? product.attributes.filter((attribute) => topics.some((topic) => attribute.name.toLowerCase().includes(topic) || topic.includes(attribute.name.toLowerCase()))) : product.attributes;
+    const detail = rows.length ? rows.map((attribute) => `${attribute.name}: ${supportText(attribute.assessment)}`).join("; ") : "No supported detail was retained for this question. Missing attributes remain unknown.";
+    const price = product.price ? ` Observed ${product.price.currency} ${product.price.amount}. ${product.price.conditions.join(" ")} ${supportText(product.price.assessment)} Stock and delivery remain unverified.` : " No qualifying observed price was retained.";
+    return `${product.name}: ${detail}${price}${product.blockers.length ? ` Unresolved: ${product.blockers.join(" ")}` : ""}`;
+  }).join("\n\n")}`;
 }
 
 export function reduceTurn(previous: ConversationState, input: PrepareInput): TurnDecision {
@@ -62,16 +117,30 @@ export function reduceTurn(previous: ConversationState, input: PrepareInput): Tu
   }
   if (["hi", "hello", "hey"].includes(command)) return reply("Hi. What are you looking to buy?");
   if (["thanks", "thank you", "ok", "okay"].includes(command)) return reply("You're welcome. Tell me what you would like to change.");
-  if (["help", "what can you do", "how does this work"].includes(command)) return reply("Describe what you want to buy and any requirements. I research sources with Exa, compare evidence, and link to product pages. Research submissions can use paid Exa credits. Viewing existing evidence is free.");
-  if (["keep it short", "shorter", "less detail", "more detail", "more details"].includes(command)) {
-    state.intent.responseLength = command.startsWith("more") ? "expanded" : "concise";
-    return reply(state.intent.responseLength === "concise" ? "I'll keep replies short." : "I'll include more evidence in replies.");
+  const operation = localOperations.find((operation) => operation.matches.test(command))?.kind;
+  if (operation === "short" || operation === "detail") {
+    state.intent.responseLength = operation === "detail" ? "expanded" : "concise";
+    return reply(operation === "detail" ? heldReply(state, "detail", text) : "I'll keep replies short.");
   }
-  if (command === "compare the first and third") { const retained = lastResearch(state); if (!retained || retained.products.length < 3) return reply("The retained comparison does not contain three products."); return reply([retained.products[0]!, retained.products[2]!].map((p) => `${p.name}: ${p.requestMatch.rationale} ${p.blockers.join(" ")}`).join("\n\n")); }
-  if (["compare the first two", "compare them", "compare these"].includes(command)) return reply(heldReply(state, "compare"));
-  if (["just give me the best one", "best one", "which is best"].includes(command)) return reply(heldReply(state, "best"));
-  if (["what about battery life", "battery life"].includes(command)) return reply(heldReply(state, "battery"));
-  if (["i don't like these", "i do not like these", "not happy with these"].includes(command)) return reply("What should change, such as price, size, or a specific feature? Your existing requirements remain active.");
+  if (operation === "theme") return reply("Use the light/dark theme toggle in the header. Your selection is saved for your next visit.");
+  if (operation === "help") return reply("Describe what you want to buy and any requirements. I research sources with Exa, compare evidence, and link to product pages. Research submissions can use paid Exa credits. Viewing existing evidence is free.");
+  if (operation === "remember") return reply([state.intent.productDescription || "No shopping request is accepted yet.", state.intent.budget ? `Budget ${state.intent.budget.currency} ${state.intent.budget.minimum ?? "no minimum"} to ${state.intent.budget.maximum ?? "no maximum"}.` : "No budget is set."].join("\n"));
+  if (operation === "sources") {
+    const research = lastResearch(state);
+    return reply(research?.sources.length ? research.sources.map((source) => `${source.title} (${source.url})`).join("\n") : "No validated supporting source is retained. I cannot open an invented link.");
+  }
+  if (operation === "error") return reply([...state.messages].reverse().find((message) => message.role === "assistant")?.text ?? "No successful research response is retained. Your accepted requirements remain unchanged. An explicit retry is subject to the existing research limits.");
+  if (operation === "cancel") { state.pending = null; return reply("No new research was requested by this message. Accepted requirements are retained. Use Stop while research is active to cancel its transport."); }
+  if (operation === "status") return reply("This status question does not start research. Transport cancellation status is shown by the active research operation; this message cannot confirm a provider stopped.");
+  if (operation === "dissatisfied") return reply("What should change, such as price, size, or a specific feature? Your existing requirements remain active.");
+  if (operation === "selection") return reply("Your existing budget and requirements remain active. " + heldReply(state, "detail", text));
+  if (operation === "cheaper") {
+    if (state.intent.requirements.length >= 24) return reply("The requirement limit is reached. Your accepted requirements remain unchanged.");
+    if (!state.intent.requirements.some((requirement) => requirement.text === text)) state.intent.requirements.push({ id: `requirement-${userId}`, text, strength: "flexible", originMessageId: userId, kind: "preference" });
+    state.intent.productDescription = state.intent.requirements.map((requirement) => requirement.text).join("\n");
+    return reply(heldReply(state, "cheaper", text));
+  }
+  if (operation === "compare" || operation === "best" || operation === "held-question") return reply(heldReply(state, operation, text));
   if (["discard pending change", "cancel that change"].includes(command)) { state.pending = null; return reply("The pending change was discarded. Your accepted requirements are unchanged."); }
   if (state.pending?.kind === "currency") {
     const answer = /^(?:actually,?\s*)?(SGD|USD|EUR|GBP|AUD|CAD|MYR|JPY|INR)\b[.,;!?]?\s*(.*)$/i.exec(text);
@@ -84,7 +153,7 @@ export function reduceTurn(previous: ConversationState, input: PrepareInput): Tu
     return { state, kind: "research" };
   }
   if (state.pending?.kind === "edit") return reply(`${state.pending.explanation} You can explicitly discard the pending change to keep your accepted request.`, "clarification");
-  if (["retry", "try again", "refresh", "research again"].includes(command)) return state.intent.originalText ? { state, kind: "research" } : reply("What are you shopping for?", "clarification");
+  if (operation === "retry") return state.intent.originalText ? { state, kind: "research" } : reply("What are you shopping for?", "clarification");
   if (state.intent.originalText && /\b(?:make it|change|remove|drop|budget|currency)\b.*\b(?:and|but|also)\b|\b(?:and|but|also)\b.*\b(?:make it|remove|drop|budget|currency)\b/i.test(text)) return pendingEdit("I kept this complete change pending because I cannot safely apply its combined edits. State each change separately. No part was applied.");
   const correctedCurrency = /^(?:(?:actually|i meant|change currency to)[, ]+)?(SGD|USD|EUR|GBP|AUD|CAD|MYR|JPY|INR)(?:,? not (SGD|USD|EUR|GBP|AUD|CAD|MYR|JPY|INR))?\.?$/i.exec(text);
   if (correctedCurrency) {
@@ -102,12 +171,12 @@ export function reduceTurn(previous: ConversationState, input: PrepareInput): Tu
     if (!draft.originalText || (!exactBudgetEdit && !state.intent.originalText)) {
       draft.originalText = text;
       draft.productDescription = text;
-      draft.requirements = [...draft.requirements.filter((r) => r.kind !== "request"), { id: `request-${userId}`, text, strength: "hard", originMessageId: userId, kind: "request" }];
+      draft.requirements = [...draft.requirements.filter((r) => r.kind !== "request"), ...requirementClauses(text, userId, true)];
     }
     const unit = money.currency ?? draft.budget?.currency;
     const bounds = { minimum: money.minimum ?? draft.budget?.minimum, maximum: money.maximum ?? draft.budget?.maximum };
     const extra = money.remainder.replace(/^[.,;!?\s]+|[.,;!?\s]+$/g, "").trim() ? text : "";
-    if (extra && state.intent.originalText) { draft.requirements.push({ id: `requirement-${userId}`, text: extra, strength: "hard", originMessageId: userId, kind: "preference" }); draft.productDescription += `\n${extra}`; }
+    if (extra && state.intent.originalText) { draft.requirements.push(...requirementClauses(extra, userId, false)); draft.productDescription += `\n${extra}`; }
     if (bounds.minimum !== undefined && bounds.maximum !== undefined && bounds.minimum > bounds.maximum) return pendingEdit("The new budget would put the maximum below the retained minimum. State both bounds or explicitly remove the old minimum. No budget change was applied.");
     if (!unit) {
       state.intent = { ...draft, budget: state.intent.budget };
@@ -133,14 +202,16 @@ export function reduceTurn(previous: ConversationState, input: PrepareInput): Tu
   if (!state.intent.originalText || /^(?:i (?:want|need|would like)|find|recommend|looking for)\b/i.test(text)) {
     const retainedHard = state.intent.requirements.filter((r) => r.kind === "request").flatMap((r) => { const clauses = r.text.match(/\b(?:must|without|no|only|excluding|at least|with)\b[^.;]+/gi) ?? []; return clauses.map((clause, i) => ({ ...r, id: `${userId}-retained-${i}`, text: clause, kind: "preference" as const })); });
     state.intent.originalText = text;
-    state.intent.requirements = [...state.intent.requirements.filter((r) => r.kind !== "request"), ...retainedHard, { id: `request-${userId}`, text, strength: "hard", originMessageId: userId, kind: "request" }];
+    state.intent.requirements = [...state.intent.requirements.filter((r) => r.kind !== "request"), ...retainedHard, ...requirementClauses(text, userId, true)];
   } else {
     const brand = /^only\s+([^,;.!?]+)$/i.exec(text);
     const kind = brand && !/\b(?:and|or|with|without|must)\b/i.test(brand[1]!) ? "brand" : /^(?:no|avoid|exclude|without)\b/i.test(text) ? "exclusion" : "preference";
-    const flexible = command === "something cheaper" || /^prefer\b/i.test(text);
-    state.intent.requirements.push({ id: `requirement-${userId}`, text, strength: flexible ? "flexible" : "hard", originMessageId: userId, kind });
+    const clauses = requirementClauses(text, userId, false);
+    state.intent.requirements.push(...clauses.map((requirement) => ({ ...requirement, kind: kind === "brand" ? "brand" as const : requirement.kind })));
   }
   if (state.intent.requirements.length > 24) { state.intent = structuredClone(previous.intent); return pendingEdit("This conversation has reached its requirement limit. Start a new chat or explicitly remove a requirement."); }
   state.intent.productDescription = state.intent.requirements.map((r) => r.text).join("\n");
+  if (/\bsuitable for Singapore\b/i.test(text)) state.intent.region = "SG";
+  if (!previous.intent.originalText && /\breplacement\b.+\bfor my\b/i.test(text) && !/\b(?:model|fitting|thread|connector|\d+\s*mm)\b/i.test(text)) return reply("What model and attachment or fitting must the replacement match? I need that compatibility detail before research.", "clarification");
   return { state, kind: "research" };
 }

@@ -54,3 +54,46 @@ describe("V2 contextual conversation", () => {
     expect(turn(initialConversation(), "Find a USB-C charger under SGD70, at least 65 W.").state.intent.budget).toMatchObject({ maximum: 70, currency: "SGD" });
   });
 });
+
+describe("free contextual operations", () => {
+  it.each([
+    "Thanks. How do I change the theme?", "Compare the first and third options", "Which one is best overall?",
+    "Just show me the best one", "Which has the stronger evidence for background-noise rejection?",
+    "Why is the second so much cheaper?", "Compare their noise and battery life.", "Compare the current options.",
+    "The search failed. What happened?", "Cancel that.", "Did it stop?", "What do you remember about my requirements?",
+    "Open the supporting source for the recommended light.", "I don't like any of those", "Don't change my existing budget",
+  ])("retains requirements and avoids research for %s", (message) => {
+    const state = turn(initialConversation(), "An archival book cradle under USD 80. No plastic supports.").state;
+    const result = turn(state, message);
+    expect(result.kind).toBe("message");
+    expect(result.state.intent).toEqual(state.intent);
+    expect(result.state.messages.at(-1)?.role).toBe("assistant");
+  });
+  it("expands retained details and never invents a price ceiling for cheaper", () => {
+    const state = turn(initialConversation(), "Find an archival book cradle between USD 30 and 80.").state;
+    const detail = turn(state, "Show me more details");
+    expect(detail.kind).toBe("message");
+    expect(detail.state.intent.responseLength).toBe("expanded");
+    const cheaper = turn(state, "Something cheaper");
+    expect(cheaper.kind).toBe("message");
+    expect(cheaper.state.intent.budget).toEqual(state.intent.budget);
+    expect(cheaper.state.intent.requirements.at(-1)?.strength).toBe("flexible");
+  });
+  it("separates explicit flexible clauses from hard requirements", () => {
+    const first = turn(initialConversation(), "I want a tactile label maker. Braille is essential; portability would be nice.");
+    expect(first.state.intent.requirements.find((r) => r.text.includes("portability"))?.strength).toBe("flexible");
+    expect(first.state.intent.requirements.find((r) => r.text.includes("Braille"))?.strength).toBe("hard");
+    const next = turn(first.state, "Quiet would be nice. No disposable cartridges. Under USD180.");
+    expect(next.state.intent.requirements.find((r) => r.text.includes("Quiet"))?.strength).toBe("flexible");
+    expect(next.state.intent.requirements.find((r) => r.text.includes("No disposable"))?.strength).toBe("hard");
+    expect(next.state.intent.budget?.maximum).toBe(180);
+  });
+  it("asks for missing replacement fit without rejecting unfamiliar products", () => {
+    const first = turn(initialConversation(), "I need a replacement tip for my white cane.");
+    expect(first.kind).toBe("clarification");
+    expect(first.state.intent.originalText).toContain("white cane");
+    const next = turn(first.state, "It has an 8 mm screw fitting. USD 25 max.");
+    expect(next.kind).toBe("research");
+    expect(next.state.intent.requirements.some((r) => r.text.includes("8 mm screw"))).toBe(true);
+  });
+});
