@@ -494,7 +494,7 @@ export function createExaProductResearch(
         query,
         {
           text: true,
-          outputSchema: z.toJSONSchema(NativeAnswerSchema),
+          outputSchema: z.toJSONSchema(NativeAnswerSchema, { target: "draft-7" }),
           systemPrompt: `${instructions}\nCurrent authoritative shopping intent: ${JSON.stringify(intent)}`,
           ...(intent.region ? { userLocation: intent.region } : {}),
         },
