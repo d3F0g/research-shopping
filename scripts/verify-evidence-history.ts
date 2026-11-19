@@ -16,9 +16,7 @@ const proof = { commit: execFileSync("git", ["rev-parse", "HEAD"], { encoding: "
 try {
   for (const viewport of [{ width: 1440, height: 1000 }, { width: 390, height: 844 }]) {
     const context = await browser.newContext({ viewport, colorScheme: "light" });
-    await context.route("https://**", (route) => route.request().resourceType() === "image"
-      ? route.fulfill({ contentType: "image/svg+xml", body: '<svg xmlns="http://www.w3.org/2000/svg" width="180" height="100"><rect x="20" y="10" width="140" height="80" rx="8" fill="#777"/><text x="90" y="55" text-anchor="middle" fill="white">Fixture image</text></svg>' })
-      : route.abort());
+    await context.route("https://**", (route) => route.abort());
     const signup = await context.request.post(`${runtime.origin}/api/auth/sign-up/email`, { headers: { origin: runtime.origin }, data: { name: "Fixture evidence shopper", email: `fixture-history-${randomUUID()}@example.test`, password: "fixture-history-password-only" } });
     assert.equal(signup.status(), 200);
     const user = (await signup.json()).user;
@@ -50,6 +48,8 @@ try {
     await expect(name).toBeInViewport();
     await expect(page.getByText("SGD 868.00", { exact: true })).toBeVisible();
     await expect(page.getByText(/Provider-reported, unverified: Price as listed on Fixture Index/)).toBeVisible();
+    const illustration = page.getByRole("img", { name: "Source illustration for Fixture Meridian Sunglasses - Silver", exact: true });
+    await expect(illustration).toHaveCount(0);
     const initialPath = `${directory}/${viewport.width}-current-observation.png`;
     await page.screenshot({ path: initialPath }); proof.screenshots.push(initialPath);
     const disclosure = page.getByRole("button", { name: "Evidence and tradeoffs for Fixture Meridian Sunglasses - Silver" });

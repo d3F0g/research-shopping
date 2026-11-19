@@ -19,5 +19,5 @@ export function catalogMaterial(intent: ShoppingIntent) {
   product.attributes = [];
   product.price = { amount: 868, currency: "SGD", variant: "Silver", conditions: ["Price as listed on Fixture Index."], conditionsResolved: false, assessment: assessment("SGD 868") };
   material.citations[0]!.text = source;
-  return material;
+  return { ...material, citations: material.citations.map(({ url, title, text }) => ({ url, title, text })) };
 }

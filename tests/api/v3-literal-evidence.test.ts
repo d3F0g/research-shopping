@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { initialConversation } from "../../src/domain/conversation";
+import { ResearchSnapshotSchema, type ResearchSnapshot } from "../../src/domain/research";
 import { projectExaAnswer } from "../../src/server/exa-research";
 import { catalogMaterial } from "../helpers/v3-catalog-material";
 
@@ -116,5 +117,25 @@ describe("opaque peer catalog rows", () => {
     const material = catalogMaterial(intent);
     material.citations[0]!.text = peers + material.citations[0]!.text + tail;
     expect(project(material).products[0]!.price).toBeNull();
+  });
+});
+
+
+describe("current snapshot binding validation", () => {
+  const mutations: Array<[string, (snapshot: ResearchSnapshot) => void]> = [
+    ["literal offset", (snapshot) => { snapshot.products[0]!.identity.support[0]!.literal.start++; }],
+    ["literal text", (snapshot) => { snapshot.products[0]!.identity.support[0]!.literal.text += "Invented"; }],
+    ["context containment", (snapshot) => { snapshot.products[0]!.identity.support[0]!.context.start++; }],
+    ["context text", (snapshot) => { snapshot.products[0]!.identity.support[0]!.context.text = "Fixture invented context"; }],
+    ["reported wording", (snapshot) => { snapshot.products[0]!.identity.support[0]!.origin = { kind: "provider", reportedQuote: "Fixture changed words SGD 868", match: "whitespace" }; }],
+    ["match kind", (snapshot) => { const span = snapshot.products[0]!.identity.support[0]!; if (span.origin.kind === "provider") span.origin.match = "literal"; }],
+    ["cut metadata", (snapshot) => { snapshot.sources[0]!.originalLength++; }],
+    ["duplicate equivalent match", (snapshot) => { snapshot.sources[0]!.text += "\n\nFixture Meridian Sunglasses - Silver SGD 868"; snapshot.sources[0]!.originalLength = snapshot.sources[0]!.text.length; }],
+  ];
+  it.each(mutations)("rejects forged %s at the current response boundary", (_name, mutate) => {
+    const snapshot = project();
+    expect(ResearchSnapshotSchema.safeParse(snapshot).success).toBe(true);
+    mutate(snapshot);
+    expect(ResearchSnapshotSchema.safeParse(snapshot).success).toBe(false);
   });
 });
