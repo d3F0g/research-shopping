@@ -6,6 +6,7 @@ import { expect, type Page, type TestInfo } from "@playwright/test";
 import { createApp } from "../../../src/server/app";
 import { createExaProductResearch } from "../../../src/server/exa-research";
 import { createResearchTurns } from "../../../src/server/research-turns";
+import { fixtureIntentInterpreter } from "../../helpers/intent";
 
 export async function normalComposition(
   page: Page,
@@ -47,6 +48,7 @@ export async function normalComposition(
   const app = createApp(
     {
       researchTurns: createResearchTurns({
+        interpretIntent: fixtureIntentInterpreter,
         research: createExaProductResearch("fake-browser-loopback-key", {
           baseUrl,
         }),

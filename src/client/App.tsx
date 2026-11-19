@@ -63,7 +63,7 @@ export function App() {
       }}
     >
       {chat.preferences.pendingChange &&
-        !(chat.preferences.pendingChange.kind === "money" &&
+        !(!chat.preferences.budget && chat.preferences.pendingChange.kind === "money" &&
           chat.preferences.pendingChange.missingSlot === "currency") && (
         <Alert className="pending-change" role="status">
           <AlertTitle>Resolve this change before researching</AlertTitle>
@@ -244,6 +244,7 @@ export function App() {
                       response &&
                       response.preferences.revision !==
                         turn.request.preferences.revision;
+                    const researchSubject = turn.prepared?.preferences.productDescription.trim();
                     return (
                       <MessageScrollerItem
                         key={turn.id}
@@ -277,9 +278,11 @@ export function App() {
                                     <TraceIcon>
                                       {turn.body.phase === "research" ? <Search /> : <TextSearch />}
                                     </TraceIcon>
-                                    <TraceTitle>
+                                    <TraceTitle className="shimmer-none">
                                       {turn.body.phase === "research"
-                                        ? `Searching sources for ${turn.prepared!.preferences.productDescription}`
+                                        ? researchSubject && researchSubject.length <= 120
+                                          ? `Searching sources for ${researchSubject}`
+                                          : "Searching product sources"
                                         : turn.request.edit
                                           ? "Applying your preferences"
                                           : "Understanding your request"}

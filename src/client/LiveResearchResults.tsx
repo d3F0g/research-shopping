@@ -306,7 +306,7 @@ export function LiveResearchResults({
                   </div>
                 </div>
                 {research.evidenceVersion === 5 && (
-                  <SourceIllustration source={illustrationSource} />
+                  <SourceIllustration key={illustrationSource?.imageUrl ?? "missing"} source={illustrationSource} />
                 )}
                 <div className="observed-price">
                   <strong>
