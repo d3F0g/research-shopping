@@ -26,9 +26,9 @@ for (const viewport of [
       exact: true,
     });
     await expect(composer).toBeVisible();
-    await mkdir("artifacts/fieldnote-v2", { recursive: true });
+    await mkdir("artifacts/fieldnote-v3/e2e", { recursive: true });
     await page.screenshot({
-      path: `artifacts/fieldnote-v2/${viewport.name}-empty.png`,
+      path: `artifacts/fieldnote-v3/e2e/${viewport.name}-empty.png`,
     });
     await composer.fill("I want to buy a powerbank around $30-40.");
     await page
@@ -82,7 +82,7 @@ for (const viewport of [
     });
     expect(intersections).toEqual([]);
     await page.screenshot({
-      path: `artifacts/fieldnote-v2/${viewport.name}-research.png`,
+      path: `artifacts/fieldnote-v3/e2e/${viewport.name}-research.png`,
     });
     await page
       .getByRole("button", {
@@ -95,7 +95,7 @@ for (const viewport of [
       "Fixture data:",
     );
     await page.screenshot({
-      path: `artifacts/fieldnote-v2/${viewport.name}-evidence.png`,
+      path: `artifacts/fieldnote-v3/e2e/${viewport.name}-evidence.png`,
     });
     const before = (await page.request
       .get("/api/test-stats")
@@ -138,7 +138,7 @@ for (const viewport of [
       page.getByText("Hi. What are you looking to buy?", { exact: true }),
     ).toBeVisible();
     await page.screenshot({
-      path: `artifacts/fieldnote-v2/${viewport.name}-light-ordinary.png`,
+      path: `artifacts/fieldnote-v3/e2e/${viewport.name}-light-ordinary.png`,
     });
   });
 }

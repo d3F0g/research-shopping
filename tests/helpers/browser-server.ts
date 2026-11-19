@@ -5,6 +5,7 @@ import { configFromEnvironment } from "../../src/server/config";
 import { createConversationService } from "../../src/server/conversations";
 import { createExaProductResearch } from "../../src/server/exa-research";
 import { nativeMaterial } from "./v2-material";
+import { catalogMaterial } from "./v3-catalog-material";
 import type { ShoppingIntent } from "../../src/domain/conversation";
 
 if (
@@ -25,6 +26,14 @@ const upstream = createServer(async (request, response) => {
   const intent = JSON.parse(
     input.systemPrompt.split("Current authoritative shopping intent: ")[1]!,
   ) as ShoppingIntent;
+  if (intent.productDescription.includes("catalog ambiguity fixture")) {
+    const material = catalogMaterial(intent);
+    const heading = intent.productDescription.includes("spaced") ? "Fixture Meridian Sunglasses -  Silver" : intent.productDescription.includes("bare") ? "Silver" : "Fixture Other Silver Sunglasses";
+    material.citations[0]!.text += `\n\n${heading}\n\nSGD 999`;
+    response.setHeader("content-type", "application/json");
+    response.end(JSON.stringify(material));
+    return;
+  }
   const material = nativeMaterial(intent);
   if (intent.productDescription.includes("slow fixture"))
     await new Promise((resolve) => setTimeout(resolve, 600));
@@ -60,6 +69,16 @@ const upstream = createServer(async (request, response) => {
       assessment.support = [{ url, quote: text }];
     return p;
   });
+  if (intent.productDescription.includes("money-only fixture")) {
+    for (const [index, product] of material.answer.products.entries()) {
+      const amount = String(product.price.amount);
+      const quote = intent.productDescription.includes("suffix") ? `${amount} SGD` : amount;
+      const citation = material.citations[index]!;
+      citation.text = citation.text.replace(`SGD ${amount}`, intent.productDescription.includes("suffix") ? quote : `SGD ${amount}`);
+      for (const assessment of [product.identity, ...product.criteria.map((criterion) => criterion.assessment), ...product.attributes.map((attribute) => attribute.assessment), product.price.assessment]) assessment.support = [{ url: citation.url, quote: citation.text }];
+      product.requestMatch = { ...product.requestMatch, support: [{ url: citation.url, quote }] };
+    }
+  }
   response.setHeader("content-type", "application/json");
   response.end(JSON.stringify(material));
 });
