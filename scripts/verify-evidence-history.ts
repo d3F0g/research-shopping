@@ -35,8 +35,32 @@ try {
     await pool.query("UPDATE fieldnote_v2_workspace SET data=$2::jsonb WHERE user_id=$1", [user.id, JSON.stringify(old)]);
     await pool.end();
     const page = await context.newPage();
-    await page.goto(runtime.origin);
-    await expect(page.getByText(historicalName, { exact: true }).first()).toBeVisible();
+    const initialEvents: { event: string; at: number; status?: number; message?: string }[] = [];
+    page.on("request", (request) => {
+      if (new URL(request.url()).pathname === "/api/account") initialEvents.push({ event: "account-request", at: Date.now() });
+    });
+    page.on("response", (response) => {
+      if (new URL(response.url()).pathname === "/api/account") initialEvents.push({ event: "account-response", at: Date.now(), status: response.status() });
+    });
+    page.on("requestfailed", (request) => {
+      if (new URL(request.url()).pathname === "/api/account") initialEvents.push({ event: "account-failed", at: Date.now(), message: request.failure()?.errorText });
+    });
+    page.on("pageerror", (error) => initialEvents.push({ event: "page-error", at: Date.now(), message: error.message }));
+    if (viewport.width === 390) {
+      const cdp = await context.newCDPSession(page);
+      await cdp.send("Network.enable");
+      await cdp.send("Network.emulateNetworkConditionsByRule", { matchedNetworkConditions: [{ urlPattern: `${runtime.origin}/api/account`, latency: 5500, downloadThroughput: -1, uploadThroughput: -1 }] });
+    }
+    try {
+      await page.goto(runtime.origin).then(() => initialEvents.push({ event: "page-loaded", at: Date.now() }));
+      await expect(page.getByText(historicalName, { exact: true }).first()).toBeVisible();
+      await writeFile(`${directory}/${viewport.width}-initial.json`, JSON.stringify({ status: "passed", accountLatencyMs: viewport.width === 390 ? 5500 : 0, events: initialEvents }, null, 2) + "\n");
+    } catch (error) {
+      await writeFile(`${directory}/${viewport.width}-initial-failure.json`, JSON.stringify({ events: initialEvents, bodyTextPrefix: (await page.locator("body").innerText()).slice(0, 30000) }, null, 2) + "\n");
+      const failurePath = `${directory}/${viewport.width}-initial-failure.png`;
+      await page.screenshot({ path: failurePath }); proof.screenshots.push(failurePath);
+      throw error;
+    }
     const migrated = await context.request.get(`${runtime.origin}/api/account`).then((response) => response.json());
     assert.deepEqual(migrated.workspace.state.messages, old.state.messages);
     assert.equal(migrated.workspace.pendingPreparedId, null);
@@ -92,11 +116,6 @@ try {
       if (new URL(request.url()).pathname === "/api/account") reloadEvents.push({ event: "account-failed", at: Date.now(), message: request.failure()?.errorText });
     });
     page.on("pageerror", (error) => reloadEvents.push({ event: "page-error", at: Date.now(), message: error.message }));
-    if (viewport.width === 390) {
-      const cdp = await context.newCDPSession(page);
-      await cdp.send("Network.enable");
-      await cdp.send("Network.emulateNetworkConditionsByRule", { matchedNetworkConditions: [{ urlPattern: `${runtime.origin}/api/account`, latency: 5500, downloadThroughput: -1, uploadThroughput: -1 }] });
-    }
     try {
       const [restoredResponse] = await Promise.all([
         page.waitForResponse((response) => response.url() === `${runtime.origin}/api/account` && response.request().method() === "GET"),
