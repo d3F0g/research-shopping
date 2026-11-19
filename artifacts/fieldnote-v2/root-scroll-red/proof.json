@@ -1,0 +1,47 @@
+{
+  "commit": "62d3fb0d8d459fd3c725d8931cb1381d77ce3fc0",
+  "dirty": " M .codex/pstack-runs/fieldnote-v2/architecture.md\n M .codex/pstack-runs/fieldnote-v2/decisions.tsv\n M .codex/pstack-runs/fieldnote-v2/state.json\n M package-lock.json\n M package.json\n M src/client/App.tsx\n M src/domain/conversation.ts\n M src/domain/turn-reducer.ts\n D src/server/fixtures.ts\n M tests/e2e/v2-chat.spec.ts\n?? .audit/fieldnote-v2/\n?? .codex/pstack-runs/fieldnote-v2/architecture-review.md\n?? artifacts/fieldnote-v2/desktop-empty.png\n?? artifacts/fieldnote-v2/desktop-evidence.png\n?? artifacts/fieldnote-v2/desktop-light-ordinary.png\n?? artifacts/fieldnote-v2/desktop-research.png\n?? artifacts/fieldnote-v2/mobile-empty.png\n?? artifacts/fieldnote-v2/mobile-evidence.png\n?? artifacts/fieldnote-v2/mobile-light-ordinary.png\n?? artifacts/fieldnote-v2/mobile-research.png\n?? artifacts/fieldnote-v2/root-scroll-red/\n",
+  "material": "Explicit automated test SDK loopback fixture. No paid call.",
+  "results": [
+    {
+      "viewport": {
+        "name": "desktop",
+        "width": 1440,
+        "height": 1000
+      },
+      "heading": {
+        "x": 372,
+        "y": 186.75,
+        "width": 180,
+        "height": 19.25
+      },
+      "composer": {
+        "x": 361,
+        "y": 853,
+        "width": 718,
+        "height": 64
+      },
+      "leadingRecommendationInViewport": true
+    },
+    {
+      "viewport": {
+        "name": "mobile",
+        "width": 390,
+        "height": 844
+      },
+      "heading": {
+        "x": 28,
+        "y": -1000.75,
+        "width": 180,
+        "height": 19.25
+      },
+      "composer": {
+        "x": 13,
+        "y": 681,
+        "width": 364,
+        "height": 64
+      },
+      "leadingRecommendationInViewport": false
+    }
+  ]
+}

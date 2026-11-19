@@ -1,5 +1,5 @@
 {
-  "milestone": 3,
+  "milestone": 9,
   "completed": [
     1,
     2
@@ -8,14 +8,59 @@
   "branch": "rebuild/fieldnote-v2",
   "worktree": "/Users/josiahwong/Documents/research-shopping-v2",
   "agents": {
-    "v2_application_owner": "src package tests scripts migrations in V2 worktree",
-    "v2_eval_owner": "evals and product-eval artifacts in V2-evals worktree"
+    "v2_application_owner": "UI scroll, editor, account integration and lifecycle; reducer handover pending",
+    "v2_eval_owner": "finalizing eval checkpoint and evidence",
+    "v2_verification_owner": "only project verification skill and smoke adaptation"
   },
   "blockers": [
     "Live Exa proof blocked by uncertain billing and no valid automated allowance",
     "Authorized merchant integration unavailable"
   ],
-  "next": "Application owner implements contracts and core checkpoints; eval owner preserves and adapts framework",
+  "next": "Focused reducer owner fixes26behavior gaps while main owner fixesUI/account; run full eval and independentQA/security",
   "tracking_issue": "https://github.com/d3F0g/research-shopping/issues/51",
-  "autonomous_continuation": "No supported task heartbeat scheduling tool exposed. Continue active turn and preserve resume capsule; no future wake armed."
+  "autonomous_continuation": "No supported task heartbeat scheduling tool exposed. Continue active turn and preserve resume capsule; no future wake armed.",
+  "contracts_commit": "cc2e8ce",
+  "preservation_commit": "6c50e13",
+  "preservation_verification": {
+    "tracked_assets": 390,
+    "blob_mismatches": 0
+  },
+  "core_commit": "8da8888",
+  "core_author_checks": {
+    "tests": 66,
+    "typecheck": "passed",
+    "scope": "Bounded author core/unit/API checks",
+    "independent_acceptance": false
+  },
+  "initial_v2_evaluation": {
+    "commit": "8da8888",
+    "cases": 60,
+    "pass": 1,
+    "fail": 45,
+    "blocked": 13,
+    "unsupported": 1,
+    "critical_failures": 55,
+    "infrastructure_errors": 0,
+    "notes": "36 exact-quotation equality checks differ after retained paragraph expansion;19 other critical state/budget/criterion failures remain. Frozen assertions unchanged."
+  },
+  "app_commit": "cdf008b",
+  "eval_code_commit": "48632fc",
+  "account_commits": [
+    "2317135",
+    "acdcdb3"
+  ],
+  "latest_completed_v2_eval": {
+    "application": "62d3fb0",
+    "pass": 4,
+    "fail": 27,
+    "blocked": 28,
+    "unsupported": 1,
+    "critical_failures": 1,
+    "infrastructure_errors": 0
+  },
+  "open_defects": [
+    "#52 initial mobile result scrolls past leading answer",
+    "26 additional locally actionable conversation/evaluation gaps",
+    "Account integrated runtime/restart/crash/browser review pending"
+  ]
 }
