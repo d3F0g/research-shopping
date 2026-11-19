@@ -1,0 +1,47 @@
+{
+  "repo": "/Users/josiahwong/Documents/research-shopping-evals",
+  "apiPort": 7173,
+  "webPort": 7283,
+  "artifacts": "/Users/josiahwong/Documents/research-shopping-evals/artifacts/product-evals/baseline/verification-skill",
+  "commit": "bb51c38748b35d838b44109d72ab4dc9a9847d8c",
+  "worktreeStatus": "?? .codex/pstack-runs/product-evals/",
+  "feature": "chat-first-shopping",
+  "actions": [
+    "Doctor confirmed owned ports, offline fixture health, minimal empty chat and dark mode despite light OS preference.",
+    "Changed the actual theme control to light and dark and confirmed each selection after refresh."
+  ],
+  "result": "failed",
+  "cleanup": true,
+  "serverPid": 65772,
+  "health": {
+    "status": "ok",
+    "mode": "fixture",
+    "liveIntegrations": false,
+    "webResearch": "disabled"
+  },
+  "theme": {
+    "firstVisit": "dark",
+    "osPreference": "light",
+    "lightPersistedAfterRefresh": true,
+    "darkPersistedAfterRefresh": true
+  },
+  "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n\n400 !== 200\n\n    at submit (file:///Users/josiahwong/Documents/research-shopping-evals/.agents/skills/verify-research-shopping/scripts/smoke.mjs:100:12)\n    at runNextTicks (node:internal/process/task_queues:65:5)\n    at process.processImmediate (node:internal/timers:453:9)\n    at process.callbackTrampoline (node:internal/async_hooks:130:17)\n    at async file:///Users/josiahwong/Documents/research-shopping-evals/.agents/skills/verify-research-shopping/scripts/smoke.mjs:153:20",
+  "failureState": {
+    "document": {
+      "width": 1440,
+      "height": 1000,
+      "viewportWidth": 1440,
+      "viewportHeight": 1000
+    },
+    "viewport": {
+      "height": 833,
+      "scrollHeight": 833,
+      "scrollTop": 0,
+      "visibility": "visible",
+      "pendingScroll": false
+    },
+    "assistantMessages": 1,
+    "lastAssistantTextLength": 51,
+    "lastAssistantRenderedTextLength": 0
+  }
+}

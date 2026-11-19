@@ -1,0 +1,54 @@
+name: Product evaluation
+
+on:
+  pull_request:
+    paths:
+      - 'evals/**'
+      - 'src/**'
+      - 'package*.json'
+      - '.github/workflows/product-evals.yml'
+      - '.agents/skills/verify-research-shopping/**'
+      - 'docs/product-evaluation*.md'
+  push:
+    branches:
+      - feat/product-evals
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  offline-evaluation:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      EXA_RESEARCH_ENABLED: 'false'
+      NODE_ENV: test
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npx --yes npm@11.6.2 ci
+      - run: npm run eval:typecheck
+      - run: npx playwright install --with-deps chromium
+      - run: npm run eval:test
+      - name: Report product behavior without uncalibrated acceptance thresholds
+        run: npm run eval -- --out artifacts/product-evals/ci --gate report --issue-drafts
+      - name: Validate frozen baseline and compare all sixty unchanged contracts
+        run: npm run eval:scorecard -- --baseline artifacts/product-evals/baseline-v1/report.json --candidate artifacts/product-evals/ci/report.json --out artifacts/product-evals/ci-scorecard
+      - name: Report complete local-only behavior without an optional interpreter
+        run: npm run eval -- --intent-mode local-only --out artifacts/product-evals/ci/without-interpreter --gate report
+      - name: Exercise actual normal browser composition with local provider
+        run: npm run eval:browser -- --out artifacts/product-evals/ci-browser --mode report
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: fieldnote-product-evaluation
+          path: |
+            artifacts/product-evals/ci/
+            artifacts/product-evals/ci-browser/
+            artifacts/product-evals/ci-scorecard/
+          if-no-files-found: error
