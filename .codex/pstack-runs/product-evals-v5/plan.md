@@ -34,3 +34,7 @@ One code writer in /Users/josiahwong/Documents/research-shopping-evals on feat/p
 ## Measurement limits
 
 Recorded original provider responses are distinct from synthetic local doubles. A supplied perfect interpretation cannot prove language-model intelligence. Never generate provider output from private expected state or repair actual returned preferences. Report post-interpretation technical behavior separately from end-to-end/live usefulness. No paid OpenAI or Exa calls, no real receipts/ledger, no private environment loading. Source changes occur only by integrating the pinned application commit, never evaluation-authored product fixes.
+
+## Upstream change during verification
+
+The completed fd9 OpenAI-era run is frozen in becee3c. While independent reviews completed, PR38 advanced to4e42bee with supported local parsing and optional local Ollama. Root integrated it through32c0811 without app edits. Retain every original v4 and first v5 artifact. Adapt only the evaluation boundary, run all60 again under local-first plus synthetic fallback and a separately labeled no-interpreter lane, and repeat independent review. No model installation or paid inference is authorized. Fix the independently observed harness timeout-event turn attribution while preserving old evidence.

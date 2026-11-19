@@ -51,18 +51,21 @@ Read `comparison.json` for newly passing cases, newly failing cases, unchanged f
 
 ## Compare the frozen v4 baseline with v5
 
-The frozen v4 report retains schema 2 and assertion contract 2.0.0. Current v5 reports use schema 3 and assertion contract 3.0.0. Use the explicit cross-contract bridge rather than weakening the same-contract comparator.
+The frozen v4 report retains schema 2 and assertion contract 2.0.0. The preserved first v5 run retains schema 3 and assertion contract 3.0.0. Current local-first v5 reports use schema 4 and assertion contract 4.0.0. Use the explicit cross-contract bridge rather than weakening the same-contract comparator.
 
 ```sh
-npm run eval -- --out artifacts/product-evals/candidate-v5 --application-commit fd9d13793342cdd7e37686b09ae6c9ffd88bb69f --issue-drafts
-npm run eval:scorecard -- --baseline artifacts/product-evals/baseline-v1/report.json --candidate artifacts/product-evals/candidate-v5/report.json --out artifacts/product-evals/comparison-v4-v5
+npm run eval -- --out artifacts/product-evals/candidate-v5-local --application-commit 4e42bee347b4c7909c2d4ac96122a781e945bd82 --issue-drafts
+npm run eval:scorecard -- --baseline artifacts/product-evals/baseline-v1/report.json --candidate artifacts/product-evals/candidate-v5-local/report.json --out artifacts/product-evals/comparison-v4-v5-local
+npm run eval -- --intent-mode local-only --out artifacts/product-evals/candidate-v5-local/without-interpreter --application-commit 4e42bee347b4c7909c2d4ac96122a781e945bd82
 ```
 
 Both reports must contain all sixty unchanged cases, expectations, actions and matching research material. Each report is validated separately. The scorecard retains original verdicts and distinguishes newly passing, still failing, pass-to-fail regressions, newly observed failures and lost assessment. Read per-case supplied-interpretation limitations as well as aggregate counts.
 
-The v5 lane supplies independently authored synthetic intent proposals through the public interpreter interface. It uses actual application state reduction, Hono requests and Exa SDK loopback transport, with zero OpenAI HTTP requests. Fixed proposals are not genuine model recordings. The v4/v5 comparison therefore describes different interpretation treatments. A newly passing technical assertion cannot establish better live understanding, tool selection, product discovery or useful recommendations. Separate fake-key transport controls exercise the production OpenAI boundary with isolated synthetic receipts.
+The current v5 lane first exercises the application's supported local interpretation, with independently authored synthetic intent proposals available through the optional interpreter interface. It uses actual application state reduction, Hono requests and Exa SDK loopback transport, with zero OpenAI HTTP requests. Fixed proposals are not genuine model recordings. The v4/v5 comparison therefore describes different interpretation treatments. A newly passing technical assertion cannot establish better live understanding, tool selection, product discovery or useful recommendations. Current transport controls exercise the actual optional Ollama adapter through an owned fake loopback service, without a model or cloud connection. Historical OpenAI transport results remain frozen with the earlier fd9 candidate; they do not approve the current runtime.
 
-The original baseline, dataset and milestones stay byte-for-byte unchanged. Keep legacy failures caused by changed product policy, such as proactive no-budget research, in the frozen scorecard and discuss their interpretation separately. Never edit expectations to turn those results green.
+The original baseline, dataset, milestones and first candidate-v5/comparison-v4-v5 artifacts stay byte-for-byte unchanged. Latest-parent artifacts use separately named directories. Keep legacy failures caused by changed product policy, such as proactive no-budget research, in the frozen scorecard and discuss their interpretation separately. Never edit expectations to turn those results green.
+
+The supplemental local-only run reads no fixed intent tape and makes no inference request. Its raw sixty-case technical results describe behavior with the optional interpreter absent. It has a different declared treatment and is incomparable under the main fixed-fallback bridge. Read the [latest report](product-evaluation-v4-v5-local.md) for both lanes and the distinction from live usefulness.
 
 ## Obtain an independent semantic judgment
 

@@ -25,3 +25,7 @@ The side-by-side is descriptive under different interpretation treatments. Do no
 ## Ownership and gates
 
 One evaluation code owner implements in the assigned worktree. No src or application test edits; its source tree must equal fd9d137, integrated by merge only. Root owns docs, ledger and GitHub. Preserve old artifacts and defect proofs. Run all sixty, meaningful positive/adverse controls, real desktop/mobile journeys and zero-credit CI. Fresh exact-head QA/security challenge both adapter fidelity and scorecard fairness before approval. Keep PR47 draft while parent38 remains open. After parent lands, integrate final trunk and repeat verification before preparing merge.
+
+## Latest local-first composition
+
+PR38 advanced to4e42bee during review. Keep all fd9 candidate/comparison files unchanged and archive its exact-ee6d independent QA/security/cleanup. Current report schema4/assertion4/adapter normal-v5.2-local-fixed-fallback distinguishes actual local parsing from consumed fallback proposals, freezes schema3 validation with static independent types/schemas, and tests the actual optional Ollama adapter against an owned fake loopback service. The main lane still uses exactly the v2 tape and original research inputs. A supplemental full60 run uses --intent-mode local-only, no tape reading or model, and stays outside the fixed-treatment comparison transitions. Retire current OpenAI test composition without restoring removed application code; historical stopped programs stay untouched.

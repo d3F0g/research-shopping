@@ -238,8 +238,14 @@
     },
     "label": "Same assertions assessed in both reports under different interpretation composition. Conditional technical comparison only."
   },
-  "independentReview": "pending final verdict",
-  "CI": "pending push",
+  "independentReview": {
+    "status": "PASS for historical evaluator/app only",
+    "head": "ee6d33850d4849ccc155f2fcdee291bd15de9118",
+    "application": "fd9d13793342cdd7e37686b09ae6c9ffd88bb69f",
+    "reports": ".audit/product-evals-v5-historical",
+    "latestIntegration": "4e42bee remains separately unreviewed"
+  },
+  "CI": "Historical local proof only; latest integration CI pending",
   "liveUsefulness": "not established",
   "manualGrantUsed": false
 }
