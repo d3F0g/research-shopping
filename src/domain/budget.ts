@@ -73,7 +73,7 @@ export function parseBudget(
   previous: ShoppingIntent["budget"],
   region: Region,
 ): BudgetUpdate {
-  let remaining = message.normalize("NFKC").replace(/[’‘]/g, "'").trim();
+  let remaining = message.normalize("NFKC").replace(/[’‘]/g, "'").replace(/\b(SGD|USD)\$/gi, "$1").trim();
   const clarification = (
     reason: "currency" | "budget",
     explanation: string,

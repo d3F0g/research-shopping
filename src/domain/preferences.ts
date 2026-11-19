@@ -5,6 +5,7 @@ import {
   type Criterion,
   type IntentEdit,
   type ShoppingIntent,
+  type MoneyDraft,
 } from "./contracts";
 import {
   ShoppingIntentSchema as Version3ShoppingIntentSchema,
@@ -144,6 +145,8 @@ function interpretMessage(
   previous: ShoppingIntent,
 ): IntentUpdate {
   const text = message.trim();
+  const pendingAnswer = resolvePendingAnswer(text, previous);
+  if (pendingAnswer) return pendingAnswer;
   const help = normalized(text);
   if (
     /^(?:how (?:does (?:this|it|fieldnote|this app) work|do i use (?:this|fieldnote|this app))|what can (?:you|fieldnote|this app) do|help(?: me use (?:this|fieldnote|this app))?|can you (?:place an order|buy (?:it|something) for me))$/.test(
@@ -340,10 +343,8 @@ function interpretMessage(
         origin: { kind: "message", text },
       });
   }
-  if (!isRefresh)
-    intent.productDescription = previous.productDescription
-      ? `${previous.productDescription}\nFollow-up: ${text}`
-      : text;
+  if (!isRefresh && !previous.productDescription)
+    intent.productDescription = text;
   intent.revision =
     Math.max(
       previous.revision,
@@ -402,13 +403,22 @@ function retainPendingUpdate(
   )
     result.preferences = {
       ...result.preferences,
-      pendingChange: {
-        kind: "legacy",
+      pendingChange: issue.reason === "constraint" ? {
+        kind: "constraint",
         id: `question-${result.preferences.revision + 1}`,
-        originalRequest: message,
+        originalRequest: result.preferences.productDescription || message,
+        message,
+        reason: "constraint",
+        explanation: issue.message,
+      } : {
+        kind: "money",
+        id: `question-${result.preferences.revision + 1}`,
+        originalRequest: result.preferences.productDescription || message,
         message,
         reason: issue.reason,
         explanation: issue.message,
+        missingSlot: issue.reason === "currency" ? "currency" : "range",
+        draft: unresolvedMoneyDraft(message, result.preferences),
       },
       revision: result.preferences.revision + 1,
     };
@@ -504,6 +514,7 @@ export function migrateVersion4Intent(
     if (known.kind === "updated" && known.budget) {
       pendingChange = {
         ...pending,
+        reason: "currency",
         kind: "money",
         id: `question-${parsed.revision}`,
         originalRequest: original,
@@ -513,4 +524,43 @@ export function migrateVersion4Intent(
     }
   }
   return ShoppingIntentSchema.parse({ ...parsed, version: 5, pendingChange });
+}
+
+export function unresolvedMoneyDraft(message: string, previous: ShoppingIntent): MoneyDraft {
+  const candidate = parseBudget(message.replace(/(?:SGD\$|S\$|(?<![A-Z])\$)/gi, "SGD"), null, previous.region);
+  return candidate.kind === "updated" && candidate.budget
+    ? { amount: candidate.budget.amount, minimum: candidate.budget.minimum ?? null, currency: /\b(?:SGD|USD)\b|S\$|US\$/i.test(message) ? candidate.budget.currency : null }
+    : { amount: null, minimum: null, currency: null };
+}
+
+export function resolvePendingAnswer(message: string, previous: ShoppingIntent): IntentUpdate | null {
+  const question = previous.pendingChange;
+  if (!question || question.kind !== "money" || question.missingSlot !== "currency" || question.draft.amount === null) return null;
+  const match = /^(?:it(?:'s| is) |in )?(SGD|USD|S\$|US\$)(?:\s*\$?\s*\d+(?:\.\d{1,2})?)?[.!?]*$/i.exec(message.trim());
+  if (!match) return null;
+  const currency = /^(?:USD|US\$)$/i.test(match[1]!) ? "USD" : "SGD";
+  const preferences = ShoppingIntentSchema.parse({
+    ...previous,
+    budget: { amount: question.draft.amount, currency, ...(question.draft.minimum === null ? {} : { minimum: question.draft.minimum }) },
+    budgetClarified: true,
+    pendingChange: null,
+    revision: previous.revision + 1,
+  });
+  return { preferences, notes: [] };
+}
+
+export function resolveLocalIntent(message: string, previous: ShoppingIntent): IntentUpdate | null {
+  const pending = resolvePendingAnswer(message, previous);
+  if (pending) return pending;
+  const text = message.trim();
+  if (/^(?:cancel|discard|never mind|nevermind)(?: (?:that|the pending change))?[.!?]*$/i.test(text))
+    return editIntent(previous, { kind: "discard-pending" }, text);
+  const interpreted = updateIntent(text, previous);
+  if (interpreted.reply && JSON.stringify(interpreted.preferences) === JSON.stringify(previous)) return interpreted;
+  if (detailOnly.test(text)) return interpreted;
+  if (/^(?:please )?(?:remove|drop|forget|clear)\s/i.test(text)) return interpreted;
+  if (/^(?:compare(?: options)?|research(?: now)?|search(?: again)?|find options|refresh(?: research)?)[.!?]*$/i.test(text)) return interpreted;
+  if (/^(?:make it|(?:set|change|raise|lower|increase|reduce|update) (?:my |the )?budget(?: to)?|budget(?: is| of)?|under|up to|at most)\s+/i.test(text) && previous.productDescription) return interpreted;
+  if (/^(?:SGD|USD|S\$|US\$)(?:\s*\$?\s*[0-9,.]+)?[.!?]*$/i.test(text) && previous.productDescription) return interpreted;
+  return null;
 }

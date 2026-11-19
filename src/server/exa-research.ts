@@ -170,6 +170,7 @@ const AnswerEnvelope = z.object({
         url: z.string(),
         title: z.string().nullable().optional(),
         text: z.string().optional(),
+        image: z.string().nullable().optional(),
       }),
     )
     .max(100),
@@ -194,7 +195,7 @@ const safeUrl = (value: string) =>
 function retainSources(
   citations: z.infer<typeof AnswerEnvelope>["citations"],
 ): ResearchSource[] {
-  const byUrl = new Map<string, { title: string; text: string } | null>();
+  const byUrl = new Map<string, { title: string; text: string; imageUrl: string | null; imageConflict: boolean } | null>();
   for (const citation of citations) {
     const url = safeUrl(citation.url);
     if (!url || !citation.text) continue;
@@ -206,8 +207,13 @@ function retainSources(
       byUrl.set(url, null);
       continue;
     }
+    const imageUrl = citation.image ? safeUrl(citation.image) : null;
+    if (existing && (existing.imageConflict || existing.imageUrl !== imageUrl)) {
+      existing.imageUrl = null;
+      existing.imageConflict = true;
+    }
     if (!byUrl.has(url))
-      byUrl.set(url, { title: citation.title ?? "", text: citation.text });
+      byUrl.set(url, { title: citation.title ?? "", text: citation.text, imageUrl, imageConflict: false });
   }
   return [...byUrl]
     .flatMap(([url, value]) => (value ? [{ url, ...value }] : []))
@@ -219,6 +225,7 @@ function retainSources(
       titleTruncated: source.title.length > 500,
       text: source.text.slice(0, 24000),
       textTruncated: source.text.length > 24000,
+      ...(source.imageUrl ? { imageUrl: source.imageUrl } : {}),
     }));
 }
 function retainedParagraphs(
@@ -560,7 +567,7 @@ function projectAnswer(raw: unknown, intent: ShoppingIntent) {
   );
   const snapshot = ResearchSnapshotSchema.safeParse({
     dataKind: "web-research",
-    evidenceVersion: 4,
+    evidenceVersion: 5,
     retrievedAt: new Date().toISOString(),
     intent,
     ...assessment,

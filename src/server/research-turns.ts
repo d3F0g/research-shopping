@@ -1,13 +1,15 @@
 import { createHash } from "node:crypto";
-import { editIntent, updateIntent } from "../domain/preferences";
+import { editIntent, resolveLocalIntent, type IntentUpdate } from "../domain/preferences";
 import type {
   ResearchOperation,
   ResearchTurns,
   ResearchUnavailableReason,
 } from "../domain/research";
+import { applyIntentActions, type IntentInterpreter } from "../domain/intent-actions";
 import type { ResearchQuota } from "./research-quota";
 
 const unavailableMessages: Record<ResearchUnavailableReason, string> = {
+  "intent-unavailable": "I could not interpret that request right now. Your accepted preferences and any pending answer are retained. Try again after intent interpretation is available.",
   "not-configured":
     "Live research is not configured. No product results are available.",
   disabled:
@@ -29,13 +31,16 @@ const unavailableMessages: Record<ResearchUnavailableReason, string> = {
 
 export function createResearchTurns(dependencies: {
   research?: ResearchOperation;
+  interpretIntent?: IntentInterpreter;
   quota?: ResearchQuota;
   unavailableReason?: "not-configured" | "disabled";
 }): ResearchTurns {
   return {
     async turn(request, signal) {
       signal.throwIfAborted();
-      const update =
+      if (request.phase === "prepare" && request.questionId && request.questionId !== request.preferences.pendingChange?.id)
+        return { responseVersion: 5, kind: "message", preferences: request.preferences, notes: [], message: "That question is no longer active. Your current preferences are unchanged." };
+      let update: IntentUpdate | null =
         request.phase === "prepare"
           ? request.edit
             ? editIntent(request.preferences, request.edit, request.message)
@@ -53,11 +58,22 @@ export function createResearchTurns(dependencies: {
                   },
                   notes: [],
                 }
-              : updateIntent(request.message, request.preferences)
+              : resolveLocalIntent(request.message, request.preferences)
           : { preferences: request.preferences, notes: [] };
+      if (!update && request.phase === "prepare") {
+        try {
+          const result = await dependencies.interpretIntent?.(request, signal);
+          signal.throwIfAborted();
+          if (result?.status === "ready") update = applyIntentActions(request.preferences, request.message, result.interpretation);
+        } catch (error) {
+          if (signal.aborted) throw error;
+        }
+        if (!update) return { responseVersion: 5, kind: "research-unavailable", reason: "intent-unavailable", message: unavailableMessages["intent-unavailable"], preferences: request.preferences, notes: [] };
+      }
+      if (!update) throw new Error("Missing intent update");
       const preferences = update.preferences;
       const notes = update.notes;
-      const base = { responseVersion: 4 as const, preferences, notes };
+      const base = { responseVersion: 5 as const, preferences, notes };
       if ("clarification" in update && update.clarification)
         return { ...base, kind: "clarification", ...update.clarification };
       if ("reply" in update && update.reply)
@@ -76,14 +92,6 @@ export function createResearchTurns(dependencies: {
           reason: "description",
           message:
             "Describe what you are shopping for before starting research.",
-        };
-      if (!preferences.budget && !preferences.budgetClarified)
-        return {
-          ...base,
-          kind: "question",
-          question: "budget",
-          message:
-            "What is your maximum budget in SGD or USD? You can skip this and compare without a price limit.",
         };
       if (request.phase === "prepare")
         return { kind: "prepared", preferences, notes };

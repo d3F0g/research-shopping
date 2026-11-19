@@ -134,6 +134,7 @@ export const PrepareTurnRequestSchema = z.strictObject({
   operationId: z.string().uuid(),
   edit: IntentEditSchema.optional(),
   skipBudget: z.boolean().optional(),
+  questionId: z.string().min(1).max(80).optional(),
 });
 export const ResearchTurnRequestSchema = z.strictObject({
   phase: z.literal("research"),

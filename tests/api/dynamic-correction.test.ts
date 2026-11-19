@@ -1,3 +1,4 @@
+import { fixtureIntentInterpreter } from "../helpers/intent";
 import { createHash, randomUUID } from "node:crypto";
 import { describe, expect, it } from "vitest";
 import { createApp } from "../../src/server/app";
@@ -94,7 +95,7 @@ describe("independent correction reproductions", () => {
   });
   it("retains invalid hard changes through ordinary replies and refresh until corrected or discarded", async () => {
     const dispatched: ShoppingIntent[] = [];
-    const turns = createResearchTurns({
+    const turns = createResearchTurns({ interpretIntent: fixtureIntentInterpreter,
       research: async ({ preferences }) => {
         dispatched.push(preferences);
         return {
@@ -164,7 +165,7 @@ describe("independent correction reproductions", () => {
   it("acknowledges new exclusions before any paid work and research uses the accepted state without interpretation", async () => {
     const seen: ShoppingIntent[] = [];
     let reservations = 0;
-    const turns = createResearchTurns({
+    const turns = createResearchTurns({ interpretIntent: fixtureIntentInterpreter,
       research: async ({ preferences }) => {
         seen.push(preferences);
         return {
@@ -214,7 +215,7 @@ describe("independent correction reproductions", () => {
     ).toBe(400);
   });
   it("keeps newly expressed hard criteria while a budget in the same first message needs correction", async () => {
-    const turns = createResearchTurns({});
+    const turns = createResearchTurns({ interpretIntent: fixtureIntentInterpreter,});
     const invalid = await turns.turn(
       prepare(
         "A purifier under CHF200. Must have washable prefilter.",

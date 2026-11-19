@@ -1,3 +1,4 @@
+import { fixtureIntentInterpreter } from "../helpers/intent";
 import { submitTurn } from "../helpers/turns";
 import { once } from "node:events";
 import { mkdtemp, readFile, rm, stat } from "node:fs/promises";
@@ -29,7 +30,7 @@ async function localResearch(
   server.listen(0, "127.0.0.1");
   await once(server, "listening");
   try {
-    const turns = createResearchTurns({
+    const turns = createResearchTurns({ interpretIntent: fixtureIntentInterpreter,
       research: createExaProductResearch("fake-private-key-never-retained", {
         baseUrl: `http://127.0.0.1:${(server.address() as AddressInfo).port}`,
         diagnosticSink: sink,
