@@ -1,0 +1,136 @@
+{
+  "head": "2bfca23674d1094302e96a4f346cd8028e38b690",
+  "scope": "adversarial immediate next-turn overlap before SDK server arrival",
+  "rows": [
+    {
+      "attempt": 0,
+      "events": [
+        {
+          "sequence": 1,
+          "turn": 0,
+          "kind": "app-request",
+          "body": "prepare"
+        },
+        {
+          "sequence": 2,
+          "turn": 0,
+          "kind": "app-response",
+          "body": null
+        },
+        {
+          "sequence": 3,
+          "turn": 0,
+          "kind": "app-request",
+          "body": "research"
+        },
+        {
+          "sequence": 4,
+          "turn": 1,
+          "kind": "app-request",
+          "body": "prepare"
+        },
+        {
+          "sequence": 5,
+          "turn": 1,
+          "kind": "admission",
+          "body": null
+        },
+        {
+          "sequence": 6,
+          "turn": 1,
+          "kind": "app-response",
+          "body": null
+        },
+        {
+          "sequence": 7,
+          "turn": 1,
+          "kind": "provider-request",
+          "body": null
+        },
+        {
+          "sequence": 8,
+          "turn": 1,
+          "kind": "provider-response",
+          "body": null
+        },
+        {
+          "sequence": 9,
+          "turn": 1,
+          "kind": "settlement",
+          "body": null
+        },
+        {
+          "sequence": 10,
+          "turn": 0,
+          "kind": "app-response",
+          "body": null
+        }
+      ]
+    },
+    {
+      "attempt": 1,
+      "events": [
+        {
+          "sequence": 1,
+          "turn": 0,
+          "kind": "app-request",
+          "body": "prepare"
+        },
+        {
+          "sequence": 2,
+          "turn": 0,
+          "kind": "app-response",
+          "body": null
+        },
+        {
+          "sequence": 3,
+          "turn": 0,
+          "kind": "app-request",
+          "body": "research"
+        },
+        {
+          "sequence": 4,
+          "turn": 1,
+          "kind": "app-request",
+          "body": "prepare"
+        },
+        {
+          "sequence": 5,
+          "turn": 1,
+          "kind": "admission",
+          "body": null
+        },
+        {
+          "sequence": 6,
+          "turn": 1,
+          "kind": "app-response",
+          "body": null
+        },
+        {
+          "sequence": 7,
+          "turn": 1,
+          "kind": "provider-request",
+          "body": null
+        },
+        {
+          "sequence": 8,
+          "turn": 1,
+          "kind": "provider-response",
+          "body": null
+        },
+        {
+          "sequence": 9,
+          "turn": 1,
+          "kind": "settlement",
+          "body": null
+        },
+        {
+          "sequence": 10,
+          "turn": 0,
+          "kind": "app-response",
+          "body": null
+        }
+      ]
+    }
+  ]
+}

@@ -1,29 +1,26 @@
 # Hard limits and preferences
 
-This page describes the explicit legacy fixture regression composition. It does not describe normal development product scope or establish live product behavior. Use [Exa product research](web-research.md) for the dynamic normal interface.
-
-Messages update structured shopping preferences. A missing material fact can produce a compact inline question. Full preference editing opens only when the user requests it.
+The current editor accepts an open product description, Required and Flexible criteria, budget bounds, currency, market, and answer length. The server interprets messages and accepts explicit edits. Category menus and known-brand selectors are not current controls.
 
 ## Contextual questions
 
-Start with an incomplete request. Require the question inside its assistant turn. Choose a supported category through its quick choice and require an actual response using that category. An optional budget question can offer quick amounts, a validated custom amount and Skip. Exercise Skip and verify it is remembered in that context instead of asking repeatedly.
-
-Submit a complete category and budget request. Require both values to be extracted without another question for either fact. A generic Skip action must never clear an unresolved hard requirement.
+Submit a useful shopping request without a budget and require research to start without an optional budget form. Add or edit bounds through the current answer's preference disclosure. A complete request with a stated budget must not ask for it again. For ambiguous money, inspect the typed pending draft, original request and question identity. Answer the missing currency and require automatic research with both bounds retained. A generic skip must never clear an unresolved hard requirement.
 
 ## Edit accepted preferences
 
-Open the current answer's preference disclosure. Verify a single mounted editor, visible keyboard focus, readable mobile fields and accepted values. Use its actual close control and confirm earlier conversation messages remain. Inline disclosure does not need a dialog focus trap.
+Open the current answer's preference disclosure. Require one mounted editor, readable mobile fields, visible keyboard focus, and the accepted values. Close it through its actual control without losing earlier messages.
 
-- Lower the budget, apply the change and inspect the actual turn response. Every current offer must have the requested currency and meet the new cap. Earlier results remain historical snapshots.
-- Clear the cap explicitly. Require no hidden old limit in the accepted preferences or next request.
-- Exclude Sony, apply the change and require no current Sony candidate. Add a required feature and require every candidate to satisfy supported fixture evidence for it.
-- Change category. Require relevant feature options and the existing explanation when category-specific assumptions are removed. Budget, region and unrelated constraints must remain as designed.
-- Change currency and region. Require mismatches to be explicit. Never treat SGD and USD amounts as interchangeable.
-- Change answer length or a flexible priority. Inspect the real response and confirm the hard-constraint object remains unchanged.
-- Enter zero or an invalid budget. Require an alert and disabled submission while the accepted positive budget stays intact. Recover through a valid amount or explicit removal.
+- Edit the open product description and a criterion. Preserve each unchanged criterion's identity and Required or Flexible strength.
+- Save a budget range. Change only its maximum and require the minimum to remain. Remove the minimum explicitly and require only that bound to disappear.
+- Change currency or market. Require the accepted response to preserve unrelated criteria. Never treat SGD and USD as interchangeable.
+- Change answer length or a Flexible criterion. Require all unrelated hard requirements and budget bounds to remain.
+- Enter zero or a minimum above the maximum. Click **Save preferences**. Require an alert and unchanged accepted state. Save stays clickable so validation can explain the error. Recover with a valid value or explicit removal.
+- After a valid save, inspect the accepted response and require no provider request. Use **Compare options** explicitly to research the edited intent.
 
-Use natural follow-up messages for the same changes where supported. After `under S$200`, require the new accepted budget and retained previous exchanges. Do not replay an old natural-language budget when applying editor changes.
+Use natural follow-up messages for supported changes. After `under S$200`, require the accepted cap and retained previous exchanges. Do not replay old request wording when applying editor changes.
 
-## Safety and state
+## Safety and proof
 
-Editing preferences cancels obsolete work and disables stale actions without erasing accepted history. The first flexible priority has the most influence but cannot override a hard limit. Unsupported requirements remain unresolved until an explicit supported correction, removal or reset. Scope repeated fields and cards to the current editor and assistant turn.
+Editing cancels obsolete work without erasing completed history. Flexible preferences cannot override a hard requirement. Unknown hard fit remains unresolved. Scope fields and cards to the current editor and assistant turn.
+
+Use `tests/e2e/budget-range.spec.ts` for actual HTTP and SDK loopback range handling. Use `tests/e2e/dynamic-shopping.spec.ts` for response-injected editor validation and immutable snapshots. Both use synthetic evidence and establish no live offers. Legacy fixture category and priority rules remain API and domain regression checks, unreachable through the current composer.

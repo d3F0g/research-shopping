@@ -1,0 +1,123 @@
+{
+  "schemaVersion": 1,
+  "applicationCommit": "bb51c38748b35d838b44109d72ab4dc9a9847d8c",
+  "reportRunId": "3a26276e5ae6ff165d939dc3",
+  "entries": [
+    {
+      "label": "97a503b1112e59a0cba78b95",
+      "packetHash": "75eac3c55b52dcdbdc3c572bdb42c1ea17eb8b97ec8dcad3c8c40fc9a057d59f",
+      "caseId": "FN-CU-001",
+      "calibrationId": null,
+      "referenceScores": null,
+      "disputes": null
+    },
+    {
+      "label": "966a74bd7b7b5ecba0d11a31",
+      "packetHash": "9644c61d93f9f75ab1c13560a67e2f6d7dd78e91fa8422b3ccec95a7708f61c5",
+      "caseId": "FN-CU-002",
+      "calibrationId": null,
+      "referenceScores": null,
+      "disputes": null
+    },
+    {
+      "label": "b2febdcceef7a585a308b1a2",
+      "packetHash": "f05bceeec91bcc55dc22cf510181dd927bc46836b99f21522086467c0476b839",
+      "caseId": "FN-CU-003",
+      "calibrationId": null,
+      "referenceScores": null,
+      "disputes": null
+    },
+    {
+      "label": "decd8f4bd4a01412a47346e0",
+      "packetHash": "9127dcd89d9ca4154aa9ec551b7abda12ee26f577f096c746d4b82fb6448f42f",
+      "caseId": "FN-CU-004",
+      "calibrationId": null,
+      "referenceScores": null,
+      "disputes": null
+    },
+    {
+      "label": "052dfa5750c3f976e5b69fb6",
+      "packetHash": "fca30e4164109d786ffbd6e1ea82543708b63eef95515a74db6fbd7bdd3139a4",
+      "caseId": "FN-CU-005",
+      "calibrationId": null,
+      "referenceScores": null,
+      "disputes": null
+    },
+    {
+      "label": "9dbdbdf549b23b75989a0379",
+      "packetHash": "4586792db989198847c83e5021ebc712f7bc9a8974059d3d98934eabb8e00da9",
+      "caseId": "FN-PE-001",
+      "calibrationId": null,
+      "referenceScores": null,
+      "disputes": null
+    },
+    {
+      "label": "15823850525a6535da043475",
+      "packetHash": "787ea6fedcd1ad3d5223231264a67955ead597659286774b08ef5b3fdd2d6d5e",
+      "caseId": "CAL-001",
+      "calibrationId": "CAL-001",
+      "referenceScores": {
+        "intentUnderstanding": 4,
+        "relevance": null,
+        "usefulness": 3,
+        "reasoning": null,
+        "naturalness": 4,
+        "conciseness": 4,
+        "adaptation": 4,
+        "clarificationNecessity": 4
+      },
+      "disputes": "Whether this interim acknowledgement earns usefulness 3 or should remain unscored. It cannot earn a completed-shopping success verdict."
+    },
+    {
+      "label": "4643e354ffc360010a8b70bf",
+      "packetHash": "a1cf0901762cd2df6181e5b068f8a884b4311cc29583a7d89668489bc669a3ff",
+      "caseId": "CAL-002",
+      "calibrationId": "CAL-002",
+      "referenceScores": {
+        "intentUnderstanding": 1,
+        "relevance": 1,
+        "usefulness": 0,
+        "reasoning": 0,
+        "naturalness": 3,
+        "conciseness": 4,
+        "adaptation": 0,
+        "clarificationNecessity": null
+      },
+      "disputes": "Exact low relevance score may vary. Both hard-constraint critical failures are deterministic and are not judge-discretion questions."
+    },
+    {
+      "label": "8f36fb602929166c66f4b23f",
+      "packetHash": "41cc1ba5ea711ded365f8df5f710e3c305440f73996dd1ccaa70b2a8dac12e81",
+      "caseId": "CAL-003",
+      "calibrationId": "CAL-003",
+      "referenceScores": {
+        "intentUnderstanding": 4,
+        "relevance": 4,
+        "usefulness": 4,
+        "reasoning": 4,
+        "naturalness": 4,
+        "conciseness": 4,
+        "adaptation": 4,
+        "clarificationNecessity": 4
+      },
+      "disputes": "Whether a next-step suggestion would improve usefulness. It must not require relaxing the user's budget or membership constraint."
+    },
+    {
+      "label": "e421bbec7642d4588c905a47",
+      "packetHash": "17e855c7ff37e1b667731912b2a0109f36cda21ab6b8d051228a678441538adf",
+      "caseId": "CAL-004",
+      "calibrationId": "CAL-004",
+      "referenceScores": {
+        "intentUnderstanding": 4,
+        "relevance": 4,
+        "usefulness": 4,
+        "reasoning": 4,
+        "naturalness": 4,
+        "conciseness": 4,
+        "adaptation": 4,
+        "clarificationNecessity": 4
+      },
+      "disputes": "Whether bird-tracking benefit is supported by the supplied field-of-view context. A judge should flag any inference that lacks adequate domain evidence rather than treating fluent wording as proof."
+    }
+  ]
+}

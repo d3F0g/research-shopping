@@ -1,0 +1,689 @@
+{
+  "scenarioId": "FN-CD-003",
+  "initialPreferences": {
+    "version": 5,
+    "productDescription": "",
+    "criteria": [],
+    "budget": null,
+    "budgetClarified": false,
+    "pendingChange": null,
+    "region": "SG",
+    "responseLength": "concise",
+    "revision": 0
+  },
+  "finalPreferences": {
+    "version": 5,
+    "productDescription": "",
+    "criteria": [],
+    "budget": null,
+    "budgetClarified": false,
+    "pendingChange": null,
+    "region": "SG",
+    "responseLength": "concise",
+    "revision": 0
+  },
+  "material": {
+    "id": "mixed-fit:FN-CD-003",
+    "kind": "synthetic",
+    "label": "Explicit synthetic provider double. Not genuine Exa research.",
+    "capturedAt": null,
+    "provenance": [
+      "Independently fixed test input before application execution",
+      "No current product or market claim",
+      "Original independent provider recipe mixed-fit; fixed profile FN-CD-003.",
+      "Synthetic claims, prices and availability statements remain visibly labeled. No live research or inventory."
+    ],
+    "sha256": "c740ac64c7b9c3c6666b40dfcab753ba1997133d3c57ff0aa127b2eb3f5a6002",
+    "body": {
+      "requestId": "synthetic-FN-CD-003",
+      "costDollars": {
+        "total": 0.005
+      },
+      "citations": [
+        {
+          "url": "https://fixture.example.com/synthetic-charge-1",
+          "title": "Synthetic Charge 1 synthetic fixture",
+          "text": "Synthetic Charge 1 standard is a USB-C charger with one 65 W USB-C output port.\nSynthetic Charge 1 standard costs SGD 40.00 for one unit, tax included.\nSynthetic input. Stock and delivery are not established."
+        },
+        {
+          "url": "https://fixture.example.com/synthetic-charge-2",
+          "title": "Synthetic Charge 2 synthetic fixture",
+          "text": "Synthetic Charge 2 standard is a USB-C charger with one 65 W USB-C output port.\nSynthetic Charge 2 standard costs SGD 55.00 for one unit, tax included.\nSynthetic input. Stock and delivery are not established.\nSynthetic Charge 2 standard is a non-functional display model and cannot be used as an operational product."
+        },
+        {
+          "url": "https://fixture.example.com/synthetic-charge-3",
+          "title": "Synthetic Charge 3 synthetic fixture",
+          "text": "Synthetic Charge 3 standard is a USB-C charger with one 65 W USB-C output port.\nSynthetic Charge 3 standard costs SGD 65.00 for one unit, tax included.\nSynthetic input. Stock and delivery are not established."
+        }
+      ],
+      "answer": {
+        "products": [
+          {
+            "id": "synthetic-charge-1",
+            "name": "Synthetic Charge 1",
+            "variant": "standard",
+            "identity": {
+              "status": "supported",
+              "scope": "exact-variant",
+              "rationale": "Synthetic source-based test interpretation, not a live product claim.",
+              "support": [
+                {
+                  "url": "https://fixture.example.com/synthetic-charge-1",
+                  "quote": "Synthetic Charge 1 standard is a USB-C charger with one 65 W USB-C output port."
+                }
+              ]
+            },
+            "requestMatch": {
+              "status": "supported",
+              "scope": "exact-variant",
+              "rationale": "Synthetic source-based test interpretation, not a live product claim.",
+              "support": [
+                {
+                  "url": "https://fixture.example.com/synthetic-charge-1",
+                  "quote": "Synthetic Charge 1 standard is a USB-C charger with one 65 W USB-C output port."
+                }
+              ]
+            },
+            "criteria": [],
+            "attributes": [
+              {
+                "name": "Use",
+                "assessment": {
+                  "status": "supported",
+                  "scope": "exact-variant",
+                  "rationale": "Synthetic source-based test interpretation, not a live product claim.",
+                  "support": [
+                    {
+                      "url": "https://fixture.example.com/synthetic-charge-1",
+                      "quote": "Synthetic Charge 1 standard is a USB-C charger with one 65 W USB-C output port."
+                    }
+                  ]
+                }
+              }
+            ],
+            "price": {
+              "amount": 40,
+              "currency": "SGD",
+              "conditions": [
+                "One unit",
+                "Tax included"
+              ],
+              "conditionsResolved": true,
+              "variant": "standard",
+              "assessment": {
+                "status": "supported",
+                "scope": "exact-variant",
+                "rationale": "Synthetic source-based test interpretation, not a live product claim.",
+                "support": [
+                  {
+                    "url": "https://fixture.example.com/synthetic-charge-1",
+                    "quote": "Synthetic Charge 1 standard costs SGD 40.00 for one unit, tax included."
+                  }
+                ]
+              }
+            },
+            "budget": {
+              "status": "supported",
+              "scope": "exact-variant",
+              "rationale": "Synthetic source-based test interpretation, not a live product claim.",
+              "support": [
+                {
+                  "url": "https://fixture.example.com/synthetic-charge-1",
+                  "quote": "Synthetic Charge 1 standard costs SGD 40.00 for one unit, tax included."
+                }
+              ]
+            }
+          },
+          {
+            "id": "synthetic-charge-2",
+            "name": "Synthetic Charge 2",
+            "variant": "standard",
+            "identity": {
+              "status": "supported",
+              "scope": "exact-variant",
+              "rationale": "Synthetic source-based test interpretation, not a live product claim.",
+              "support": [
+                {
+                  "url": "https://fixture.example.com/synthetic-charge-2",
+                  "quote": "Synthetic Charge 2 standard is a USB-C charger with one 65 W USB-C output port."
+                }
+              ]
+            },
+            "requestMatch": {
+              "status": "contradicted",
+              "scope": "exact-variant",
+              "rationale": "Synthetic negative fit observation. The exact use remains a semantic assessment.",
+              "support": [
+                {
+                  "url": "https://fixture.example.com/synthetic-charge-2",
+                  "quote": "Synthetic Charge 2 standard is a non-functional display model and cannot be used as an operational product."
+                }
+              ]
+            },
+            "criteria": [],
+            "attributes": [
+              {
+                "name": "Use",
+                "assessment": {
+                  "status": "supported",
+                  "scope": "exact-variant",
+                  "rationale": "Synthetic source-based test interpretation, not a live product claim.",
+                  "support": [
+                    {
+                      "url": "https://fixture.example.com/synthetic-charge-2",
+                      "quote": "Synthetic Charge 2 standard is a USB-C charger with one 65 W USB-C output port."
+                    }
+                  ]
+                }
+              }
+            ],
+            "price": {
+              "amount": 55,
+              "currency": "SGD",
+              "conditions": [
+                "One unit",
+                "Tax included"
+              ],
+              "conditionsResolved": true,
+              "variant": "standard",
+              "assessment": {
+                "status": "supported",
+                "scope": "exact-variant",
+                "rationale": "Synthetic source-based test interpretation, not a live product claim.",
+                "support": [
+                  {
+                    "url": "https://fixture.example.com/synthetic-charge-2",
+                    "quote": "Synthetic Charge 2 standard costs SGD 55.00 for one unit, tax included."
+                  }
+                ]
+              }
+            },
+            "budget": {
+              "status": "supported",
+              "scope": "exact-variant",
+              "rationale": "Synthetic source-based test interpretation, not a live product claim.",
+              "support": [
+                {
+                  "url": "https://fixture.example.com/synthetic-charge-2",
+                  "quote": "Synthetic Charge 2 standard costs SGD 55.00 for one unit, tax included."
+                }
+              ]
+            }
+          },
+          {
+            "id": "synthetic-charge-3",
+            "name": "Synthetic Charge 3",
+            "variant": "standard",
+            "identity": {
+              "status": "supported",
+              "scope": "exact-variant",
+              "rationale": "Synthetic source-based test interpretation, not a live product claim.",
+              "support": [
+                {
+                  "url": "https://fixture.example.com/synthetic-charge-3",
+                  "quote": "Synthetic Charge 3 standard is a USB-C charger with one 65 W USB-C output port."
+                }
+              ]
+            },
+            "requestMatch": {
+              "status": "unknown",
+              "scope": "unclear",
+              "rationale": "Synthetic input intentionally lacks qualifying evidence.",
+              "support": []
+            },
+            "criteria": [],
+            "attributes": [
+              {
+                "name": "Use",
+                "assessment": {
+                  "status": "supported",
+                  "scope": "exact-variant",
+                  "rationale": "Synthetic source-based test interpretation, not a live product claim.",
+                  "support": [
+                    {
+                      "url": "https://fixture.example.com/synthetic-charge-3",
+                      "quote": "Synthetic Charge 3 standard is a USB-C charger with one 65 W USB-C output port."
+                    }
+                  ]
+                }
+              }
+            ],
+            "price": {
+              "amount": 65,
+              "currency": "SGD",
+              "conditions": [
+                "One unit",
+                "Tax included"
+              ],
+              "conditionsResolved": true,
+              "variant": "standard",
+              "assessment": {
+                "status": "supported",
+                "scope": "exact-variant",
+                "rationale": "Synthetic source-based test interpretation, not a live product claim.",
+                "support": [
+                  {
+                    "url": "https://fixture.example.com/synthetic-charge-3",
+                    "quote": "Synthetic Charge 3 standard costs SGD 65.00 for one unit, tax included."
+                  }
+                ]
+              }
+            },
+            "budget": {
+              "status": "supported",
+              "scope": "exact-variant",
+              "rationale": "Synthetic source-based test interpretation, not a live product claim.",
+              "support": [
+                {
+                  "url": "https://fixture.example.com/synthetic-charge-3",
+                  "quote": "Synthetic Charge 3 standard costs SGD 65.00 for one unit, tax included."
+                }
+              ]
+            }
+          }
+        ],
+        "choice": {
+          "productId": "synthetic-charge-1",
+          "reasons": [
+            {
+              "kind": "field",
+              "name": "identity"
+            },
+            {
+              "kind": "field",
+              "name": "price"
+            }
+          ]
+        },
+        "limitations": [
+          "Entirely synthetic fixed provider material, including every product, claim and price. No inventory or merchant proof. Missing criteria remain unknown."
+        ]
+      }
+    },
+    "status": 200
+  },
+  "interpretation": {
+    "mode": "fixed-proposals",
+    "inputHash": "ba136b479052387d0ab913a7bb4d802eebe4f7e17be79846d908e5fd87c4044a",
+    "openAIHttpRequests": 0,
+    "invocations": 2,
+    "suppliedTurns": [
+      {
+        "turnIndex": 0,
+        "message": "Find a USB-C charger under SGD 70, at least 65 W.",
+        "proposal": {
+          "disposition": "research",
+          "actions": [
+            {
+              "kind": "start-request",
+              "source": {
+                "start": 7,
+                "end": 20,
+                "text": "USB-C charger"
+              }
+            },
+            {
+              "kind": "budget",
+              "source": {
+                "start": 21,
+                "end": 33,
+                "text": "under SGD 70"
+              },
+              "operation": "set-maximum",
+              "draft": {
+                "amount": 70,
+                "minimum": null,
+                "currency": "SGD"
+              }
+            },
+            {
+              "kind": "add-criterion",
+              "source": {
+                "start": 35,
+                "end": 48,
+                "text": "at least 65 W"
+              },
+              "strength": "hard"
+            }
+          ]
+        },
+        "limitations": [
+          "Hard strength follows the literal requirement, including essential, needs, or a specific required specification. The proposal does not rewrite wording to satisfy a lexical guard."
+        ]
+      },
+      {
+        "turnIndex": 1,
+        "message": "No, that recommendation only gives 45 W from one port. I need 65 W from a single USB-C port.",
+        "proposal": {
+          "disposition": "research",
+          "actions": [
+            {
+              "kind": "add-criterion",
+              "source": {
+                "start": 55,
+                "end": 92,
+                "text": "I need 65 W from a single USB-C port."
+              },
+              "strength": "hard"
+            }
+          ]
+        },
+        "limitations": [
+          "Hard strength follows the literal requirement, including essential, needs, or a specific required specification. The proposal does not rewrite wording to satisfy a lexical guard.",
+          "The 45 W statement describes an unsuitable recommendation and is not a requested reduction in output."
+        ]
+      }
+    ],
+    "limitations": []
+  },
+  "turns": [
+    {
+      "index": 0,
+      "action": {
+        "kind": "message",
+        "text": "Find a USB-C charger under SGD 70, at least 65 W."
+      },
+      "initialPreferences": {
+        "version": 5,
+        "productDescription": "",
+        "criteria": [],
+        "budget": null,
+        "budgetClarified": false,
+        "pendingChange": null,
+        "region": "SG",
+        "responseLength": "concise",
+        "revision": 0
+      },
+      "finalPreferences": {
+        "version": 5,
+        "productDescription": "",
+        "criteria": [],
+        "budget": null,
+        "budgetClarified": false,
+        "pendingChange": null,
+        "region": "SG",
+        "responseLength": "concise",
+        "revision": 0
+      },
+      "response": {
+        "responseVersion": 5,
+        "preferences": {
+          "version": 5,
+          "productDescription": "",
+          "criteria": [],
+          "budget": null,
+          "budgetClarified": false,
+          "pendingChange": null,
+          "region": "SG",
+          "responseLength": "concise",
+          "revision": 0
+        },
+        "notes": [],
+        "kind": "research-unavailable",
+        "message": "I could not interpret that request right now. Your accepted preferences and any pending answer are retained. Try again after intent interpretation is available.",
+        "reason": "intent-unavailable"
+      },
+      "providerCalls": 0,
+      "cancelled": false
+    },
+    {
+      "index": 1,
+      "action": {
+        "kind": "message",
+        "text": "No, that recommendation only gives 45 W from one port. I need 65 W from a single USB-C port."
+      },
+      "initialPreferences": {
+        "version": 5,
+        "productDescription": "",
+        "criteria": [],
+        "budget": null,
+        "budgetClarified": false,
+        "pendingChange": null,
+        "region": "SG",
+        "responseLength": "concise",
+        "revision": 0
+      },
+      "finalPreferences": {
+        "version": 5,
+        "productDescription": "",
+        "criteria": [],
+        "budget": null,
+        "budgetClarified": false,
+        "pendingChange": null,
+        "region": "SG",
+        "responseLength": "concise",
+        "revision": 0
+      },
+      "response": {
+        "responseVersion": 5,
+        "preferences": {
+          "version": 5,
+          "productDescription": "",
+          "criteria": [],
+          "budget": null,
+          "budgetClarified": false,
+          "pendingChange": null,
+          "region": "SG",
+          "responseLength": "concise",
+          "revision": 0
+        },
+        "notes": [],
+        "kind": "research-unavailable",
+        "message": "I could not interpret that request right now. Your accepted preferences and any pending answer are retained. Try again after intent interpretation is available.",
+        "reason": "intent-unavailable"
+      },
+      "providerCalls": 0,
+      "cancelled": false
+    }
+  ],
+  "events": [
+    {
+      "sequence": 1,
+      "turn": 0,
+      "kind": "app-request",
+      "elapsedMs": 1.06,
+      "body": {
+        "phase": "prepare",
+        "message": "Find a USB-C charger under SGD 70, at least 65 W.",
+        "preferences": {
+          "version": 5,
+          "productDescription": "",
+          "criteria": [],
+          "budget": null,
+          "budgetClarified": false,
+          "pendingChange": null,
+          "region": "SG",
+          "responseLength": "concise",
+          "revision": 0
+        },
+        "operationId": "46cf1a75-e89e-4eae-8906-a378c3c2213b"
+      }
+    },
+    {
+      "sequence": 2,
+      "turn": 0,
+      "kind": "interpreter-request",
+      "elapsedMs": 1.77,
+      "body": {
+        "operationId": "46cf1a75-e89e-4eae-8906-a378c3c2213b",
+        "message": "Find a USB-C charger under SGD 70, at least 65 W.",
+        "questionId": null,
+        "inputHash": "ba136b479052387d0ab913a7bb4d802eebe4f7e17be79846d908e5fd87c4044a",
+        "label": "Independently authored synthetic proposals. Conditional technical behavior only."
+      }
+    },
+    {
+      "sequence": 3,
+      "turn": 0,
+      "kind": "interpreter-response",
+      "elapsedMs": 1.79,
+      "body": {
+        "status": "ready",
+        "interpretation": {
+          "disposition": "research",
+          "actions": [
+            {
+              "kind": "start-request",
+              "source": {
+                "start": 7,
+                "end": 20,
+                "text": "USB-C charger"
+              }
+            },
+            {
+              "kind": "budget",
+              "source": {
+                "start": 21,
+                "end": 33,
+                "text": "under SGD 70"
+              },
+              "operation": "set-maximum",
+              "draft": {
+                "amount": 70,
+                "minimum": null,
+                "currency": "SGD"
+              }
+            },
+            {
+              "kind": "add-criterion",
+              "source": {
+                "start": 35,
+                "end": 48,
+                "text": "at least 65 W"
+              },
+              "strength": "hard"
+            }
+          ]
+        },
+        "bindings": [],
+        "limitations": [
+          "Hard strength follows the literal requirement, including essential, needs, or a specific required specification. The proposal does not rewrite wording to satisfy a lexical guard."
+        ]
+      }
+    },
+    {
+      "sequence": 4,
+      "turn": 0,
+      "kind": "app-response",
+      "elapsedMs": 2.12,
+      "body": {
+        "status": 200,
+        "body": {
+          "responseVersion": 5,
+          "preferences": {
+            "version": 5,
+            "productDescription": "",
+            "criteria": [],
+            "budget": null,
+            "budgetClarified": false,
+            "pendingChange": null,
+            "region": "SG",
+            "responseLength": "concise",
+            "revision": 0
+          },
+          "notes": [],
+          "kind": "research-unavailable",
+          "message": "I could not interpret that request right now. Your accepted preferences and any pending answer are retained. Try again after intent interpretation is available.",
+          "reason": "intent-unavailable"
+        }
+      }
+    },
+    {
+      "sequence": 5,
+      "turn": 1,
+      "kind": "app-request",
+      "elapsedMs": 2.15,
+      "body": {
+        "phase": "prepare",
+        "message": "No, that recommendation only gives 45 W from one port. I need 65 W from a single USB-C port.",
+        "preferences": {
+          "version": 5,
+          "productDescription": "",
+          "criteria": [],
+          "budget": null,
+          "budgetClarified": false,
+          "pendingChange": null,
+          "region": "SG",
+          "responseLength": "concise",
+          "revision": 0
+        },
+        "operationId": "2bb2e413-51af-41dd-82b1-a376ea8ab8b0"
+      }
+    },
+    {
+      "sequence": 6,
+      "turn": 1,
+      "kind": "interpreter-request",
+      "elapsedMs": 2.56,
+      "body": {
+        "operationId": "2bb2e413-51af-41dd-82b1-a376ea8ab8b0",
+        "message": "No, that recommendation only gives 45 W from one port. I need 65 W from a single USB-C port.",
+        "questionId": null,
+        "inputHash": "ba136b479052387d0ab913a7bb4d802eebe4f7e17be79846d908e5fd87c4044a",
+        "label": "Independently authored synthetic proposals. Conditional technical behavior only."
+      }
+    },
+    {
+      "sequence": 7,
+      "turn": 1,
+      "kind": "interpreter-response",
+      "elapsedMs": 2.57,
+      "body": {
+        "status": "ready",
+        "interpretation": {
+          "disposition": "research",
+          "actions": [
+            {
+              "kind": "add-criterion",
+              "source": {
+                "start": 55,
+                "end": 92,
+                "text": "I need 65 W from a single USB-C port."
+              },
+              "strength": "hard"
+            }
+          ]
+        },
+        "bindings": [],
+        "limitations": [
+          "Hard strength follows the literal requirement, including essential, needs, or a specific required specification. The proposal does not rewrite wording to satisfy a lexical guard.",
+          "The 45 W statement describes an unsuitable recommendation and is not a requested reduction in output."
+        ]
+      }
+    },
+    {
+      "sequence": 8,
+      "turn": 1,
+      "kind": "app-response",
+      "elapsedMs": 2.77,
+      "body": {
+        "status": 200,
+        "body": {
+          "responseVersion": 5,
+          "preferences": {
+            "version": 5,
+            "productDescription": "",
+            "criteria": [],
+            "budget": null,
+            "budgetClarified": false,
+            "pendingChange": null,
+            "region": "SG",
+            "responseLength": "concise",
+            "revision": 0
+          },
+          "notes": [],
+          "kind": "research-unavailable",
+          "message": "I could not interpret that request right now. Your accepted preferences and any pending answer are retained. Try again after intent interpretation is available.",
+          "reason": "intent-unavailable"
+        }
+      }
+    }
+  ],
+  "network": {
+    "denied": [],
+    "allowedOriginCount": 2,
+    "externalRequests": 0
+  },
+  "cleanup": true,
+  "applicationError": null
+}

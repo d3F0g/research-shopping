@@ -1,0 +1,664 @@
+{
+  "scenarioId": "FN-EH-004",
+  "initialPreferences": {
+    "version": 5,
+    "productDescription": "",
+    "criteria": [],
+    "budget": null,
+    "budgetClarified": false,
+    "pendingChange": null,
+    "region": "SG",
+    "responseLength": "concise",
+    "revision": 0
+  },
+  "finalPreferences": {
+    "version": 5,
+    "productDescription": "",
+    "criteria": [],
+    "budget": null,
+    "budgetClarified": false,
+    "pendingChange": null,
+    "region": "SG",
+    "responseLength": "concise",
+    "revision": 1
+  },
+  "material": {
+    "id": "unknown:FN-EH-004",
+    "kind": "synthetic",
+    "label": "Explicit synthetic provider double. Not genuine Exa research.",
+    "capturedAt": null,
+    "provenance": [
+      "Independently fixed test input before application execution",
+      "No current product or market claim",
+      "Original independent provider recipe unknown; fixed profile FN-EH-004.",
+      "Synthetic claims, prices and availability statements remain visibly labeled. No live research or inventory."
+    ],
+    "sha256": "ec2af9aac5c3fcc35b4ad0010ec6122f5457207546140d26099290c0aabfeb16",
+    "body": {
+      "requestId": "synthetic-FN-EH-004",
+      "costDollars": {
+        "total": 0.005
+      },
+      "citations": [
+        {
+          "url": "https://fixture.example.com/synthetic-splash-1",
+          "title": "Synthetic Splash 1 synthetic fixture",
+          "text": "Synthetic Splash 1 standard is a keyboard described as spill resistant.\nSynthetic Splash 1 standard costs USD 40.00 for one unit, tax included.\nSynthetic input. Stock and delivery are not established."
+        },
+        {
+          "url": "https://fixture.example.com/synthetic-splash-2",
+          "title": "Synthetic Splash 2 synthetic fixture",
+          "text": "Synthetic Splash 2 standard is a keyboard described as spill resistant.\nSynthetic Splash 2 standard costs USD 55.00 for one unit, tax included.\nSynthetic input. Stock and delivery are not established."
+        },
+        {
+          "url": "https://fixture.example.com/synthetic-splash-3",
+          "title": "Synthetic Splash 3 synthetic fixture",
+          "text": "Synthetic Splash 3 standard is a keyboard described as spill resistant.\nSynthetic Splash 3 standard costs USD 70.00 for one unit, tax included.\nSynthetic input. Stock and delivery are not established."
+        }
+      ],
+      "answer": {
+        "products": [
+          {
+            "id": "synthetic-splash-1",
+            "name": "Synthetic Splash 1",
+            "variant": "standard",
+            "identity": {
+              "status": "supported",
+              "scope": "exact-variant",
+              "rationale": "Synthetic source-based test interpretation, not a live product claim.",
+              "support": [
+                {
+                  "url": "https://fixture.example.com/synthetic-splash-1",
+                  "quote": "Synthetic Splash 1 standard is a keyboard described as spill resistant."
+                }
+              ]
+            },
+            "requestMatch": {
+              "status": "unknown",
+              "scope": "unclear",
+              "rationale": "Synthetic input intentionally lacks qualifying evidence.",
+              "support": []
+            },
+            "criteria": [],
+            "attributes": [
+              {
+                "name": "Use",
+                "assessment": {
+                  "status": "supported",
+                  "scope": "exact-variant",
+                  "rationale": "Synthetic source-based test interpretation, not a live product claim.",
+                  "support": [
+                    {
+                      "url": "https://fixture.example.com/synthetic-splash-1",
+                      "quote": "Synthetic Splash 1 standard is a keyboard described as spill resistant."
+                    }
+                  ]
+                }
+              }
+            ],
+            "price": null,
+            "budget": {
+              "status": "unknown",
+              "scope": "unclear",
+              "rationale": "Synthetic input intentionally lacks qualifying evidence.",
+              "support": []
+            }
+          },
+          {
+            "id": "synthetic-splash-2",
+            "name": "Synthetic Splash 2",
+            "variant": "standard",
+            "identity": {
+              "status": "supported",
+              "scope": "exact-variant",
+              "rationale": "Synthetic source-based test interpretation, not a live product claim.",
+              "support": [
+                {
+                  "url": "https://fixture.example.com/synthetic-splash-2",
+                  "quote": "Synthetic Splash 2 standard is a keyboard described as spill resistant."
+                }
+              ]
+            },
+            "requestMatch": {
+              "status": "supported",
+              "scope": "exact-variant",
+              "rationale": "Synthetic source-based test interpretation, not a live product claim.",
+              "support": [
+                {
+                  "url": "https://fixture.example.com/synthetic-splash-2",
+                  "quote": "Synthetic Splash 2 standard is a keyboard described as spill resistant."
+                }
+              ]
+            },
+            "criteria": [],
+            "attributes": [
+              {
+                "name": "Use",
+                "assessment": {
+                  "status": "supported",
+                  "scope": "exact-variant",
+                  "rationale": "Synthetic source-based test interpretation, not a live product claim.",
+                  "support": [
+                    {
+                      "url": "https://fixture.example.com/synthetic-splash-2",
+                      "quote": "Synthetic Splash 2 standard is a keyboard described as spill resistant."
+                    }
+                  ]
+                }
+              }
+            ],
+            "price": {
+              "amount": 55,
+              "currency": "USD",
+              "conditions": [
+                "One unit",
+                "Tax included"
+              ],
+              "conditionsResolved": true,
+              "variant": "standard",
+              "assessment": {
+                "status": "supported",
+                "scope": "exact-variant",
+                "rationale": "Synthetic source-based test interpretation, not a live product claim.",
+                "support": [
+                  {
+                    "url": "https://fixture.example.com/synthetic-splash-2",
+                    "quote": "Synthetic Splash 2 standard costs USD 55.00 for one unit, tax included."
+                  }
+                ]
+              }
+            },
+            "budget": {
+              "status": "supported",
+              "scope": "exact-variant",
+              "rationale": "Synthetic source-based test interpretation, not a live product claim.",
+              "support": [
+                {
+                  "url": "https://fixture.example.com/synthetic-splash-2",
+                  "quote": "Synthetic Splash 2 standard costs USD 55.00 for one unit, tax included."
+                }
+              ]
+            }
+          },
+          {
+            "id": "synthetic-splash-3",
+            "name": "Synthetic Splash 3",
+            "variant": "standard",
+            "identity": {
+              "status": "supported",
+              "scope": "exact-variant",
+              "rationale": "Synthetic source-based test interpretation, not a live product claim.",
+              "support": [
+                {
+                  "url": "https://fixture.example.com/synthetic-splash-3",
+                  "quote": "Synthetic Splash 3 standard is a keyboard described as spill resistant."
+                }
+              ]
+            },
+            "requestMatch": {
+              "status": "supported",
+              "scope": "exact-variant",
+              "rationale": "Synthetic source-based test interpretation, not a live product claim.",
+              "support": [
+                {
+                  "url": "https://fixture.example.com/synthetic-splash-3",
+                  "quote": "Synthetic Splash 3 standard is a keyboard described as spill resistant."
+                }
+              ]
+            },
+            "criteria": [],
+            "attributes": [
+              {
+                "name": "Use",
+                "assessment": {
+                  "status": "supported",
+                  "scope": "exact-variant",
+                  "rationale": "Synthetic source-based test interpretation, not a live product claim.",
+                  "support": [
+                    {
+                      "url": "https://fixture.example.com/synthetic-splash-3",
+                      "quote": "Synthetic Splash 3 standard is a keyboard described as spill resistant."
+                    }
+                  ]
+                }
+              }
+            ],
+            "price": {
+              "amount": 70,
+              "currency": "USD",
+              "conditions": [
+                "One unit",
+                "Tax included"
+              ],
+              "conditionsResolved": true,
+              "variant": "standard",
+              "assessment": {
+                "status": "supported",
+                "scope": "exact-variant",
+                "rationale": "Synthetic source-based test interpretation, not a live product claim.",
+                "support": [
+                  {
+                    "url": "https://fixture.example.com/synthetic-splash-3",
+                    "quote": "Synthetic Splash 3 standard costs USD 70.00 for one unit, tax included."
+                  }
+                ]
+              }
+            },
+            "budget": {
+              "status": "supported",
+              "scope": "exact-variant",
+              "rationale": "Synthetic source-based test interpretation, not a live product claim.",
+              "support": [
+                {
+                  "url": "https://fixture.example.com/synthetic-splash-3",
+                  "quote": "Synthetic Splash 3 standard costs USD 70.00 for one unit, tax included."
+                }
+              ]
+            }
+          }
+        ],
+        "choice": null,
+        "limitations": [
+          "Entirely synthetic fixed provider material, including every product, claim and price. No inventory or merchant proof. Missing criteria remain unknown."
+        ]
+      }
+    },
+    "status": 200
+  },
+  "interpretation": {
+    "mode": "fixed-proposals",
+    "inputHash": "ba136b479052387d0ab913a7bb4d802eebe4f7e17be79846d908e5fd87c4044a",
+    "openAIHttpRequests": 0,
+    "ollamaHttpRequests": 0,
+    "consumedTurns": [
+      0,
+      1
+    ],
+    "unconsumedTurns": [],
+    "invocations": 2,
+    "suppliedTurns": [
+      {
+        "turnIndex": 0,
+        "message": "Find a washable keyboard under USD 80. It must be safe to rinse under running water.",
+        "proposal": {
+          "disposition": "research",
+          "actions": [
+            {
+              "kind": "start-request",
+              "source": {
+                "start": 16,
+                "end": 24,
+                "text": "keyboard"
+              }
+            },
+            {
+              "kind": "add-criterion",
+              "source": {
+                "start": 7,
+                "end": 15,
+                "text": "washable"
+              },
+              "strength": "hard"
+            },
+            {
+              "kind": "budget",
+              "source": {
+                "start": 25,
+                "end": 37,
+                "text": "under USD 80"
+              },
+              "operation": "set-maximum",
+              "draft": {
+                "amount": 80,
+                "minimum": null,
+                "currency": "USD"
+              }
+            },
+            {
+              "kind": "add-criterion",
+              "source": {
+                "start": 39,
+                "end": 84,
+                "text": "It must be safe to rinse under running water."
+              },
+              "strength": "hard"
+            }
+          ]
+        },
+        "limitations": [
+          "Hard strength follows the literal requirement, including essential, needs, or a specific required specification. The proposal does not rewrite wording to satisfy a lexical guard."
+        ]
+      },
+      {
+        "turnIndex": 1,
+        "message": "The source says spill-resistant. Is that enough?",
+        "proposal": {
+          "disposition": "acknowledge",
+          "actions": []
+        },
+        "limitations": [
+          "The action contract has no held-evidence answer or comparison operation. Acknowledge requests no new research and does not fabricate comparison content.",
+          "The source phrase spill-resistant does not alter the requested running-water requirement."
+        ]
+      }
+    ],
+    "limitations": []
+  },
+  "turns": [
+    {
+      "index": 0,
+      "action": {
+        "kind": "message",
+        "text": "Find a washable keyboard under USD 80. It must be safe to rinse under running water."
+      },
+      "initialPreferences": {
+        "version": 5,
+        "productDescription": "",
+        "criteria": [],
+        "budget": null,
+        "budgetClarified": false,
+        "pendingChange": null,
+        "region": "SG",
+        "responseLength": "concise",
+        "revision": 0
+      },
+      "finalPreferences": {
+        "version": 5,
+        "productDescription": "",
+        "criteria": [],
+        "budget": null,
+        "budgetClarified": false,
+        "pendingChange": null,
+        "region": "SG",
+        "responseLength": "concise",
+        "revision": 0
+      },
+      "response": {
+        "responseVersion": 5,
+        "preferences": {
+          "version": 5,
+          "productDescription": "",
+          "criteria": [],
+          "budget": null,
+          "budgetClarified": false,
+          "pendingChange": null,
+          "region": "SG",
+          "responseLength": "concise",
+          "revision": 0
+        },
+        "notes": [],
+        "kind": "research-unavailable",
+        "message": "I could not safely interpret the complete message, so no part of it was applied. Your accepted preferences and any pending question are unchanged. This message needs additional interpretation, which is unavailable right now.",
+        "reason": "intent-unavailable"
+      },
+      "intentHandling": "synthetic-fallback",
+      "providerCalls": 0,
+      "cancelled": false
+    },
+    {
+      "index": 1,
+      "action": {
+        "kind": "message",
+        "text": "The source says spill-resistant. Is that enough?"
+      },
+      "initialPreferences": {
+        "version": 5,
+        "productDescription": "",
+        "criteria": [],
+        "budget": null,
+        "budgetClarified": false,
+        "pendingChange": null,
+        "region": "SG",
+        "responseLength": "concise",
+        "revision": 0
+      },
+      "finalPreferences": {
+        "version": 5,
+        "productDescription": "",
+        "criteria": [],
+        "budget": null,
+        "budgetClarified": false,
+        "pendingChange": null,
+        "region": "SG",
+        "responseLength": "concise",
+        "revision": 1
+      },
+      "response": {
+        "responseVersion": 5,
+        "preferences": {
+          "version": 5,
+          "productDescription": "",
+          "criteria": [],
+          "budget": null,
+          "budgetClarified": false,
+          "pendingChange": null,
+          "region": "SG",
+          "responseLength": "concise",
+          "revision": 1
+        },
+        "notes": [],
+        "kind": "message",
+        "message": "Your preferences and earlier research are still here."
+      },
+      "intentHandling": "synthetic-fallback",
+      "providerCalls": 0,
+      "cancelled": false
+    }
+  ],
+  "events": [
+    {
+      "sequence": 1,
+      "turn": 0,
+      "kind": "app-request",
+      "attemptId": "2cc08716-3ee7-4fca-a34f-5e4fb64a5794",
+      "elapsedMs": 1.46,
+      "body": {
+        "phase": "prepare",
+        "message": "Find a washable keyboard under USD 80. It must be safe to rinse under running water.",
+        "preferences": {
+          "version": 5,
+          "productDescription": "",
+          "criteria": [],
+          "budget": null,
+          "budgetClarified": false,
+          "pendingChange": null,
+          "region": "SG",
+          "responseLength": "concise",
+          "revision": 0
+        },
+        "operationId": "972c806f-5041-4f30-83f8-99eb57f1276c"
+      }
+    },
+    {
+      "sequence": 2,
+      "turn": 0,
+      "kind": "interpreter-request",
+      "attemptId": "2cc08716-3ee7-4fca-a34f-5e4fb64a5794",
+      "elapsedMs": 2.89,
+      "body": {
+        "operationId": "972c806f-5041-4f30-83f8-99eb57f1276c",
+        "message": "Find a washable keyboard under USD 80. It must be safe to rinse under running water.",
+        "questionId": null,
+        "inputHash": "ba136b479052387d0ab913a7bb4d802eebe4f7e17be79846d908e5fd87c4044a",
+        "label": "Independently authored synthetic proposals. Conditional technical behavior only."
+      }
+    },
+    {
+      "sequence": 3,
+      "turn": 0,
+      "kind": "interpreter-response",
+      "attemptId": "2cc08716-3ee7-4fca-a34f-5e4fb64a5794",
+      "elapsedMs": 2.92,
+      "body": {
+        "status": "ready",
+        "interpretation": {
+          "disposition": "research",
+          "actions": [
+            {
+              "kind": "start-request",
+              "source": {
+                "start": 16,
+                "end": 24,
+                "text": "keyboard"
+              }
+            },
+            {
+              "kind": "add-criterion",
+              "source": {
+                "start": 7,
+                "end": 15,
+                "text": "washable"
+              },
+              "strength": "hard"
+            },
+            {
+              "kind": "budget",
+              "source": {
+                "start": 25,
+                "end": 37,
+                "text": "under USD 80"
+              },
+              "operation": "set-maximum",
+              "draft": {
+                "amount": 80,
+                "minimum": null,
+                "currency": "USD"
+              }
+            },
+            {
+              "kind": "add-criterion",
+              "source": {
+                "start": 39,
+                "end": 84,
+                "text": "It must be safe to rinse under running water."
+              },
+              "strength": "hard"
+            }
+          ]
+        },
+        "bindings": [],
+        "limitations": [
+          "Hard strength follows the literal requirement, including essential, needs, or a specific required specification. The proposal does not rewrite wording to satisfy a lexical guard."
+        ]
+      }
+    },
+    {
+      "sequence": 4,
+      "turn": 0,
+      "kind": "app-response",
+      "attemptId": "2cc08716-3ee7-4fca-a34f-5e4fb64a5794",
+      "elapsedMs": 3.5,
+      "body": {
+        "status": 200,
+        "body": {
+          "responseVersion": 5,
+          "preferences": {
+            "version": 5,
+            "productDescription": "",
+            "criteria": [],
+            "budget": null,
+            "budgetClarified": false,
+            "pendingChange": null,
+            "region": "SG",
+            "responseLength": "concise",
+            "revision": 0
+          },
+          "notes": [],
+          "kind": "research-unavailable",
+          "message": "I could not safely interpret the complete message, so no part of it was applied. Your accepted preferences and any pending question are unchanged. This message needs additional interpretation, which is unavailable right now.",
+          "reason": "intent-unavailable"
+        }
+      }
+    },
+    {
+      "sequence": 5,
+      "turn": 1,
+      "kind": "app-request",
+      "attemptId": "341ded44-2196-4acd-b2b4-da320ad408ff",
+      "elapsedMs": 3.54,
+      "body": {
+        "phase": "prepare",
+        "message": "The source says spill-resistant. Is that enough?",
+        "preferences": {
+          "version": 5,
+          "productDescription": "",
+          "criteria": [],
+          "budget": null,
+          "budgetClarified": false,
+          "pendingChange": null,
+          "region": "SG",
+          "responseLength": "concise",
+          "revision": 0
+        },
+        "operationId": "2c7edadd-2723-4c45-bdf8-beb2ab4632dc"
+      }
+    },
+    {
+      "sequence": 6,
+      "turn": 1,
+      "kind": "interpreter-request",
+      "attemptId": "341ded44-2196-4acd-b2b4-da320ad408ff",
+      "elapsedMs": 4.2,
+      "body": {
+        "operationId": "2c7edadd-2723-4c45-bdf8-beb2ab4632dc",
+        "message": "The source says spill-resistant. Is that enough?",
+        "questionId": null,
+        "inputHash": "ba136b479052387d0ab913a7bb4d802eebe4f7e17be79846d908e5fd87c4044a",
+        "label": "Independently authored synthetic proposals. Conditional technical behavior only."
+      }
+    },
+    {
+      "sequence": 7,
+      "turn": 1,
+      "kind": "interpreter-response",
+      "attemptId": "341ded44-2196-4acd-b2b4-da320ad408ff",
+      "elapsedMs": 4.21,
+      "body": {
+        "status": "ready",
+        "interpretation": {
+          "disposition": "acknowledge",
+          "actions": []
+        },
+        "bindings": [],
+        "limitations": [
+          "The action contract has no held-evidence answer or comparison operation. Acknowledge requests no new research and does not fabricate comparison content.",
+          "The source phrase spill-resistant does not alter the requested running-water requirement."
+        ]
+      }
+    },
+    {
+      "sequence": 8,
+      "turn": 1,
+      "kind": "app-response",
+      "attemptId": "341ded44-2196-4acd-b2b4-da320ad408ff",
+      "elapsedMs": 4.52,
+      "body": {
+        "status": 200,
+        "body": {
+          "responseVersion": 5,
+          "preferences": {
+            "version": 5,
+            "productDescription": "",
+            "criteria": [],
+            "budget": null,
+            "budgetClarified": false,
+            "pendingChange": null,
+            "region": "SG",
+            "responseLength": "concise",
+            "revision": 1
+          },
+          "notes": [],
+          "kind": "message",
+          "message": "Your preferences and earlier research are still here."
+        }
+      }
+    }
+  ],
+  "network": {
+    "denied": [],
+    "allowedOriginCount": 2,
+    "externalRequests": 0
+  },
+  "cleanup": true,
+  "applicationError": null
+}

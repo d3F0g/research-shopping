@@ -1,0 +1,25 @@
+{
+  "applicationCommit": "fd9d13793342cdd7e37686b09ae6c9ffd88bb69f",
+  "method": "Copied tracked src into ignored local probe; no server entrypoint, environment file, credentials, ledger or SDK used. Research function is an in-memory nonnetwork double.",
+  "configuredInterpreter": false,
+  "researchCalls": 0,
+  "response": {
+    "responseVersion": 5,
+    "kind": "research-unavailable",
+    "reason": "intent-unavailable",
+    "message": "I could not interpret that request right now. Your accepted preferences and any pending answer are retained. Try again after intent interpretation is available.",
+    "preferences": {
+      "version": 5,
+      "productDescription": "",
+      "criteria": [],
+      "budget": null,
+      "budgetClarified": false,
+      "pendingChange": null,
+      "region": "SG",
+      "responseLength": "concise",
+      "revision": 0
+    },
+    "notes": []
+  },
+  "expectedIntegrationWork": "Versioned v5 adapter must supply an independently authored/recorded interpretation boundary. Do not derive intent replies from private evaluation expectations."
+}

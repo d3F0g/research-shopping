@@ -1,0 +1,442 @@
+[
+  {
+    "id": "FN-CU-001",
+    "turns": [
+      "I want to buy a powerbank that costs around $30-40",
+      "SGD"
+    ]
+  },
+  {
+    "id": "FN-CU-002",
+    "turns": [
+      "Find a lightweight laptop for travel",
+      "I spend most days on trains. Under EUR 1200, and it must weigh no more than 1.3 kg."
+    ]
+  },
+  {
+    "id": "FN-CU-003",
+    "turns": [
+      "My mum keeps missing the doorbell when she's in the garden. I want a flashing receiver she can carry.",
+      "It must work with her existing wireless bell, model Fixture Bell 7. Up to GBP 80."
+    ]
+  },
+  {
+    "id": "FN-CU-004",
+    "turns": [
+      "I need something to digitise my dad's old 35 mm slides. I don't need a camera.",
+      "Yes, a slide scanner. Keep it under USD 250."
+    ]
+  },
+  {
+    "id": "FN-CU-005",
+    "turns": [
+      "Find a desk lamp under SGD 100. It must clamp onto the desk.",
+      "Actually forget the lamp. I need a floor lamp under SGD 180; freestanding is essential."
+    ]
+  },
+  {
+    "id": "FN-PE-001",
+    "turns": [
+      "Headphones for long flights under S$500",
+      "Actually make it S$300",
+      "No Sony products"
+    ]
+  },
+  {
+    "id": "FN-PE-002",
+    "turns": [
+      "I need a power bank that supports fast charging",
+      "Only Anker",
+      "USB-C PD at 30 W or more is required. SGD 50 to 90."
+    ]
+  },
+  {
+    "id": "FN-PE-003",
+    "turns": [
+      "I want a label maker for tactile labels in my workshop. Braille output is essential; portability would be nice.",
+      "Under USD 180, and it must work without a phone app."
+    ]
+  },
+  {
+    "id": "FN-PE-004",
+    "turns": [
+      "I'm replacing an aquarium filter. It must suit a 60 litre freshwater tank and take reusable media.",
+      "Quiet would be nice. No proprietary disposable cartridges, please. AUD 120 max."
+    ]
+  },
+  {
+    "id": "FN-PE-005",
+    "turns": [
+      "A pour-over kettle, please. I need a gooseneck and variable temperature. I prefer white but black is fine.",
+      "Keep it below JPY 15000. It has to run on 100 V."
+    ]
+  },
+  {
+    "id": "FN-CC-001",
+    "turns": [
+      "I'd like a torque screwdriver for bicycle work, about $60 to $90.",
+      "USD. Adjustable from 2 to 8 Nm is essential."
+    ]
+  },
+  {
+    "id": "FN-CC-002",
+    "turns": [
+      "Find two compact sewing machines under GBP 200.",
+      "Is that one good for denim?",
+      "I mean the second machine."
+    ]
+  },
+  {
+    "id": "FN-CC-003",
+    "turns": [
+      "I need a replacement tip for my white cane.",
+      "It's a Fixture Mobility folding cane with an 8 mm screw fitting. USD 25 max."
+    ]
+  },
+  {
+    "id": "FN-CC-004",
+    "turns": [
+      "Help me find a daylight lamp for painting miniatures. Adjustable brightness is essential.",
+      "I don't have a budget in mind. Please search without one."
+    ]
+  },
+  {
+    "id": "FN-CC-005",
+    "turns": [
+      "Find a compact mechanical keyboard, USD 80 to 140. It must have wireless support.",
+      "Something cheaper",
+      "The lower-priced options within that range are fine."
+    ]
+  },
+  {
+    "id": "FN-BC-001",
+    "turns": [
+      "Find a USB-C dock for two monitors, SGD 100 to 160.",
+      "I meant USD, not SGD"
+    ]
+  },
+  {
+    "id": "FN-BC-002",
+    "turns": [
+      "I'm shopping for a hand coffee grinder in France. EUR 80 to 130, please.",
+      "I like the steel one. Don't change my existing budget."
+    ]
+  },
+  {
+    "id": "FN-BC-003",
+    "turns": [
+      "A fountain pen under JPY 6000, with a fine nib.",
+      "Can I see one around JPY 4000 instead?"
+    ]
+  },
+  {
+    "id": "FN-BC-004",
+    "turns": [
+      "I need a cordless soldering iron between AUD 90 and 150.",
+      "You can remove the minimum, but AUD 150 is still my limit."
+    ]
+  },
+  {
+    "id": "FN-BC-005",
+    "turns": [
+      "Find a compact photo printer under GBP 100.",
+      "That GBP 89 one looks good. I'm not a member and won't subscribe."
+    ]
+  },
+  {
+    "id": "FN-MR-001",
+    "turns": [
+      "Find closed-back headphones between SGD 120 and 220. No Sony products.",
+      "I'd prefer something that folds.",
+      "Keep it short"
+    ]
+  },
+  {
+    "id": "FN-MR-002",
+    "turns": [
+      "Find a temperature-controlled soldering station under SGD 180.",
+      "Only products suitable for Singapore",
+      "It must have a Type G plug and support 230 V. Show the smaller ones first."
+    ]
+  },
+  {
+    "id": "FN-MR-003",
+    "turns": [
+      "I need a tenkeyless keyboard, USD 70 to 110. It must work over USB without Bluetooth.",
+      "Make it quieter.",
+      "Don't change my existing budget"
+    ]
+  },
+  {
+    "id": "FN-MR-004",
+    "turns": [
+      "I need a monochrome laser printer under EUR 180. Automatic duplex is essential.",
+      "I'd rather avoid expensive consumables.",
+      "Show me more details"
+    ]
+  },
+  {
+    "id": "FN-MR-005",
+    "turns": [
+      "Find waterproof hiking boots in EU size 42, up to GBP 140.",
+      "Actually size 43.",
+      "Brown would be nice."
+    ]
+  },
+  {
+    "id": "FN-CD-001",
+    "turns": [
+      "Show me over-ear headphones under SGD 300 for long flights.",
+      "I don't like any of those",
+      "They're all too bulky. Fold-flat cups are a must."
+    ]
+  },
+  {
+    "id": "FN-CD-002",
+    "turns": [
+      "Find an electric burr grinder under USD 180.",
+      "I meant manual, sorry. No batteries or mains power.",
+      "The budget is still USD 180."
+    ]
+  },
+  {
+    "id": "FN-CD-003",
+    "turns": [
+      "Find a USB-C charger under SGD 70, at least 65 W.",
+      "No, that recommendation only gives 45 W from one port. I need 65 W from a single USB-C port."
+    ]
+  },
+  {
+    "id": "FN-CD-004",
+    "turns": [
+      "Find a small tripod for a mirrorless camera, under EUR 100.",
+      "I don't want the cheapest if it's shaky. Stability matters more than folded size.",
+      "It must support a 2 kg camera setup."
+    ]
+  },
+  {
+    "id": "FN-CD-005",
+    "turns": [
+      "Find an Anker power bank under USD 90 with 30 W USB-C output.",
+      "Actually other brands are fine, but still no Sony.",
+      "I still need the 30 W output."
+    ]
+  },
+  {
+    "id": "FN-RT-001",
+    "turns": [
+      "Find a desk fan under SGD 60. USB power is essential.",
+      "Thanks. How do I change the theme?"
+    ]
+  },
+  {
+    "id": "FN-RT-002",
+    "turns": [
+      "Find three binocular options for birdwatching under USD 250.",
+      "Compare the first and third options"
+    ]
+  },
+  {
+    "id": "FN-RT-003",
+    "turns": [
+      "Find a compact induction hob under GBP 90.",
+      "Show me more details",
+      "Keep it short"
+    ]
+  },
+  {
+    "id": "FN-RT-004",
+    "turns": [
+      "Find a USB microscope under USD 100.",
+      "Stop that search. Instead find a 10x jeweller's loupe under USD 30."
+    ]
+  },
+  {
+    "id": "FN-RT-005",
+    "turns": [
+      "Find a film changing bag under EUR 40.",
+      "Can you search now?"
+    ]
+  },
+  {
+    "id": "FN-PR-001",
+    "turns": [
+      "Find a darkroom timer for analogue photo printing, under USD 120.",
+      "It must switch an enlarger on and off. A kitchen countdown timer won't do."
+    ]
+  },
+  {
+    "id": "FN-PR-002",
+    "turns": [
+      "I'm left-handed and need fabric scissors, under GBP 35.",
+      "They must have genuinely reversed blades, not just a left-handed handle."
+    ]
+  },
+  {
+    "id": "FN-PR-003",
+    "turns": [
+      "I need a tabletop weaving loom for narrow bands, under EUR 90.",
+      "An inkle loom, specifically. Not a knitting machine."
+    ]
+  },
+  {
+    "id": "FN-PR-004",
+    "turns": [
+      "Find a fermentation heating mat for a 5 litre kombucha jar, under AUD 60.",
+      "It needs a thermostat. I don't want a seedling mat with no temperature control."
+    ]
+  },
+  {
+    "id": "FN-PR-005",
+    "turns": [
+      "I need a replacement stylus for my turntable cartridge, Fixture Audio C12. Under USD 45.",
+      "Just the stylus, not a whole new cartridge."
+    ]
+  },
+  {
+    "id": "FN-PQ-001",
+    "turns": [
+      "Show me three USB microphones under SGD 180 for spoken-word recording.",
+      "Compare the first and third options",
+      "Which has the stronger evidence for background-noise rejection?"
+    ]
+  },
+  {
+    "id": "FN-PQ-002",
+    "turns": [
+      "Find compact document scanners under USD 300 with automatic duplex.",
+      "Why is the second so much cheaper?"
+    ]
+  },
+  {
+    "id": "FN-PQ-003",
+    "turns": [
+      "Find portable air pumps for bicycle tyres under GBP 80.",
+      "Compare their noise and battery life."
+    ]
+  },
+  {
+    "id": "FN-PQ-004",
+    "turns": [
+      "Find a folding music stand under EUR 45. Low weight and a sturdy tray both matter.",
+      "Which one is best overall?"
+    ]
+  },
+  {
+    "id": "FN-PQ-005",
+    "turns": [
+      "Find a compact label printer under SGD 100.",
+      "Which is cheapest once I can actually use it? I won't sign up for anything."
+    ]
+  },
+  {
+    "id": "FN-EH-001",
+    "turns": [
+      "Find a waterproof backpack under USD 100. It must protect contents in heavy rain.",
+      "One source says waterproof and another says only splash-resistant. Which is it?"
+    ]
+  },
+  {
+    "id": "FN-EH-002",
+    "turns": [
+      "Find a cordless rotary tool under GBP 60.",
+      "The quote says the battery is included. Can I rely on that?"
+    ]
+  },
+  {
+    "id": "FN-EH-003",
+    "turns": [
+      "Find an electric pencil sharpener under SGD 40.",
+      "This Singapore page says $35. Does that fit?"
+    ]
+  },
+  {
+    "id": "FN-EH-004",
+    "turns": [
+      "Find a washable keyboard under USD 80. It must be safe to rinse under running water.",
+      "The source says spill-resistant. Is that enough?"
+    ]
+  },
+  {
+    "id": "FN-EH-005",
+    "turns": [
+      "Find a tabletop easel under EUR 50.",
+      "I only need one. That EUR 35 price says a minimum order of four."
+    ]
+  },
+  {
+    "id": "FN-UI-001",
+    "turns": [
+      "Find a USB-C card reader under SGD 35. It must read SD and microSD.",
+      "Just show me the best one"
+    ]
+  },
+  {
+    "id": "FN-UI-002",
+    "turns": [
+      "Find a compact travel umbrella under GBP 35.",
+      "Show me more details",
+      "Keep it short"
+    ]
+  },
+  {
+    "id": "FN-UI-003",
+    "turns": [
+      "Find a pocket digital scale under EUR 30. It must measure in 0.1 g increments.",
+      "Show the comparison.",
+      "Can you explain the first option's limitations?"
+    ]
+  },
+  {
+    "id": "FN-UI-004",
+    "turns": [
+      "I'm looking for a reading light under USD 25.",
+      "A warm light would be nice."
+    ]
+  },
+  {
+    "id": "FN-UI-005",
+    "turns": [
+      "Find a desktop microphone under SGD 150.",
+      "Actually I need a portable recorder under SGD 200.",
+      "Compare the current options."
+    ]
+  },
+  {
+    "id": "FN-ER-001",
+    "turns": [
+      "Find a portable CD player under USD 70.",
+      "The search failed. What happened?",
+      "Try again once."
+    ]
+  },
+  {
+    "id": "FN-ER-002",
+    "turns": [
+      "Find a small laminator under GBP 60.",
+      "Cancel that.",
+      "Did it stop?"
+    ]
+  },
+  {
+    "id": "FN-ER-003",
+    "turns": [
+      "I need a folding stool under SGD 45. No plastic seat.",
+      "What do you remember about my requirements?"
+    ]
+  },
+  {
+    "id": "FN-ER-004",
+    "turns": [
+      "Find a rechargeable book light under USD 30.",
+      "Open the supporting source for the recommended light."
+    ]
+  },
+  {
+    "id": "FN-ER-005",
+    "turns": [
+      "Find a battery-powered mug warmer under EUR 25. It must keep a full mug at 60 C for eight hours.",
+      "If nothing meets that, say so. Don't relax those requirements."
+    ]
+  }
+]

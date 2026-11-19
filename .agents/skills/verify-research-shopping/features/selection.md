@@ -1,23 +1,15 @@
-# Product selection
+# Product source links and unavailable selection
 
-This page describes the explicit legacy fixture regression composition. It does not describe normal development product scope or establish live product behavior. Use [Exa product research](web-research.md) for the dynamic normal interface.
+Current normal research exposes **View product source**. It has no product-selection or merchant-handoff control. Normal `POST /api/select` returns HTTP 409 because verified merchant selection is unavailable. Record browser handoff as unreachable with this prerequisite, not as a passing selection journey.
 
-Selecting a current eligible product resolves its identity server-side and adds a safe manufacturer handoff to the conversation. The sample price and stock caveat remain explicit.
+## Drive source navigation checks
 
-## Drive selection
+Scope the product article to its assistant turn. Match **View product source** to the exact validated source URL in the response. Require HTTPS, no credentials or unsafe destination, and `noopener noreferrer` for a new tab. Keep observed-price, unknown stock, and delivery limitations visible. Do not open external destinations merely to complete the local check.
 
-Use the current actionable recommendation turn. Record its selected product identity. Observe the actual POST `/api/select` response, then require the visible manufacturer link to equal that response's exact `productUrl`. The displayed identity and merchant host must match the same handoff.
+Require no **Select this product** button or invented merchant offer. After a preference change, old results remain evidence snapshots and cannot initiate research under obsolete constraints. Use **New chat** and require the old conversation to disappear while the theme remains.
 
-Require HTTPS without userinfo or a nonstandard port. The link opens safely with the existing new-tab attributes. Match its full accessible name or use a non-exact match because it includes the new-tab suffix. The smoke helper compares the link with the actual response and never opens the external destination.
+## Legacy boundary proof
 
-Require visible fixture price and the limitation that price and stock were not checked live. The handoff belongs to its originating conversation turn. Earlier messages must remain rather than being replaced by a separate dashboard panel.
+`tests/api/app.test.ts` and `tests/unit/shopping.test.ts` preserve synthetic fixture selection coverage. Check exact product identity, full manufacturer destination, unavailable products, hard constraints, and unsafe URL rejection there. The current composer cannot drive that legacy API composition.
 
-After changing preferences or beginning newer work, historical cards must not authorize selection under old constraints. Require their obsolete actions to be disabled, or require the explicitly supported revalidation path to use current accepted preferences. Never trust an old offer or link as fresh selection authority.
-
-Use the actual new-chat/reset control after handoff. Require an empty conversation and default shopping preferences while preserving the theme selection.
-
-## Boundary proof
-
-Run domain and API tests for unsafe URL forms, wrong product identity, unavailable products and hard-limit rejection. Inject malformed successful handoff payloads only at the selection boundary and require no clickable unsafe destination. Preserve exact identity/destination checks when changing UI selectors.
-
-Do not place orders or enter checkout. URL-policy acceptance does not prove destination reachability, current price, inventory, delivery or variant correctness. Record unavailable products excluded before selection and use actual boundary tests for their rejection proof.
+Keep malformed source response and unsafe-link rejection in normal browser tests. A safe research URL does not prove merchant authorization, reachability, current price, inventory, delivery, or exact variant availability. Do not place orders or enter checkout.

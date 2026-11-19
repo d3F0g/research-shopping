@@ -1,0 +1,637 @@
+{
+  "scenarioId": "FN-UI-002",
+  "initialPreferences": {
+    "version": 5,
+    "productDescription": "",
+    "criteria": [],
+    "budget": null,
+    "budgetClarified": false,
+    "pendingChange": null,
+    "region": "SG",
+    "responseLength": "concise",
+    "revision": 0
+  },
+  "finalPreferences": {
+    "version": 5,
+    "productDescription": "",
+    "criteria": [],
+    "budget": null,
+    "budgetClarified": false,
+    "pendingChange": null,
+    "region": "SG",
+    "responseLength": "concise",
+    "revision": 2
+  },
+  "material": {
+    "id": "supported:FN-UI-002",
+    "kind": "synthetic",
+    "label": "Explicit synthetic provider double. Not genuine Exa research.",
+    "capturedAt": null,
+    "provenance": [
+      "Independently fixed test input before application execution",
+      "No current product or market claim",
+      "Original independent provider recipe supported; fixed profile powerbank.",
+      "Synthetic claims, prices and availability statements remain visibly labeled. No live research or inventory.",
+      "Input suitability gap: no matching product profile. Relevance and recommendation usefulness are unassessed, never counted as a shopping success."
+    ],
+    "sha256": "884f895f25e5064618973b7354b7824f231770a515a778ec390584f9e1569fd6",
+    "body": {
+      "requestId": "synthetic-offline-input",
+      "costDollars": {
+        "total": 0.005
+      },
+      "citations": [
+        {
+          "url": "https://fixture.example.com/powerbank",
+          "title": "Synthetic fixture power bank",
+          "text": "Synthetic Anker Pocket 10 black is a portable power bank with USB-C fast charging.\nSynthetic Anker Pocket 10 black costs SGD 35.00 for one unit, tax included."
+        }
+      ],
+      "answer": {
+        "products": [
+          {
+            "id": "synthetic-pocket-10",
+            "name": "Synthetic Anker Pocket 10",
+            "variant": "black",
+            "identity": {
+              "status": "supported",
+              "scope": "exact-variant",
+              "rationale": "Synthetic test assessment, not a live product claim.",
+              "support": [
+                {
+                  "url": "https://fixture.example.com/powerbank",
+                  "quote": "Synthetic Anker Pocket 10 black is a portable power bank with USB-C fast charging."
+                }
+              ]
+            },
+            "requestMatch": {
+              "status": "supported",
+              "scope": "exact-variant",
+              "rationale": "Synthetic test assessment, not a live product claim.",
+              "support": [
+                {
+                  "url": "https://fixture.example.com/powerbank",
+                  "quote": "Synthetic Anker Pocket 10 black is a portable power bank with USB-C fast charging."
+                }
+              ]
+            },
+            "criteria": [],
+            "attributes": [
+              {
+                "name": "Charging",
+                "assessment": {
+                  "status": "supported",
+                  "scope": "exact-variant",
+                  "rationale": "Synthetic test assessment, not a live product claim.",
+                  "support": [
+                    {
+                      "url": "https://fixture.example.com/powerbank",
+                      "quote": "Synthetic Anker Pocket 10 black is a portable power bank with USB-C fast charging."
+                    }
+                  ]
+                }
+              }
+            ],
+            "price": {
+              "amount": 35,
+              "currency": "SGD",
+              "conditions": [
+                "One unit",
+                "Tax included"
+              ],
+              "conditionsResolved": true,
+              "variant": "black",
+              "assessment": {
+                "status": "supported",
+                "scope": "exact-variant",
+                "rationale": "Synthetic test assessment, not a live product claim.",
+                "support": [
+                  {
+                    "url": "https://fixture.example.com/powerbank",
+                    "quote": "Synthetic Anker Pocket 10 black costs SGD 35.00 for one unit, tax included."
+                  }
+                ]
+              }
+            },
+            "budget": {
+              "status": "supported",
+              "scope": "exact-variant",
+              "rationale": "Synthetic test assessment, not a live product claim.",
+              "support": [
+                {
+                  "url": "https://fixture.example.com/powerbank",
+                  "quote": "Synthetic Anker Pocket 10 black costs SGD 35.00 for one unit, tax included."
+                }
+              ]
+            }
+          }
+        ],
+        "choice": {
+          "productId": "synthetic-pocket-10",
+          "reasons": [
+            {
+              "kind": "field",
+              "name": "identity"
+            },
+            {
+              "kind": "field",
+              "name": "price"
+            }
+          ]
+        },
+        "limitations": [
+          "Synthetic provider double for automated evaluation. No real products, current prices, availability or merchant verification."
+        ]
+      }
+    },
+    "status": 200
+  },
+  "interpretation": {
+    "mode": "fixed-proposals",
+    "inputHash": "ba136b479052387d0ab913a7bb4d802eebe4f7e17be79846d908e5fd87c4044a",
+    "openAIHttpRequests": 0,
+    "ollamaHttpRequests": 0,
+    "consumedTurns": [
+      0,
+      1
+    ],
+    "unconsumedTurns": [
+      2
+    ],
+    "invocations": 2,
+    "suppliedTurns": [
+      {
+        "turnIndex": 0,
+        "message": "Find a compact travel umbrella under GBP 35.",
+        "proposal": {
+          "disposition": "research",
+          "actions": [
+            {
+              "kind": "start-request",
+              "source": {
+                "start": 15,
+                "end": 30,
+                "text": "travel umbrella"
+              }
+            },
+            {
+              "kind": "add-criterion",
+              "source": {
+                "start": 7,
+                "end": 14,
+                "text": "compact"
+              },
+              "strength": "flexible"
+            },
+            {
+              "kind": "budget",
+              "source": {
+                "start": 31,
+                "end": 43,
+                "text": "under GBP 35"
+              },
+              "operation": "clarify",
+              "draft": {
+                "amount": 35,
+                "minimum": null,
+                "currency": null
+              }
+            }
+          ]
+        },
+        "limitations": [
+          "The stated currency is unsupported by the allowed SGD/USD draft. Its numeric amount is retained with currency null. No currency conversion or substitute currency is proposed."
+        ]
+      },
+      {
+        "turnIndex": 1,
+        "message": "Show me more details",
+        "proposal": {
+          "disposition": "acknowledge",
+          "actions": []
+        },
+        "limitations": [
+          "Detail level is a local presentation control with no IntentActions field. It may bypass interpretation."
+        ]
+      },
+      {
+        "turnIndex": 2,
+        "message": "Keep it short",
+        "proposal": {
+          "disposition": "acknowledge",
+          "actions": []
+        },
+        "limitations": [
+          "Response length is a local presentation control with no IntentActions field. It may bypass interpretation."
+        ]
+      }
+    ],
+    "limitations": []
+  },
+  "turns": [
+    {
+      "index": 0,
+      "action": {
+        "kind": "message",
+        "text": "Find a compact travel umbrella under GBP 35."
+      },
+      "initialPreferences": {
+        "version": 5,
+        "productDescription": "",
+        "criteria": [],
+        "budget": null,
+        "budgetClarified": false,
+        "pendingChange": null,
+        "region": "SG",
+        "responseLength": "concise",
+        "revision": 0
+      },
+      "finalPreferences": {
+        "version": 5,
+        "productDescription": "",
+        "criteria": [],
+        "budget": null,
+        "budgetClarified": false,
+        "pendingChange": null,
+        "region": "SG",
+        "responseLength": "concise",
+        "revision": 0
+      },
+      "response": {
+        "responseVersion": 5,
+        "preferences": {
+          "version": 5,
+          "productDescription": "",
+          "criteria": [],
+          "budget": null,
+          "budgetClarified": false,
+          "pendingChange": null,
+          "region": "SG",
+          "responseLength": "concise",
+          "revision": 0
+        },
+        "notes": [],
+        "kind": "research-unavailable",
+        "message": "I could not safely interpret the complete message, so no part of it was applied. Your accepted preferences and any pending question are unchanged. This message needs additional interpretation, which is unavailable right now.",
+        "reason": "intent-unavailable"
+      },
+      "intentHandling": "synthetic-fallback",
+      "providerCalls": 0,
+      "cancelled": false
+    },
+    {
+      "index": 1,
+      "action": {
+        "kind": "message",
+        "text": "Show me more details"
+      },
+      "initialPreferences": {
+        "version": 5,
+        "productDescription": "",
+        "criteria": [],
+        "budget": null,
+        "budgetClarified": false,
+        "pendingChange": null,
+        "region": "SG",
+        "responseLength": "concise",
+        "revision": 0
+      },
+      "finalPreferences": {
+        "version": 5,
+        "productDescription": "",
+        "criteria": [],
+        "budget": null,
+        "budgetClarified": false,
+        "pendingChange": null,
+        "region": "SG",
+        "responseLength": "concise",
+        "revision": 1
+      },
+      "response": {
+        "responseVersion": 5,
+        "preferences": {
+          "version": 5,
+          "productDescription": "",
+          "criteria": [],
+          "budget": null,
+          "budgetClarified": false,
+          "pendingChange": null,
+          "region": "SG",
+          "responseLength": "concise",
+          "revision": 1
+        },
+        "notes": [],
+        "kind": "message",
+        "message": "Your preferences and earlier research are still here."
+      },
+      "intentHandling": "synthetic-fallback",
+      "providerCalls": 0,
+      "cancelled": false
+    },
+    {
+      "index": 2,
+      "action": {
+        "kind": "message",
+        "text": "Keep it short"
+      },
+      "initialPreferences": {
+        "version": 5,
+        "productDescription": "",
+        "criteria": [],
+        "budget": null,
+        "budgetClarified": false,
+        "pendingChange": null,
+        "region": "SG",
+        "responseLength": "concise",
+        "revision": 1
+      },
+      "finalPreferences": {
+        "version": 5,
+        "productDescription": "",
+        "criteria": [],
+        "budget": null,
+        "budgetClarified": false,
+        "pendingChange": null,
+        "region": "SG",
+        "responseLength": "concise",
+        "revision": 2
+      },
+      "response": {
+        "responseVersion": 5,
+        "preferences": {
+          "version": 5,
+          "productDescription": "",
+          "criteria": [],
+          "budget": null,
+          "budgetClarified": false,
+          "pendingChange": null,
+          "region": "SG",
+          "responseLength": "concise",
+          "revision": 2
+        },
+        "notes": [],
+        "kind": "message",
+        "message": "Preferences updated. Compare options when you are ready."
+      },
+      "intentHandling": "local",
+      "providerCalls": 0,
+      "cancelled": false
+    }
+  ],
+  "events": [
+    {
+      "sequence": 1,
+      "turn": 0,
+      "kind": "app-request",
+      "attemptId": "3b4419d5-97c4-4ced-b9c2-049d096c6275",
+      "elapsedMs": 1.38,
+      "body": {
+        "phase": "prepare",
+        "message": "Find a compact travel umbrella under GBP 35.",
+        "preferences": {
+          "version": 5,
+          "productDescription": "",
+          "criteria": [],
+          "budget": null,
+          "budgetClarified": false,
+          "pendingChange": null,
+          "region": "SG",
+          "responseLength": "concise",
+          "revision": 0
+        },
+        "operationId": "6308fcc7-848a-4785-baae-0c4b9448337e"
+      }
+    },
+    {
+      "sequence": 2,
+      "turn": 0,
+      "kind": "interpreter-request",
+      "attemptId": "3b4419d5-97c4-4ced-b9c2-049d096c6275",
+      "elapsedMs": 2.32,
+      "body": {
+        "operationId": "6308fcc7-848a-4785-baae-0c4b9448337e",
+        "message": "Find a compact travel umbrella under GBP 35.",
+        "questionId": null,
+        "inputHash": "ba136b479052387d0ab913a7bb4d802eebe4f7e17be79846d908e5fd87c4044a",
+        "label": "Independently authored synthetic proposals. Conditional technical behavior only."
+      }
+    },
+    {
+      "sequence": 3,
+      "turn": 0,
+      "kind": "interpreter-response",
+      "attemptId": "3b4419d5-97c4-4ced-b9c2-049d096c6275",
+      "elapsedMs": 2.34,
+      "body": {
+        "status": "ready",
+        "interpretation": {
+          "disposition": "research",
+          "actions": [
+            {
+              "kind": "start-request",
+              "source": {
+                "start": 15,
+                "end": 30,
+                "text": "travel umbrella"
+              }
+            },
+            {
+              "kind": "add-criterion",
+              "source": {
+                "start": 7,
+                "end": 14,
+                "text": "compact"
+              },
+              "strength": "flexible"
+            },
+            {
+              "kind": "budget",
+              "source": {
+                "start": 31,
+                "end": 43,
+                "text": "under GBP 35"
+              },
+              "operation": "clarify",
+              "draft": {
+                "amount": 35,
+                "minimum": null,
+                "currency": null
+              }
+            }
+          ]
+        },
+        "bindings": [],
+        "limitations": [
+          "The stated currency is unsupported by the allowed SGD/USD draft. Its numeric amount is retained with currency null. No currency conversion or substitute currency is proposed."
+        ]
+      }
+    },
+    {
+      "sequence": 4,
+      "turn": 0,
+      "kind": "app-response",
+      "attemptId": "3b4419d5-97c4-4ced-b9c2-049d096c6275",
+      "elapsedMs": 2.79,
+      "body": {
+        "status": 200,
+        "body": {
+          "responseVersion": 5,
+          "preferences": {
+            "version": 5,
+            "productDescription": "",
+            "criteria": [],
+            "budget": null,
+            "budgetClarified": false,
+            "pendingChange": null,
+            "region": "SG",
+            "responseLength": "concise",
+            "revision": 0
+          },
+          "notes": [],
+          "kind": "research-unavailable",
+          "message": "I could not safely interpret the complete message, so no part of it was applied. Your accepted preferences and any pending question are unchanged. This message needs additional interpretation, which is unavailable right now.",
+          "reason": "intent-unavailable"
+        }
+      }
+    },
+    {
+      "sequence": 5,
+      "turn": 1,
+      "kind": "app-request",
+      "attemptId": "8c046217-a487-4cd2-acff-0d52b71f38e1",
+      "elapsedMs": 2.84,
+      "body": {
+        "phase": "prepare",
+        "message": "Show me more details",
+        "preferences": {
+          "version": 5,
+          "productDescription": "",
+          "criteria": [],
+          "budget": null,
+          "budgetClarified": false,
+          "pendingChange": null,
+          "region": "SG",
+          "responseLength": "concise",
+          "revision": 0
+        },
+        "operationId": "6c53b4ba-7e4c-4ce2-8932-2ab727bdb9c8"
+      }
+    },
+    {
+      "sequence": 6,
+      "turn": 1,
+      "kind": "interpreter-request",
+      "attemptId": "8c046217-a487-4cd2-acff-0d52b71f38e1",
+      "elapsedMs": 3.62,
+      "body": {
+        "operationId": "6c53b4ba-7e4c-4ce2-8932-2ab727bdb9c8",
+        "message": "Show me more details",
+        "questionId": null,
+        "inputHash": "ba136b479052387d0ab913a7bb4d802eebe4f7e17be79846d908e5fd87c4044a",
+        "label": "Independently authored synthetic proposals. Conditional technical behavior only."
+      }
+    },
+    {
+      "sequence": 7,
+      "turn": 1,
+      "kind": "interpreter-response",
+      "attemptId": "8c046217-a487-4cd2-acff-0d52b71f38e1",
+      "elapsedMs": 3.64,
+      "body": {
+        "status": "ready",
+        "interpretation": {
+          "disposition": "acknowledge",
+          "actions": []
+        },
+        "bindings": [],
+        "limitations": [
+          "Detail level is a local presentation control with no IntentActions field. It may bypass interpretation."
+        ]
+      }
+    },
+    {
+      "sequence": 8,
+      "turn": 1,
+      "kind": "app-response",
+      "attemptId": "8c046217-a487-4cd2-acff-0d52b71f38e1",
+      "elapsedMs": 3.99,
+      "body": {
+        "status": 200,
+        "body": {
+          "responseVersion": 5,
+          "preferences": {
+            "version": 5,
+            "productDescription": "",
+            "criteria": [],
+            "budget": null,
+            "budgetClarified": false,
+            "pendingChange": null,
+            "region": "SG",
+            "responseLength": "concise",
+            "revision": 1
+          },
+          "notes": [],
+          "kind": "message",
+          "message": "Your preferences and earlier research are still here."
+        }
+      }
+    },
+    {
+      "sequence": 9,
+      "turn": 2,
+      "kind": "app-request",
+      "attemptId": "ab5d84d5-947e-40d8-9df4-1abf7dd0913b",
+      "elapsedMs": 4.02,
+      "body": {
+        "phase": "prepare",
+        "message": "Keep it short",
+        "preferences": {
+          "version": 5,
+          "productDescription": "",
+          "criteria": [],
+          "budget": null,
+          "budgetClarified": false,
+          "pendingChange": null,
+          "region": "SG",
+          "responseLength": "concise",
+          "revision": 1
+        },
+        "operationId": "93735601-2be2-40c2-b90e-35f631246287"
+      }
+    },
+    {
+      "sequence": 10,
+      "turn": 2,
+      "kind": "app-response",
+      "attemptId": "ab5d84d5-947e-40d8-9df4-1abf7dd0913b",
+      "elapsedMs": 5.55,
+      "body": {
+        "status": 200,
+        "body": {
+          "responseVersion": 5,
+          "preferences": {
+            "version": 5,
+            "productDescription": "",
+            "criteria": [],
+            "budget": null,
+            "budgetClarified": false,
+            "pendingChange": null,
+            "region": "SG",
+            "responseLength": "concise",
+            "revision": 2
+          },
+          "notes": [],
+          "kind": "message",
+          "message": "Preferences updated. Compare options when you are ready."
+        }
+      }
+    }
+  ],
+  "network": {
+    "denied": [],
+    "allowedOriginCount": 2,
+    "externalRequests": 0
+  },
+  "cleanup": true,
+  "applicationError": null
+}

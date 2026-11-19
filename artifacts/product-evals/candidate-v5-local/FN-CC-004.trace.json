@@ -1,0 +1,660 @@
+{
+  "scenarioId": "FN-CC-004",
+  "initialPreferences": {
+    "version": 5,
+    "productDescription": "",
+    "criteria": [],
+    "budget": null,
+    "budgetClarified": false,
+    "pendingChange": null,
+    "region": "SG",
+    "responseLength": "concise",
+    "revision": 0
+  },
+  "finalPreferences": {
+    "version": 5,
+    "productDescription": "",
+    "criteria": [],
+    "budget": null,
+    "budgetClarified": false,
+    "pendingChange": null,
+    "region": "SG",
+    "responseLength": "concise",
+    "revision": 1
+  },
+  "material": {
+    "id": "supported:FN-CC-004",
+    "kind": "synthetic",
+    "label": "Explicit synthetic provider double. Not genuine Exa research.",
+    "capturedAt": null,
+    "provenance": [
+      "Independently fixed test input before application execution",
+      "No current product or market claim",
+      "Original independent provider recipe supported; fixed profile FN-CC-004.",
+      "Synthetic claims, prices and availability statements remain visibly labeled. No live research or inventory."
+    ],
+    "sha256": "7e49f7901c13fe9029e9257d99b31eb1f8fd38bfb230a6ece352a80ef690d3b1",
+    "body": {
+      "requestId": "synthetic-FN-CC-004",
+      "costDollars": {
+        "total": 0.005
+      },
+      "citations": [
+        {
+          "url": "https://fixture.example.com/synthetic-paint-1",
+          "title": "Synthetic Paint 1 synthetic fixture",
+          "text": "Synthetic Paint 1 standard is a daylight lamp with adjustable brightness for painting.\nSynthetic Paint 1 standard costs SGD 45.00 for one unit, tax included.\nSynthetic input. Stock and delivery are not established."
+        },
+        {
+          "url": "https://fixture.example.com/synthetic-paint-2",
+          "title": "Synthetic Paint 2 synthetic fixture",
+          "text": "Synthetic Paint 2 standard is a daylight lamp with adjustable brightness for painting.\nSynthetic Paint 2 standard costs SGD 65.00 for one unit, tax included.\nSynthetic input. Stock and delivery are not established."
+        },
+        {
+          "url": "https://fixture.example.com/synthetic-paint-3",
+          "title": "Synthetic Paint 3 synthetic fixture",
+          "text": "Synthetic Paint 3 standard is a daylight lamp with adjustable brightness for painting.\nSynthetic Paint 3 standard costs SGD 85.00 for one unit, tax included.\nSynthetic input. Stock and delivery are not established."
+        }
+      ],
+      "answer": {
+        "products": [
+          {
+            "id": "synthetic-paint-1",
+            "name": "Synthetic Paint 1",
+            "variant": "standard",
+            "identity": {
+              "status": "supported",
+              "scope": "exact-variant",
+              "rationale": "Synthetic source-based test interpretation, not a live product claim.",
+              "support": [
+                {
+                  "url": "https://fixture.example.com/synthetic-paint-1",
+                  "quote": "Synthetic Paint 1 standard is a daylight lamp with adjustable brightness for painting."
+                }
+              ]
+            },
+            "requestMatch": {
+              "status": "supported",
+              "scope": "exact-variant",
+              "rationale": "Synthetic source-based test interpretation, not a live product claim.",
+              "support": [
+                {
+                  "url": "https://fixture.example.com/synthetic-paint-1",
+                  "quote": "Synthetic Paint 1 standard is a daylight lamp with adjustable brightness for painting."
+                }
+              ]
+            },
+            "criteria": [],
+            "attributes": [
+              {
+                "name": "Use",
+                "assessment": {
+                  "status": "supported",
+                  "scope": "exact-variant",
+                  "rationale": "Synthetic source-based test interpretation, not a live product claim.",
+                  "support": [
+                    {
+                      "url": "https://fixture.example.com/synthetic-paint-1",
+                      "quote": "Synthetic Paint 1 standard is a daylight lamp with adjustable brightness for painting."
+                    }
+                  ]
+                }
+              }
+            ],
+            "price": {
+              "amount": 45,
+              "currency": "SGD",
+              "conditions": [
+                "One unit",
+                "Tax included"
+              ],
+              "conditionsResolved": true,
+              "variant": "standard",
+              "assessment": {
+                "status": "supported",
+                "scope": "exact-variant",
+                "rationale": "Synthetic source-based test interpretation, not a live product claim.",
+                "support": [
+                  {
+                    "url": "https://fixture.example.com/synthetic-paint-1",
+                    "quote": "Synthetic Paint 1 standard costs SGD 45.00 for one unit, tax included."
+                  }
+                ]
+              }
+            },
+            "budget": {
+              "status": "supported",
+              "scope": "exact-variant",
+              "rationale": "Synthetic source-based test interpretation, not a live product claim.",
+              "support": [
+                {
+                  "url": "https://fixture.example.com/synthetic-paint-1",
+                  "quote": "Synthetic Paint 1 standard costs SGD 45.00 for one unit, tax included."
+                }
+              ]
+            }
+          },
+          {
+            "id": "synthetic-paint-2",
+            "name": "Synthetic Paint 2",
+            "variant": "standard",
+            "identity": {
+              "status": "supported",
+              "scope": "exact-variant",
+              "rationale": "Synthetic source-based test interpretation, not a live product claim.",
+              "support": [
+                {
+                  "url": "https://fixture.example.com/synthetic-paint-2",
+                  "quote": "Synthetic Paint 2 standard is a daylight lamp with adjustable brightness for painting."
+                }
+              ]
+            },
+            "requestMatch": {
+              "status": "supported",
+              "scope": "exact-variant",
+              "rationale": "Synthetic source-based test interpretation, not a live product claim.",
+              "support": [
+                {
+                  "url": "https://fixture.example.com/synthetic-paint-2",
+                  "quote": "Synthetic Paint 2 standard is a daylight lamp with adjustable brightness for painting."
+                }
+              ]
+            },
+            "criteria": [],
+            "attributes": [
+              {
+                "name": "Use",
+                "assessment": {
+                  "status": "supported",
+                  "scope": "exact-variant",
+                  "rationale": "Synthetic source-based test interpretation, not a live product claim.",
+                  "support": [
+                    {
+                      "url": "https://fixture.example.com/synthetic-paint-2",
+                      "quote": "Synthetic Paint 2 standard is a daylight lamp with adjustable brightness for painting."
+                    }
+                  ]
+                }
+              }
+            ],
+            "price": {
+              "amount": 65,
+              "currency": "SGD",
+              "conditions": [
+                "One unit",
+                "Tax included"
+              ],
+              "conditionsResolved": true,
+              "variant": "standard",
+              "assessment": {
+                "status": "supported",
+                "scope": "exact-variant",
+                "rationale": "Synthetic source-based test interpretation, not a live product claim.",
+                "support": [
+                  {
+                    "url": "https://fixture.example.com/synthetic-paint-2",
+                    "quote": "Synthetic Paint 2 standard costs SGD 65.00 for one unit, tax included."
+                  }
+                ]
+              }
+            },
+            "budget": {
+              "status": "supported",
+              "scope": "exact-variant",
+              "rationale": "Synthetic source-based test interpretation, not a live product claim.",
+              "support": [
+                {
+                  "url": "https://fixture.example.com/synthetic-paint-2",
+                  "quote": "Synthetic Paint 2 standard costs SGD 65.00 for one unit, tax included."
+                }
+              ]
+            }
+          },
+          {
+            "id": "synthetic-paint-3",
+            "name": "Synthetic Paint 3",
+            "variant": "standard",
+            "identity": {
+              "status": "supported",
+              "scope": "exact-variant",
+              "rationale": "Synthetic source-based test interpretation, not a live product claim.",
+              "support": [
+                {
+                  "url": "https://fixture.example.com/synthetic-paint-3",
+                  "quote": "Synthetic Paint 3 standard is a daylight lamp with adjustable brightness for painting."
+                }
+              ]
+            },
+            "requestMatch": {
+              "status": "supported",
+              "scope": "exact-variant",
+              "rationale": "Synthetic source-based test interpretation, not a live product claim.",
+              "support": [
+                {
+                  "url": "https://fixture.example.com/synthetic-paint-3",
+                  "quote": "Synthetic Paint 3 standard is a daylight lamp with adjustable brightness for painting."
+                }
+              ]
+            },
+            "criteria": [],
+            "attributes": [
+              {
+                "name": "Use",
+                "assessment": {
+                  "status": "supported",
+                  "scope": "exact-variant",
+                  "rationale": "Synthetic source-based test interpretation, not a live product claim.",
+                  "support": [
+                    {
+                      "url": "https://fixture.example.com/synthetic-paint-3",
+                      "quote": "Synthetic Paint 3 standard is a daylight lamp with adjustable brightness for painting."
+                    }
+                  ]
+                }
+              }
+            ],
+            "price": {
+              "amount": 85,
+              "currency": "SGD",
+              "conditions": [
+                "One unit",
+                "Tax included"
+              ],
+              "conditionsResolved": true,
+              "variant": "standard",
+              "assessment": {
+                "status": "supported",
+                "scope": "exact-variant",
+                "rationale": "Synthetic source-based test interpretation, not a live product claim.",
+                "support": [
+                  {
+                    "url": "https://fixture.example.com/synthetic-paint-3",
+                    "quote": "Synthetic Paint 3 standard costs SGD 85.00 for one unit, tax included."
+                  }
+                ]
+              }
+            },
+            "budget": {
+              "status": "supported",
+              "scope": "exact-variant",
+              "rationale": "Synthetic source-based test interpretation, not a live product claim.",
+              "support": [
+                {
+                  "url": "https://fixture.example.com/synthetic-paint-3",
+                  "quote": "Synthetic Paint 3 standard costs SGD 85.00 for one unit, tax included."
+                }
+              ]
+            }
+          }
+        ],
+        "choice": {
+          "productId": "synthetic-paint-1",
+          "reasons": [
+            {
+              "kind": "field",
+              "name": "identity"
+            },
+            {
+              "kind": "field",
+              "name": "price"
+            }
+          ]
+        },
+        "limitations": [
+          "Entirely synthetic fixed provider material, including every product, claim and price. No inventory or merchant proof. Missing criteria remain unknown."
+        ]
+      }
+    },
+    "status": 200
+  },
+  "interpretation": {
+    "mode": "fixed-proposals",
+    "inputHash": "ba136b479052387d0ab913a7bb4d802eebe4f7e17be79846d908e5fd87c4044a",
+    "openAIHttpRequests": 0,
+    "ollamaHttpRequests": 0,
+    "consumedTurns": [
+      0,
+      1
+    ],
+    "unconsumedTurns": [],
+    "invocations": 2,
+    "suppliedTurns": [
+      {
+        "turnIndex": 0,
+        "message": "Help me find a daylight lamp for painting miniatures. Adjustable brightness is essential.",
+        "proposal": {
+          "disposition": "research",
+          "actions": [
+            {
+              "kind": "start-request",
+              "source": {
+                "start": 15,
+                "end": 52,
+                "text": "daylight lamp for painting miniatures"
+              }
+            },
+            {
+              "kind": "add-criterion",
+              "source": {
+                "start": 54,
+                "end": 89,
+                "text": "Adjustable brightness is essential."
+              },
+              "strength": "hard"
+            }
+          ]
+        },
+        "limitations": [
+          "Hard strength follows the literal requirement, including essential, needs, or a specific required specification. The proposal does not rewrite wording to satisfy a lexical guard."
+        ]
+      },
+      {
+        "turnIndex": 1,
+        "message": "I don't have a budget in mind. Please search without one.",
+        "proposal": {
+          "disposition": "research",
+          "actions": []
+        },
+        "limitations": [
+          "The user explicitly requests research without a budget. There is no budget to remove in the literal conversation, and the contract has no separate no-budget affirmation action."
+        ]
+      }
+    ],
+    "limitations": []
+  },
+  "turns": [
+    {
+      "index": 0,
+      "action": {
+        "kind": "message",
+        "text": "Help me find a daylight lamp for painting miniatures. Adjustable brightness is essential."
+      },
+      "initialPreferences": {
+        "version": 5,
+        "productDescription": "",
+        "criteria": [],
+        "budget": null,
+        "budgetClarified": false,
+        "pendingChange": null,
+        "region": "SG",
+        "responseLength": "concise",
+        "revision": 0
+      },
+      "finalPreferences": {
+        "version": 5,
+        "productDescription": "",
+        "criteria": [],
+        "budget": null,
+        "budgetClarified": false,
+        "pendingChange": null,
+        "region": "SG",
+        "responseLength": "concise",
+        "revision": 0
+      },
+      "response": {
+        "responseVersion": 5,
+        "preferences": {
+          "version": 5,
+          "productDescription": "",
+          "criteria": [],
+          "budget": null,
+          "budgetClarified": false,
+          "pendingChange": null,
+          "region": "SG",
+          "responseLength": "concise",
+          "revision": 0
+        },
+        "notes": [],
+        "kind": "research-unavailable",
+        "message": "I could not safely interpret the complete message, so no part of it was applied. Your accepted preferences and any pending question are unchanged. This message needs additional interpretation, which is unavailable right now.",
+        "reason": "intent-unavailable"
+      },
+      "intentHandling": "synthetic-fallback",
+      "providerCalls": 0,
+      "cancelled": false
+    },
+    {
+      "index": 1,
+      "action": {
+        "kind": "message",
+        "text": "I don't have a budget in mind. Please search without one."
+      },
+      "initialPreferences": {
+        "version": 5,
+        "productDescription": "",
+        "criteria": [],
+        "budget": null,
+        "budgetClarified": false,
+        "pendingChange": null,
+        "region": "SG",
+        "responseLength": "concise",
+        "revision": 0
+      },
+      "finalPreferences": {
+        "version": 5,
+        "productDescription": "",
+        "criteria": [],
+        "budget": null,
+        "budgetClarified": false,
+        "pendingChange": null,
+        "region": "SG",
+        "responseLength": "concise",
+        "revision": 1
+      },
+      "response": {
+        "responseVersion": 5,
+        "preferences": {
+          "version": 5,
+          "productDescription": "",
+          "criteria": [],
+          "budget": null,
+          "budgetClarified": false,
+          "pendingChange": null,
+          "region": "SG",
+          "responseLength": "concise",
+          "revision": 1
+        },
+        "notes": [],
+        "kind": "clarification",
+        "message": "What are you shopping for? Describe the product and what matters to you.",
+        "reason": "description"
+      },
+      "intentHandling": "synthetic-fallback",
+      "providerCalls": 0,
+      "cancelled": false
+    }
+  ],
+  "events": [
+    {
+      "sequence": 1,
+      "turn": 0,
+      "kind": "app-request",
+      "attemptId": "2724d595-f1a9-4cb2-a301-4be24cf2c52a",
+      "elapsedMs": 1.35,
+      "body": {
+        "phase": "prepare",
+        "message": "Help me find a daylight lamp for painting miniatures. Adjustable brightness is essential.",
+        "preferences": {
+          "version": 5,
+          "productDescription": "",
+          "criteria": [],
+          "budget": null,
+          "budgetClarified": false,
+          "pendingChange": null,
+          "region": "SG",
+          "responseLength": "concise",
+          "revision": 0
+        },
+        "operationId": "ca2f3d18-e0f6-4a16-b8e3-936e4a46efb2"
+      }
+    },
+    {
+      "sequence": 2,
+      "turn": 0,
+      "kind": "interpreter-request",
+      "attemptId": "2724d595-f1a9-4cb2-a301-4be24cf2c52a",
+      "elapsedMs": 2.22,
+      "body": {
+        "operationId": "ca2f3d18-e0f6-4a16-b8e3-936e4a46efb2",
+        "message": "Help me find a daylight lamp for painting miniatures. Adjustable brightness is essential.",
+        "questionId": null,
+        "inputHash": "ba136b479052387d0ab913a7bb4d802eebe4f7e17be79846d908e5fd87c4044a",
+        "label": "Independently authored synthetic proposals. Conditional technical behavior only."
+      }
+    },
+    {
+      "sequence": 3,
+      "turn": 0,
+      "kind": "interpreter-response",
+      "attemptId": "2724d595-f1a9-4cb2-a301-4be24cf2c52a",
+      "elapsedMs": 2.24,
+      "body": {
+        "status": "ready",
+        "interpretation": {
+          "disposition": "research",
+          "actions": [
+            {
+              "kind": "start-request",
+              "source": {
+                "start": 15,
+                "end": 52,
+                "text": "daylight lamp for painting miniatures"
+              }
+            },
+            {
+              "kind": "add-criterion",
+              "source": {
+                "start": 54,
+                "end": 89,
+                "text": "Adjustable brightness is essential."
+              },
+              "strength": "hard"
+            }
+          ]
+        },
+        "bindings": [],
+        "limitations": [
+          "Hard strength follows the literal requirement, including essential, needs, or a specific required specification. The proposal does not rewrite wording to satisfy a lexical guard."
+        ]
+      }
+    },
+    {
+      "sequence": 4,
+      "turn": 0,
+      "kind": "app-response",
+      "attemptId": "2724d595-f1a9-4cb2-a301-4be24cf2c52a",
+      "elapsedMs": 2.56,
+      "body": {
+        "status": 200,
+        "body": {
+          "responseVersion": 5,
+          "preferences": {
+            "version": 5,
+            "productDescription": "",
+            "criteria": [],
+            "budget": null,
+            "budgetClarified": false,
+            "pendingChange": null,
+            "region": "SG",
+            "responseLength": "concise",
+            "revision": 0
+          },
+          "notes": [],
+          "kind": "research-unavailable",
+          "message": "I could not safely interpret the complete message, so no part of it was applied. Your accepted preferences and any pending question are unchanged. This message needs additional interpretation, which is unavailable right now.",
+          "reason": "intent-unavailable"
+        }
+      }
+    },
+    {
+      "sequence": 5,
+      "turn": 1,
+      "kind": "app-request",
+      "attemptId": "1969ca1d-ddc8-40ca-8fe5-ec9325fa7ed7",
+      "elapsedMs": 2.59,
+      "body": {
+        "phase": "prepare",
+        "message": "I don't have a budget in mind. Please search without one.",
+        "preferences": {
+          "version": 5,
+          "productDescription": "",
+          "criteria": [],
+          "budget": null,
+          "budgetClarified": false,
+          "pendingChange": null,
+          "region": "SG",
+          "responseLength": "concise",
+          "revision": 0
+        },
+        "operationId": "a6e54186-ecac-4a2f-a681-ae972a1c4f6f"
+      }
+    },
+    {
+      "sequence": 6,
+      "turn": 1,
+      "kind": "interpreter-request",
+      "attemptId": "1969ca1d-ddc8-40ca-8fe5-ec9325fa7ed7",
+      "elapsedMs": 3.14,
+      "body": {
+        "operationId": "a6e54186-ecac-4a2f-a681-ae972a1c4f6f",
+        "message": "I don't have a budget in mind. Please search without one.",
+        "questionId": null,
+        "inputHash": "ba136b479052387d0ab913a7bb4d802eebe4f7e17be79846d908e5fd87c4044a",
+        "label": "Independently authored synthetic proposals. Conditional technical behavior only."
+      }
+    },
+    {
+      "sequence": 7,
+      "turn": 1,
+      "kind": "interpreter-response",
+      "attemptId": "1969ca1d-ddc8-40ca-8fe5-ec9325fa7ed7",
+      "elapsedMs": 3.16,
+      "body": {
+        "status": "ready",
+        "interpretation": {
+          "disposition": "research",
+          "actions": []
+        },
+        "bindings": [],
+        "limitations": [
+          "The user explicitly requests research without a budget. There is no budget to remove in the literal conversation, and the contract has no separate no-budget affirmation action."
+        ]
+      }
+    },
+    {
+      "sequence": 8,
+      "turn": 1,
+      "kind": "app-response",
+      "attemptId": "1969ca1d-ddc8-40ca-8fe5-ec9325fa7ed7",
+      "elapsedMs": 3.63,
+      "body": {
+        "status": 200,
+        "body": {
+          "responseVersion": 5,
+          "preferences": {
+            "version": 5,
+            "productDescription": "",
+            "criteria": [],
+            "budget": null,
+            "budgetClarified": false,
+            "pendingChange": null,
+            "region": "SG",
+            "responseLength": "concise",
+            "revision": 1
+          },
+          "notes": [],
+          "kind": "clarification",
+          "message": "What are you shopping for? Describe the product and what matters to you.",
+          "reason": "description"
+        }
+      }
+    }
+  ],
+  "network": {
+    "denied": [],
+    "allowedOriginCount": 2,
+    "externalRequests": 0
+  },
+  "cleanup": true,
+  "applicationError": null
+}

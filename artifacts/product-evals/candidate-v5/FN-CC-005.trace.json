@@ -1,0 +1,988 @@
+{
+  "scenarioId": "FN-CC-005",
+  "initialPreferences": {
+    "version": 5,
+    "productDescription": "",
+    "criteria": [],
+    "budget": null,
+    "budgetClarified": false,
+    "pendingChange": null,
+    "region": "SG",
+    "responseLength": "concise",
+    "revision": 0
+  },
+  "finalPreferences": {
+    "version": 5,
+    "productDescription": "",
+    "criteria": [
+      {
+        "id": "criterion-1",
+        "wording": "Something cheaper",
+        "strength": "flexible",
+        "origin": {
+          "kind": "message",
+          "text": "Something cheaper"
+        }
+      },
+      {
+        "id": "criterion-4",
+        "wording": "The lower-priced options within that range are fine.",
+        "strength": "flexible",
+        "origin": {
+          "kind": "message",
+          "text": "The lower-priced options within that range are fine."
+        }
+      }
+    ],
+    "budget": null,
+    "budgetClarified": false,
+    "pendingChange": null,
+    "region": "SG",
+    "responseLength": "concise",
+    "revision": 6
+  },
+  "material": {
+    "id": "held-comparison:FN-CC-005",
+    "kind": "synthetic",
+    "label": "Explicit synthetic provider double. Not genuine Exa research.",
+    "capturedAt": null,
+    "provenance": [
+      "Independently fixed test input before application execution",
+      "No current product or market claim",
+      "Original independent provider recipe held-comparison; fixed profile FN-CC-005.",
+      "Synthetic claims, prices and availability statements remain visibly labeled. No live research or inventory."
+    ],
+    "sha256": "248cb859984c37bca8d7106378193e5ff2c61c7a3e8644c1f86474a317f03cdf",
+    "body": {
+      "requestId": "synthetic-FN-CC-005",
+      "costDollars": {
+        "total": 0.005
+      },
+      "citations": [
+        {
+          "url": "https://fixture.example.com/synthetic-keys-1",
+          "title": "Synthetic Keys 1 synthetic fixture",
+          "text": "Synthetic Keys 1 standard is a compact wireless mechanical keyboard.\nSynthetic Keys 1 standard costs USD 85.00 for one unit, tax included.\nSynthetic input. Stock and delivery are not established."
+        },
+        {
+          "url": "https://fixture.example.com/synthetic-keys-2",
+          "title": "Synthetic Keys 2 synthetic fixture",
+          "text": "Synthetic Keys 2 standard is a compact wireless mechanical keyboard.\nSynthetic Keys 2 standard costs USD 110.00 for one unit, tax included.\nSynthetic input. Stock and delivery are not established."
+        },
+        {
+          "url": "https://fixture.example.com/synthetic-keys-3",
+          "title": "Synthetic Keys 3 synthetic fixture",
+          "text": "Synthetic Keys 3 standard is a compact wireless mechanical keyboard.\nSynthetic Keys 3 standard costs USD 135.00 for one unit, tax included.\nSynthetic input. Stock and delivery are not established."
+        }
+      ],
+      "answer": {
+        "products": [
+          {
+            "id": "synthetic-keys-1",
+            "name": "Synthetic Keys 1",
+            "variant": "standard",
+            "identity": {
+              "status": "supported",
+              "scope": "exact-variant",
+              "rationale": "Synthetic source-based test interpretation, not a live product claim.",
+              "support": [
+                {
+                  "url": "https://fixture.example.com/synthetic-keys-1",
+                  "quote": "Synthetic Keys 1 standard is a compact wireless mechanical keyboard."
+                }
+              ]
+            },
+            "requestMatch": {
+              "status": "supported",
+              "scope": "exact-variant",
+              "rationale": "Synthetic source-based test interpretation, not a live product claim.",
+              "support": [
+                {
+                  "url": "https://fixture.example.com/synthetic-keys-1",
+                  "quote": "Synthetic Keys 1 standard is a compact wireless mechanical keyboard."
+                }
+              ]
+            },
+            "criteria": [],
+            "attributes": [
+              {
+                "name": "Use",
+                "assessment": {
+                  "status": "supported",
+                  "scope": "exact-variant",
+                  "rationale": "Synthetic source-based test interpretation, not a live product claim.",
+                  "support": [
+                    {
+                      "url": "https://fixture.example.com/synthetic-keys-1",
+                      "quote": "Synthetic Keys 1 standard is a compact wireless mechanical keyboard."
+                    }
+                  ]
+                }
+              }
+            ],
+            "price": {
+              "amount": 85,
+              "currency": "USD",
+              "conditions": [
+                "One unit",
+                "Tax included"
+              ],
+              "conditionsResolved": true,
+              "variant": "standard",
+              "assessment": {
+                "status": "supported",
+                "scope": "exact-variant",
+                "rationale": "Synthetic source-based test interpretation, not a live product claim.",
+                "support": [
+                  {
+                    "url": "https://fixture.example.com/synthetic-keys-1",
+                    "quote": "Synthetic Keys 1 standard costs USD 85.00 for one unit, tax included."
+                  }
+                ]
+              }
+            },
+            "budget": {
+              "status": "supported",
+              "scope": "exact-variant",
+              "rationale": "Synthetic source-based test interpretation, not a live product claim.",
+              "support": [
+                {
+                  "url": "https://fixture.example.com/synthetic-keys-1",
+                  "quote": "Synthetic Keys 1 standard costs USD 85.00 for one unit, tax included."
+                }
+              ]
+            }
+          },
+          {
+            "id": "synthetic-keys-2",
+            "name": "Synthetic Keys 2",
+            "variant": "standard",
+            "identity": {
+              "status": "supported",
+              "scope": "exact-variant",
+              "rationale": "Synthetic source-based test interpretation, not a live product claim.",
+              "support": [
+                {
+                  "url": "https://fixture.example.com/synthetic-keys-2",
+                  "quote": "Synthetic Keys 2 standard is a compact wireless mechanical keyboard."
+                }
+              ]
+            },
+            "requestMatch": {
+              "status": "supported",
+              "scope": "exact-variant",
+              "rationale": "Synthetic source-based test interpretation, not a live product claim.",
+              "support": [
+                {
+                  "url": "https://fixture.example.com/synthetic-keys-2",
+                  "quote": "Synthetic Keys 2 standard is a compact wireless mechanical keyboard."
+                }
+              ]
+            },
+            "criteria": [],
+            "attributes": [
+              {
+                "name": "Use",
+                "assessment": {
+                  "status": "supported",
+                  "scope": "exact-variant",
+                  "rationale": "Synthetic source-based test interpretation, not a live product claim.",
+                  "support": [
+                    {
+                      "url": "https://fixture.example.com/synthetic-keys-2",
+                      "quote": "Synthetic Keys 2 standard is a compact wireless mechanical keyboard."
+                    }
+                  ]
+                }
+              }
+            ],
+            "price": {
+              "amount": 110,
+              "currency": "USD",
+              "conditions": [
+                "One unit",
+                "Tax included"
+              ],
+              "conditionsResolved": true,
+              "variant": "standard",
+              "assessment": {
+                "status": "supported",
+                "scope": "exact-variant",
+                "rationale": "Synthetic source-based test interpretation, not a live product claim.",
+                "support": [
+                  {
+                    "url": "https://fixture.example.com/synthetic-keys-2",
+                    "quote": "Synthetic Keys 2 standard costs USD 110.00 for one unit, tax included."
+                  }
+                ]
+              }
+            },
+            "budget": {
+              "status": "supported",
+              "scope": "exact-variant",
+              "rationale": "Synthetic source-based test interpretation, not a live product claim.",
+              "support": [
+                {
+                  "url": "https://fixture.example.com/synthetic-keys-2",
+                  "quote": "Synthetic Keys 2 standard costs USD 110.00 for one unit, tax included."
+                }
+              ]
+            }
+          },
+          {
+            "id": "synthetic-keys-3",
+            "name": "Synthetic Keys 3",
+            "variant": "standard",
+            "identity": {
+              "status": "supported",
+              "scope": "exact-variant",
+              "rationale": "Synthetic source-based test interpretation, not a live product claim.",
+              "support": [
+                {
+                  "url": "https://fixture.example.com/synthetic-keys-3",
+                  "quote": "Synthetic Keys 3 standard is a compact wireless mechanical keyboard."
+                }
+              ]
+            },
+            "requestMatch": {
+              "status": "supported",
+              "scope": "exact-variant",
+              "rationale": "Synthetic source-based test interpretation, not a live product claim.",
+              "support": [
+                {
+                  "url": "https://fixture.example.com/synthetic-keys-3",
+                  "quote": "Synthetic Keys 3 standard is a compact wireless mechanical keyboard."
+                }
+              ]
+            },
+            "criteria": [],
+            "attributes": [
+              {
+                "name": "Use",
+                "assessment": {
+                  "status": "supported",
+                  "scope": "exact-variant",
+                  "rationale": "Synthetic source-based test interpretation, not a live product claim.",
+                  "support": [
+                    {
+                      "url": "https://fixture.example.com/synthetic-keys-3",
+                      "quote": "Synthetic Keys 3 standard is a compact wireless mechanical keyboard."
+                    }
+                  ]
+                }
+              }
+            ],
+            "price": {
+              "amount": 135,
+              "currency": "USD",
+              "conditions": [
+                "One unit",
+                "Tax included"
+              ],
+              "conditionsResolved": true,
+              "variant": "standard",
+              "assessment": {
+                "status": "supported",
+                "scope": "exact-variant",
+                "rationale": "Synthetic source-based test interpretation, not a live product claim.",
+                "support": [
+                  {
+                    "url": "https://fixture.example.com/synthetic-keys-3",
+                    "quote": "Synthetic Keys 3 standard costs USD 135.00 for one unit, tax included."
+                  }
+                ]
+              }
+            },
+            "budget": {
+              "status": "supported",
+              "scope": "exact-variant",
+              "rationale": "Synthetic source-based test interpretation, not a live product claim.",
+              "support": [
+                {
+                  "url": "https://fixture.example.com/synthetic-keys-3",
+                  "quote": "Synthetic Keys 3 standard costs USD 135.00 for one unit, tax included."
+                }
+              ]
+            }
+          }
+        ],
+        "choice": {
+          "productId": "synthetic-keys-1",
+          "reasons": [
+            {
+              "kind": "field",
+              "name": "identity"
+            },
+            {
+              "kind": "field",
+              "name": "price"
+            }
+          ]
+        },
+        "limitations": [
+          "Entirely synthetic fixed provider material, including every product, claim and price. No inventory or merchant proof. Missing criteria remain unknown."
+        ]
+      }
+    },
+    "status": 200
+  },
+  "interpretation": {
+    "mode": "fixed-proposals",
+    "inputHash": "ba136b479052387d0ab913a7bb4d802eebe4f7e17be79846d908e5fd87c4044a",
+    "openAIHttpRequests": 0,
+    "invocations": 3,
+    "suppliedTurns": [
+      {
+        "turnIndex": 0,
+        "message": "Find a compact mechanical keyboard, USD 80 to 140. It must have wireless support.",
+        "proposal": {
+          "disposition": "research",
+          "actions": [
+            {
+              "kind": "start-request",
+              "source": {
+                "start": 15,
+                "end": 34,
+                "text": "mechanical keyboard"
+              }
+            },
+            {
+              "kind": "add-criterion",
+              "source": {
+                "start": 7,
+                "end": 14,
+                "text": "compact"
+              },
+              "strength": "flexible"
+            },
+            {
+              "kind": "budget",
+              "source": {
+                "start": 36,
+                "end": 49,
+                "text": "USD 80 to 140"
+              },
+              "operation": "replace-range",
+              "draft": {
+                "amount": 140,
+                "minimum": 80,
+                "currency": "USD"
+              }
+            },
+            {
+              "kind": "add-criterion",
+              "source": {
+                "start": 51,
+                "end": 81,
+                "text": "It must have wireless support."
+              },
+              "strength": "hard"
+            }
+          ]
+        }
+      },
+      {
+        "turnIndex": 1,
+        "message": "Something cheaper",
+        "proposal": {
+          "disposition": "feedback",
+          "actions": [
+            {
+              "kind": "add-criterion",
+              "source": {
+                "start": 0,
+                "end": 17,
+                "text": "Something cheaper"
+              },
+              "strength": "flexible"
+            }
+          ]
+        },
+        "limitations": [
+          "Cheaper does not supply a new numeric budget or explicitly remove a bound. The feedback disposition asks for the missing tradeoff rather than inventing a price."
+        ]
+      },
+      {
+        "turnIndex": 2,
+        "message": "The lower-priced options within that range are fine.",
+        "proposal": {
+          "disposition": "acknowledge",
+          "actions": [
+            {
+              "kind": "add-criterion",
+              "source": {
+                "start": 0,
+                "end": 52,
+                "text": "The lower-priced options within that range are fine."
+              },
+              "strength": "flexible"
+            }
+          ]
+        },
+        "limitations": [
+          "The action contract has no held-evidence answer or comparison operation. Acknowledge requests no new research and does not fabricate comparison content."
+        ]
+      }
+    ],
+    "limitations": []
+  },
+  "turns": [
+    {
+      "index": 0,
+      "action": {
+        "kind": "message",
+        "text": "Find a compact mechanical keyboard, USD 80 to 140. It must have wireless support."
+      },
+      "initialPreferences": {
+        "version": 5,
+        "productDescription": "",
+        "criteria": [],
+        "budget": null,
+        "budgetClarified": false,
+        "pendingChange": null,
+        "region": "SG",
+        "responseLength": "concise",
+        "revision": 0
+      },
+      "finalPreferences": {
+        "version": 5,
+        "productDescription": "",
+        "criteria": [],
+        "budget": null,
+        "budgetClarified": false,
+        "pendingChange": null,
+        "region": "SG",
+        "responseLength": "concise",
+        "revision": 0
+      },
+      "response": {
+        "responseVersion": 5,
+        "preferences": {
+          "version": 5,
+          "productDescription": "",
+          "criteria": [],
+          "budget": null,
+          "budgetClarified": false,
+          "pendingChange": null,
+          "region": "SG",
+          "responseLength": "concise",
+          "revision": 0
+        },
+        "notes": [],
+        "kind": "research-unavailable",
+        "message": "I could not interpret that request right now. Your accepted preferences and any pending answer are retained. Try again after intent interpretation is available.",
+        "reason": "intent-unavailable"
+      },
+      "providerCalls": 0,
+      "cancelled": false
+    },
+    {
+      "index": 1,
+      "action": {
+        "kind": "message",
+        "text": "Something cheaper"
+      },
+      "initialPreferences": {
+        "version": 5,
+        "productDescription": "",
+        "criteria": [],
+        "budget": null,
+        "budgetClarified": false,
+        "pendingChange": null,
+        "region": "SG",
+        "responseLength": "concise",
+        "revision": 0
+      },
+      "finalPreferences": {
+        "version": 5,
+        "productDescription": "",
+        "criteria": [
+          {
+            "id": "criterion-1",
+            "wording": "Something cheaper",
+            "strength": "flexible",
+            "origin": {
+              "kind": "message",
+              "text": "Something cheaper"
+            }
+          }
+        ],
+        "budget": null,
+        "budgetClarified": false,
+        "pendingChange": null,
+        "region": "SG",
+        "responseLength": "concise",
+        "revision": 3
+      },
+      "response": {
+        "responseVersion": 5,
+        "preferences": {
+          "version": 5,
+          "productDescription": "",
+          "criteria": [
+            {
+              "id": "criterion-1",
+              "wording": "Something cheaper",
+              "strength": "flexible",
+              "origin": {
+                "kind": "message",
+                "text": "Something cheaper"
+              }
+            }
+          ],
+          "budget": null,
+          "budgetClarified": false,
+          "pendingChange": null,
+          "region": "SG",
+          "responseLength": "concise",
+          "revision": 3
+        },
+        "notes": [],
+        "kind": "clarification",
+        "message": "What should change in the next comparison? Tell me the tradeoff that missed the mark.",
+        "reason": "feedback"
+      },
+      "providerCalls": 0,
+      "cancelled": false
+    },
+    {
+      "index": 2,
+      "action": {
+        "kind": "message",
+        "text": "The lower-priced options within that range are fine."
+      },
+      "initialPreferences": {
+        "version": 5,
+        "productDescription": "",
+        "criteria": [
+          {
+            "id": "criterion-1",
+            "wording": "Something cheaper",
+            "strength": "flexible",
+            "origin": {
+              "kind": "message",
+              "text": "Something cheaper"
+            }
+          }
+        ],
+        "budget": null,
+        "budgetClarified": false,
+        "pendingChange": null,
+        "region": "SG",
+        "responseLength": "concise",
+        "revision": 3
+      },
+      "finalPreferences": {
+        "version": 5,
+        "productDescription": "",
+        "criteria": [
+          {
+            "id": "criterion-1",
+            "wording": "Something cheaper",
+            "strength": "flexible",
+            "origin": {
+              "kind": "message",
+              "text": "Something cheaper"
+            }
+          },
+          {
+            "id": "criterion-4",
+            "wording": "The lower-priced options within that range are fine.",
+            "strength": "flexible",
+            "origin": {
+              "kind": "message",
+              "text": "The lower-priced options within that range are fine."
+            }
+          }
+        ],
+        "budget": null,
+        "budgetClarified": false,
+        "pendingChange": null,
+        "region": "SG",
+        "responseLength": "concise",
+        "revision": 6
+      },
+      "response": {
+        "responseVersion": 5,
+        "preferences": {
+          "version": 5,
+          "productDescription": "",
+          "criteria": [
+            {
+              "id": "criterion-1",
+              "wording": "Something cheaper",
+              "strength": "flexible",
+              "origin": {
+                "kind": "message",
+                "text": "Something cheaper"
+              }
+            },
+            {
+              "id": "criterion-4",
+              "wording": "The lower-priced options within that range are fine.",
+              "strength": "flexible",
+              "origin": {
+                "kind": "message",
+                "text": "The lower-priced options within that range are fine."
+              }
+            }
+          ],
+          "budget": null,
+          "budgetClarified": false,
+          "pendingChange": null,
+          "region": "SG",
+          "responseLength": "concise",
+          "revision": 6
+        },
+        "notes": [],
+        "kind": "message",
+        "message": "Your preferences and earlier research are still here."
+      },
+      "providerCalls": 0,
+      "cancelled": false
+    }
+  ],
+  "events": [
+    {
+      "sequence": 1,
+      "turn": 0,
+      "kind": "app-request",
+      "elapsedMs": 1.84,
+      "body": {
+        "phase": "prepare",
+        "message": "Find a compact mechanical keyboard, USD 80 to 140. It must have wireless support.",
+        "preferences": {
+          "version": 5,
+          "productDescription": "",
+          "criteria": [],
+          "budget": null,
+          "budgetClarified": false,
+          "pendingChange": null,
+          "region": "SG",
+          "responseLength": "concise",
+          "revision": 0
+        },
+        "operationId": "cc40fb35-2374-4ddd-886e-7cbe58c89bb8"
+      }
+    },
+    {
+      "sequence": 2,
+      "turn": 0,
+      "kind": "interpreter-request",
+      "elapsedMs": 2.62,
+      "body": {
+        "operationId": "cc40fb35-2374-4ddd-886e-7cbe58c89bb8",
+        "message": "Find a compact mechanical keyboard, USD 80 to 140. It must have wireless support.",
+        "questionId": null,
+        "inputHash": "ba136b479052387d0ab913a7bb4d802eebe4f7e17be79846d908e5fd87c4044a",
+        "label": "Independently authored synthetic proposals. Conditional technical behavior only."
+      }
+    },
+    {
+      "sequence": 3,
+      "turn": 0,
+      "kind": "interpreter-response",
+      "elapsedMs": 2.65,
+      "body": {
+        "status": "ready",
+        "interpretation": {
+          "disposition": "research",
+          "actions": [
+            {
+              "kind": "start-request",
+              "source": {
+                "start": 15,
+                "end": 34,
+                "text": "mechanical keyboard"
+              }
+            },
+            {
+              "kind": "add-criterion",
+              "source": {
+                "start": 7,
+                "end": 14,
+                "text": "compact"
+              },
+              "strength": "flexible"
+            },
+            {
+              "kind": "budget",
+              "source": {
+                "start": 36,
+                "end": 49,
+                "text": "USD 80 to 140"
+              },
+              "operation": "replace-range",
+              "draft": {
+                "amount": 140,
+                "minimum": 80,
+                "currency": "USD"
+              }
+            },
+            {
+              "kind": "add-criterion",
+              "source": {
+                "start": 51,
+                "end": 81,
+                "text": "It must have wireless support."
+              },
+              "strength": "hard"
+            }
+          ]
+        },
+        "bindings": [],
+        "limitations": []
+      }
+    },
+    {
+      "sequence": 4,
+      "turn": 0,
+      "kind": "app-response",
+      "elapsedMs": 2.94,
+      "body": {
+        "status": 200,
+        "body": {
+          "responseVersion": 5,
+          "preferences": {
+            "version": 5,
+            "productDescription": "",
+            "criteria": [],
+            "budget": null,
+            "budgetClarified": false,
+            "pendingChange": null,
+            "region": "SG",
+            "responseLength": "concise",
+            "revision": 0
+          },
+          "notes": [],
+          "kind": "research-unavailable",
+          "message": "I could not interpret that request right now. Your accepted preferences and any pending answer are retained. Try again after intent interpretation is available.",
+          "reason": "intent-unavailable"
+        }
+      }
+    },
+    {
+      "sequence": 5,
+      "turn": 1,
+      "kind": "app-request",
+      "elapsedMs": 2.97,
+      "body": {
+        "phase": "prepare",
+        "message": "Something cheaper",
+        "preferences": {
+          "version": 5,
+          "productDescription": "",
+          "criteria": [],
+          "budget": null,
+          "budgetClarified": false,
+          "pendingChange": null,
+          "region": "SG",
+          "responseLength": "concise",
+          "revision": 0
+        },
+        "operationId": "0bc7be50-e374-478f-8527-61f02daf7005"
+      }
+    },
+    {
+      "sequence": 6,
+      "turn": 1,
+      "kind": "interpreter-request",
+      "elapsedMs": 3.34,
+      "body": {
+        "operationId": "0bc7be50-e374-478f-8527-61f02daf7005",
+        "message": "Something cheaper",
+        "questionId": null,
+        "inputHash": "ba136b479052387d0ab913a7bb4d802eebe4f7e17be79846d908e5fd87c4044a",
+        "label": "Independently authored synthetic proposals. Conditional technical behavior only."
+      }
+    },
+    {
+      "sequence": 7,
+      "turn": 1,
+      "kind": "interpreter-response",
+      "elapsedMs": 3.35,
+      "body": {
+        "status": "ready",
+        "interpretation": {
+          "disposition": "feedback",
+          "actions": [
+            {
+              "kind": "add-criterion",
+              "source": {
+                "start": 0,
+                "end": 17,
+                "text": "Something cheaper"
+              },
+              "strength": "flexible"
+            }
+          ]
+        },
+        "bindings": [],
+        "limitations": [
+          "Cheaper does not supply a new numeric budget or explicitly remove a bound. The feedback disposition asks for the missing tradeoff rather than inventing a price."
+        ]
+      }
+    },
+    {
+      "sequence": 8,
+      "turn": 1,
+      "kind": "app-response",
+      "elapsedMs": 3.84,
+      "body": {
+        "status": 200,
+        "body": {
+          "responseVersion": 5,
+          "preferences": {
+            "version": 5,
+            "productDescription": "",
+            "criteria": [
+              {
+                "id": "criterion-1",
+                "wording": "Something cheaper",
+                "strength": "flexible",
+                "origin": {
+                  "kind": "message",
+                  "text": "Something cheaper"
+                }
+              }
+            ],
+            "budget": null,
+            "budgetClarified": false,
+            "pendingChange": null,
+            "region": "SG",
+            "responseLength": "concise",
+            "revision": 3
+          },
+          "notes": [],
+          "kind": "clarification",
+          "message": "What should change in the next comparison? Tell me the tradeoff that missed the mark.",
+          "reason": "feedback"
+        }
+      }
+    },
+    {
+      "sequence": 9,
+      "turn": 2,
+      "kind": "app-request",
+      "elapsedMs": 3.89,
+      "body": {
+        "phase": "prepare",
+        "message": "The lower-priced options within that range are fine.",
+        "preferences": {
+          "version": 5,
+          "productDescription": "",
+          "criteria": [
+            {
+              "id": "criterion-1",
+              "wording": "Something cheaper",
+              "strength": "flexible",
+              "origin": {
+                "kind": "message",
+                "text": "Something cheaper"
+              }
+            }
+          ],
+          "budget": null,
+          "budgetClarified": false,
+          "pendingChange": null,
+          "region": "SG",
+          "responseLength": "concise",
+          "revision": 3
+        },
+        "operationId": "23ccd690-9b66-4621-8711-6ff71131423a"
+      }
+    },
+    {
+      "sequence": 10,
+      "turn": 2,
+      "kind": "interpreter-request",
+      "elapsedMs": 4.26,
+      "body": {
+        "operationId": "23ccd690-9b66-4621-8711-6ff71131423a",
+        "message": "The lower-priced options within that range are fine.",
+        "questionId": null,
+        "inputHash": "ba136b479052387d0ab913a7bb4d802eebe4f7e17be79846d908e5fd87c4044a",
+        "label": "Independently authored synthetic proposals. Conditional technical behavior only."
+      }
+    },
+    {
+      "sequence": 11,
+      "turn": 2,
+      "kind": "interpreter-response",
+      "elapsedMs": 4.28,
+      "body": {
+        "status": "ready",
+        "interpretation": {
+          "disposition": "acknowledge",
+          "actions": [
+            {
+              "kind": "add-criterion",
+              "source": {
+                "start": 0,
+                "end": 52,
+                "text": "The lower-priced options within that range are fine."
+              },
+              "strength": "flexible"
+            }
+          ]
+        },
+        "bindings": [],
+        "limitations": [
+          "The action contract has no held-evidence answer or comparison operation. Acknowledge requests no new research and does not fabricate comparison content."
+        ]
+      }
+    },
+    {
+      "sequence": 12,
+      "turn": 2,
+      "kind": "app-response",
+      "elapsedMs": 4.66,
+      "body": {
+        "status": 200,
+        "body": {
+          "responseVersion": 5,
+          "preferences": {
+            "version": 5,
+            "productDescription": "",
+            "criteria": [
+              {
+                "id": "criterion-1",
+                "wording": "Something cheaper",
+                "strength": "flexible",
+                "origin": {
+                  "kind": "message",
+                  "text": "Something cheaper"
+                }
+              },
+              {
+                "id": "criterion-4",
+                "wording": "The lower-priced options within that range are fine.",
+                "strength": "flexible",
+                "origin": {
+                  "kind": "message",
+                  "text": "The lower-priced options within that range are fine."
+                }
+              }
+            ],
+            "budget": null,
+            "budgetClarified": false,
+            "pendingChange": null,
+            "region": "SG",
+            "responseLength": "concise",
+            "revision": 6
+          },
+          "notes": [],
+          "kind": "message",
+          "message": "Your preferences and earlier research are still here."
+        }
+      }
+    }
+  ],
+  "network": {
+    "denied": [],
+    "allowedOriginCount": 2,
+    "externalRequests": 0
+  },
+  "cleanup": true,
+  "applicationError": null
+}

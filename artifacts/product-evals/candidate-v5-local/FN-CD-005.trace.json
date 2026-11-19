@@ -1,0 +1,873 @@
+{
+  "scenarioId": "FN-CD-005",
+  "initialPreferences": {
+    "version": 5,
+    "productDescription": "",
+    "criteria": [],
+    "budget": null,
+    "budgetClarified": false,
+    "pendingChange": null,
+    "region": "SG",
+    "responseLength": "concise",
+    "revision": 0
+  },
+  "finalPreferences": {
+    "version": 5,
+    "productDescription": "",
+    "criteria": [],
+    "budget": null,
+    "budgetClarified": false,
+    "pendingChange": null,
+    "region": "SG",
+    "responseLength": "concise",
+    "revision": 1
+  },
+  "material": {
+    "id": "mixed-fit:FN-CD-005",
+    "kind": "synthetic",
+    "label": "Explicit synthetic provider double. Not genuine Exa research.",
+    "capturedAt": null,
+    "provenance": [
+      "Independently fixed test input before application execution",
+      "No current product or market claim",
+      "Original independent provider recipe mixed-fit; fixed profile FN-CD-005.",
+      "Synthetic claims, prices and availability statements remain visibly labeled. No live research or inventory."
+    ],
+    "sha256": "adc97064868ee51fdfacd5ceb4bbada6069ba1cc50103e5970563bf3ec21d4ea",
+    "body": {
+      "requestId": "synthetic-FN-CD-005",
+      "costDollars": {
+        "total": 0.005
+      },
+      "citations": [
+        {
+          "url": "https://fixture.example.com/synthetic-store-1",
+          "title": "Synthetic Store 1 synthetic fixture",
+          "text": "Synthetic Store 1 standard is a power bank with 30 W USB-C output.\nSynthetic Store 1 standard costs USD 55.00 for one unit, tax included.\nSynthetic input. Stock and delivery are not established."
+        },
+        {
+          "url": "https://fixture.example.com/synthetic-store-2",
+          "title": "Synthetic Store 2 synthetic fixture",
+          "text": "Synthetic Store 2 standard is a power bank with 30 W USB-C output.\nSynthetic Store 2 standard costs USD 70.00 for one unit, tax included.\nSynthetic input. Stock and delivery are not established.\nSynthetic Store 2 standard is a non-functional display model and cannot be used as an operational product."
+        },
+        {
+          "url": "https://fixture.example.com/synthetic-store-3",
+          "title": "Synthetic Store 3 synthetic fixture",
+          "text": "Synthetic Store 3 standard is a power bank with 30 W USB-C output.\nSynthetic Store 3 standard costs USD 85.00 for one unit, tax included.\nSynthetic input. Stock and delivery are not established."
+        }
+      ],
+      "answer": {
+        "products": [
+          {
+            "id": "synthetic-store-1",
+            "name": "Synthetic Store 1",
+            "variant": "standard",
+            "identity": {
+              "status": "supported",
+              "scope": "exact-variant",
+              "rationale": "Synthetic source-based test interpretation, not a live product claim.",
+              "support": [
+                {
+                  "url": "https://fixture.example.com/synthetic-store-1",
+                  "quote": "Synthetic Store 1 standard is a power bank with 30 W USB-C output."
+                }
+              ]
+            },
+            "requestMatch": {
+              "status": "supported",
+              "scope": "exact-variant",
+              "rationale": "Synthetic source-based test interpretation, not a live product claim.",
+              "support": [
+                {
+                  "url": "https://fixture.example.com/synthetic-store-1",
+                  "quote": "Synthetic Store 1 standard is a power bank with 30 W USB-C output."
+                }
+              ]
+            },
+            "criteria": [],
+            "attributes": [
+              {
+                "name": "Use",
+                "assessment": {
+                  "status": "supported",
+                  "scope": "exact-variant",
+                  "rationale": "Synthetic source-based test interpretation, not a live product claim.",
+                  "support": [
+                    {
+                      "url": "https://fixture.example.com/synthetic-store-1",
+                      "quote": "Synthetic Store 1 standard is a power bank with 30 W USB-C output."
+                    }
+                  ]
+                }
+              }
+            ],
+            "price": {
+              "amount": 55,
+              "currency": "USD",
+              "conditions": [
+                "One unit",
+                "Tax included"
+              ],
+              "conditionsResolved": true,
+              "variant": "standard",
+              "assessment": {
+                "status": "supported",
+                "scope": "exact-variant",
+                "rationale": "Synthetic source-based test interpretation, not a live product claim.",
+                "support": [
+                  {
+                    "url": "https://fixture.example.com/synthetic-store-1",
+                    "quote": "Synthetic Store 1 standard costs USD 55.00 for one unit, tax included."
+                  }
+                ]
+              }
+            },
+            "budget": {
+              "status": "supported",
+              "scope": "exact-variant",
+              "rationale": "Synthetic source-based test interpretation, not a live product claim.",
+              "support": [
+                {
+                  "url": "https://fixture.example.com/synthetic-store-1",
+                  "quote": "Synthetic Store 1 standard costs USD 55.00 for one unit, tax included."
+                }
+              ]
+            }
+          },
+          {
+            "id": "synthetic-store-2",
+            "name": "Synthetic Store 2",
+            "variant": "standard",
+            "identity": {
+              "status": "supported",
+              "scope": "exact-variant",
+              "rationale": "Synthetic source-based test interpretation, not a live product claim.",
+              "support": [
+                {
+                  "url": "https://fixture.example.com/synthetic-store-2",
+                  "quote": "Synthetic Store 2 standard is a power bank with 30 W USB-C output."
+                }
+              ]
+            },
+            "requestMatch": {
+              "status": "contradicted",
+              "scope": "exact-variant",
+              "rationale": "Synthetic negative fit observation. The exact use remains a semantic assessment.",
+              "support": [
+                {
+                  "url": "https://fixture.example.com/synthetic-store-2",
+                  "quote": "Synthetic Store 2 standard is a non-functional display model and cannot be used as an operational product."
+                }
+              ]
+            },
+            "criteria": [],
+            "attributes": [
+              {
+                "name": "Use",
+                "assessment": {
+                  "status": "supported",
+                  "scope": "exact-variant",
+                  "rationale": "Synthetic source-based test interpretation, not a live product claim.",
+                  "support": [
+                    {
+                      "url": "https://fixture.example.com/synthetic-store-2",
+                      "quote": "Synthetic Store 2 standard is a power bank with 30 W USB-C output."
+                    }
+                  ]
+                }
+              }
+            ],
+            "price": {
+              "amount": 70,
+              "currency": "USD",
+              "conditions": [
+                "One unit",
+                "Tax included"
+              ],
+              "conditionsResolved": true,
+              "variant": "standard",
+              "assessment": {
+                "status": "supported",
+                "scope": "exact-variant",
+                "rationale": "Synthetic source-based test interpretation, not a live product claim.",
+                "support": [
+                  {
+                    "url": "https://fixture.example.com/synthetic-store-2",
+                    "quote": "Synthetic Store 2 standard costs USD 70.00 for one unit, tax included."
+                  }
+                ]
+              }
+            },
+            "budget": {
+              "status": "supported",
+              "scope": "exact-variant",
+              "rationale": "Synthetic source-based test interpretation, not a live product claim.",
+              "support": [
+                {
+                  "url": "https://fixture.example.com/synthetic-store-2",
+                  "quote": "Synthetic Store 2 standard costs USD 70.00 for one unit, tax included."
+                }
+              ]
+            }
+          },
+          {
+            "id": "synthetic-store-3",
+            "name": "Synthetic Store 3",
+            "variant": "standard",
+            "identity": {
+              "status": "supported",
+              "scope": "exact-variant",
+              "rationale": "Synthetic source-based test interpretation, not a live product claim.",
+              "support": [
+                {
+                  "url": "https://fixture.example.com/synthetic-store-3",
+                  "quote": "Synthetic Store 3 standard is a power bank with 30 W USB-C output."
+                }
+              ]
+            },
+            "requestMatch": {
+              "status": "unknown",
+              "scope": "unclear",
+              "rationale": "Synthetic input intentionally lacks qualifying evidence.",
+              "support": []
+            },
+            "criteria": [],
+            "attributes": [
+              {
+                "name": "Use",
+                "assessment": {
+                  "status": "supported",
+                  "scope": "exact-variant",
+                  "rationale": "Synthetic source-based test interpretation, not a live product claim.",
+                  "support": [
+                    {
+                      "url": "https://fixture.example.com/synthetic-store-3",
+                      "quote": "Synthetic Store 3 standard is a power bank with 30 W USB-C output."
+                    }
+                  ]
+                }
+              }
+            ],
+            "price": {
+              "amount": 85,
+              "currency": "USD",
+              "conditions": [
+                "One unit",
+                "Tax included"
+              ],
+              "conditionsResolved": true,
+              "variant": "standard",
+              "assessment": {
+                "status": "supported",
+                "scope": "exact-variant",
+                "rationale": "Synthetic source-based test interpretation, not a live product claim.",
+                "support": [
+                  {
+                    "url": "https://fixture.example.com/synthetic-store-3",
+                    "quote": "Synthetic Store 3 standard costs USD 85.00 for one unit, tax included."
+                  }
+                ]
+              }
+            },
+            "budget": {
+              "status": "supported",
+              "scope": "exact-variant",
+              "rationale": "Synthetic source-based test interpretation, not a live product claim.",
+              "support": [
+                {
+                  "url": "https://fixture.example.com/synthetic-store-3",
+                  "quote": "Synthetic Store 3 standard costs USD 85.00 for one unit, tax included."
+                }
+              ]
+            }
+          }
+        ],
+        "choice": {
+          "productId": "synthetic-store-1",
+          "reasons": [
+            {
+              "kind": "field",
+              "name": "identity"
+            },
+            {
+              "kind": "field",
+              "name": "price"
+            }
+          ]
+        },
+        "limitations": [
+          "Entirely synthetic fixed provider material, including every product, claim and price. No inventory or merchant proof. Missing criteria remain unknown."
+        ]
+      }
+    },
+    "status": 200
+  },
+  "interpretation": {
+    "mode": "fixed-proposals",
+    "inputHash": "ba136b479052387d0ab913a7bb4d802eebe4f7e17be79846d908e5fd87c4044a",
+    "openAIHttpRequests": 0,
+    "ollamaHttpRequests": 0,
+    "consumedTurns": [
+      0,
+      1,
+      2
+    ],
+    "unconsumedTurns": [],
+    "invocations": 3,
+    "suppliedTurns": [
+      {
+        "turnIndex": 0,
+        "message": "Find an Anker power bank under USD 90 with 30 W USB-C output.",
+        "proposal": {
+          "disposition": "research",
+          "actions": [
+            {
+              "kind": "start-request",
+              "source": {
+                "start": 14,
+                "end": 24,
+                "text": "power bank"
+              }
+            },
+            {
+              "kind": "add-criterion",
+              "source": {
+                "start": 8,
+                "end": 13,
+                "text": "Anker"
+              },
+              "strength": "hard"
+            },
+            {
+              "kind": "budget",
+              "source": {
+                "start": 25,
+                "end": 37,
+                "text": "under USD 90"
+              },
+              "operation": "set-maximum",
+              "draft": {
+                "amount": 90,
+                "minimum": null,
+                "currency": "USD"
+              }
+            },
+            {
+              "kind": "add-criterion",
+              "source": {
+                "start": 38,
+                "end": 60,
+                "text": "with 30 W USB-C output"
+              },
+              "strength": "hard"
+            }
+          ]
+        },
+        "limitations": [
+          "Hard strength follows the literal requirement, including essential, needs, or a specific required specification. The proposal does not rewrite wording to satisfy a lexical guard."
+        ]
+      },
+      {
+        "turnIndex": 1,
+        "message": "Actually other brands are fine, but still no Sony.",
+        "proposal": {
+          "disposition": "research",
+          "actions": [
+            {
+              "kind": "remove-criterion",
+              "source": {
+                "start": 0,
+                "end": 30,
+                "text": "Actually other brands are fine"
+              },
+              "id": "@symbolic-0"
+            },
+            {
+              "kind": "add-criterion",
+              "source": {
+                "start": 36,
+                "end": 49,
+                "text": "still no Sony"
+              },
+              "strength": "hard"
+            }
+          ]
+        },
+        "symbolicTargets": [
+          {
+            "actionIndex": 0,
+            "targetWording": "Anker"
+          }
+        ],
+        "limitations": [
+          "Other brands are fine explicitly releases the earlier Anker restriction. The removal contract may not express this without removal-cue wording; the target stays symbolic."
+        ]
+      },
+      {
+        "turnIndex": 2,
+        "message": "I still need the 30 W output.",
+        "proposal": {
+          "disposition": "acknowledge",
+          "actions": []
+        },
+        "limitations": [
+          "Still need confirms the already stated 30 W requirement. No removal, weakened threshold, or new research is proposed."
+        ]
+      }
+    ],
+    "limitations": [
+      "Symbolic removal at turn 1 has 0 prior literal matches for \"Anker\""
+    ]
+  },
+  "turns": [
+    {
+      "index": 0,
+      "action": {
+        "kind": "message",
+        "text": "Find an Anker power bank under USD 90 with 30 W USB-C output."
+      },
+      "initialPreferences": {
+        "version": 5,
+        "productDescription": "",
+        "criteria": [],
+        "budget": null,
+        "budgetClarified": false,
+        "pendingChange": null,
+        "region": "SG",
+        "responseLength": "concise",
+        "revision": 0
+      },
+      "finalPreferences": {
+        "version": 5,
+        "productDescription": "",
+        "criteria": [],
+        "budget": null,
+        "budgetClarified": false,
+        "pendingChange": null,
+        "region": "SG",
+        "responseLength": "concise",
+        "revision": 0
+      },
+      "response": {
+        "responseVersion": 5,
+        "preferences": {
+          "version": 5,
+          "productDescription": "",
+          "criteria": [],
+          "budget": null,
+          "budgetClarified": false,
+          "pendingChange": null,
+          "region": "SG",
+          "responseLength": "concise",
+          "revision": 0
+        },
+        "notes": [],
+        "kind": "research-unavailable",
+        "message": "I could not safely interpret the complete message, so no part of it was applied. Your accepted preferences and any pending question are unchanged. This message needs additional interpretation, which is unavailable right now.",
+        "reason": "intent-unavailable"
+      },
+      "intentHandling": "synthetic-fallback",
+      "providerCalls": 0,
+      "cancelled": false
+    },
+    {
+      "index": 1,
+      "action": {
+        "kind": "message",
+        "text": "Actually other brands are fine, but still no Sony."
+      },
+      "initialPreferences": {
+        "version": 5,
+        "productDescription": "",
+        "criteria": [],
+        "budget": null,
+        "budgetClarified": false,
+        "pendingChange": null,
+        "region": "SG",
+        "responseLength": "concise",
+        "revision": 0
+      },
+      "finalPreferences": {
+        "version": 5,
+        "productDescription": "",
+        "criteria": [],
+        "budget": null,
+        "budgetClarified": false,
+        "pendingChange": null,
+        "region": "SG",
+        "responseLength": "concise",
+        "revision": 0
+      },
+      "response": {
+        "responseVersion": 5,
+        "preferences": {
+          "version": 5,
+          "productDescription": "",
+          "criteria": [],
+          "budget": null,
+          "budgetClarified": false,
+          "pendingChange": null,
+          "region": "SG",
+          "responseLength": "concise",
+          "revision": 0
+        },
+        "notes": [],
+        "kind": "research-unavailable",
+        "message": "I could not safely interpret the complete message, so no part of it was applied. Your accepted preferences and any pending question are unchanged. This message needs additional interpretation, which is unavailable right now.",
+        "reason": "intent-unavailable"
+      },
+      "intentHandling": "synthetic-fallback",
+      "providerCalls": 0,
+      "cancelled": false
+    },
+    {
+      "index": 2,
+      "action": {
+        "kind": "message",
+        "text": "I still need the 30 W output."
+      },
+      "initialPreferences": {
+        "version": 5,
+        "productDescription": "",
+        "criteria": [],
+        "budget": null,
+        "budgetClarified": false,
+        "pendingChange": null,
+        "region": "SG",
+        "responseLength": "concise",
+        "revision": 0
+      },
+      "finalPreferences": {
+        "version": 5,
+        "productDescription": "",
+        "criteria": [],
+        "budget": null,
+        "budgetClarified": false,
+        "pendingChange": null,
+        "region": "SG",
+        "responseLength": "concise",
+        "revision": 1
+      },
+      "response": {
+        "responseVersion": 5,
+        "preferences": {
+          "version": 5,
+          "productDescription": "",
+          "criteria": [],
+          "budget": null,
+          "budgetClarified": false,
+          "pendingChange": null,
+          "region": "SG",
+          "responseLength": "concise",
+          "revision": 1
+        },
+        "notes": [],
+        "kind": "message",
+        "message": "Your preferences and earlier research are still here."
+      },
+      "intentHandling": "synthetic-fallback",
+      "providerCalls": 0,
+      "cancelled": false
+    }
+  ],
+  "events": [
+    {
+      "sequence": 1,
+      "turn": 0,
+      "kind": "app-request",
+      "attemptId": "2ca26ce4-ecf8-412c-9e50-2137322275e5",
+      "elapsedMs": 2.3,
+      "body": {
+        "phase": "prepare",
+        "message": "Find an Anker power bank under USD 90 with 30 W USB-C output.",
+        "preferences": {
+          "version": 5,
+          "productDescription": "",
+          "criteria": [],
+          "budget": null,
+          "budgetClarified": false,
+          "pendingChange": null,
+          "region": "SG",
+          "responseLength": "concise",
+          "revision": 0
+        },
+        "operationId": "02c1547f-cd97-42b2-906f-0460e966ada7"
+      }
+    },
+    {
+      "sequence": 2,
+      "turn": 0,
+      "kind": "interpreter-request",
+      "attemptId": "2ca26ce4-ecf8-412c-9e50-2137322275e5",
+      "elapsedMs": 3.49,
+      "body": {
+        "operationId": "02c1547f-cd97-42b2-906f-0460e966ada7",
+        "message": "Find an Anker power bank under USD 90 with 30 W USB-C output.",
+        "questionId": null,
+        "inputHash": "ba136b479052387d0ab913a7bb4d802eebe4f7e17be79846d908e5fd87c4044a",
+        "label": "Independently authored synthetic proposals. Conditional technical behavior only."
+      }
+    },
+    {
+      "sequence": 3,
+      "turn": 0,
+      "kind": "interpreter-response",
+      "attemptId": "2ca26ce4-ecf8-412c-9e50-2137322275e5",
+      "elapsedMs": 3.51,
+      "body": {
+        "status": "ready",
+        "interpretation": {
+          "disposition": "research",
+          "actions": [
+            {
+              "kind": "start-request",
+              "source": {
+                "start": 14,
+                "end": 24,
+                "text": "power bank"
+              }
+            },
+            {
+              "kind": "add-criterion",
+              "source": {
+                "start": 8,
+                "end": 13,
+                "text": "Anker"
+              },
+              "strength": "hard"
+            },
+            {
+              "kind": "budget",
+              "source": {
+                "start": 25,
+                "end": 37,
+                "text": "under USD 90"
+              },
+              "operation": "set-maximum",
+              "draft": {
+                "amount": 90,
+                "minimum": null,
+                "currency": "USD"
+              }
+            },
+            {
+              "kind": "add-criterion",
+              "source": {
+                "start": 38,
+                "end": 60,
+                "text": "with 30 W USB-C output"
+              },
+              "strength": "hard"
+            }
+          ]
+        },
+        "bindings": [],
+        "limitations": [
+          "Hard strength follows the literal requirement, including essential, needs, or a specific required specification. The proposal does not rewrite wording to satisfy a lexical guard."
+        ]
+      }
+    },
+    {
+      "sequence": 4,
+      "turn": 0,
+      "kind": "app-response",
+      "attemptId": "2ca26ce4-ecf8-412c-9e50-2137322275e5",
+      "elapsedMs": 4,
+      "body": {
+        "status": 200,
+        "body": {
+          "responseVersion": 5,
+          "preferences": {
+            "version": 5,
+            "productDescription": "",
+            "criteria": [],
+            "budget": null,
+            "budgetClarified": false,
+            "pendingChange": null,
+            "region": "SG",
+            "responseLength": "concise",
+            "revision": 0
+          },
+          "notes": [],
+          "kind": "research-unavailable",
+          "message": "I could not safely interpret the complete message, so no part of it was applied. Your accepted preferences and any pending question are unchanged. This message needs additional interpretation, which is unavailable right now.",
+          "reason": "intent-unavailable"
+        }
+      }
+    },
+    {
+      "sequence": 5,
+      "turn": 1,
+      "kind": "app-request",
+      "attemptId": "eab1f803-08b0-4ebc-96a5-019241aee4a0",
+      "elapsedMs": 4.04,
+      "body": {
+        "phase": "prepare",
+        "message": "Actually other brands are fine, but still no Sony.",
+        "preferences": {
+          "version": 5,
+          "productDescription": "",
+          "criteria": [],
+          "budget": null,
+          "budgetClarified": false,
+          "pendingChange": null,
+          "region": "SG",
+          "responseLength": "concise",
+          "revision": 0
+        },
+        "operationId": "f8e82035-70f3-4f63-b3fe-7ec81a3dcd8f"
+      }
+    },
+    {
+      "sequence": 6,
+      "turn": 1,
+      "kind": "interpreter-request",
+      "attemptId": "eab1f803-08b0-4ebc-96a5-019241aee4a0",
+      "elapsedMs": 4.62,
+      "body": {
+        "operationId": "f8e82035-70f3-4f63-b3fe-7ec81a3dcd8f",
+        "message": "Actually other brands are fine, but still no Sony.",
+        "questionId": null,
+        "inputHash": "ba136b479052387d0ab913a7bb4d802eebe4f7e17be79846d908e5fd87c4044a",
+        "label": "Independently authored synthetic proposals. Conditional technical behavior only."
+      }
+    },
+    {
+      "sequence": 7,
+      "turn": 1,
+      "kind": "input-limitation",
+      "attemptId": "eab1f803-08b0-4ebc-96a5-019241aee4a0",
+      "elapsedMs": 4.66,
+      "body": {
+        "message": "Symbolic removal at turn 1 has 0 prior literal matches for \"Anker\""
+      }
+    },
+    {
+      "sequence": 8,
+      "turn": 1,
+      "kind": "interpreter-response",
+      "attemptId": "eab1f803-08b0-4ebc-96a5-019241aee4a0",
+      "elapsedMs": 4.66,
+      "body": {
+        "status": "unavailable"
+      }
+    },
+    {
+      "sequence": 9,
+      "turn": 1,
+      "kind": "app-response",
+      "attemptId": "eab1f803-08b0-4ebc-96a5-019241aee4a0",
+      "elapsedMs": 4.92,
+      "body": {
+        "status": 200,
+        "body": {
+          "responseVersion": 5,
+          "preferences": {
+            "version": 5,
+            "productDescription": "",
+            "criteria": [],
+            "budget": null,
+            "budgetClarified": false,
+            "pendingChange": null,
+            "region": "SG",
+            "responseLength": "concise",
+            "revision": 0
+          },
+          "notes": [],
+          "kind": "research-unavailable",
+          "message": "I could not safely interpret the complete message, so no part of it was applied. Your accepted preferences and any pending question are unchanged. This message needs additional interpretation, which is unavailable right now.",
+          "reason": "intent-unavailable"
+        }
+      }
+    },
+    {
+      "sequence": 10,
+      "turn": 2,
+      "kind": "app-request",
+      "attemptId": "89a262d5-01ad-4222-8020-47467ce7d04e",
+      "elapsedMs": 4.94,
+      "body": {
+        "phase": "prepare",
+        "message": "I still need the 30 W output.",
+        "preferences": {
+          "version": 5,
+          "productDescription": "",
+          "criteria": [],
+          "budget": null,
+          "budgetClarified": false,
+          "pendingChange": null,
+          "region": "SG",
+          "responseLength": "concise",
+          "revision": 0
+        },
+        "operationId": "299a2129-ac39-40ce-bc9e-1bc9c53195aa"
+      }
+    },
+    {
+      "sequence": 11,
+      "turn": 2,
+      "kind": "interpreter-request",
+      "attemptId": "89a262d5-01ad-4222-8020-47467ce7d04e",
+      "elapsedMs": 5.43,
+      "body": {
+        "operationId": "299a2129-ac39-40ce-bc9e-1bc9c53195aa",
+        "message": "I still need the 30 W output.",
+        "questionId": null,
+        "inputHash": "ba136b479052387d0ab913a7bb4d802eebe4f7e17be79846d908e5fd87c4044a",
+        "label": "Independently authored synthetic proposals. Conditional technical behavior only."
+      }
+    },
+    {
+      "sequence": 12,
+      "turn": 2,
+      "kind": "interpreter-response",
+      "attemptId": "89a262d5-01ad-4222-8020-47467ce7d04e",
+      "elapsedMs": 5.44,
+      "body": {
+        "status": "ready",
+        "interpretation": {
+          "disposition": "acknowledge",
+          "actions": []
+        },
+        "bindings": [],
+        "limitations": [
+          "Still need confirms the already stated 30 W requirement. No removal, weakened threshold, or new research is proposed."
+        ]
+      }
+    },
+    {
+      "sequence": 13,
+      "turn": 2,
+      "kind": "app-response",
+      "attemptId": "89a262d5-01ad-4222-8020-47467ce7d04e",
+      "elapsedMs": 5.69,
+      "body": {
+        "status": 200,
+        "body": {
+          "responseVersion": 5,
+          "preferences": {
+            "version": 5,
+            "productDescription": "",
+            "criteria": [],
+            "budget": null,
+            "budgetClarified": false,
+            "pendingChange": null,
+            "region": "SG",
+            "responseLength": "concise",
+            "revision": 1
+          },
+          "notes": [],
+          "kind": "message",
+          "message": "Your preferences and earlier research are still here."
+        }
+      }
+    }
+  ],
+  "network": {
+    "denied": [],
+    "allowedOriginCount": 2,
+    "externalRequests": 0
+  },
+  "cleanup": true,
+  "applicationError": null
+}
