@@ -1,0 +1,32 @@
+{
+  "archive": "publication-review-receipts.tar.gz",
+  "sha256": "43bad00682e00af9340388638b5d7aa65a2eb8585f6d7f411e97ffd8309520ac",
+  "scope": "Sanitized independent current-tree/publication and Issue56 verification reviews. Historical exposure and live acceptance remain open. No raw scan-needle data is included.",
+  "members": [
+    {
+      "path": "reviews/qa-sanitized-tip-5717e0f.md",
+      "bytes": 4384,
+      "sha256": "dfe7dca9011b81b23fcf10801861c75e1063cd34ed24315b2198e109572492cc"
+    },
+    {
+      "path": "reviews/security-publication-review.md",
+      "bytes": 3395,
+      "sha256": "f25bf0f1fe4ed4fd2dc415152067fdac85042f3bf8632641b703ceaf7444243a"
+    },
+    {
+      "path": "reviews/qa-verifier-and-metadata-d4648c9.md",
+      "bytes": 7660,
+      "sha256": "0c2715c29347d183764a07fab4662d629a212f4356ea12dd4724b02cf7865fc9"
+    },
+    {
+      "path": "reviews/security-verifier-and-metadata-d4648c9.md",
+      "bytes": 8202,
+      "sha256": "223a3b64df84aebd2188f6e8e8bc34eb9567a9e50a77c5d6f3a2b47eafa0d621"
+    },
+    {
+      "path": "reviews/distinct-model-closeout-d4648c9.md",
+      "bytes": 8917,
+      "sha256": "76bdd936ab26896b99ebb66e988227cc2aba52949debbf7f1cae606934006876"
+    }
+  ]
+}

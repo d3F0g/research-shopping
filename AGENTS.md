@@ -1,6 +1,6 @@
 # Active Fieldnote V2 delivery
 
-The user-designated V2 review milestone overrides routine merge authorization for `rebuild/fieldnote-v2`. Deliver one reviewable PR and leave it unmerged with auto-merge off until the user reviews the appearance and evaluation outcomes. No production deployment is authorized.
+On 19 November 2026 the user approved the current V2 UI and PR #53 and instructed continued development. Preserve that UI and build on it. The final human appearance/evaluation milestone is satisfied. Routine autonomous merging now follows the repository gates below. Resolve and reverify the reported evidence defects in issue #55 before landing the current candidate. No production deployment is authorized.
 
 V2 uses Exa as its sole external AI research and structured-answer provider. Hono owns typed conversation state, material clarifications, accepted constraints, prepared operations and source-based eligibility. There is no OpenAI runtime, Codex-auth runtime inference, optional interpreter or synthetic runtime catalog in V2. Preserve complete open requests without a product-category grammar. Current implementation and recovery state are in `.codex/pstack-runs/fieldnote-v2/`.
 
@@ -8,7 +8,7 @@ Use official unmodified shadcn primitives and official AI Elements compositions 
 
 Preserve all frozen evaluation scenarios, expectations and baseline artifacts. Active V2 adapters may mechanically project actual state and exact quotation provenance, but cannot fabricate accepted intent or evidence. Complete source context remains separate from literal native excerpts. Report failures and unassessed semantics honestly.
 
-The stopped Exa ledger and historical unknown charges remain unresolved in issue #42. The earlier manual grant stopped after another uncertain attempt. No new automatic paid verification or renewed allowance is authorized. Do not reset, refund, relabel or replace records. Continue local substituted tests while live usefulness remains externally blocked.
+The stopped Exa ledger and historical unknown charges remain unresolved in issue #42. The earlier manual grant stopped after another uncertain attempt. The user separately approved a new manual-only continuation on 19 November 2026, at most US$0.50 additional reserved usage and ten user-submitted requests, bound to the complete acknowledged nine-attempt baseline. Preserve both old and new private grants and all historical records. No automatic paid verification, ledger reset/refund, or further renewal is authorized. Use local substitutes for engineering and reserve the current grant for explicit human submissions. Private opt-in provider diagnostics may support offline replay; they remain bounded and absent from normal responses/history. Public notes about private operator captures contain only sanitized derived outcomes and hashes. Keep private operator provider text, diagnostic locators and configuration out of tracked handoffs. Explicitly composed fixture evidence remains labeled as such. Verify repository visibility and review metadata publication scope before pushing; neither private visibility nor a code-only verdict approves private capture contents.
 
 The following repository-wide policy remains applicable except where this V2 milestone explicitly supersedes it.
 

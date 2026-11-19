@@ -20,7 +20,7 @@ The user approved the chat-first design in PR #33, satisfying issue #30's visual
 8. Open a tested pull request and apply the autonomous merge gates in AGENTS.md.
 9. Merge eligible PRs in dependency order, synchronize trunk, and verify final CI.
 
-The repository is private. Issues are assigned to its owner because ephemeral Codex workers have no durable GitHub identity. Issue bodies and the run ledger record worker responsibility. The orchestrator has standing authorization to merge completed PRs when every gate in AGENTS.md passes. Production deployment, destructive operations, sensitive credential changes, and security-critical permission changes require separate authorization. Credentials stay outside source control.
+Verify repository visibility live before publication. GitHub reported this repository public at the 19 November 2026 inspection. Issues are assigned to its owner because ephemeral Codex workers have no durable GitHub identity. Issue bodies and the run ledger record worker responsibility. The orchestrator has standing authorization to merge completed PRs when every gate in AGENTS.md passes. Production deployment, destructive operations, sensitive credential changes, and security-critical permission changes require separate authorization. Credentials stay outside source control.
 
 ## Land a verified PR or stack
 
@@ -42,4 +42,4 @@ The standing policy is repository-scoped. Historical run plans retain the author
 - [Durable personalization #3](https://github.com/d3F0g/research-shopping/issues/3) covers authentication and PostgreSQL.
 - [Coverage #4](https://github.com/d3F0g/research-shopping/issues/4) covers more categories and semantic evaluations.
 
-Git operations in this run use the authenticated GitHub CLI helper per command because the host's default helper could not access the new private repository. No global credential configuration changed.
+Earlier setup used the authenticated GitHub CLI helper per command after the host's default helper could not access the new repository. Visibility cannot be inferred from that failure. No global credential configuration changed.

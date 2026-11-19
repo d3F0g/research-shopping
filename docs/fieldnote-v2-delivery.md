@@ -1,6 +1,8 @@
 # Fieldnote V2 delivery for review
 
-PR [#53](https://github.com/d3F0g/research-shopping/pull/53) remains **draft and unmerged**, with auto-merge off, for the user's appearance and evaluation review. This is a locally verified rebuild with an explicit external live-research blocker. It is not a production deployment or a claim of completed live shopping acceptance.
+This records the original `e81b890` handoff. The user subsequently approved the current UI and PR #53 and requested evidence fixes in issue #55. The current follow-up plan is in `.codex/pstack-runs/fieldnote-v2/evidence-gap-plan.md`; historical review and CI receipts below remain bound to their named candidates.
+
+This original handoff left PR [#53](https://github.com/d3F0g/research-shopping/pull/53) draft and unmerged for user review. The user subsequently approved the UI and PR. The [evidence follow-up](fieldnote-evidence-followup.md) records the current defects, verification and delivery status. The historical results below do not establish current-head CI or complete live shopping acceptance.
 
 ## Architecture and selective reuse
 
@@ -25,7 +27,7 @@ npx --yes npm@11.6.2 ci
 EXA_RESEARCH_ENABLED=false API_PORT=3190 VITE_API_PORT=3190 WEB_PORT=5290 npm run dev
 ```
 
-Open <http://127.0.0.1:5290>. This safely previews the normal application without paid dispatch. Research reports its actual unavailable state; it does not select fixtures. The automated screenshot journey uses an explicitly composed test-only SDK transport. Do not enable billable verification until the existing stopped ledger and authorization boundary are resolved. Server-only configuration and optional PostgreSQL settings are in [README](../README.md) and [Exa integration](exa-research.md). Existing preview ports 3000/5173 remain untouched.
+Open <http://127.0.0.1:5290>. This safely previews the normal application without paid dispatch. Research reports its actual unavailable state; it does not select fixtures. The automated screenshot journey uses an explicitly composed test-only SDK transport. Automated checks remain offline. The user separately authorized a bounded manual-only continuation while preserving the stopped historical ledger; its private grant does not resolve old unknown charges. Server-only configuration and optional PostgreSQL settings are in [README](../README.md) and [Exa integration](exa-research.md). Existing preview ports 3000/5173 remain untouched.
 
 The mandatory `$30–40` then `SGD` flow retains the product and both bounds, and automatically prepares research. The real browser/API journey verified it against a local SDK substitute. That is not evidence of live Exa output quality.
 

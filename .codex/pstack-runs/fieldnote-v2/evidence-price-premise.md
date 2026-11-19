@@ -1,0 +1,11 @@
+# Price observation premise
+
+The narrow heading parser at5383a70 fixes the original positive case but reveals a shared failed premise: a target heading plus matching money is enough to retain one selected-variant observation even when the remaining clause has not been understood.
+
+Independent QA/security tested that premise. `AX1 / SGD850 / For AX2 only` retains amount850 under AX1 with unknown assessment. `Model A / Price: SGD850 to SGD1200 / Tax included` retains850 under ModelA with unknown assessment. The actual browser displays the lone850 prominently. Null recommendation eligibility does not repair a misleading stored/displayed price.
+
+The retained amount must therefore require complete selected-variant attribution and a single applicable amount independently from eligibility. Unparsed context cannot become an exact price fact by matching a prefix. Known conditional eligibility and genuinely ambiguous identity/amount are different states. The smallest implementation must preserve that distinction without inventing a category registry, weakening source/cut checks, or replacing full context with a suffix denylist.
+
+Red proofs live in the independent reviewer trees under artifacts/fieldnote-v2/evidence-gap-security/price-variant-probe.json and artifacts/fieldnote-v2/evidence-gap-qa/custom-browser/. The worker must stage failing assertions on actual stored money, not only a null choice, then present the corrected observation rule. These are locally controlled synthetic SDK/browser results, not the uncaptured live response.
+
+At651ee11 the stored wrong-variant/range prices are withheld, but independent API/browser QA rejects a new false-negative premise: a descriptive `exact variant Model A` identity sentence is monetary context. That word alone does not link a statement to the price. The exact complete SGD850+tax positive source then loses its price even though maintained240 tests and the frozen60 corpus pass. Preserve that runtime red proof. Source-line classification must require a pricing relationship, while unknown residual clauses attached to a price stay unbound. A fresh scoped owner takes this fix round after the original owner completed its clean candidate.

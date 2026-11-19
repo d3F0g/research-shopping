@@ -58,4 +58,4 @@ See the [V2 delivery report](docs/fieldnote-v2-delivery.md) for screenshots, exa
 
 ## Review gate
 
-The V2 integration PR remains unmerged for the user's appearance and evaluation review. Routine repository merge authorization does not override this milestone. Production deployment and sensitive operations require separate authorization.
+The user approved the current UI and PR #53 on 19 November 2026. Preserve the approved chat layout. Routine development and merging follow the independent QA, security and current-head CI gates in AGENTS.md. Issue #55 tracks the reported live evidence follow-up, which must be resolved or honestly classified before landing. Production deployment and sensitive operations still require separate authorization.

@@ -1,0 +1,357 @@
+[
+  {
+    "archive": "checkpoint-support-01.tar.gz",
+    "bytes": 39058731,
+    "sha256": "8b6ba73ebe01760b640a1a2df765eb163970f21a37e74bccfa50360189ca054d",
+    "scope": "Lossless wrapper of rejected checkpoints and exact raw logs; restore these parts first to recover original repo-relative paths. Current final reports remain loose.",
+    "members": [
+      {
+        "path": ".audit/fieldnote-v2/evidence-gap/architecture.md",
+        "bytes": 12642,
+        "sha256": "ad1ab37e85182953eb33dc9b46208a1664072f3d685c3b299a24f9cfd0dbaa87"
+      },
+      {
+        "path": ".audit/fieldnote-v2/evidence-gap/cleanup-579ec53.md",
+        "bytes": 6029,
+        "sha256": "2940add527aea3b66b3832d71e8b5969b52b70a48de10b1ed12fe6613ee30821"
+      },
+      {
+        "path": ".audit/fieldnote-v2/evidence-gap/literal-design/design-a.md",
+        "bytes": 20138,
+        "sha256": "81378dafedfc78b20e2c28a0572bb4068e0ae2a0c0127e340c4b801c542f418a"
+      },
+      {
+        "path": ".audit/fieldnote-v2/evidence-gap/literal-design/design-b.md",
+        "bytes": 11605,
+        "sha256": "feb4951cd38485a760e1af1a4f409a40c15d832af09025dce8fd1a4625ae4cbc"
+      },
+      {
+        "path": ".audit/fieldnote-v2/evidence-gap/qa-579ec53.md",
+        "bytes": 10677,
+        "sha256": "43059be89fd705b44cf6765d75388a78ee9fd56bede618c5d2cd4ebe628061ab"
+      },
+      {
+        "path": ".audit/fieldnote-v2/evidence-gap/qa-ccfb87c.md",
+        "bytes": 10197,
+        "sha256": "cc83721a10257eaff6ef2d13cd866c0657c965a900ec61c9a000c66ef35c986e"
+      },
+      {
+        "path": ".audit/fieldnote-v2/evidence-gap/root-repro/report-integrity-probes.ts",
+        "bytes": 1533,
+        "sha256": "5529ebc72f38d519704905ed9324cb5bbf1a28095d397a30d6ea16a90549777f"
+      },
+      {
+        "path": ".audit/fieldnote-v2/evidence-gap/root-repro/security-probes.ts",
+        "bytes": 2611,
+        "sha256": "f50dc38c2386f3f3eaed1abf602ebe8f6997a704a207801943f40d64a41e732f"
+      },
+      {
+        "path": ".audit/fieldnote-v2/evidence-gap/security-579ec53.md",
+        "bytes": 10255,
+        "sha256": "da6f7ad406e636da996234b70140aca511953baaa44c8bdd49e795b57a4c17d4"
+      },
+      {
+        "path": ".audit/fieldnote-v2/evidence-gap/security-ccfb87c.md",
+        "bytes": 9516,
+        "sha256": "b70c98ec7329c795ce823e03dc6e79608d6451a3610d1dad1874ac89e476ca06"
+      },
+      {
+        "path": ".audit/fieldnote-v2/evidence-gap/security-preflight.md",
+        "bytes": 5153,
+        "sha256": "b95affc6baa1b0abf6eb0a36e84011843a7f0a9ee9c5d788de88a9858841bbbb"
+      },
+      {
+        "path": ".audit/fieldnote-v2/evidence-gap/trail-579ec53.md",
+        "bytes": 9902,
+        "sha256": "d0ec2dfdcd6624e2a2908a55e660ee9037d007c59039184f63573cc63d4b9085"
+      },
+      {
+        "path": "artifacts/fieldnote-v2/evidence-gap-followup/fieldnote-v3-root-build.log",
+        "bytes": 1726,
+        "sha256": "4d9f8e5e3f70618d95a9c8ed017d93203b048b88f5845ac28b32bca0a59caa37"
+      },
+      {
+        "path": "artifacts/fieldnote-v2/evidence-gap-followup/fieldnote-v3-root-focused.log",
+        "bytes": 234,
+        "sha256": "bbb3c1a6476a197e69fea782cfdebbe89353c5cd2cd95e4cbf44dfcfc614269e"
+      },
+      {
+        "path": "artifacts/fieldnote-v2/evidence-gap-followup/fieldnote-v3-root-heading-green.log",
+        "bytes": 253,
+        "sha256": "ac54ea5090c6b766d4772d7a8bbdd0c78ed5f086044e616aa830be9e5e356d6b"
+      },
+      {
+        "path": "artifacts/fieldnote-v2/evidence-gap-followup/fieldnote-v3-root-heading-red.log",
+        "bytes": 3110,
+        "sha256": "79219282569c403ed0531ae6f3169821e2fc6e2cfd6a8efb6d1e643a6c2b5bb8"
+      },
+      {
+        "path": "artifacts/fieldnote-v2/evidence-gap-followup/fieldnote-v3-root-peer-red.log",
+        "bytes": 1357,
+        "sha256": "40975f19adf83f772cde57caa3f680820f97d45199902b1e4f9ab9f5588069d4"
+      },
+      {
+        "path": "artifacts/fieldnote-v2/evidence-gap-followup/fieldnote-v3-root-red.log",
+        "bytes": 1940,
+        "sha256": "b6739a0d2d299020b7177934067e3cca7cb07b1c0bf1fc39f4a8ea0138de6274"
+      },
+      {
+        "path": "artifacts/fieldnote-v2/evidence-gap-followup/fieldnote-v3-root-report-integrity-red.log",
+        "bytes": 14605,
+        "sha256": "8dd010c991643767b620bad201d9184c97ba5bcfc782acb0a0a078d4c8bac70a"
+      },
+      {
+        "path": "artifacts/fieldnote-v2/evidence-gap-followup/fieldnote-v3-root-round2-green-app.log",
+        "bytes": 253,
+        "sha256": "1c03c70df49bebf4469ad626293be8a729ebb1ac93221a52604485bcbe62a1be"
+      },
+      {
+        "path": "artifacts/fieldnote-v2/evidence-gap-followup/fieldnote-v3-root-round2-green-eval.log",
+        "bytes": 5061,
+        "sha256": "e2ca82e8ef89ad172b195462acea413d6188d33a19c1e1843a9c9703983b8c0d"
+      },
+      {
+        "path": "artifacts/fieldnote-v2/evidence-gap-followup/fieldnote-v3-root-round2-red-app.log",
+        "bytes": 14240,
+        "sha256": "6c35c34282d7e9f42e9a1e318d0f87a4ddeeaf2992eeca026788fddf88086ca0"
+      },
+      {
+        "path": "artifacts/fieldnote-v2/evidence-gap-followup/fieldnote-v3-root-round2-red-eval.log",
+        "bytes": 2853,
+        "sha256": "fc094d82aa4f15d0bc580d208683ba9f40355a1b4187c5c74840a5cf12465c5e"
+      },
+      {
+        "path": "artifacts/fieldnote-v2/evidence-gap-followup/fieldnote-v3-root-round2-string-red.log",
+        "bytes": 3387,
+        "sha256": "03b6218a5bfc00e77dee6d0f7d6c4684bc9907d05aa97868bf287e0cd208812f"
+      },
+      {
+        "path": "artifacts/fieldnote-v2/evidence-gap-followup/fieldnote-v3-root-security-red.log",
+        "bytes": 3739,
+        "sha256": "0b5c1de78de0568d99910932f55174d3481df14d37f9fc5471a9f4eb07aa0087"
+      },
+      {
+        "path": "artifacts/fieldnote-v2/evidence-gap-followup/fieldnote-v4-root-final-build.log",
+        "bytes": 1726,
+        "sha256": "3449055955b177f8f86472ad5a134434a5e16fe507fa422d5f171371966b85a4"
+      },
+      {
+        "path": "artifacts/fieldnote-v2/evidence-gap-followup/fieldnote-v4-root-final-eval-tests.log",
+        "bytes": 6714,
+        "sha256": "2338b0dfe75480a2b9d30c031b9975e3765284ba40afb51f3e85955d9fc96265"
+      },
+      {
+        "path": "artifacts/fieldnote-v2/evidence-gap-followup/fieldnote-v4-root-final-money-green.log",
+        "bytes": 257,
+        "sha256": "409614a89933abcfad55e575f36e7add7ebead6f18a171430c2acbfcf0cd1b27"
+      },
+      {
+        "path": "artifacts/fieldnote-v2/evidence-gap-followup/fieldnote-v4-root-final-money-red.log",
+        "bytes": 4683,
+        "sha256": "ce05db04078a964c89ce4946b2ef8de5adf34c4201f45e1dbdbc86b624d4f0a6"
+      },
+      {
+        "path": "artifacts/fieldnote-v2/evidence-gap-followup/fieldnote-v4-root-final-tests.log",
+        "bytes": 312,
+        "sha256": "db7f36e2b08deb1b4b20cb2844ee37b62e9ac6183af3117f5e8ce6f5027e3857"
+      },
+      {
+        "path": "artifacts/fieldnote-v2/evidence-gap-followup/fieldnote-v4-root-money-green.log",
+        "bytes": 267,
+        "sha256": "297fd3b9831f88c11d4da1445ecfe9154352e3f110adbb4b7344f46317884727"
+      },
+      {
+        "path": "artifacts/fieldnote-v2/evidence-gap-followup/fieldnote-v4-root-money-red.log",
+        "bytes": 8975,
+        "sha256": "a05fcf4cabd203da7ed45cb93b12966044c075c3d31928c44e486e82ee17767a"
+      },
+      {
+        "path": "artifacts/fieldnote-v2/evidence-gap-followup/fieldnote-v4-root-price-contract-red.log",
+        "bytes": 6678,
+        "sha256": "c27e8d739f289e131ebbd3cec0c9eb6af8c8f977e3be56a9f06c6cc733bf9416"
+      },
+      {
+        "path": "artifacts/fieldnote-v2/evidence-gap-followup/qa-33fadc7-01.tar.gz",
+        "bytes": 10961344,
+        "sha256": "a6770ebbb8951dcdd7d84e77391a5498eb97a8fce57ecdb1abb34dbf96366e8b"
+      },
+      {
+        "path": "artifacts/fieldnote-v2/evidence-gap-followup/qa-33fadc7-02.tar.gz",
+        "bytes": 28170528,
+        "sha256": "5ea13af3f7fc9b5fc41fc95c43b14152fc57c93df71782be40d165ffb19b6601"
+      }
+    ]
+  },
+  {
+    "archive": "checkpoint-support-02.tar.gz",
+    "bytes": 69993914,
+    "sha256": "da3e001ee8fccf6e53e4610a72c8091f939e2b2b7a6f00f3e51d123fa1bcf0fd",
+    "scope": "Lossless wrapper of rejected checkpoints and exact raw logs; restore these parts first to recover original repo-relative paths. Current final reports remain loose.",
+    "members": [
+      {
+        "path": "artifacts/fieldnote-v2/evidence-gap-followup/qa-33fadc7-03.tar.gz",
+        "bytes": 57227150,
+        "sha256": "b9ba308392a2fadbbe064fe5d6aff812e36ec21b31f48184b395ab9605eebe6b"
+      },
+      {
+        "path": "artifacts/fieldnote-v2/evidence-gap-followup/qa-33fadc7-04.tar.gz",
+        "bytes": 12757602,
+        "sha256": "a33c59bf587f6531808f2c9d97166c6b4b9ea449351cddb2871a9728facfdb94"
+      }
+    ]
+  },
+  {
+    "archive": "checkpoint-support-03.tar.gz",
+    "bytes": 82163801,
+    "sha256": "aba587222830292b96448088f671fb1197f273e2206374b0e094ce1a83b128de",
+    "scope": "Lossless wrapper of rejected checkpoints and exact raw logs; restore these parts first to recover original repo-relative paths. Current final reports remain loose.",
+    "members": [
+      {
+        "path": "artifacts/fieldnote-v2/evidence-gap-followup/qa-579ec53-01.tar.gz",
+        "bytes": 18293023,
+        "sha256": "8045caaf7b56188808bbc32b453776e58ffb261ff69c8608ba9827b9ce0e3cf7"
+      },
+      {
+        "path": "artifacts/fieldnote-v2/evidence-gap-followup/qa-579ec53-02.tar.gz",
+        "bytes": 23088606,
+        "sha256": "29df0a66be3124010b02e49064788f5de27ce577b6095a3ad625e6287d1635a9"
+      },
+      {
+        "path": "artifacts/fieldnote-v2/evidence-gap-followup/qa-579ec53-03.tar.gz",
+        "bytes": 12313387,
+        "sha256": "8e421508429413e9296478213d904d856a66bd5eda772843b10397c0221fafd3"
+      },
+      {
+        "path": "artifacts/fieldnote-v2/evidence-gap-followup/qa-651ee11-01.tar.gz",
+        "bytes": 12504929,
+        "sha256": "f1eb6acd74d02fb19727494324e7566bf11bfe18d6100b4d9d3b0c7218a801a2"
+      },
+      {
+        "path": "artifacts/fieldnote-v2/evidence-gap-followup/qa-651ee11-02.tar.gz",
+        "bytes": 16202438,
+        "sha256": "71229a2aaa187c9a9bebcad4c8c469658460e054f87896758f5ff7e06736b2c0"
+      }
+    ]
+  },
+  {
+    "archive": "checkpoint-support-04.tar.gz",
+    "bytes": 34498021,
+    "sha256": "2172b45fa0caaf734fc6cf51b9bf02991d061b299bed11b39fe9f15271f18c37",
+    "scope": "Lossless wrapper of rejected checkpoints and exact raw logs; restore these parts first to recover original repo-relative paths. Current final reports remain loose.",
+    "members": [
+      {
+        "path": "artifacts/fieldnote-v2/evidence-gap-followup/qa-ccfb87c-01.tar.gz",
+        "bytes": 5874673,
+        "sha256": "a7eee52a7003b7365f7cc52b2269d7d0ccbca76ffd28724d40d1afee0c73cf09"
+      },
+      {
+        "path": "artifacts/fieldnote-v2/evidence-gap-followup/qa-pre-v3-support-01.tar.gz",
+        "bytes": 5653429,
+        "sha256": "4e7a2a1713acdc4cf69abe967aa9003a47ffbb301b753e9ea62b303db74d0df5"
+      },
+      {
+        "path": "artifacts/fieldnote-v2/evidence-gap-followup/qa-pre-v3-support-02.tar.gz",
+        "bytes": 23194622,
+        "sha256": "b0e077463bfa6c757fd392a691471fa91d993c20adb53c5f41c96212d5859147"
+      }
+    ]
+  },
+  {
+    "archive": "checkpoint-support-05.tar.gz",
+    "bytes": 64424434,
+    "sha256": "d79005309d442bf12917c85ac9e19d64291e46f99185f8db65fcd860a6b2f72d",
+    "scope": "Lossless wrapper of rejected checkpoints and exact raw logs; restore these parts first to recover original repo-relative paths. Current final reports remain loose.",
+    "members": [
+      {
+        "path": "artifacts/fieldnote-v2/evidence-gap-followup/qa-pre-v3-support-03.tar.gz",
+        "bytes": 55919357,
+        "sha256": "e2a3f878f68da31ed1ccb6a6211d961ee3b40fee2375b2d609e3048e15c7b6f6"
+      },
+      {
+        "path": "artifacts/fieldnote-v2/evidence-gap-followup/qa-pre-v3-support-04.tar.gz",
+        "bytes": 8390182,
+        "sha256": "c1c4c70527922a3e20a1c83bc0c60a2274d305cbd1da764641fd85ee9b4e04b0"
+      },
+      {
+        "path": "artifacts/fieldnote-v2/evidence-gap-followup/root-579-report-integrity-red.json",
+        "bytes": 14604,
+        "sha256": "84f181c2f31367ba95f46a8567c081e9593f848448444a8821820af610c79ba7"
+      },
+      {
+        "path": "artifacts/fieldnote-v2/evidence-gap-followup/root-579-security-red-probes.json",
+        "bytes": 3738,
+        "sha256": "d0286fe5f2fdefad5398a19d97cce3fb0a3d1edf09b5c12697784ba6e32c48cc"
+      },
+      {
+        "path": "artifacts/fieldnote-v2/evidence-gap-followup/root-651-build.log",
+        "bytes": 1726,
+        "sha256": "57c7afb543e2c2b7020f98b83225ca59b3eaadbcc3796053e05b4c5dee5c89f7"
+      },
+      {
+        "path": "artifacts/fieldnote-v2/evidence-gap-followup/root-651-eval.log",
+        "bytes": 2012,
+        "sha256": "794e6c644a2db06f74d3dbe429392e8dfd6bb45432c6c8889158378d375dd2cf"
+      },
+      {
+        "path": "artifacts/fieldnote-v2/evidence-gap-followup/root-651-evaltests.log",
+        "bytes": 4859,
+        "sha256": "df3a14ac9704e6a68a70413dc93b59d4e97803004af804cfee4fa991f8649619"
+      },
+      {
+        "path": "artifacts/fieldnote-v2/evidence-gap-followup/root-651-preservation.log",
+        "bytes": 232,
+        "sha256": "f3504394f1861ff0569b3bb39f0d8a171f34f2f9fa81dc3031dbbe64ef3728b7"
+      },
+      {
+        "path": "artifacts/fieldnote-v2/evidence-gap-followup/root-651-tests.log",
+        "bytes": 310,
+        "sha256": "0acf818ca10c1d93babcc94869464df9a26a7097dd3b239d89e58add684144e1"
+      },
+      {
+        "path": "artifacts/fieldnote-v2/evidence-gap-followup/root-descriptive-green.log",
+        "bytes": 328,
+        "sha256": "8cf98e22037546571e3729b588a97225df47a32ec5da5fcf33dd793b8a415149"
+      },
+      {
+        "path": "artifacts/fieldnote-v2/evidence-gap-followup/root-descriptive-proof.json",
+        "bytes": 570,
+        "sha256": "b46a3425b1f32d7ba15024a9168063e7c77443b552fe4fca4754a6b91e91de3e"
+      },
+      {
+        "path": "artifacts/fieldnote-v2/evidence-gap-followup/root-descriptive-red.log",
+        "bytes": 7143,
+        "sha256": "b394e0b2c08bf6d951619b8e19ecfa2a01f36d91f32b561194c2068c0f7d7380"
+      },
+      {
+        "path": "artifacts/fieldnote-v2/evidence-gap-followup/root-price-binding-red.log",
+        "bytes": 19094,
+        "sha256": "852210245a517501dd4913e7a908980fc01ae59a5d63a1a1394a69f7ffc0c731"
+      },
+      {
+        "path": "artifacts/fieldnote-v2/evidence-gap-followup/root-red.log",
+        "bytes": 3095,
+        "sha256": "df5a360809f6557818a1abb79ca9326a3bb3f79275f508924cf4b5c51f633548"
+      },
+      {
+        "path": "artifacts/fieldnote-v2/evidence-gap-followup/root-v3-final-private-replay-proof.json",
+        "bytes": 556,
+        "sha256": "35f6d3b35747c24b10c8cbb9ddc85d215408486312a363238a002a96d0288590"
+      },
+      {
+        "path": "artifacts/fieldnote-v2/evidence-gap-followup/root-v3-private-replay-proof.json",
+        "bytes": 511,
+        "sha256": "bc419ec3a94c220215a5d394adc8f8b5878cb441380da3173b9defd96e8dd3d1"
+      },
+      {
+        "path": "artifacts/fieldnote-v2/evidence-gap-followup/root-v4-private-replay-proof.json",
+        "bytes": 748,
+        "sha256": "db7bd4189c8bd73a0915beaa19a34aa8acf9a2351da0d55e5b6da83ef322eedb"
+      },
+      {
+        "path": "artifacts/fieldnote-v2/evidence-gap-followup/security-v3-checkpoints-01.tar.gz",
+        "bytes": 105651,
+        "sha256": "06bcdcbf2d578904c8468cc4d37b9e8a2aa1a124131320ed4af50a10a4d63ae1"
+      }
+    ]
+  }
+]

@@ -1,0 +1,22 @@
+{
+  "commit": "fd1f505c116e5112af5597292c5f6c1d9499b824",
+  "captureSha256": "277f90338e732d5722564a64b71771faa566c15fccfe999942778aa1d07c9a29",
+  "capturedAt": "2026-11-19T11:22:06.123Z",
+  "result": "passed",
+  "evidenceVersion": 4,
+  "identity": "supported",
+  "attributedVariantPrice": null,
+  "sourceRowAmount": {
+    "amount": 868,
+    "currency": "SGD"
+  },
+  "observationHasNoVariant": true,
+  "attribution": "unknown",
+  "reportedConditionsResolved": false,
+  "exactNativePriceAssessmentAndConditionsPreserved": true,
+  "requestMatch": "unknown",
+  "choice": null,
+  "completeSourceContextPreserved": true,
+  "paidCalls": 0,
+  "limitation": "Pure offline replay. Preserves a literal source amount; does not establish exact-variant applicability, full fit, fresh retrieval, varied product usefulness or merchant verification."
+}
