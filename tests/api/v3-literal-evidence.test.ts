@@ -87,3 +87,30 @@ describe("named catalog attribution boundaries", () => {
     if (tail) expect(product.price?.conditions).toContain("Not tax included");
   });
 });
+
+describe("opaque peer catalog rows", () => {
+  const peers = "Fixture Other Eyeglasses - Black\n\n SGD 547 SGD 268 (51% off)\n\nFixture Other Brand Silver Navigator Sunglasses\n\n SGD 490 SGD 243 (50% off)\n\n";
+  it("retains the selected single amount beside opaque sale prices and a shared color name", () => {
+    const material = catalogMaterial(intent);
+    material.citations[0]!.text = peers + material.citations[0]!.text;
+    const result = project(material);
+    expect(result.products[0]!.price).toMatchObject({ amount: 868, currency: "SGD", conditionsResolved: false });
+    expect(result.products[0]!.identity.status).toBe("supported");
+    expect(result.choice).toBeNull();
+    expect(result.sources[0]!.text).toContain(peers);
+  });
+  it.each(["SGD 868 SGD 500 (50% off)", "SGD 868–1200", "SGD 868 for three units", "SGD 868\n\nFor Gold only."])("rejects target ambiguity even beside opaque peer sales %s", (selected) => {
+    const material = catalogMaterial(intent);
+    material.citations[0]!.text = peers + material.citations[0]!.text.replace("SGD 868", selected);
+    expect(project(material).products[0]!.price).toBeNull();
+  });
+  it.each([
+    "\n\nFixture Meridian Sunglasses - Silver costs SGD 999.",
+    "\n\nShipping costs SGD 100.",
+    "\n\nPrice applies to Gold only.",
+  ])("retains unsafe unscoped or target-naming clauses outside peer spans %s", (tail) => {
+    const material = catalogMaterial(intent);
+    material.citations[0]!.text = peers + material.citations[0]!.text + tail;
+    expect(project(material).products[0]!.price).toBeNull();
+  });
+});
