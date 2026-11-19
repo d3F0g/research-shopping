@@ -8,9 +8,13 @@ import { createResearchTurns } from "../../src/server/research-turns";
 import { postTurn } from "../helpers/turns";
 
 describe("simple shopping without model interpretation", () => {
-  it.each(["absent", "unavailable"] as const)(
-    "retains the exact powerbank range and researches after SGD when the interpreter is %s",
-    async (availability) => {
+  it.each([
+    ["absent", "I want to buy a powerbank that costs around $30-40"],
+    ["unavailable", "I want to buy a powerbank that costs around $30-40"],
+    ["absent", "I want to buy a powerbank that costs around $30-40."],
+  ] as const)(
+    "retains the exact powerbank range and researches after SGD with interpreter %s for %s",
+    async (availability, message) => {
       const interpretIntent = vi.fn<IntentInterpreter>(async () => {
         throw new Error("Synthetic unavailable interpreter");
       });
@@ -27,7 +31,6 @@ describe("simple shopping without model interpretation", () => {
           quota: { reserve, settle: async () => {} },
         }),
       });
-      const message = "I want to buy a powerbank that costs around $30-40";
       const firstResponse = await postTurn(app, {
         message,
         preferences: defaultIntent(),
