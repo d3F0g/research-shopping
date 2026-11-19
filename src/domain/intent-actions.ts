@@ -43,7 +43,11 @@ export function applyIntentActions(previous: ShoppingIntent, message: string, ra
   const budgetActions = actions.filter((action) => action.kind === "budget");
   if (budgetActions.length > 1 || (budgetActions.length && actions.some((action) => action.kind === "remove-budget"))) return null;
   const budgetAction = budgetActions[0];
-  const moneyContext = starts.length ? null : previous.budget;
+  const pendingMoney = previous.pendingChange?.kind === "money" && previous.pendingChange.draft.amount !== null ? previous.pendingChange : null;
+  const moneyContext = starts.length ? null : pendingMoney ? {
+    amount: pendingMoney.draft.amount!, currency: pendingMoney.draft.currency ?? "SGD",
+    ...(pendingMoney.draft.minimum === null ? {} : { minimum: pendingMoney.draft.minimum }),
+  } : previous.budget;
   const parsedMoney = budgetAction ? parseBudget(message, moneyContext, previous.region) : null;
   if (budgetAction) {
     const parsedSource = parseBudget(budgetAction.source.text, moneyContext, previous.region);
@@ -112,7 +116,13 @@ export function applyIntentActions(previous: ShoppingIntent, message: string, ra
   }
   const budget = parsedMoney;
   const notes: string[] = [];
-  if (budget?.kind === "updated" && !actions.some((action) => action.kind === "remove-budget")) {
+  const currencyStillMissing = pendingMoney && !starts.length && pendingMoney.draft.currency === null && budgetAction?.draft.currency === null && !/\b(?:SGD|USD)\b|S\$|US\$/i.test(message);
+  if (budget?.kind === "updated" && currencyStillMissing && budget.budget) {
+    intent.pendingChange = {
+      ...pendingMoney, message, id: `question-${previous.revision + 1}`,
+      draft: { amount: budget.budget.amount, minimum: budget.budget.minimum ?? null, currency: null },
+    };
+  } else if (budget?.kind === "updated" && !actions.some((action) => action.kind === "remove-budget")) {
     intent.budget = budget.budget;
     intent.budgetClarified = true;
     if (intent.pendingChange?.reason !== "constraint") intent.pendingChange = null;

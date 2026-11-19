@@ -31,3 +31,12 @@ describe("amendments while currency is unresolved", () => {
     expect(resolved.preferences.budget).toEqual({ minimum: 30, amount: 50, currency: "SGD" });
   });
 });
+
+describe("local versus general intent routing", () => {
+  it("sends compound monetary and product changes to the structured interpreter", async () => {
+    const { resolveLocalIntent } = await import("../../src/domain/preferences");
+    const previous = updateIntent("powerbank $30-40", defaultIntent()).preferences;
+    expect(resolveLocalIntent("make it 50; only Anker", previous)).toBeNull();
+    expect(resolveLocalIntent("under SGD50; prefer lighter", { ...previous, pendingChange: null })).toBeNull();
+  });
+});

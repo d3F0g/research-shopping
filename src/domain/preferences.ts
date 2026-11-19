@@ -1,4 +1,4 @@
-import { parseBudget } from "./budget";
+import { isCompleteBudgetAmendment, parseBudget } from "./budget";
 import {
   defaultIntent,
   ShoppingIntentSchema,
@@ -534,7 +534,7 @@ export function unresolvedMoneyDraft(message: string, previous: ShoppingIntent):
 export function resolvePendingAnswer(message: string, previous: ShoppingIntent): IntentUpdate | null {
   const question = previous.pendingChange;
   if (!question || question.kind !== "money" || question.missingSlot !== "currency" || question.draft.amount === null) return null;
-  if (/^make it\s/i.test(message.trim()) && !/\b(?:SGD|USD)\b|S\$|US\$/i.test(message)) {
+  if (/^make it\s/i.test(message.trim()) && isCompleteBudgetAmendment(message) && !/\b(?:SGD|USD)\b|S\$|US\$/i.test(message)) {
     const amended = parseBudget(message, { amount: question.draft.amount, currency: "SGD", ...(question.draft.minimum === null ? {} : { minimum: question.draft.minimum }) }, previous.region);
     if (amended.kind === "updated" && amended.budget) {
       const pendingChange = { ...question, message, id: `question-${previous.revision + 1}`, draft: { ...question.draft, amount: amended.budget.amount } };
@@ -566,7 +566,7 @@ export function resolveLocalIntent(message: string, previous: ShoppingIntent): I
   if (detailOnly.test(text)) return interpreted;
   if (/^(?:please )?(?:remove|drop|forget|clear)\s/i.test(text)) return interpreted;
   if (/^(?:compare(?: options)?|research(?: now)?|search(?: again)?|find options|refresh(?: research)?)[.!?]*$/i.test(text)) return interpreted;
-  if (/^(?:make it|(?:set|change|raise|lower|increase|reduce|update) (?:my |the )?budget(?: to)?|budget(?: is| of)?|under|up to|at most)\s+/i.test(text) && previous.productDescription) return interpreted;
+  if (isCompleteBudgetAmendment(text) && previous.productDescription) return interpreted;
   if (/^(?:SGD|USD|S\$|US\$)(?:\s*\$?\s*[0-9,.]+)?[.!?]*$/i.test(text) && previous.productDescription) return interpreted;
   return null;
 }

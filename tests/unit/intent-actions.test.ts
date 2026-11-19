@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import { updateIntent } from "../../src/domain/preferences";
 import { defaultIntent } from "../../src/domain/contracts";
 import { applyIntentActions, type IntentActions } from "../../src/domain/intent-actions";
 
@@ -45,6 +46,17 @@ describe("validated model operations", () => {
     const message = "Do not remove my budget";
     const result = apply(message, [{ kind: "remove-budget", bound: "all", source: span(message) }]);
     expect(result).toBeNull();
+  });
+  it("preserves the unresolved currency while applying a compound ceiling and brand amendment", () => {
+    const pending = updateIntent("powerbank $30-40", defaultIntent()).preferences;
+    const message = "make it 50; only Anker";
+    const result = applyIntentActions(pending, message, { disposition: "research", actions: [
+      { kind: "budget", source: span(message, "make it 50"), operation: "set-maximum", draft: { amount: 50, minimum: null, currency: null } },
+      { kind: "add-criterion", source: span(message, "only Anker"), strength: "hard" },
+    ] });
+    expect(result?.preferences.budget).toBeNull();
+    expect(result?.preferences.pendingChange).toMatchObject({ draft: { amount: 50, minimum: 30, currency: null } });
+    expect(result?.preferences.criteria).toMatchObject([{ wording: "only Anker", strength: "hard" }]);
   });
   it("only removes the selected lower bound", () => {
     const text = "Remove the minimum budget";

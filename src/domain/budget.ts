@@ -298,3 +298,9 @@ export function parseBudget(
       : {}),
   };
 }
+
+const localMoney = String.raw`(?:(?:${currencyToken}|[A-Z]{3})\s*)?${amountToken}(?:\s*[A-Z]{3})?`;
+const completeAmendment = new RegExp(String.raw`^(?:make it|(?:set|change|raise|lower|increase|reduce|update) (?:my |the )?budget(?: to)?|budget(?: is| of)?|under|up to|at most)\s+${localMoney}(?:\s*(?:to|and|[-–—])\s*${localMoney})?[.!?]*$`, "i");
+export function isCompleteBudgetAmendment(message: string): boolean {
+  return completeAmendment.test(message.trim());
+}
