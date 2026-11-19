@@ -12,7 +12,7 @@ export function validCurrentProvenance(snapshot: ResearchSnapshot, product: Rese
     try { answer = JSON.parse(answer) as Json; } catch { return false; }
   }
   const native = list(record(answer).products).map(record).find((item) => item.id === product.id);
-  if (!native || snapshot.evidenceVersion !== 3) return false;
+  if (!native || snapshot.evidenceVersion !== 4) return false;
   const citations = list(upstream.citations).map(record);
   const sources = new Map(snapshot.sources.map((source) => [source.id, source]));
   const assessments = [
@@ -21,6 +21,7 @@ export function validCurrentProvenance(snapshot: ResearchSnapshot, product: Rese
     ...product.requirements.map((entry) => ({ field: "requirement", current: entry.assessment, native: record(list(native.criteria).map(record).find((row) => row.criterionId === entry.requirementId)).assessment })),
     ...product.attributes.map((entry, index) => ({ field: "attribute", current: entry.assessment, native: record(list(native.attributes)[index]).assessment })),
     ...(product.price ? [{ field: "price", current: product.price.assessment, native: record(native.price).assessment }] : []),
+    ...(product.priceObservation ? [{ field: "catalog-price-report", current: product.priceObservation.reportedAssessment, native: record(native.price).assessment }] : []),
   ];
   const originals = new Map(snapshot.sources.map((source) => [source.id, citations.find((citation) => {
     try { return typeof citation.url === "string" && new URL(citation.url).href === source.url && typeof citation.text === "string" && citation.text.slice(0, 24000) === source.text; } catch { return false; }
@@ -29,6 +30,23 @@ export function validCurrentProvenance(snapshot: ResearchSnapshot, product: Rese
     const text = originals.get(source.id)?.text;
     return typeof text !== "string" || text.length !== source.originalLength || source.textTruncated !== (text.length > source.text.length);
   })) return false;
+  const observation = product.priceObservation;
+  if (observation) {
+    const { row } = observation;
+    const source = sources.get(row.sourceId);
+    const reported = record(native.price), assessment = record(reported.assessment);
+    const line = /^([^\r\n]+)\r?\n[\t \r\n]*([^\r\n]+)$/u.exec(row.literal.text);
+    const amount = line && /^[\t ]*(?:([A-Z]{3})[\t ]*([0-9]+(?:,[0-9]{3})*(?:\.[0-9]{1,2})?)|([0-9]+(?:,[0-9]{3})*(?:\.[0-9]{1,2})?)[\t ]*([A-Z]{3}))[\t ]*$/u.exec(line[2]!);
+    if (product.price !== null || "variant" in observation || observation.attribution.status !== "unknown" || !source || source.textTruncated || source.text.length > 4000 || row.origin.kind !== "source-context" || !Number.isInteger(row.literal.start) || !Number.isInteger(row.literal.end) || row.literal.start < 0 || row.literal.end <= row.literal.start || row.literal.end > source.text.length || source.text.slice(row.literal.start, row.literal.end) !== row.literal.text || row.context.start !== 0 || row.context.end !== source.text.length || row.context.text !== source.text || !amount || Number((amount[2] ?? amount[3])!.replaceAll(",", "")) !== observation.amount || (amount[1] ?? amount[4]) !== observation.currency || reported.amount !== observation.amount || reported.currency !== observation.currency || JSON.stringify(reported.conditions) !== JSON.stringify(observation.reportedConditions) || reported.conditionsResolved !== observation.reportedConditionsResolved || assessment.status !== observation.reportedAssessment.status || assessment.scope !== observation.reportedAssessment.scope || assessment.rationale !== observation.reportedAssessment.rationale) return false;
+    const namePattern = product.name.split(/[\u0009-\u000d\u0020\u00a0]+/u).map((part) => part.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")).join("[\\u0009-\\u000d\\u0020\\u00a0]+");
+    const names = [...line![1]!.matchAll(new RegExp(namePattern, "gu"))];
+    if (names.length !== 1) return false;
+    const nameStart = row.literal.start + names[0]!.index, nameEnd = nameStart + names[0]![0].length;
+    if (!product.identity.support.some((span) => span.sourceId === row.sourceId && span.literal.start <= nameStart && span.literal.end >= nameEnd)) return false;
+    const moneyStart = row.literal.start + row.literal.text.lastIndexOf(line![2]!) + line![2]!.match(/^[\t ]*/u)![0].length;
+    const moneyEnd = row.literal.end - line![2]!.match(/[\t ]*$/u)![0].length;
+    if (!observation.reportedAssessment.support.some((span) => span.sourceId === row.sourceId && span.origin.kind === "provider" && span.literal.start >= row.literal.start && span.literal.start <= moneyStart && span.literal.end >= moneyEnd && span.literal.end <= row.literal.end)) return false;
+  }
   return assessments.every(({ field, current: assessment, native: nativeAssessment }) => (assessment.status === "unknown" || assessment.support.length > 0) && assessment.support.every((span) => {
     const reports = list(record(nativeAssessment).support).map(record);
     const source = sources.get(span.sourceId);

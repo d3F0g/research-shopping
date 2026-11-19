@@ -93,5 +93,17 @@ export const additionalArchivedReports = [
     "archiveSha256": "c9241def3f87b0d46cc3446a1508e6978bbce641d68cfaa2e571abcc6a3d783f",
     "member": "fieldnote-v2-evidence-gap-clean60/report.json",
     "sha256": "580b3401f486472f0413e77665f6943c2b6c85bebfaa005fbe9b40d1dd8cebaa"
-  }
+  },
+{
+  "archive": "artifacts/fieldnote-v2/evidence-gap-followup/owner-579ec53-checkpoint.tar.gz",
+  "archiveSha256": "fa1c9e8bb3fe9558a24966180f98675927e7dbdc7b929b3650304ed2478c2c13",
+  "member": "artifacts/fieldnote-v3/verified-full60/report.json",
+  "sha256": "c28708f946e525d91c7178f54b73ce3399f04e19e8987ccf6df8895f4ee797c1"
+},
+{
+  "archive": "artifacts/fieldnote-v2/evidence-gap-followup/owner-ccfb87c-checkpoint.tar.gz",
+  "archiveSha256": "342562fbcadfcbb3923dd8bd17b63a42ea4a644320294092b4fe8624cc53395a",
+  "member": "artifacts/fieldnote-v3/round2-critical-full60/report.json",
+  "sha256": "757360fc44d9d3984f7778cda355eeeb02d67b9f60e0d9b2eb3212cf3f17534f"
+}
 ] as const;

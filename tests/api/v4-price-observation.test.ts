@@ -57,3 +57,41 @@ describe("V4 catalog observation without variant price authority", () => {
     expect(product).toMatchObject({ priceObservation: { attribution: { status: "unknown" }, reportedAssessment: { status: "contradicted", rationale: material.answer.products[0]!.price.assessment.rationale }, reportedConditions: material.answer.products[0]!.price.conditions, reportedConditionsResolved: false } });
   });
 });
+
+describe("V4 observation boundary validation", () => {
+  it("rejects forged money, variant authority, origin, offsets and incomplete context", async () => {
+    const { ResearchSnapshotSchema } = await import("../../src/domain/research");
+    const snapshot = project(catalogMaterial(intent));
+    const mutations = [
+      (value: typeof snapshot) => { value.products[0]!.priceObservation!.amount = 999; },
+      (value: typeof snapshot) => { value.products[0]!.priceObservation!.currency = "USD"; },
+      (value: typeof snapshot) => { Object.assign(value.products[0]!.priceObservation!, { variant: "Silver" }); },
+      (value: typeof snapshot) => { Object.assign(value.products[0]!.priceObservation!.attribution, { status: "supported" }); },
+      (value: typeof snapshot) => { value.products[0]!.priceObservation!.row.literal.start++; },
+      (value: typeof snapshot) => { value.products[0]!.priceObservation!.row.context.end--; value.products[0]!.priceObservation!.row.context.text = value.products[0]!.priceObservation!.row.context.text.slice(0, -1); },
+      (value: typeof snapshot) => { value.products[0]!.priceObservation!.row.origin = { kind: "provider", reportedQuote: "Fixture invented quotation", match: "literal" }; },
+      (value: typeof snapshot) => { value.products[0]!.priceObservation!.reportedAssessment.support[0]!.origin = { kind: "source-context" }; },
+    ];
+    expect(ResearchSnapshotSchema.safeParse(snapshot).success).toBe(true);
+    for (const mutate of mutations) {
+      const value = structuredClone(snapshot);
+      mutate(value);
+      expect(ResearchSnapshotSchema.safeParse(value).success).toBe(false);
+    }
+  });
+  it("retains source facts and known qualifiers in free detail replies without changing history", async () => {
+    const { reduceTurn } = await import("../../src/domain/turn-reducer");
+    const { randomUUID } = await import("node:crypto");
+    const material = catalogMaterial(intent);
+    material.citations[0]!.text += "\n\nNew Silver colorway\n\nSGD 999\n\nFor Gold only.";
+    const research = project(material);
+    const state = { ...initialConversation(), intent, messages: [{ id: "fixture-v4", role: "assistant" as const, text: research.summary, research }] };
+    const result = reduceTurn(state, { phase: "prepare", operationId: randomUUID(), message: "Show me more details." });
+    expect(result.kind).toBe("message");
+    const reply = result.state.messages.at(-1)!;
+    expect(reply.text + reply.detail).toContain("Source row shows SGD 868");
+    expect(reply.text + reply.detail).toContain("For Gold only.");
+    expect(reply.text + reply.detail).toContain("SGD 999");
+    expect(result.state.messages[0]).toEqual(state.messages[0]);
+  });
+});

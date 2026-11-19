@@ -6,11 +6,12 @@ import { chromium, expect } from "@playwright/test";
 import { Pool } from "pg";
 import { accountRuntime } from "./account-test-runtime.mjs";
 import { emptyWorkspace } from "../src/domain/workspace";
+import { actualStoredConversationV3 } from "../tests/helpers/v3-stored-material";
 import { actualStoredConversationV2 } from "../tests/helpers/v2-stored-material";
 
 const runtime = await accountRuntime({ web: true });
 const browser = await chromium.launch();
-const directory = "artifacts/fieldnote-v3/history-browser";
+const directory = "artifacts/fieldnote-v4/history-browser";
 await mkdir(directory, { recursive: true });
 const proof = { commit: execFileSync("git", ["rev-parse", "HEAD"], { encoding: "utf8" }).trim(), worktree: execFileSync("git", ["status", "--porcelain"], { encoding: "utf8" }).trim(), status: "failed", cleanup: false, checks: [] as string[], screenshots: [] as string[], limitations: ["Synthetic source format and local SDK traffic only. No private capture, paid research, live usefulness or merchant verification.", "Independent visual and security review remains required."] };
 try {
@@ -22,9 +23,10 @@ try {
     const user = (await signup.json()).user;
     await context.request.get(`${runtime.origin}/api/account`);
     const pool = new Pool({ connectionString: runtime.database });
-    const old = { ...emptyWorkspace(), schema: 2 };
-    old.state = actualStoredConversationV2();
-    old.state.messages.unshift({ id: "fixture-history-label", role: "assistant", text: "Fixture data. Historical automated V2 evidence follows unchanged." });
+    const old = { ...emptyWorkspace(), schema: 3 };
+    old.state = actualStoredConversationV3();
+    old.state.messages.unshift(...actualStoredConversationV2().messages);
+    old.state.messages.unshift({ id: "fixture-history-label", role: "assistant", text: "Fixture data. Historical automated V2 and V3 evidence follows unchanged." });
     const historicalName = old.state.messages.find((message) => message.research)!.research!.products[0]!.name;
     const operationId = randomUUID(), preparedId = randomUUID(), stamp = new Date().toISOString();
     old.receipts = [{ operationId, preparedId, digest: "a".repeat(64), status: "prepared", createdAt: stamp }];
@@ -34,7 +36,7 @@ try {
     await pool.end();
     const page = await context.newPage();
     await page.goto(runtime.origin);
-    await expect(page.getByText(historicalName, { exact: true })).toBeVisible();
+    await expect(page.getByText(historicalName, { exact: true }).first()).toBeVisible();
     const migrated = await context.request.get(`${runtime.origin}/api/account`).then((response) => response.json());
     assert.deepEqual(migrated.workspace.state.messages, old.state.messages);
     assert.equal(migrated.workspace.pendingPreparedId, null);
@@ -71,7 +73,7 @@ try {
     await page.screenshot({ path: evidencePath, animations: "disabled" }); proof.screenshots.push(evidencePath);
     const saved = await context.request.get(`${runtime.origin}/api/account`).then((response) => response.json());
     assert.deepEqual(saved.workspace.state.messages.slice(0, old.state.messages.length), old.state.messages);
-    assert.deepEqual(saved.workspace.state.messages.filter((message: { research?: unknown }) => message.research).map((message: { research: { evidenceVersion: number } }) => message.research.evidenceVersion), [2, 3]);
+    assert.deepEqual(saved.workspace.state.messages.filter((message: { research?: unknown }) => message.research).map((message: { research: { evidenceVersion: number } }) => message.research.evidenceVersion), [2, 3, 4]);
     const separate = await browser.newContext();
     const isolatedSignup = await separate.request.post(`${runtime.origin}/api/auth/sign-up/email`, { headers: { origin: runtime.origin }, data: { name: "Fixture isolated shopper", email: `fixture-isolated-${randomUUID()}@example.test`, password: "fixture-history-password-only" } });
     assert.equal(isolatedSignup.status(), 200);
@@ -81,7 +83,7 @@ try {
     assert.deepEqual((await context.request.get(`${runtime.origin}/api/account`).then((response) => response.json())).workspace, saved.workspace);
     await page.reload();
     await expect(page.getByText("SGD 868.00", { exact: true })).toBeVisible();
-    proof.checks.push(`${viewport.width}px browser preserved V2 history, rendered V3 literal evidence and unresolved observed money, blocked stale prepared work, isolated another account, and survived PostgreSQL/API restart.`);
+    proof.checks.push(`${viewport.width}px browser preserved V2/V3 history, rendered V4 source-row observation without a qualifying variant price, blocked stale prepared work, isolated another account, and survived PostgreSQL/API restart.`);
     await context.close();
   }
   proof.status = "passed";

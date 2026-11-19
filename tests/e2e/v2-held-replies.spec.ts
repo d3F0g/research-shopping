@@ -38,7 +38,7 @@ for (const viewport of [
     await expect(page.getByText(battery.text, { exact: true })).toBeInViewport();
     const disclosure = page.getByRole("button", { name: "Full evidence and conditions", exact: true }).last();
     await expect(disclosure).toHaveAttribute("aria-expanded", "false");
-    const directory = "artifacts/fieldnote-v3/e2e/held-replies";
+    const directory = "artifacts/fieldnote-v4/e2e/held-replies";
     await mkdir(directory, { recursive: true });
     await page.screenshot({ path: `${directory}/${viewport.name}-battery-concise.png` });
     await disclosure.scrollIntoViewIfNeeded();

@@ -157,3 +157,16 @@ test("the closed historical inventory authenticates every pinned archived payloa
     assert.throws(() => validateReport(report), /archive digest/, entry.path);
   }
 });
+
+test("the actual archived V3 report is authenticated without V4 regrading", async () => {
+  const { execFileSync } = await import("node:child_process");
+  const { additionalArchivedReports } = await import("../../history-fieldnote-v2/archive");
+  const entry = additionalArchivedReports.find((item) => item.archive.endsWith("owner-ccfb87c-checkpoint.tar.gz"))!;
+  const bytes = await readFile(entry.archive);
+  assert.equal(createHash("sha256").update(bytes).digest("hex"), entry.archiveSha256);
+  const report = JSON.parse(execFileSync("tar", ["-xOf", entry.archive, entry.member], { encoding: "utf8", maxBuffer: 40_000_000 }));
+  assert.equal(historicalReportDigest(report), entry.sha256);
+  validateReport(report);
+  report.cases[0].checks = [];
+  assert.throws(() => validateReport(report), /archive digest/);
+});

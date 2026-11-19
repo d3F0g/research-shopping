@@ -1,8 +1,9 @@
 import { z } from "zod";
 import type { ResearchSnapshot } from "./research";
+import type { ResearchSnapshot as StoredResearchV3 } from "./research-history-v3";
 import type { StoredResearchV2 } from "./workspace-history-v2";
 export type DeepReadonly<T> = T extends object ? { readonly [Key in keyof T]: DeepReadonly<T[Key]> } : T;
-export type RenderableResearch = DeepReadonly<ResearchSnapshot | StoredResearchV2>;
+export type RenderableResearch = DeepReadonly<ResearchSnapshot | StoredResearchV3 | StoredResearchV2>;
 
 export const MoneySchema = z
   .number()

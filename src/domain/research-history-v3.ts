@@ -28,7 +28,7 @@ const RequirementSchema = z.strictObject({
   originMessageId: z.string().max(80),
   kind: z.enum(["request", "brand", "exclusion", "preference"]),
 });
-const ShoppingIntentSchema = z.strictObject({
+export const ShoppingIntentSchema = z.strictObject({
   intentVersion: z.literal(2),
   originalText: z.string().max(2000),
   productDescription: z.string().max(6000),

@@ -28,8 +28,13 @@ const upstream = createServer(async (request, response) => {
   ) as ShoppingIntent;
   if (intent.productDescription.includes("catalog ambiguity fixture")) {
     const material = catalogMaterial(intent);
-    const heading = intent.productDescription.includes("spaced") ? "Fixture Meridian Sunglasses -  Silver" : intent.productDescription.includes("bare") ? "Silver" : "Fixture Other Silver Sunglasses";
+    const heading = intent.productDescription.includes("qualified") ? "New Silver colorway" : intent.productDescription.includes("spaced") ? "Fixture Meridian Sunglasses -  Silver" : intent.productDescription.includes("bare") ? "Silver" : "Fixture Other Silver Sunglasses";
     material.citations[0]!.text += `\n\n${heading}\n\nSGD 999`;
+    if (intent.productDescription.includes("qualified")) {
+      material.citations[0]!.text += "\n\nFor Gold only.";
+      material.answer.products[0]!.price.assessment.status = "contradicted";
+      material.answer.products[0]!.price.assessment.rationale = "Fixture provider says this amount does not apply to the chosen variant.";
+    }
     response.setHeader("content-type", "application/json");
     response.end(JSON.stringify(material));
     return;

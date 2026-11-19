@@ -15,8 +15,8 @@ import {
   type ResearchSource,
 } from "../domain/research";
 import { isSafeSourceUrl } from "../domain/safe-url";
-import { bindReportedQuote, completeContext } from "../domain/evidence-binding-v3";
-import { assessPriceContext, observePrice, unresolvedConditions, isMonetaryOnlyEvidence } from "./price-evidence";
+import { bindReportedQuote, completeContext } from "../domain/evidence-binding-v4";
+import { assessPriceContext, catalogPriceObservation, unresolvedConditions, isMonetaryOnlyEvidence } from "./price-evidence";
 
 const NativeAssessment = z.object({
   status: z.enum(["supported", "unknown", "contradicted", "conflict"]),
@@ -202,6 +202,7 @@ function bindRequestMatch(value: z.infer<typeof NativeAssessment>, sources: Rese
     return { ...assessment, status: "unknown", rationale: "The provider's quotation establishes only a monetary observation. It does not establish fit to the complete shopping objective." };
   return assessment;
 }
+type PriceBinding = { price: NonNullable<ResearchProduct["price"]>; priceObservation: null } | { price: null; priceObservation: ResearchProduct["priceObservation"] };
 function bindPrice(
   value: z.infer<typeof NativeProduct>["price"],
   productName: string,
@@ -210,17 +211,18 @@ function bindPrice(
   otherProducts: Pick<ResearchProduct, "name" | "variant">[],
   sources: ResearchSource[],
   completeSources: boolean,
-): ResearchProduct["price"] {
-  if (!value || !selectedVariant || value.variant !== selectedVariant) return null;
+): PriceBinding {
+  const absent = { price: null, priceObservation: null };
+  if (!value || !selectedVariant || value.variant !== selectedVariant) return absent;
   const assessment = bindAssessment(value.assessment, sources, completeSources);
-  if (!assessment.support.length) return null;
+  if (!assessment.support.length) return absent;
   if (
     sources.some(
       (source) =>
         source.textTruncated || containsSourceInstructions(source.text),
     )
   )
-    return null;
+    return absent;
   const support = assessment.support.map((span) => {
     const source = sources.find((source) => source.id === span.sourceId)!;
     return source.text.length <= 4000
@@ -228,16 +230,16 @@ function bindPrice(
       : span;
   });
   const price = { ...value, assessment };
-  const published = support.map((span) => {
-    const source = sources.find((source) => source.id === span.sourceId)!;
-    return observePrice(price, productName, identity, source, otherProducts, span.context.text);
-  });
-  const observation = published.find((proof) => proof.kind === "observed");
-  if (!observation) return null;
+  const published = support.map((span) => assessPriceContext(price, productName, span.context.text, otherProducts));
+  const observation = published.find((proof) => proof.kind === "qualified" || proof.kind === "unresolved");
+  if (!observation) {
+    const catalog = sources.map((source) => catalogPriceObservation({ ...value, assessment: { ...value.assessment, support: assessment.support } }, productName, identity, source)).find((value) => value !== null);
+    return { price: null, priceObservation: catalog ?? null };
+  }
   const resolved =
     completeSources &&
     value.conditionsResolved &&
-    published.some((proof) => proof.kind === "observed" && proof.applicability.kind === "qualified") &&
+    published.some((proof) => proof.kind === "qualified") &&
     sources.every((source) => {
       const proof = assessPriceContext(
         price,
@@ -250,9 +252,9 @@ function bindPrice(
         (source.text.length <= 4000 && proof.kind === "qualified")
       );
     });
-  return {
+  return { priceObservation: null, price: {
     ...value,
-    conditions: resolved ? observation.applicability.conditions : unresolvedConditions(observation.applicability.conditions, value.conditions),
+    conditions: resolved ? observation.conditions : unresolvedConditions(observation.conditions, value.conditions),
     conditionsResolved: resolved,
     assessment: {
       ...assessment,
@@ -265,7 +267,7 @@ function bindPrice(
         : "The source amount is an unresolved observation. Its exact variant, complete monetary context or eligibility conditions do not establish an applicable price. Confirm the total with the merchant.",
       support,
     },
-  };
+  } };
 }
 export type ExaProjectionDiagnostic = {
   stage: "envelope" | "answer-json" | "answer-schema" | "sources" | "snapshot" | "ready";
@@ -343,7 +345,7 @@ function projectAnswer(raw: unknown, intent: ShoppingIntent): {
           name: a.name,
           assessment: bindAssessment(a.assessment, sources, complete),
         })),
-        price: bindPrice(
+        ...bindPrice(
           p.price,
           p.name,
           p.variant,
@@ -428,8 +430,11 @@ function projectAnswer(raw: unknown, intent: ShoppingIntent): {
       ? { productId: proposed.id, rationale: proposed.requestMatch.rationale }
       : null;
   const observed = products.find((product) => supportedExactly(product.identity) && product.price && product.identity.support.some((span) => span.literal.text.includes(product.name)));
+  const catalog = products.find((product) => product.priceObservation);
   const summary = choice
     ? `${proposed!.name} is a source-supported option for your requirements. ${choice.rationale}`
+    : catalog?.priceObservation
+      ? `The source row shows ${catalog.priceObservation.currency} ${catalog.priceObservation.amount.toFixed(2)}, observed and unverified. Applicability to the selected variant and purchase conditions remain unresolved. ${!supportedExactly(catalog.requestMatch) ? "Fit to your complete shopping objective remains unresolved. " : ""}I cannot recommend a compliant option until the listed evidence gaps are resolved.`
     : observed?.price
       ? `The source lists ${observed.name} at ${observed.price.currency} ${observed.price.amount.toFixed(2)}, observed and unverified. ${!observed.price.conditionsResolved ? "Purchase conditions remain unresolved. " : ""}${!supportedExactly(observed.requestMatch) ? "Fit to your complete shopping objective remains unresolved. " : ""}I cannot recommend a compliant option until the listed evidence gaps are resolved.`
       : products.length
@@ -437,7 +442,7 @@ function projectAnswer(raw: unknown, intent: ShoppingIntent): {
         : "The sources did not establish a usable product comparison.";
   const result = ResearchSnapshotSchema.safeParse({
     version: 2,
-    evidenceVersion: 3,
+    evidenceVersion: 4,
     dataKind: "web-research",
     retrievedAt: new Date().toISOString(),
     intent,

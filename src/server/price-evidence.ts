@@ -1,5 +1,5 @@
-import { uniqueLiteralSpan } from "../domain/evidence-binding-v3";
-import type { Assessment, ResearchProduct, ResearchSource } from "../domain/research";
+import { uniqueLiteralSpan, catalogRowMoney } from "../domain/evidence-binding-v4";
+import type { Assessment, ResearchProduct, ResearchSource, CatalogPriceObservation } from "../domain/research";
 
 type Price = NonNullable<ResearchProduct["price"]>;
 export type PriceContext =
@@ -220,58 +220,23 @@ export function assessPriceContext(
     : { kind: "unresolved", conditions: [...new Set(unresolved)].slice(0, 8) };
 }
 
-export type PriceObservation =
-  | { kind: "absent" }
-  | { kind: "observed"; applicability: { kind: "qualified" | "unresolved"; conditions: string[] } };
-
-function namedCatalogObservation(price: Price, productName: string, identity: Assessment, source: ResearchSource): PriceObservation {
-  if (source.textTruncated || source.text.length > 4000 || identity.status !== "supported" || identity.scope !== "exact-variant") return { kind: "absent" };
-  if (!new RegExp(`(?:^|[^\\p{L}\\p{N}])${literal(price.variant)}(?=$|[^\\p{L}\\p{N}])`, "u").test(productName)) return { kind: "absent" };
-  const rows = [...source.text.matchAll(/^([^\r\n]+)\r?\n[\t \r\n]*([A-Z]{3}[\t ]*[0-9][^\r\n]*)(?=\r?$)/gmu)];
-  const trimHeading = (text: string) => text.replace(/^[\t \u00a0]+|[\t \u00a0]+$/gu, "");
-  const headingKey = (text: string) => trimHeading(text).replace(/[\u0009-\u000d\u0020\u00a0]+/gu, " ").toLowerCase();
-  const selectedKey = headingKey(productName);
-  const selectedWords = new Set(selectedKey.match(/[\p{L}\p{N}]+/gu));
-  const selected = rows.filter((row) => headingKey(row[1]!) === selectedKey);
-  if (selected.length !== 1) return { kind: "absent" };
-  const row = selected[0]!;
-  const heading = uniqueLiteralSpan(row[1]!, productName);
-  if (!heading) return { kind: "absent" };
-  const rowEnd = row.index + row[0].length;
-  const nameStart = row.index + heading.start, nameEnd = row.index + heading.end;
-  const moneyStart = row.index + row[0].lastIndexOf(row[2]!), moneyEnd = moneyStart + row[2]!.replace(/[ \t]+$/u, "").length;
-  const selectedMoney = new RegExp(`^${moneyPattern(price.currency)}[ \t]*$`, "u").exec(row[2]!);
-  if (!selectedMoney || Number((selectedMoney[1] ?? selectedMoney[2])!.replaceAll(",", "")) !== price.amount) return { kind: "absent" };
-  const identityBound = identity.support.some((span) => span.sourceId === source.id && span.literal.start <= nameStart && span.literal.end >= nameEnd);
-  const priceBound = price.assessment.support.some((span) => span.sourceId === source.id && span.literal.start >= nameStart && span.literal.start <= moneyStart && span.literal.end >= moneyEnd && span.literal.end <= rowEnd);
-  if (!identityBound || !priceBound) return { kind: "absent" };
-  const opaqueMoneyLine = (text: string) => /^[ \t]*$/u.test(text
-    .replace(/\b[A-Z]{3}[ \t]*[0-9]+(?:,[0-9]{3})*(?:\.[0-9]{1,2})?/gu, "")
-    .replace(/\([0-9]+(?:\.[0-9]+)?%[ \t]*off\)/gu, ""));
-  const independent = rows.filter((other) => {
-    const heading = headingKey(other[1]!);
-    const words = heading.match(/[\p{L}\p{N}]+/gu) ?? [];
-    return other !== row && !heading.includes(selectedKey) && words.length > 1 && !words.every((word) => selectedWords.has(word)) && !monetaryContext.test(heading) && !/\b(?:variant|configuration|range)\b/iu.test(heading) && opaqueMoneyLine(other[2]!);
+export function catalogPriceObservation(price: Price, productName: string, identity: Assessment, source: ResearchSource): CatalogPriceObservation | null {
+  if (source.textTruncated || source.text.length > 4000 || identity.status !== "supported" || identity.scope !== "exact-variant") return null;
+  const rows = [...source.text.matchAll(/^([^\r\n]+)\r?\n[\t \r\n]*((?:[A-Z]{3}[\t ]*[0-9]|[0-9])[^\r\n]*)(?=\r?$)/gmu)];
+  const candidates = rows.flatMap((row) => {
+    const money = catalogRowMoney(row[0]);
+    const heading = money && uniqueLiteralSpan(money.heading, productName);
+    if (!money || !heading || money.amount !== price.amount || money.currency !== price.currency) return [];
+    const nameStart = row.index + heading.start, nameEnd = row.index + heading.end;
+    const moneyStart = row.index + row[0].lastIndexOf(row[2]!), moneyEnd = row.index + row[0].length;
+    const identityBound = identity.support.some((span) => span.sourceId === source.id && span.literal.start <= nameStart && span.literal.end >= nameEnd);
+    const priceBound = price.assessment.support.some((span) => span.sourceId === source.id && span.literal.start >= nameStart && span.literal.start <= moneyStart && span.literal.end >= moneyEnd - row[2]!.match(/[ \t]*$/u)![0].length && span.literal.end <= moneyEnd);
+    return identityBound && priceBound ? [{ sourceId: source.id, origin: { kind: "source-context" as const }, literal: { start: row.index, end: moneyEnd, text: row[0] }, context: { start: 0, end: source.text.length, text: source.text } }] : [];
   });
-  const removed = [row, ...independent].sort((a, b) => b.index - a.index);
-  let remainder = source.text;
-  for (const entry of removed) remainder = remainder.slice(0, entry.index) + "\n" + remainder.slice(entry.index + entry[0].length);
-  const conditions: string[] = [];
-  for (const clause of remainder.split(/\r?\n|(?<=[.!?])\s+/u).map((part) => part.trim().replace(/[.!?]$/u, ""))) {
-    if (!clause) continue;
-    if (/\p{Sc}|\b[A-Z]{3}\s*\d|\b\d[\d.,]*\s*[A-Z]{3}\b/u.test(clause)) return { kind: "absent" };
-    if (!monetaryContext.test(clause) && !/\b(?:variant|configuration|range)\b/iu.test(clause)) continue;
-    const conditional = conditionalProof(clause);
-    if (conditional) conditions.push(...conditional);
-    else if (conditionProof(clause) === null) return { kind: "absent" };
-  }
-  return { kind: "observed", applicability: { kind: "unresolved", conditions: [...new Set(conditions)] } };
-}
-
-export function observePrice(price: Price, productName: string, identity: Assessment, source: ResearchSource, otherProducts: Pick<ResearchProduct, "name" | "variant">[], contextText = source.text): PriceObservation {
-  const context = assessPriceContext(price, productName, contextText, otherProducts);
-  if (context.kind === "qualified" || context.kind === "unresolved") return { kind: "observed", applicability: context };
-  return namedCatalogObservation(price, productName, identity, source);
+  if (candidates.length !== 1) return null;
+  const qualifications = source.text.split(/\r?\n/u).filter((line) => monetaryContext.test(line) || /\b(?:variant|configuration|range)\b/iu.test(line));
+  const rationale = "This source row shows an amount. Its applicability to the selected variant is unresolved. All surrounding amounts and qualifiers remain in the complete source context." + (qualifications.length ? ` Source context: ${qualifications.join("\n")}` : "");
+  return { kind: "catalog-row", amount: price.amount, currency: price.currency, row: candidates[0]!, reportedAssessment: price.assessment, reportedConditions: price.conditions, reportedConditionsResolved: price.conditionsResolved, attribution: { status: "unknown", rationale } };
 }
 
 export function unresolvedConditions(sourceConditions: string[], reported: string[]): string[] {

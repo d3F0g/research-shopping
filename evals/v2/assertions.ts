@@ -15,15 +15,15 @@ export function grade(scenario: Scenario, observation: Observation): Check[] {
     if (raw.response?.kind === "research") {
       const snapshot = raw.response.research;
       for (const product of snapshot.products) {
-        const assessments = [product.identity, product.requestMatch, ...product.requirements.map((item) => item.assessment), ...product.attributes.map((item) => item.assessment), ...(product.price ? [product.price.assessment] : [])];
+        const assessments = [product.identity, product.requestMatch, ...product.requirements.map((item) => item.assessment), ...product.attributes.map((item) => item.assessment), ...(product.price ? [product.price.assessment] : []), ...(product.priceObservation ? [product.priceObservation.reportedAssessment] : [])];
         const valid = validCurrentProvenance(snapshot, product, observation.material.body);
         const aligned = assessments.some((assessment) => assessment.support.some((span) => span.origin.kind === "provider" && span.origin.match === "whitespace"));
         const historical = checks.find((check) => check.id === `quote-containment:${product.id}` && check.turn === turn.index);
         if (valid && aligned && historical) {
           historical.status = "blocked";
-          historical.expected = "Historical quote containment cannot represent provider wording with whitespace alignment. Current evidence-3 provenance is checked separately; the actual provider report is preserved unchanged.";
+          historical.expected = "Historical quote containment cannot represent provider wording with whitespace alignment. Current evidence-4 provenance is checked separately; the actual provider report is preserved unchanged.";
         }
-        checks.push({ id: `native-complete-provenance:${product.id}`, turn: turn.index, status: valid ? "pass" : "fail", critical: true, expected: "Evidence-3 reports match actual provider wording; unique whitespace equivalence, literal UTF-16 offsets, complete context and actual source cut metadata are independently checked", observed: JSON.parse(JSON.stringify(assessments)) as Json, evidence: observation.events.filter((item) => item.turn === turn.index).map((item) => item.sequence) });
+        checks.push({ id: `native-complete-provenance:${product.id}`, turn: turn.index, status: valid ? "pass" : "fail", critical: true, expected: "Evidence-4 reports match actual provider wording; unique whitespace equivalence, literal UTF-16 offsets, complete context and actual source cut metadata are independently checked", observed: JSON.parse(JSON.stringify({ assessments, priceObservation: product.priceObservation })) as Json, evidence: observation.events.filter((item) => item.turn === turn.index).map((item) => item.sequence) });
       }
     }
     const event = observation.events.find((item) => item.turn === turn.index && item.kind === "provider-request");

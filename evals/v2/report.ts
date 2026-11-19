@@ -65,7 +65,7 @@ export function validateReport(report: AnyReport): void {
   if (report.schemaVersion === 2) { validateV2(report); return; }
   if (report.schemaVersion === 3) { validateV3(report); return; }
   if (report.schemaVersion === 4) { validateV4(report); return; }
-  if (report.schemaVersion === 5 && report.adapterVersion === "fieldnote-v2-http-1.0.0") { validateHistoricalFieldnoteReport(report); return; }
+  if (report.schemaVersion === 5 && ["fieldnote-v2-http-1.0.0", "fieldnote-v2-http-1.1.0"].includes(report.adapterVersion)) { validateHistoricalFieldnoteReport(report); return; }
   if (report.schemaVersion !== 5 || report.adapterVersion !== ADAPTER_VERSION || report.assertionVersion !== ASSERTION_VERSION) throw new Error("Unsupported evaluation contract");
   if (hash(report.datasetContracts) !== report.datasetHash || new Set(report.datasetContracts.map((row) => row.id)).size !== report.datasetContracts.length) throw new Error("Dataset contract mismatch");
   for (const kind of ["grading", "adapter"] as const) {

@@ -1,7 +1,7 @@
 import type { DeepReadonly, ShoppingIntent } from "./conversation";
-import type { Assessment, ResearchProduct, ResearchSnapshot } from "./research-history-v3";
-export { SupportSchema, AssessmentSchema, SourceSchema, ProductSchema, ResearchSnapshotSchema } from "./research-history-v3";
-export type { Assessment, ResearchSource, ResearchProduct, ResearchSnapshot } from "./research-history-v3";
+import type { Assessment, ResearchProduct, ResearchSnapshot } from "./research-history-v4";
+export { SupportSchema, AssessmentSchema, SourceSchema, ProductSchema, ResearchSnapshotSchema } from "./research-history-v4";
+export type { Assessment, ResearchSource, ResearchProduct, ResearchSnapshot, CatalogPriceObservation } from "./research-history-v4";
 export type ResearchUnavailableReason =
   | "not-configured"
   | "disabled"

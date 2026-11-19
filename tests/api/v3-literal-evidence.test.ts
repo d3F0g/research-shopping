@@ -15,12 +15,13 @@ describe("versioned literal source evidence", () => {
   it("retains unique whitespace-aligned identity and its observed catalog amount without resolving conditions", () => {
     const snapshot = project();
     const product = snapshot.products[0]!;
-    expect(snapshot).toMatchObject({ version: 2, evidenceVersion: 3, choice: null });
+    expect(snapshot).toMatchObject({ version: 2, evidenceVersion: 4, choice: null });
     expect(product.identity.status).toBe("supported");
     expect(product.identity.support[0]).toMatchObject({ origin: { kind: "provider", reportedQuote: "Fixture Meridian Sunglasses - Silver SGD 868", match: "whitespace" }, literal: { text: "Fixture Meridian Sunglasses - Silver \n\n SGD 868" } });
-    expect(product.price).toMatchObject({ amount: 868, currency: "SGD", variant: "Silver", conditionsResolved: false, conditions: ["Provider-reported, unverified: Price as listed on Fixture Index."] });
-    expect(snapshot.summary).toMatch(/^The source lists Fixture Meridian Sunglasses - Silver at SGD 868.00, observed and unverified/);
-    expect(snapshot.summary).toContain("Purchase conditions remain unresolved.");
+    expect(product.price).toBeNull();
+    expect(product.priceObservation).toMatchObject({ amount: 868, currency: "SGD", reportedConditionsResolved: false, reportedConditions: ["Price as listed on Fixture Index."] });
+    expect(snapshot.summary).toMatch(/^The source row shows SGD 868.00, observed and unverified/);
+    expect(snapshot.summary).toContain("purchase conditions remain unresolved.");
     expect(snapshot.summary).toContain("Fit to your complete shopping objective remains unresolved.");
     expect(snapshot.summary).not.toMatch(/best|all.*fit|source-supported option/);
     expect(product.eligible).toBe(false);
@@ -75,22 +76,25 @@ describe("named catalog attribution boundaries", () => {
     const material = catalogMaterial(intent);
     material.citations[0]!.text += "\n\nMembership required.";
     const product = project(material).products[0]!;
-    expect(product.price).toMatchObject({ conditionsResolved: false, conditions: ["Membership required", "Provider-reported, unverified: Price as listed on Fixture Index."] });
+    expect(product.price).toBeNull();
+    expect(product.priceObservation?.attribution.rationale).toContain("Membership required.");
+    expect(product.priceObservation?.reportedConditions).toEqual(["Price as listed on Fixture Index."]);
   });
   it("keeps the complete 300-character native condition with its provenance label", () => {
     const material = catalogMaterial(intent);
     material.answer.products[0]!.price.conditions = ["Fixture provider uncertainty. " + "x".repeat(270)];
     const reported = material.answer.products[0]!.price.conditions[0]!;
-    expect(project(material).products[0]!.price?.conditions).toContain(`Provider-reported, unverified: ${reported}`);
+    expect(project(material).products[0]!.priceObservation?.reportedConditions).toContain(reported);
   });
   it.each(["", "\n\nNot tax included."])("does not promote an unproven native tax-included claim %j", (tail) => {
     const material = catalogMaterial(intent);
     material.answer.products[0]!.price.conditions = ["tax included"];
     material.citations[0]!.text += tail;
     const product = project(material).products[0]!;
-    expect(product.price?.conditionsResolved).toBe(false);
-    expect(product.price?.conditions).not.toContain("tax included");
-    if (tail) expect(product.price?.conditions).toContain("Not tax included");
+    expect(product.price).toBeNull();
+    expect(product.priceObservation?.reportedConditionsResolved).toBe(false);
+    expect(product.priceObservation?.reportedConditions).toEqual(["tax included"]);
+    if (tail) expect(product.priceObservation?.attribution.rationale).toContain("Not tax included");
   });
 });
 
@@ -100,7 +104,8 @@ describe("opaque peer catalog rows", () => {
     const material = catalogMaterial(intent);
     material.citations[0]!.text = peers + material.citations[0]!.text;
     const result = project(material);
-    expect(result.products[0]!.price).toMatchObject({ amount: 868, currency: "SGD", conditionsResolved: false });
+    expect(result.products[0]!.price).toBeNull();
+    expect(result.products[0]!.priceObservation).toMatchObject({ amount: 868, currency: "SGD", attribution: { status: "unknown" } });
     expect(result.products[0]!.identity.status).toBe("supported");
     expect(result.choice).toBeNull();
     expect(result.sources[0]!.text).toContain(peers);
@@ -198,7 +203,8 @@ describe("ambiguous catalog headings", () => {
   it("retains a distinct full heading sharing only the selected color", () => {
     const material = catalogMaterial(intent);
     material.citations[0]!.text += "\n\nFixture Other Silver Sunglasses\n\nSGD 999 SGD 499 (50% off)";
-    expect(project(material).products[0]!.price).toMatchObject({ amount: 868, conditionsResolved: false });
+    expect(project(material).products[0]!.price).toBeNull();
+    expect(project(material).products[0]!.priceObservation).toMatchObject({ amount: 868, attribution: { status: "unknown" } });
   });
 });
 
@@ -209,7 +215,8 @@ describe("unique catalog heading binding", () => {
     material.citations[0]!.text = material.citations[0]!.text.replace("Fixture Meridian Sunglasses - Silver", "Fixture Meridian Sunglasses -  Silver");
     const snapshot = project(material);
     expect(snapshot.products[0]!.identity.status).toBe("supported");
-    expect(snapshot.products[0]!.price).toMatchObject({ amount: 868, conditionsResolved: false });
+    expect(snapshot.products[0]!.price).toBeNull();
+    expect(snapshot.products[0]!.priceObservation).toMatchObject({ amount: 868, attribution: { status: "unknown" } });
     expect(snapshot.sources[0]!.text).toBe(material.citations[0]!.text);
   });
   it("does not use adverse case folding to create a positive heading binding", () => {

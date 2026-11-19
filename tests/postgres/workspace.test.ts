@@ -1,3 +1,4 @@
+import { actualStoredConversationV3 } from "../helpers/v3-stored-material";
 import { actualStoredConversationV2 } from "../helpers/v2-stored-material";
 import { randomUUID } from "node:crypto";
 import { afterAll, beforeAll, beforeEach, describe, expect, it } from "vitest";
@@ -26,7 +27,7 @@ const research: (intent: Parameters<ResearchOperation>[0]["intent"], operationId
   if (paused) await new Promise<void>((resolve) => { hold = resolve; started?.(); });
   const text = "Fixture data: no merchant inventory or price is established.";
   const assessment = { status: "unknown" as const, scope: "unclear" as const, rationale: "Fixture data: no product facts are established.", support: [{ sourceId: "fixture", origin: { kind: "provider" as const, reportedQuote: "Fixture data", match: "literal" as const }, literal: { start: 0, end: 12, text: "Fixture data" }, context: { start: 0, end: text.length, text } }] };
-  return { status: "ready", research: { version: 2, evidenceVersion: 3, dataKind: "test-fixture", intent: structuredClone(intent), retrievedAt: new Date().toISOString(), summary: "Fixture data: local research response.", products: [{ id: "fixture-item", name: "Fixture data item", variant: null, identity: assessment, requestMatch: assessment, requirements: [], attributes: [{ name: "Fixture data", assessment }], price: null, stock: "unverified", eligible: false, blockers: ["Fixture data: unresolved identity and request fit."] }], choice: null, sources: oversized ? Array.from({ length: 10 }, (_, i) => ({ id: `fixture-${i}`, url: `https://example.com/fixture-${i}`, title: "Fixture data", text: "測".repeat(24000), originalLength: 24000, textTruncated: false })) : [{ id: "fixture", url: "https://example.com/fixture", title: "Fixture data", text, originalLength: text.length, textTruncated: false }], limitations: ["Fixture data only. No paid requests or verified offers."], requestId: "fixture-request", reportedCostUsd: 0 } };
+  return { status: "ready", research: { version: 2, evidenceVersion: 4, dataKind: "test-fixture", intent: structuredClone(intent), retrievedAt: new Date().toISOString(), summary: "Fixture data: local research response.", products: [{ id: "fixture-item", name: "Fixture data item", variant: null, identity: assessment, requestMatch: assessment, requirements: [], attributes: [{ name: "Fixture data", assessment }], price: null, priceObservation: null, stock: "unverified", eligible: false, blockers: ["Fixture data: unresolved identity and request fit."] }], choice: null, sources: oversized ? Array.from({ length: 10 }, (_, i) => ({ id: `fixture-${i}`, url: `https://example.com/fixture-${i}`, title: "Fixture data", text: "測".repeat(24000), originalLength: 24000, textTruncated: false })) : [{ id: "fixture", url: "https://example.com/fixture", title: "Fixture data", text, originalLength: text.length, textTruncated: false }], limitations: ["Fixture data only. No paid requests or verified offers."], requestId: "fixture-request", reportedCostUsd: 0 } };
 };
 const dependencies = { reduce: reduceTurn, research };
 let store = createWorkspaceStore(pool, dependencies);
@@ -82,8 +83,9 @@ describe("V2 PostgreSQL account persistence", () => {
   it("migrates the wrapper, freezes historical research and interrupts stale paid preparation", async () => {
     const prepared = await prepare();
     const previous = await data();
-    previous.schema = 2;
-    previous.state = actualStoredConversationV2();
+    previous.schema = 3;
+    previous.state = actualStoredConversationV3();
+    previous.state.messages.unshift(...actualStoredConversationV2().messages);
     await pool.query("UPDATE fieldnote_v2_workspace SET data=$2::jsonb WHERE user_id=$1", [identities[0].userId, JSON.stringify(previous)]);
     const oldMessages = structuredClone(previous.state.messages);
     const loaded = await createWorkspaceStore(pool, dependencies).load(identities[0]);
@@ -92,7 +94,7 @@ describe("V2 PostgreSQL account persistence", () => {
     expect(loaded.epoch).toBe(prepared.workspace.epoch + 1);
     expect(loaded.pendingPreparedId).toBeNull();
     const migrated = await data();
-    expect(migrated.schema).toBe(3);
+    expect(migrated.schema).toBe(4);
     expect(migrated.receipts).toEqual(previous.receipts.map((receipt: Record<string, unknown>) => ({ ...receipt, status: "interrupted" })));
     const stale = await command(identities[0], { phase: "research", revision: prepared.workspace.revision, preparedId: prepared.workspace.pendingPreparedId! });
     expect(stale.operation?.status).toBe("interrupted");
@@ -102,7 +104,7 @@ describe("V2 PostgreSQL account persistence", () => {
     expect(current.response?.kind).toBe("research");
     const persisted = await createWorkspaceStore(pool, dependencies).load(identities[0]);
     expect(persisted.state.messages.slice(0, oldMessages.length)).toEqual(oldMessages);
-    expect(persisted.state.messages.filter((message) => message.research).map((message) => message.research!.evidenceVersion)).toEqual([2, 3]);
+    expect(persisted.state.messages.filter((message) => message.research).map((message) => message.research!.evidenceVersion)).toEqual([2, 3, 4]);
     expect((await store.load(identities[1])).state.messages).toEqual([]);
     expect(calls).toBe(1);
   });

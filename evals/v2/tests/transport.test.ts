@@ -208,8 +208,9 @@ test("whitespace bindings preserve actual native reports and expose the historic
     const response = observed.rawTurns[0]!.response;
     assert.equal(response?.kind, "research"); if (response?.kind !== "research") return;
     const product = response.research.products[0]!;
-    assert.equal(product.price?.amount, 868);
-    assert.equal(product.price?.conditionsResolved, false);
+    assert.equal(product.price, null);
+    assert.equal(product.priceObservation?.amount, 868);
+    assert.equal(product.priceObservation?.reportedConditionsResolved, false);
     assert.equal(response.research.choice, null);
     const checks = grade(contract, observed);
     assert.equal(checks.find((check) => check.id === `native-complete-provenance:${product.id}`)!.status, "pass");
@@ -259,4 +260,37 @@ test("current provenance accepts equivalent object and JSON-string SDK answers",
       assert.equal(observed.cleanup, true);
     }
   } finally { guard.close(); }
+});
+
+test("V4 catalog observations preserve raw row context and native claims independently", async () => {
+  const { catalogMaterial } = await import("../../../tests/helpers/v3-catalog-material");
+  const { initialConversation } = await import("../../../src/domain/conversation");
+  const { projectExaAnswer } = await import("../../../src/server/exa-research");
+  const { validCurrentProvenance } = await import("../provenance");
+  const intent = { ...initialConversation().intent, productDescription: "Fixture sunglasses", budget: { currency: "SGD", maximum: 1000 } };
+  const native = catalogMaterial(intent);
+  native.answer.products[0]!.identity.support[0]!.quote = "Fixture Meridian Sunglasses - Silver";
+  native.citations[0]!.text += "\n\nNew Silver colorway\n\nSGD 999\n\nFor Gold only.";
+  const result = projectExaAnswer(native, intent);
+  if (result.status !== "ready") throw new Error("Expected fixture source observation");
+  const product = result.research.products[0]!;
+  const body = JSON.parse(JSON.stringify(native)) as Json;
+  assert.equal(validCurrentProvenance(result.research, product, body), true);
+  const mutations: Array<(item: typeof product) => void> = [
+    (item) => { item.priceObservation!.amount = 999; },
+    (item) => { item.priceObservation!.row.context.text = item.priceObservation!.row.literal.text; },
+    (item) => { item.priceObservation!.row.literal.start++; },
+    (item) => { Object.assign(item.priceObservation!, { variant: "Silver" }); },
+    (item) => { item.priceObservation!.reportedConditionsResolved = true; },
+    (item) => { item.priceObservation!.reportedConditions = ["Fixture invented eligibility condition"]; },
+    (item) => { item.priceObservation!.reportedAssessment.status = "contradicted"; },
+    (item) => { item.priceObservation!.reportedAssessment.rationale = "Fixture invented rationale"; },
+    (item) => { item.priceObservation!.reportedAssessment.support[0]!.origin = { kind: "source-context" }; },
+    (item) => { item.priceObservation!.reportedAssessment.support[0]!.origin = { kind: "provider", reportedQuote: item.priceObservation!.row.literal.text, match: "literal" }; },
+  ];
+  for (const mutate of mutations) {
+    const changed = structuredClone(product);
+    mutate(changed);
+    assert.equal(validCurrentProvenance(result.research, changed, body), false);
+  }
 });

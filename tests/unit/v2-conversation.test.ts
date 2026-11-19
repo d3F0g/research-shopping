@@ -233,7 +233,7 @@ describe("retained snapshot answers", () => {
   it("keeps oversized passages whole in canonical history and makes display omissions explicit", () => {
     const state = researched();
     const research = state.messages.at(-1)!.research!;
-    if (research.evidenceVersion !== 3) throw new Error("Expected current fixture evidence");
+    if (research.evidenceVersion !== 4) throw new Error("Expected current fixture evidence");
     research.products[0]!.attributes = Array.from({ length: 6 }, () => structuredClone(research.products[0]!.attributes[0]!));
     for (const attribute of research.products[0]!.attributes) attribute.assessment.support = Array.from({ length: 3 }, () => ({ ...attribute.assessment.support[0]!, context: { start: 0, end: 4000, text: "x".repeat(4000) } }));
     const result = turn(state, "Compare the first two.");

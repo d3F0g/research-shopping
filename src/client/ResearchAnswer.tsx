@@ -90,6 +90,8 @@ function Product({
   snapshot: ResearchSnapshot;
 }) {
   const [failed, setFailed] = useState(false);
+  const observation = "priceObservation" in product ? product.priceObservation : null;
+  const observationSource = observation && snapshot.sources.find((source) => source.id === observation.row.sourceId);
   const source = snapshot.sources.find((s) =>
     product.identity.support.some((span) => span.sourceId === s.id),
   );
@@ -134,10 +136,16 @@ function Product({
                 : ""}
               {!product.price.conditionsResolved && " · Conditions unresolved"}
             </>
-          ) : (
-            "No qualifying observed price"
-          )}
+          ) : observation ? (
+            <>Source row shows <strong>{observation.currency} {observation.amount.toFixed(2)}</strong>. Observed and unverified. Applicability to this variant is unresolved.</>
+          ) : "No qualifying observed price"}
         </p>
+        {observation && <>
+          <p>{observation.attribution.rationale}</p>
+          {observation.reportedConditions.length > 0 && <p>Provider-reported, unverified: {observation.reportedConditions.join(" ")}</p>}
+          {!observation.reportedConditionsResolved && <p>Provider purchase conditions remain unresolved.</p>}
+          {["contradicted", "conflict"].includes(observation.reportedAssessment.status) && <p>Provider price assessment {observation.reportedAssessment.status}, unverified: {observation.reportedAssessment.rationale}</p>}
+        </>}
         <p className="text-muted-foreground">Stock and delivery unknown.</p>
         <p>{product.requestMatch.rationale}</p>
         {product.blockers.length > 0 && (
@@ -197,6 +205,13 @@ function Product({
                   snapshot={snapshot}
                 />
               )}
+              {observation && observationSource && <div className="space-y-2">
+                <p>Literal catalog row. Applicability to the selected variant is unresolved.</p>
+                <Citation source={observationSource} quote={observation.row.literal.text} />
+                <p>Complete source context. Other amounts and qualifiers remain unattributed.</p>
+                <Citation source={observationSource} quote={observation.row.context.text} />
+                <Evidence label="Provider-reported price assessment, unverified" assessment={observation.reportedAssessment} snapshot={snapshot} />
+              </div>}
               {product.blockers.map((blocker, i) => (
                 <p key={i}>{blocker}</p>
               ))}

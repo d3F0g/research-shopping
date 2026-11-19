@@ -73,6 +73,7 @@ jobs:
           path: |
             artifacts/playwright-results/
             artifacts/fieldnote-v2/accounts/
+            artifacts/fieldnote-v4/
             artifacts/fieldnote-v3/history-browser/
             artifacts/fieldnote-v3/e2e/
             artifacts/fieldnote-v3/round2-browser/

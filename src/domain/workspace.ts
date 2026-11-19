@@ -1,7 +1,9 @@
 import { z } from "zod";
 import { initialConversation, PrepareInputSchema, ShoppingIntentSchema, type ConversationState, type TurnResponse } from "./conversation";
 import { StoredConversationV2Schema, StoredResearchV2Schema, StoredWorkspaceV2Schema } from "./workspace-history-v2";
-import { ResearchSnapshotSchema } from "./research-history-v3";
+import { ResearchSnapshotSchema as StoredResearchV3Schema } from "./research-history-v3";
+import { ResearchSnapshotSchema } from "./research-history-v4";
+import { StoredWorkspaceV3Schema } from "./workspace-history-v3";
 export { StoredConversationV2Schema, StoredResearchV2Schema } from "./workspace-history-v2";
 
 export const WORKSPACE_LIMIT = 256 * 1024;
@@ -11,14 +13,14 @@ const Revision = z.number().int().nonnegative().max(Number.MAX_SAFE_INTEGER);
 const Id = z.string().uuid();
 export const StoredConversationSchema = StoredConversationV2Schema.extend({
   intent: ShoppingIntentSchema,
-  messages: z.array(z.strictObject({ id: z.string().max(100), role: z.enum(["user", "assistant"]), text: z.string().max(6000), detail: z.string().max(24000).optional(), research: z.union([StoredResearchV2Schema, ResearchSnapshotSchema]).optional() })).max(200),
+  messages: z.array(z.strictObject({ id: z.string().max(100), role: z.enum(["user", "assistant"]), text: z.string().max(6000), detail: z.string().max(24000).optional(), research: z.union([StoredResearchV2Schema, StoredResearchV3Schema, ResearchSnapshotSchema]).optional() })).max(200),
 });
-export const WorkspaceDataSchema = StoredWorkspaceV2Schema.extend({ schema: z.literal(3), state: StoredConversationSchema });
+export const WorkspaceDataSchema = StoredWorkspaceV2Schema.extend({ schema: z.literal(4), state: StoredConversationSchema });
 export function readWorkspaceData(value: unknown): { data: WorkspaceData; migrated: boolean } {
-  if (typeof value === "object" && value !== null && "schema" in value && value.schema === 2) {
-    const previous = StoredWorkspaceV2Schema.parse(value);
+  if (typeof value === "object" && value !== null && "schema" in value && (value.schema === 2 || value.schema === 3)) {
+    const previous = value.schema === 2 ? StoredWorkspaceV2Schema.parse(value) : StoredWorkspaceV3Schema.parse(value);
     return { migrated: true, data: WorkspaceDataSchema.parse({
-      ...previous, schema: 3, pending: null,
+      ...previous, schema: 4, pending: null,
       state: { ...previous.state, intent: ShoppingIntentSchema.parse(previous.state.intent) },
       receipts: previous.receipts.map((receipt) => receipt.status === "prepared" || receipt.status === "running" ? { ...receipt, status: "interrupted" } : receipt),
     }) };
@@ -43,7 +45,7 @@ export const AccountStateSchema = z.discriminatedUnion("status", [
 ]);
 export type AccountState = Exclude<z.infer<typeof AccountStateSchema>, { status: "signed-in" }> | { status: "signed-in"; user: { id: string; email: string }; workspace: WorkspaceSnapshot };
 export function emptyWorkspace(): WorkspaceData {
-  return { schema: 3, state: initialConversation(), acceptedAt: null, turns: [], receipts: [], pending: null };
+  return { schema: 4, state: initialConversation(), acceptedAt: null, turns: [], receipts: [], pending: null };
 }
 export function workspaceBytes(data: WorkspaceData): number { return new TextEncoder().encode(JSON.stringify(data)).byteLength; }
 export function boundWorkspace(data: WorkspaceData, protectedOperationId?: string): boolean {

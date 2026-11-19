@@ -1,0 +1,240 @@
+{
+  "provenance": {
+    "archive": "artifacts/fieldnote-v2/evidence-gap-followup/owner-ccfb87c-checkpoint.tar.gz",
+    "sha256": "342562fbcadfcbb3923dd8bd17b63a42ea4a644320294092b4fe8624cc53395a",
+    "member": "artifacts/fieldnote-v3/round2-critical-full60/FN-CU-001.trace.json",
+    "pointer": "/rawTurns/1/after"
+  },
+  "state": {
+    "version": 2,
+    "revision": 2,
+    "intent": {
+      "intentVersion": 2,
+      "originalText": "I want to buy a powerbank that costs around $30-40",
+      "productDescription": "I want to buy a powerbank that costs around $30-40",
+      "requirements": [
+        {
+          "id": "request-034599cf-8e89-4b95-8280-b54d321f46fc",
+          "text": "I want to buy a powerbank that costs around $30-40",
+          "strength": "hard",
+          "originMessageId": "034599cf-8e89-4b95-8280-b54d321f46fc",
+          "kind": "request"
+        }
+      ],
+      "budget": {
+        "minimum": 30,
+        "maximum": 40,
+        "currency": "SGD"
+      },
+      "region": null,
+      "responseLength": "concise"
+    },
+    "pending": null,
+    "messages": [
+      {
+        "id": "034599cf-8e89-4b95-8280-b54d321f46fc",
+        "role": "user",
+        "text": "I want to buy a powerbank that costs around $30-40"
+      },
+      {
+        "id": "034599cf-8e89-4b95-8280-b54d321f46fc-reply",
+        "role": "assistant",
+        "text": "Which currency, for example SGD or USD?"
+      },
+      {
+        "id": "83ef4463-da8a-495e-937e-9be28b81fcad",
+        "role": "user",
+        "text": "SGD"
+      },
+      {
+        "id": "83ef4463-da8a-495e-937e-9be28b81fcad-research",
+        "role": "assistant",
+        "text": "The source lists Synthetic Anker Pocket 10 at SGD 35.00, observed and unverified. I cannot recommend a compliant option until the listed evidence gaps are resolved.",
+        "research": {
+          "version": 2,
+          "evidenceVersion": 3,
+          "dataKind": "web-research",
+          "retrievedAt": "2026-11-19T12:44:19.592Z",
+          "intent": {
+            "intentVersion": 2,
+            "originalText": "I want to buy a powerbank that costs around $30-40",
+            "productDescription": "I want to buy a powerbank that costs around $30-40",
+            "requirements": [
+              {
+                "id": "request-034599cf-8e89-4b95-8280-b54d321f46fc",
+                "text": "I want to buy a powerbank that costs around $30-40",
+                "strength": "hard",
+                "originMessageId": "034599cf-8e89-4b95-8280-b54d321f46fc",
+                "kind": "request"
+              }
+            ],
+            "budget": {
+              "minimum": 30,
+              "maximum": 40,
+              "currency": "SGD"
+            },
+            "region": null,
+            "responseLength": "concise"
+          },
+          "summary": "The source lists Synthetic Anker Pocket 10 at SGD 35.00, observed and unverified. I cannot recommend a compliant option until the listed evidence gaps are resolved.",
+          "products": [
+            {
+              "id": "synthetic-pocket-10",
+              "name": "Synthetic Anker Pocket 10",
+              "variant": "black",
+              "identity": {
+                "status": "supported",
+                "scope": "exact-variant",
+                "rationale": "Synthetic test assessment, not a live product claim.",
+                "support": [
+                  {
+                    "sourceId": "source-1",
+                    "origin": {
+                      "kind": "provider",
+                      "reportedQuote": "Synthetic Anker Pocket 10 black is a portable power bank with USB-C fast charging.",
+                      "match": "literal"
+                    },
+                    "literal": {
+                      "start": 0,
+                      "end": 82,
+                      "text": "Synthetic Anker Pocket 10 black is a portable power bank with USB-C fast charging."
+                    },
+                    "context": {
+                      "start": 0,
+                      "end": 158,
+                      "text": "Synthetic Anker Pocket 10 black is a portable power bank with USB-C fast charging.\nSynthetic Anker Pocket 10 black costs SGD 35.00 for one unit, tax included."
+                    }
+                  }
+                ]
+              },
+              "requestMatch": {
+                "status": "supported",
+                "scope": "exact-variant",
+                "rationale": "Synthetic test assessment, not a live product claim.",
+                "support": [
+                  {
+                    "sourceId": "source-1",
+                    "origin": {
+                      "kind": "provider",
+                      "reportedQuote": "Synthetic Anker Pocket 10 black is a portable power bank with USB-C fast charging.",
+                      "match": "literal"
+                    },
+                    "literal": {
+                      "start": 0,
+                      "end": 82,
+                      "text": "Synthetic Anker Pocket 10 black is a portable power bank with USB-C fast charging."
+                    },
+                    "context": {
+                      "start": 0,
+                      "end": 158,
+                      "text": "Synthetic Anker Pocket 10 black is a portable power bank with USB-C fast charging.\nSynthetic Anker Pocket 10 black costs SGD 35.00 for one unit, tax included."
+                    }
+                  }
+                ]
+              },
+              "requirements": [
+                {
+                  "requirementId": "request-034599cf-8e89-4b95-8280-b54d321f46fc",
+                  "assessment": {
+                    "status": "unknown",
+                    "scope": "unclear",
+                    "rationale": "No unambiguous source assessment covers this complete requirement.",
+                    "support": []
+                  }
+                }
+              ],
+              "attributes": [
+                {
+                  "name": "Charging",
+                  "assessment": {
+                    "status": "supported",
+                    "scope": "exact-variant",
+                    "rationale": "Synthetic test assessment, not a live product claim.",
+                    "support": [
+                      {
+                        "sourceId": "source-1",
+                        "origin": {
+                          "kind": "provider",
+                          "reportedQuote": "Synthetic Anker Pocket 10 black is a portable power bank with USB-C fast charging.",
+                          "match": "literal"
+                        },
+                        "literal": {
+                          "start": 0,
+                          "end": 82,
+                          "text": "Synthetic Anker Pocket 10 black is a portable power bank with USB-C fast charging."
+                        },
+                        "context": {
+                          "start": 0,
+                          "end": 158,
+                          "text": "Synthetic Anker Pocket 10 black is a portable power bank with USB-C fast charging.\nSynthetic Anker Pocket 10 black costs SGD 35.00 for one unit, tax included."
+                        }
+                      }
+                    ]
+                  }
+                }
+              ],
+              "price": {
+                "amount": 35,
+                "currency": "SGD",
+                "variant": "black",
+                "conditions": [
+                  "One unit",
+                  "Tax included"
+                ],
+                "conditionsResolved": true,
+                "assessment": {
+                  "status": "supported",
+                  "scope": "exact-variant",
+                  "rationale": "Synthetic test assessment, not a live product claim.",
+                  "support": [
+                    {
+                      "sourceId": "source-1",
+                      "origin": {
+                        "kind": "provider",
+                        "reportedQuote": "Synthetic Anker Pocket 10 black costs SGD 35.00 for one unit, tax included.",
+                        "match": "literal"
+                      },
+                      "literal": {
+                        "start": 83,
+                        "end": 158,
+                        "text": "Synthetic Anker Pocket 10 black costs SGD 35.00 for one unit, tax included."
+                      },
+                      "context": {
+                        "start": 0,
+                        "end": 158,
+                        "text": "Synthetic Anker Pocket 10 black is a portable power bank with USB-C fast charging.\nSynthetic Anker Pocket 10 black costs SGD 35.00 for one unit, tax included."
+                      }
+                    }
+                  ]
+                }
+              },
+              "stock": "unverified",
+              "eligible": false,
+              "blockers": [
+                "I want to buy a powerbank that costs around $30-40 (unknown)"
+              ]
+            }
+          ],
+          "choice": null,
+          "sources": [
+            {
+              "id": "source-1",
+              "url": "https://fixture.example.com/powerbank",
+              "title": "Synthetic fixture power bank",
+              "text": "Synthetic Anker Pocket 10 black is a portable power bank with USB-C fast charging.\nSynthetic Anker Pocket 10 black costs SGD 35.00 for one unit, tax included.",
+              "originalLength": 158,
+              "textTruncated": false
+            }
+          ],
+          "limitations": [
+            "Assessments are source-based AI interpretations. Quotations prove provenance, not semantic entailment.",
+            "Prices are unverified page observations. Stock, delivery and current merchant offers remain unknown.",
+            "Synthetic provider double for automated evaluation. No real products, current prices, availability or merchant verification."
+          ],
+          "requestId": "synthetic-offline-input",
+          "reportedCostUsd": 0.005
+        }
+      }
+    ]
+  }
+}
