@@ -248,7 +248,7 @@ try {
     journey.initialGeometry = { answer: await insideViewport(answer, 'Leading recommendation'), title: await insideViewport(title, 'First product name'), composer: await composerVisible() };
     await expect(page.getByText('Fixture data. Automated test substitute.', { exact: true })).toBeVisible();
     await expect(page.getByText('SGD 30–40', { exact: true })).toBeVisible();
-    const image = page.getByRole('img', { name: 'Source illustration for Fixture Powerbank Model A', exact: true });
+    const image = page.getByRole('img', { name: 'Source page preview for Fixture Powerbank Model A', exact: true });
     if (viewport.name === 'short-mobile') {
       await expect(image).toHaveCount(0);
       journey.checks.push('Failed source illustration is removed; product, evidence and source link remain.');
