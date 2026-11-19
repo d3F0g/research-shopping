@@ -104,11 +104,13 @@ function moneyPattern(currency: string) {
 export function isMonetaryOnlyEvidence(text: string, currencies: readonly string[]): boolean {
   if (!/[0-9]/u.test(text)) return false;
   const denominations = [...new Set([...Object.keys(currencyAliases), ...currencies])].map(denominationPattern);
-  const conditions = [buyerRestriction.source.slice(1, -1), conditionalRestriction.source.slice(1, -1), "(?:for|per)\\s+(?:one|[0-9]+)\\s+units?", ...[...conditionKinds.keys()].map(literal)];
+  const conditions = [buyerRestriction.source.slice(1, -1), conditionalRestriction.source.slice(1, -1), "(?:for|per)\\s+(?:(?:one|[0-9]+)\\s+)?(?:units?|items?|pieces?)", ...[...conditionKinds.keys()].map(literal)];
   const phrase = (parts: string[]) => new RegExp(`(?<!\\p{L})(?:${parts.join("|")})(?!\\p{L})`, "giu");
   const remainder = text
+    .replace(/[\t\n\v\f\r \u00a0]+/gu, " ")
     .replace(phrase(conditions), " ")
     .replace(phrase([...denominations, "\\p{Sc}"]), " ")
+    .replace(/(?<=[0-9]) *[xX] *(?=[0-9])/gu, " ")
     .replace(/[0-9]+(?:[.,][0-9]+)*/gu, " ")
     .replace(phrase(["is priced at", "has a price of", "from", "to", "between", "and"]), " ")
     .replace(new RegExp(monetaryContext.source, "giu"), " ");
