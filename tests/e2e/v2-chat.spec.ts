@@ -364,3 +364,110 @@ test("a failed New chat keeps the new draft and history without retrying", async
     release();
   }
 });
+
+for (const outcome of ["success", "failure"]) {
+  test(`a late Stop ${outcome} preserves the new chat and draft`, async ({ page }) => {
+    await page.goto("/");
+    const composer = page.getByRole("textbox", { name: "Message", exact: true });
+    const send = page.getByRole("button", { name: "Send message", exact: true });
+    const calls = async () => (await page.request.get("/api/test-stats").then((response) => response.json())).calls as number;
+    const baseline = await calls();
+    const original = "I want a slow fixture powerbank under SGD40";
+    await composer.fill(original);
+    await send.click();
+    await expect.poll(calls).toBe(baseline + 1);
+    let release!: () => void;
+    let entered!: () => void;
+    const held = new Promise<void>((resolve) => { entered = resolve; });
+    const gate = new Promise<void>((resolve) => { release = resolve; });
+    await page.route("**/api/cancel", async (route) => {
+      const response = await route.fetch();
+      entered();
+      await gate;
+      await route.fulfill(outcome === "success" ? { response } : { status: 503, json: { error: "Fixture cancellation unavailable" } });
+    });
+    await page.getByRole("button", { name: "Stop research", exact: true }).click();
+    await held;
+    try {
+      await page.getByRole("button", { name: "New chat", exact: true }).click();
+      await expect(page.getByRole("heading", { name: "What are you looking for?" })).toBeVisible();
+      await composer.fill("hello");
+      await send.click();
+      await expect(page.getByText("Hi. What are you looking to buy?", { exact: true })).toBeVisible();
+      await composer.fill("Fixture draft after Stop and New chat");
+      const pendingResponse = page.waitForResponse((response) => response.url().endsWith("/api/cancel"));
+      release();
+      await (await pendingResponse).finished();
+      const current = await page.request.get("/api/session").then((response) => response.json());
+      expect(current.state.intent.budget).toBeNull();
+      expect(current.state.messages.some((message: { text: string }) => message.text === "hello")).toBe(true);
+      await expect(page.getByText(original, { exact: true })).toHaveCount(0);
+      await expect(page.getByText("Hi. What are you looking to buy?", { exact: true })).toBeVisible();
+      await expect(page.getByText("The server could not confirm cancellation. No automatic retry was sent.", { exact: true })).toHaveCount(0);
+      await expect(composer).toHaveValue("Fixture draft after Stop and New chat");
+      await expect(send).toBeEnabled();
+      expect(await calls()).toBe(baseline + 1);
+      await composer.fill("thanks");
+      await send.click();
+      await expect(page.getByText("thanks", { exact: true })).toBeVisible();
+      expect(await calls()).toBe(baseline + 1);
+    } finally {
+      release();
+    }
+  });
+}
+
+test("a current Stop failure preserves accepted context and allows the next message", async ({ page }) => {
+  await page.goto("/");
+  const composer = page.getByRole("textbox", { name: "Message", exact: true });
+  const send = page.getByRole("button", { name: "Send message", exact: true });
+  const calls = async () => (await page.request.get("/api/test-stats").then((response) => response.json())).calls as number;
+  const baseline = await calls();
+  await composer.fill("I want a slow fixture powerbank under SGD40");
+  await send.click();
+  await expect.poll(calls).toBe(baseline + 1);
+  let attempts = 0;
+  await page.route("**/api/cancel", async (route) => {
+    attempts++;
+    await route.fetch();
+    await route.fulfill({ status: 503, json: { error: "Fixture cancellation unavailable" } });
+  });
+  await composer.fill("Fixture draft during Stop");
+  await page.getByRole("button", { name: "Stop research", exact: true }).click();
+  await expect(page.getByText("The server could not confirm cancellation. No automatic retry was sent.", { exact: true })).toBeVisible();
+  await expect(composer).toHaveValue("Fixture draft during Stop");
+  await expect(page.getByText("SGD 0–40", { exact: true })).toBeVisible();
+  expect(attempts).toBe(1);
+  await composer.fill("hello");
+  await send.click();
+  await expect(page.getByText("Hi. What are you looking to buy?", { exact: true })).toBeVisible();
+  await expect(page.getByText("The server could not confirm cancellation. No automatic retry was sent.", { exact: true })).toHaveCount(0);
+  expect(await calls()).toBe(baseline + 1);
+  const current = await page.request.get("/api/session").then((response) => response.json());
+  expect(current.state.intent.budget).toMatchObject({ maximum: 40, currency: "SGD" });
+});
+
+for (const endpoint of ["account", "session"]) {
+  test(`a current ${endpoint} reload failure retains the draft and supports explicit recovery`, async ({ page }) => {
+    await page.route(`**/api/${endpoint}`, (route) => route.fulfill({ status: 503, json: { error: "Fixture bootstrap unavailable" } }));
+    await page.goto("/");
+    await expect(page.getByText("The server is unavailable. Your draft is retained. Reload your account when it returns.", { exact: true })).toBeVisible();
+    const baseline = (await page.request.get("/api/test-stats").then((response) => response.json())).calls;
+    const composer = page.getByRole("textbox", { name: "Message", exact: true });
+    const send = page.getByRole("button", { name: "Send message", exact: true });
+    await composer.fill("Fixture draft during unavailable account");
+    await expect(send).toBeDisabled();
+    await page.unroute(`**/api/${endpoint}`);
+    await page.getByRole("button", { name: "Account", exact: true }).click();
+    await page.getByRole("button", { name: "Reload account", exact: true }).click();
+    await expect(page.getByText("Accounts are not configured.", { exact: false })).toBeVisible();
+    await page.getByRole("button", { name: "Close", exact: true }).click();
+    await expect(composer).toHaveValue("Fixture draft during unavailable account");
+    await expect(send).toBeEnabled();
+    await expect(page.getByRole("alert")).toHaveCount(0);
+    await composer.fill("hello");
+    await send.click();
+    await expect(page.getByText("Hi. What are you looking to buy?", { exact: true })).toBeVisible();
+    expect((await page.request.get("/api/test-stats").then((response) => response.json())).calls).toBe(baseline);
+  });
+}

@@ -38,6 +38,126 @@ try {
     { name: "desktop", width: 1440, height: 1000 },
     { name: "mobile", width: 390, height: 844 },
   ]) {
+    for (const endpoint of ["account", "session"]) {
+      for (const outcome of ["success", "failure"]) {
+        const context = await browser.newContext({ viewport: size });
+        const page = await context.newPage();
+        let release;
+        let entered;
+        let requests = 0;
+        const held = new Promise((resolve) => { entered = resolve; });
+        const gate = new Promise((resolve) => { release = resolve; });
+        await page.route(`**/api/${endpoint}`, async (route) => {
+          if (++requests !== 1) return route.continue();
+          const response = await route.fetch();
+          entered();
+          await gate;
+          await route.fulfill(outcome === "success" ? { response } : { status: 503, json: { error: "Fixture stale bootstrap failure" } });
+        });
+        try {
+          await page.goto(runtime.origin);
+          await held;
+          await expect(page.getByRole("button", { name: "New chat", exact: true })).toBeEnabled();
+          await send(page, "hello");
+          await expect(page.getByText("Hi. What are you looking to buy?", { exact: true })).toBeVisible();
+          await authenticate(page, `fixture-bootstrap-${randomUUID()}@example.test`, true);
+          await send(page, "thanks");
+          await expect(page.getByText("thanks", { exact: true })).toBeVisible();
+          const composer = page.getByRole("textbox", { name: "Message", exact: true });
+          await composer.fill("Fixture draft after account creation");
+          const pendingResponse = page.waitForResponse((response) => response.url().endsWith(`/api/${endpoint}`));
+          release();
+          await (await pendingResponse).finished();
+          const account = await page.request.get(`${runtime.origin}/api/account`).then((response) => response.json());
+          assert.equal(account.status, "signed-in");
+          assert.equal(account.workspace.state.messages.some((message) => message.text === "thanks"), true);
+          assert.equal(account.workspace.state.intent.budget, null);
+          await expect(page.getByText("thanks", { exact: true })).toBeVisible();
+          await expect(page.getByText("hello", { exact: true })).toHaveCount(0);
+          await expect(composer).toHaveValue("Fixture draft after account creation");
+          await expect(page.getByRole("button", { name: "Send message", exact: true })).toBeEnabled();
+          await expect(page.getByRole("alert")).toHaveCount(0);
+          await page.getByRole("button", { name: "Account", exact: true }).click();
+          await expect(page.getByText("Your saved conversation", { exact: true })).toBeVisible();
+          await page.screenshot({ path: `artifacts/fieldnote-v2/accounts/${size.name}-late-${endpoint}-${outcome}.png` });
+          await page.getByRole("button", { name: "Close", exact: true }).click();
+          await send(page, "hello");
+          await expect(page.getByText("Hi. What are you looking to buy?", { exact: true })).toBeVisible();
+          proof.push(`${size.name} stale initial ${endpoint} ${outcome} preserves the signed-in conversation, draft and readiness.`);
+        } finally {
+          release();
+          await context.close();
+        }
+      }
+    }
+    for (const transition of ["new-chat", "sign-in", "account-new-chat"]) {
+      for (const outcome of ["success", "failure"]) {
+        const context = await browser.newContext({ viewport: size });
+        const page = await context.newPage();
+        await page.goto(runtime.origin);
+        if (transition === "account-new-chat")
+          await authenticate(page, `fixture-stop-${randomUUID()}@example.test`, true);
+        const stats = () => page.request.get(`${runtime.origin}/api/test-stats`).then((response) => response.json());
+        const before = await stats();
+        const original = "I want a slow fixture powerbank under SGD40";
+        await send(page, original);
+        await expect.poll(async () => (await stats()).calls).toBe(before.calls + 1);
+        let release;
+        let entered;
+        let attempts = 0;
+        const held = new Promise((resolve) => { entered = resolve; });
+        const gate = new Promise((resolve) => { release = resolve; });
+        const endpoint = transition === "account-new-chat" ? "workspace" : "cancel";
+        await page.route(`**/api/${endpoint}`, async (route) => {
+          if (endpoint === "workspace" && route.request().postDataJSON()?.phase !== "cancel") return route.continue();
+          if (++attempts !== 1) return route.continue();
+          const response = await route.fetch();
+          entered();
+          await gate;
+          await route.fulfill(outcome === "success" ? { response } : { status: 503, json: { error: "Fixture stale cancellation failure" } });
+        });
+        await page.getByRole("button", { name: "Stop research", exact: true }).click();
+        await held;
+        try {
+          await expect.poll(async () => (await stats()).closed).toBe(before.closed + 1);
+          if (transition === "sign-in")
+            await authenticate(page, `fixture-stop-${randomUUID()}@example.test`, true);
+          else
+            await page.getByRole("button", { name: "New chat", exact: true }).click();
+          await expect(page.getByRole("heading", { name: "What are you looking for?" })).toBeVisible();
+          await send(page, "hello");
+          await expect(page.getByText("Hi. What are you looking to buy?", { exact: true })).toBeVisible();
+          const composer = page.getByRole("textbox", { name: "Message", exact: true });
+          await composer.fill("Fixture draft after stopped research");
+          const pendingResponse = page.waitForResponse((response) => response.url().endsWith(`/api/${endpoint}`));
+          release();
+          await (await pendingResponse).finished();
+          const account = await page.request.get(`${runtime.origin}/api/account`).then((response) => response.json());
+          const current = transition === "new-chat"
+            ? await page.request.get(`${runtime.origin}/api/session`).then((response) => response.json())
+            : account.workspace;
+          assert.equal(account.status, transition === "new-chat" ? "guest" : "signed-in");
+          assert.equal(current.state.intent.budget, null);
+          assert.equal(current.state.messages.some((message) => message.text === "hello"), true);
+          assert.equal(current.state.messages.some((message) => message.text === original), false);
+          await page.screenshot({ path: `artifacts/fieldnote-v2/accounts/${size.name}-late-stop-${transition}-${outcome}.png` });
+          await expect(page.getByText(original, { exact: true })).toHaveCount(0);
+          await expect(page.getByText("Hi. What are you looking to buy?", { exact: true })).toBeVisible();
+          await expect(page.getByRole("alert")).toHaveCount(0);
+          await expect(composer).toHaveValue("Fixture draft after stopped research");
+          await expect(page.getByRole("button", { name: "Send message", exact: true })).toBeEnabled();
+          assert.equal((await stats()).calls, before.calls + 1);
+          assert.equal(attempts, transition === "sign-in" ? 2 : 1);
+          await send(page, "thanks");
+          await expect(page.getByText("thanks", { exact: true })).toBeVisible();
+          assert.equal((await stats()).calls, before.calls + 1);
+          proof.push(`${size.name} late Stop ${outcome} after ${transition} preserves conversation, draft and readiness with one cancelled local SDK call and no retry.`);
+        } finally {
+          release();
+          await context.close();
+        }
+      }
+    }
     const context = await browser.newContext({ viewport: size });
     const page = await context.newPage();
     await page.goto(runtime.origin);
