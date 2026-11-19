@@ -223,10 +223,13 @@ describe("unique catalog heading binding", () => {
 describe("monetary grammar and open product descriptions", () => {
   it.each(["RTX4080", "USB3", "ABC35", "USDock35", "Fixture Orinth lunar spectrometer 7"])("does not classify %s as currency by its letter count", (name) => {
     const request = { ...initialConversation().intent, productDescription: `Fixture ${name}`, budget: null };
-    const material = JSON.parse(JSON.stringify(nativeMaterial(request)).replaceAll("Model A", name));
+    const raw = nativeMaterial(request);
+    const source = raw.citations[0]!.text;
+    const material = JSON.parse(JSON.stringify(raw).replaceAll(JSON.stringify(source).slice(1, -1), JSON.stringify(`Fixture data: ${name}. ${source}`).slice(1, -1)));
     material.answer.products[0].requestMatch = { ...material.answer.products[0].requestMatch, support: [{ url: material.citations[0].url, quote: name }] };
     const result = projectExaAnswer(material, request);
     if (result.status !== "ready") throw new Error("Expected fixture comparison");
+    expect(result.research.products[0]!.requestMatch.support).toHaveLength(1);
     expect(result.research.products[0]!.requestMatch.status).toBe("supported");
     expect(result.research.products[0]!.requestMatch.support[0]!.literal.text).toBe(name);
   });
