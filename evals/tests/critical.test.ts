@@ -115,4 +115,6 @@ test("literal money accepts sentence punctuation without accepting numeric conti
   assert.equal(literalMoney("Synthetic price is SGD 60.501.", "SGD", 60.5), false);
   assert.equal(literalMoney("Synthetic price is USD 60.", "SGD", 60), false);
   assert.equal(literalMoney("Synthetic price is $60.", "SGD", 60), false);
+  assert.equal(literalMoney("Synthetic price is SGD 1,060.50.", "SGD", 1060.5), true);
+  assert.equal(literalMoney("Synthetic price is SGD 6,0.", "SGD", 60), false);
 });

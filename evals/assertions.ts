@@ -16,10 +16,9 @@ export function safeSourceUrl(value: string): boolean {
   } catch { return false; }
 }
 export function literalMoney(quote: string, currency: string, amount: number): boolean {
-  const text = quote.replace(/,/g, "");
-  for (const match of text.matchAll(/\b(SGD|USD|S\$|US\$)\s*([0-9]+(?:\.[0-9]{1,2})?)(?!\d|\.\d)/gi)) {
+  for (const match of quote.matchAll(/\b(SGD|USD|S\$|US\$)\s*((?:[0-9]{1,3}(?:,[0-9]{3})+|[0-9]+)(?:\.[0-9]{1,2})?)(?![\d,]|\.\d)/gi)) {
     const observedCurrency = /^(?:SGD|S\$)$/i.test(match[1]!) ? "SGD" : "USD";
-    if (observedCurrency === currency && Number(match[2]) === amount) return true;
+    if (observedCurrency === currency && Number(match[2]!.replace(/,/g, "")) === amount) return true;
   }
   return false;
 }
