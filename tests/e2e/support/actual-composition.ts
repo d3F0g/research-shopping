@@ -10,6 +10,7 @@ import { createExaProductResearch } from "../../../src/server/exa-research";
 import { createResearchTurns } from "../../../src/server/research-turns";
 import { syntheticAnswer } from "../../fixtures/dynamic-research";
 import { fixtureIntentInterpreter } from "../../helpers/intent";
+import { freePort } from "../../helpers/manual-composition";
 import type { IntentInterpreter } from "../../../src/domain/intent-actions";
 
 export async function actualComposition(
@@ -68,8 +69,8 @@ export async function actualComposition(
   await once(provider, "listening");
   const providerUrl = `http://127.0.0.1:${(provider.address() as AddressInfo).port}`;
   const originalFetch = globalThis.fetch;
-  const apiPort = 6543;
-  const webPort = 6544;
+  const apiPort = await freePort();
+  const webPort = await freePort();
   const baseUrl = `http://127.0.0.1:${webPort}`;
   globalThis.fetch = (input, init) => {
     const target =
