@@ -36,7 +36,7 @@ function merchantMaterial(intent: ShoppingIntent, priceBlock: string) {
   product.variant = "AX1";
   product.price!.amount = 850;
   product.price!.variant = "AX1";
-  const text = `Fixture data: Fixture Meridian Sunglasses AX1 are sunglasses.\n\n${priceBlock}`;
+  const text = `Fixture data: Fixture Meridian Sunglasses AX1 are sunglasses, exact variant AX1.\n\n${priceBlock}`;
   const support = [{ url: material.citations[0]!.url, quote: text }];
   const assessment = {
     status: "supported",
@@ -159,6 +159,21 @@ describe("shopping retrieval and ordinary source price blocks", () => {
     expect(result.research.products[0]!.eligible).toBe(true);
     expect(result.research.choice?.productId).toBe("model-a");
   });
+  it.each([
+    ["AX1 costs SGD850, tax included.", "https://manufacturer.com/model-a"],
+    ["AX1\nPrice: SGD850\nTax included.", "https://manufacturer.com/"],
+  ])("retains a qualifying price beside descriptive variant prose and a safe citation %s %s", (block, url) => {
+    const intent = sunglassesIntent();
+    const material = merchantMaterial(intent, block);
+    material.citations[0]!.url = url.replace(/\/$/u, "");
+    material.answer.products[0]!.identity.support[0]!.url = url;
+    const result = projectExaAnswer(material, intent);
+    if (result.status !== "ready") throw new Error("No comparison");
+    expect(result.research.products[0]!.price).toMatchObject({
+      amount: 850, currency: "SGD", variant: "AX1", conditionsResolved: true,
+    });
+    expect(result.research.choice?.productId).toBe("model-a");
+  });
   it("keeps two uniquely scoped price cards usable without mixing their prices", () => {
     const intent = sunglassesIntent();
     const material = merchantMaterial(intent, "Fixture Meridian Sunglasses AX1\nPrice: SGD850\nTax included.\n\nFixture Meridian Sunglasses BX2\nPrice: SGD950\nTax included.");
@@ -249,8 +264,8 @@ describe("private projection diagnostics at the SDK boundary", () => {
     if (!address || typeof address === "string") throw new Error("No socket");
     return { baseUrl: `http://127.0.0.1:${address.port}`, calls: () => calls };
   }
-  it.each(["complete", "membership"])("exercises %s source card through real API and SDK sockets", async (mode) => {
-    const block = `Fixture Meridian Sunglasses AX1\nPrice: SGD850\nTax included.${mode === "membership" ? "\nMembership required." : ""}`;
+  it.each(["complete", "membership", "other-variant", "range"])("exercises %s source card through real API and SDK sockets", async (mode) => {
+    const block = `Fixture Meridian Sunglasses AX1\nPrice: SGD850${mode === "range" ? " to SGD1200" : ""}\nTax included.${mode === "membership" ? "\nMembership required." : mode === "other-variant" ? "\nFor AX2 only." : ""}`;
     const sdk = await endpoint((request: { systemPrompt: string }) => merchantMaterial(
       JSON.parse(request.systemPrompt.split("Current authoritative shopping intent: ")[1]!), block,
     ));
@@ -275,6 +290,7 @@ describe("private projection diagnostics at the SDK boundary", () => {
     expect(body.kind).toBe("research");
     expect(body.research.intent.budget).toEqual({ minimum: 800, maximum: 1000, currency: "SGD" });
     expect(body.research.products[0].eligible).toBe(mode === "complete");
+    expect(body.research.products[0].price).toEqual(mode === "other-variant" || mode === "range" ? null : expect.objectContaining({ amount: 850, currency: "SGD", variant: "AX1", conditionsResolved: mode === "complete" }));
     expect(body.research.choice?.productId ?? null).toBe(mode === "complete" ? "model-a" : null);
     expect(reservations).toBe(1);
     expect(sdk.calls()).toBe(1);
