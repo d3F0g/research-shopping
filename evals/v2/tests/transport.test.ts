@@ -38,6 +38,48 @@ test("real HTTP currency answer resumes original request and both bounds once", 
     assert.equal(grade(contract, changed).find((item) => item.id === "research-query-intent:1")!.status, "fail");
   } finally { guard.close(); }
 });
+test("retrieval query oracle binds every authoritative field and rejects missing or stale data", async () => {
+  const guard = offlineNetwork();
+  try {
+    const contract = scenario(["I want to buy a powerbank around $30-40.", "SGD"]);
+    const observation = await observe(contract, scenarioMaterial("supported", "FN-CU-001"), guard);
+    const intent = observation.rawTurns[1]!.after.intent;
+    assert.ok(intent.budget);
+    const expected = {
+      productDescription: intent.productDescription,
+      budget: intent.budget,
+      requirements: intent.requirements.map(({ text, strength }) => ({ text, strength })),
+      region: intent.region,
+    };
+    const provider = observation.events.find((event) => event.kind === "provider-request")!;
+    const payload = provider.body as { body: { query: string; systemPrompt: string } };
+    assert.deepEqual(JSON.parse(payload.body.query), expected);
+    const changes: unknown[] = [
+      intent.productDescription,
+      { ...expected, productDescription: "a different objective" },
+      { ...expected, budget: { maximum: 40, currency: "SGD" } },
+      { ...expected, budget: { minimum: 30, maximum: 40 } },
+      { ...expected, budget: { ...expected.budget, maximum: 100 } },
+      { ...expected, budget: { ...expected.budget, currency: "USD" } },
+      { ...expected, requirements: [] },
+      { ...expected, requirements: expected.requirements.map((row) => ({ ...row, strength: "flexible" })) },
+      { ...expected, region: "US" },
+      { productDescription: expected.productDescription, budget: expected.budget, requirements: expected.requirements },
+      { ...expected, staleField: "old request" },
+    ];
+    for (const query of changes) {
+      const mutated = structuredClone(observation);
+      const event = mutated.events.find((item) => item.kind === "provider-request")!;
+      (event.body as { body: { query: string } }).body.query = JSON.stringify(query);
+      assert.equal(grade(contract, mutated).find((item) => item.id === "research-query-intent:1")!.status, "fail");
+    }
+    const stalePrompt = structuredClone(observation);
+    const event = stalePrompt.events.find((item) => item.kind === "provider-request")!;
+    (event.body as { body: { systemPrompt: string } }).body.systemPrompt = "No current intent";
+    assert.equal(grade(contract, stalePrompt).find((item) => item.id === "research-query-intent:1")!.status, "fail");
+    assert.equal(grade(contract, observation).find((item) => item.id === "research-query-intent:1")!.status, "pass");
+  } finally { guard.close(); }
+});
 test("prepared identity retries cache actual research and ordinary messages spend nothing", async () => {
   const guard = offlineNetwork();
   const app = await ownedApplication(material("powerbank"), guard);
