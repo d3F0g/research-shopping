@@ -1,3 +1,4 @@
+import { uniqueLiteralSpan } from "../domain/evidence-binding-v3";
 import type { Assessment, ResearchProduct, ResearchSource } from "../domain/research";
 
 type Price = NonNullable<ResearchProduct["price"]>;
@@ -212,8 +213,10 @@ function namedCatalogObservation(price: Price, productName: string, identity: As
   const selected = rows.filter((row) => headingKey(row[1]!) === selectedKey);
   if (selected.length !== 1) return { kind: "absent" };
   const row = selected[0]!;
+  const heading = uniqueLiteralSpan(row[1]!, productName);
+  if (!heading) return { kind: "absent" };
   const rowEnd = row.index + row[0].length;
-  const nameStart = row.index + row[1]!.indexOf(productName), nameEnd = nameStart + productName.length;
+  const nameStart = row.index + heading.start, nameEnd = row.index + heading.end;
   const moneyStart = row.index + row[0].lastIndexOf(row[2]!), moneyEnd = moneyStart + row[2]!.replace(/[ \t]+$/u, "").length;
   const selectedMoney = new RegExp(`^${moneyPattern(price.currency)}[ \t]*$`, "u").exec(row[2]!);
   if (!selectedMoney || Number((selectedMoney[1] ?? selectedMoney[2])!.replaceAll(",", "")) !== price.amount) return { kind: "absent" };

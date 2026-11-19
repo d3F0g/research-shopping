@@ -68,3 +68,30 @@ export const historicalReportArchive = {
     }
   ]
 } as const;
+
+export const additionalArchivedReports = [
+  {
+    "archive": "artifacts/fieldnote-v2/evidence-gap-followup/owner-33fadc7-checks.tar.gz",
+    "archiveSha256": "bc299cce62b00be04b4fde18ba67f5f77c81b5bf4a29350982f13cb700bc28b6",
+    "member": "owner-33fadc7/critical/report.json",
+    "sha256": "220cd1f5773225096d67e2c259b74da2d09b063b3394e728a5e66e9ff703e05b"
+  },
+  {
+    "archive": "artifacts/fieldnote-v2/evidence-gap-followup/owner-33fadc7-checks.tar.gz",
+    "archiveSha256": "bc299cce62b00be04b4fde18ba67f5f77c81b5bf4a29350982f13cb700bc28b6",
+    "member": "owner-33fadc7/report.json",
+    "sha256": "4dfc90787ca36e9fdea4b7620f6649d8b5659ce36df7f9e13e5473f388d1e314"
+  },
+  {
+    "archive": "artifacts/fieldnote-v2/evidence-gap-followup/owner-651-checkpoint.tar.gz",
+    "archiveSha256": "c9241def3f87b0d46cc3446a1508e6978bbce641d68cfaa2e571abcc6a3d783f",
+    "member": "fieldnote-v2-evidence-gap-full60/report.json",
+    "sha256": "5c428a77fbce3e67cd961cfc60b1083ebf01fb6906b705a34fc02d79a94d5aea"
+  },
+  {
+    "archive": "artifacts/fieldnote-v2/evidence-gap-followup/owner-651-checkpoint.tar.gz",
+    "archiveSha256": "c9241def3f87b0d46cc3446a1508e6978bbce641d68cfaa2e571abcc6a3d783f",
+    "member": "fieldnote-v2-evidence-gap-clean60/report.json",
+    "sha256": "580b3401f486472f0413e77665f6943c2b6c85bebfaa005fbe9b40d1dd8cebaa"
+  }
+] as const;
