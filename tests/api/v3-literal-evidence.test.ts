@@ -275,6 +275,10 @@ describe("monetary token boundaries", () => {
     "SGD35 x 3", "SGD35x3", "3 X SGD35", "SGD35 X 3 x 2",
     "SGD35 per item", "SGD35 per piece", "SGD35 for one item", "SGD35 for 3 pieces",
     "SGD35 per\nitem", "SGD35 for\t3\tunits", "SGD35 including\ntax",
+    "SGD35 plus SGD5", "SGD35plusSGD5", "SGD35 minus SGD5", "SGD35minusSGD5",
+    "SGD35 times 3", "SGD35times3", "SGD35 divided by 3", "SGD35 multiplied by 3",
+    "SGD35 each", "SGD35 per piece", "SGD35 excl. GST", "SGD35 incl. tax",
+    "SGD35 excl VAT", "SGD35 incl GST", "SGD35 excluding\nGST",
   ];
   it.each(quotes)("withholds complete fit from monetary tokens %j without altering the reported quote", (quote) => {
     const request = { ...initialConversation().intent, productDescription: "Fixture USB-C powerbank", budget: null };
@@ -290,7 +294,7 @@ describe("monetary token boundaries", () => {
     expect(result.research.choice).toBeNull();
     expect(result.research.sources[0]!.text).toBe(material.citations[0]!.text);
   });
-  it.each(["X35", "RTX4080x3", "35 X-ray", "Orinth 35 x 3 spectrometer", "SGD35 for Orinth lunar spectrometer"])("retains open objective or model text %j beside numeric and monetary tokens", (quote) => {
+  it.each(["X35", "RTX4080x3", "35 X-ray", "Orinth 35 x 3 spectrometer", "SGD35 for Orinth lunar spectrometer", "X 35", "35X", "Fixture plus35", "Fixture each35"])("retains open objective or model text %j beside numeric and monetary tokens", (quote) => {
     const request = { ...initialConversation().intent, productDescription: `Fixture ${quote}`, budget: null };
     const material = nativeMaterial(request);
     material.citations[0]!.text = `Fixture data. ${quote}.\n\n${material.citations[0]!.text}`;
