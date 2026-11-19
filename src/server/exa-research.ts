@@ -198,7 +198,7 @@ function bindAssessment(
 }
 function bindRequestMatch(value: z.infer<typeof NativeAssessment>, sources: ResearchSource[], completeSources: boolean): Assessment {
   const assessment = bindAssessment(value, sources, completeSources);
-  if (assessment.status === "supported" && assessment.support.every((span) => /^(?:[A-Z]{3}|[A-Z]{0,2}[$€£])\s*\d[\d,.]*$/u.test(span.literal.text.trim())))
+  if (assessment.status === "supported" && assessment.support.every((span) => /^(?:(?:[A-Z]{3}|[A-Z]{0,2}\p{Sc})\s*)?[+-]?\d[\d,.]*(?:\s*(?:[A-Z]{3}|[A-Z]{0,2}\p{Sc}))?$/iu.test(span.literal.text.trim())))
     return { ...assessment, status: "unknown", rationale: "The provider's quotation establishes only a monetary observation. It does not establish fit to the complete shopping objective." };
   return assessment;
 }

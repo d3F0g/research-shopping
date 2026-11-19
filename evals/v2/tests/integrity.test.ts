@@ -1,7 +1,9 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
-import { randomUUID } from "node:crypto";
+import { randomUUID, createHash } from "node:crypto";
+import { historicalReportArchive } from "../../history-fieldnote-v2/archive";
+import { historicalReportDigest } from "../../history-fieldnote-v2/report";
 import { initialConversation, type TurnResponse } from "../../../src/domain/conversation";
 import { loadDataset } from "../../dataset";
 import { hash, materialPayloadHash } from "../../hash";
@@ -85,13 +87,13 @@ test("historical Fieldnote schema-5 reports retain read integrity without curren
   validateReport(old);
   const counts = structuredClone(old);
   counts.summary.passed++;
-  assert.throws(() => validateReport(counts), /summary/);
+  assert.throws(() => validateReport(counts), /archive digest/);
   const provenance = structuredClone(old);
   provenance.cases.find((row: RunReport["cases"][number]) => row.observation?.rawTurns.length).observation.rawTurns[0].after.intent.productDescription = "Fixture invented historical state";
-  assert.throws(() => validateReport(provenance), /state|transport/);
+  assert.throws(() => validateReport(provenance), /archive digest/);
   const implementation = structuredClone(old);
   implementation.implementationInputs.grading[0].text += "\n";
-  assert.throws(() => validateReport(implementation), /hash/);
+  assert.throws(() => validateReport(implementation), /archive digest/);
 });
 
 test("frozen V2 evidence projects its actual original quotation without reinterpretation", async () => {
@@ -136,6 +138,22 @@ test("archived Fieldnote reports reject forged grading and self-consistent hash 
     for (const row of value.cases) row.verdict = !row.observation ? "blocked" : row.checks.some((check) => check.status === "fail") ? "fail" : row.checks.some((check) => check.status === "blocked") ? "blocked" : row.checks.some((check) => check.status === "unsupported") ? "unsupported" : "pass";
     value.summary = summarize(value.cases);
     assert.notEqual(hash(value), hash(original), name);
-    assert.throws(() => validateReport(value), undefined, name);
+    assert.throws(() => validateReport(value), Error, name);
+  }
+});
+
+
+test("the closed historical inventory authenticates every pinned archived payload", async () => {
+  assert.equal(historicalReportArchive.sourceCommit, "33fadc7e3cfde2207528adb32b650287e758d343");
+  assert.equal(historicalReportArchive.reports.length, 13);
+  for (const entry of historicalReportArchive.reports) {
+    const bytes = await readFile(entry.path);
+    const blob = createHash("sha1").update(`blob ${bytes.length}\0`).update(bytes).digest("hex");
+    assert.equal(blob, entry.blob, entry.path);
+    const report = JSON.parse(bytes.toString("utf8"));
+    assert.equal(historicalReportDigest(report), entry.sha256, entry.path);
+    validateReport(report);
+    report.runId = "fixture-unknown-historical-report";
+    assert.throws(() => validateReport(report), /archive digest/, entry.path);
   }
 });

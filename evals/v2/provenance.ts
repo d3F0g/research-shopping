@@ -6,7 +6,12 @@ const list = (value: Json | undefined) => Array.isArray(value) ? value : [];
 const collapse = (text: string) => text.replace(/[\u0009-\u000d\u0020\u00a0]+/gu, " ");
 export function validCurrentProvenance(snapshot: ResearchSnapshot, product: ResearchProduct, material: Json): boolean {
   const upstream = record(material);
-  const native = list(record(upstream.answer).products).map(record).find((item) => item.id === product.id);
+  let answer = upstream.answer;
+  if (typeof answer === "string") {
+    if (answer.length > 128000) return false;
+    try { answer = JSON.parse(answer) as Json; } catch { return false; }
+  }
+  const native = list(record(answer).products).map(record).find((item) => item.id === product.id);
   if (!native || snapshot.evidenceVersion !== 3) return false;
   const citations = list(upstream.citations).map(record);
   const sources = new Map(snapshot.sources.map((source) => [source.id, source]));

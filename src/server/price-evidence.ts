@@ -206,7 +206,10 @@ function namedCatalogObservation(price: Price, productName: string, identity: As
   if (!new RegExp(`(?:^|[^\\p{L}\\p{N}])${literal(price.variant)}(?=$|[^\\p{L}\\p{N}])`, "u").test(productName)) return { kind: "absent" };
   const rows = [...source.text.matchAll(/^([^\r\n]+)\r?\n[\t \r\n]*([A-Z]{3}[\t ]*[0-9][^\r\n]*)(?=\r?$)/gmu)];
   const trimHeading = (text: string) => text.replace(/^[\t \u00a0]+|[\t \u00a0]+$/gu, "");
-  const selected = rows.filter((row) => trimHeading(row[1]!) === productName);
+  const headingKey = (text: string) => trimHeading(text).replace(/[\u0009-\u000d\u0020\u00a0]+/gu, " ").toLowerCase();
+  const selectedKey = headingKey(productName);
+  const selectedWords = new Set(selectedKey.match(/[\p{L}\p{N}]+/gu));
+  const selected = rows.filter((row) => headingKey(row[1]!) === selectedKey);
   if (selected.length !== 1) return { kind: "absent" };
   const row = selected[0]!;
   const rowEnd = row.index + row[0].length;
@@ -220,7 +223,11 @@ function namedCatalogObservation(price: Price, productName: string, identity: As
   const opaqueMoneyLine = (text: string) => /^[ \t]*$/u.test(text
     .replace(/\b[A-Z]{3}[ \t]*[0-9]+(?:,[0-9]{3})*(?:\.[0-9]{1,2})?/gu, "")
     .replace(/\([0-9]+(?:\.[0-9]+)?%[ \t]*off\)/gu, ""));
-  const independent = rows.filter((other) => other !== row && !other[1]!.includes(productName) && !monetaryContext.test(other[1]!) && !/\b(?:variant|configuration|range)\b/iu.test(other[1]!) && opaqueMoneyLine(other[2]!));
+  const independent = rows.filter((other) => {
+    const heading = headingKey(other[1]!);
+    const words = heading.match(/[\p{L}\p{N}]+/gu) ?? [];
+    return other !== row && !heading.includes(selectedKey) && words.length > 1 && !words.every((word) => selectedWords.has(word)) && !monetaryContext.test(heading) && !/\b(?:variant|configuration|range)\b/iu.test(heading) && opaqueMoneyLine(other[2]!);
+  });
   const removed = [row, ...independent].sort((a, b) => b.index - a.index);
   let remainder = source.text;
   for (const entry of removed) remainder = remainder.slice(0, entry.index) + "\n" + remainder.slice(entry.index + entry[0].length);
@@ -237,10 +244,9 @@ function namedCatalogObservation(price: Price, productName: string, identity: As
 }
 
 export function observePrice(price: Price, productName: string, identity: Assessment, source: ResearchSource, otherProducts: Pick<ResearchProduct, "name" | "variant">[], contextText = source.text): PriceObservation {
-  const catalog = namedCatalogObservation(price, productName, identity, source);
   const context = assessPriceContext(price, productName, contextText, otherProducts);
   if (context.kind === "qualified" || context.kind === "unresolved") return { kind: "observed", applicability: context };
-  return catalog;
+  return namedCatalogObservation(price, productName, identity, source);
 }
 
 export function unresolvedConditions(sourceConditions: string[], reported: string[]): string[] {
