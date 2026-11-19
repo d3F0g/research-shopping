@@ -119,7 +119,7 @@ export function reduceTurn(previous: ConversationState, input: PrepareInput): Tu
   if (["thanks", "thank you", "ok", "okay"].includes(command)) return reply("You're welcome. Tell me what you would like to change.");
   const operation = localOperations.find((operation) => operation.matches.test(command))?.kind;
   const changeText = command.replace(/don't change my existing budget/g, "");
-  const unsupportedCompound = /\b(?:and|but|also|then)\b|[.;!?]\s+/.test(changeText) && /\b(?:make it|change|remove|drop|budget|currency|must|need|only|without|no longer)\b/.test(changeText);
+  const unsupportedCompound = /\b(?:and|but|also|then)\b|[.;!?]\s+/.test(changeText) && (/\b(?:make it|change|remove|drop|budget|currency|must|need|want|prefer|only|without|no longer|cheaper)\b/.test(changeText) || monetaryDraft(changeText) !== null);
   if (operation && !["theme", "error", "remember"].includes(operation) && unsupportedCompound) return pendingEdit("I kept the complete combined instruction pending because it includes a request change I cannot safely combine with this operation. No part was applied.");
   if (operation === "short" || operation === "detail") {
     state.intent.responseLength = operation === "detail" ? "expanded" : "concise";
@@ -133,7 +133,12 @@ export function reduceTurn(previous: ConversationState, input: PrepareInput): Tu
     return reply(research?.sources.length ? research.sources.map((source) => `${source.title} (${source.url})`).join("\n") : "No validated supporting source is retained. I cannot open an invented link.");
   }
   if (operation === "error") return reply([...state.messages].reverse().find((message) => message.role === "assistant")?.text ?? "No successful research response is retained. Your accepted requirements remain unchanged. An explicit retry is subject to the existing research limits.");
-  if (operation === "cancel") { state.pending = null; return reply("No new research was requested by this message. Accepted requirements are retained. Use Stop while research is active to cancel its transport."); }
+  if (operation === "cancel") {
+    state.pending = null;
+    const message = "Any active application research is cancelled. Your accepted requirements remain available.";
+    state.messages.push({ id: `${userId}-reply`, role: "assistant", text: message });
+    return { state, kind: "cancel", message };
+  }
   if (operation === "status") return reply("This status question does not start research. Transport cancellation status is shown by the active research operation; this message cannot confirm a provider stopped.");
   if (operation === "dissatisfied") return reply("What should change, such as price, size, or a specific feature? Your existing requirements remain active.");
   if (operation === "selection") return reply("Your existing budget and requirements remain active. " + heldReply(state, "detail", text));
@@ -208,6 +213,24 @@ export function reduceTurn(previous: ConversationState, input: PrepareInput): Tu
     for (const requirement of state.intent.requirements.filter((r) => r.kind === "request")) requirement.text = requirement.text.replace(/\bonly\s+[A-Z][A-Za-z0-9-]*\b/g, "").trim();
     state.intent.requirements = state.intent.requirements.filter((r) => r.kind !== "brand");
     state.intent.productDescription = state.intent.requirements.map((r) => r.text).join("\n");
+    return { state, kind: "research" };
+  }
+  if (!newObjective && /^(?:actually|i meant)\b/i.test(text)) {
+    const correction = /^(?:actually|i meant)[, ]+([a-z][a-z -]{0,39}?)\s+(\d{1,9}(?:\.\d{1,6})?)\s*([a-z%]{0,8})[.!?]?$/i.exec(text);
+    if (!correction) return pendingEdit("I kept this complete correction pending. Open Edit preferences to change the intended criterion, or discard this pending change. Your accepted requirements are unchanged.");
+    const name = correction[1]!.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    const pattern = new RegExp(`\\b${name}\\s+(\\d+(?:\\.\\d+)?)(?![\\d.])`, "gi");
+    const targets = state.intent.requirements.flatMap((requirement) => [...requirement.text.matchAll(pattern)].map((match) => ({ requirement, match })));
+    if (targets.length !== 1) return pendingEdit(`Which single ${correction[1]} criterion should change? Open Edit preferences to identify it, or discard this pending change. No part was applied.`);
+    const { requirement, match } = targets[0]!;
+    const valueStart = match.index! + match[0].length - match[1]!.length;
+    const suffix = requirement.text.slice(valueStart + match[1]!.length);
+    if (correction[3] && !new RegExp(`^\\s*${correction[3]}\\b`, "i").test(suffix)) return pendingEdit("The requested unit does not match the retained scalar. Open Edit preferences to specify the complete criterion. No part was applied.");
+    requirement.text = requirement.text.slice(0, valueStart) + correction[2]! + suffix;
+    requirement.originMessageId = userId;
+    const originalMatches = [...state.intent.originalText.matchAll(pattern)];
+    if (originalMatches.length === 1 && originalMatches[0]![1] === match[1]) state.intent.originalText = state.intent.originalText.replace(pattern, (whole) => whole.slice(0, -match[1]!.length) + correction[2]!);
+    state.intent.productDescription = state.intent.requirements.map((row) => row.text).join("\n");
     return { state, kind: "research" };
   }
   if (!state.intent.originalText || newObjective) {

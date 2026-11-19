@@ -1,9 +1,11 @@
 import { randomUUID } from "node:crypto";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { initialConversation, MoneySchema, type ConversationState } from "../../src/domain/conversation";
 import { reduceTurn } from "../../src/domain/turn-reducer";
 import { projectExaAnswer } from "../../src/server/exa-research";
 import { nativeMaterial } from "../helpers/v2-material";
+import { createConversationService } from "../../src/server/conversations";
+import type { ResearchOperation } from "../../src/domain/research";
 const turn = (state: ConversationState, message: string) => reduceTurn(state, { phase: "prepare", operationId: randomUUID(), message });
 describe("V2 contextual conversation", () => {
   it("preserves original request and both budget bounds through a typed currency answer", () => {
@@ -67,7 +69,7 @@ describe("free contextual operations", () => {
   ])("retains requirements and avoids research for %s", (message) => {
     const state = turn(initialConversation(), "An archival book cradle under USD 80. No plastic supports.").state;
     const result = turn(state, message);
-    expect(result.kind).toBe("message");
+    expect(result.kind).toBe(message === "Cancel that." ? "cancel" : "message");
     expect(result.state.intent).toEqual(state.intent);
     expect(result.state.messages.at(-1)?.role).toBe("assistant");
   });
@@ -182,5 +184,71 @@ describe("complete contextual changes", () => {
     expect(next.state.intent.requirements.some((r) => r.text.includes("clamp"))).toBe(false);
     expect(next.state.intent.budget).toEqual({ maximum: 180, currency: "SGD" });
     expect(next.state.messages[0]?.text).toContain("clamp");
+  });
+});
+
+
+describe("bounded named scalar corrections", () => {
+  it("updates one literal attribute value and keeps its unit, other requirements and history", () => {
+    const state = turn(initialConversation(), "Find waterproof hiking boots in EU size 42, up to GBP140. No plastic trim.").state;
+    const next = turn(state, "Actually size 43.");
+    expect(next.kind).toBe("research");
+    expect(next.state.intent.productDescription).toContain("EU size 43");
+    expect(next.state.intent.productDescription).not.toContain("size 42");
+    expect(next.state.intent.originalText).not.toContain("size 42");
+    expect(next.state.intent.productDescription).toContain("No plastic trim");
+    expect(next.state.intent.budget).toEqual(state.intent.budget);
+    expect(next.state.intent.requirements.find((r) => r.text.includes("size 43"))?.originMessageId).toBe(next.state.messages.at(-1)?.id);
+    expect(next.state.messages[0]?.text).toContain("EU size 42");
+    const flexible = turn(next.state, "Brown would be nice.");
+    expect(flexible.state.intent.requirements.at(-1)).toMatchObject({ strength: "flexible" });
+  });
+  it("works for an unfamiliar literal numeric attribute without a feature registry", () => {
+    const state = turn(initialConversation(), "Find an archival book cradle with opening angle 120 degrees under USD100.").state;
+    const next = turn(state, "Actually opening angle 140 degrees.");
+    expect(next.kind).toBe("research");
+    expect(next.state.intent.productDescription).toContain("opening angle 140 degrees");
+    expect(next.state.intent.budget).toEqual(state.intent.budget);
+  });
+  it.each([
+    ["Find a stand with height 42 cm. It must have height 55 cm when extended.", "Actually height 43 cm."],
+    ["Find a stand with height 42 cm.", "Actually width 43 cm."],
+    ["Find a stand with height 42 cm.", "Actually height 43 kg."],
+    ["Find a stand with height 42 cm.", "Actually height 43 cm and remove the budget."],
+  ])("retains a complete ambiguous or unsupported scalar correction", (request, message) => {
+    const state = turn(initialConversation(), request).state;
+    const next = turn(state, message);
+    expect(next.kind).toBe("clarification");
+    expect(next.state.intent).toEqual(state.intent);
+    expect(next.state.pending).toMatchObject({ kind: "edit", message });
+  });
+});
+
+
+describe("text cancellation effect", () => {
+  it("aborts active research, rejects its late result and retains the accepted request", async () => {
+    let signal: AbortSignal | undefined;
+    let finish: (() => void) | undefined;
+    const quota = { reserve: vi.fn(async () => "admitted" as const), settle: vi.fn(async () => {}) };
+    const research: ResearchOperation = async ({ intent }, abort) => {
+      signal = abort;
+      await new Promise<void>((resolve) => { finish = resolve; });
+      return projectExaAnswer(nativeMaterial(intent), intent);
+    };
+    const service = createConversationService({ research, quota });
+    const id = service.create();
+    const prepared = service.prepare(id, { phase: "prepare", operationId: randomUUID(), message: "A USB-C powerbank under SGD40." });
+    if (prepared.kind !== "prepared") throw new Error("No prepared request");
+    const response = service.research(id, prepared.preparedId, new AbortController().signal);
+    await vi.waitFor(() => expect(signal).toBeDefined());
+    const cancelled = service.prepare(id, { phase: "prepare", operationId: randomUUID(), message: "Cancel that." });
+    expect(cancelled.kind).toBe("message");
+    expect(signal!.aborted).toBe(true);
+    expect(cancelled.state.intent).toEqual(prepared.state.intent);
+    finish!();
+    expect((await response).kind).toBe("research-unavailable");
+    expect(service.state(id).messages.some((message) => message.research)).toBe(false);
+    expect(quota.reserve).toHaveBeenCalledTimes(1);
+    expect(quota.settle).toHaveBeenCalledWith(expect.any(String), 0.005, false);
   });
 });
