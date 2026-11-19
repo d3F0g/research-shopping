@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { initialConversation, type TurnResponse } from "./conversation";
+import { initialConversation, PrepareInputSchema, type TurnResponse } from "./conversation";
 import { isSafeSourceUrl } from "./safe-url";
 
 export const WORKSPACE_LIMIT = 256 * 1024;
@@ -19,7 +19,7 @@ const IntentV2 = z.strictObject({
   region: z.string().regex(/^[A-Z]{2}$/).nullable(),
   responseLength: z.enum(["concise", "expanded"]),
 });
-const SupportV2 = z.strictObject({ sourceId: z.string().max(80), quote: z.string().min(1).max(4000), start: z.number().int().nonnegative(), end: z.number().int().positive() });
+const SupportV2 = z.strictObject({ originalQuote: z.string().min(1).max(4000), originalStart: z.number().int().nonnegative(), originalEnd: z.number().int().positive(), sourceId: z.string().max(80), quote: z.string().min(1).max(4000), start: z.number().int().nonnegative(), end: z.number().int().positive() });
 const AssessmentV2 = z.strictObject({ status: z.enum(["supported", "unknown", "contradicted", "conflict"]), scope: z.enum(["exact-variant", "product-family", "unclear"]), rationale: z.string().min(1).max(800), support: z.array(SupportV2).max(3) });
 const SafeUrlV2 = z.string().refine(isSafeSourceUrl);
 export const StoredResearchV2Schema = z.strictObject({
@@ -55,7 +55,7 @@ export const WorkspaceSnapshotSchema = z.strictObject({ revision: Revision, epoc
 export type WorkspaceSnapshot = z.infer<typeof WorkspaceSnapshotSchema>;
 export type WorkspaceResult = { workspace: WorkspaceSnapshot; response: TurnResponse | null; operation: { operationId: string; status: WorkspaceData["receipts"][number]["status"] } | null };
 export const WorkspaceCommandSchema = z.discriminatedUnion("phase", [
-  z.strictObject({ phase: z.literal("prepare"), revision: Revision, operationId: Id, message: z.string().trim().min(1).max(2000), questionId: z.string().max(80).optional() }),
+  PrepareInputSchema.extend({ revision: Revision }),
   z.strictObject({ phase: z.literal("research"), revision: Revision, preparedId: Id }),
   z.strictObject({ phase: z.literal("cancel"), revision: Revision, operationId: Id, target: Id }),
   z.strictObject({ phase: z.literal("new-chat"), revision: Revision, operationId: Id }),

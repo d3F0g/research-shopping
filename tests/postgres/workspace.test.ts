@@ -23,7 +23,9 @@ let observedSignal: AbortSignal | undefined;
 const research: (intent: Parameters<ResearchOperation>[0]["intent"], operationId: string, signal: AbortSignal) => ReturnType<ResearchOperation> = async (intent, _operationId, signal) => {
   calls++; observedSignal = signal;
   if (paused) await new Promise<void>((resolve) => { hold = resolve; started?.(); });
-  return { status: "ready", research: { version: 2, evidenceVersion: 2, dataKind: "test-fixture", intent: structuredClone(intent), retrievedAt: new Date().toISOString(), summary: "Fixture data: local research response.", products: [], choice: null, sources: oversized ? Array.from({ length: 10 }, (_, i) => ({ id: `fixture-${i}`, url: `https://example.com/fixture-${i}`, title: "Fixture data", text: "測".repeat(24000), originalLength: 24000, textTruncated: false })) : [{ id: "fixture", url: "https://example.com/fixture", title: "Fixture data", text: "Fixture data: no merchant inventory or price is established.", originalLength: 58, textTruncated: false }], limitations: ["Fixture data only. No paid requests or verified offers."], requestId: "fixture-request", reportedCostUsd: 0 } };
+  const text = "Fixture data: no merchant inventory or price is established.";
+  const assessment = { status: "unknown" as const, scope: "unclear" as const, rationale: "Fixture data: no product facts are established.", support: [{ sourceId: "fixture", quote: text, start: 0, end: text.length, originalQuote: "Fixture data", originalStart: 0, originalEnd: 12 }] };
+  return { status: "ready", research: { version: 2, evidenceVersion: 2, dataKind: "test-fixture", intent: structuredClone(intent), retrievedAt: new Date().toISOString(), summary: "Fixture data: local research response.", products: [{ id: "fixture-item", name: "Fixture data item", variant: null, identity: assessment, requestMatch: assessment, requirements: [], attributes: [{ name: "Fixture data", assessment }], price: null, stock: "unverified", eligible: false, blockers: ["Fixture data: unresolved identity and request fit."] }], choice: null, sources: oversized ? Array.from({ length: 10 }, (_, i) => ({ id: `fixture-${i}`, url: `https://example.com/fixture-${i}`, title: "Fixture data", text: "測".repeat(24000), originalLength: 24000, textTruncated: false })) : [{ id: "fixture", url: "https://example.com/fixture", title: "Fixture data", text, originalLength: text.length, textTruncated: false }], limitations: ["Fixture data only. No paid requests or verified offers."], requestId: "fixture-request", reportedCostUsd: 0 } };
 };
 const dependencies = { reduce: reduceTurn, research };
 let store = createWorkspaceStore(pool, dependencies);
@@ -104,6 +106,7 @@ describe("V2 PostgreSQL account persistence", () => {
     const response = await command(identities[0], { phase: "research", revision: prepared.workspace.revision, preparedId: prepared.workspace.pendingPreparedId! });
     expect(response.response?.kind).toBe("research");
     const snapshot = structuredClone(response.workspace.state.messages.find((message) => message.research)!.research);
+    expect(snapshot!.products[0].identity.support[0]).toMatchObject({ originalQuote: "Fixture data", originalStart: 0, originalEnd: 12 });
     await prepare(identities[0], "Make it 50");
     const reloaded = await createWorkspaceStore(pool, dependencies).load(identities[0]);
     expect(reloaded.state.intent.budget).toEqual({ minimum: 30, maximum: 50, currency: "SGD" });

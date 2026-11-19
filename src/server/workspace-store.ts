@@ -89,7 +89,7 @@ export function createWorkspaceStore(pool: Pool, dependencies: WorkspaceDependen
     } finally { client.release(); }
   }
   async function prepare(identity: Identity, input: Extract<WorkspaceCommand, { phase: "prepare" }>): Promise<WorkspaceResult> {
-    const inputDigest = digest({ phase: input.phase, message: input.message, questionId: input.questionId });
+    const inputDigest = digest({ ...input, revision: undefined, operationId: undefined });
     const outcome = await transaction<WorkspaceResult | AccountError>(identity, async (client, row, now) => {
       const receipt = row.data.receipts.find((item) => item.operationId === input.operationId);
       if (receipt) {
@@ -99,7 +99,7 @@ export function createWorkspaceStore(pool: Pool, dependencies: WorkspaceDependen
       }
       if (row.revision !== input.revision) return conflict();
       const previous = structuredClone(row.data.state);
-      const decision = dependencies.reduce(previous, { phase: "prepare", operationId: input.operationId, message: input.message, ...(input.questionId ? { questionId: input.questionId } : {}) });
+      const decision = dependencies.reduce(previous, input);
       const changed = intentDigest(row.data.state) !== intentDigest(decision.state);
       if (decision.kind === "research" || changed || decision.state.pending) { interrupt(row); row.epoch++; }
       if (JSON.stringify(row.data.state.intent) !== JSON.stringify(decision.state.intent) || JSON.stringify(row.data.state.pending) !== JSON.stringify(decision.state.pending)) row.data.acceptedAt = new Date(now).toISOString();
