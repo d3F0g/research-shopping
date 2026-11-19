@@ -232,58 +232,54 @@ function bindAssessment(
 function bindPrice(
   value: z.infer<typeof NativeProduct>["price"],
   productName: string,
-  otherProductNames: string[],
+  otherProducts: Pick<ResearchProduct, "name" | "variant">[],
   sources: ResearchSource[],
   completeSources: boolean,
 ): ResearchProduct["price"] {
   if (!value) return null;
   const assessment = bindAssessment(value.assessment, sources, completeSources);
   if (!assessment.support.length) return null;
-  const relevant = sources.filter(
-    (source) =>
-      assessment.support.some((span) => span.sourceId === source.id) ||
-      source.text.toLowerCase().includes(productName.toLowerCase()) ||
-      !otherProductNames.some((name) =>
-        source.text.toLowerCase().includes(name.toLowerCase()),
-      ),
-  );
   if (
-    relevant.some(
+    sources.some(
       (source) =>
         source.textTruncated || containsSourceInstructions(source.text),
     )
   )
     return null;
-  const contexts = relevant.map((source) => ({
-    source,
-    proof: assessPriceContext(
-      { ...value, assessment },
-      productName,
-      source.text,
-    ),
-  }));
-  const observation = contexts.find(
-    ({ proof }) => proof.kind === "qualified" || proof.kind === "unresolved",
-  );
-  if (!observation) return null;
-  const resolved =
-    completeSources &&
-    contexts.every(
-      ({ source, proof }) =>
-        proof.kind === "absent" ||
-        (source.text.length <= 4000 && proof.kind === "qualified"),
-    );
   const support = assessment.support.map((span) => {
     const source = sources.find((source) => source.id === span.sourceId)!;
     return source.text.length <= 4000
       ? { ...span, start: 0, end: source.text.length, quote: source.text }
       : span;
   });
+  const price = { ...value, assessment };
+  const published = support.map((span) =>
+    assessPriceContext(price, productName, span.quote, otherProducts),
+  );
+  const observation = published.find(
+    (proof) => proof.kind === "qualified" || proof.kind === "unresolved",
+  );
+  if (!observation) return null;
+  const resolved =
+    completeSources &&
+    published.some((proof) => proof.kind === "qualified") &&
+    sources.every((source) => {
+      const proof = assessPriceContext(
+        price,
+        productName,
+        source.text,
+        otherProducts,
+      );
+      return (
+        proof.kind === "absent" ||
+        (source.text.length <= 4000 && proof.kind === "qualified")
+      );
+    });
   return {
     ...value,
     conditions:
-      resolved && observation.proof.kind === "qualified"
-        ? observation.proof.conditions
+      resolved && observation.kind === "qualified"
+        ? observation.conditions
         : [],
     conditionsResolved: resolved,
     assessment: {
@@ -358,9 +354,7 @@ export function projectExaAnswer(raw: unknown, intent: ShoppingIntent) {
         price: bindPrice(
           p.price,
           p.name,
-          native.data.products
-            .filter((other) => other.id !== p.id)
-            .map((other) => other.name),
+          native.data.products.filter((other) => other.id !== p.id),
           sources,
           complete,
         ),

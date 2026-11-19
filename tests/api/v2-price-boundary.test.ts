@@ -176,6 +176,87 @@ describe("complete atomic price evidence", () => {
     for (const span of research.products[0]!.price!.assessment.support)
       expect(actualNativeQuotes).toContain(span.originalQuote);
   });
+  it.each([
+    ["Fixture Other Model B is a separate product.", true],
+    [
+      "Model A costs SGD 65 for one unit, tax included. Fixture Other Model B is a separate product.",
+      false,
+    ],
+    [
+      "Model A requires SGD 15 shipping in addition to the displayed price. Fixture Other Model B is a separate product.",
+      false,
+    ],
+  ])("retains mixed-source monetary context: %s", (text, eligible) => {
+    const material = nativeMaterial(intent);
+    const other = structuredClone(material.answer.products[0]!);
+    other.id = "model-b";
+    other.name = "Fixture Other Model B";
+    other.variant = "Model B";
+    other.identity.status = "unknown";
+    other.requestMatch.status = "unknown";
+    material.answer.products.push(other);
+    material.citations.push({
+      ...material.citations[0]!,
+      url: "https://manufacturer.com/other",
+      text,
+    });
+    const research = project(material);
+    expect(research.choice?.productId === "model-a").toBe(eligible);
+    expect(
+      research.products.find((product) => product.id === "model-a")!.eligible,
+    ).toBe(eligible);
+  });
+  it("does not promote an unquoted price source over identity-only native support", () => {
+    const material = materialWith(identity);
+    material.citations.push({
+      ...material.citations[0]!,
+      url: "https://manufacturer.com/actual-price",
+      text: "Model A costs SGD 35 for one unit, tax included.",
+    });
+    const research = project(material);
+    expect(research.choice).toBeNull();
+    expect(research.products[0]!.price?.conditionsResolved ?? false).toBe(
+      false,
+    );
+    for (const span of research.products[0]!.price?.assessment.support ?? [])
+      expect(
+        material.answer.products[0]!.price.assessment.support.map(
+          (native) => native.quote,
+        ),
+      ).toContain(span.originalQuote);
+  });
+  it("keeps three distinct products with the same variant usable on separate unambiguous pages", () => {
+    const material = nativeMaterial(intent);
+    material.answer.products = [];
+    material.citations = [];
+    for (let index = 0; index < 3; index++) {
+      const name = `Fixture Pebble ${index + 1}`;
+      const price = 35 + index;
+      const text = `Fixture data. ${name} standard is a USB-C powerbank. ${name} standard costs SGD ${price} for one unit, tax included.`;
+      const product = materialWith(text);
+      const item = product.answer.products[0]!;
+      item.id = `model-${index + 1}`;
+      item.name = name;
+      item.variant = "standard";
+      item.price.variant = "standard";
+      item.price.amount = price;
+      const url = `https://manufacturer.com/pebble-${index + 1}`;
+      const oldUrl = product.citations[0]!.url;
+      const changed = JSON.parse(
+        JSON.stringify(product).replaceAll(oldUrl, url),
+      ) as typeof product;
+      material.answer.products.push(changed.answer.products[0]!);
+      material.citations.push(changed.citations[0]!);
+    }
+    material.answer.choice.productId = "model-1";
+    const research = project(material);
+    expect(research.products.map((product) => product.eligible)).toEqual([
+      true,
+      true,
+      true,
+    ]);
+    expect(research.choice?.productId).toBe("model-1");
+  });
   it("preserves native adverse status and complete quotes", () => {
     const material = materialWith(
       `${identity} Model A costs SGD 35 without tax included.`,
