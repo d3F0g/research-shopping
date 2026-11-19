@@ -5,6 +5,7 @@ const webPort = process.env.PLAYWRIGHT_WEB_PORT ?? "5273";
 const baseURL = `http://127.0.0.1:${webPort}`;
 
 export default defineConfig({
+  captureGitInfo: { commit: true, diff: false },
   testDir: "./tests/e2e",
   fullyParallel: true,
   workers: 1,
