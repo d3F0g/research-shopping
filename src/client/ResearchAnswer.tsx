@@ -137,14 +137,13 @@ function Product({
               {!product.price.conditionsResolved && " · Conditions unresolved"}
             </>
           ) : observation ? (
-            <>Source row shows <strong>{observation.currency} {observation.amount.toFixed(2)}</strong>. Observed and unverified. Applicability to this variant is unresolved.</>
+            <>Source row shows <strong>{observation.currency} {observation.amount.toFixed(2)}</strong>. Observed and unverified.</>
           ) : "No qualifying observed price"}
         </p>
         {observation && <>
           <p>{observation.attribution.rationale}</p>
-          {observation.reportedConditions.length > 0 && <p>Provider-reported, unverified: {observation.reportedConditions.join(" ")}</p>}
-          {!observation.reportedConditionsResolved && <p>Provider purchase conditions remain unresolved.</p>}
           {["contradicted", "conflict"].includes(observation.reportedAssessment.status) && <p>Provider price assessment {observation.reportedAssessment.status}, unverified: {observation.reportedAssessment.rationale}</p>}
+          {(observation.reportedConditions.length > 0 || !observation.reportedConditionsResolved) && <p>Provider-reported, unverified: {observation.reportedConditions.join(" ")}{!observation.reportedConditionsResolved && " Purchase conditions remain unresolved."}</p>}
         </>}
         <p className="text-muted-foreground">Stock and delivery unknown.</p>
         <p>{product.requestMatch.rationale}</p>

@@ -228,14 +228,14 @@ export function catalogPriceObservation(price: Price, productName: string, ident
     const heading = money && uniqueLiteralSpan(money.heading, productName);
     if (!money || !heading || money.amount !== price.amount || money.currency !== price.currency) return [];
     const nameStart = row.index + heading.start, nameEnd = row.index + heading.end;
-    const moneyStart = row.index + row[0].lastIndexOf(row[2]!), moneyEnd = row.index + row[0].length;
+    const moneyStart = row.index + money.moneyStart, moneyEnd = row.index + money.moneyEnd, rowEnd = row.index + row[0].length;
     const identityBound = identity.support.some((span) => span.sourceId === source.id && span.literal.start <= nameStart && span.literal.end >= nameEnd);
-    const priceBound = price.assessment.support.some((span) => span.sourceId === source.id && span.literal.start >= nameStart && span.literal.start <= moneyStart && span.literal.end >= moneyEnd - row[2]!.match(/[ \t]*$/u)![0].length && span.literal.end <= moneyEnd);
-    return identityBound && priceBound ? [{ sourceId: source.id, origin: { kind: "source-context" as const }, literal: { start: row.index, end: moneyEnd, text: row[0] }, context: { start: 0, end: source.text.length, text: source.text } }] : [];
+    const priceBound = price.assessment.support.some((span) => span.sourceId === source.id && span.literal.start >= nameStart && span.literal.start <= moneyStart && span.literal.end >= moneyEnd && span.literal.end <= rowEnd);
+    return identityBound && priceBound ? [{ sourceId: source.id, origin: { kind: "source-context" as const }, literal: { start: row.index, end: rowEnd, text: row[0] }, context: { start: 0, end: source.text.length, text: source.text } }] : [];
   });
   if (candidates.length !== 1) return null;
   const qualifications = source.text.split(/\r?\n/u).filter((line) => monetaryContext.test(line) || /\b(?:variant|configuration|range)\b/iu.test(line));
-  const rationale = "This source row shows an amount. Its applicability to the selected variant is unresolved. All surrounding amounts and qualifiers remain in the complete source context." + (qualifications.length ? ` Source context: ${qualifications.join("\n")}` : "");
+  const rationale = "Applicability to the selected variant is unresolved. Other source amounts remain unattributed." + (qualifications.length ? ` Source context: ${qualifications.join("\n")}` : "");
   return { kind: "catalog-row", amount: price.amount, currency: price.currency, row: candidates[0]!, reportedAssessment: price.assessment, reportedConditions: price.conditions, reportedConditionsResolved: price.conditionsResolved, attribution: { status: "unknown", rationale } };
 }
 

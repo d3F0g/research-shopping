@@ -49,11 +49,14 @@ for (const viewport of [{ width: 1440, height: 1000 }, { width: 390, height: 844
       }
       await page.screenshot({ path: `${directory}/${viewport.width}-${scenario.id}.png` });
       if ("adverse" in scenario) {
-        await page.getByRole("button", { name: "Evidence and tradeoffs for Fixture Meridian Sunglasses - Silver", exact: true }).click();
+        const disclosure = page.getByRole("button", { name: "Evidence and tradeoffs for Fixture Meridian Sunglasses - Silver", exact: true });
+        await disclosure.click();
+        await expect.poll(() => disclosure.evaluate((element) => element.parentElement!.querySelector("[data-slot=trace-collapsible-content]")!.getAnimations().length)).toBe(0);
         const context = page.locator("blockquote").filter({ hasText: "New Silver colorway" });
         await expect(context).toContainText("SGD 999");
         await expect(context).toContainText("For Gold only.");
         await context.evaluate((element) => element.scrollIntoView({ block: "end" }));
+        await expect(context).toBeInViewport();
         await page.screenshot({ path: `${directory}/${viewport.width}-${scenario.id}-context.png`, animations: "disabled" });
       }
       outcomes.push({ id: scenario.id, summary: result.research.summary, choice: result.research.choice, products: result.research.products });
