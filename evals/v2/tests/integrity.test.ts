@@ -92,3 +92,15 @@ test("historical Fieldnote schema-5 reports retain read integrity without curren
   implementation.implementationInputs.grading[0].text += "\n";
   assert.throws(() => validateReport(implementation), /hash/);
 });
+
+test("frozen V2 evidence projects its actual original quotation without reinterpretation", async () => {
+  const { storedResearchV2 } = await import("../../../tests/helpers/v2-stored-material");
+  const research = storedResearchV2();
+  const original = structuredClone(research);
+  const projected = projectResponse({ kind: "research", research, state: initialConversation() })!;
+  const snapshot = projected.research as Record<string, import("../../frozen-v4/contracts").Json>;
+  const identity = (snapshot.products as Record<string, import("../../frozen-v4/contracts").Json>[])[0]!.identity as { support: unknown[] };
+  const support = research.products[0]!.identity.support[0]!;
+  assert.deepEqual(identity.support[0], { ...support, quote: support.originalQuote, start: support.originalStart, end: support.originalEnd });
+  assert.deepEqual(research, original);
+});

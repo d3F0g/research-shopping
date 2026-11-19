@@ -233,7 +233,7 @@ function bindPrice(
     return observePrice(price, productName, identity, source, otherProducts, span.context.text);
   });
   const observation = published.find((proof) => proof.kind === "observed");
-  if (!observation || observation.kind !== "observed") return null;
+  if (!observation) return null;
   const resolved =
     completeSources &&
     value.conditionsResolved &&
