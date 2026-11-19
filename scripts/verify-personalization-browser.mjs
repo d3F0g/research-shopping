@@ -176,15 +176,21 @@ try {
         await authenticate(page, `fixture-conflict-${randomUUID()}@example.test`, true);
         const stats = () => page.request.get(`${conflictRuntime.origin}/api/test-stats`).then((response) => response.json());
         const before = await stats();
-        await send(page, "I want a slow fixture powerbank under SGD40");
+        const original = "I want a slow fixture powerbank between SGD30 and40";
+        await send(page, original);
         await expect.poll(async () => (await stats()).calls).toBe(before.calls + 1);
+        const beforeStop = await page.request.get(`${conflictRuntime.origin}/api/account`).then((response) => response.json());
         let entered;
         let cancelled;
+        let cancelStatus;
+        let cancelCommand;
         const held = new Promise((resolve) => { entered = resolve; });
         const gate = new Promise((resolve) => { release = resolve; });
         await page.route("**/api/workspace", async (route) => {
           if (route.request().postDataJSON()?.phase !== "cancel") return route.continue();
+          cancelCommand = route.request().postDataJSON();
           const response = await route.fetch();
+          cancelStatus = response.status();
           cancelled = await response.json();
           entered();
           await gate;
@@ -192,7 +198,39 @@ try {
         });
         await page.getByRole("button", { name: "Stop research", exact: true }).click();
         await held;
+        const cancellation = {
+          status: cancelStatus,
+          bodyKeys: Object.keys(cancelled ?? {}).slice(0, 10),
+          error: typeof cancelled?.error === "string" ? cancelled.error.slice(0, 200) : null,
+          submittedRevision: cancelCommand.revision,
+        };
+        await writeFile(`artifacts/fieldnote-v2/accounts/${size.name}-stop-cancel-response.json`, JSON.stringify(cancellation, null, 2) + "\n");
+        assert.ok(cancelStatus === 200 || cancelStatus === 409, `Unexpected cancellation response ${JSON.stringify(cancellation)}`);
+        if (cancelStatus === 409)
+          assert.deepEqual(cancelled, { error: "Saved conversation changed. Reload it before continuing." });
+        else {
+          assert.deepEqual(Object.keys(cancelled).sort(), ["operation", "response", "workspace"]);
+          assert.equal(cancelled.response, null);
+          assert.deepEqual(cancelled.operation, { operationId: cancelCommand.operationId, status: "complete" });
+        }
         await expect.poll(async () => (await stats()).closed).toBe(before.closed + 1);
+        await expect.poll(async () => (await page.request.get(`${conflictRuntime.origin}/api/account`).then((response) => response.json())).workspace.pendingOperationId).toBe(null);
+        const afterCancel = await page.request.get(`${conflictRuntime.origin}/api/account`).then((response) => response.json());
+        assert.equal(afterCancel.status, "signed-in");
+        assert.deepEqual(afterCancel.user, beforeStop.user);
+        assert.equal(cancelCommand.revision, beforeStop.workspace.revision);
+        assert.equal(cancelCommand.target, beforeStop.workspace.pendingOperationId);
+        assert.equal(afterCancel.workspace.revision, beforeStop.workspace.revision + 1);
+        assert.equal(afterCancel.workspace.epoch, beforeStop.workspace.epoch + Number(cancelStatus === 200));
+        assert.equal(afterCancel.workspace.pendingPreparedId, null);
+        assert.deepEqual(afterCancel.workspace.state.intent, beforeStop.workspace.state.intent);
+        if (cancelStatus === 200) {
+          assert.deepEqual(afterCancel.workspace, cancelled.workspace);
+          assert.deepEqual(afterCancel.workspace.state, beforeStop.workspace.state);
+        } else {
+          assert.deepEqual(afterCancel.workspace.state.messages.slice(0, -1), beforeStop.workspace.state.messages);
+          assert.equal(afterCancel.workspace.state.messages.at(-1)?.text, "Research stopped. Your preferences are retained.");
+        }
         const resetResponse = page.waitForResponse((response) => response.url().endsWith("/api/workspace") && response.request().postDataJSON()?.phase === "new-chat");
         await page.getByRole("button", { name: "New chat", exact: true }).click();
         assert.equal((await resetResponse).status(), 409);
@@ -200,15 +238,20 @@ try {
         const composer = page.getByRole("textbox", { name: "Message", exact: true });
         await composer.fill("Fixture draft during workspace conflict");
         const current = await page.request.get(`${conflictRuntime.origin}/api/account`).then((response) => response.json());
-        assert.deepEqual(current.workspace, cancelled.workspace);
-        assert.equal(current.workspace.state.intent.budget.maximum, 40);
-        assert.equal(current.workspace.state.intent.budget.currency, "SGD");
+        assert.deepEqual(current, afterCancel);
+        assert.deepEqual(current.workspace.state.intent.budget, { minimum: 30, maximum: 40, currency: "SGD" });
+        assert.equal(current.workspace.state.messages.some((message) => message.research), false);
+        await expect(page.getByText(original, { exact: true })).toBeVisible();
         assert.equal((await stats()).calls, before.calls + 1);
         await page.screenshot({ path: `artifacts/fieldnote-v2/accounts/${size.name}-stop-reset-conflict.png` });
         const pendingResponse = page.waitForResponse((response) => response.url().endsWith("/api/workspace") && response.request().postDataJSON()?.phase === "cancel");
         release();
-        await (await pendingResponse).finished();
+        const deliveredCancellation = await pendingResponse;
+        assert.equal(deliveredCancellation.status(), cancelStatus);
+        if (cancelStatus === 200) await deliveredCancellation.finished();
         await expect(composer).toHaveValue("Fixture draft during workspace conflict");
+        await expect(page.getByText("The server could not start a new chat. Your history stays visible.", { exact: true })).toBeVisible();
+        assert.deepEqual(await page.request.get(`${conflictRuntime.origin}/api/account`).then((response) => response.json()), afterCancel);
         await page.reload();
         await expect(page.getByRole("button", { name: "New chat", exact: true })).toBeEnabled();
         await page.getByRole("button", { name: "New chat", exact: true }).click();
@@ -216,10 +259,12 @@ try {
         await send(page, "hello");
         await expect(page.getByText("Hi. What are you looking to buy?", { exact: true })).toBeVisible();
         const recovered = await page.request.get(`${conflictRuntime.origin}/api/account`).then((response) => response.json());
+        assert.deepEqual(recovered.user, afterCancel.user);
         assert.equal(recovered.workspace.state.intent.budget, null);
         assert.equal((await stats()).calls, before.calls + 1);
+        assert.equal((await stats()).closed, before.closed + 1);
         await page.screenshot({ path: `artifacts/fieldnote-v2/accounts/${size.name}-stop-reset-conflict-recovered.png` });
-        proof.push(`${size.name} signed-in Stop then New chat before cancellation confirmation reports a 409 conflict without constraint mutation or extra SDK calls. Explicit browser refresh then New chat recovers. The signed-in Account sheet has no reload control.`);
+        proof.push(`${size.name} signed-in Stop returns ${cancelStatus}. New chat before cancellation confirmation reports a 409 conflict without constraint mutation or extra SDK calls. Explicit browser refresh then New chat recovers. The signed-in Account sheet has no reload control.`);
       } finally {
         release();
         await context.close();
