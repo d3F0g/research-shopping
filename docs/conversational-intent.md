@@ -1,34 +1,46 @@
 # Contextual shopping intent
 
-Fieldnote retains accepted preferences, a typed pending question and genuine message history separately. The question records its identity, original request, missing field and unresolved money draft. For the powerbank request `$30-40`, answering `SGD`, `S$` or `SGD$30` resolves currency only and preserves SGD30–40. It does not replace the range with SGD30. A bare currency without that pending draft cannot convert an unrelated accepted budget.
+Fieldnote keeps accepted preferences, typed pending questions and genuine message history separately. A pending question records its identity, original request, missing field and unresolved money draft. For the powerbank request `$30-40`, answering `SGD`, `S$` or `SGD$30` fills currency only and preserves SGD30 to SGD40. It does not replace the range with SGD30 or convert an unrelated accepted budget.
 
-The server's reducer applies named operations rather than accepting a replacement intent. General language uses structured OpenAI extraction; typed edits, known local controls and pending currency answers resolve locally. Unmentioned hard constraints survive new objectives. Cheaper/lighter preferences do not invent numeric limits. Explicit maximum changes preserve the minimum. Material ambiguity remains a targeted question, while useful no-budget requests can research immediately.
+## Interpretation boundary
 
-## Provider and safety boundary
+Known local controls and pending answers run first. A complete supported shopping sentence proposes operations through the same validated reducer used by optional model interpretation. Product vocabulary stays open. The local producer must consume the supported utterance completely and decline unsupported compound, negative or conditional language. It cannot save the easy half and discard an extra hard requirement. This is a bounded command grammar, not a replacement conversational model or a category registry.
 
-The user authorized the configured OpenAI account on 19 November 2026. Initial live verification is limited to two calls and US$0.10 reserved. The adapter uses the [Responses API](https://developers.openai.com/api/docs/quickstart.md) with [strict structured output](https://developers.openai.com/api/docs/guides/structured-outputs.md), model [gpt-6.2-sol](https://developers.openai.com/api/docs/models/gpt-6.2-sol.md), store false and no tools or reasoning output contract. It never supplies product facts or replaces Exa research. No search-tool prompt is needed because this model has no search tool.
+General contextual interpretation is provider-independent. An optional local Ollama model can propose named operations for richer language. It cannot replace the entire accepted intent, supply product facts, execute tools or authorize a purchase. Exact user spans, deterministic schemas, monetary validation and explicit hard-constraint checks remain the safety boundary. A failed interpretation preserves accepted preferences, any pending draft and the original message. No fixture research or paid inference fallback is selected.
 
-Exact source spans establish provenance, not semantic truth. Validate action targets, monetary proposals, negation and existing hard constraints before applying them. A failed or malformed interpretation retains accepted state and any pending draft, returns honest interpretation unavailability and starts no Exa call. The model cannot authorize a purchase, invent a price or silently remove a hard requirement.
+Unmentioned constraints survive new objectives. Cheaper and lighter express flexible preferences without invented numerical limits. A maximum-only change retains the minimum. Material ambiguity remains a targeted question. A useful supported no-budget request researches immediately rather than asking an optional budget question.
 
-Bound serialized request input to 12,000 UTF-8 bytes and requested output to 2,048 tokens. Persistent private receipts reserve US$0.05 before each attempt, cap the initial program at two attempts and retain uncertainty. Completed preparation can be reused only with its stable operation identity and exact input hash. Cancellation reaches request and body consumption; stale work cannot dispatch Exa. Token-based cost calculations use documented rates conservatively and are estimates, not provider-reported bills or account balance.
+## Optional local configuration
 
-## Development configuration
+Normal simple requests require only the existing Exa development configuration. OpenAI API keys and Codex authentication are not application inference configuration.
 
-The key stays in the existing ignored development environment. Add only the nonsecret controls when the reviewed implementation is ready:
+To opt into an already installed local Ollama model, set these server-only controls in the ignored development environment:
 
 ```dotenv
-OPENAI_INTENT_ENABLED=true
-OPENAI_INTENT_LEDGER_PATH=/absolute/path/to/private-intent-receipts.json
+FIELDNOTE_INTENT_PROVIDER=ollama
+OLLAMA_INTENT_MODEL=YOUR_INSTALLED_LOCAL_MODEL
 ```
 
-The existing OPENAI_API_KEY is server-only. Both live providers are disabled outside development composition. Tests inject recorded/local responses or fake-key transports; they must not load a real environment file or consume either paid allowance. Never reset or replace the receipt ledger to retry an uncertain charge or replenish the initial program.
+The optional adapter uses the fixed loopback Ollama endpoint and [native structured output](https://docs.ollama.com/capabilities/structured-outputs). It checks the selected model's local metadata before inference and rejects cloud or remote models, redirects and unsupported configuration. It never pulls a model, installs Ollama, accepts provider credentials or selects a paid fallback. Request input, output, response bytes and deadline are bounded. Cancellation reaches metadata/inference requests and body consumption. Private thinking fields are ignored. Production and automated-test composition do not enable real inference.
 
-## Conversation and evidence
+This host had no Ollama executable or listener at port11434 when assessed. Local HTTP substitute tests establish adapter behavior, not the semantic quality of an installed model. Complex language without an available interpreter remains an explicit limitation. Prefer retained context and honest recovery to partial constraint acceptance or repeated requests for a known amount.
 
-The existing prepare/research transport remains. Accepted intent is committed before paid research, so Stop and retry preserve it. Stable preparation identity prevents paying to reinterpret cached preparation; an explicit research retry remains a separate action. Quick answers bind to the active question, and generation checks reject late results. Current v5 is separate from frozen v4/v3 historical codecs. Active migration may recover a draft only from a genuine retained original request; historical messages and snapshots remain unchanged and read-only.
+## Research and evidence
 
-The UI uses official shadcn/ui and AI Elements. It displays understanding during preparation and a compact search status after authoritative preparation. It does not expose private reasoning, fake intermediate stages or simulated token streaming. Source-backed product cards retain observed/unverified prices and unknown stock. Images come only from actual safe Exa citation metadata tied to an identity source; label them as representative source illustrations with visible attribution and neutral missing/load-error fallbacks.
+Exa Answer remains the intelligent retrieval and structured-recommendation provider. It already combines discovery, source-based synthesis and citations in one operation. The optional local model does not answer product questions or receive Exa source pages. Exa Search would require separate synthesis ownership, and Agent would add an asynchronous multistep capability. Neither is needed for this milestone. No new billable Exa endpoint, unverified endpoint access or exploratory paid operation is introduced.
+
+The existing prepare/research transport remains. Accepted intent is acknowledged before paid research, so Stop and retry preserve it. Cached preparation prevents reinterpreting an already completed preparation. Current v5 remains separate from frozen v4/v3 history. Historical snapshots stay unchanged and read-only. Quick answers bind to the active question and generation checks reject stale work.
+
+The official shadcn/ui and AI Elements interface shows only actual preparation and research activity. Product cards retain observed/unverified prices and unknown stock. Images come only from safe actual Exa citation metadata tied to identity evidence. They are attributed representative source illustrations, with exact-variant uncertainty and neutral missing/load-error fallbacks.
+
+## Historical OpenAI experiment
+
+The first real interpretation request on 19 November2026 at 11:56:10 Singapore time returned HTTP429. Its diagnostic retained status only, without error.code/type, provider request ID or limit headers. [OpenAI's error guidance](https://help.openai.com/en/articles/5955604-troubleshooting-api-rate-limits-and-429-errors) distinguishes several causes of429. Available evidence cannot determine which occurred. Do not report confirmed rate exhaustion, billing failure or model entitlement failure.
+
+The original private stopped receipt retains one uncertain attempt and US$0.05 reserved. Its usage and charge remain unknown. Keep it unchanged; removing the runtime adapter cannot reconcile billing. The user superseded this experiment and prohibited using Codex authentication as application inference. No OpenAI account provisioning, billing action, key rotation or retry is required for the selected architecture. Issue #48 retains the historical evidence gap separately from Exa acceptance.
 
 ## Acceptance
 
-Issue #44 and PR #38 retain the exact failed reproduction and the fixing evidence. Automated browser acceptance covers the two-turn range/currency flow, contextual corrections, hard constraints, cancellation/retry/isolation, provider failure, image attribution and responsive themes/composer. Root's initial real application proof is separately limited to one Exa call and at most two OpenAI calls. A real provider failure after correct resolution verifies the no-loop failure path; it does not establish useful live recommendations. Do not claim product acceptance from local substitutes or passing tests alone.
+Issue #44 and PR #38 retain the failed reproduction and fixing evidence. Automated tests use local substitutes and must establish zero interpretation calls for the exact simple request, retained30/40 bounds, automatic research, contextual changes, hard constraints, cancellation/retry/isolation, honest failures and image attribution on desktop/mobile.
+
+Root's still-unused P0 real proof is limited to one Exa operation and US$0.05 reserved from the existing authorized manual grant. Do not run a real OpenAI request or renew either ledger. A genuine normal-browser request must reach useful relevant source-backed comparisons before claiming product acceptance. Provider errors, source-only results, fixtures and passing offline tests cannot establish usefulness. Preserve every real attempt and its cost uncertainty.

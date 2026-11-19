@@ -42,7 +42,7 @@ Before release, repeat the three original shopping journeys plus a materially di
 
 ## Acknowledged intent and cancellation
 
-Preparation runs the sole server reducer without a provider call. Only the transport response may contain prepared intent; completed history cannot persist it as a finished research result. The client accepts preparation under its current operation generation before starting the one research request. Research has no new message or edit fields.
+Preparation runs the shared server reducer. Supported complete requests and pending answers must work with the interpreter absent and make zero inference calls. Richer language may use an explicitly configured local-only interpreter; tests use fake loopback transport and never an OpenAI key or Codex authentication. Only the transport response may contain prepared intent; completed history cannot persist it as a finished research result. The client accepts preparation under its current operation generation before starting the one Exa research request. Research has no new message or edit fields.
 
 Test an invalid currency change followed by an ordinary acknowledgment and refresh. The original change must stay pending and research must remain blocked until explicit correction or discard. Preserve unrelated accepted criteria and the original request wording. Test a new hard exclusion accepted before a delayed provider response, then Stop and another comparison. The exclusion must survive Stop and retry. New chat explicitly resets it. Test these with actual Hono and SDK loopback transport, not only route-injected browser responses.
 
