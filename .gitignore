@@ -154,3 +154,7 @@ artifacts/screenshots/web-research-desktop.png
 artifacts/screenshots/web-research-mobile.png
 
 .local/
+
+artifacts/product-evals/current/
+artifacts/product-evals/ci/
+artifacts/product-evals/ci-browser/

@@ -1,5 +1,3 @@
-import { z } from "zod";
-
 export const DATASET_VERSION = "1.0.0";
 export const ASSERTION_VERSION = "1.0.0";
 export const ADAPTER_VERSION = "normal-v4.1";
@@ -137,9 +135,3 @@ export type RunReport = {
   };
   limitations: string[];
 };
-export const MetricScoreSchema = z.object({ score: z.number().int().min(0).max(4), rationale: z.string().min(1).max(2000), uncertain: z.boolean() }).strict();
-export const JudgmentsSchema = z.object({
-  schemaVersion: z.literal(1),
-  judge: z.object({ identity: z.string().min(1), provider: z.string().min(1), independentOfImplementation: z.literal(true), calibrationStatus: z.literal("pending-human-review") }).strict(),
-  judgments: z.array(z.object({ label: z.string().regex(/^[a-f0-9]{24}$/), packetHash: z.string().regex(/^[a-f0-9]{64}$/), scores: z.record(z.string(), MetricScoreSchema), overall: z.enum(["useful", "not-useful", "uncertain"]) }).strict()).min(1),
-}).strict();

@@ -12,7 +12,7 @@ import type { Event, Intent, Json, Material, Observation, PublicScenario, TurnOb
 import type { offlineNetwork } from "./network";
 
 type Guard = ReturnType<typeof offlineNetwork>;
-export async function ownedApplication(input: Material, guard: Guard) {
+export async function ownedApplication(input: Material, guard: Guard, options: { webPort?: number } = {}) {
   const events: Event[] = [];
   const started = performance.now();
   let currentTurn = 0;
@@ -58,7 +58,7 @@ export async function ownedApplication(input: Material, guard: Guard) {
   const apiPort = (api.address() as AddressInfo).port;
   const origin = `http://127.0.0.1:${apiPort}`;
   guard.allow(origin);
-  app = createApp({ researchTurns: createResearchTurns({ ...(input.id === "missing-config" ? {} : { research: createExaProductResearch("fake-offline-evaluation-key", { baseUrl: providerOrigin, timeoutMs: input.id === "timeout" ? 150 : 2000 }), quota }) }) }, { apiPort, webPort: apiPort });
+  app = createApp({ researchTurns: createResearchTurns({ ...(input.id === "missing-config" ? {} : { research: createExaProductResearch("fake-offline-evaluation-key", { baseUrl: providerOrigin, timeoutMs: input.id === "timeout" ? 150 : 2000 }), quota }) }) }, { apiPort, webPort: options.webPort ?? apiPort });
   return {
     origin, events,
     setTurn(turn: number) { currentTurn = turn; },
