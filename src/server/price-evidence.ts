@@ -101,20 +101,38 @@ function moneyPattern(currency: string) {
   return `(?:${denomination}\\s*${number}|${number}\\s*${denomination})(?![\\w.,]\\d|\\d)`;
 }
 
+type MonetaryToken = "amount" | "denomination" | "condition" | "operator" | "separator";
+
 export function isMonetaryOnlyEvidence(text: string, currencies: readonly string[]): boolean {
   if (!/[0-9]/u.test(text)) return false;
   const denominations = [...new Set([...Object.keys(currencyAliases), ...currencies])].map(denominationPattern);
-  const conditions = [buyerRestriction.source.slice(1, -1), conditionalRestriction.source.slice(1, -1), "(?:for|per)\\s+(?:(?:one|[0-9]+)\\s+)?(?:units?|items?|pieces?)", ...[...conditionKinds.keys()].map(literal)];
-  const phrase = (parts: string[]) => new RegExp(`(?<!\\p{L})(?:${parts.join("|")})(?!\\p{L})`, "giu");
-  const remainder = text
-    .replace(/[\t\n\v\f\r \u00a0]+/gu, " ")
-    .replace(phrase(conditions), " ")
-    .replace(phrase([...denominations, "\\p{Sc}"]), " ")
-    .replace(/(?<=[0-9]) *[xX] *(?=[0-9])/gu, " ")
-    .replace(/[0-9]+(?:[.,][0-9]+)*/gu, " ")
-    .replace(phrase(["is priced at", "has a price of", "from", "to", "between", "and"]), " ")
-    .replace(new RegExp(monetaryContext.source, "giu"), " ");
-  return /^[\s\p{P}\p{Sm}]*$/u.test(remainder);
+  const conditions = [buyerRestriction.source.slice(1, -1), conditionalRestriction.source.slice(1, -1), "(?:for|per)\\s+(?:(?:one|[0-9]+)\\s+)?(?:units?|items?|pieces?)", "(?:incl|excl)\\.? *(?:tax|GST|VAT)", ...[...conditionKinds.keys()].map(literal), "is priced at", "has a price of", "from", "to", "between", "and", "each", monetaryContext.source];
+  const rules: { kind: MonetaryToken; pattern: RegExp }[] = [
+    { kind: "amount", pattern: /[0-9]+(?:[.,][0-9]+)*/y },
+    { kind: "denomination", pattern: new RegExp(`(?:${[...denominations, "\\p{Sc}"].join("|")})`, "iyu") },
+    { kind: "condition", pattern: new RegExp(`(?:${conditions.join("|")})`, "iyu") },
+    { kind: "operator", pattern: /(?:multiplied by|divided by|plus|minus|times|x)/iy },
+    { kind: "separator", pattern: /[\s\p{P}\p{Sm}]+/yu },
+  ];
+  const canonical = text.replace(/[\t\n\v\f\r \u00a0]+/gu, " ");
+  const tokens: MonetaryToken[] = [];
+  for (let position = 0; position < canonical.length;) {
+    let matched: { kind: MonetaryToken; length: number } | undefined;
+    for (const rule of rules) {
+      rule.pattern.lastIndex = position;
+      const value = rule.pattern.exec(canonical)?.[0];
+      if (value && (!matched || value.length > matched.length)) matched = { kind: rule.kind, length: value.length };
+    }
+    if (!matched) return false;
+    if (matched.kind !== "separator") tokens.push(matched.kind);
+    position += matched.length;
+  }
+  const hasOperand = (index: number, direction: -1 | 1) => {
+    let position = index + direction;
+    while (tokens[position] === "denomination" || tokens[position] === "condition") position += direction;
+    return tokens[position] === "amount";
+  };
+  return tokens.every((token, index) => token !== "operator" || hasOperand(index, -1) && hasOperand(index, 1));
 }
 
 export function assessPriceContext(

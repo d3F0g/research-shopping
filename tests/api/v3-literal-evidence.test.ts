@@ -278,7 +278,7 @@ describe("monetary token boundaries", () => {
     "SGD35 plus SGD5", "SGD35plusSGD5", "SGD35 minus SGD5", "SGD35minusSGD5",
     "SGD35 times 3", "SGD35times3", "SGD35 divided by 3", "SGD35 multiplied by 3",
     "SGD35 each", "SGD35 per piece", "SGD35 excl. GST", "SGD35 incl. tax",
-    "SGD35 excl VAT", "SGD35 incl GST", "SGD35 excluding\nGST",
+    "SGD35 excl VAT", "SGD35 incl GST", "SGD35 excluding\nGST", "SGD35 excl.GST", "SGD35 incl.tax", "35 United\tStates dollars",
   ];
   it.each(quotes)("withholds complete fit from monetary tokens %j without altering the reported quote", (quote) => {
     const request = { ...initialConversation().intent, productDescription: "Fixture USB-C powerbank", budget: null };
