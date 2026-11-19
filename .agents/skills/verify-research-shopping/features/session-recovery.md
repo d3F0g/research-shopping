@@ -4,7 +4,7 @@ The current tab owns conversation history and accepted preferences. New-chat/res
 
 ## Reset and isolation
 
-Create a multi-turn conversation with a shortlist and handoff. Use the visible new-chat/reset control. Require no previous messages, product cards, source results or merchant link, an empty composer, default shopping preferences and the minimal chat state. The selected theme must remain unchanged.
+Create a multi-turn conversation with research results and source disclosures. Use the visible new-chat/reset control. Require no previous messages, product cards or source results, an empty composer, default shopping preferences and the minimal chat state. The selected theme must remain unchanged.
 
 Use two independent browser contexts. Change preferences and submit multiple turns in one. Require the other context to remain empty with its own default preferences. Reset the first and require no change in the other.
 
@@ -14,9 +14,9 @@ Fail `/api/turn` at its network boundary. Submit a real request and require an h
 
 Delay a real turn response. Before releasing it, edit the draft, submit a newer turn or reset. Require the old request to abort and its late completion to leave newer state authoritative. Completed earlier messages remain snapshots; cancelled tasks must not leave a permanent spinner.
 
-Delay a real selection response. Edit the draft or reset while pending. Release the response and require no stale handoff. Repeat through the source-request boundary where affected. Retained history must not keep cancelled work alive merely because its component remains mounted.
+Normal merchant selection is unavailable. Test delayed research and preparation responses instead. Retained history must not keep cancelled work alive merely because its component remains mounted.
 
-Before paid research, observe the prepare response and accepted intent. Stop during the SDK request, then submit another turn. Accepted criteria must remain. An invalid budget change must remain pending across Thanks and refresh, with no provider request until resolved or explicitly discarded. New chat explicitly clears it. Research-phase requests cannot carry new text or bypass pending state.
+Before paid research, observe the prepare response and accepted intent. Stop during the SDK request, then submit another turn. Accepted criteria must remain. An invalid budget change must remain pending across Thanks and a typed `refresh` request, with no provider request until resolved or explicitly discarded. This is not a browser reload. Current browser reload clears in-memory history, accepted preferences, and pending changes. Durable pending-change recovery remains a gap if refresh persistence is required. New chat explicitly clears it. Research-phase requests cannot carry new text or bypass pending state.
 
 ## Feedback
 

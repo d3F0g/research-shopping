@@ -1,29 +1,23 @@
 # Research requests
 
-This page describes the explicit legacy fixture regression composition. It does not describe normal development product scope or establish live product behavior. Use [Exa product research](web-research.md) for the dynamic normal interface.
-
-Users describe a shopping objective in chat. The assistant returns an ordinary message, a contextual question, a fixture shortlist or an honest limitation.
+Users describe an open shopping objective in chat. The server returns an ordinary message, a contextual question, researched observations, or an honest limitation. Follow [Exa product research](web-research.md) for provider boundaries and authorized live proof.
 
 ## Drive a request
 
-Start at the owned app in a fresh context. Submit `Wireless headphones for long flights, under S$500` through the composer. Observe the actual POST `/api/turn` response. Require headphones, SGD offers at most 500, fixture labels, and recommendation content inside its assistant turn. No category or budget question is needed for this message.
+Use the owned normal app or an explicitly injected normal-contract test composition. Submit `Wireless headphones for long flights, under S$500`. Observe preparation and research separately. Require the accepted description and SGD 500 cap without asking for either again. Researched cards belong inside the assistant turn. Missing evidence cannot become a confident fit.
 
-Exercise each visible starter separately if starters changed. A starter must submit its displayed intent rather than silently installing unrelated preferences. It is an optional shortcut, not a form prerequisite.
+Exercise visible starters separately if they changed. Require the displayed intent without unrelated preferences. For an incomplete request, inspect the server's actual question. Do not expect category quick choices. Exercise the optional budget form and skip through the [preference recipe](preferences.md).
 
-In a fresh conversation, submit `Something good for work`. Require a targeted material-preference question and no fabricated product cards. Use its quick choice to continue. Submit `Noise cancelling headphones under S$100` and require the honest no-match response with the 100 cap retained. Submit a supported laptop request and require laptop results or an explicit limitation.
-
-Submit an ordinary greeting or acknowledgment. Require a normal assistant message with no new shortlist or invented activity. Unsupported categories and requirements must still receive an honest clarification.
+Use empty or unavailable provider evidence and require an honest limitation with hard constraints retained. Submit an unfamiliar product description without changing a category registry. Submit an ordinary greeting or acknowledgment and require a normal message without provider dispatch.
 
 ## Retain the conversation
 
-Submit a second natural shopping message. Require both submitted messages and accepted assistant responses to remain visible in history. Current results must use the latest accepted preferences. Typing must cancel obsolete work without deleting completed exchanges.
+Submit a natural shopping follow-up. Require both user messages and completed assistant responses to remain visible. Current results must use the latest accepted intent. Typing cancels obsolete work without deleting completed exchanges.
 
-Scope each `.product-card`, evidence, comparison and selection action to its message. A global first-card locator can select an earlier shortlist. Use the latest actionable turn for current-behavior assertions.
+Scope product articles, evidence, and source links to their assistant message. A global first-card locator can select an earlier result. Historical results are snapshots and cannot restore paid actions.
 
-## Recorded activity
+## Activity and limits
 
-The transport returns complete JSON. While waiting, require no invented tool stages, timings, reasoning or recorded outcomes. After the response arrives, open its actual activity control and compare every visible provider/outcome with `toolActivity` in that response. Ordinary messages and clarifications with an empty array have no recorded activity control.
+The transport returns complete JSON. Pending indicators must reflect actual requests. Do not expect token streaming, invented reasoning, or a recorded `toolActivity` disclosure that the current renderer does not expose.
 
-## Limits
-
-Only headphones and laptops are supported. Fixture prices, claims and stock remain labeled as samples with fixed timestamps. A current screenshot date or Exa retrieval timestamp cannot make those fixtures current evidence. No source excerpt establishes merchant inventory.
+Legacy fixture recommendation responses cannot be driven through the current composer. Keep their category-specific and synthetic-offer assertions in API and domain regression tests. Current browser tests use injected normal-contract evidence or local SDK transport. Neither proves live retrieval, current prices, stock, or delivery.
