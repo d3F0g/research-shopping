@@ -143,7 +143,7 @@ describe("current snapshot binding validation", () => {
 
 
 describe("money-only request evidence", () => {
-  const variants = ["SGD 35", "35 SGD", "35SGD", "35", "S$35", "35 S$", "$35", "35.00", "SGD 35.00"];
+  const variants = ["SGD 35", "35 SGD", "35SGD", "35", "S$35", "35 S$", "$35", "35.00", "SGD 35.00", "35 SGD.", "(35 SGD)", "SGD 35–40", "35 / 40 SGD", "SGD 35 + SGD 40"];
   for (const budget of [null, { minimum: 30, maximum: 40, currency: "SGD" }]) {
     it.each(variants)(`keeps %s unknown with ${budget ? "bounded" : "no"} budget`, (quote) => {
       const request = { ...initialConversation().intent, productDescription: "Fixture USB-C powerbank", budget };
@@ -175,6 +175,10 @@ describe("ambiguous catalog headings", () => {
     "fixture meridian sunglasses - silver",
     "Fixture Meridian Sunglasses",
     "Meridian Sunglasses - Silver",
+    "Meridian Sunglasses - Silver (standard)",
+    "Meridian Sunglasses - Silver Edition",
+    "Meridian Sunglasses - Silver Extended Fixture Description",
+    "Silver Edition",
     "Silver",
     " silver ",
   ])("retains unresolved target heading %j as adverse context", (heading) => {
