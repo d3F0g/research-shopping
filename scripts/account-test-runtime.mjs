@@ -113,6 +113,11 @@ export async function accountRuntime({ web = false } = {}) {
       await stop(api);
       await start();
     },
+    async restartDatabase() {
+      await stop(api);
+      await fixture.restart();
+      await start();
+    },
     async crash() {
       await stop(api, "SIGKILL");
     },

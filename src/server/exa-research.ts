@@ -427,11 +427,14 @@ function projectAnswer(raw: unknown, intent: ShoppingIntent): {
     )
       ? { productId: proposed.id, rationale: proposed.requestMatch.rationale }
       : null;
+  const observed = products.find((product) => supportedExactly(product.identity) && product.price && product.identity.support.some((span) => span.literal.text.includes(product.name)));
   const summary = choice
     ? `${proposed!.name} is a source-supported option for your requirements. ${choice.rationale}`
-    : products.length
-      ? "Here are useful comparisons. I cannot confidently choose a compliant option until the listed evidence gaps are resolved."
-      : "The sources did not establish a usable product comparison.";
+    : observed?.price
+      ? `The source lists ${observed.name} at ${observed.price.currency} ${observed.price.amount.toFixed(2)}, observed and unverified. ${!observed.price.conditionsResolved ? "Purchase conditions remain unresolved. " : ""}${!supportedExactly(observed.requestMatch) ? "Fit to your complete shopping objective remains unresolved. " : ""}I cannot recommend a compliant option until the listed evidence gaps are resolved.`
+      : products.length
+        ? "Here are useful comparisons. I cannot confidently choose a compliant option until the listed evidence gaps are resolved."
+        : "The sources did not establish a usable product comparison.";
   const result = ResearchSnapshotSchema.safeParse({
     version: 2,
     evidenceVersion: 3,

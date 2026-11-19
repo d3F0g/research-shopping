@@ -12,6 +12,7 @@ import { createResearchExecutor } from "../../src/server/research-executor";
 import { reduceTurn } from "../../src/domain/turn-reducer";
 import type { ShoppingIntent } from "../../src/domain/conversation";
 import { nativeMaterial } from "./v2-material";
+import { catalogMaterial } from "./v3-catalog-material";
 
 const database = process.env.FIELDNOTE_TEST_DATABASE_URL;
 const ledger = process.env.FIELDNOTE_TEST_LEDGER_PATH;
@@ -42,7 +43,7 @@ const upstream = createServer(async (request, response) => {
   const intent = JSON.parse(
     input.systemPrompt.split("Current authoritative shopping intent: ")[1]!,
   ) as ShoppingIntent;
-  const material = nativeMaterial(intent);
+  const material = intent.productDescription.includes("catalog fixture") ? catalogMaterial(intent) : nativeMaterial(intent);
   if (intent.productDescription.includes("slow fixture")) {
     response.writeHead(200, { "content-type": "application/json" });
     response.write('{"answer":');

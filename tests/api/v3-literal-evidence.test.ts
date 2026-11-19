@@ -17,6 +17,10 @@ describe("versioned literal source evidence", () => {
     expect(product.identity.status).toBe("supported");
     expect(product.identity.support[0]).toMatchObject({ origin: { kind: "provider", reportedQuote: "Fixture Meridian Sunglasses - Silver SGD 868", match: "whitespace" }, literal: { text: "Fixture Meridian Sunglasses - Silver \n\n SGD 868" } });
     expect(product.price).toMatchObject({ amount: 868, currency: "SGD", variant: "Silver", conditionsResolved: false, conditions: ["Provider-reported, unverified: Price as listed on Fixture Index."] });
+    expect(snapshot.summary).toMatch(/^The source lists Fixture Meridian Sunglasses - Silver at SGD 868.00, observed and unverified/);
+    expect(snapshot.summary).toContain("Purchase conditions remain unresolved.");
+    expect(snapshot.summary).toContain("Fit to your complete shopping objective remains unresolved.");
+    expect(snapshot.summary).not.toMatch(/best|all.*fit|source-supported option/);
     expect(product.eligible).toBe(false);
     expect(snapshot.intent.budget).toEqual(intent.budget);
   });
