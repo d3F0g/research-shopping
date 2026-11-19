@@ -37,21 +37,26 @@ export async function accountRuntime({ web = false } = {}) {
     FIELDNOTE_AUTH_SECRET: "fixture-account-lifecycle-secret-long-enough",
   };
   const processes = new Set();
+  const diagnostics = [];
   let api;
-  function launch(command, args) {
+  function launch(role, command, args) {
     const child = spawn(command, args, {
       env,
       detached: true,
       stdio: ["ignore", "pipe", "pipe"],
     });
     processes.add(child);
+    const diagnostic = { role, startedAt: Date.now(), stdout: "", stderr: "", truncated: false, exitCode: null, signal: null };
+    diagnostics.push(diagnostic);
+    if (diagnostics.length > 8) diagnostics.shift();
     let output = "";
-    child.stdout.on("data", (v) => {
-      output += v;
+    for (const stream of ["stdout", "stderr"]) child[stream].on("data", (value) => {
+      const text = String(value);
+      output = (output + text).slice(-16_384);
+      diagnostic.truncated ||= diagnostic[stream].length + text.length > 8192;
+      diagnostic[stream] = (diagnostic[stream] + text).slice(-8192);
     });
-    child.stderr.on("data", (v) => {
-      output += v;
-    });
+    child.on("exit", (code, signal) => { diagnostic.exitCode = code; diagnostic.signal = signal; });
     child.fixtureOutput = () => output;
     return child;
   }
@@ -76,7 +81,7 @@ export async function accountRuntime({ web = false } = {}) {
     if (child) processes.delete(child);
   }
   async function start() {
-    api = launch(process.execPath, [
+    api = launch("api", process.execPath, [
       "--import",
       "tsx",
       "tests/helpers/account-runtime.ts",
@@ -91,7 +96,7 @@ export async function accountRuntime({ web = false } = {}) {
     );
     await start();
     if (web) {
-      const vite = launch(process.execPath, [
+      const vite = launch("vite", process.execPath, [
         "node_modules/vite/bin/vite.js",
         "--host",
         "127.0.0.1",
@@ -109,6 +114,7 @@ export async function accountRuntime({ web = false } = {}) {
     apiOrigin,
     ledger,
     database: fixture.url,
+    diagnostics: () => diagnostics.map((diagnostic) => ({ ...diagnostic })),
     async restart() {
       await stop(api);
       await start();

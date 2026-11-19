@@ -35,6 +35,110 @@ try {
     await pool.query("UPDATE fieldnote_v2_workspace SET data=$2::jsonb WHERE user_id=$1", [user.id, JSON.stringify(old)]);
     await pool.end();
     const page = await context.newPage();
+    type DiagnosticEvent = Record<string, string | number | boolean | null>;
+    const firstEvents: DiagnosticEvent[] = [], lastEvents: DiagnosticEvent[] = [];
+    const requests = new Map<string, string>(), pendingRules = new Map<string, string>();
+    let firstBytes = 0, lastBytes = 0, droppedEvents = 0, droppedRequests = 0, capturing = true;
+    const ownedPath = (value: string) => {
+      try {
+        const url = new URL(value);
+        if (url.origin !== runtime.origin) return null;
+        const version = url.searchParams.get("v");
+        return (url.pathname + (version && /^[a-f0-9]{8}$/.test(version) ? `?v=${version}` : "")).slice(0, 512);
+      } catch { return null; }
+    };
+    const record = (event: string, fields: Record<string, string | number | boolean | null | undefined> = {}) => {
+      if (!capturing) return;
+      const entry: DiagnosticEvent = { event, at: Date.now() };
+      for (const [key, value] of Object.entries(fields)) if (value !== undefined) entry[key] = typeof value === "string" ? value.slice(0, 512) : value;
+      const bytes = Buffer.byteLength(JSON.stringify(entry));
+      if (bytes > 4096) { droppedEvents++; return; }
+      if (firstEvents.length < 64 && firstBytes + bytes <= 32_768) { firstEvents.push(entry); firstBytes += bytes; return; }
+      lastEvents.push(entry); lastBytes += bytes;
+      while (lastEvents.length > 512 || lastBytes > 196_608) { lastBytes -= Buffer.byteLength(JSON.stringify(lastEvents.shift())); droppedEvents++; }
+    };
+    page.on("request", (request) => {
+      const path = ownedPath(request.url());
+      if (path) record("request", { path, resourceType: request.resourceType(), method: request.method() });
+    });
+    page.on("response", (response) => {
+      const path = ownedPath(response.url());
+      if (path) record("response", { path, status: response.status(), statusText: response.statusText(), resourceType: response.request().resourceType(), contentType: response.headers()["content-type"], contentLength: response.headers()["content-length"] });
+    });
+    page.on("requestfailed", (request) => {
+      const path = ownedPath(request.url());
+      if (path) record("request-failed", { path, resourceType: request.resourceType(), message: request.failure()?.errorText });
+    });
+    page.on("console", (message) => {
+      const location = message.location();
+      const path = location.url ? ownedPath(location.url) : null;
+      if (!location.url || path) record("console", { level: message.type(), path, message: message.text(), line: location.lineNumber });
+    });
+    page.on("pageerror", (error) => record("page-error", { message: error.message }));
+    page.on("domcontentloaded", () => record("dom-content-loaded", { path: ownedPath(page.url()) }));
+    page.on("load", () => record("load", { path: ownedPath(page.url()) }));
+    await page.addInitScript(({ origin }) => {
+      const errors: { tag: string; path: string }[] = [];
+      Object.defineProperty(window, "__fixtureBootstrapErrors", { value: errors });
+      window.addEventListener("error", (event) => {
+        const target = event.target;
+        if (!(target instanceof HTMLElement) || errors.length >= 32) return;
+        const source = target.getAttribute("src") ?? target.getAttribute("href");
+        if (!source) return;
+        const url = new URL(source, location.href);
+        if (url.origin === origin) errors.push({ tag: target.tagName, path: url.pathname.slice(0, 512) });
+      }, true);
+    }, { origin: runtime.origin });
+    const cdp = await context.newCDPSession(page);
+    cdp.on("Network.requestWillBeSent", ({ requestId, request, type }) => {
+      if (!capturing) return;
+      const path = ownedPath(request.url);
+      if (!path) return;
+      if (requests.size >= 1024) { requests.delete(requests.keys().next().value!); droppedRequests++; }
+      requests.set(requestId, path);
+      record("cdp-request", { requestId, path, resourceType: type });
+      if (pendingRules.has(requestId)) { record("applied-rule", { requestId, path, ruleId: pendingRules.get(requestId) }); pendingRules.delete(requestId); }
+    });
+    cdp.on("Network.requestWillBeSentExtraInfo", ({ requestId, appliedNetworkConditionsId }) => {
+      if (!capturing || !appliedNetworkConditionsId) return;
+      const path = requests.get(requestId);
+      if (path) record("applied-rule", { requestId, path, ruleId: appliedNetworkConditionsId });
+      else {
+        if (pendingRules.size >= 1024) { pendingRules.delete(pendingRules.keys().next().value!); droppedRequests++; }
+        pendingRules.set(requestId, appliedNetworkConditionsId);
+      }
+    });
+    cdp.on("Network.responseReceived", ({ requestId, response, type }) => {
+      const path = ownedPath(response.url);
+      if (path) record("cdp-response", { requestId, path, status: response.status, statusText: response.statusText, mimeType: response.mimeType, resourceType: type, encodedDataLength: response.encodedDataLength, fromDiskCache: response.fromDiskCache, fromServiceWorker: response.fromServiceWorker });
+    });
+    cdp.on("Network.loadingFinished", ({ requestId, encodedDataLength }) => {
+      const path = requests.get(requestId);
+      if (path) record("cdp-finished", { requestId, path, encodedDataLength });
+    });
+    cdp.on("Network.loadingFailed", ({ requestId, errorText, canceled, blockedReason }) => {
+      const path = requests.get(requestId);
+      if (path) record("cdp-failed", { requestId, path, message: errorText, canceled, blockedReason });
+    });
+    await cdp.send("Network.enable");
+    const writeBootstrap = async (phase: "initial" | "reload") => {
+      const file = `${directory}/${viewport.width}-${phase}-bootstrap.json`;
+      const diagnostics = { events: [...firstEvents, ...lastEvents], droppedEvents, droppedRequests, processes: runtime.diagnostics() };
+      await writeFile(file, JSON.stringify(diagnostics, null, 2) + "\n");
+      const documentState = await page.evaluate(({ origin }) => {
+        const root = document.getElementById("root");
+        return {
+          readyState: document.readyState, title: document.title.slice(0, 128), bodyPresent: !!document.body, rootPresent: !!root,
+          rootChildCount: root?.childElementCount ?? 0, bodyTextLength: document.body?.innerText.length ?? 0,
+          htmlLength: document.documentElement.outerHTML.length, rootHtmlLength: root?.innerHTML.length ?? 0,
+          background: getComputedStyle(document.documentElement).backgroundColor,
+          scripts: [...document.scripts].slice(0, 32).map((script) => { const url = new URL(script.src || location.href); return { type: script.type, path: url.origin === origin ? url.pathname.slice(0, 512) : null }; }),
+          resourceErrors: (window as unknown as { __fixtureBootstrapErrors: { tag: string; path: string }[] }).__fixtureBootstrapErrors,
+        };
+      }, { origin: runtime.origin }).catch((error: Error) => ({ captureError: error.message.slice(0, 512) }));
+      await writeFile(file, JSON.stringify({ ...diagnostics, documentState }, null, 2) + "\n");
+      capturing = false;
+    };
     const initialEvents: { event: string; at: number; status?: number; message?: string }[] = [];
     page.on("request", (request) => {
       if (new URL(request.url()).pathname === "/api/account") initialEvents.push({ event: "account-request", at: Date.now() });
@@ -47,14 +151,13 @@ try {
     });
     page.on("pageerror", (error) => initialEvents.push({ event: "page-error", at: Date.now(), message: error.message }));
     if (viewport.width === 390) {
-      const cdp = await context.newCDPSession(page);
-      await cdp.send("Network.enable");
-      await cdp.send("Network.emulateNetworkConditionsByRule", { matchedNetworkConditions: [{ urlPattern: `${runtime.origin}/api/account`, latency: 5500, downloadThroughput: -1, uploadThroughput: -1 }] });
+      const { ruleIds } = await cdp.send("Network.emulateNetworkConditionsByRule", { matchedNetworkConditions: [{ urlPattern: `${runtime.origin}/api/account`, latency: 5500, downloadThroughput: -1, uploadThroughput: -1 }] });
+      for (const ruleId of ruleIds) record("configured-rule", { ruleId, path: "/api/account", latency: 5500 });
     }
     try {
       const [initialResponse] = await Promise.all([
         page.waitForResponse((response) => response.url() === `${runtime.origin}/api/account` && response.request().method() === "GET"),
-        page.goto(runtime.origin).then(() => initialEvents.push({ event: "page-loaded", at: Date.now() })),
+        page.goto(runtime.origin).then((response) => { record("navigation", { path: response ? ownedPath(response.url()) : null, status: response?.status(), contentType: response?.headers()["content-type"] }); initialEvents.push({ event: "page-loaded", at: Date.now() }); }),
       ]);
       assert.equal(initialResponse.status(), 200);
       const initial = await initialResponse.json();
@@ -64,7 +167,9 @@ try {
       initialEvents.push({ event: "account-validated", at: Date.now() });
       await expect(page.getByText(historicalName, { exact: true }).first()).toBeVisible();
       await writeFile(`${directory}/${viewport.width}-initial.json`, JSON.stringify({ status: "passed", accountLatencyMs: viewport.width === 390 ? 5500 : 0, events: initialEvents }, null, 2) + "\n");
+      await writeBootstrap("initial");
     } catch (error) {
+      await writeBootstrap("initial");
       await writeFile(`${directory}/${viewport.width}-initial-failure.json`, JSON.stringify({ events: initialEvents, bodyTextPrefix: (await page.locator("body").innerText()).slice(0, 30000) }, null, 2) + "\n");
       const failurePath = `${directory}/${viewport.width}-initial-failure.png`;
       await page.screenshot({ path: failurePath }); proof.screenshots.push(failurePath);
@@ -125,10 +230,12 @@ try {
       if (new URL(request.url()).pathname === "/api/account") reloadEvents.push({ event: "account-failed", at: Date.now(), message: request.failure()?.errorText });
     });
     page.on("pageerror", (error) => reloadEvents.push({ event: "page-error", at: Date.now(), message: error.message }));
+    firstEvents.length = 0; lastEvents.length = 0; requests.clear(); pendingRules.clear();
+    firstBytes = 0; lastBytes = 0; droppedEvents = 0; droppedRequests = 0; capturing = true;
     try {
       const [restoredResponse] = await Promise.all([
         page.waitForResponse((response) => response.url() === `${runtime.origin}/api/account` && response.request().method() === "GET"),
-        page.reload().then(() => reloadEvents.push({ event: "page-loaded", at: Date.now() })),
+        page.reload().then((response) => { record("navigation", { path: response ? ownedPath(response.url()) : null, status: response?.status(), contentType: response?.headers()["content-type"] }); reloadEvents.push({ event: "page-loaded", at: Date.now() }); }),
       ]);
       assert.equal(restoredResponse.status(), 200);
       const restored = await restoredResponse.json();
@@ -137,7 +244,9 @@ try {
       reloadEvents.push({ event: "account-validated", at: Date.now() });
       await expect(page.getByText("SGD 868.00", { exact: true })).toBeVisible();
       await writeFile(`${directory}/${viewport.width}-reload.json`, JSON.stringify({ status: "passed", accountLatencyMs: viewport.width === 390 ? 5500 : 0, events: reloadEvents }, null, 2) + "\n");
+      await writeBootstrap("reload");
     } catch (error) {
+      await writeBootstrap("reload");
       await writeFile(`${directory}/${viewport.width}-reload-failure.json`, JSON.stringify({ events: reloadEvents, bodyTextPrefix: (await page.locator("body").innerText()).slice(0, 30000) }, null, 2) + "\n");
       const failurePath = `${directory}/${viewport.width}-reload-failure.png`;
       await page.screenshot({ path: failurePath }); proof.screenshots.push(failurePath);
