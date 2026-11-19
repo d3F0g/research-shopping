@@ -169,6 +169,42 @@ describe("real SDK transport and bounded evidence", () => {
       expect(JSON.stringify(result)).not.toContain("fake-loopback-key");
     },
   );
+  it.each([
+    "Model A costs SGD 35, not tax included.",
+    "Model A costs SGD 35 without tax included.",
+    "Model A costs SGD 35, tax included.\n\nFixture data: technical details.\n\nModel A requires SGD 15 shipping in addition.",
+    "Model A costs SGD 65 while Model B costs SGD 35, tax included.",
+    "Model A costs SGD 35 to SGD 65 depending on configuration, tax included.",
+  ])(
+    "does not promote misleading native price through the SDK: %s",
+    async (text) => {
+      const current = intent();
+      const material = rewrite(
+        nativeMaterial(current),
+        `Fixture data: Fixture Powerbank Model A is a USB-C powerbank. ${text}`,
+      );
+      let calls = 0;
+      const baseUrl = await listen((_req, res) => {
+        calls++;
+        res.setHeader("content-type", "application/json");
+        res.end(JSON.stringify(material));
+      });
+      const result = await createExaProductResearch("fake-loopback-key", {
+        baseUrl,
+      })({ intent: current }, new AbortController().signal);
+      if (result.status !== "ready")
+        throw new Error("Expected an honest comparison");
+      expect(calls).toBe(1);
+      expect(result.research.choice).toBeNull();
+      expect(result.research.products[0]!.eligible).toBe(false);
+      expect(
+        result.research.products[0]!.price?.conditionsResolved ?? false,
+      ).toBe(false);
+      expect(
+        result.research.products[0]!.price?.conditions ?? [],
+      ).not.toContain("tax included");
+    },
+  );
   it.each(["is not wireless", "wired audio only", "without wireless audio"])(
     "retains adverse passage '%s' omitted by the proposed positive selection",
     (negative) => {

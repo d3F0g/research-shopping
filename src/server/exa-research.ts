@@ -15,6 +15,7 @@ import {
   type ResearchSource,
 } from "../domain/research";
 import { isSafeSourceUrl } from "../domain/safe-url";
+import { assessPriceContext } from "./price-evidence";
 
 const NativeAssessment = z.object({
   status: z.enum(["supported", "unknown", "contradicted", "conflict"]),
@@ -92,9 +93,10 @@ function containsSourceInstructions(text: string): boolean {
   );
 }
 
-function retainSources(
-  citations: z.infer<typeof Envelope>["citations"],
-): ResearchSource[] {
+function retainSources(citations: z.infer<typeof Envelope>["citations"]): {
+  sources: ResearchSource[];
+  complete: boolean;
+} {
   const unique = new Map<
     string,
     z.infer<typeof Envelope>["citations"][number] | null
@@ -111,7 +113,7 @@ function retainSources(
         unique.set(url, { ...retained, image: undefined });
     }
   }
-  return [...unique]
+  const sources = [...unique]
     .flatMap(([url, source]) => (source ? [{ url, source }] : []))
     .slice(0, 10)
     .map(({ url, source }, i) => ({
@@ -125,6 +127,13 @@ function retainSources(
         ? { imageUrl: source.image }
         : {}),
     }));
+  return {
+    sources,
+    complete:
+      unique.size <= 10 &&
+      [...unique.values()].every(Boolean) &&
+      sources.every((source) => !source.textTruncated),
+  };
 }
 function paragraph(source: ResearchSource, start: number, end: number) {
   const before = source.text.lastIndexOf("\n\n", start),
@@ -146,6 +155,7 @@ function paragraph(source: ResearchSource, start: number, end: number) {
 function bindAssessment(
   value: z.infer<typeof NativeAssessment>,
   sources: ResearchSource[],
+  completeSources: boolean,
 ): Assessment {
   const support: Assessment["support"] = [];
   let truncated = false,
@@ -185,12 +195,12 @@ function bindAssessment(
         "The retained source contains instructions directed at the assistant. It cannot establish product facts.",
       support,
     };
-  if (truncated && value.status === "supported")
+  if ((!completeSources || truncated) && value.status === "supported")
     return {
       status: "unknown",
       scope: "unclear",
       rationale:
-        "The source was cut. Discarded context may qualify the retained passage, so it cannot establish positive compliance.",
+        "Source context is incomplete or conflicting. Discarded context may qualify this passage, so it cannot establish positive compliance.",
       support,
     };
   if (value.status !== "unknown" && !support.length)
@@ -221,137 +231,71 @@ function bindAssessment(
 }
 function bindPrice(
   value: z.infer<typeof NativeProduct>["price"],
+  productName: string,
+  otherProductNames: string[],
   sources: ResearchSource[],
+  completeSources: boolean,
 ): ResearchProduct["price"] {
   if (!value) return null;
-  const assessment = bindAssessment(value.assessment, sources);
+  const assessment = bindAssessment(value.assessment, sources, completeSources);
   if (!assessment.support.length) return null;
-  if (
-    assessment.support.some((span) => {
-      const source = sources.find((s) => s.id === span.sourceId)!;
-      return source.textTruncated || containsSourceInstructions(source.text);
-    })
-  )
-    return null;
-  const token =
-    value.currency === "SGD"
-      ? "(?:SGD|S\\$|Singapore dollars?)"
-      : value.currency === "USD"
-        ? "(?:USD|US\\$|U\\.S\\. dollars?|United States dollars?)"
-        : value.currency === "EUR"
-          ? "(?:EUR|€|euros?)"
-          : value.currency === "GBP"
-            ? "(?:GBP|£|pounds?)"
-            : value.currency;
-  const number = "([0-9]+(?:,[0-9]{3})*(?:\\.[0-9]{1,2})?)";
-  const money = new RegExp(
-    `(?<![A-Za-z])${token}\\s*\\$?\\s*${number}(?!\\d|[.,]\\d)|(?<![\\d.,])${number}\\s*${token}(?![A-Za-z])`,
-    "gi",
-  );
-  let observed = false,
-    unresolved = !value.conditionsResolved;
-  const contexts: Assessment["support"] = [];
-  for (const span of assessment.support) {
-    const source = sources.find((s) => s.id === span.sourceId)!;
-    let start = span.start,
-      end = span.end;
-    const adjacent =
-      /\b(?:price|offer|members?|membership|voucher|coupon|trade.in|subscription|conditions?|minimum|purchase|tax|shipping|delivery)\b|(?:SGD|USD|EUR|GBP|S\$|US\$|€|£)\s*\d/i;
-    if (start > 1) {
-      const previous = paragraph(source, start - 3, start - 3);
-      if (previous && adjacent.test(previous.quote)) start = previous.start;
-    }
-    if (end < source.text.length) {
-      const next = paragraph(source, end + 2, end + 2);
-      if (!next && source.textTruncated) return null;
-      if (next && adjacent.test(next.quote)) end = next.end;
-    }
-    if (
-      end - start > 4000 ||
-      (source.textTruncated && end === source.text.length)
-    )
-      return null;
-    const quote = source.text.slice(start, end);
-    if (
-      /\b(?:minimum (?:spend|purchase)|membership|voucher|coupon|subscription|requires? (?:a |an )?purchase)\b/i.test(
-        source.text,
-      )
-    )
-      unresolved = true;
-    contexts.push({ ...span, start, end, quote });
-    for (const match of quote.matchAll(money)) {
-      if (Number((match[1] ?? match[2])!.replaceAll(",", "")) !== value.amount)
-        continue;
-      const before = quote.slice(Math.max(0, match.index - 120), match.index),
-        after = quote.slice(match.index + match[0].length);
-      if (
-        /\b(?:not|never|no longer|isn't|wasn't|cannot)\b[^.!?\n]*$/i.test(
-          before,
-        ) ||
-        /\b(?:save|savings?|discount|rebate|cashback|was|RRP|list price|previously|originally|difference of)\s*[:=-]?\s*$/i.test(
-          before,
-        ) ||
-        /^\s*(?:off|less|cheaper)\b/i.test(after) ||
-        /(?:\/\s*(?:mo|month|wk|week|yr|year)|\bper\s+(?:month|week|year)|\bmonthly|\binstal+ments?|\bpayments?)\b/i.test(
-          quote,
-        )
-      )
-        return null;
-      observed = true;
-      if (
-        /\b(?:less than|more than|difference|compared (?:with|to))\b/i.test(
-          quote,
-        )
-      )
-        unresolved = true;
-      const sentenceBefore = before.split(/[.!?\n]/).at(-1) ?? "";
-      const sentenceAfter = after.split(/[.!?\n]/)[0] ?? "";
-      if (
-        !(sentenceBefore + match[0] + sentenceAfter)
-          .toLowerCase()
-          .includes(value.variant.toLowerCase())
-      )
-        unresolved = true;
-      unresolved ||=
-        /\.\.\.|…|\b(?:members?|membership|trade[ -]?in|vouchers?|coupons?|subscri(?:be|ption)|new customers?|minimum (?:spend|purchase)|when you|with (?:a )?purchase|bundle|pack of|for \d+ units?)\b/i.test(
-          quote,
-        ) || /\bfrom\s*(?:SALE\s*)?$/i.test(before);
-    }
-  }
-  if (!observed) return null;
-  const conditions = value.conditions.filter((condition) =>
-    contexts.some((span) =>
-      span.quote.toLowerCase().includes(condition.toLowerCase()),
-    ),
-  );
-  unresolved ||= conditions.length !== value.conditions.length;
-  unresolved ||= contexts.some((span) =>
-    /\b(?:exclud(?:e|es|ed|ing)|not includ(?:e|ed|ing)|before|plus|additional|mandatory|extra)\b[^.!?\n]{0,100}\b(?:tax|GST|VAT|shipping|delivery|fees?|charges?)\b|\b(?:tax|GST|VAT|shipping|delivery|fees?|charges?)\b[^.!?\n]{0,80}\b(?:extra|excluded|not included|additional|apply|calculated)\b/i.test(
-      span.quote,
-    ),
-  );
-  unresolved ||= value.conditions.some(
-    (c) =>
-      !/^(?:one unit|per unit|tax included|including tax|gst included|sale price|standard price|regular price)[.!]?$/i.test(
-        c.trim(),
+  const relevant = sources.filter(
+    (source) =>
+      assessment.support.some((span) => span.sourceId === source.id) ||
+      source.text.toLowerCase().includes(productName.toLowerCase()) ||
+      !otherProductNames.some((name) =>
+        source.text.toLowerCase().includes(name.toLowerCase()),
       ),
   );
   if (
-    !contexts.some((s) =>
-      s.quote.toLowerCase().includes(value.variant.toLowerCase()),
+    relevant.some(
+      (source) =>
+        source.textTruncated || containsSourceInstructions(source.text),
     )
   )
-    unresolved = true;
+    return null;
+  const contexts = relevant.map((source) => ({
+    source,
+    proof: assessPriceContext(
+      { ...value, assessment },
+      productName,
+      source.text,
+    ),
+  }));
+  const observation = contexts.find(
+    ({ proof }) => proof.kind === "qualified" || proof.kind === "unresolved",
+  );
+  if (!observation) return null;
+  const resolved =
+    completeSources &&
+    contexts.every(
+      ({ source, proof }) =>
+        proof.kind === "absent" ||
+        (source.text.length <= 4000 && proof.kind === "qualified"),
+    );
+  const support = assessment.support.map((span) => {
+    const source = sources.find((source) => source.id === span.sourceId)!;
+    return source.text.length <= 4000
+      ? { ...span, start: 0, end: source.text.length, quote: source.text }
+      : span;
+  });
   return {
     ...value,
-    conditions,
-    conditionsResolved: !unresolved,
+    conditions:
+      resolved && observation.proof.kind === "qualified"
+        ? observation.proof.conditions
+        : [],
+    conditionsResolved: resolved,
     assessment: {
       ...assessment,
-      rationale: unresolved
-        ? "The complete price context has unresolved or conflicting conditions. Confirm the total and eligibility with the merchant."
-        : assessment.rationale,
-      support: contexts,
+      status:
+        !resolved && assessment.status === "supported"
+          ? "unknown"
+          : assessment.status,
+      rationale: resolved
+        ? assessment.rationale
+        : "The source amount is an unresolved observation. Its exact variant, complete monetary context or eligibility conditions do not establish an applicable price. Confirm the total with the merchant.",
+      support,
     },
   };
 }
@@ -379,7 +323,7 @@ export function projectExaAnswer(raw: unknown, intent: ShoppingIntent) {
   }
   const native = NativeAnswerSchema.safeParse(answer);
   if (!native.success) return unavailable("invalid-response");
-  const sources = retainSources(envelope.data.citations);
+  const { sources, complete } = retainSources(envelope.data.citations);
   if (!sources.length) return unavailable("empty");
   if (
     new Set(native.data.products.map((p) => p.id)).size !==
@@ -392,8 +336,8 @@ export function projectExaAnswer(raw: unknown, intent: ShoppingIntent) {
         id: p.id,
         name: p.name,
         variant: p.variant,
-        identity: bindAssessment(p.identity, sources),
-        requestMatch: bindAssessment(p.requestMatch, sources),
+        identity: bindAssessment(p.identity, sources, complete),
+        requestMatch: bindAssessment(p.requestMatch, sources, complete),
         requirements: intent.requirements.map((r) => ({
           requirementId: r.id,
           assessment:
@@ -401,6 +345,7 @@ export function projectExaAnswer(raw: unknown, intent: ShoppingIntent) {
               ? bindAssessment(
                   p.criteria.find((c) => c.criterionId === r.id)!.assessment,
                   sources,
+                  complete,
                 )
               : unknown(
                   "No unambiguous source assessment covers this complete requirement.",
@@ -408,9 +353,17 @@ export function projectExaAnswer(raw: unknown, intent: ShoppingIntent) {
         })),
         attributes: p.attributes.map((a) => ({
           name: a.name,
-          assessment: bindAssessment(a.assessment, sources),
+          assessment: bindAssessment(a.assessment, sources, complete),
         })),
-        price: bindPrice(p.price, sources),
+        price: bindPrice(
+          p.price,
+          p.name,
+          native.data.products
+            .filter((other) => other.id !== p.id)
+            .map((other) => other.name),
+          sources,
+          complete,
+        ),
         stock: "unverified",
         eligible: false,
         blockers: [],
