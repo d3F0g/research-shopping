@@ -1,5 +1,4 @@
-import type { ConversationState, TurnResponse } from "../../src/domain/conversation";
-import type { Assessment } from "../../src/domain/research";
+import type { ConversationState, RenderableResearch, TurnResponse } from "../../src/domain/conversation";
 import type { Intent, Json } from "../frozen-v4/contracts";
 
 export function projectIntent(state: ConversationState): Intent {
@@ -14,12 +13,14 @@ export function projectIntent(state: ConversationState): Intent {
   return { productDescription: intent.productDescription, criteria: intent.requirements.map(({ id, text, strength }) => ({ id, wording: text, strength })), budget, budgetClarified: intent.budget !== null && pending?.kind !== "currency", pendingChange, region: intent.region, responseLength: intent.responseLength, revision: state.revision, version: state.version } as Intent;
 }
 
-export function projectResponse(response: TurnResponse | null): Record<string, Json> | null {
+export function projectResponse(response: TurnResponse | { kind: "research"; research: RenderableResearch; state: ConversationState } | null): Record<string, Json> | null {
   if (!response) return null;
   const projected = JSON.parse(JSON.stringify(response)) as Record<string, Json>;
   if (response.kind === "research") {
     const research = response.research;
-    const assessment = (value: Assessment): Json => ({ ...value, support: value.support.map((span) => ({ ...span, quote: span.originalQuote, start: span.originalStart, end: span.originalEnd })) });
+    const assessment = (value: RenderableResearch["products"][number]["identity"]): Json => ({ ...value, support: value.support.map((span) => "origin" in span
+      ? { ...span, quote: span.origin.kind === "provider" ? span.origin.reportedQuote : span.literal.text, start: span.literal.start, end: span.literal.end }
+      : { ...span, quote: span.originalQuote, start: span.originalStart, end: span.originalEnd }) });
     projected.research = { ...JSON.parse(JSON.stringify(research)) as Record<string, Json>, products: research.products.map((product) => ({ ...JSON.parse(JSON.stringify(product)) as Record<string, Json>, identity: assessment(product.identity), requestMatch: assessment(product.requestMatch), criteria: product.requirements.map(({ requirementId, assessment: value }) => ({ criterionId: requirementId, assessment: assessment(value) })), attributes: product.attributes.map((row) => ({ name: row.name, assessment: assessment(row.assessment) })), price: product.price ? { ...product.price, assessment: assessment(product.price.assessment) } : null })) };
   }
   return projected;

@@ -1,3 +1,4 @@
+import { validateHistoricalFieldnoteReport } from "../history-fieldnote-v2/report";
 import { execFileSync } from "node:child_process";
 import { readFile, readdir } from "node:fs/promises";
 import { join } from "node:path";
@@ -15,7 +16,7 @@ import { ADAPTER_VERSION, ASSERTION_VERSION, type CaseResult, type Observation, 
 
 export type AnyReport = V2 | V3 | V4 | RunReport;
 const paths = {
-  grading: ["v2/assertions.ts", "v2/contracts.ts", "v2/projection.ts", "v2/report.ts", "frozen-v4/assertions.ts", "frozen-v4/contracts.ts", "frozen-v4/report.ts", "hash.ts", "dataset.ts", "dataset/milestones.ts"],
+  grading: ["v2/assertions.ts", "v2/provenance.ts", "v2/contracts.ts", "v2/projection.ts", "v2/report.ts", "frozen-v4/assertions.ts", "frozen-v4/contracts.ts", "frozen-v4/report.ts", "hash.ts", "dataset.ts", "dataset/milestones.ts"],
   adapter: ["v2/adapter.ts", "v2/projection.ts", "v2/contracts.ts", "network.ts", "inputs/materials.ts"],
 };
 const git = (...args: string[]) => execFileSync("git", args, { encoding: "utf8" }).trim();
@@ -64,6 +65,7 @@ export function validateReport(report: AnyReport): void {
   if (report.schemaVersion === 2) { validateV2(report); return; }
   if (report.schemaVersion === 3) { validateV3(report); return; }
   if (report.schemaVersion === 4) { validateV4(report); return; }
+  if (report.schemaVersion === 5 && report.adapterVersion === "fieldnote-v2-http-1.0.0") { validateHistoricalFieldnoteReport(report); return; }
   if (report.schemaVersion !== 5 || report.adapterVersion !== ADAPTER_VERSION || report.assertionVersion !== ASSERTION_VERSION) throw new Error("Unsupported evaluation contract");
   if (hash(report.datasetContracts) !== report.datasetHash || new Set(report.datasetContracts.map((row) => row.id)).size !== report.datasetContracts.length) throw new Error("Dataset contract mismatch");
   for (const kind of ["grading", "adapter"] as const) {

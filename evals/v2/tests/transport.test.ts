@@ -182,13 +182,56 @@ test("native quotations stay distinct from complete context and mutations fail p
     const response = observed.rawTurns[0]!.response;
     assert.equal(response?.kind, "research"); if (response?.kind !== "research") return;
     const span = response.research.products[0]!.identity.support[0]!;
-    assert.ok(span.quote.includes(span.originalQuote));
-    assert.ok(span.start <= span.originalStart && span.end >= span.originalEnd);
-    assert.ok(span.quote.length > span.originalQuote.length);
+    assert.ok(span.context.text.includes(span.literal.text));
+    assert.ok(span.context.start <= span.literal.start && span.context.end >= span.literal.end);
+    assert.ok(span.context.text.length > span.literal.text.length);
     const projected = observed.turns[0]!.response!.research as Record<string, Json>;
     const identity = (projected.products as Record<string, Json>[])[0]!.identity as { support: { quote: string }[] };
-    assert.equal(identity.support[0]!.quote, span.originalQuote);
-    span.originalQuote = "Synthetic invented native quotation";
+    assert.equal(identity.support[0]!.quote, span.literal.text);
+    if (span.origin.kind !== "provider") throw new Error("Expected provider support");
+    span.origin.reportedQuote = "Synthetic invented native quotation";
     assert.equal(grade(contract, observed).find((item) => item.id === `native-complete-provenance:${response.research.products[0]!.id}`)!.status, "fail");
+  } finally { guard.close(); }
+});
+
+test("whitespace bindings preserve actual native reports and expose the historical representation gap", async () => {
+  const { catalogMaterial } = await import("../../../tests/helpers/v3-catalog-material");
+  const { initialConversation } = await import("../../../src/domain/conversation");
+  const { ResearchSnapshotSchema } = await import("../../../src/domain/research");
+  const native = catalogMaterial(initialConversation().intent);
+  const input = { ...material("powerbank"), id: "fixture-catalog-whitespace", label: "Fixture catalog whitespace format only", body: JSON.parse(JSON.stringify(native)) as Json };
+  input.sha256 = materialPayloadHash(input);
+  const guard = offlineNetwork();
+  try {
+    const contract = scenario(["Find sunglasses between SGD800 and1000"]);
+    const observed = await observe(contract, input, guard);
+    const response = observed.rawTurns[0]!.response;
+    assert.equal(response?.kind, "research"); if (response?.kind !== "research") return;
+    const product = response.research.products[0]!;
+    assert.equal(product.price?.amount, 868);
+    assert.equal(product.price?.conditionsResolved, false);
+    assert.equal(response.research.choice, null);
+    const checks = grade(contract, observed);
+    assert.equal(checks.find((check) => check.id === `native-complete-provenance:${product.id}`)!.status, "pass");
+    assert.equal(checks.find((check) => check.id === `quote-containment:${product.id}`)!.status, "blocked");
+    const projected = observed.turns[0]!.response!.research as Record<string, Json>;
+    const identity = (projected.products as Record<string, Json>[])[0]!.identity as { support: { quote: string }[] };
+    assert.equal(identity.support[0]!.quote, native.answer.products[0]!.identity.support[0]!.quote);
+    const mutated = structuredClone(observed);
+    const raw = mutated.rawTurns[0]!.response;
+    if (raw?.kind !== "research") throw new Error("Expected current fixture");
+    const support = raw.research.products[0]!.identity.support[0]!;
+    support.origin = { kind: "provider", reportedQuote: support.literal.text, match: "literal" };
+    assert.equal(ResearchSnapshotSchema.safeParse(raw.research).success, true);
+    assert.equal(grade(contract, mutated).find((check) => check.id === `native-complete-provenance:${product.id}`)!.status, "fail");
+    support.origin = { kind: "source-context" };
+    assert.equal(grade(contract, mutated).find((check) => check.id === `native-complete-provenance:${product.id}`)!.status, "fail");
+    const cuts = structuredClone(observed);
+    const cut = cuts.rawTurns[0]!.response;
+    if (cut?.kind !== "research") throw new Error("Expected current fixture");
+    cut.research.sources[0]!.originalLength++;
+    assert.equal(grade(contract, cuts).find((check) => check.id === `native-complete-provenance:${product.id}`)!.status, "fail");
+    assert.equal(observed.network.externalRequests, 0);
+    assert.equal(observed.cleanup, true);
   } finally { guard.close(); }
 });

@@ -78,3 +78,17 @@ test("frozen hard-requirement and bounded-dispatch assertions stay sensitive", (
   assert.equal(checks.find((check) => check.id === "hard-criterion-retention:0")!.status, "fail");
   assert.equal(checks.find((check) => check.id === "bounded-dispatch:0")!.status, "fail");
 });
+
+test("historical Fieldnote schema-5 reports retain read integrity without current regrading", async () => {
+  const old = JSON.parse(await readFile("artifacts/fieldnote-v2/conversation-polish/full60/report.json", "utf8"));
+  validateReport(old);
+  const counts = structuredClone(old);
+  counts.summary.passed++;
+  assert.throws(() => validateReport(counts), /summary/);
+  const provenance = structuredClone(old);
+  provenance.cases.find((row: RunReport["cases"][number]) => row.observation?.rawTurns.length).observation.rawTurns[0].after.intent.productDescription = "Fixture invented historical state";
+  assert.throws(() => validateReport(provenance), /state|transport/);
+  const implementation = structuredClone(old);
+  implementation.implementationInputs.grading[0].text += "\n";
+  assert.throws(() => validateReport(implementation), /hash/);
+});
