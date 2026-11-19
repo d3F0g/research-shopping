@@ -159,6 +159,17 @@ describe("shopping retrieval and ordinary source price blocks", () => {
     expect(result.research.products[0]!.eligible).toBe(true);
     expect(result.research.choice?.productId).toBe("model-a");
   });
+  it("does not treat an ordinary configuration description as a price qualifier", () => {
+    const intent = sunglassesIntent();
+    const material = merchantMaterial(intent, "AX1 costs SGD850, tax included.");
+    const text = material.citations[0]!.text.replace("exact variant AX1", "standard configuration AX1");
+    material.citations[0]!.text = text;
+    material.answer.products[0]!.identity.support[0]!.quote = text;
+    const result = projectExaAnswer(material, intent);
+    if (result.status !== "ready") throw new Error("No comparison");
+    expect(result.research.products[0]!.price?.amount).toBe(850);
+    expect(result.research.choice?.productId).toBe("model-a");
+  });
   it.each([
     ["AX1 costs SGD850, tax included.", "https://manufacturer.com/model-a"],
     ["AX1\nPrice: SGD850\nTax included.", "https://manufacturer.com/"],
@@ -290,7 +301,13 @@ describe("private projection diagnostics at the SDK boundary", () => {
     expect(body.kind).toBe("research");
     expect(body.research.intent.budget).toEqual({ minimum: 800, maximum: 1000, currency: "SGD" });
     expect(body.research.products[0].eligible).toBe(mode === "complete");
-    expect(body.research.products[0].price).toEqual(mode === "other-variant" || mode === "range" ? null : expect.objectContaining({ amount: 850, currency: "SGD", variant: "AX1", conditionsResolved: mode === "complete" }));
+    if (mode === "other-variant" || mode === "range") {
+      expect(body.research.products[0].price).toBeNull();
+    } else {
+      expect(body.research.products[0].price).toMatchObject({
+        amount: 850, currency: "SGD", variant: "AX1", conditionsResolved: mode === "complete",
+      });
+    }
     expect(body.research.choice?.productId ?? null).toBe(mode === "complete" ? "model-a" : null);
     expect(reservations).toBe(1);
     expect(sdk.calls()).toBe(1);
