@@ -20,3 +20,14 @@ describe("answers to pending money questions", () => {
     expect(result.preferences.productDescription).toBe(initial.productDescription);
   });
 });
+
+describe("amendments while currency is unresolved", () => {
+  it("retains the missing currency and floor when the user changes only the ceiling", () => {
+    const first = updateIntent("powerbank $30-40", defaultIntent());
+    const amended = updateIntent("make it 50", first.preferences);
+    expect(amended.preferences.budget).toBeNull();
+    expect(amended.preferences.pendingChange).toMatchObject({ kind: "money", missingSlot: "currency", draft: { minimum: 30, amount: 50, currency: null } });
+    const resolved = updateIntent("SGD", amended.preferences);
+    expect(resolved.preferences.budget).toEqual({ minimum: 30, amount: 50, currency: "SGD" });
+  });
+});

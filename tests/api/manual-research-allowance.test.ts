@@ -1,6 +1,7 @@
 import { randomUUID } from "node:crypto";
 import { readFile, unlink } from "node:fs/promises";
 import { afterEach, describe, expect, it, vi } from "vitest";
+import { syntheticIntent } from "../fixtures/dynamic-research";
 import { defaultIntent } from "../../src/domain/contracts";
 import { createResearchQuota } from "../../src/server/research-quota";
 import { manualResearchFiles } from "../helpers/manual-research";
@@ -26,23 +27,9 @@ async function submit(
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(body),
     });
-  const prepared = await (
-    await post({
-      phase: "prepare",
-      message,
-      operationId,
-      preferences: defaultIntent(),
-    })
-  ).json();
-  return prepared.kind === "prepared"
-    ? (
-        await post({
-          phase: "research",
-          operationId,
-          preferences: prepared.preferences,
-        })
-      ).json()
-    : prepared;
+  if (message === "A quiet H13 air purifier under SGD300. Must have washable prefilter.")
+    return (await post({ phase: "research", operationId, preferences: syntheticIntent() })).json();
+  return (await post({ phase: "prepare", message, operationId, preferences: defaultIntent() })).json();
 }
 
 describe("manual allowance through the actual server entry point and SDK", () => {

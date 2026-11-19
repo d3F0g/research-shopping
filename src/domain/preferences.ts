@@ -145,8 +145,6 @@ function interpretMessage(
   previous: ShoppingIntent,
 ): IntentUpdate {
   const text = message.trim();
-  const pendingAnswer = resolvePendingAnswer(text, previous);
-  if (pendingAnswer) return pendingAnswer;
   const help = normalized(text);
   if (
     /^(?:how (?:does (?:this|it|fieldnote|this app) work|do i use (?:this|fieldnote|this app))|what can (?:you|fieldnote|this app) do|help(?: me use (?:this|fieldnote|this app))?|can you (?:place an order|buy (?:it|something) for me))$/.test(
@@ -434,7 +432,7 @@ export function updateIntent(
   message: string,
   previous: ShoppingIntent,
 ): IntentUpdate {
-  return retainPendingUpdate(interpretMessage(message, previous), message);
+  return resolvePendingAnswer(message, previous) ?? retainPendingUpdate(interpretMessage(message, previous), message);
 }
 
 export function migrateLegacyPreferences(previous: LegacyPreferences):
@@ -536,6 +534,14 @@ export function unresolvedMoneyDraft(message: string, previous: ShoppingIntent):
 export function resolvePendingAnswer(message: string, previous: ShoppingIntent): IntentUpdate | null {
   const question = previous.pendingChange;
   if (!question || question.kind !== "money" || question.missingSlot !== "currency" || question.draft.amount === null) return null;
+  if (/^make it\s/i.test(message.trim()) && !/\b(?:SGD|USD)\b|S\$|US\$/i.test(message)) {
+    const amended = parseBudget(message, { amount: question.draft.amount, currency: "SGD", ...(question.draft.minimum === null ? {} : { minimum: question.draft.minimum }) }, previous.region);
+    if (amended.kind === "updated" && amended.budget) {
+      const pendingChange = { ...question, message, id: `question-${previous.revision + 1}`, draft: { ...question.draft, amount: amended.budget.amount } };
+      return { preferences: { ...previous, pendingChange, revision: previous.revision + 1 }, notes: [], clarification: { reason: pendingChange.reason, message: pendingChange.explanation } };
+    }
+    return { preferences: previous, notes: [], clarification: { reason: question.reason, message: amended.kind === "clarification" ? amended.message : question.explanation } };
+  }
   const match = /^(?:it(?:'s| is) |in )?(SGD|USD|S\$|US\$)(?:\s*\$?\s*\d+(?:\.\d{1,2})?)?[.!?]*$/i.exec(message.trim());
   if (!match) return null;
   const currency = /^(?:USD|US\$)$/i.test(match[1]!) ? "USD" : "SGD";

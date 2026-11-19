@@ -32,7 +32,7 @@ describe("read-only historical response rendering", () => {
   it("renders current assessment snapshots through the independent current renderer", () => {
     const research = syntheticComparison();
     const outcome = HistoricalApplicationTurnResponseSchema.parse({
-      responseVersion: 4,
+      responseVersion: 5,
       kind: "research",
       preferences: research.intent,
       answer: research.summary,
