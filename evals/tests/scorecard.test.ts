@@ -4,6 +4,9 @@ import { readFile } from "node:fs/promises";
 import { crossContractScorecard, assessmentTransitions } from "../scorecard";
 import { caseResult, makeReport, validateReport, compareReports, type AnyReport } from "../report";
 import { hash } from "../hash";
+import { offlineNetwork } from "../network";
+import { scenarioMaterial } from "../inputs/materials";
+import { fixedIntentInput, scenarioIntentInput } from "../inputs/intent";
 import { loadDataset } from "../dataset";
 import type { Check, RunReport } from "../contracts";
 import type { RunReport as FrozenReport } from "../frozen-v2/contracts";
@@ -12,7 +15,16 @@ let candidate: RunReport;
 before(async () => {
   baseline = JSON.parse(await readFile(new URL("../../artifacts/product-evals/baseline-v1/report.json", import.meta.url), "utf8"));
   const { scenarios } = await loadDataset();
-  candidate = await makeReport(scenarios.map((scenario) => caseResult(scenario, baseline.cases.find((row) => row.id === scenario.id)!.material, null, "Explicit synthetic missing-execution control")), scenarios);
+  const guard = offlineNetwork();
+  try {
+    const { observe } = await import("../adapter");
+    const cases = [];
+    for (const scenario of scenarios) {
+      const material = scenarioMaterial(scenario.provider, scenario.id);
+      cases.push(caseResult(scenario, material, await observe(scenario, material, guard)));
+    }
+    candidate = await makeReport(cases, scenarios);
+  } finally { guard.close(); }
 });
 test("frozen v2 revalidates through static code while embedded source remains inert", () => {
   validateReport(baseline);
@@ -32,11 +44,9 @@ test("cross-contract bridge binds sixty rows, immutable requirements and both co
   assert.equal(result.baseline.digest, hash(baseline));
   assert.equal(result.candidate.digest, hash(candidate));
   assert.equal(result.incomparableInputs.length, 0);
-  assert.equal(result.pairedAssessed.denominator, 0);
-  assert.equal(result.scenarioChanges.newlyPassing.length, 0);
-  assert.equal(result.scenarioChanges.failedToUnassessed.length, baseline.summary.failed);
-  assert(result.assertionChanges.failedToUnassessed.length > 0);
-  assert.equal(result.assertionChanges.newlyPassing.length, 0);
+  assert(result.pairedAssessed.denominator > 0);
+  assert(result.assertionChanges.lostAssessment.length > 0);
+  assert(result.scenarioChanges.failedToUnassessed.every((id) => !result.scenarioChanges.newlyPassing.includes(id)));
   assert(result.rows.every((row) => row.sharedRequirements.every((item) => item.hash.length === 64 && item.gradingHashes.before === baseline.implementationHashes.grading)));
   assert.equal(compareReports(baseline, candidate).compatible, false);
   assert.equal(compareReports(baseline, candidate).notComparable.length, 60);
@@ -78,4 +88,33 @@ test("assertion transitions distinguish regressions, discovered failures and los
   assert.deepEqual(transitions.stillFailing.map((row) => row.key), ["0/same"]);
   const downgraded = assessmentTransitions([check("critical", "pass")], [{ ...check("critical", "fail"), critical: false }]);
   assert.equal(downgraded.criticalRegressions.length, 1);
+});
+
+test("alternate and missing interpretation treatments cannot enter comparable improvement counts", async () => {
+  const guard = offlineNetwork();
+  try {
+    const { observe } = await import("../adapter");
+    const contract = candidate.datasetContracts[0]!;
+    const original = candidate.cases[0]!;
+    const authored = await scenarioIntentInput(contract);
+    for (const intent of [null, fixedIntentInput(authored.turns, "Separate custom-control treatment")]) {
+      const observed = await observe(contract, original.material, guard, { intent });
+      const cases = [...candidate.cases];
+      cases[0] = caseResult(contract, original.material, observed);
+      const changed = await makeReport(cases, candidate.datasetContracts);
+      const result = await crossContractScorecard(baseline, changed);
+      assert.deepEqual(result.incomparableInputs, [contract.id]);
+      assert.equal(result.rows[0]!.researchMaterial.equal, true);
+      assert.equal(result.rows[0]!.interpretationTreatment.comparable, false);
+      assert.equal(result.rows[0]!.assertionChanges, null);
+      assert(!result.scenarioChanges.newlyPassing.includes(contract.id));
+      assert(!result.assertionChanges.newlyPassing.some((row) => row.scenarioId === contract.id));
+    }
+    const absentCases = [...candidate.cases];
+    absentCases[0] = caseResult(contract, original.material, null, "Explicit missing-execution control");
+    const absent = await crossContractScorecard(baseline, await makeReport(absentCases, candidate.datasetContracts));
+    assert.equal(absent.rows[0]!.interpretationTreatment.observedMode, "not-executed");
+    assert.equal(absent.rows[0]!.strictVerdicts.v5, "blocked");
+    assert.equal(absent.rows[0]!.assertionChanges, null);
+  } finally { guard.close(); }
 });
