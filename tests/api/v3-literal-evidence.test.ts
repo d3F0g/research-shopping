@@ -191,3 +191,21 @@ describe("ambiguous catalog headings", () => {
     expect(project(material).products[0]!.price).toMatchObject({ amount: 868, conditionsResolved: false });
   });
 });
+
+
+describe("unique catalog heading binding", () => {
+  it("retains the raw heading span when its only difference is whitespace", () => {
+    const material = catalogMaterial(intent);
+    material.citations[0]!.text = material.citations[0]!.text.replace("Fixture Meridian Sunglasses - Silver", "Fixture Meridian Sunglasses -  Silver");
+    const snapshot = project(material);
+    expect(snapshot.products[0]!.identity.status).toBe("supported");
+    expect(snapshot.products[0]!.price).toMatchObject({ amount: 868, conditionsResolved: false });
+    expect(snapshot.sources[0]!.text).toBe(material.citations[0]!.text);
+  });
+  it("does not use adverse case folding to create a positive heading binding", () => {
+    const material = catalogMaterial(intent);
+    material.citations[0]!.text = material.citations[0]!.text.replace("Fixture Meridian Sunglasses - Silver", "fixture meridian sunglasses - silver");
+    material.answer.products[0]!.identity.support[0]!.quote = material.citations[0]!.text;
+    expect(project(material).products[0]!.price).toBeNull();
+  });
+});
