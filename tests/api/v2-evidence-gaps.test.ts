@@ -176,6 +176,32 @@ describe("shopping retrieval and ordinary source price blocks", () => {
     ]);
   });
   it.each([
+    "Fixture Meridian Sunglasses AX1\nPrice: SGD850 to SGD1200\nDepending on configuration.",
+    "Fixture Meridian Sunglasses AX1\nPrice: SGD850–1200\nDepending on configuration.",
+    "Fixture Meridian Sunglasses AX1\nSGD850\nFor AX2 only.",
+    "Fixture Meridian Sunglasses AX1\nSGD850\nFor AX2.",
+    "Fixture Meridian Sunglasses AX1\nSGD850\nPrice applies to AX2 only.",
+    "Fixture Meridian Sunglasses AX1\nSGD850\nAX2 variant only.",
+    "Fixture Meridian Sunglasses AX1\nSGD850\nFor three units.",
+    "AX1 costs SGD850 to SGD1200 depending on configuration.",
+    "AX1 costs SGD850 for AX2 only.",
+    "AX1 costs SGD850 for three units.",
+    "AX1 costs SGD850, tax included. For AX2.",
+  ])("withholds a single exact price when its amount, variant or quantity is unbound: %s", (block) => {
+    const intent = sunglassesIntent();
+    const result = projectExaAnswer(merchantMaterial(intent, block), intent);
+    if (result.status !== "ready") throw new Error("No comparison");
+    expect(result.research.choice).toBeNull();
+    expect(result.research.products[0]!.price).toBeNull();
+  });
+  it("retains a literal known membership price condition prominently without making a choice", () => {
+    const intent = sunglassesIntent();
+    const result = projectExaAnswer(merchantMaterial(intent, "Fixture Meridian Sunglasses AX1\nSGD850\nTax included.\nMembership required."), intent);
+    if (result.status !== "ready") throw new Error("No comparison");
+    expect(result.research.products[0]!.price).toMatchObject({ amount: 850, variant: "AX1", conditionsResolved: false, conditions: ["Membership required"] });
+    expect(result.research.choice).toBeNull();
+  });
+  it.each([
     "Fixture Meridian Sunglasses AX1\nSGD 850.00\nOnly available with membership.",
     "Fixture Meridian Sunglasses AX2\nSGD 850.00\nFor one unit, tax included.",
     "Fixture Meridian Sunglasses AX1\nSGD 850.00–1200.00\nDepending on configuration.",
