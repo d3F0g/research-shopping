@@ -30,6 +30,42 @@ const hasNegativeContext = (message: string, source: { start: number; end: numbe
   return /\b(?:no|not|never|cannot|without|neither|nor|[a-z]+n't|avoid\w*|refus\w*)\b/i.test(`${before}${source.text}${after}`.replace(/[’‘]/g, "'"));
 };
 
+const localAmount = String.raw`(?:(?:SGD|USD|S\$|US\$|\$)\s*)?\d+(?:,\d{3})*(?:\.\d{1,2})?k?(?:\s*(?:SGD|USD))?`;
+const localMoney = String.raw`(?:(?:that costs?|costing|priced at|with a budget of)\s+(?:(?:around|about|approximately)\s+)?|(?:under|below|up to|at most|around|about|approximately)\s+|(?:between|from)\s+)${localAmount}(?:\s*(?:[-\u2013\u2014]|to|and)\s*${localAmount})?`;
+const localShopping = new RegExp(String.raw`^(?:(?:now\s+|instead\s+)?I\s+(?:want(?:\s+to buy)?|need|am looking for)|I'm looking for|find me|switch to)\s+(?:(?:a|an|the)\s+)?([\p{L}][\p{L}\s'-]*?)(?:\s+(${localMoney}))?[.!?]?$`, "iu");
+const unsupportedTargetOperator = /\b(?:and|or|but|nor|not|no|never|without|with|must|required?|only|prefer|unless|if|when|that|which|who|for|to|under|over|below|above|between|from|around|about|costs?|costing|budget|price|priced|support\w*|contain\w*|include\w*|exclud\w*|except\w*|avoid\w*|than|versus|vs|non|free|same|these|those|it|them|buy|find|ignore|instead|is|are|be|has|have|can|could|should|would|will|need|needs|want|please)\b/i;
+const localPhrase = (text: string) => !unsupportedTargetOperator.test(text) && !/\b[\p{L}]+n't\b/iu.test(text) && /^[\p{L}]+(?:['-][\p{L}]+)*(?:\s+[\p{L}]+(?:['-][\p{L}]+)*)*$/u.test(text);
+
+export function parseLocalIntentActions(message: string, previous: ShoppingIntent): IntentActions | null {
+  if (previous.pendingChange) return null;
+  const text = message.trim();
+  if (previous.productDescription) {
+    const criterion = /^(only|prefer)\s+(.+?)[.!?]?$/i.exec(text);
+    if (/^(?:cheaper|lighter)[.!?]?$/i.test(text) || (criterion && localPhrase(criterion[2]!))) {
+      const start = message.indexOf(text);
+      return { disposition: "research", actions: [{ kind: "add-criterion", source: { start, end: start + text.length, text }, strength: criterion?.[1]?.toLowerCase() === "only" ? "hard" : "flexible" }] };
+    }
+  }
+  if (previous.productDescription && !/^(?:now\s+I\s+(?:want|need)|instead\s+I\s+|switch to\s+)/i.test(text)) return null;
+  const match = localShopping.exec(text);
+  if (!match || /^(?:a|an|the)$/i.test(match[1]!) || !localPhrase(match[1]!)) return null;
+  const start = message.indexOf(text);
+  const actions: IntentActions["actions"] = [{ kind: "start-request", source: { start, end: start + text.length, text } }];
+  const money = match[2];
+  if (money) {
+    const range = /[-\u2013\u2014]|\b(?:to|and)\b/.test(money.replace(/^up to\s+/i, ""));
+    const context = range && /\$/.test(money) && !hasExplicitBudgetCurrency(money) ? null : previous.budget;
+    const parsed = parseBudget(text, context, previous.region);
+    if (parsed.kind !== "updated" && parsed.kind !== "clarification") return null;
+    const draft = parsed.kind === "updated" && parsed.budget
+      ? { amount: parsed.budget.amount, minimum: range ? parsed.budget.minimum ?? null : null, currency: parsed.budget.currency }
+      : unresolvedMoneyDraft(text, previous);
+    const moneyStart = message.indexOf(money, start);
+    actions.push({ kind: "budget", source: { start: moneyStart, end: moneyStart + money.length, text: money }, operation: parsed.kind === "clarification" ? "clarify" : range ? "replace-range" : "set-maximum", draft });
+  }
+  return { disposition: "research", actions };
+}
+
 
 export function applyIntentActions(previous: ShoppingIntent, message: string, raw: unknown): IntentUpdate | null {
   const parsed = IntentActionsSchema.safeParse(raw);

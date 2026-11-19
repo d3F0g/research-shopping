@@ -1,8 +1,30 @@
 import { describe, expect, it } from "vitest";
 import { BudgetSchema, defaultIntent } from "../../src/domain/contracts";
 import { updateIntent } from "../../src/domain/preferences";
+import { parseBudget } from "../../src/domain/budget";
 
 describe("dynamic budget ranges", () => {
+  it.each([
+    ["Powerbank costs around SGD30-40.", 30, 40],
+    ["Powerbank costs around SGD30-40. Prefer portability.", 30, 40],
+    ["Powerbank costs around SGD30.25-40.50.", 30.25, 40.5],
+    ["Powerbank under SGD40.50.", undefined, 40.5],
+  ])("retains complete monetary values before sentence punctuation in %s", (message, minimum, amount) => {
+    expect(parseBudget(message, null, "SG")).toMatchObject({ kind: "updated", budget: { ...(minimum === undefined ? {} : { minimum }), amount, currency: "SGD" } });
+  });
+
+  it.each([
+    "Powerbank costs around SGD30-40..",
+    "Powerbank costs around SGD30-40..50.",
+    "Powerbank costs around SGD30-40.501.",
+    "Powerbank costs around SGD30-40e2.",
+    "Powerbank costs around SGD30.-40",
+    "Powerbank under SGD40..",
+    "Powerbank under SGD40. 50",
+  ])("does not salvage malformed numeric prefixes in %s", (message) => {
+    expect(parseBudget(message, null, "SG")).toMatchObject({ kind: "clarification", reason: "budget" });
+  });
+
   it("keeps the exact necklace request and both thousand-denominated bounds", () => {
     const result = updateIntent("Necklaces between 1k to 2k", defaultIntent());
     expect(result.clarification).toBeUndefined();

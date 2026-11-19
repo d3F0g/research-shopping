@@ -11,6 +11,7 @@ async function send(page: Page, message: string) {
 }
 
 test("shows actual preparation and search activity with an attributed source illustration on desktop and mobile", async ({ page }, testInfo) => {
+  const preparationRequest = `${request}. Prefer portability.`;
   const native = powerbankAnswer();
   Object.assign(native.citations[0], { image: "https://images.example.com/synthetic-powerbank.svg" });
   const imageRequests: import("@playwright/test").Request[] = [];
@@ -22,10 +23,11 @@ test("shows actual preparation and search activity with an attributed source ill
   try {
     await page.setViewportSize({ width: 1440, height: 900 });
     await page.goto(transport.baseUrl);
-    await expect(page.locator(".composer-note")).toContainText("paid OpenAI interpretation");
+    await expect(page.locator(".composer-note")).toContainText("one paid Exa call");
+    await expect(page.locator(".composer-note")).not.toContainText("OpenAI");
     await expect(page.locator("html")).toHaveClass(/dark/);
     transport.deferInterpretation();
-    await send(page, request);
+    await send(page, preparationRequest);
     await expect(page.locator(".pending-message")).toHaveText("Understanding your request");
     await page.screenshot({ path: testInfo.outputPath("desktop-understanding.png") });
     transport.resumeInterpretation();
@@ -34,7 +36,7 @@ test("shows actual preparation and search activity with an attributed source ill
     transport.deferNext();
     await first.getByRole("button", { name: "SGD", exact: true }).click();
     await expect.poll(() => transport.sdkRequests.length).toBe(1);
-    await expect(page.locator(".pending-message")).toHaveText(`Searching sources for ${request}`);
+    await expect(page.locator(".pending-message")).toHaveText(`Searching sources for ${preparationRequest}`);
     await expect(first.getByRole("button", { name: "SGD", exact: true })).toHaveCount(0);
     await page.screenshot({ path: testInfo.outputPath("desktop-searching.png") });
     await page.setViewportSize({ width: 390, height: 600 });
@@ -55,6 +57,11 @@ test("shows actual preparation and search activity with an attributed source ill
     expect(imageRequests[0].headers().referer).toBeUndefined();
     expect(transport.interpretationRequests).toHaveLength(1);
     expect(transport.requests[1]).toHaveProperty("questionId", "question-1");
+    expect(transport.requests.find((turn) => turn.phase === "research")!.preferences).toMatchObject({
+      budget: { minimum: 30, amount: 40, currency: "SGD" },
+      criteria: [expect.objectContaining({ wording: "portability", strength: "flexible" })],
+      pendingChange: null,
+    });
     for (const viewport of [{ width: 1440, height: 900 }, { width: 390, height: 844 }, { width: 390, height: 600 }]) {
       await page.setViewportSize(viewport);
       await card.scrollIntoViewIfNeeded();
@@ -111,7 +118,7 @@ test("retains the resolved budget through provider failure and retries research 
     expect(transport.sdkRequests).toHaveLength(1);
     await latest.getByRole("button", { name: "Retry", exact: true }).click();
     await expect(latest.getByRole("article", { name: "Synthetic Pocket 10", exact: true })).toBeVisible();
-    expect(transport.interpretationRequests).toHaveLength(1);
+    expect(transport.interpretationRequests).toHaveLength(0);
     expect(transport.sdkRequests).toHaveLength(2);
     const research = transport.requests.filter((turn) => turn.phase === "research");
     expect(research[1].operationId).not.toBe(research[0].operationId);
@@ -201,12 +208,12 @@ function powerbankAnswer() {
   return native;
 }
 
-for (const currency of ["SGD", "S$", "SGD$30"]) {
-  test(`retains the original 30 to 40 range after ${currency} and automatically researches`, async ({ page }, testInfo) => {
-    const transport = await actualComposition(page, testInfo, powerbankAnswer());
+for (const [currency, submittedRequest] of [["SGD", request], ["S$", request], ["SGD$30", request], ["SGD", `${request}.`]]) {
+  test(`retains the original 30 to 40 range after ${currency}${submittedRequest.endsWith(".") ? " with sentence punctuation" : ""} and automatically researches`, async ({ page }, testInfo) => {
+    const transport = await actualComposition(page, testInfo, powerbankAnswer(), { interpretIntent: null });
     try {
       await page.goto(transport.baseUrl);
-      await send(page, request);
+      await send(page, submittedRequest);
       await expect(page.getByTestId("conversation-turn").last()).toContainText("SGD or USD");
       expect(transport.sdkRequests).toHaveLength(0);
       await send(page, currency);
@@ -214,11 +221,21 @@ for (const currency of ["SGD", "S$", "SGD$30"]) {
       await expect(latest.getByRole("heading", { name: "Conditional choice · Synthetic Pocket 10", exact: true })).toBeVisible();
       await expect(latest.locator(".intent-summary > p")).toHaveText("SGD 30–40");
       expect(transport.sdkRequests).toHaveLength(1);
+      expect(transport.interpretationRequests).toHaveLength(0);
       expect(transport.requests.filter((turn) => turn.phase === "research")).toEqual([
         expect.objectContaining({ preferences: expect.objectContaining({ budget: { minimum: 30, amount: 40, currency: "SGD" }, pendingChange: null }) }),
       ]);
-      await expect(page.getByTestId("user-message")).toHaveText([request, currency]);
+      await expect(page.getByTestId("user-message")).toHaveText([submittedRequest, currency]);
       await expect(page.locator(".pending-change, .question-card")).toHaveCount(0);
+      if (currency === "SGD") {
+        for (const viewport of [{ width: 1440, height: 900 }, { width: 390, height: 600 }]) {
+          await page.setViewportSize(viewport);
+          await latest.getByRole("article").scrollIntoViewIfNeeded();
+          await expect(page.getByLabel("Message", { exact: true })).toBeInViewport();
+          expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(viewport.width);
+          await page.screenshot({ path: testInfo.outputPath(`no-interpreter-${viewport.width}.png`) });
+        }
+      }
     } finally {
       await transport.close();
     }

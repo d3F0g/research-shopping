@@ -26,23 +26,29 @@ export async function startManualServer(
   let defer = false;
   let aborts = 0;
   const provider = createServer((request, response) => {
+    if (request.url === "/api/tags" && options.intent) {
+      response.writeHead(200, { "Content-Type": "application/json" });
+      response.end(JSON.stringify({ models: [{ name: "fixture-local:latest", model: "fixture-local:latest" }] }));
+      return;
+    }
     let body = "";
     request.on("data", (chunk) => {
       body += String(chunk);
     });
     request.on("end", async () => {
       const parsed = JSON.parse(body);
-      if (request.url === "/v1/responses" && options.intent) {
+      if (request.url === "/api/chat" && options.intent) {
         intentRequests.push(parsed);
-        const input = JSON.parse(parsed.input);
+        const input = JSON.parse(parsed.messages.find((message: { role: string }) => message.role === "user").content);
         const result = await fixtureIntentInterpreter({
           ...input, phase: "prepare", operationId: "00000000-0000-4000-8000-000000000001",
         } as PrepareTurnRequest, new AbortController().signal);
         response.writeHead(200, { "Content-Type": "application/json" });
         response.end(JSON.stringify({
-          status: "completed",
-          output: [{ type: "message", content: [{ type: "output_text", text: result.status === "ready" ? JSON.stringify(result.interpretation) : "{}" }] }],
-          usage: { input_tokens: 100, output_tokens: 100 },
+          done: true,
+          done_reason: "stop",
+          message: { role: "assistant", content: result.status === "ready" ? JSON.stringify(result.interpretation) : "{}" },
+          eval_count: 100,
         }));
         return;
       }
@@ -73,7 +79,8 @@ export async function startManualServer(
 const originalFetch = globalThis.fetch;
 globalThis.fetch = (input, init) => {
   const url = new URL(typeof input === "string" ? input : input instanceof URL ? input.href : input.url);
-  if (url.origin !== "https://api.exa.ai" && !(${options.intent === true} && url.origin === "https://api.openai.com")) throw new Error("External transport forbidden in automated proof");
+  const localIntent = ${options.intent === true} && url.origin === "http://127.0.0.1:11434" && ["/api/tags", "/api/chat"].includes(url.pathname) && !url.search;
+  if (url.origin !== "https://api.exa.ai" && !localIntent) throw new Error("External transport forbidden in automated proof");
   const target = new URL(url.pathname + url.search, ${JSON.stringify(providerUrl)});
   return originalFetch(input instanceof Request ? new Request(target, input) : target, init);
 };
@@ -95,9 +102,8 @@ globalThis.fetch = (input, init) => {
         API_PORT: String(port),
         WEB_PORT: String(options.webPort ?? port),
         ...(options.intent ? {
-          OPENAI_INTENT_ENABLED: "true",
-          OPENAI_API_KEY: "fake-manual-intent-loopback-key",
-          OPENAI_INTENT_LEDGER_PATH: join(files.directory, "intent-receipts.json"),
+          FIELDNOTE_INTENT_PROVIDER: "ollama",
+          OLLAMA_INTENT_MODEL: "fixture-local:latest",
         } : {}),
         ...(options.grantPath !== undefined
           ? { EXA_MANUAL_RESEARCH_GRANT_PATH: options.grantPath }

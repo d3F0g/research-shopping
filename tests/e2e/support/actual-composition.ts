@@ -17,7 +17,7 @@ export async function actualComposition(
   page: Page,
   testInfo: TestInfo,
   payload?: unknown,
-  options: { interpretIntent?: IntentInterpreter } = {},
+  options: { interpretIntent?: IntentInterpreter | null } = {},
 ) {
   const sdkRequests: Record<string, unknown>[] = [];
   const requests: Record<string, unknown>[] = [];
@@ -87,7 +87,7 @@ export async function actualComposition(
   const app = createApp(
     {
       researchTurns: createResearchTurns({
-        async interpretIntent(request, signal) {
+        ...(options.interpretIntent === null ? {} : { interpretIntent: (async (request, signal) => {
           interpretationRequests.push(structuredClone(request));
           if (deferInterpretation) {
             deferInterpretation = false;
@@ -98,7 +98,7 @@ export async function actualComposition(
           }
           signal.throwIfAborted();
           return (options.interpretIntent ?? fixtureIntentInterpreter)(request, signal);
-        },
+        }) satisfies IntentInterpreter }),
         research: createExaProductResearch("fake-lifecycle-loopback-key", {
           baseUrl: providerUrl,
         }),

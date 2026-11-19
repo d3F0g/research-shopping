@@ -6,7 +6,7 @@ import {
   type ShoppingIntent,
 } from "./contracts";
 
-const amountToken = String.raw`[+-]?(?:\d[\d,._]*(?:e[+-]?\d+)?[km]?|infinity|nan)`;
+const amountToken = String.raw`[+-]?(?:\d[\d,._]*(?:e[+-]?\d+)?[km]?\.?|infinity|nan)`;
 const numberToken = /^(?:\d{1,3}(?:,\d{3})+|\d+)(?:\.\d{1,2})?$/;
 const unsupportedCodes = Intl.supportedValuesOf("currency")
   .filter((currency) => currency !== "SGD" && currency !== "USD")
@@ -65,6 +65,12 @@ function amountOf(token: string): number | undefined {
   if (!valid) return undefined;
   const amount = Number(digits.replaceAll(",", "")) * (thousands ? 1000 : 1);
   return MoneyAmountSchema.safeParse(amount).success ? amount : undefined;
+}
+function sentenceAmount(token: string, after: string): string {
+  const value = token.slice(0, -1);
+  return token.endsWith(".") && amountOf(value) !== undefined && /^(?:$|\s+\p{L})/u.test(after)
+    ? value
+    : token;
 }
 type Amount = { token: string; currency?: Currency };
 
@@ -162,7 +168,7 @@ export function parseBudget(
         uncuedRangeClauses.add(clause);
         return whole;
       }
-      ranges.push({ lower, upper, tokens, clause });
+      ranges.push({ lower, upper: secondSuffix ? upper : sentenceAmount(upper, after), tokens, clause });
       return " ";
     },
   );
@@ -180,12 +186,12 @@ export function parseBudget(
   const amounts: Amount[] = [];
   remaining = remaining.replace(
     new RegExp(
-      String.raw`(?:\b(SGD|USD|US\$|S\$)|\$)\s*(${amountToken})\b`,
-      "gi",
+      String.raw`(?:\b(SGD|USD|US\$|S\$)|\$)\s*(${amountToken})(?![\p{L}\p{N}_,.])`,
+      "giu",
     ),
-    (_whole, currency: string | undefined, token: string) => {
+    (whole, currency: string | undefined, token: string, offset: number, source: string) => {
       amounts.push({
-        token,
+        token: sentenceAmount(token, source.slice(offset + whole.length)),
         ...(currency ? { currency: currencyOf(currency) } : {}),
       });
       return " ";
@@ -200,13 +206,13 @@ export function parseBudget(
   );
   remaining = remaining.replace(
     new RegExp(
-      String.raw`\b(?:under|below|up to|at most|less than|no more than|budget(?: is| of| to)?|limit(?: is| of| to)?|maximum(?: of)?|max(?: of)?|make it)\s*(${amountToken})\b`,
-      "gi",
+      String.raw`\b(?:under|below|up to|at most|less than|no more than|budget(?: is| of| to)?|limit(?: is| of| to)?|maximum(?: of)?|max(?: of)?|make it)\s*(${amountToken})(?![\p{L}\p{N}_,.])`,
+      "giu",
     ),
     (whole, token: string, offset: number, source: string) => {
       if (measurementUnit.test(source.slice(offset + whole.length)))
         return whole;
-      amounts.push({ token });
+      amounts.push({ token: sentenceAmount(token, source.slice(offset + whole.length)) });
       return " ";
     },
   );
