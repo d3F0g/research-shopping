@@ -4,6 +4,7 @@ import { mkdir } from "node:fs/promises";
 for (const viewport of [
   { name: "desktop", width: 1440, height: 1000 },
   { name: "mobile", width: 390, height: 844 },
+  { name: "short-mobile", width: 390, height: 568 },
 ]) {
   test(`${viewport.name} chat currency, evidence, history, theme and composer`, async ({
     page,
@@ -52,6 +53,34 @@ for (const viewport of [
     await expect(
       page.getByText(/^Fixture Powerbank Model A is a source-supported option/),
     ).toBeInViewport();
+    const intersections = await page.evaluate(() => {
+      const scroll = document.querySelector<HTMLElement>(
+        '[data-slot="message-scroller-button"][data-active="true"]',
+      );
+      if (!scroll) return [];
+      const box = scroll.getBoundingClientRect();
+      return [
+        ...document.querySelectorAll<HTMLElement>(
+          "a, button, input, textarea, select",
+        ),
+      ]
+        .filter((el) => {
+          if (
+            el === scroll ||
+            !el.checkVisibility() ||
+            getComputedStyle(el).pointerEvents === "none"
+          )
+            return false;
+          const target = el.getBoundingClientRect();
+          return (
+            Math.min(box.right, target.right) >
+              Math.max(box.left, target.left) &&
+            Math.min(box.bottom, target.bottom) > Math.max(box.top, target.top)
+          );
+        })
+        .map((el) => el.textContent);
+    });
+    expect(intersections).toEqual([]);
     await page.screenshot({
       path: `artifacts/fieldnote-v2/${viewport.name}-research.png`,
     });
@@ -164,6 +193,72 @@ test("edits the actual open objective, requirements and both budget bounds", asy
   expect(
     current.state.messages.some(
       (m: { text: string }) => m.text === "A powerbank under SGD40",
+    ),
+  ).toBe(true);
+});
+
+test("keeps free replies during research and stops abandoned transport before new results publish", async ({
+  page,
+}) => {
+  await page.goto("/");
+  const calls = async () =>
+    (
+      (await page.request.get("/api/test-stats").then((r) => r.json())) as {
+        calls: number;
+      }
+    ).calls;
+  const baseline = await calls();
+  const composer = page.getByRole("textbox", { name: "Message", exact: true });
+  const send = async (text: string) => {
+    await composer.fill(text);
+    await page
+      .getByRole("button", { name: "Send message", exact: true })
+      .click();
+  };
+  await send("I want a slow fixture powerbank under SGD40");
+  await expect(page.getByRole("status")).toContainText(
+    "Requesting source-backed research",
+  );
+  await send("Keep it short.");
+  await expect(
+    page.getByText("I'll keep replies short.", { exact: true }),
+  ).toBeVisible();
+  await expect.poll(calls).toBe(baseline + 1);
+  await expect(page.getByRole("status")).toHaveCount(0);
+  await send("Research again");
+  await expect(page.getByRole("status")).toContainText(
+    "Requesting source-backed research",
+  );
+  await expect.poll(calls).toBe(baseline + 2);
+  await page
+    .getByRole("button", { name: "Stop research", exact: true })
+    .click();
+  await expect(page.getByRole("status")).toHaveCount(0);
+  await send("Research again");
+  await expect(page.getByRole("status")).toContainText(
+    "Requesting source-backed research",
+  );
+  await expect.poll(calls).toBe(baseline + 3);
+  await send("Only Anker");
+  await expect.poll(calls).toBe(baseline + 4);
+  await expect(page.getByRole("status")).toHaveCount(0);
+  const current = await page.request.get("/api/session").then((r) => r.json());
+  const retained = current.state.messages.filter(
+    (m: { research?: unknown }) => m.research,
+  );
+  expect(retained).toHaveLength(2);
+  expect(
+    retained[1].research.intent.requirements.some(
+      (r: { text: string }) => r.text === "Only Anker",
+    ),
+  ).toBe(true);
+  expect(current.state.intent.budget).toMatchObject({
+    maximum: 40,
+    currency: "SGD",
+  });
+  expect(
+    current.state.messages.some(
+      (m: { text: string }) => m.text === "Keep it short.",
     ),
   ).toBe(true);
 });

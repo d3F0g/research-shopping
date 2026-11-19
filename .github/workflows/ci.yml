@@ -50,6 +50,14 @@ jobs:
       - run: npm run build
       - name: Install Chromium
         run: npx playwright install --with-deps chromium
+      - name: Verify crash recovery without redispatch
+        run: node scripts/verify-personalization-crash.mjs
+        env:
+          FIELDNOTE_TEST_DATABASE_URL: postgresql://fieldnote_fixture:fixture-only-password@127.0.0.1:5432/fieldnote_fixture
+      - name: Verify actual account browser journeys
+        run: node scripts/verify-personalization-browser.mjs
+        env:
+          FIELDNOTE_TEST_DATABASE_URL: postgresql://fieldnote_fixture:fixture-only-password@127.0.0.1:5432/fieldnote_fixture
       - run: npm run test:e2e
         env:
           DEBUG: pw:webserver

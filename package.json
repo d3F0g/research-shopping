@@ -23,7 +23,11 @@
     "eval:browser": "EXA_RESEARCH_ENABLED=false node --import tsx evals/v2/browser.ts",
     "eval:scorecard": "EXA_RESEARCH_ENABLED=false node --import tsx evals/v2/scorecard-cli.ts",
     "eval:judge": "EXA_RESEARCH_ENABLED=false node --import tsx evals/v2/semantic/run.ts",
-    "eval:preservation": "node evals/v2/verify-preservation.mjs"
+    "eval:preservation": "node evals/v2/verify-preservation.mjs",
+    "verify:registry": "node scripts/verify-official-components.mjs",
+    "verify:accounts:restart": "node scripts/verify-personalization-restart.mjs",
+    "verify:accounts:crash": "node scripts/verify-personalization-crash.mjs",
+    "verify:accounts:browser": "node scripts/verify-personalization-browser.mjs"
   },
   "dependencies": {
     "@base-ui/react": "^1.9.0",

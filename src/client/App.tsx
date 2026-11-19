@@ -94,7 +94,7 @@ export function App() {
           <ResponseAnchor id={focusMessage} />
           <MessageScroller className="flex-1">
             <MessageScrollerViewport>
-              <MessageScrollerContent className="mx-auto w-full max-w-3xl px-4 py-6 sm:px-6">
+              <MessageScrollerContent className="mx-auto w-full max-w-3xl px-4 py-6 pr-14 sm:px-6 sm:pr-14">
                 {state.messages.length === 0 && (
                   <div className="flex min-h-48 flex-1 items-center justify-center">
                     <h1 className="text-center font-medium">
@@ -190,7 +190,7 @@ export function App() {
                 )}
               </MessageScrollerContent>
             </MessageScrollerViewport>
-            <MessageScrollerButton />
+            <MessageScrollerButton className="inset-s-auto right-4 translate-x-0" />
           </MessageScroller>
         </MessageScrollerProvider>
         <div className="mx-auto w-full max-w-3xl shrink-0 px-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] pt-3 sm:px-6">

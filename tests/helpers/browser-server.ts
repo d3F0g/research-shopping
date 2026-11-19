@@ -26,6 +26,8 @@ const upstream = createServer(async (request, response) => {
     input.systemPrompt.split("Current authoritative shopping intent: ")[1]!,
   ) as ShoppingIntent;
   const material = nativeMaterial(intent);
+  if (intent.productDescription.includes("slow fixture"))
+    await new Promise((resolve) => setTimeout(resolve, 600));
   if (intent.productDescription.includes("provider error")) {
     response.writeHead(503).end("unavailable");
     return;

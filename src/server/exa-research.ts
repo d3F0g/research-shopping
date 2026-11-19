@@ -100,6 +100,11 @@ function retainSources(
     if (unique.has(url) && unique.get(url)?.text !== citation.text)
       unique.set(url, null);
     else if (!unique.has(url)) unique.set(url, citation);
+    else {
+      const retained = unique.get(url);
+      if (retained && retained.image !== citation.image)
+        unique.set(url, { ...retained, image: undefined });
+    }
   }
   return [...unique]
     .flatMap(([url, source]) => (source ? [{ url, source }] : []))

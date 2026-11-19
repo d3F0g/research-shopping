@@ -180,6 +180,14 @@ export function createApp(
   });
 
   app.use("/api/*", async (context, next) => {
+    if (
+      !["/api/session", "/api/turn", "/api/cancel", "/api/new-chat"].includes(
+        context.req.path,
+      )
+    ) {
+      await next();
+      return;
+    }
     let id = getCookie(context, "fieldnote-session");
     if (!id || !conversations.has(id)) {
       id = conversations.create();
