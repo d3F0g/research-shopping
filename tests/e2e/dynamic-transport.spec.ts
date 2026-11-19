@@ -225,7 +225,14 @@ test("compares unfamiliar products and freeform criteria through the normal nati
     support: [],
   };
   native.answer.products.push(other);
-  const transport = await normalComposition(page, testInfo, native);
+  const transport = await normalComposition(page, testInfo, (body: Record<string, unknown>) => {
+    const intent = JSON.parse(String(body.systemPrompt).split("Current authoritative shopping intent: ")[1]);
+    const preference = intent.criteria.find((criterion: { wording: string }) => criterion.wording === "field repairability");
+    const result = structuredClone(native);
+    for (const product of result.answer.products)
+      product.criteria[1].criterionId = preference.id;
+    return result;
+  });
   try {
     await page.goto("/");
     await send(

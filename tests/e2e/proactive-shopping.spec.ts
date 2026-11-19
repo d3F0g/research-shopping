@@ -22,6 +22,7 @@ test("shows actual preparation and search activity with an attributed source ill
   try {
     await page.setViewportSize({ width: 1440, height: 900 });
     await page.goto(transport.baseUrl);
+    await expect(page.locator(".composer-note")).toContainText("paid OpenAI interpretation");
     await expect(page.locator("html")).toHaveClass(/dark/);
     transport.deferInterpretation();
     await send(page, request);
@@ -137,7 +138,7 @@ test("keeps actual search activity compact for a long accepted description", asy
   }
 });
 
-test("keeps accepted constraints after cancellation and replaces an old budget only for an explicit new request", async ({ page }, testInfo) => {
+test("keeps accepted constraints after cancellation and a new product description until New chat", async ({ page }, testInfo) => {
   const transport = await actualComposition(page, testInfo, powerbankAnswer(), {
     async interpretIntent(request, signal) {
       if (request.message.startsWith("New request")) return {
@@ -161,9 +162,14 @@ test("keeps accepted constraints after cancellation and replaces an old budget o
     await send(page, "New request. A slide scanner");
     await expect(page.getByTestId("conversation-turn").last()).toHaveAttribute("data-active", "true");
     const fresh = transport.requests.filter((turn) => turn.phase === "research").at(-1)!;
-    expect(fresh.preferences).toMatchObject({ budget: null, criteria: [], productDescription: "New request. A slide scanner" });
+    expect(fresh.preferences).toMatchObject({ budget: { amount: 40, currency: "SGD" }, criteria: [expect.objectContaining({ wording: "Only Anker", strength: "hard" })], productDescription: "New request. A slide scanner" });
+    await expect(page.getByTestId("conversation-turn").last().getByRole("heading", { name: /Conditional choice/ })).toHaveCount(0);
     await expect(page.getByTestId("user-message")).toHaveText(["A powerbank under SGD40", "Only Anker", "New request. A slide scanner"]);
     await expect(page.getByTestId("conversation-turn").first()).toContainText("Response stopped.");
+    await page.getByRole("button", { name: "New chat", exact: true }).click();
+    await send(page, "A portable powerbank");
+    await expect(page.getByTestId("conversation-turn").last()).toHaveAttribute("data-active", "true");
+    expect(transport.requests.filter((turn) => turn.phase === "research").at(-1)!.preferences).toMatchObject({ budget: null, criteria: [] });
   } finally {
     await transport.close();
   }

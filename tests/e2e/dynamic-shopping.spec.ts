@@ -163,34 +163,27 @@ test("shows useful synthetic comparison, literal evidence, safe sources and resp
   expect(calls).toBe(1);
 });
 
-test("sends original language without a client parser and asks only the server's budget question", async ({
+test("sends original language without a client parser and automatically researches the server's prepared intent", async ({
   page,
 }) => {
   await fixtureHealth(page);
-  const requests: TurnRequest[] = [];
+  const requests: Record<string, unknown>[] = [];
   const preferences = {
     ...defaultIntent(),
     productDescription: "A heliostat controller with dew resilience",
     revision: 1,
   };
   await page.route("**/api/turn", (route) => {
-    const incoming = route.request().postDataJSON() as TurnRequest;
+    const incoming = route.request().postDataJSON();
     requests.push(incoming);
     return route.fulfill({
-      json: incoming.skipBudget
-        ? {
+      json: incoming.phase === "prepare"
+        ? { kind: "prepared", preferences, notes: [] }
+        : {
             responseVersion: 5,
             kind: "research-unavailable",
             reason: "disabled",
             message: "Synthetic test. Research disabled.",
-            preferences: { ...preferences, budgetClarified: true },
-            notes: [],
-          }
-        : {
-            responseVersion: 5,
-            kind: "question",
-            question: "budget",
-            message: "Any budget in mind?",
             preferences,
             notes: [],
           },
@@ -198,25 +191,13 @@ test("sends original language without a client parser and asks only the server's
   });
   await page.goto("/");
   await send(page, preferences.productDescription);
-  await expect(
-    page.getByRole("heading", { name: "Any budget in mind?" }),
-  ).toBeVisible();
-  expect(requests[0].preferences).toEqual(defaultIntent());
-  expect(requests[0].message).toBe(preferences.productDescription);
-  await expect(
-    page.getByRole("button", { name: /SGD (150|300|500)/ }),
-  ).toHaveCount(0);
-  await page.getByRole("button", { name: "Skip budget", exact: true }).click();
-  await expect(
-    page.getByRole("heading", { name: "Research unavailable" }),
-  ).toBeVisible();
-  expect(requests[1].skipBudget).toBe(true);
-  expect(requests[1].preferences.productDescription).toBe(
-    preferences.productDescription,
-  );
-  await expect(
-    page.getByRole("button", { name: "Skip budget", exact: true }),
-  ).toHaveCount(0);
+  await expect(page.getByRole("heading", { name: "Research unavailable" })).toBeVisible();
+  expect(requests).toHaveLength(2);
+  expect(requests[0]).toMatchObject({ phase: "prepare", preferences: defaultIntent(), message: preferences.productDescription });
+  expect(requests[1]).toMatchObject({ phase: "research", preferences });
+  expect(requests[1]).not.toHaveProperty("message");
+  await expect(page.locator(".question-card")).toHaveCount(0);
+  await expect(page.getByRole("button", { name: /SGD (150|300|500)|Skip budget/ })).toHaveCount(0);
 });
 
 test("saves explicit stable criterion edits without automatic research and keeps prior snapshots", async ({

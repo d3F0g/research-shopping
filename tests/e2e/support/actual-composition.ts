@@ -43,13 +43,16 @@ export async function actualComposition(
       body += String(chunk);
     });
     request.on("end", () => {
-      sdkRequests.push(JSON.parse(body));
+      const parsed = JSON.parse(body) as Record<string, unknown>;
+      sdkRequests.push(parsed);
       const status = nextStatus;
       nextStatus = 200;
       const finish = () => {
         if (!response.destroyed) {
           response.writeHead(status, { "Content-Type": "application/json" });
-          response.end(JSON.stringify(status === 200 ? native : { error: "Synthetic provider failure" }));
+          response.end(JSON.stringify(status === 200
+            ? typeof native === "function" ? native(parsed) : native
+            : { error: "Synthetic provider failure" }));
         }
       };
       if (deferred) {
