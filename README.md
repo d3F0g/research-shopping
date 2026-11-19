@@ -54,6 +54,8 @@ Browser checks use explicitly composed local SDK responses with visible fixture 
 
 The original sixty evaluation scenarios, expectations and historical baseline remain unchanged. V2 uses an explicit adapter and comparison bridge. Blocked semantic/browser capabilities remain blocked rather than receiving invented scores. See [evaluation instructions](evals/v2/README.md) and the [run ledger](.codex/pstack-runs/fieldnote-v2/plan.md).
 
+See the [V2 delivery report](docs/fieldnote-v2-delivery.md) for screenshots, exact review evidence, evaluation counts and remaining external blockers.
+
 ## Review gate
 
 The V2 integration PR remains unmerged for the user's appearance and evaluation review. Routine repository merge authorization does not override this milestone. Production deployment and sensitive operations require separate authorization.

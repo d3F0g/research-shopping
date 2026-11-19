@@ -1,20 +1,34 @@
 {
-  "milestone": 13,
+  "milestone": 15,
   "completed": [
     1,
-    2
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14
   ],
   "base": "9d2a3c5e336a6652ec6b02e0c3deff6617fb7d11",
   "branch": "rebuild/fieldnote-v2",
   "worktree": "/Users/josiahwong/Documents/research-shopping-v2",
   "agents": {
-    "v2_context_safety": "two QAmeaning defects +boundedCIartifactuploadpath"
+    "v2_independent_qa": "PASS e0b application; PASS43bafcf metadata binding",
+    "v2_security_review": "PASS e0b application; PASS43bafcf metadata binding",
+    "v2_distinct_trail_review": "gpt-6-astra complete; evidence packaging corrected and verified; final CI remains"
   },
   "blockers": [
     "Live Exa proof blocked by uncertain billing and no valid automated allowance",
     "Authorized merchant integration unavailable"
   ],
-  "next": "Integratecontext-safetyfix,reverifyQA/security/commentdelta, finalremoteCI and unmergedPR",
+  "next": "Push final docs/evidence candidate; inspect hosted CI; record final receipts externally on PR53/#51 and hand off unmerged",
   "tracking_issue": "https://github.com/d3F0g/research-shopping/issues/51",
   "autonomous_continuation": "No supported task heartbeat scheduling tool exposed. Continue active turn and preserve resume capsule; no future wake armed.",
   "contracts_commit": "cc2e8ce",
@@ -41,30 +55,27 @@
     "infrastructure_errors": 0,
     "notes": "36 exact-quotation equality checks differ after retained paragraph expansion;19 other critical state/budget/criterion failures remain. Frozen assertions unchanged."
   },
-  "app_commit": "8fdc2b2",
+  "app_commit": "e0b7317f4bd00ce49141229943279e0da357cdbc",
   "eval_code_commit": "48632fc",
   "account_commits": [
     "2317135",
     "acdcdb3"
   ],
   "latest_completed_v2_eval": {
-    "application": "62d3fb0",
-    "pass": 4,
-    "fail": 27,
-    "blocked": 28,
+    "application": "e0b7317",
+    "pass": 11,
+    "fail": 0,
+    "blocked": 48,
     "unsupported": 1,
-    "critical_failures": 1,
-    "infrastructure_errors": 0
+    "critical_failures": 0,
+    "infrastructure_errors": 0,
+    "acceptance": "INCONCLUSIVE"
   },
-  "open_defects": [
-    "#52 initial mobile result scrolls past leading answer",
-    "26 additional locally actionable conversation/evaluation gaps",
-    "Account integrated runtime/restart/crash/browser review pending"
-  ],
+  "open_defects": [],
   "review_verdicts": {
-    "security": "PASS8fd for local reviewed scope,97 codeblob manifest",
-    "qa": "ISSUES8fd: heldsourcequestion dispatch andquotedproductprice budgetshadow",
-    "comment": "PASS8d, k conversionreachableandtested"
+    "security": "PASS e0b7317 for local security scope",
+    "qa": "PASS e0b7317 for offline runtime and visual scope",
+    "comment": "PASS e0b7317, no must-kill findings"
   },
   "root_checks": {
     "code_commit": "8fdc2b2",
@@ -81,5 +92,14 @@
       "infra": 0
     },
     "project_skill": "passed3viewports cleanuptrue"
-  }
+  },
+  "candidate_before_delivery_docs": "43bafcf9e3d113a2a0ccc01c9baf7377def6d3ef",
+  "pr": "https://github.com/d3F0g/research-shopping/pull/53",
+  "hosted_ci": {
+    "head": "015cebb12bf4452b9f275223c49abb66529b8af2",
+    "push_ci": "44481600549 success",
+    "pr_eval": "44481618535 success",
+    "pr_ci": "44481618019 failed optional diff metadata allocation; fixed locally at5cfe620, final hosted rerun pending"
+  },
+  "final_candidate_binding": "All98 security blobs and src/tests/evals/skill trees verified equal reviewed43b; pending changes docs/evidence/ledger only"
 }

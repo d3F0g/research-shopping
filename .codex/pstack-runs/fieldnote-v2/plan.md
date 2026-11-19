@@ -8,10 +8,10 @@ A locally running Exa-only chat application, unchanged official shadcn component
 
 - [x] Read the Principles section of poteto-mode.
 - [x] Phase A: Frame
-- [ ] Phase B: Design the workflow
-- [ ] Phase C: Run the loop
-- [ ] Phase D: Keep the audit trail
-- [ ] Phase E: Verify and hand back
+- [x] Phase B: Design the workflow
+- [x] Phase C: Run the loop
+- [x] Phase D: Keep the audit trail
+- [ ] Phase E: Verify and hand back (final hosted CI and GitHub receipt pending)
 
 ## Work sequence
 
@@ -44,4 +44,4 @@ No automated billable Exa requests. Issue 42 retains uncertain usage and stopped
 
 ## Next action
 
-Collect audits, choose contracts, recruit application owner and evaluation adapter owner with isolated file/worktree ownership.
+Application and exact-source independent reviews are complete. Final metadata binding, decision-trail review, final hosted CI and the unmerged PR handoff remain. The current status is in state.json and resume.md; historical checkpoints above are not final acceptance.
