@@ -81,8 +81,32 @@ try {
     await separate.close();
     await runtime.restartDatabase();
     assert.deepEqual((await context.request.get(`${runtime.origin}/api/account`).then((response) => response.json())).workspace, saved.workspace);
-    await page.reload();
-    await expect(page.getByText("SGD 868.00", { exact: true })).toBeVisible();
+    const reloadEvents: { event: string; at: number; status?: number; message?: string }[] = [];
+    page.on("request", (request) => {
+      if (new URL(request.url()).pathname === "/api/account") reloadEvents.push({ event: "account-request", at: Date.now() });
+    });
+    page.on("response", (response) => {
+      if (new URL(response.url()).pathname === "/api/account") reloadEvents.push({ event: "account-response", at: Date.now(), status: response.status() });
+    });
+    page.on("requestfailed", (request) => {
+      if (new URL(request.url()).pathname === "/api/account") reloadEvents.push({ event: "account-failed", at: Date.now(), message: request.failure()?.errorText });
+    });
+    page.on("pageerror", (error) => reloadEvents.push({ event: "page-error", at: Date.now(), message: error.message }));
+    if (viewport.width === 390) {
+      const cdp = await context.newCDPSession(page);
+      await cdp.send("Network.enable");
+      await cdp.send("Network.emulateNetworkConditionsByRule", { matchedNetworkConditions: [{ urlPattern: `${runtime.origin}/api/account`, latency: 5500, downloadThroughput: -1, uploadThroughput: -1 }] });
+    }
+    try {
+      await page.reload();
+      reloadEvents.push({ event: "page-loaded", at: Date.now() });
+      await expect(page.getByText("SGD 868.00", { exact: true })).toBeVisible();
+    } catch (error) {
+      await writeFile(`${directory}/${viewport.width}-reload-failure.json`, JSON.stringify({ events: reloadEvents, bodyTextPrefix: (await page.locator("body").innerText()).slice(0, 30000) }, null, 2) + "\n");
+      const failurePath = `${directory}/${viewport.width}-reload-failure.png`;
+      await page.screenshot({ path: failurePath }); proof.screenshots.push(failurePath);
+      throw error;
+    }
     proof.checks.push(`${viewport.width}px browser preserved V2/V3 history, rendered V4 source-row observation without a qualifying variant price, blocked stale prepared work, isolated another account, and survived PostgreSQL/API restart.`);
     await context.close();
   }
