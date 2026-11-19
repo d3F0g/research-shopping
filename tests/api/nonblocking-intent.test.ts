@@ -183,4 +183,38 @@ describe("simple shopping without model interpretation", () => {
     const result = await createResearchTurns({}).turn({ phase: "prepare", message: "Now I want a folding kayak that costs around $30-40", preferences: previous, operationId: randomUUID() }, new AbortController().signal);
     expect(result).toMatchObject({ kind: "research-unavailable", reason: "intent-unavailable", preferences: previous });
   });
+
+  describe.each(["absent", "unavailable"] as const)("HTTP exclusion admission with interpreter %s", (availability) => {
+    it.each([
+      "I want a powerbank excluding Anker",
+      "I want a powerbank except Anker",
+      "I want a powerbank exclude Anker",
+      "I want a powerbank avoiding Anker",
+      "I want a powerbank other than Anker",
+      "I want an Anker-free powerbank",
+      "I want a powerbank free of Anker",
+      "I want a non-Anker powerbank",
+      "I want a powerbank rather than Anker",
+      "I want a powerbank better than Anker",
+      "I want a powerbank versus Anker",
+    ])("preserves the complete request and accepted state without dispatch for %s", async (message) => {
+      const previous = defaultIntent();
+      const interpretIntent = vi.fn<IntentInterpreter>(async () => ({ status: "unavailable" }));
+      const reserve = vi.fn(async () => "admitted" as const);
+      const research = vi.fn(async () => ({ status: "unavailable" as const, reason: "empty" as const, reportedCostUsd: 0 }));
+      const app = createApp({ researchTurns: createResearchTurns({
+        ...(availability === "absent" ? {} : { interpretIntent }),
+        research,
+        quota: { reserve, settle: async () => {} },
+      }) });
+      const response = await postTurn(app, { message, preferences: previous, operationId: randomUUID() });
+      expect(response.status).toBe(200);
+      const result = TurnTransportResponseSchema.parse(await response.json());
+      expect(result).toMatchObject({ kind: "research-unavailable", reason: "intent-unavailable", preferences: previous });
+      expect(reserve).not.toHaveBeenCalled();
+      expect(research).not.toHaveBeenCalled();
+      if (availability === "absent") expect(interpretIntent).not.toHaveBeenCalled();
+      else expect(interpretIntent).toHaveBeenCalledWith(expect.objectContaining({ message, preferences: previous }), expect.any(AbortSignal));
+    });
+  });
 });
