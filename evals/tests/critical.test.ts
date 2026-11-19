@@ -4,7 +4,7 @@ import { createServer } from "node:http";
 import { once } from "node:events";
 import type { AddressInfo } from "node:net";
 import { offlineNetwork } from "../network";
-import { grade, safeSourceUrl } from "../assertions";
+import { grade, safeSourceUrl, literalMoney } from "../assertions";
 import { material } from "../inputs/materials";
 import { loadDataset } from "../dataset";
 import { summarize, compareReports, makeReport } from "../report";
@@ -104,4 +104,15 @@ test("cancellation reaches the local SDK response", async () => {
     assert(result.events.some((event) => event.kind === "provider-aborted"));
     assert.equal(result.cleanup, true);
   } finally { guard.close(); }
+});
+
+test("literal money accepts sentence punctuation without accepting numeric continuations", () => {
+  assert.equal(literalMoney("Synthetic price is SGD 60.", "SGD", 60), true);
+  assert.equal(literalMoney("Synthetic price is SGD 60.50.", "SGD", 60.5), true);
+  assert.equal(literalMoney("Synthetic price is SGD 60.5.", "SGD", 60.5), true);
+  assert.equal(literalMoney("Synthetic price is SGD 600.", "SGD", 60), false);
+  assert.equal(literalMoney("Synthetic price is SGD 60.50.", "SGD", 60), false);
+  assert.equal(literalMoney("Synthetic price is SGD 60.501.", "SGD", 60.5), false);
+  assert.equal(literalMoney("Synthetic price is USD 60.", "SGD", 60), false);
+  assert.equal(literalMoney("Synthetic price is $60.", "SGD", 60), false);
 });

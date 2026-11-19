@@ -75,7 +75,7 @@ export function compareReports(baseline: RunReport, candidate: RunReport) {
     const old = baseline.cases.find((item) => item.id === row.id);
     if (!old) { result.added.push(row.id); continue; }
     if (!compatible || old.scenarioHash !== row.scenarioHash || old.expectationHash !== row.expectationHash || old.materialHash !== row.materialHash) { result.notComparable.push(row.id); continue; }
-    if (["blocked", "unsupported"].includes(old.verdict) || ["blocked", "unsupported"].includes(row.verdict)) result.capabilityTransitions.push({ id: row.id, from: old.verdict, to: row.verdict });
+    if (old.verdict !== row.verdict && (["blocked", "unsupported"].includes(old.verdict) || ["blocked", "unsupported"].includes(row.verdict))) result.capabilityTransitions.push({ id: row.id, from: old.verdict, to: row.verdict });
     if (old.verdict !== "pass" && row.verdict === "pass") result.newlyPassing.push(row.id);
     if (old.verdict !== "fail" && row.verdict === "fail") result.newlyFailing.push(row.id);
     if (old.verdict === "fail" && row.verdict === "fail") result.unchangedFailures.push(row.id);

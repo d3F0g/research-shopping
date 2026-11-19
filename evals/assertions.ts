@@ -15,6 +15,14 @@ export function safeSourceUrl(value: string): boolean {
     return url.protocol === "https:" && !url.username && !url.password && !url.port && host.includes(".") && !host.endsWith(".local") && !host.endsWith(".localhost") && !/^(?:\d+\.){3}\d+$/.test(host) && !host.includes(":") && host !== "localhost";
   } catch { return false; }
 }
+export function literalMoney(quote: string, currency: string, amount: number): boolean {
+  const text = quote.replace(/,/g, "");
+  for (const match of text.matchAll(/\b(SGD|USD|S\$|US\$)\s*([0-9]+(?:\.[0-9]{1,2})?)(?!\d|\.\d)/gi)) {
+    const observedCurrency = /^(?:SGD|S\$)$/i.test(match[1]!) ? "SGD" : "USD";
+    if (observedCurrency === currency && Number(match[2]) === amount) return true;
+  }
+  return false;
+}
 function normalize(value: string): string { return value.toLowerCase().replace(/[^\p{L}\p{N}]+/gu, " ").trim(); }
 function checkRequirement(requirement: Requirement, turn: TurnObservation, observation: Observation): { ok?: boolean; expected: Json; observed: Json; status?: "blocked" | "unsupported" } {
   const prefs = turn.finalPreferences;
@@ -72,10 +80,7 @@ function checksForResearch(observation: Observation, turn: TurnObservation): Che
       const supplied = record(upstreamProduct?.price);
       const moneySupported = list(record(price.assessment).support).map(record).some((span) => {
         if (typeof span.quote !== "string" || typeof price.amount !== "number") return false;
-        const amount = price.amount.toFixed(2).replace(/\.00$/, "");
-        const text = span.quote.replace(/,/g, "");
-        const currency = price.currency === "SGD" ? "(?:SGD|S\\$)" : price.currency === "USD" ? "(?:USD|US\\$)" : "(?!)";
-        return new RegExp(`${currency}\\s*${amount.replace(".", "\\.")}(?:\\.00)?(?![\\d.])`, "i").test(text);
+        return literalMoney(span.quote, String(price.currency), price.amount);
       });
       emit(`price-attribution:${product.id}`, price.amount === supplied.amount && price.currency === supplied.currency && price.variant === supplied.variant && moneySupported, "Amount, explicit currency and variant match literal provider evidence", price);
       const upstreamText = list(record(supplied.assessment).support).map((span) => String(record(span).quote ?? "")).join("\n");
