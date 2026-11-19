@@ -172,3 +172,10 @@ artifacts/product-evals/interrupted-smoke/
 artifacts/product-evals/integrity-fix-owner/
 
 artifacts/product-evals/baseline/existing-browser/
+
+artifacts/product-evals/v5-owner/
+artifacts/product-evals/v5-start/
+!artifacts/product-evals/candidate-v5/
+!artifacts/product-evals/candidate-v5/**
+!artifacts/product-evals/comparison-v4-v5/
+!artifacts/product-evals/comparison-v4-v5/**

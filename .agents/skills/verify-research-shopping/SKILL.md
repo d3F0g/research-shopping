@@ -17,7 +17,7 @@ node .agents/skills/verify-research-shopping/scripts/smoke.mjs
 
 The helper finds its checkout from its own path. Pass `--project-dir /absolute/checkout` for another worktree. It runs the normal browser smoke through `evals/browser/run.ts`, without dataset grading or semantic judging. Set `VERIFY_ARTIFACT_DIR` to choose the evidence directory. The runner allocates owned ephemeral ports, health-checks its normal Hono instance, and records origins and the Vite process ID in `proof.json`. Earlier `VERIFY_API_PORT` and `VERIFY_WEB_PORT` overrides no longer apply.
 
-The child receives a small explicit environment with Exa disabled. It does not run the live server entrypoint or load a private environment file. The real SDK talks only to an owned fake-key loopback provider. No private quota ledger, account balance, database, migration, or real provider is needed. Never copy private environment files or credentials into another worktree.
+The child receives a small explicit environment with Exa disabled. It does not run the live server entrypoint or load a private environment file. The real Exa SDK talks only to an owned fake-key loopback provider. The v5 runner supplies fixed literal-span intent proposals at the IntentInterpreter boundary. The actual server validates and applies them. Main-lane OpenAI HTTP calls are zero, so this proof does not measure model understanding. No private quota ledger, account balance, database, migration, or real provider is needed. Never copy private environment files or credentials into another worktree.
 
 ## Confirm the owned normal test instance
 
@@ -33,13 +33,13 @@ Use a fresh browser context to establish first-visit dark mode independently of 
 
 Verify light mode and dark mode through the actual toggle. Refresh after each selection and require persistence. Theme persistence does not establish conversation persistence. Conversation state remains tab-local unless the application explicitly implements durable history.
 
-Drive an ordinary message, a missing-material-preference question and a supported shopping request. The question must appear inline in the assistant turn. Exercise the current optional budget form and its skip action. A message that already states a budget or product description must not be asked for that fact again. Category quick choices are not current controls.
+Drive an ordinary message, a missing-material-preference question and a supported shopping request. The question must appear inline in the assistant turn. Submit a useful product request without a budget and require research to start without an optional-budget form. For ambiguous money, inspect the typed pending draft, original request and question identity; answer only the missing currency and require automatic research with both bounds retained. A message that already states a budget or product description must not be asked for that fact again. Category quick choices are not current controls.
 
 Submit a natural preference follow-up. Require the earlier user and assistant messages to remain in history, while the newest result reflects the accepted preferences. Scope result actions and assertions to their message. Historical results cannot initiate research under obsolete constraints.
 
 Scroll the conversation at mobile size. Require the composer to remain visible and usable without hiding the current message or allowing body-level horizontal overflow. Test Enter to submit, Shift+Enter for a newline, keyboard focus and touch disclosures through the actual controls.
 
-The smoke proof records its actual driven subset. The broader [conversation and theme guide](features/chat.md) and matching package tests cover the remaining chat states. Use the [preferences](features/preferences.md), [research](features/research.md), [evidence](features/evidence.md), [selection](features/selection.md), [session](features/session-recovery.md) and [Exa research](features/web-research.md) guides for affected behaviors.
+The smoke proof records its actual driven subset. The broader browser run also checks question identity, Enter submission, retained-history controls, session isolation and transport cancellation. Supplemental source images use intercepted local bytes and a deliberate load error. They do not change the sixty-case research inputs or prove actual image provenance. The broader [conversation and theme guide](features/chat.md) and matching package tests cover the remaining chat states. Use the [preferences](features/preferences.md), [research](features/research.md), [evidence](features/evidence.md), [selection](features/selection.md), [session](features/session-recovery.md) and [Exa research](features/web-research.md) guides for affected behaviors.
 
 ## Preserve shopping and safety
 

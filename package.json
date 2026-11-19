@@ -20,7 +20,8 @@
     "eval:compare": "EXA_RESEARCH_ENABLED=false node --import tsx evals/run.ts --compare",
     "eval:browser": "EXA_RESEARCH_ENABLED=false node --import tsx evals/browser/run.ts",
     "eval:judge": "EXA_RESEARCH_ENABLED=false node --import tsx evals/semantic/run.ts",
-    "eval:live": "EXA_RESEARCH_ENABLED=false node --import tsx evals/live.ts"
+    "eval:live": "EXA_RESEARCH_ENABLED=false node --import tsx evals/live.ts",
+    "eval:scorecard": "EXA_RESEARCH_ENABLED=false node --import tsx evals/scorecard-cli.ts"
   },
   "dependencies": {
     "@base-ui/react": "^1.9.0",

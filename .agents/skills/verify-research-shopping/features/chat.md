@@ -16,7 +16,7 @@ After a shopping response, submit a brief acknowledgment. Require the original e
 
 ## Contextual preferences
 
-In a fresh conversation, submit a shopping request without a budget. Require the server-owned optional budget question inside the assistant turn. Use the displayed amount and currency fields, then **Apply budget**, and inspect the accepted preference. In a separate conversation, exercise **Skip budget** without inventing a budget. Do not expect category quick choices.
+In a fresh conversation, submit a useful shopping request without a budget. Require one research request without an optional-budget gate or invented budget. For ambiguous money such as `around $30-40`, require a typed currency question. Inspect its original request, stored bounds and question identity. Answer `SGD` through the composer and require the actual questionId on preparation, retained SGD 30 to 40 bounds and automatic research. The typed answer must bypass another interpretation invocation.
 
 Submit a complete request such as `Wireless headphones for long flights, under S$500`. Require the response to preserve its product description and SGD 500 budget without asking for either again. Inspect the actual turn response as well as the visible preference summary or contextual editor.
 

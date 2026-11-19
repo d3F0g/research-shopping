@@ -1,3 +1,4 @@
+import { setTimeout as delay } from "node:timers/promises";
 import { once } from "node:events";
 import { randomUUID } from "node:crypto";
 import { createServer, type ServerResponse } from "node:http";
@@ -10,13 +11,16 @@ import { createResearchTurns } from "../src/server/research-turns";
 import { createExaProductResearch } from "../src/server/exa-research";
 import type { Event, Intent, Json, Material, Observation, PublicScenario, TurnObservation } from "./contracts";
 import type { offlineNetwork } from "./network";
+import { InputCoverageError, scenarioIntentInput, type IntentInput } from "./inputs/intent";
 
 type Guard = ReturnType<typeof offlineNetwork>;
-export async function ownedApplication(input: Material, guard: Guard, options: { webPort?: number } = {}) {
+export async function ownedApplication(input: Material, guard: Guard, options: { webPort?: number; intent?: IntentInput; intentDelayMs?: number } = {}) {
   const events: Event[] = [];
   const started = performance.now();
   let currentTurn = 0;
   let providerCalls = 0;
+  let interpreterCalls = 0;
+  const inputLimitations: string[] = [];
   const record = (kind: Event["kind"], body: unknown) => events.push({ sequence: events.length + 1, turn: currentTurn, kind, elapsedMs: Math.round((performance.now() - started) * 100) / 100, body: JSON.parse(JSON.stringify(body)) as Json });
   const providerResponses = new Set<ServerResponse>();
   const provider = createServer((request, response) => {
@@ -67,9 +71,27 @@ export async function ownedApplication(input: Material, guard: Guard, options: {
   const apiPort = (api.address() as AddressInfo).port;
   const origin = `http://127.0.0.1:${apiPort}`;
   guard.allow(origin);
-  app = createApp({ researchTurns: createResearchTurns({ ...(input.id === "missing-config" ? {} : { research: createExaProductResearch("fake-offline-evaluation-key", { baseUrl: providerOrigin, timeoutMs: input.id === "timeout" ? 150 : 2000 }), quota }) }) }, { apiPort, webPort: options.webPort ?? apiPort });
+  app = createApp({ researchTurns: createResearchTurns({
+    ...(options.intent ? { interpretIntent: async (request, signal) => {
+      signal.throwIfAborted();
+      interpreterCalls++;
+      record("interpreter-request", { operationId: request.operationId, message: request.message, questionId: request.questionId ?? null, inputHash: options.intent!.hash, label: options.intent!.label });
+      try {
+        if (options.intentDelayMs) await delay(options.intentDelayMs, undefined, { signal });
+        const proposed = options.intent!.propose(currentTurn, request);
+        record("interpreter-response", { status: "ready", ...proposed });
+        return { status: "ready" as const, interpretation: proposed.interpretation };
+      } catch (error) {
+        if (!(error instanceof InputCoverageError)) throw error;
+        inputLimitations.push(error.message);
+        record("input-limitation", { message: error.message });
+        record("interpreter-response", { status: "unavailable" });
+        return { status: "unavailable" as const };
+      }
+    } } : {}), ...(input.id === "missing-config" ? {} : { research: createExaProductResearch("fake-offline-evaluation-key", { baseUrl: providerOrigin, timeoutMs: input.id === "timeout" ? 150 : 2000 }), quota }) }) }, { apiPort, webPort: options.webPort ?? apiPort });
   return {
     origin, events,
+    interpretation() { return { mode: options.intent ? "fixed-proposals" as const : "unavailable" as const, inputHash: options.intent?.hash ?? null, openAIHttpRequests: 0 as const, invocations: interpreterCalls, suppliedTurns: structuredClone(options.intent?.turns ?? []) as Json[], limitations: [...inputLimitations] }; },
     setTurn(turn: number) { currentTurn = turn; },
     get providerCalls() { return providerCalls; },
     async request(body: unknown, signal?: AbortSignal) {
@@ -92,8 +114,9 @@ export async function ownedApplication(input: Material, guard: Guard, options: {
     record,
   };
 }
-export async function observe(scenario: PublicScenario, input: Material, guard: Guard): Promise<Observation> {
-  const app = await ownedApplication(input, guard);
+export async function observe(scenario: PublicScenario, input: Material, guard: Guard, options: { intent?: IntentInput | null } = {}): Promise<Observation> {
+  const intent = options.intent === undefined ? await scenarioIntentInput(scenario) : options.intent;
+  const app = await ownedApplication(input, guard, intent ? { intent } : {});
   let preferences: ShoppingIntent = defaultIntent();
   const initialPreferences = structuredClone(preferences);
   const turns: TurnObservation[] = [];
@@ -111,6 +134,7 @@ export async function observe(scenario: PublicScenario, input: Material, guard: 
       let cancelled = false;
       if (action.kind === "reset") {
         preferences = defaultIntent();
+        lastOperation = undefined;
         app.record("reset", { reason: "Explicit public reset action" });
       } else if (action.kind === "repeat-research") {
         if (!lastOperation) throw new Error("Cannot repeat a research phase before an actual prepared turn");
@@ -120,11 +144,11 @@ export async function observe(scenario: PublicScenario, input: Material, guard: 
       } else {
         const operationId = randomUUID();
         const message = action.kind === "skip-budget" ? "Skip budget" : action.text;
-        const prepared = await app.request({ phase: "prepare", message, preferences, operationId, ...(action.kind === "skip-budget" ? { skipBudget: true } : {}) });
+        const prepared = await app.request({ phase: "prepare", message, preferences, operationId, ...(preferences.pendingChange ? { questionId: preferences.pendingChange.id } : {}), ...(action.kind === "skip-budget" ? { skipBudget: true } : {}) });
         preferences = prepared.preferences;
         response = prepared as unknown as Record<string, Json>;
         if (prepared.kind === "prepared") {
-          lastOperation = { operationId, preferences: structuredClone(preferences) };
+          lastOperation = { operationId: randomUUID(), preferences: structuredClone(preferences) };
           if (action.kind === "cancel") {
             const controller = new AbortController();
             const pending = app.request({ phase: "research", ...lastOperation }, controller.signal);
@@ -150,5 +174,5 @@ export async function observe(scenario: PublicScenario, input: Material, guard: 
     await app.close();
     cleanup = true;
   }
-  return structuredClone({ scenarioId: scenario.id, initialPreferences, finalPreferences: preferences, material: input, turns, events: app.events, network: guard.snapshot(), cleanup, applicationError });
+  return structuredClone({ scenarioId: scenario.id, initialPreferences, finalPreferences: preferences, material: input, interpretation: app.interpretation(), turns, events: app.events, network: guard.snapshot(), cleanup, applicationError });
 }

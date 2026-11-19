@@ -6,6 +6,7 @@ import { join } from "node:path";
 import { spawnSync } from "node:child_process";
 import { chromium } from "@playwright/test";
 import { grade, safeSourceUrl } from "../assertions";
+import { controlIntent } from "../inputs/controls";
 import { offlineNetwork } from "../network";
 import { scenarioMaterial } from "../inputs/materials";
 import { caseResult, compareReports, makeReport, summarize, validateReport } from "../report";
@@ -24,7 +25,7 @@ before(async () => {
   const guard = offlineNetwork();
   try {
     const { observe } = await import("../adapter");
-    observed = await observe(contract, scenarioMaterial("mixed-fit", "FN-RT-002"), guard);
+    observed = await observe(contract, scenarioMaterial("mixed-fit", "FN-RT-002"), guard, { intent: controlIntent(contract) });
     report = await makeReport([caseResult(contract, observed.material, observed)], [contract]);
   } finally { guard.close(); }
 });
@@ -152,6 +153,9 @@ test("report ingestion recomputes payload bindings, checks, verdict and summary"
     (value) => { value.cases[0]!.material.provenance.push("Forged provenance"); },
     (value) => { object(value.cases[0]!.observation!.material.body).requestId = "rewritten"; },
     (value) => { value.cases[0]!.material.sha256 = "stale"; },
+    (value) => { value.cases[0]!.observation!.interpretation.inputHash = "forged"; },
+    (value) => { const response = value.cases[0]!.observation!.events.find((event) => event.kind === "interpreter-response")!; object(response.body).interpretation = { disposition: "acknowledge", actions: [] }; },
+    (value) => { value.configuration.openAIHttpRequests = 1 as 0; },
   ];
   for (const mutate of mutations) { const bad = structuredClone(report); mutate(bad); assert.throws(() => compareReports(report, bad), /Invalid report integrity/); }
   assert.throws(() => compareReports({ ...report, schemaVersion: 1 } as unknown as RunReport, report), /Unsupported report schema/);
@@ -212,7 +216,7 @@ test("timeout and cancellation retain terminal events in immutable completed obs
     for (const kind of ["message", "cancel"] as const) {
       const timeout: Scenario = { ...contract, provider: "timeout", actions: [{ kind, text: "Find binoculars under USD 250" }] };
       const input = scenarioMaterial("timeout", "FN-ER-001");
-      const value = await observe(timeout, input, guard);
+      const value = await observe(timeout, input, guard, { intent: controlIntent(timeout) });
       assert.equal(value.cleanup, true);
       assert(value.events.some((event) => event.kind === "provider-aborted"));
       assert(value.events.some((event) => event.kind === "settlement" && object(event.body).cost === null && object(event.body).successful === false));

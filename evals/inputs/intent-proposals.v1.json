@@ -1,0 +1,4217 @@
+{
+  "format": "fieldnote-independent-synthetic-intent-proposals-v1",
+  "provenance": {
+    "label": "Independently authored synthetic provider proposals",
+    "genuineOpenAIResponses": false,
+    "proofOfModelUnderstanding": false,
+    "applicationExecutedByAuthor": false,
+    "purpose": "Fixed inputs for conditional application behavior. These proposals do not measure model understanding and contain no expected pass/fail scores or full preference states.",
+    "inputs": {
+      "public-conversations.json": "8289c7fc6bf66e68595b1ca2c68169234f8a93eed5edc818056a8fc03780c218",
+      "intent-actions-source.ts": "a26baa68ba3bf621e645637541de86cb489bfe63e403cc712135201544e5864d"
+    },
+    "schemaScope": "IntentActions union and the amount/minimum/currency MoneyDraft shape visible in the permitted source. No imported parser, application output, private milestone, or expected-state file was consulted.",
+    "symbolicBinding": "A remove-criterion ID beginning @symbolic- is a placeholder. Resolve only through its turn-level symbolicTargets actionIndex and prior literal targetWording, uniquely matched to an actual prior criterion ID. If absent or ambiguous, record an unbound proposal; never invent an ID or repair accepted state.",
+    "adapterBoundary": "Adapters may package fixed fields and uniquely bind symbolic criterion IDs. They must not infer actions from expected milestones, change strengths to satisfy lexical guards, manufacture currencies, or rewrite these proposals after observing application outputs."
+  },
+  "conversations": [
+    {
+      "id": "FN-CU-001",
+      "turns": [
+        {
+          "turnIndex": 0,
+          "message": "I want to buy a powerbank that costs around $30-40",
+          "proposal": {
+            "disposition": "research",
+            "actions": [
+              {
+                "kind": "start-request",
+                "source": {
+                  "start": 16,
+                  "end": 25,
+                  "text": "powerbank"
+                }
+              },
+              {
+                "kind": "budget",
+                "source": {
+                  "start": 37,
+                  "end": 50,
+                  "text": "around $30-40"
+                },
+                "operation": "clarify",
+                "draft": {
+                  "amount": 40,
+                  "minimum": 30,
+                  "currency": null
+                }
+              }
+            ]
+          }
+        },
+        {
+          "turnIndex": 1,
+          "message": "SGD",
+          "proposal": {
+            "disposition": "research",
+            "actions": [
+              {
+                "kind": "budget",
+                "source": {
+                  "start": 0,
+                  "end": 3,
+                  "text": "SGD"
+                },
+                "operation": "replace-range",
+                "draft": {
+                  "amount": 40,
+                  "minimum": 30,
+                  "currency": "SGD"
+                }
+              }
+            ]
+          },
+          "limitations": [
+            "This currency-only answer resolves the prior literal 30 to 40 draft; a local typed-answer path may bypass this proposal."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "FN-CU-002",
+      "turns": [
+        {
+          "turnIndex": 0,
+          "message": "Find a lightweight laptop for travel",
+          "proposal": {
+            "disposition": "research",
+            "actions": [
+              {
+                "kind": "start-request",
+                "source": {
+                  "start": 19,
+                  "end": 36,
+                  "text": "laptop for travel"
+                }
+              },
+              {
+                "kind": "add-criterion",
+                "source": {
+                  "start": 7,
+                  "end": 18,
+                  "text": "lightweight"
+                },
+                "strength": "flexible"
+              }
+            ]
+          }
+        },
+        {
+          "turnIndex": 1,
+          "message": "I spend most days on trains. Under EUR 1200, and it must weigh no more than 1.3 kg.",
+          "proposal": {
+            "disposition": "research",
+            "actions": [
+              {
+                "kind": "refine-description",
+                "source": {
+                  "start": 0,
+                  "end": 28,
+                  "text": "I spend most days on trains."
+                }
+              },
+              {
+                "kind": "budget",
+                "source": {
+                  "start": 29,
+                  "end": 43,
+                  "text": "Under EUR 1200"
+                },
+                "operation": "clarify",
+                "draft": {
+                  "amount": 1200,
+                  "minimum": null,
+                  "currency": null
+                }
+              },
+              {
+                "kind": "add-criterion",
+                "source": {
+                  "start": 49,
+                  "end": 82,
+                  "text": "it must weigh no more than 1.3 kg"
+                },
+                "strength": "hard"
+              }
+            ]
+          },
+          "limitations": [
+            "The stated currency is unsupported by the allowed SGD/USD draft. Its numeric amount is retained with currency null. No currency conversion or substitute currency is proposed."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "FN-CU-003",
+      "turns": [
+        {
+          "turnIndex": 0,
+          "message": "My mum keeps missing the doorbell when she's in the garden. I want a flashing receiver she can carry.",
+          "proposal": {
+            "disposition": "research",
+            "actions": [
+              {
+                "kind": "start-request",
+                "source": {
+                  "start": 67,
+                  "end": 100,
+                  "text": "a flashing receiver she can carry"
+                }
+              },
+              {
+                "kind": "refine-description",
+                "source": {
+                  "start": 0,
+                  "end": 59,
+                  "text": "My mum keeps missing the doorbell when she's in the garden."
+                }
+              },
+              {
+                "kind": "add-criterion",
+                "source": {
+                  "start": 69,
+                  "end": 86,
+                  "text": "flashing receiver"
+                },
+                "strength": "hard"
+              },
+              {
+                "kind": "add-criterion",
+                "source": {
+                  "start": 87,
+                  "end": 100,
+                  "text": "she can carry"
+                },
+                "strength": "flexible"
+              }
+            ]
+          },
+          "limitations": [
+            "Hard strength follows the literal requirement, including essential, needs, or a specific required specification. The proposal does not rewrite wording to satisfy a lexical guard."
+          ]
+        },
+        {
+          "turnIndex": 1,
+          "message": "It must work with her existing wireless bell, model Fixture Bell 7. Up to GBP 80.",
+          "proposal": {
+            "disposition": "research",
+            "actions": [
+              {
+                "kind": "add-criterion",
+                "source": {
+                  "start": 0,
+                  "end": 67,
+                  "text": "It must work with her existing wireless bell, model Fixture Bell 7."
+                },
+                "strength": "hard"
+              },
+              {
+                "kind": "budget",
+                "source": {
+                  "start": 68,
+                  "end": 80,
+                  "text": "Up to GBP 80"
+                },
+                "operation": "clarify",
+                "draft": {
+                  "amount": 80,
+                  "minimum": null,
+                  "currency": null
+                }
+              }
+            ]
+          },
+          "limitations": [
+            "The stated currency is unsupported by the allowed SGD/USD draft. Its numeric amount is retained with currency null. No currency conversion or substitute currency is proposed."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "FN-CU-004",
+      "turns": [
+        {
+          "turnIndex": 0,
+          "message": "I need something to digitise my dad's old 35 mm slides. I don't need a camera.",
+          "proposal": {
+            "disposition": "research",
+            "actions": [
+              {
+                "kind": "start-request",
+                "source": {
+                  "start": 7,
+                  "end": 54,
+                  "text": "something to digitise my dad's old 35 mm slides"
+                }
+              },
+              {
+                "kind": "add-criterion",
+                "source": {
+                  "start": 56,
+                  "end": 78,
+                  "text": "I don't need a camera."
+                },
+                "strength": "hard"
+              }
+            ]
+          },
+          "limitations": [
+            "Hard strength follows the literal requirement, including essential, needs, or a specific required specification. The proposal does not rewrite wording to satisfy a lexical guard."
+          ]
+        },
+        {
+          "turnIndex": 1,
+          "message": "Yes, a slide scanner. Keep it under USD 250.",
+          "proposal": {
+            "disposition": "research",
+            "actions": [
+              {
+                "kind": "refine-description",
+                "source": {
+                  "start": 5,
+                  "end": 20,
+                  "text": "a slide scanner"
+                }
+              },
+              {
+                "kind": "budget",
+                "source": {
+                  "start": 30,
+                  "end": 43,
+                  "text": "under USD 250"
+                },
+                "operation": "set-maximum",
+                "draft": {
+                  "amount": 250,
+                  "minimum": null,
+                  "currency": "USD"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "FN-CU-005",
+      "turns": [
+        {
+          "turnIndex": 0,
+          "message": "Find a desk lamp under SGD 100. It must clamp onto the desk.",
+          "proposal": {
+            "disposition": "research",
+            "actions": [
+              {
+                "kind": "start-request",
+                "source": {
+                  "start": 7,
+                  "end": 16,
+                  "text": "desk lamp"
+                }
+              },
+              {
+                "kind": "budget",
+                "source": {
+                  "start": 17,
+                  "end": 30,
+                  "text": "under SGD 100"
+                },
+                "operation": "set-maximum",
+                "draft": {
+                  "amount": 100,
+                  "minimum": null,
+                  "currency": "SGD"
+                }
+              },
+              {
+                "kind": "add-criterion",
+                "source": {
+                  "start": 32,
+                  "end": 60,
+                  "text": "It must clamp onto the desk."
+                },
+                "strength": "hard"
+              }
+            ]
+          }
+        },
+        {
+          "turnIndex": 1,
+          "message": "Actually forget the lamp. I need a floor lamp under SGD 180; freestanding is essential.",
+          "proposal": {
+            "disposition": "research",
+            "actions": [
+              {
+                "kind": "start-request",
+                "source": {
+                  "start": 35,
+                  "end": 45,
+                  "text": "floor lamp"
+                }
+              },
+              {
+                "kind": "remove-criterion",
+                "source": {
+                  "start": 0,
+                  "end": 25,
+                  "text": "Actually forget the lamp."
+                },
+                "id": "@symbolic-0"
+              },
+              {
+                "kind": "budget",
+                "source": {
+                  "start": 46,
+                  "end": 59,
+                  "text": "under SGD 180"
+                },
+                "operation": "set-maximum",
+                "draft": {
+                  "amount": 180,
+                  "minimum": null,
+                  "currency": "SGD"
+                }
+              },
+              {
+                "kind": "add-criterion",
+                "source": {
+                  "start": 61,
+                  "end": 86,
+                  "text": "freestanding is essential"
+                },
+                "strength": "hard"
+              }
+            ]
+          },
+          "symbolicTargets": [
+            {
+              "actionIndex": 1,
+              "targetWording": "It must clamp onto the desk."
+            }
+          ],
+          "limitations": [
+            "The action contract has no replacement-description operation. A start-request expresses the explicit corrected objective; other unmentioned constraints are not removed.",
+            "Hard strength follows the literal requirement, including essential, needs, or a specific required specification. The proposal does not rewrite wording to satisfy a lexical guard.",
+            "Forgetting the prior lamp and explicitly requiring freestanding operation supersedes the clamp requirement. The symbolic removal cannot be replaced with an invented criterion ID."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "FN-PE-001",
+      "turns": [
+        {
+          "turnIndex": 0,
+          "message": "Headphones for long flights under S$500",
+          "proposal": {
+            "disposition": "research",
+            "actions": [
+              {
+                "kind": "start-request",
+                "source": {
+                  "start": 0,
+                  "end": 27,
+                  "text": "Headphones for long flights"
+                }
+              },
+              {
+                "kind": "budget",
+                "source": {
+                  "start": 28,
+                  "end": 39,
+                  "text": "under S$500"
+                },
+                "operation": "set-maximum",
+                "draft": {
+                  "amount": 500,
+                  "minimum": null,
+                  "currency": "SGD"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "turnIndex": 1,
+          "message": "Actually make it S$300",
+          "proposal": {
+            "disposition": "research",
+            "actions": [
+              {
+                "kind": "budget",
+                "source": {
+                  "start": 9,
+                  "end": 22,
+                  "text": "make it S$300"
+                },
+                "operation": "set-maximum",
+                "draft": {
+                  "amount": 300,
+                  "minimum": null,
+                  "currency": "SGD"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "turnIndex": 2,
+          "message": "No Sony products",
+          "proposal": {
+            "disposition": "research",
+            "actions": [
+              {
+                "kind": "add-criterion",
+                "source": {
+                  "start": 0,
+                  "end": 16,
+                  "text": "No Sony products"
+                },
+                "strength": "hard"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "FN-PE-002",
+      "turns": [
+        {
+          "turnIndex": 0,
+          "message": "I need a power bank that supports fast charging",
+          "proposal": {
+            "disposition": "research",
+            "actions": [
+              {
+                "kind": "start-request",
+                "source": {
+                  "start": 9,
+                  "end": 19,
+                  "text": "power bank"
+                }
+              },
+              {
+                "kind": "add-criterion",
+                "source": {
+                  "start": 25,
+                  "end": 47,
+                  "text": "supports fast charging"
+                },
+                "strength": "hard"
+              }
+            ]
+          },
+          "limitations": [
+            "Hard strength follows the literal requirement, including essential, needs, or a specific required specification. The proposal does not rewrite wording to satisfy a lexical guard."
+          ]
+        },
+        {
+          "turnIndex": 1,
+          "message": "Only Anker",
+          "proposal": {
+            "disposition": "research",
+            "actions": [
+              {
+                "kind": "add-criterion",
+                "source": {
+                  "start": 0,
+                  "end": 10,
+                  "text": "Only Anker"
+                },
+                "strength": "hard"
+              }
+            ]
+          }
+        },
+        {
+          "turnIndex": 2,
+          "message": "USB-C PD at 30 W or more is required. SGD 50 to 90.",
+          "proposal": {
+            "disposition": "research",
+            "actions": [
+              {
+                "kind": "add-criterion",
+                "source": {
+                  "start": 0,
+                  "end": 37,
+                  "text": "USB-C PD at 30 W or more is required."
+                },
+                "strength": "hard"
+              },
+              {
+                "kind": "budget",
+                "source": {
+                  "start": 38,
+                  "end": 50,
+                  "text": "SGD 50 to 90"
+                },
+                "operation": "replace-range",
+                "draft": {
+                  "amount": 90,
+                  "minimum": 50,
+                  "currency": "SGD"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "FN-PE-003",
+      "turns": [
+        {
+          "turnIndex": 0,
+          "message": "I want a label maker for tactile labels in my workshop. Braille output is essential; portability would be nice.",
+          "proposal": {
+            "disposition": "research",
+            "actions": [
+              {
+                "kind": "start-request",
+                "source": {
+                  "start": 9,
+                  "end": 54,
+                  "text": "label maker for tactile labels in my workshop"
+                }
+              },
+              {
+                "kind": "add-criterion",
+                "source": {
+                  "start": 56,
+                  "end": 83,
+                  "text": "Braille output is essential"
+                },
+                "strength": "hard"
+              },
+              {
+                "kind": "add-criterion",
+                "source": {
+                  "start": 85,
+                  "end": 110,
+                  "text": "portability would be nice"
+                },
+                "strength": "flexible"
+              }
+            ]
+          },
+          "limitations": [
+            "Hard strength follows the literal requirement, including essential, needs, or a specific required specification. The proposal does not rewrite wording to satisfy a lexical guard."
+          ]
+        },
+        {
+          "turnIndex": 1,
+          "message": "Under USD 180, and it must work without a phone app.",
+          "proposal": {
+            "disposition": "research",
+            "actions": [
+              {
+                "kind": "budget",
+                "source": {
+                  "start": 0,
+                  "end": 13,
+                  "text": "Under USD 180"
+                },
+                "operation": "set-maximum",
+                "draft": {
+                  "amount": 180,
+                  "minimum": null,
+                  "currency": "USD"
+                }
+              },
+              {
+                "kind": "add-criterion",
+                "source": {
+                  "start": 19,
+                  "end": 51,
+                  "text": "it must work without a phone app"
+                },
+                "strength": "hard"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "FN-PE-004",
+      "turns": [
+        {
+          "turnIndex": 0,
+          "message": "I'm replacing an aquarium filter. It must suit a 60 litre freshwater tank and take reusable media.",
+          "proposal": {
+            "disposition": "research",
+            "actions": [
+              {
+                "kind": "start-request",
+                "source": {
+                  "start": 17,
+                  "end": 32,
+                  "text": "aquarium filter"
+                }
+              },
+              {
+                "kind": "add-criterion",
+                "source": {
+                  "start": 34,
+                  "end": 98,
+                  "text": "It must suit a 60 litre freshwater tank and take reusable media."
+                },
+                "strength": "hard"
+              }
+            ]
+          }
+        },
+        {
+          "turnIndex": 1,
+          "message": "Quiet would be nice. No proprietary disposable cartridges, please. AUD 120 max.",
+          "proposal": {
+            "disposition": "research",
+            "actions": [
+              {
+                "kind": "add-criterion",
+                "source": {
+                  "start": 0,
+                  "end": 20,
+                  "text": "Quiet would be nice."
+                },
+                "strength": "flexible"
+              },
+              {
+                "kind": "add-criterion",
+                "source": {
+                  "start": 21,
+                  "end": 66,
+                  "text": "No proprietary disposable cartridges, please."
+                },
+                "strength": "hard"
+              },
+              {
+                "kind": "budget",
+                "source": {
+                  "start": 67,
+                  "end": 78,
+                  "text": "AUD 120 max"
+                },
+                "operation": "clarify",
+                "draft": {
+                  "amount": 120,
+                  "minimum": null,
+                  "currency": null
+                }
+              }
+            ]
+          },
+          "limitations": [
+            "The stated currency is unsupported by the allowed SGD/USD draft. Its numeric amount is retained with currency null. No currency conversion or substitute currency is proposed."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "FN-PE-005",
+      "turns": [
+        {
+          "turnIndex": 0,
+          "message": "A pour-over kettle, please. I need a gooseneck and variable temperature. I prefer white but black is fine.",
+          "proposal": {
+            "disposition": "research",
+            "actions": [
+              {
+                "kind": "start-request",
+                "source": {
+                  "start": 2,
+                  "end": 18,
+                  "text": "pour-over kettle"
+                }
+              },
+              {
+                "kind": "add-criterion",
+                "source": {
+                  "start": 28,
+                  "end": 72,
+                  "text": "I need a gooseneck and variable temperature."
+                },
+                "strength": "hard"
+              },
+              {
+                "kind": "add-criterion",
+                "source": {
+                  "start": 73,
+                  "end": 106,
+                  "text": "I prefer white but black is fine."
+                },
+                "strength": "flexible"
+              }
+            ]
+          },
+          "limitations": [
+            "Hard strength follows the literal requirement, including essential, needs, or a specific required specification. The proposal does not rewrite wording to satisfy a lexical guard."
+          ]
+        },
+        {
+          "turnIndex": 1,
+          "message": "Keep it below JPY 15000. It has to run on 100 V.",
+          "proposal": {
+            "disposition": "research",
+            "actions": [
+              {
+                "kind": "budget",
+                "source": {
+                  "start": 8,
+                  "end": 23,
+                  "text": "below JPY 15000"
+                },
+                "operation": "clarify",
+                "draft": {
+                  "amount": 15000,
+                  "minimum": null,
+                  "currency": null
+                }
+              },
+              {
+                "kind": "add-criterion",
+                "source": {
+                  "start": 25,
+                  "end": 48,
+                  "text": "It has to run on 100 V."
+                },
+                "strength": "hard"
+              }
+            ]
+          },
+          "limitations": [
+            "Hard strength follows the literal requirement, including essential, needs, or a specific required specification. The proposal does not rewrite wording to satisfy a lexical guard.",
+            "The stated currency is unsupported by the allowed SGD/USD draft. Its numeric amount is retained with currency null. No currency conversion or substitute currency is proposed."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "FN-CC-001",
+      "turns": [
+        {
+          "turnIndex": 0,
+          "message": "I'd like a torque screwdriver for bicycle work, about $60 to $90.",
+          "proposal": {
+            "disposition": "research",
+            "actions": [
+              {
+                "kind": "start-request",
+                "source": {
+                  "start": 11,
+                  "end": 46,
+                  "text": "torque screwdriver for bicycle work"
+                }
+              },
+              {
+                "kind": "budget",
+                "source": {
+                  "start": 48,
+                  "end": 64,
+                  "text": "about $60 to $90"
+                },
+                "operation": "clarify",
+                "draft": {
+                  "amount": 90,
+                  "minimum": 60,
+                  "currency": null
+                }
+              }
+            ]
+          }
+        },
+        {
+          "turnIndex": 1,
+          "message": "USD. Adjustable from 2 to 8 Nm is essential.",
+          "proposal": {
+            "disposition": "research",
+            "actions": [
+              {
+                "kind": "budget",
+                "source": {
+                  "start": 0,
+                  "end": 3,
+                  "text": "USD"
+                },
+                "operation": "replace-range",
+                "draft": {
+                  "amount": 90,
+                  "minimum": 60,
+                  "currency": "USD"
+                }
+              },
+              {
+                "kind": "add-criterion",
+                "source": {
+                  "start": 5,
+                  "end": 44,
+                  "text": "Adjustable from 2 to 8 Nm is essential."
+                },
+                "strength": "hard"
+              }
+            ]
+          },
+          "limitations": [
+            "Hard strength follows the literal requirement, including essential, needs, or a specific required specification. The proposal does not rewrite wording to satisfy a lexical guard."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "FN-CC-002",
+      "turns": [
+        {
+          "turnIndex": 0,
+          "message": "Find two compact sewing machines under GBP 200.",
+          "proposal": {
+            "disposition": "research",
+            "actions": [
+              {
+                "kind": "start-request",
+                "source": {
+                  "start": 17,
+                  "end": 32,
+                  "text": "sewing machines"
+                }
+              },
+              {
+                "kind": "add-criterion",
+                "source": {
+                  "start": 9,
+                  "end": 16,
+                  "text": "compact"
+                },
+                "strength": "flexible"
+              },
+              {
+                "kind": "budget",
+                "source": {
+                  "start": 33,
+                  "end": 46,
+                  "text": "under GBP 200"
+                },
+                "operation": "clarify",
+                "draft": {
+                  "amount": 200,
+                  "minimum": null,
+                  "currency": null
+                }
+              }
+            ]
+          },
+          "limitations": [
+            "The requested result count of two has no dedicated action field.",
+            "The stated currency is unsupported by the allowed SGD/USD draft. Its numeric amount is retained with currency null. No currency conversion or substitute currency is proposed."
+          ]
+        },
+        {
+          "turnIndex": 1,
+          "message": "Is that one good for denim?",
+          "proposal": {
+            "disposition": "acknowledge",
+            "actions": []
+          },
+          "limitations": [
+            "The action contract has no held-evidence answer or comparison operation. Acknowledge requests no new research and does not fabricate comparison content.",
+            "The phrase that one has no identifiable referent in literal user turns alone."
+          ]
+        },
+        {
+          "turnIndex": 2,
+          "message": "I mean the second machine.",
+          "proposal": {
+            "disposition": "acknowledge",
+            "actions": []
+          },
+          "limitations": [
+            "The action contract has no held-evidence answer or comparison operation. Acknowledge requests no new research and does not fabricate comparison content.",
+            "The second machine identifies a held-result position, not a new product objective."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "FN-CC-003",
+      "turns": [
+        {
+          "turnIndex": 0,
+          "message": "I need a replacement tip for my white cane.",
+          "proposal": {
+            "disposition": "research",
+            "actions": [
+              {
+                "kind": "start-request",
+                "source": {
+                  "start": 9,
+                  "end": 42,
+                  "text": "replacement tip for my white cane"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "turnIndex": 1,
+          "message": "It's a Fixture Mobility folding cane with an 8 mm screw fitting. USD 25 max.",
+          "proposal": {
+            "disposition": "research",
+            "actions": [
+              {
+                "kind": "add-criterion",
+                "source": {
+                  "start": 7,
+                  "end": 63,
+                  "text": "Fixture Mobility folding cane with an 8 mm screw fitting"
+                },
+                "strength": "hard"
+              },
+              {
+                "kind": "budget",
+                "source": {
+                  "start": 65,
+                  "end": 75,
+                  "text": "USD 25 max"
+                },
+                "operation": "set-maximum",
+                "draft": {
+                  "amount": 25,
+                  "minimum": null,
+                  "currency": "USD"
+                }
+              }
+            ]
+          },
+          "limitations": [
+            "Hard strength follows the literal requirement, including essential, needs, or a specific required specification. The proposal does not rewrite wording to satisfy a lexical guard.",
+            "The fitting describes the existing cane and constrains compatibility of the replacement tip."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "FN-CC-004",
+      "turns": [
+        {
+          "turnIndex": 0,
+          "message": "Help me find a daylight lamp for painting miniatures. Adjustable brightness is essential.",
+          "proposal": {
+            "disposition": "research",
+            "actions": [
+              {
+                "kind": "start-request",
+                "source": {
+                  "start": 15,
+                  "end": 52,
+                  "text": "daylight lamp for painting miniatures"
+                }
+              },
+              {
+                "kind": "add-criterion",
+                "source": {
+                  "start": 54,
+                  "end": 89,
+                  "text": "Adjustable brightness is essential."
+                },
+                "strength": "hard"
+              }
+            ]
+          },
+          "limitations": [
+            "Hard strength follows the literal requirement, including essential, needs, or a specific required specification. The proposal does not rewrite wording to satisfy a lexical guard."
+          ]
+        },
+        {
+          "turnIndex": 1,
+          "message": "I don't have a budget in mind. Please search without one.",
+          "proposal": {
+            "disposition": "research",
+            "actions": []
+          },
+          "limitations": [
+            "The user explicitly requests research without a budget. There is no budget to remove in the literal conversation, and the contract has no separate no-budget affirmation action."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "FN-CC-005",
+      "turns": [
+        {
+          "turnIndex": 0,
+          "message": "Find a compact mechanical keyboard, USD 80 to 140. It must have wireless support.",
+          "proposal": {
+            "disposition": "research",
+            "actions": [
+              {
+                "kind": "start-request",
+                "source": {
+                  "start": 15,
+                  "end": 34,
+                  "text": "mechanical keyboard"
+                }
+              },
+              {
+                "kind": "add-criterion",
+                "source": {
+                  "start": 7,
+                  "end": 14,
+                  "text": "compact"
+                },
+                "strength": "flexible"
+              },
+              {
+                "kind": "budget",
+                "source": {
+                  "start": 36,
+                  "end": 49,
+                  "text": "USD 80 to 140"
+                },
+                "operation": "replace-range",
+                "draft": {
+                  "amount": 140,
+                  "minimum": 80,
+                  "currency": "USD"
+                }
+              },
+              {
+                "kind": "add-criterion",
+                "source": {
+                  "start": 51,
+                  "end": 81,
+                  "text": "It must have wireless support."
+                },
+                "strength": "hard"
+              }
+            ]
+          }
+        },
+        {
+          "turnIndex": 1,
+          "message": "Something cheaper",
+          "proposal": {
+            "disposition": "feedback",
+            "actions": [
+              {
+                "kind": "add-criterion",
+                "source": {
+                  "start": 0,
+                  "end": 17,
+                  "text": "Something cheaper"
+                },
+                "strength": "flexible"
+              }
+            ]
+          },
+          "limitations": [
+            "Cheaper does not supply a new numeric budget or explicitly remove a bound. The feedback disposition asks for the missing tradeoff rather than inventing a price."
+          ]
+        },
+        {
+          "turnIndex": 2,
+          "message": "The lower-priced options within that range are fine.",
+          "proposal": {
+            "disposition": "acknowledge",
+            "actions": [
+              {
+                "kind": "add-criterion",
+                "source": {
+                  "start": 0,
+                  "end": 52,
+                  "text": "The lower-priced options within that range are fine."
+                },
+                "strength": "flexible"
+              }
+            ]
+          },
+          "limitations": [
+            "The action contract has no held-evidence answer or comparison operation. Acknowledge requests no new research and does not fabricate comparison content."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "FN-BC-001",
+      "turns": [
+        {
+          "turnIndex": 0,
+          "message": "Find a USB-C dock for two monitors, SGD 100 to 160.",
+          "proposal": {
+            "disposition": "research",
+            "actions": [
+              {
+                "kind": "start-request",
+                "source": {
+                  "start": 7,
+                  "end": 34,
+                  "text": "USB-C dock for two monitors"
+                }
+              },
+              {
+                "kind": "budget",
+                "source": {
+                  "start": 36,
+                  "end": 50,
+                  "text": "SGD 100 to 160"
+                },
+                "operation": "replace-range",
+                "draft": {
+                  "amount": 160,
+                  "minimum": 100,
+                  "currency": "SGD"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "turnIndex": 1,
+          "message": "I meant USD, not SGD",
+          "proposal": {
+            "disposition": "research",
+            "actions": [
+              {
+                "kind": "budget",
+                "source": {
+                  "start": 0,
+                  "end": 20,
+                  "text": "I meant USD, not SGD"
+                },
+                "operation": "replace-range",
+                "draft": {
+                  "amount": 160,
+                  "minimum": 100,
+                  "currency": "USD"
+                }
+              }
+            ]
+          },
+          "limitations": [
+            "The currency correction preserves both amounts from the prior literal request."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "FN-BC-002",
+      "turns": [
+        {
+          "turnIndex": 0,
+          "message": "I'm shopping for a hand coffee grinder in France. EUR 80 to 130, please.",
+          "proposal": {
+            "disposition": "research",
+            "actions": [
+              {
+                "kind": "start-request",
+                "source": {
+                  "start": 19,
+                  "end": 38,
+                  "text": "hand coffee grinder"
+                }
+              },
+              {
+                "kind": "refine-description",
+                "source": {
+                  "start": 39,
+                  "end": 48,
+                  "text": "in France"
+                }
+              },
+              {
+                "kind": "budget",
+                "source": {
+                  "start": 50,
+                  "end": 63,
+                  "text": "EUR 80 to 130"
+                },
+                "operation": "clarify",
+                "draft": {
+                  "amount": 130,
+                  "minimum": 80,
+                  "currency": null
+                }
+              }
+            ]
+          },
+          "limitations": [
+            "The region action supports only SG and US. France remains descriptive context.",
+            "The stated currency is unsupported by the allowed SGD/USD draft. Its numeric amount is retained with currency null. No currency conversion or substitute currency is proposed."
+          ]
+        },
+        {
+          "turnIndex": 1,
+          "message": "I like the steel one. Don't change my existing budget.",
+          "proposal": {
+            "disposition": "acknowledge",
+            "actions": [
+              {
+                "kind": "add-criterion",
+                "source": {
+                  "start": 0,
+                  "end": 21,
+                  "text": "I like the steel one."
+                },
+                "strength": "flexible"
+              }
+            ]
+          },
+          "limitations": [
+            "The action contract has no held-evidence answer or comparison operation. Acknowledge requests no new research and does not fabricate comparison content.",
+            "Do not change my existing budget is preservation, not a money edit. The selected steel item cannot be identified from literal user turns alone."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "FN-BC-003",
+      "turns": [
+        {
+          "turnIndex": 0,
+          "message": "A fountain pen under JPY 6000, with a fine nib.",
+          "proposal": {
+            "disposition": "research",
+            "actions": [
+              {
+                "kind": "start-request",
+                "source": {
+                  "start": 2,
+                  "end": 14,
+                  "text": "fountain pen"
+                }
+              },
+              {
+                "kind": "budget",
+                "source": {
+                  "start": 15,
+                  "end": 29,
+                  "text": "under JPY 6000"
+                },
+                "operation": "clarify",
+                "draft": {
+                  "amount": 6000,
+                  "minimum": null,
+                  "currency": null
+                }
+              },
+              {
+                "kind": "add-criterion",
+                "source": {
+                  "start": 31,
+                  "end": 46,
+                  "text": "with a fine nib"
+                },
+                "strength": "hard"
+              }
+            ]
+          },
+          "limitations": [
+            "Hard strength follows the literal requirement, including essential, needs, or a specific required specification. The proposal does not rewrite wording to satisfy a lexical guard.",
+            "The stated currency is unsupported by the allowed SGD/USD draft. Its numeric amount is retained with currency null. No currency conversion or substitute currency is proposed."
+          ]
+        },
+        {
+          "turnIndex": 1,
+          "message": "Can I see one around JPY 4000 instead?",
+          "proposal": {
+            "disposition": "research",
+            "actions": [
+              {
+                "kind": "budget",
+                "source": {
+                  "start": 14,
+                  "end": 29,
+                  "text": "around JPY 4000"
+                },
+                "operation": "clarify",
+                "draft": {
+                  "amount": 4000,
+                  "minimum": null,
+                  "currency": null
+                }
+              }
+            ]
+          },
+          "limitations": [
+            "Around expresses an approximate target. The draft has no approximation field; 4000 is the stated number, not an invented tolerance.",
+            "The stated currency is unsupported by the allowed SGD/USD draft. Its numeric amount is retained with currency null. No currency conversion or substitute currency is proposed."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "FN-BC-004",
+      "turns": [
+        {
+          "turnIndex": 0,
+          "message": "I need a cordless soldering iron between AUD 90 and 150.",
+          "proposal": {
+            "disposition": "research",
+            "actions": [
+              {
+                "kind": "start-request",
+                "source": {
+                  "start": 9,
+                  "end": 32,
+                  "text": "cordless soldering iron"
+                }
+              },
+              {
+                "kind": "budget",
+                "source": {
+                  "start": 33,
+                  "end": 55,
+                  "text": "between AUD 90 and 150"
+                },
+                "operation": "clarify",
+                "draft": {
+                  "amount": 150,
+                  "minimum": 90,
+                  "currency": null
+                }
+              }
+            ]
+          },
+          "limitations": [
+            "The stated currency is unsupported by the allowed SGD/USD draft. Its numeric amount is retained with currency null. No currency conversion or substitute currency is proposed."
+          ]
+        },
+        {
+          "turnIndex": 1,
+          "message": "You can remove the minimum, but AUD 150 is still my limit.",
+          "proposal": {
+            "disposition": "research",
+            "actions": [
+              {
+                "kind": "remove-budget",
+                "source": {
+                  "start": 8,
+                  "end": 26,
+                  "text": "remove the minimum"
+                },
+                "bound": "minimum"
+              }
+            ]
+          },
+          "limitations": [
+            "The existing currency remains AUD and unresolved. Removing the minimum does not authorize converting or discarding the AUD 150 maximum."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "FN-BC-005",
+      "turns": [
+        {
+          "turnIndex": 0,
+          "message": "Find a compact photo printer under GBP 100.",
+          "proposal": {
+            "disposition": "research",
+            "actions": [
+              {
+                "kind": "start-request",
+                "source": {
+                  "start": 15,
+                  "end": 28,
+                  "text": "photo printer"
+                }
+              },
+              {
+                "kind": "add-criterion",
+                "source": {
+                  "start": 7,
+                  "end": 14,
+                  "text": "compact"
+                },
+                "strength": "flexible"
+              },
+              {
+                "kind": "budget",
+                "source": {
+                  "start": 29,
+                  "end": 42,
+                  "text": "under GBP 100"
+                },
+                "operation": "clarify",
+                "draft": {
+                  "amount": 100,
+                  "minimum": null,
+                  "currency": null
+                }
+              }
+            ]
+          },
+          "limitations": [
+            "The stated currency is unsupported by the allowed SGD/USD draft. Its numeric amount is retained with currency null. No currency conversion or substitute currency is proposed."
+          ]
+        },
+        {
+          "turnIndex": 1,
+          "message": "That GBP 89 one looks good. I'm not a member and won't subscribe.",
+          "proposal": {
+            "disposition": "acknowledge",
+            "actions": [
+              {
+                "kind": "add-criterion",
+                "source": {
+                  "start": 28,
+                  "end": 65,
+                  "text": "I'm not a member and won't subscribe."
+                },
+                "strength": "hard"
+              }
+            ]
+          },
+          "limitations": [
+            "The action contract has no held-evidence answer or comparison operation. Acknowledge requests no new research and does not fabricate comparison content.",
+            "GBP 89 is a quoted option price, not a revised budget."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "FN-MR-001",
+      "turns": [
+        {
+          "turnIndex": 0,
+          "message": "Find closed-back headphones between SGD 120 and 220. No Sony products.",
+          "proposal": {
+            "disposition": "research",
+            "actions": [
+              {
+                "kind": "start-request",
+                "source": {
+                  "start": 5,
+                  "end": 27,
+                  "text": "closed-back headphones"
+                }
+              },
+              {
+                "kind": "budget",
+                "source": {
+                  "start": 28,
+                  "end": 51,
+                  "text": "between SGD 120 and 220"
+                },
+                "operation": "replace-range",
+                "draft": {
+                  "amount": 220,
+                  "minimum": 120,
+                  "currency": "SGD"
+                }
+              },
+              {
+                "kind": "add-criterion",
+                "source": {
+                  "start": 53,
+                  "end": 70,
+                  "text": "No Sony products."
+                },
+                "strength": "hard"
+              }
+            ]
+          }
+        },
+        {
+          "turnIndex": 1,
+          "message": "I'd prefer something that folds.",
+          "proposal": {
+            "disposition": "research",
+            "actions": [
+              {
+                "kind": "add-criterion",
+                "source": {
+                  "start": 0,
+                  "end": 32,
+                  "text": "I'd prefer something that folds."
+                },
+                "strength": "flexible"
+              }
+            ]
+          }
+        },
+        {
+          "turnIndex": 2,
+          "message": "Keep it short",
+          "proposal": {
+            "disposition": "acknowledge",
+            "actions": []
+          },
+          "limitations": [
+            "Response length is a local presentation control with no IntentActions field. It may bypass interpretation."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "FN-MR-002",
+      "turns": [
+        {
+          "turnIndex": 0,
+          "message": "Find a temperature-controlled soldering station under SGD 180.",
+          "proposal": {
+            "disposition": "research",
+            "actions": [
+              {
+                "kind": "start-request",
+                "source": {
+                  "start": 7,
+                  "end": 47,
+                  "text": "temperature-controlled soldering station"
+                }
+              },
+              {
+                "kind": "budget",
+                "source": {
+                  "start": 48,
+                  "end": 61,
+                  "text": "under SGD 180"
+                },
+                "operation": "set-maximum",
+                "draft": {
+                  "amount": 180,
+                  "minimum": null,
+                  "currency": "SGD"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "turnIndex": 1,
+          "message": "Only products suitable for Singapore",
+          "proposal": {
+            "disposition": "research",
+            "actions": [
+              {
+                "kind": "add-criterion",
+                "source": {
+                  "start": 0,
+                  "end": 36,
+                  "text": "Only products suitable for Singapore"
+                },
+                "strength": "hard"
+              },
+              {
+                "kind": "set-region",
+                "source": {
+                  "start": 27,
+                  "end": 36,
+                  "text": "Singapore"
+                },
+                "value": "SG"
+              }
+            ]
+          }
+        },
+        {
+          "turnIndex": 2,
+          "message": "It must have a Type G plug and support 230 V. Show the smaller ones first.",
+          "proposal": {
+            "disposition": "research",
+            "actions": [
+              {
+                "kind": "add-criterion",
+                "source": {
+                  "start": 0,
+                  "end": 45,
+                  "text": "It must have a Type G plug and support 230 V."
+                },
+                "strength": "hard"
+              },
+              {
+                "kind": "add-criterion",
+                "source": {
+                  "start": 46,
+                  "end": 74,
+                  "text": "Show the smaller ones first."
+                },
+                "strength": "flexible"
+              }
+            ]
+          },
+          "limitations": [
+            "The flexible size preference can be recorded. Explicit ordering is outside the action contract."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "FN-MR-003",
+      "turns": [
+        {
+          "turnIndex": 0,
+          "message": "I need a tenkeyless keyboard, USD 70 to 110. It must work over USB without Bluetooth.",
+          "proposal": {
+            "disposition": "research",
+            "actions": [
+              {
+                "kind": "start-request",
+                "source": {
+                  "start": 9,
+                  "end": 28,
+                  "text": "tenkeyless keyboard"
+                }
+              },
+              {
+                "kind": "budget",
+                "source": {
+                  "start": 30,
+                  "end": 43,
+                  "text": "USD 70 to 110"
+                },
+                "operation": "replace-range",
+                "draft": {
+                  "amount": 110,
+                  "minimum": 70,
+                  "currency": "USD"
+                }
+              },
+              {
+                "kind": "add-criterion",
+                "source": {
+                  "start": 45,
+                  "end": 85,
+                  "text": "It must work over USB without Bluetooth."
+                },
+                "strength": "hard"
+              }
+            ]
+          }
+        },
+        {
+          "turnIndex": 1,
+          "message": "Make it quieter.",
+          "proposal": {
+            "disposition": "research",
+            "actions": [
+              {
+                "kind": "add-criterion",
+                "source": {
+                  "start": 0,
+                  "end": 16,
+                  "text": "Make it quieter."
+                },
+                "strength": "flexible"
+              }
+            ]
+          }
+        },
+        {
+          "turnIndex": 2,
+          "message": "Don't change my existing budget",
+          "proposal": {
+            "disposition": "acknowledge",
+            "actions": []
+          },
+          "limitations": [
+            "Budget preservation requests no action and no numeric replacement."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "FN-MR-004",
+      "turns": [
+        {
+          "turnIndex": 0,
+          "message": "I need a monochrome laser printer under EUR 180. Automatic duplex is essential.",
+          "proposal": {
+            "disposition": "research",
+            "actions": [
+              {
+                "kind": "start-request",
+                "source": {
+                  "start": 9,
+                  "end": 33,
+                  "text": "monochrome laser printer"
+                }
+              },
+              {
+                "kind": "budget",
+                "source": {
+                  "start": 34,
+                  "end": 47,
+                  "text": "under EUR 180"
+                },
+                "operation": "clarify",
+                "draft": {
+                  "amount": 180,
+                  "minimum": null,
+                  "currency": null
+                }
+              },
+              {
+                "kind": "add-criterion",
+                "source": {
+                  "start": 49,
+                  "end": 79,
+                  "text": "Automatic duplex is essential."
+                },
+                "strength": "hard"
+              }
+            ]
+          },
+          "limitations": [
+            "Hard strength follows the literal requirement, including essential, needs, or a specific required specification. The proposal does not rewrite wording to satisfy a lexical guard.",
+            "The stated currency is unsupported by the allowed SGD/USD draft. Its numeric amount is retained with currency null. No currency conversion or substitute currency is proposed."
+          ]
+        },
+        {
+          "turnIndex": 1,
+          "message": "I'd rather avoid expensive consumables.",
+          "proposal": {
+            "disposition": "research",
+            "actions": [
+              {
+                "kind": "add-criterion",
+                "source": {
+                  "start": 0,
+                  "end": 39,
+                  "text": "I'd rather avoid expensive consumables."
+                },
+                "strength": "flexible"
+              }
+            ]
+          },
+          "limitations": [
+            "Rather avoid describes a flexible preference in this wording, not an absolute exclusion."
+          ]
+        },
+        {
+          "turnIndex": 2,
+          "message": "Show me more details",
+          "proposal": {
+            "disposition": "acknowledge",
+            "actions": []
+          },
+          "limitations": [
+            "Detail level is a local presentation control with no IntentActions field. It may bypass interpretation."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "FN-MR-005",
+      "turns": [
+        {
+          "turnIndex": 0,
+          "message": "Find waterproof hiking boots in EU size 42, up to GBP 140.",
+          "proposal": {
+            "disposition": "research",
+            "actions": [
+              {
+                "kind": "start-request",
+                "source": {
+                  "start": 16,
+                  "end": 28,
+                  "text": "hiking boots"
+                }
+              },
+              {
+                "kind": "add-criterion",
+                "source": {
+                  "start": 5,
+                  "end": 15,
+                  "text": "waterproof"
+                },
+                "strength": "hard"
+              },
+              {
+                "kind": "add-criterion",
+                "source": {
+                  "start": 32,
+                  "end": 42,
+                  "text": "EU size 42"
+                },
+                "strength": "hard"
+              },
+              {
+                "kind": "budget",
+                "source": {
+                  "start": 44,
+                  "end": 57,
+                  "text": "up to GBP 140"
+                },
+                "operation": "clarify",
+                "draft": {
+                  "amount": 140,
+                  "minimum": null,
+                  "currency": null
+                }
+              }
+            ]
+          },
+          "limitations": [
+            "Hard strength follows the literal requirement, including essential, needs, or a specific required specification. The proposal does not rewrite wording to satisfy a lexical guard.",
+            "The stated currency is unsupported by the allowed SGD/USD draft. Its numeric amount is retained with currency null. No currency conversion or substitute currency is proposed."
+          ]
+        },
+        {
+          "turnIndex": 1,
+          "message": "Actually size 43.",
+          "proposal": {
+            "disposition": "research",
+            "actions": [
+              {
+                "kind": "remove-criterion",
+                "source": {
+                  "start": 0,
+                  "end": 17,
+                  "text": "Actually size 43."
+                },
+                "id": "@symbolic-0"
+              },
+              {
+                "kind": "add-criterion",
+                "source": {
+                  "start": 9,
+                  "end": 16,
+                  "text": "size 43"
+                },
+                "strength": "hard"
+              }
+            ]
+          },
+          "symbolicTargets": [
+            {
+              "actionIndex": 0,
+              "targetWording": "EU size 42"
+            }
+          ],
+          "limitations": [
+            "Hard strength follows the literal requirement, including essential, needs, or a specific required specification. The proposal does not rewrite wording to satisfy a lexical guard.",
+            "The explicit size correction replaces the prior size criterion. The removal contract may not express this correction without removal-cue wording; no user wording is fabricated."
+          ]
+        },
+        {
+          "turnIndex": 2,
+          "message": "Brown would be nice.",
+          "proposal": {
+            "disposition": "research",
+            "actions": [
+              {
+                "kind": "add-criterion",
+                "source": {
+                  "start": 0,
+                  "end": 20,
+                  "text": "Brown would be nice."
+                },
+                "strength": "flexible"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "FN-CD-001",
+      "turns": [
+        {
+          "turnIndex": 0,
+          "message": "Show me over-ear headphones under SGD 300 for long flights.",
+          "proposal": {
+            "disposition": "research",
+            "actions": [
+              {
+                "kind": "start-request",
+                "source": {
+                  "start": 8,
+                  "end": 27,
+                  "text": "over-ear headphones"
+                }
+              },
+              {
+                "kind": "budget",
+                "source": {
+                  "start": 28,
+                  "end": 41,
+                  "text": "under SGD 300"
+                },
+                "operation": "set-maximum",
+                "draft": {
+                  "amount": 300,
+                  "minimum": null,
+                  "currency": "SGD"
+                }
+              },
+              {
+                "kind": "refine-description",
+                "source": {
+                  "start": 42,
+                  "end": 58,
+                  "text": "for long flights"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "turnIndex": 1,
+          "message": "I don't like any of those",
+          "proposal": {
+            "disposition": "feedback",
+            "actions": []
+          }
+        },
+        {
+          "turnIndex": 2,
+          "message": "They're all too bulky. Fold-flat cups are a must.",
+          "proposal": {
+            "disposition": "research",
+            "actions": [
+              {
+                "kind": "add-criterion",
+                "source": {
+                  "start": 0,
+                  "end": 22,
+                  "text": "They're all too bulky."
+                },
+                "strength": "flexible"
+              },
+              {
+                "kind": "add-criterion",
+                "source": {
+                  "start": 23,
+                  "end": 49,
+                  "text": "Fold-flat cups are a must."
+                },
+                "strength": "hard"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "FN-CD-002",
+      "turns": [
+        {
+          "turnIndex": 0,
+          "message": "Find an electric burr grinder under USD 180.",
+          "proposal": {
+            "disposition": "research",
+            "actions": [
+              {
+                "kind": "start-request",
+                "source": {
+                  "start": 8,
+                  "end": 29,
+                  "text": "electric burr grinder"
+                }
+              },
+              {
+                "kind": "budget",
+                "source": {
+                  "start": 30,
+                  "end": 43,
+                  "text": "under USD 180"
+                },
+                "operation": "set-maximum",
+                "draft": {
+                  "amount": 180,
+                  "minimum": null,
+                  "currency": "USD"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "turnIndex": 1,
+          "message": "I meant manual, sorry. No batteries or mains power.",
+          "proposal": {
+            "disposition": "research",
+            "actions": [
+              {
+                "kind": "start-request",
+                "source": {
+                  "start": 8,
+                  "end": 14,
+                  "text": "manual"
+                }
+              },
+              {
+                "kind": "add-criterion",
+                "source": {
+                  "start": 23,
+                  "end": 51,
+                  "text": "No batteries or mains power."
+                },
+                "strength": "hard"
+              }
+            ]
+          },
+          "limitations": [
+            "The action contract has no replacement-description operation. A start-request expresses the explicit corrected objective; other unmentioned constraints are not removed.",
+            "The replacement description fragment manual is elliptical. The literal earlier grinder context is necessary, but the contract cannot compose a replacement description from multiple message spans."
+          ]
+        },
+        {
+          "turnIndex": 2,
+          "message": "The budget is still USD 180.",
+          "proposal": {
+            "disposition": "acknowledge",
+            "actions": []
+          },
+          "limitations": [
+            "Still USD 180 confirms the existing budget; it does not request another paid research operation."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "FN-CD-003",
+      "turns": [
+        {
+          "turnIndex": 0,
+          "message": "Find a USB-C charger under SGD 70, at least 65 W.",
+          "proposal": {
+            "disposition": "research",
+            "actions": [
+              {
+                "kind": "start-request",
+                "source": {
+                  "start": 7,
+                  "end": 20,
+                  "text": "USB-C charger"
+                }
+              },
+              {
+                "kind": "budget",
+                "source": {
+                  "start": 21,
+                  "end": 33,
+                  "text": "under SGD 70"
+                },
+                "operation": "set-maximum",
+                "draft": {
+                  "amount": 70,
+                  "minimum": null,
+                  "currency": "SGD"
+                }
+              },
+              {
+                "kind": "add-criterion",
+                "source": {
+                  "start": 35,
+                  "end": 48,
+                  "text": "at least 65 W"
+                },
+                "strength": "hard"
+              }
+            ]
+          },
+          "limitations": [
+            "Hard strength follows the literal requirement, including essential, needs, or a specific required specification. The proposal does not rewrite wording to satisfy a lexical guard."
+          ]
+        },
+        {
+          "turnIndex": 1,
+          "message": "No, that recommendation only gives 45 W from one port. I need 65 W from a single USB-C port.",
+          "proposal": {
+            "disposition": "research",
+            "actions": [
+              {
+                "kind": "add-criterion",
+                "source": {
+                  "start": 55,
+                  "end": 92,
+                  "text": "I need 65 W from a single USB-C port."
+                },
+                "strength": "hard"
+              }
+            ]
+          },
+          "limitations": [
+            "Hard strength follows the literal requirement, including essential, needs, or a specific required specification. The proposal does not rewrite wording to satisfy a lexical guard.",
+            "The 45 W statement describes an unsuitable recommendation and is not a requested reduction in output."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "FN-CD-004",
+      "turns": [
+        {
+          "turnIndex": 0,
+          "message": "Find a small tripod for a mirrorless camera, under EUR 100.",
+          "proposal": {
+            "disposition": "research",
+            "actions": [
+              {
+                "kind": "start-request",
+                "source": {
+                  "start": 13,
+                  "end": 43,
+                  "text": "tripod for a mirrorless camera"
+                }
+              },
+              {
+                "kind": "add-criterion",
+                "source": {
+                  "start": 7,
+                  "end": 12,
+                  "text": "small"
+                },
+                "strength": "flexible"
+              },
+              {
+                "kind": "budget",
+                "source": {
+                  "start": 45,
+                  "end": 58,
+                  "text": "under EUR 100"
+                },
+                "operation": "clarify",
+                "draft": {
+                  "amount": 100,
+                  "minimum": null,
+                  "currency": null
+                }
+              }
+            ]
+          },
+          "limitations": [
+            "The stated currency is unsupported by the allowed SGD/USD draft. Its numeric amount is retained with currency null. No currency conversion or substitute currency is proposed."
+          ]
+        },
+        {
+          "turnIndex": 1,
+          "message": "I don't want the cheapest if it's shaky. Stability matters more than folded size.",
+          "proposal": {
+            "disposition": "research",
+            "actions": [
+              {
+                "kind": "add-criterion",
+                "source": {
+                  "start": 41,
+                  "end": 81,
+                  "text": "Stability matters more than folded size."
+                },
+                "strength": "flexible"
+              }
+            ]
+          },
+          "limitations": [
+            "Relative preference priority is preserved in wording. The action contract has no explicit weighting or priority edge."
+          ]
+        },
+        {
+          "turnIndex": 2,
+          "message": "It must support a 2 kg camera setup.",
+          "proposal": {
+            "disposition": "research",
+            "actions": [
+              {
+                "kind": "add-criterion",
+                "source": {
+                  "start": 0,
+                  "end": 36,
+                  "text": "It must support a 2 kg camera setup."
+                },
+                "strength": "hard"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "FN-CD-005",
+      "turns": [
+        {
+          "turnIndex": 0,
+          "message": "Find an Anker power bank under USD 90 with 30 W USB-C output.",
+          "proposal": {
+            "disposition": "research",
+            "actions": [
+              {
+                "kind": "start-request",
+                "source": {
+                  "start": 14,
+                  "end": 24,
+                  "text": "power bank"
+                }
+              },
+              {
+                "kind": "add-criterion",
+                "source": {
+                  "start": 8,
+                  "end": 13,
+                  "text": "Anker"
+                },
+                "strength": "hard"
+              },
+              {
+                "kind": "budget",
+                "source": {
+                  "start": 25,
+                  "end": 37,
+                  "text": "under USD 90"
+                },
+                "operation": "set-maximum",
+                "draft": {
+                  "amount": 90,
+                  "minimum": null,
+                  "currency": "USD"
+                }
+              },
+              {
+                "kind": "add-criterion",
+                "source": {
+                  "start": 38,
+                  "end": 60,
+                  "text": "with 30 W USB-C output"
+                },
+                "strength": "hard"
+              }
+            ]
+          },
+          "limitations": [
+            "Hard strength follows the literal requirement, including essential, needs, or a specific required specification. The proposal does not rewrite wording to satisfy a lexical guard."
+          ]
+        },
+        {
+          "turnIndex": 1,
+          "message": "Actually other brands are fine, but still no Sony.",
+          "proposal": {
+            "disposition": "research",
+            "actions": [
+              {
+                "kind": "remove-criterion",
+                "source": {
+                  "start": 0,
+                  "end": 30,
+                  "text": "Actually other brands are fine"
+                },
+                "id": "@symbolic-0"
+              },
+              {
+                "kind": "add-criterion",
+                "source": {
+                  "start": 36,
+                  "end": 49,
+                  "text": "still no Sony"
+                },
+                "strength": "hard"
+              }
+            ]
+          },
+          "symbolicTargets": [
+            {
+              "actionIndex": 0,
+              "targetWording": "Anker"
+            }
+          ],
+          "limitations": [
+            "Other brands are fine explicitly releases the earlier Anker restriction. The removal contract may not express this without removal-cue wording; the target stays symbolic."
+          ]
+        },
+        {
+          "turnIndex": 2,
+          "message": "I still need the 30 W output.",
+          "proposal": {
+            "disposition": "acknowledge",
+            "actions": []
+          },
+          "limitations": [
+            "Still need confirms the already stated 30 W requirement. No removal, weakened threshold, or new research is proposed."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "FN-RT-001",
+      "turns": [
+        {
+          "turnIndex": 0,
+          "message": "Find a desk fan under SGD 60. USB power is essential.",
+          "proposal": {
+            "disposition": "research",
+            "actions": [
+              {
+                "kind": "start-request",
+                "source": {
+                  "start": 7,
+                  "end": 15,
+                  "text": "desk fan"
+                }
+              },
+              {
+                "kind": "budget",
+                "source": {
+                  "start": 16,
+                  "end": 28,
+                  "text": "under SGD 60"
+                },
+                "operation": "set-maximum",
+                "draft": {
+                  "amount": 60,
+                  "minimum": null,
+                  "currency": "SGD"
+                }
+              },
+              {
+                "kind": "add-criterion",
+                "source": {
+                  "start": 30,
+                  "end": 53,
+                  "text": "USB power is essential."
+                },
+                "strength": "hard"
+              }
+            ]
+          },
+          "limitations": [
+            "Hard strength follows the literal requirement, including essential, needs, or a specific required specification. The proposal does not rewrite wording to satisfy a lexical guard."
+          ]
+        },
+        {
+          "turnIndex": 1,
+          "message": "Thanks. How do I change the theme?",
+          "proposal": {
+            "disposition": "acknowledge",
+            "actions": []
+          },
+          "limitations": [
+            "Theme help requires a local app-help response. IntentActions cannot generate help text or operate the toggle."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "FN-RT-002",
+      "turns": [
+        {
+          "turnIndex": 0,
+          "message": "Find three binocular options for birdwatching under USD 250.",
+          "proposal": {
+            "disposition": "research",
+            "actions": [
+              {
+                "kind": "start-request",
+                "source": {
+                  "start": 11,
+                  "end": 45,
+                  "text": "binocular options for birdwatching"
+                }
+              },
+              {
+                "kind": "budget",
+                "source": {
+                  "start": 46,
+                  "end": 59,
+                  "text": "under USD 250"
+                },
+                "operation": "set-maximum",
+                "draft": {
+                  "amount": 250,
+                  "minimum": null,
+                  "currency": "USD"
+                }
+              }
+            ]
+          },
+          "limitations": [
+            "The requested result count of three has no dedicated action field."
+          ]
+        },
+        {
+          "turnIndex": 1,
+          "message": "Compare the first and third options",
+          "proposal": {
+            "disposition": "acknowledge",
+            "actions": []
+          },
+          "limitations": [
+            "The action contract has no held-evidence answer or comparison operation. Acknowledge requests no new research and does not fabricate comparison content."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "FN-RT-003",
+      "turns": [
+        {
+          "turnIndex": 0,
+          "message": "Find a compact induction hob under GBP 90.",
+          "proposal": {
+            "disposition": "research",
+            "actions": [
+              {
+                "kind": "start-request",
+                "source": {
+                  "start": 15,
+                  "end": 28,
+                  "text": "induction hob"
+                }
+              },
+              {
+                "kind": "add-criterion",
+                "source": {
+                  "start": 7,
+                  "end": 14,
+                  "text": "compact"
+                },
+                "strength": "flexible"
+              },
+              {
+                "kind": "budget",
+                "source": {
+                  "start": 29,
+                  "end": 41,
+                  "text": "under GBP 90"
+                },
+                "operation": "clarify",
+                "draft": {
+                  "amount": 90,
+                  "minimum": null,
+                  "currency": null
+                }
+              }
+            ]
+          },
+          "limitations": [
+            "The stated currency is unsupported by the allowed SGD/USD draft. Its numeric amount is retained with currency null. No currency conversion or substitute currency is proposed."
+          ]
+        },
+        {
+          "turnIndex": 1,
+          "message": "Show me more details",
+          "proposal": {
+            "disposition": "acknowledge",
+            "actions": []
+          },
+          "limitations": [
+            "Detail level is a local presentation control with no IntentActions field. It may bypass interpretation."
+          ]
+        },
+        {
+          "turnIndex": 2,
+          "message": "Keep it short",
+          "proposal": {
+            "disposition": "acknowledge",
+            "actions": []
+          },
+          "limitations": [
+            "Response length is a local presentation control with no IntentActions field. It may bypass interpretation."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "FN-RT-004",
+      "turns": [
+        {
+          "turnIndex": 0,
+          "message": "Find a USB microscope under USD 100.",
+          "proposal": {
+            "disposition": "research",
+            "actions": [
+              {
+                "kind": "start-request",
+                "source": {
+                  "start": 7,
+                  "end": 21,
+                  "text": "USB microscope"
+                }
+              },
+              {
+                "kind": "budget",
+                "source": {
+                  "start": 22,
+                  "end": 35,
+                  "text": "under USD 100"
+                },
+                "operation": "set-maximum",
+                "draft": {
+                  "amount": 100,
+                  "minimum": null,
+                  "currency": "USD"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "turnIndex": 1,
+          "message": "Stop that search. Instead find a 10x jeweller's loupe under USD 30.",
+          "proposal": {
+            "disposition": "research",
+            "actions": [
+              {
+                "kind": "start-request",
+                "source": {
+                  "start": 33,
+                  "end": 53,
+                  "text": "10x jeweller's loupe"
+                }
+              },
+              {
+                "kind": "budget",
+                "source": {
+                  "start": 54,
+                  "end": 66,
+                  "text": "under USD 30"
+                },
+                "operation": "set-maximum",
+                "draft": {
+                  "amount": 30,
+                  "minimum": null,
+                  "currency": "USD"
+                }
+              }
+            ]
+          },
+          "limitations": [
+            "The new objective is explicit. Stopping an active request needs transport cancellation, which IntentActions cannot express."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "FN-RT-005",
+      "turns": [
+        {
+          "turnIndex": 0,
+          "message": "Find a film changing bag under EUR 40.",
+          "proposal": {
+            "disposition": "research",
+            "actions": [
+              {
+                "kind": "start-request",
+                "source": {
+                  "start": 7,
+                  "end": 24,
+                  "text": "film changing bag"
+                }
+              },
+              {
+                "kind": "budget",
+                "source": {
+                  "start": 25,
+                  "end": 37,
+                  "text": "under EUR 40"
+                },
+                "operation": "clarify",
+                "draft": {
+                  "amount": 40,
+                  "minimum": null,
+                  "currency": null
+                }
+              }
+            ]
+          },
+          "limitations": [
+            "The stated currency is unsupported by the allowed SGD/USD draft. Its numeric amount is retained with currency null. No currency conversion or substitute currency is proposed."
+          ]
+        },
+        {
+          "turnIndex": 1,
+          "message": "Can you search now?",
+          "proposal": {
+            "disposition": "research",
+            "actions": []
+          },
+          "limitations": [
+            "This explicit research request does not resolve the unsupported EUR currency. No currency substitution is proposed."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "FN-PR-001",
+      "turns": [
+        {
+          "turnIndex": 0,
+          "message": "Find a darkroom timer for analogue photo printing, under USD 120.",
+          "proposal": {
+            "disposition": "research",
+            "actions": [
+              {
+                "kind": "start-request",
+                "source": {
+                  "start": 7,
+                  "end": 49,
+                  "text": "darkroom timer for analogue photo printing"
+                }
+              },
+              {
+                "kind": "budget",
+                "source": {
+                  "start": 51,
+                  "end": 64,
+                  "text": "under USD 120"
+                },
+                "operation": "set-maximum",
+                "draft": {
+                  "amount": 120,
+                  "minimum": null,
+                  "currency": "USD"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "turnIndex": 1,
+          "message": "It must switch an enlarger on and off. A kitchen countdown timer won't do.",
+          "proposal": {
+            "disposition": "research",
+            "actions": [
+              {
+                "kind": "add-criterion",
+                "source": {
+                  "start": 0,
+                  "end": 38,
+                  "text": "It must switch an enlarger on and off."
+                },
+                "strength": "hard"
+              },
+              {
+                "kind": "add-criterion",
+                "source": {
+                  "start": 39,
+                  "end": 74,
+                  "text": "A kitchen countdown timer won't do."
+                },
+                "strength": "hard"
+              }
+            ]
+          },
+          "limitations": [
+            "Hard strength follows the literal requirement, including essential, needs, or a specific required specification. The proposal does not rewrite wording to satisfy a lexical guard."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "FN-PR-002",
+      "turns": [
+        {
+          "turnIndex": 0,
+          "message": "I'm left-handed and need fabric scissors, under GBP 35.",
+          "proposal": {
+            "disposition": "research",
+            "actions": [
+              {
+                "kind": "start-request",
+                "source": {
+                  "start": 25,
+                  "end": 40,
+                  "text": "fabric scissors"
+                }
+              },
+              {
+                "kind": "add-criterion",
+                "source": {
+                  "start": 0,
+                  "end": 15,
+                  "text": "I'm left-handed"
+                },
+                "strength": "hard"
+              },
+              {
+                "kind": "budget",
+                "source": {
+                  "start": 42,
+                  "end": 54,
+                  "text": "under GBP 35"
+                },
+                "operation": "clarify",
+                "draft": {
+                  "amount": 35,
+                  "minimum": null,
+                  "currency": null
+                }
+              }
+            ]
+          },
+          "limitations": [
+            "Hard strength follows the literal requirement, including essential, needs, or a specific required specification. The proposal does not rewrite wording to satisfy a lexical guard.",
+            "The stated currency is unsupported by the allowed SGD/USD draft. Its numeric amount is retained with currency null. No currency conversion or substitute currency is proposed."
+          ]
+        },
+        {
+          "turnIndex": 1,
+          "message": "They must have genuinely reversed blades, not just a left-handed handle.",
+          "proposal": {
+            "disposition": "research",
+            "actions": [
+              {
+                "kind": "add-criterion",
+                "source": {
+                  "start": 0,
+                  "end": 72,
+                  "text": "They must have genuinely reversed blades, not just a left-handed handle."
+                },
+                "strength": "hard"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "FN-PR-003",
+      "turns": [
+        {
+          "turnIndex": 0,
+          "message": "I need a tabletop weaving loom for narrow bands, under EUR 90.",
+          "proposal": {
+            "disposition": "research",
+            "actions": [
+              {
+                "kind": "start-request",
+                "source": {
+                  "start": 9,
+                  "end": 47,
+                  "text": "tabletop weaving loom for narrow bands"
+                }
+              },
+              {
+                "kind": "budget",
+                "source": {
+                  "start": 49,
+                  "end": 61,
+                  "text": "under EUR 90"
+                },
+                "operation": "clarify",
+                "draft": {
+                  "amount": 90,
+                  "minimum": null,
+                  "currency": null
+                }
+              }
+            ]
+          },
+          "limitations": [
+            "The stated currency is unsupported by the allowed SGD/USD draft. Its numeric amount is retained with currency null. No currency conversion or substitute currency is proposed."
+          ]
+        },
+        {
+          "turnIndex": 1,
+          "message": "An inkle loom, specifically. Not a knitting machine.",
+          "proposal": {
+            "disposition": "research",
+            "actions": [
+              {
+                "kind": "refine-description",
+                "source": {
+                  "start": 0,
+                  "end": 28,
+                  "text": "An inkle loom, specifically."
+                }
+              },
+              {
+                "kind": "add-criterion",
+                "source": {
+                  "start": 29,
+                  "end": 52,
+                  "text": "Not a knitting machine."
+                },
+                "strength": "hard"
+              }
+            ]
+          },
+          "limitations": [
+            "Hard strength follows the literal requirement, including essential, needs, or a specific required specification. The proposal does not rewrite wording to satisfy a lexical guard."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "FN-PR-004",
+      "turns": [
+        {
+          "turnIndex": 0,
+          "message": "Find a fermentation heating mat for a 5 litre kombucha jar, under AUD 60.",
+          "proposal": {
+            "disposition": "research",
+            "actions": [
+              {
+                "kind": "start-request",
+                "source": {
+                  "start": 7,
+                  "end": 58,
+                  "text": "fermentation heating mat for a 5 litre kombucha jar"
+                }
+              },
+              {
+                "kind": "budget",
+                "source": {
+                  "start": 60,
+                  "end": 72,
+                  "text": "under AUD 60"
+                },
+                "operation": "clarify",
+                "draft": {
+                  "amount": 60,
+                  "minimum": null,
+                  "currency": null
+                }
+              }
+            ]
+          },
+          "limitations": [
+            "The stated currency is unsupported by the allowed SGD/USD draft. Its numeric amount is retained with currency null. No currency conversion or substitute currency is proposed."
+          ]
+        },
+        {
+          "turnIndex": 1,
+          "message": "It needs a thermostat. I don't want a seedling mat with no temperature control.",
+          "proposal": {
+            "disposition": "research",
+            "actions": [
+              {
+                "kind": "add-criterion",
+                "source": {
+                  "start": 0,
+                  "end": 22,
+                  "text": "It needs a thermostat."
+                },
+                "strength": "hard"
+              },
+              {
+                "kind": "add-criterion",
+                "source": {
+                  "start": 23,
+                  "end": 79,
+                  "text": "I don't want a seedling mat with no temperature control."
+                },
+                "strength": "hard"
+              }
+            ]
+          },
+          "limitations": [
+            "Hard strength follows the literal requirement, including essential, needs, or a specific required specification. The proposal does not rewrite wording to satisfy a lexical guard."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "FN-PR-005",
+      "turns": [
+        {
+          "turnIndex": 0,
+          "message": "I need a replacement stylus for my turntable cartridge, Fixture Audio C12. Under USD 45.",
+          "proposal": {
+            "disposition": "research",
+            "actions": [
+              {
+                "kind": "start-request",
+                "source": {
+                  "start": 9,
+                  "end": 27,
+                  "text": "replacement stylus"
+                }
+              },
+              {
+                "kind": "add-criterion",
+                "source": {
+                  "start": 28,
+                  "end": 73,
+                  "text": "for my turntable cartridge, Fixture Audio C12"
+                },
+                "strength": "hard"
+              },
+              {
+                "kind": "budget",
+                "source": {
+                  "start": 75,
+                  "end": 87,
+                  "text": "Under USD 45"
+                },
+                "operation": "set-maximum",
+                "draft": {
+                  "amount": 45,
+                  "minimum": null,
+                  "currency": "USD"
+                }
+              }
+            ]
+          },
+          "limitations": [
+            "Hard strength follows the literal requirement, including essential, needs, or a specific required specification. The proposal does not rewrite wording to satisfy a lexical guard."
+          ]
+        },
+        {
+          "turnIndex": 1,
+          "message": "Just the stylus, not a whole new cartridge.",
+          "proposal": {
+            "disposition": "research",
+            "actions": [
+              {
+                "kind": "add-criterion",
+                "source": {
+                  "start": 0,
+                  "end": 43,
+                  "text": "Just the stylus, not a whole new cartridge."
+                },
+                "strength": "hard"
+              }
+            ]
+          },
+          "limitations": [
+            "Hard strength follows the literal requirement, including essential, needs, or a specific required specification. The proposal does not rewrite wording to satisfy a lexical guard."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "FN-PQ-001",
+      "turns": [
+        {
+          "turnIndex": 0,
+          "message": "Show me three USB microphones under SGD 180 for spoken-word recording.",
+          "proposal": {
+            "disposition": "research",
+            "actions": [
+              {
+                "kind": "start-request",
+                "source": {
+                  "start": 14,
+                  "end": 29,
+                  "text": "USB microphones"
+                }
+              },
+              {
+                "kind": "budget",
+                "source": {
+                  "start": 30,
+                  "end": 43,
+                  "text": "under SGD 180"
+                },
+                "operation": "set-maximum",
+                "draft": {
+                  "amount": 180,
+                  "minimum": null,
+                  "currency": "SGD"
+                }
+              },
+              {
+                "kind": "refine-description",
+                "source": {
+                  "start": 44,
+                  "end": 69,
+                  "text": "for spoken-word recording"
+                }
+              }
+            ]
+          },
+          "limitations": [
+            "The requested result count of three has no dedicated action field."
+          ]
+        },
+        {
+          "turnIndex": 1,
+          "message": "Compare the first and third options",
+          "proposal": {
+            "disposition": "acknowledge",
+            "actions": []
+          },
+          "limitations": [
+            "The action contract has no held-evidence answer or comparison operation. Acknowledge requests no new research and does not fabricate comparison content."
+          ]
+        },
+        {
+          "turnIndex": 2,
+          "message": "Which has the stronger evidence for background-noise rejection?",
+          "proposal": {
+            "disposition": "acknowledge",
+            "actions": []
+          },
+          "limitations": [
+            "The action contract has no held-evidence answer or comparison operation. Acknowledge requests no new research and does not fabricate comparison content."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "FN-PQ-002",
+      "turns": [
+        {
+          "turnIndex": 0,
+          "message": "Find compact document scanners under USD 300 with automatic duplex.",
+          "proposal": {
+            "disposition": "research",
+            "actions": [
+              {
+                "kind": "start-request",
+                "source": {
+                  "start": 13,
+                  "end": 30,
+                  "text": "document scanners"
+                }
+              },
+              {
+                "kind": "add-criterion",
+                "source": {
+                  "start": 5,
+                  "end": 12,
+                  "text": "compact"
+                },
+                "strength": "flexible"
+              },
+              {
+                "kind": "budget",
+                "source": {
+                  "start": 31,
+                  "end": 44,
+                  "text": "under USD 300"
+                },
+                "operation": "set-maximum",
+                "draft": {
+                  "amount": 300,
+                  "minimum": null,
+                  "currency": "USD"
+                }
+              },
+              {
+                "kind": "add-criterion",
+                "source": {
+                  "start": 45,
+                  "end": 66,
+                  "text": "with automatic duplex"
+                },
+                "strength": "hard"
+              }
+            ]
+          },
+          "limitations": [
+            "Hard strength follows the literal requirement, including essential, needs, or a specific required specification. The proposal does not rewrite wording to satisfy a lexical guard."
+          ]
+        },
+        {
+          "turnIndex": 1,
+          "message": "Why is the second so much cheaper?",
+          "proposal": {
+            "disposition": "acknowledge",
+            "actions": []
+          },
+          "limitations": [
+            "The action contract has no held-evidence answer or comparison operation. Acknowledge requests no new research and does not fabricate comparison content."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "FN-PQ-003",
+      "turns": [
+        {
+          "turnIndex": 0,
+          "message": "Find portable air pumps for bicycle tyres under GBP 80.",
+          "proposal": {
+            "disposition": "research",
+            "actions": [
+              {
+                "kind": "start-request",
+                "source": {
+                  "start": 14,
+                  "end": 41,
+                  "text": "air pumps for bicycle tyres"
+                }
+              },
+              {
+                "kind": "add-criterion",
+                "source": {
+                  "start": 5,
+                  "end": 13,
+                  "text": "portable"
+                },
+                "strength": "hard"
+              },
+              {
+                "kind": "budget",
+                "source": {
+                  "start": 42,
+                  "end": 54,
+                  "text": "under GBP 80"
+                },
+                "operation": "clarify",
+                "draft": {
+                  "amount": 80,
+                  "minimum": null,
+                  "currency": null
+                }
+              }
+            ]
+          },
+          "limitations": [
+            "Hard strength follows the literal requirement, including essential, needs, or a specific required specification. The proposal does not rewrite wording to satisfy a lexical guard.",
+            "The stated currency is unsupported by the allowed SGD/USD draft. Its numeric amount is retained with currency null. No currency conversion or substitute currency is proposed."
+          ]
+        },
+        {
+          "turnIndex": 1,
+          "message": "Compare their noise and battery life.",
+          "proposal": {
+            "disposition": "acknowledge",
+            "actions": []
+          },
+          "limitations": [
+            "The action contract has no held-evidence answer or comparison operation. Acknowledge requests no new research and does not fabricate comparison content.",
+            "Comparison dimensions do not themselves set new minimum battery life or maximum noise requirements."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "FN-PQ-004",
+      "turns": [
+        {
+          "turnIndex": 0,
+          "message": "Find a folding music stand under EUR 45. Low weight and a sturdy tray both matter.",
+          "proposal": {
+            "disposition": "research",
+            "actions": [
+              {
+                "kind": "start-request",
+                "source": {
+                  "start": 7,
+                  "end": 26,
+                  "text": "folding music stand"
+                }
+              },
+              {
+                "kind": "budget",
+                "source": {
+                  "start": 27,
+                  "end": 39,
+                  "text": "under EUR 45"
+                },
+                "operation": "clarify",
+                "draft": {
+                  "amount": 45,
+                  "minimum": null,
+                  "currency": null
+                }
+              },
+              {
+                "kind": "add-criterion",
+                "source": {
+                  "start": 41,
+                  "end": 82,
+                  "text": "Low weight and a sturdy tray both matter."
+                },
+                "strength": "flexible"
+              }
+            ]
+          },
+          "limitations": [
+            "The stated currency is unsupported by the allowed SGD/USD draft. Its numeric amount is retained with currency null. No currency conversion or substitute currency is proposed."
+          ]
+        },
+        {
+          "turnIndex": 1,
+          "message": "Which one is best overall?",
+          "proposal": {
+            "disposition": "acknowledge",
+            "actions": []
+          },
+          "limitations": [
+            "The action contract has no held-evidence answer or comparison operation. Acknowledge requests no new research and does not fabricate comparison content."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "FN-PQ-005",
+      "turns": [
+        {
+          "turnIndex": 0,
+          "message": "Find a compact label printer under SGD 100.",
+          "proposal": {
+            "disposition": "research",
+            "actions": [
+              {
+                "kind": "start-request",
+                "source": {
+                  "start": 15,
+                  "end": 28,
+                  "text": "label printer"
+                }
+              },
+              {
+                "kind": "add-criterion",
+                "source": {
+                  "start": 7,
+                  "end": 14,
+                  "text": "compact"
+                },
+                "strength": "flexible"
+              },
+              {
+                "kind": "budget",
+                "source": {
+                  "start": 29,
+                  "end": 42,
+                  "text": "under SGD 100"
+                },
+                "operation": "set-maximum",
+                "draft": {
+                  "amount": 100,
+                  "minimum": null,
+                  "currency": "SGD"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "turnIndex": 1,
+          "message": "Which is cheapest once I can actually use it? I won't sign up for anything.",
+          "proposal": {
+            "disposition": "acknowledge",
+            "actions": [
+              {
+                "kind": "add-criterion",
+                "source": {
+                  "start": 46,
+                  "end": 75,
+                  "text": "I won't sign up for anything."
+                },
+                "strength": "hard"
+              }
+            ]
+          },
+          "limitations": [
+            "The action contract has no held-evidence answer or comparison operation. Acknowledge requests no new research and does not fabricate comparison content.",
+            "Hard strength follows the literal requirement, including essential, needs, or a specific required specification. The proposal does not rewrite wording to satisfy a lexical guard.",
+            "The cheapest usable choice depends on held price conditions. No numeric budget update is proposed."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "FN-EH-001",
+      "turns": [
+        {
+          "turnIndex": 0,
+          "message": "Find a waterproof backpack under USD 100. It must protect contents in heavy rain.",
+          "proposal": {
+            "disposition": "research",
+            "actions": [
+              {
+                "kind": "start-request",
+                "source": {
+                  "start": 18,
+                  "end": 26,
+                  "text": "backpack"
+                }
+              },
+              {
+                "kind": "add-criterion",
+                "source": {
+                  "start": 7,
+                  "end": 17,
+                  "text": "waterproof"
+                },
+                "strength": "hard"
+              },
+              {
+                "kind": "budget",
+                "source": {
+                  "start": 27,
+                  "end": 40,
+                  "text": "under USD 100"
+                },
+                "operation": "set-maximum",
+                "draft": {
+                  "amount": 100,
+                  "minimum": null,
+                  "currency": "USD"
+                }
+              },
+              {
+                "kind": "add-criterion",
+                "source": {
+                  "start": 42,
+                  "end": 81,
+                  "text": "It must protect contents in heavy rain."
+                },
+                "strength": "hard"
+              }
+            ]
+          },
+          "limitations": [
+            "Hard strength follows the literal requirement, including essential, needs, or a specific required specification. The proposal does not rewrite wording to satisfy a lexical guard."
+          ]
+        },
+        {
+          "turnIndex": 1,
+          "message": "One source says waterproof and another says only splash-resistant. Which is it?",
+          "proposal": {
+            "disposition": "acknowledge",
+            "actions": []
+          },
+          "limitations": [
+            "The action contract has no held-evidence answer or comparison operation. Acknowledge requests no new research and does not fabricate comparison content.",
+            "Source conflict must be answered from actual evidence; user-reported source wording is not new product proof."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "FN-EH-002",
+      "turns": [
+        {
+          "turnIndex": 0,
+          "message": "Find a cordless rotary tool under GBP 60.",
+          "proposal": {
+            "disposition": "research",
+            "actions": [
+              {
+                "kind": "start-request",
+                "source": {
+                  "start": 7,
+                  "end": 27,
+                  "text": "cordless rotary tool"
+                }
+              },
+              {
+                "kind": "budget",
+                "source": {
+                  "start": 28,
+                  "end": 40,
+                  "text": "under GBP 60"
+                },
+                "operation": "clarify",
+                "draft": {
+                  "amount": 60,
+                  "minimum": null,
+                  "currency": null
+                }
+              }
+            ]
+          },
+          "limitations": [
+            "The stated currency is unsupported by the allowed SGD/USD draft. Its numeric amount is retained with currency null. No currency conversion or substitute currency is proposed."
+          ]
+        },
+        {
+          "turnIndex": 1,
+          "message": "The quote says the battery is included. Can I rely on that?",
+          "proposal": {
+            "disposition": "acknowledge",
+            "actions": []
+          },
+          "limitations": [
+            "The action contract has no held-evidence answer or comparison operation. Acknowledge requests no new research and does not fabricate comparison content.",
+            "The user asks whether evidence supports inclusion. The proposal does not assert that a battery is included."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "FN-EH-003",
+      "turns": [
+        {
+          "turnIndex": 0,
+          "message": "Find an electric pencil sharpener under SGD 40.",
+          "proposal": {
+            "disposition": "research",
+            "actions": [
+              {
+                "kind": "start-request",
+                "source": {
+                  "start": 8,
+                  "end": 33,
+                  "text": "electric pencil sharpener"
+                }
+              },
+              {
+                "kind": "budget",
+                "source": {
+                  "start": 34,
+                  "end": 46,
+                  "text": "under SGD 40"
+                },
+                "operation": "set-maximum",
+                "draft": {
+                  "amount": 40,
+                  "minimum": null,
+                  "currency": "SGD"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "turnIndex": 1,
+          "message": "This Singapore page says $35. Does that fit?",
+          "proposal": {
+            "disposition": "acknowledge",
+            "actions": []
+          },
+          "limitations": [
+            "The action contract has no held-evidence answer or comparison operation. Acknowledge requests no new research and does not fabricate comparison content.",
+            "The quoted $35 is an observed page price, not a budget edit. Singapore page location does not establish its currency."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "FN-EH-004",
+      "turns": [
+        {
+          "turnIndex": 0,
+          "message": "Find a washable keyboard under USD 80. It must be safe to rinse under running water.",
+          "proposal": {
+            "disposition": "research",
+            "actions": [
+              {
+                "kind": "start-request",
+                "source": {
+                  "start": 16,
+                  "end": 24,
+                  "text": "keyboard"
+                }
+              },
+              {
+                "kind": "add-criterion",
+                "source": {
+                  "start": 7,
+                  "end": 15,
+                  "text": "washable"
+                },
+                "strength": "hard"
+              },
+              {
+                "kind": "budget",
+                "source": {
+                  "start": 25,
+                  "end": 37,
+                  "text": "under USD 80"
+                },
+                "operation": "set-maximum",
+                "draft": {
+                  "amount": 80,
+                  "minimum": null,
+                  "currency": "USD"
+                }
+              },
+              {
+                "kind": "add-criterion",
+                "source": {
+                  "start": 39,
+                  "end": 84,
+                  "text": "It must be safe to rinse under running water."
+                },
+                "strength": "hard"
+              }
+            ]
+          },
+          "limitations": [
+            "Hard strength follows the literal requirement, including essential, needs, or a specific required specification. The proposal does not rewrite wording to satisfy a lexical guard."
+          ]
+        },
+        {
+          "turnIndex": 1,
+          "message": "The source says spill-resistant. Is that enough?",
+          "proposal": {
+            "disposition": "acknowledge",
+            "actions": []
+          },
+          "limitations": [
+            "The action contract has no held-evidence answer or comparison operation. Acknowledge requests no new research and does not fabricate comparison content.",
+            "The source phrase spill-resistant does not alter the requested running-water requirement."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "FN-EH-005",
+      "turns": [
+        {
+          "turnIndex": 0,
+          "message": "Find a tabletop easel under EUR 50.",
+          "proposal": {
+            "disposition": "research",
+            "actions": [
+              {
+                "kind": "start-request",
+                "source": {
+                  "start": 7,
+                  "end": 21,
+                  "text": "tabletop easel"
+                }
+              },
+              {
+                "kind": "budget",
+                "source": {
+                  "start": 22,
+                  "end": 34,
+                  "text": "under EUR 50"
+                },
+                "operation": "clarify",
+                "draft": {
+                  "amount": 50,
+                  "minimum": null,
+                  "currency": null
+                }
+              }
+            ]
+          },
+          "limitations": [
+            "The stated currency is unsupported by the allowed SGD/USD draft. Its numeric amount is retained with currency null. No currency conversion or substitute currency is proposed."
+          ]
+        },
+        {
+          "turnIndex": 1,
+          "message": "I only need one. That EUR 35 price says a minimum order of four.",
+          "proposal": {
+            "disposition": "acknowledge",
+            "actions": [
+              {
+                "kind": "add-criterion",
+                "source": {
+                  "start": 0,
+                  "end": 16,
+                  "text": "I only need one."
+                },
+                "strength": "hard"
+              }
+            ]
+          },
+          "limitations": [
+            "The action contract has no held-evidence answer or comparison operation. Acknowledge requests no new research and does not fabricate comparison content.",
+            "EUR 35 and minimum order of four describe a quoted offer, not a new budget or requested quantity of four."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "FN-UI-001",
+      "turns": [
+        {
+          "turnIndex": 0,
+          "message": "Find a USB-C card reader under SGD 35. It must read SD and microSD.",
+          "proposal": {
+            "disposition": "research",
+            "actions": [
+              {
+                "kind": "start-request",
+                "source": {
+                  "start": 7,
+                  "end": 24,
+                  "text": "USB-C card reader"
+                }
+              },
+              {
+                "kind": "budget",
+                "source": {
+                  "start": 25,
+                  "end": 37,
+                  "text": "under SGD 35"
+                },
+                "operation": "set-maximum",
+                "draft": {
+                  "amount": 35,
+                  "minimum": null,
+                  "currency": "SGD"
+                }
+              },
+              {
+                "kind": "add-criterion",
+                "source": {
+                  "start": 39,
+                  "end": 67,
+                  "text": "It must read SD and microSD."
+                },
+                "strength": "hard"
+              }
+            ]
+          }
+        },
+        {
+          "turnIndex": 1,
+          "message": "Just show me the best one",
+          "proposal": {
+            "disposition": "acknowledge",
+            "actions": []
+          },
+          "limitations": [
+            "The action contract has no held-evidence answer or comparison operation. Acknowledge requests no new research and does not fabricate comparison content.",
+            "A single-choice presentation request has no dedicated action field."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "FN-UI-002",
+      "turns": [
+        {
+          "turnIndex": 0,
+          "message": "Find a compact travel umbrella under GBP 35.",
+          "proposal": {
+            "disposition": "research",
+            "actions": [
+              {
+                "kind": "start-request",
+                "source": {
+                  "start": 15,
+                  "end": 30,
+                  "text": "travel umbrella"
+                }
+              },
+              {
+                "kind": "add-criterion",
+                "source": {
+                  "start": 7,
+                  "end": 14,
+                  "text": "compact"
+                },
+                "strength": "flexible"
+              },
+              {
+                "kind": "budget",
+                "source": {
+                  "start": 31,
+                  "end": 43,
+                  "text": "under GBP 35"
+                },
+                "operation": "clarify",
+                "draft": {
+                  "amount": 35,
+                  "minimum": null,
+                  "currency": null
+                }
+              }
+            ]
+          },
+          "limitations": [
+            "The stated currency is unsupported by the allowed SGD/USD draft. Its numeric amount is retained with currency null. No currency conversion or substitute currency is proposed."
+          ]
+        },
+        {
+          "turnIndex": 1,
+          "message": "Show me more details",
+          "proposal": {
+            "disposition": "acknowledge",
+            "actions": []
+          },
+          "limitations": [
+            "Detail level is a local presentation control with no IntentActions field. It may bypass interpretation."
+          ]
+        },
+        {
+          "turnIndex": 2,
+          "message": "Keep it short",
+          "proposal": {
+            "disposition": "acknowledge",
+            "actions": []
+          },
+          "limitations": [
+            "Response length is a local presentation control with no IntentActions field. It may bypass interpretation."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "FN-UI-003",
+      "turns": [
+        {
+          "turnIndex": 0,
+          "message": "Find a pocket digital scale under EUR 30. It must measure in 0.1 g increments.",
+          "proposal": {
+            "disposition": "research",
+            "actions": [
+              {
+                "kind": "start-request",
+                "source": {
+                  "start": 7,
+                  "end": 27,
+                  "text": "pocket digital scale"
+                }
+              },
+              {
+                "kind": "budget",
+                "source": {
+                  "start": 28,
+                  "end": 40,
+                  "text": "under EUR 30"
+                },
+                "operation": "clarify",
+                "draft": {
+                  "amount": 30,
+                  "minimum": null,
+                  "currency": null
+                }
+              },
+              {
+                "kind": "add-criterion",
+                "source": {
+                  "start": 42,
+                  "end": 78,
+                  "text": "It must measure in 0.1 g increments."
+                },
+                "strength": "hard"
+              }
+            ]
+          },
+          "limitations": [
+            "The stated currency is unsupported by the allowed SGD/USD draft. Its numeric amount is retained with currency null. No currency conversion or substitute currency is proposed."
+          ]
+        },
+        {
+          "turnIndex": 1,
+          "message": "Show the comparison.",
+          "proposal": {
+            "disposition": "acknowledge",
+            "actions": []
+          },
+          "limitations": [
+            "The action contract has no held-evidence answer or comparison operation. Acknowledge requests no new research and does not fabricate comparison content."
+          ]
+        },
+        {
+          "turnIndex": 2,
+          "message": "Can you explain the first option's limitations?",
+          "proposal": {
+            "disposition": "acknowledge",
+            "actions": []
+          },
+          "limitations": [
+            "The action contract has no held-evidence answer or comparison operation. Acknowledge requests no new research and does not fabricate comparison content."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "FN-UI-004",
+      "turns": [
+        {
+          "turnIndex": 0,
+          "message": "I'm looking for a reading light under USD 25.",
+          "proposal": {
+            "disposition": "research",
+            "actions": [
+              {
+                "kind": "start-request",
+                "source": {
+                  "start": 18,
+                  "end": 31,
+                  "text": "reading light"
+                }
+              },
+              {
+                "kind": "budget",
+                "source": {
+                  "start": 32,
+                  "end": 44,
+                  "text": "under USD 25"
+                },
+                "operation": "set-maximum",
+                "draft": {
+                  "amount": 25,
+                  "minimum": null,
+                  "currency": "USD"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "turnIndex": 1,
+          "message": "A warm light would be nice.",
+          "proposal": {
+            "disposition": "research",
+            "actions": [
+              {
+                "kind": "add-criterion",
+                "source": {
+                  "start": 0,
+                  "end": 27,
+                  "text": "A warm light would be nice."
+                },
+                "strength": "flexible"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "FN-UI-005",
+      "turns": [
+        {
+          "turnIndex": 0,
+          "message": "Find a desktop microphone under SGD 150.",
+          "proposal": {
+            "disposition": "research",
+            "actions": [
+              {
+                "kind": "start-request",
+                "source": {
+                  "start": 7,
+                  "end": 25,
+                  "text": "desktop microphone"
+                }
+              },
+              {
+                "kind": "budget",
+                "source": {
+                  "start": 26,
+                  "end": 39,
+                  "text": "under SGD 150"
+                },
+                "operation": "set-maximum",
+                "draft": {
+                  "amount": 150,
+                  "minimum": null,
+                  "currency": "SGD"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "turnIndex": 1,
+          "message": "Actually I need a portable recorder under SGD 200.",
+          "proposal": {
+            "disposition": "research",
+            "actions": [
+              {
+                "kind": "start-request",
+                "source": {
+                  "start": 18,
+                  "end": 35,
+                  "text": "portable recorder"
+                }
+              },
+              {
+                "kind": "budget",
+                "source": {
+                  "start": 36,
+                  "end": 49,
+                  "text": "under SGD 200"
+                },
+                "operation": "set-maximum",
+                "draft": {
+                  "amount": 200,
+                  "minimum": null,
+                  "currency": "SGD"
+                }
+              }
+            ]
+          },
+          "limitations": [
+            "The action contract has no replacement-description operation. A start-request expresses the explicit corrected objective; other unmentioned constraints are not removed."
+          ]
+        },
+        {
+          "turnIndex": 2,
+          "message": "Compare the current options.",
+          "proposal": {
+            "disposition": "acknowledge",
+            "actions": []
+          },
+          "limitations": [
+            "The action contract has no held-evidence answer or comparison operation. Acknowledge requests no new research and does not fabricate comparison content."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "FN-ER-001",
+      "turns": [
+        {
+          "turnIndex": 0,
+          "message": "Find a portable CD player under USD 70.",
+          "proposal": {
+            "disposition": "research",
+            "actions": [
+              {
+                "kind": "start-request",
+                "source": {
+                  "start": 7,
+                  "end": 25,
+                  "text": "portable CD player"
+                }
+              },
+              {
+                "kind": "budget",
+                "source": {
+                  "start": 26,
+                  "end": 38,
+                  "text": "under USD 70"
+                },
+                "operation": "set-maximum",
+                "draft": {
+                  "amount": 70,
+                  "minimum": null,
+                  "currency": "USD"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "turnIndex": 1,
+          "message": "The search failed. What happened?",
+          "proposal": {
+            "disposition": "acknowledge",
+            "actions": []
+          },
+          "limitations": [
+            "The user asks about a failed request. IntentActions has no error-inspection operation and cannot infer a failure cause."
+          ]
+        },
+        {
+          "turnIndex": 2,
+          "message": "Try again once.",
+          "proposal": {
+            "disposition": "research",
+            "actions": []
+          },
+          "limitations": [
+            "The explicit retry requests one research operation. Retry count enforcement belongs to transport and is not represented in IntentActions."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "FN-ER-002",
+      "turns": [
+        {
+          "turnIndex": 0,
+          "message": "Find a small laminator under GBP 60.",
+          "proposal": {
+            "disposition": "research",
+            "actions": [
+              {
+                "kind": "start-request",
+                "source": {
+                  "start": 13,
+                  "end": 22,
+                  "text": "laminator"
+                }
+              },
+              {
+                "kind": "add-criterion",
+                "source": {
+                  "start": 7,
+                  "end": 12,
+                  "text": "small"
+                },
+                "strength": "flexible"
+              },
+              {
+                "kind": "budget",
+                "source": {
+                  "start": 23,
+                  "end": 35,
+                  "text": "under GBP 60"
+                },
+                "operation": "clarify",
+                "draft": {
+                  "amount": 60,
+                  "minimum": null,
+                  "currency": null
+                }
+              }
+            ]
+          },
+          "limitations": [
+            "The stated currency is unsupported by the allowed SGD/USD draft. Its numeric amount is retained with currency null. No currency conversion or substitute currency is proposed."
+          ]
+        },
+        {
+          "turnIndex": 1,
+          "message": "Cancel that.",
+          "proposal": {
+            "disposition": "acknowledge",
+            "actions": []
+          },
+          "limitations": [
+            "Cancellation has no IntentActions operation. Acknowledge must not be treated as proof that a transport was cancelled."
+          ]
+        },
+        {
+          "turnIndex": 2,
+          "message": "Did it stop?",
+          "proposal": {
+            "disposition": "acknowledge",
+            "actions": []
+          },
+          "limitations": [
+            "Cancellation status requires actual transport state. IntentActions cannot confirm it."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "FN-ER-003",
+      "turns": [
+        {
+          "turnIndex": 0,
+          "message": "I need a folding stool under SGD 45. No plastic seat.",
+          "proposal": {
+            "disposition": "research",
+            "actions": [
+              {
+                "kind": "start-request",
+                "source": {
+                  "start": 9,
+                  "end": 22,
+                  "text": "folding stool"
+                }
+              },
+              {
+                "kind": "budget",
+                "source": {
+                  "start": 23,
+                  "end": 35,
+                  "text": "under SGD 45"
+                },
+                "operation": "set-maximum",
+                "draft": {
+                  "amount": 45,
+                  "minimum": null,
+                  "currency": "SGD"
+                }
+              },
+              {
+                "kind": "add-criterion",
+                "source": {
+                  "start": 37,
+                  "end": 53,
+                  "text": "No plastic seat."
+                },
+                "strength": "hard"
+              }
+            ]
+          }
+        },
+        {
+          "turnIndex": 1,
+          "message": "What do you remember about my requirements?",
+          "proposal": {
+            "disposition": "acknowledge",
+            "actions": []
+          },
+          "limitations": [
+            "Recall requires rendering actual accepted preferences. These independently authored proposals never supply a replacement preference snapshot."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "FN-ER-004",
+      "turns": [
+        {
+          "turnIndex": 0,
+          "message": "Find a rechargeable book light under USD 30.",
+          "proposal": {
+            "disposition": "research",
+            "actions": [
+              {
+                "kind": "start-request",
+                "source": {
+                  "start": 7,
+                  "end": 30,
+                  "text": "rechargeable book light"
+                }
+              },
+              {
+                "kind": "budget",
+                "source": {
+                  "start": 31,
+                  "end": 43,
+                  "text": "under USD 30"
+                },
+                "operation": "set-maximum",
+                "draft": {
+                  "amount": 30,
+                  "minimum": null,
+                  "currency": "USD"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "turnIndex": 1,
+          "message": "Open the supporting source for the recommended light.",
+          "proposal": {
+            "disposition": "acknowledge",
+            "actions": []
+          },
+          "limitations": [
+            "Opening a supporting source requires a held validated URL and navigation control. IntentActions has no navigation operation and this tape supplies no URL."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "FN-ER-005",
+      "turns": [
+        {
+          "turnIndex": 0,
+          "message": "Find a battery-powered mug warmer under EUR 25. It must keep a full mug at 60 C for eight hours.",
+          "proposal": {
+            "disposition": "research",
+            "actions": [
+              {
+                "kind": "start-request",
+                "source": {
+                  "start": 7,
+                  "end": 33,
+                  "text": "battery-powered mug warmer"
+                }
+              },
+              {
+                "kind": "budget",
+                "source": {
+                  "start": 34,
+                  "end": 46,
+                  "text": "under EUR 25"
+                },
+                "operation": "clarify",
+                "draft": {
+                  "amount": 25,
+                  "minimum": null,
+                  "currency": null
+                }
+              },
+              {
+                "kind": "add-criterion",
+                "source": {
+                  "start": 48,
+                  "end": 96,
+                  "text": "It must keep a full mug at 60 C for eight hours."
+                },
+                "strength": "hard"
+              }
+            ]
+          },
+          "limitations": [
+            "The stated currency is unsupported by the allowed SGD/USD draft. Its numeric amount is retained with currency null. No currency conversion or substitute currency is proposed."
+          ]
+        },
+        {
+          "turnIndex": 1,
+          "message": "If nothing meets that, say so. Don't relax those requirements.",
+          "proposal": {
+            "disposition": "acknowledge",
+            "actions": []
+          },
+          "limitations": [
+            "This preserves all earlier requirements and requests honest absence reporting. It supplies no new evidence, money edit, or authority to relax a constraint."
+          ]
+        }
+      ]
+    }
+  ]
+}

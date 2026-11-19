@@ -3,6 +3,7 @@ import assert from "node:assert/strict";
 import { createServer } from "node:http";
 import { once } from "node:events";
 import type { AddressInfo } from "node:net";
+import { controlIntent } from "../inputs/controls";
 import { offlineNetwork } from "../network";
 import { grade, safeSourceUrl, literalMoney } from "../assertions";
 import { material } from "../inputs/materials";
@@ -17,7 +18,7 @@ test("normal app actually calls the local SDK and carries authoritative preferen
   const guard = offlineNetwork();
   try {
     const { observe } = await import("../adapter");
-    original = await observe(scenario, material("powerbank"), guard);
+    original = await observe(scenario, material("powerbank"), guard, { intent: controlIntent(scenario) });
     assert.equal(original.turns.length, 2);
     assert.equal(original.turns[0]!.providerCalls, 1);
     assert.equal(original.turns[1]!.providerCalls, 0);
@@ -89,7 +90,7 @@ test("a repeated operation does not reach the SDK twice", async () => {
   const guard = offlineNetwork();
   try {
     const { observe } = await import("../adapter");
-    const result = await observe({ id: "duplicate", provider: "powerbank", actions: [scenario.actions[0]!, { kind: "repeat-research" }] }, material("powerbank"), guard);
+    const result = await observe({ id: "duplicate", provider: "powerbank", actions: [scenario.actions[0]!, { kind: "repeat-research" }] }, material("powerbank"), guard, { intent: controlIntent(scenario) });
     assert.equal(result.turns[0]!.providerCalls, 1);
     assert.equal(result.turns[1]!.providerCalls, 0);
     assert.equal(result.turns[1]!.response!.reason, "duplicate");
@@ -99,7 +100,7 @@ test("cancellation reaches the local SDK response", async () => {
   const guard = offlineNetwork();
   try {
     const { observe } = await import("../adapter");
-    const result = await observe({ id: "cancel", provider: "slow", actions: [{ kind: "cancel", text: "Find a power bank under SGD40" }] }, material("slow"), guard);
+    const result = await observe({ id: "cancel", provider: "slow", actions: [{ kind: "cancel", text: "Find a power bank under SGD40" }] }, material("slow"), guard, { intent: controlIntent(scenario) });
     assert.equal(result.turns[0]!.cancelled, true);
     assert(result.events.some((event) => event.kind === "provider-aborted"));
     assert.equal(result.cleanup, true);

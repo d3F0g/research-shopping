@@ -1,6 +1,6 @@
 export const DATASET_VERSION = "1.0.0";
-export const ASSERTION_VERSION = "2.0.0";
-export const ADAPTER_VERSION = "normal-v4.1";
+export const ASSERTION_VERSION = "3.0.0";
+export const ADAPTER_VERSION = "normal-v5.1-authored-intent";
 export const categories = ["conversational-understanding", "preference-extraction", "contextual-clarification", "budget-currency", "preference-retention", "corrections-dissatisfaction", "research-selection", "product-relevance", "comparison-quality", "evidence-honesty", "chat-interaction", "recovery-safety"] as const;
 export type Category = typeof categories[number];
 export type Json = null | boolean | number | string | Json[] | { [key: string]: Json };
@@ -9,7 +9,7 @@ export type Intent = {
   criteria: { id: string; wording: string; strength: "hard" | "flexible" }[];
   budget: { amount: number; minimum?: number; currency: string } | null;
   budgetClarified: boolean;
-  pendingChange: { reason: string; message: string; explanation: string } | null;
+  pendingChange: { kind: string; id: string; originalRequest: string; reason: string; message: string; explanation: string; missingSlot?: string; draft?: { amount: number | null; minimum: number | null; currency: string | null } } | null;
   region: string;
   responseLength: string;
   revision: number;
@@ -68,7 +68,7 @@ export type Material = {
 export type Event = {
   sequence: number;
   turn: number;
-  kind: "app-request" | "app-response" | "provider-request" | "provider-response" | "admission" | "settlement" | "cancelled" | "provider-aborted" | "reset";
+  kind: "app-request" | "app-response" | "provider-request" | "provider-response" | "admission" | "settlement" | "cancelled" | "provider-aborted" | "reset" | "interpreter-request" | "interpreter-response" | "input-limitation";
   elapsedMs: number;
   body: Json;
 };
@@ -89,6 +89,7 @@ export type Observation = {
   turns: TurnObservation[];
   events: Event[];
   network: { denied: string[]; allowedOriginCount: number; externalRequests: 0 };
+  interpretation: { mode: "fixed-proposals" | "unavailable"; inputHash: string | null; openAIHttpRequests: 0; invocations: number; suppliedTurns: Json[]; limitations: string[] };
   cleanup: boolean;
   applicationError: string | null;
 };
@@ -120,7 +121,7 @@ export type CaseResult = {
 };
 export type Metric = { passed: number; assessed: number; unassessed: number; rate: number | null };
 export type RunReport = {
-  schemaVersion: 2;
+  schemaVersion: 3;
   datasetContracts: ScenarioContract[];
   createdAt: string;
   runId: string;
@@ -132,7 +133,7 @@ export type RunReport = {
   implementationHashes: { grading: string; adapter: string; suite: string };
   application: { commit: string; tree: string; dirty: boolean; sourceHash: string };
   suite: { commit: string; dirty: boolean };
-  configuration: { provider: string; model: null; exaCreditsConsumed: 0; composition: string };
+  configuration: { provider: string; model: null; exaCreditsConsumed: 0; composition: string; interpretation: string; openAIHttpRequests: 0 };
   cases: CaseResult[];
   summary: {
     total: number; executed: number; passed: number; failed: number; blocked: number; unsupported: number; infrastructureErrors: number; criticalFailures: number; criticalScenarios: number; observedTurns: number; observedClarifications: number;
