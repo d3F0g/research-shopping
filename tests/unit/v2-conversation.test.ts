@@ -138,7 +138,7 @@ describe("retained snapshot answers", () => {
     const question = turn(short.state, "What about battery life?");
     const answer = question.state.messages.at(-1)!;
     expect(question.kind).toBe("message");
-    expect(answer.text).not.toContain("Up to 12 hours");
+    expect(answer.text).toContain(qualified);
     expect(answer.text).toContain("AI source assessment supported");
     expect(answer.text.length).toBeLessThan(850);
     expect(answer.text).not.toContain("https://");
@@ -152,27 +152,40 @@ describe("retained snapshot answers", () => {
     expect(expanded.state.messages.at(-1)?.text).toContain("https://manufacturer.com/model-a");
     expect(expanded.state.messages.at(-1)?.text).toContain(qualified);
   });
-  it("shows a useful short finding only with every complete retained quotation and qualifier", () => {
+  it("shows the whole brief native finding when its complete supporting passage is long", () => {
     const state = researched();
     const assessment = state.messages.at(-1)!.research!.products[0]!.attributes[0]!.assessment;
-    assessment.rationale = "Light-load claim only.";
-    assessment.support = [{ ...assessment.support[0]!, quote: "Up to 12 hours with low-power devices; high-power runtime is unknown." }];
+    assessment.rationale = "Up to 12 hours, only with ANC off; runtime with ANC enabled is unknown.";
+    const passage = assessment.support[0]!.quote;
     const answer = turn(state, "What about battery life?").state.messages.at(-1)!;
-    expect(answer.text).toContain("Up to 12 hours with low-power devices; high-power runtime is unknown.");
-    expect(answer.text).toContain("Light-load claim only.");
-    expect(answer.detail).toContain("high-power runtime is unknown");
+    expect(answer.text).toContain(`Battery life: (AI source assessment supported, exact-variant) ${assessment.rationale}`);
+    expect(answer.text).not.toContain(passage);
+    expect(answer.detail).toContain(assessment.rationale);
+    expect(answer.detail).toContain(passage);
+    expect(answer.detail).toContain("https://manufacturer.com/model-a");
   });
-  it("discloses long or adverse findings whole instead of truncating them into a positive claim", () => {
+  it.each(["unknown", "conflict"] as const)("keeps %s prominent and discloses long adverse findings whole", (status) => {
     const state = researched();
     const assessment = state.messages.at(-1)!.research!.products[0]!.attributes[0]!.assessment;
-    assessment.status = "conflict";
+    assessment.status = status;
     assessment.rationale = "A long positive-looking battery claim ".repeat(8) + "does not hold for the requested variant; a second retained passage contradicts it.";
     const result = turn(state, "What about battery life?");
     const answer = result.state.messages.at(-1)!;
-    expect(answer.text).toContain("AI source assessment conflict");
+    expect(answer.text).toContain(`Battery life: (AI source assessment ${status}, exact-variant)`);
     expect(answer.text).not.toContain("positive-looking");
     expect(answer.detail).toContain(assessment.rationale);
     expect(answer.detail).toContain("https://manufacturer.com/model-a");
+  });
+  it("does not display an unsupported brief native claim as a finding", () => {
+    const state = researched();
+    const assessment = state.messages.at(-1)!.research!.products[0]!.attributes[0]!.assessment;
+    assessment.status = "unknown";
+    assessment.support = [];
+    assessment.rationale = "Up to 12 hours, only with ANC off.";
+    const answer = turn(state, "What about battery life?").state.messages.at(-1)!;
+    expect(answer.text).toContain("Battery life: (AI source assessment unknown, exact-variant)");
+    expect(answer.text).not.toContain(assessment.rationale);
+    expect(answer.detail).toContain(assessment.rationale);
   });
   it("keeps oversized passages whole in canonical history and makes display omissions explicit", () => {
     const state = researched();

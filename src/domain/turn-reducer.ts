@@ -109,8 +109,8 @@ function heldReply(state: ConversationState, mode: "compare" | "best" | "detail"
     const attributes = rows(product);
     const findings = attributes.slice(0, 2).map(({ name, assessment }) => {
       const status = `AI source assessment ${assessment.status}, ${assessment.scope}`;
-      const qualified = [assessment.rationale, ...assessment.support.map((span) => `"${span.quote}"`)].join(" ");
-      return `${name}: ${assessment.support.length && qualified.length <= 180 ? `${qualified} ` : ""}(${status})`;
+      const qualified = assessment.rationale;
+      return `${name}: (${status})${assessment.support.length && qualified.length <= 180 ? ` ${qualified}` : ""}`;
     }).join("; ");
     return { name: product.name, finding: `${findings || "Missing attributes remain unknown."}${product.blockers.length ? " Unresolved requirements remain." : ""}` };
   });
