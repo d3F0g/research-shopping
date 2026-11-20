@@ -48,7 +48,7 @@ Literal quotation bindings establish provenance. They do not prove semantic enta
 
 The server computes choice eligibility from exact identity, complete request fit, every hard criterion and both optional numerical budget bounds in the requested currency. The card and free held-evidence replies use the same price view. Actual historical V2, V3 and V4 requests, questions, messages and research stay frozen. Only active preferences migrate. Old responses cannot gain new proof or paid actions.
 
-The current automated evaluator composes separately labeled V5 fixtures for three valid research scenarios. Original native-1 materials, frozen assertions, baselines and preservation assets remain unchanged. Normal runtime does not convert old provider output into the new contract.
+The current automated evaluator composes separately labeled V5 fixtures for three valid research scenarios. Original native-1 materials, frozen assertions, baselines and preservation assets remain unchanged. Normal runtime does not convert old provider output into the new contract. The descriptive scorecard authenticates the same complete current materials as the runner. The three changed fixtures stay excluded from historical paired transitions and assessed denominators; internally consistent forged materials still reject.
 
 ## Verify without spending
 
