@@ -1,10 +1,7 @@
 import { createHash } from "node:crypto";
 
 type Gate = {
-  endpoint: string;
   phase: "headers" | "body";
-  outcome: "success" | "failure";
-  skip: number;
   entered: boolean;
   released: boolean;
   release: () => void;
@@ -25,16 +22,13 @@ export function sessionGates(fetchApp: (request: Request) => Response | Promise<
       if (request.method === "POST") {
         const input = await request.json() as {
           action: "arm" | "release" | "reset";
-          endpoint?: string;
           phase?: Gate["phase"];
-          outcome?: Gate["outcome"];
-          skip?: number;
         };
         if (input.action === "arm") {
           if (gate && !gate.released) return Response.json({ error: "Unreleased fixture gate" }, { status: 409 });
           let release!: () => void;
           const wait = new Promise<void>((resolve) => { release = resolve; });
-          gate = { endpoint: input.endpoint ?? "/api/session", phase: input.phase ?? "headers", outcome: input.outcome ?? "success", skip: input.skip ?? 0, entered: false, released: false, release, wait };
+          gate = { phase: input.phase ?? "headers", entered: false, released: false, release, wait };
         } else {
           if (gate) { gate.released = true; gate.release(); }
           if (input.action === "reset") { gate = null; events.length = 0; sequence = 0; }
@@ -49,34 +43,32 @@ export function sessionGates(fetchApp: (request: Request) => Response | Promise<
     request.signal.addEventListener("abort", () => record("aborted"), { once: true });
     const response = await fetchApp(request);
     record("created", { cookie: digest(response.headers.get("set-cookie")), status: response.status });
-    const held = gate && !gate.entered && gate.endpoint === url.pathname && gate.skip-- <= 0 ? gate : null;
+    const held = gate && !gate.entered && url.pathname === "/api/session" ? gate : null;
     if (!held) return response;
     held.entered = true;
     const text = await response.text();
     record("held", { phase: held.phase, snapshot: JSON.parse(text) });
     const headers = new Headers(response.headers);
-    const status = held.outcome === "failure" ? 503 : response.status;
-    const body = held.outcome === "failure" ? JSON.stringify({ error: "Fixture stale bootstrap failure" }) : text;
     if (held.phase === "headers") {
       await held.wait;
       record("released", { aborted: request.signal.aborted });
-      return new Response(body, { headers, status });
+      return new Response(text, { headers, status: response.status });
     }
     headers.delete("content-length");
     let cancelled = false;
     const stream = new ReadableStream<Uint8Array>({
       start(controller) {
-        controller.enqueue(new TextEncoder().encode(body.slice(0, 1)));
+        controller.enqueue(new TextEncoder().encode(text.slice(0, 1)));
         void held.wait.then(() => {
           record("released", { aborted: request.signal.aborted, cancelled });
           if (!cancelled) {
-            controller.enqueue(new TextEncoder().encode(body.slice(1)));
+            controller.enqueue(new TextEncoder().encode(text.slice(1)));
             controller.close();
           }
         });
       },
       cancel() { cancelled = true; record("body-cancelled"); },
     });
-    return new Response(stream, { headers, status });
+    return new Response(stream, { headers, status: response.status });
   };
 }
