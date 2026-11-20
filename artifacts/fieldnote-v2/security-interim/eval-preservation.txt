@@ -1,0 +1,5 @@
+
+> research-shopping@0.1.0 eval:preservation
+> node evals/v2/verify-preservation.mjs
+
+{"sourceCommit":"f865939c669153943e77af3870e54c10daad6750","unchangedCommittedAssets":389,"adaptedPaths":[".github/workflows/product-evals.yml"]}

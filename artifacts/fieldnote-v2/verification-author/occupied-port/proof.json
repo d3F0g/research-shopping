@@ -1,0 +1,23 @@
+{
+  "repo": "/Users/josiahwong/Documents/research-shopping-v2",
+  "apiPort": 3273,
+  "webPort": 5383,
+  "artifacts": "/Users/josiahwong/Documents/research-shopping-v2-verification/artifacts/fieldnote-v2/verification-skill/occupied-port",
+  "commit": "e88f894acd85616d11ec76a01b23d1a75a43f45c",
+  "worktreeStatus": "M AGENTS.md\n?? artifacts/fieldnote-v2/accounts/restart.json\n?? artifacts/fieldnote-v2/desktop-empty.png\n?? artifacts/fieldnote-v2/desktop-evidence.png\n?? artifacts/fieldnote-v2/desktop-light-ordinary.png\n?? artifacts/fieldnote-v2/desktop-research.png\n?? artifacts/fieldnote-v2/mobile-empty.png\n?? artifacts/fieldnote-v2/mobile-evidence.png\n?? artifacts/fieldnote-v2/mobile-light-ordinary.png\n?? artifacts/fieldnote-v2/mobile-research.png",
+  "sourceState": {
+    "status": "M AGENTS.md",
+    "diffSha256": "c0ce005c8228f59ef8dfefccd98bb6f3a81bf75fd3e4345a21c202c6b7e5769c"
+  },
+  "composition": "Automated test only. Actual Hono + Exa SDK against owned loopback substitute.",
+  "result": "failed",
+  "cleanup": true,
+  "processes": [],
+  "journeys": [],
+  "limits": [
+    "No live Exa retrieval, billing, merchant reachability, inventory, semantic factuality, or PostgreSQL/account acceptance.",
+    "Cancellation at the browser transport boundary does not establish SDK socket cancellation. Run the package API tests.",
+    "Screenshots require independent visual inspection. This helper does not approve the final V2 PR."
+  ],
+  "error": "Error: listen EADDRINUSE: address already in use 127.0.0.1:3273\n    at Server.setupListenHandle [as _listen2] (node:net:1940:16)\n    at listenInCluster (node:net:1997:12)\n    at node:net:2206:7\n    at process.processTicksAndRejections (node:internal/process/task_queues:90:21)"
+}

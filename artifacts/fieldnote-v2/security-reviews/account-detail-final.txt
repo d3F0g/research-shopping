@@ -1,0 +1,2 @@
+Database migrations applied.
+Optional detail persists through actual owned PostgreSQL/API restart, original research unchanged, held reply adds zero provider calls.

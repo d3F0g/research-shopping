@@ -1,0 +1,158 @@
+{
+  "version": 2,
+  "evidenceVersion": 4,
+  "dataKind": "test-fixture",
+  "retrievedAt": "2026-11-20T04:11:25.469Z",
+  "intent": {
+    "intentVersion": 2,
+    "originalText": "",
+    "productDescription": "Fixture sunglasses",
+    "requirements": [],
+    "budget": {
+      "minimum": 800,
+      "maximum": 1000,
+      "currency": "SGD"
+    },
+    "region": null,
+    "responseLength": "concise"
+  },
+  "summary": "The source row shows SGD 868.00, observed and unverified. Applicability to the selected variant and purchase conditions remain unresolved. Fit to your complete shopping objective remains unresolved. I cannot recommend a compliant option until the listed evidence gaps are resolved.",
+  "products": [
+    {
+      "id": "model-a",
+      "name": "Fixture Meridian Sunglasses - Silver",
+      "variant": "Silver",
+      "identity": {
+        "status": "supported",
+        "scope": "exact-variant",
+        "rationale": "Fixture data: a source-based AI interpretation, not verified fit.",
+        "support": [
+          {
+            "sourceId": "source-1",
+            "origin": {
+              "kind": "provider",
+              "reportedQuote": "Fixture Meridian Sunglasses - Silver SGD 868",
+              "match": "whitespace"
+            },
+            "literal": {
+              "start": 53,
+              "end": 100,
+              "text": "Fixture Meridian Sunglasses - Silver \n\n SGD 868"
+            },
+            "context": {
+              "start": 53,
+              "end": 101,
+              "text": "Fixture Meridian Sunglasses - Silver \n\n SGD 868 "
+            }
+          }
+        ]
+      },
+      "requestMatch": {
+        "status": "unknown",
+        "scope": "exact-variant",
+        "rationale": "The provider's quotation establishes only a monetary observation. It does not establish fit to the complete shopping objective.",
+        "support": [
+          {
+            "sourceId": "source-1",
+            "origin": {
+              "kind": "provider",
+              "reportedQuote": "SGD 868",
+              "match": "literal"
+            },
+            "literal": {
+              "start": 93,
+              "end": 100,
+              "text": "SGD 868"
+            },
+            "context": {
+              "start": 92,
+              "end": 101,
+              "text": " SGD 868 "
+            }
+          }
+        ]
+      },
+      "requirements": [],
+      "attributes": [],
+      "price": null,
+      "priceObservation": {
+        "kind": "catalog-row",
+        "amount": 868,
+        "currency": "SGD",
+        "row": {
+          "sourceId": "source-1",
+          "origin": {
+            "kind": "source-context"
+          },
+          "literal": {
+            "start": 53,
+            "end": 101,
+            "text": "Fixture Meridian Sunglasses - Silver \n\n SGD 868 "
+          },
+          "context": {
+            "start": 0,
+            "end": 152,
+            "text": "Fixture data.\n\nOther Sunglasses - Brown \n\n SGD 419 \n\nFixture Meridian Sunglasses - Silver \n\n SGD 868 \n\nAnother Sunglasses - Blue \n\n SGD 305\n\nPromo Codes"
+          }
+        },
+        "reportedAssessment": {
+          "status": "supported",
+          "scope": "exact-variant",
+          "rationale": "Fixture data: a source-based AI interpretation, not verified fit.",
+          "support": [
+            {
+              "sourceId": "source-1",
+              "origin": {
+                "kind": "provider",
+                "reportedQuote": "SGD 868",
+                "match": "literal"
+              },
+              "literal": {
+                "start": 93,
+                "end": 100,
+                "text": "SGD 868"
+              },
+              "context": {
+                "start": 92,
+                "end": 101,
+                "text": " SGD 868 "
+              }
+            }
+          ]
+        },
+        "reportedConditions": [
+          "Price as listed on Fixture Index."
+        ],
+        "reportedConditionsResolved": false,
+        "attribution": {
+          "status": "unknown",
+          "rationale": "Applicability to the selected variant is unresolved. Other source amounts remain unattributed."
+        }
+      },
+      "stock": "unverified",
+      "eligible": false,
+      "blockers": [
+        "Fit to the complete shopping objective remains unresolved.",
+        "An applicable exact-variant price is unverified."
+      ]
+    }
+  ],
+  "choice": null,
+  "sources": [
+    {
+      "id": "source-1",
+      "url": "https://manufacturer.com/model-a",
+      "title": "Fixture data model page",
+      "text": "Fixture data.\n\nOther Sunglasses - Brown \n\n SGD 419 \n\nFixture Meridian Sunglasses - Silver \n\n SGD 868 \n\nAnother Sunglasses - Blue \n\n SGD 305\n\nPromo Codes",
+      "originalLength": 152,
+      "textTruncated": false
+    }
+  ],
+  "limitations": [
+    "Assessments are source-based AI interpretations. Quotations prove provenance, not semantic entailment.",
+    "Prices are unverified page observations. Stock, delivery and current merchant offers remain unknown.",
+    "Fixture data only. No live research or merchant verification."
+  ],
+  "requestId": "fixture-request",
+  "reportedCostUsd": 0.005
+}

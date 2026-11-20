@@ -1,48 +1,61 @@
-# Research + Shopping
+# Fieldnote V2
 
-Fieldnote is a chat-first shopping assistant with fixture-backed comparisons and optional development-only Exa web context. It supports headphones and laptops in the Singapore sample catalog. Prices, availability, and product claims are labeled as synthetic data. The app does not read live inventory or place orders.
+Fieldnote researches open-ended shopping requests through Exa and presents concise source-backed comparisons in a chat. The product ends at a safe product/source link. It does not place orders, take payments, or establish merchant inventory.
 
-## Run the app
+## Run locally
 
-Use Node.js 22.12 or newer. Use npm 11. The host npm 8 resolver crashed during the first dependency install.
+Use Node.js 22.12 or newer and npm 11. From the V2 checkout, run:
 
 ```sh
 npx --yes npm@11.6.2 ci
-npm run dev
+API_PORT=3190 VITE_API_PORT=3190 WEB_PORT=5290 npm run dev
 ```
 
-Open `http://127.0.0.1:5173`. The API listens on `http://127.0.0.1:3000`.
+Open http://127.0.0.1:5290. These ports avoid the earlier preview on 5173 and 3000. First visits start dark. The header toggle persists light or dark selection. A missing Exa configuration returns an honest unavailable reply while retaining the request. It never returns fixture products.
 
-First visits use dark mode. Use the theme toggle to persist light or dark mode. Messages and shopping preferences stay in this tab until refresh. Select **New chat** to clear the conversation and preferences; the theme remains selected.
+The server reads the ignored checkout-local `.env`. Do not copy private environment files between worktrees. Exa requires a server-only `EXA_API_KEY` and the existing absolute `EXA_RESEARCH_LEDGER_PATH`. `EXA_RESEARCH_ENABLED=false` disables dispatch. Production research remains disabled.
 
-## Verify changes
+**Live verification is blocked.** Issue [#42](https://github.com/d3F0g/research-shopping/issues/42) tracks uncertain charges and the stopped allowance. This rebuild made no paid calls. Do not reset or replace the ledger or renew a grant. Genuine proof needs trustworthy billing reconciliation and explicit bounded authorization. See [Exa integration](docs/exa-research.md).
+
+## Use the conversation
+
+Submit a complete request with any hard requirements. Useful requests do not need an optional budget form. A request such as `I want a powerbank around $30-40` asks only for currency, retains both bounds, and resumes research after the answer. Source assessments distinguish supported, unknown, contradicted and conflicting evidence. Observed prices remain unverified with merchants.
+
+Follow-ups can change preferences, request a shorter answer, inspect held evidence or compare displayed options. Held comparisons and presentation changes do not call Exa. The inline preference editor changes the actual open request and criteria. Historical messages and research snapshots remain separate from current preferences.
+
+Guest sessions survive refresh while the API process and session cookie remain valid. They are not durable across API restarts. Optional local accounts persist bounded conversations in PostgreSQL. No guest history is uploaded automatically. **New chat** clears the active shopping context.
+
+## Optional local accounts
+
+Account composition requires all three server settings. Missing settings keep guest mode; partial or failed configuration reports unavailable.
+
+- `FIELDNOTE_DATABASE_URL` identifies a development PostgreSQL database.
+- `FIELDNOTE_AUTH_ORIGIN` is the exact loopback UI origin.
+- `FIELDNOTE_AUTH_SECRET` is the server-only auth secret.
+
+Migrations are additive and checksummed. The new V2 workspace table leaves the earlier workspace untouched. This run uses owned temporary test databases only. Account shopping-data deletion retains account credentials. Email verification, recovery, full account deletion and secure backup/WAL erasure are not implemented.
+
+## Verify
 
 ```sh
 npm run typecheck
 npm test
 npm run build
-npx playwright install chromium
+npm run eval:preservation
+npm run eval:typecheck
+npm run eval:test
+npm run eval -- --gate critical --out artifacts/product-evals/v2-current
 npm run test:e2e
+npm run verify:offline
+env -u FIELDNOTE_TEST_DATABASE_URL npm run test:postgres
 ```
 
-The Playwright run starts a separate API and UI on loopback ports 3163 and 5273. It does not reuse an existing server. Set `PLAYWRIGHT_API_PORT` and `PLAYWRIGHT_WEB_PORT` to choose different ports. Successful desktop and mobile screenshots go to `artifacts/screenshots`. Playwright traces, videos, and failure screenshots go to `artifacts/playwright-results`.
+Browser checks use explicitly composed local SDK responses with visible fixture labels. They do not establish live research usefulness. The [verification skill](.agents/skills/verify-research-shopping/SKILL.md) starts only owned processes, checks actual viewport geometry, and verifies cleanup. It refuses occupied ports.
 
-## Local ports
+The original sixty evaluation scenarios, expectations and historical baseline remain unchanged. V2 uses an explicit adapter and comparison bridge. Blocked semantic/browser capabilities remain blocked rather than receiving invented scores. See [evaluation instructions](evals/v2/README.md) and the [run ledger](.codex/pstack-runs/fieldnote-v2/plan.md).
 
-Set `API_PORT` to change the Hono port. `PORT` is the API fallback. Set `WEB_PORT` to change the Vite port. Set `VITE_API_PORT` to point Vite at the API. Both services bind to `127.0.0.1`.
+See the [V2 delivery report](docs/fieldnote-v2-delivery.md) for screenshots, exact review evidence, evaluation counts and remaining external blockers.
 
-## Limits
+## Review gate
 
-The deterministic parser understands a small set of product categories and constraints. The fixture catalog covers headphones and laptops in SGD for Singapore. US requests return an explicit limitation. Optional Exa web research returns source context separately from the sample catalog. The demo has no current merchant offers, shipping checks, saved account profile, payment, or order placement.
-
-## GitHub Actions CI
-
-The workflow in [`.github/workflows/ci.yml`](.github/workflows/ci.yml) runs automatically on pushes and pull requests. It installs dependencies, checks TypeScript, runs unit/API tests, builds the frontend, runs Chromium journeys, and uploads browser evidence. See [CI documentation](docs/ci.md) and the actual PR checks for execution results.
-
-## Frontend standard
-
-The conversation uses official shadcn/ui and AI Elements patterns with retained messages, contextual preference cards, a bottom composer, centralized themes, local Geist typography, concise product rows, expandable comparisons, safe citations and actual recorded provider outcomes. See [frontend architecture and provenance](docs/frontend-standard.md) and the [desktop/mobile screenshot gallery](artifacts/chat-first/gallery.md). The user approved PR #33's design. Routine changes follow the autonomous merge gates in AGENTS.md; future human design reviews require an explicitly designated milestone.
-
-## Exa web context
-
-The API development process can read `EXA_API_KEY` from the ignored root `.env`. Use the explicit web-context action after a sample shortlist appears. Exa sources never change synthetic prices, stock, ranking, or merchant handoff. Production composition stays disabled. See [Exa setup and verification](docs/exa-research.md).
+The user approved the current UI and PR #53 on 19 November 2026. Preserve the approved chat layout. Routine development and merging follow the independent QA, security and current-head CI gates in AGENTS.md. Issue #55 tracks the reported live evidence follow-up, which must be resolved or honestly classified before landing. Production deployment and sensitive operations still require separate authorization.

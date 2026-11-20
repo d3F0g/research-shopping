@@ -1,0 +1,314 @@
+import { priceView } from "../../src/domain/price-view";
+import { describe, expect, it } from "vitest";
+import { initialConversation } from "../../src/domain/conversation";
+import { ResearchSnapshotSchema, type ResearchSnapshot } from "../../src/domain/research";
+import { projectExaAnswer } from "../../src/server/exa-research";
+import { catalogMaterial } from "../helpers/v3-catalog-material";
+import { nativeMaterial } from "../helpers/v2-material";
+
+const intent = { ...initialConversation().intent, productDescription: "Fixture sunglasses", budget: { minimum: 800, maximum: 1000, currency: "SGD" } };
+function project(material = catalogMaterial(intent)) {
+  const result = projectExaAnswer(material, intent);
+  if (result.status !== "ready") throw new Error("Expected fixture comparison");
+  return result.research;
+}
+describe("versioned literal source evidence", () => {
+  it("retains unique whitespace-aligned identity and its observed catalog amount without resolving conditions", () => {
+    const snapshot = project();
+    const product = snapshot.products[0]!;
+    expect(snapshot).toMatchObject({ version: 2, evidenceVersion: 5, choice: null });
+    expect(product.identity.status).toBe("supported");
+    expect(product.identity.support[0]).toMatchObject({ origin: { kind: "provider", reportedQuote: "Fixture Meridian Sunglasses - Silver SGD 868", match: "whitespace" } });
+    expect(product.priceEvidence.state).not.toBe("applicable");
+    expect(priceView(product.priceEvidence, snapshot.sources).label).toBe("SGD 868.00");
+    expect(product.priceEvidence).toMatchObject({ state: "observed", report: { sourceReviews: [{ conditions: [{ text: "Price as listed on Fixture Index.", interpretation: "unknown" }] }] } });
+    expect(snapshot.summary).toMatch(/^SGD 868.00, observed and unverified/);
+    expect(snapshot.summary).toContain("Purchase conditions remain unresolved.");
+    expect(product.blockers).toContain("Fit to the complete shopping objective remains unresolved.");
+    expect(snapshot.summary).not.toMatch(/best|all.*fit|source-supported option/);
+    expect(product.eligible).toBe(false);
+    expect(snapshot.intent.budget).toEqual(intent.budget);
+  });
+  it.each(["Fixture Meridian Sunglasses — Silver SGD 868", "Fixture Meridian Sunglasses - Silver … SGD 868", "Fixture Meridian Silver SGD 868", "Fixture Meridian Sunglasses - silver SGD 868", "Fixture Meridian Sunglasses - Sil\u200bver SGD 868"])("does not repair non-whitespace changes in %s", (quote) => {
+    const material = catalogMaterial(intent);
+    material.answer.products[0]!.identity.support[0]!.quote = quote;
+    expect(project(material).products[0]!.identity.status).toBe("unknown");
+  });
+  it("rejects duplicate equivalent source spans rather than selecting the first occurrence", () => {
+    const material = catalogMaterial(intent);
+    material.citations[0]!.text += "\n\nFixture Meridian Sunglasses - Silver SGD 868";
+    expect(project(material).products[0]!.identity.status).toBe("unknown");
+  });
+});
+
+describe("named catalog attribution boundaries", () => {
+  it.each([
+    ["SGD 868", "SGD 868–1200"],
+    ["SGD 868", "SGD 868 for three units"],
+    ["SGD 868", "SGD 868\nFor AX2 only."],
+    ["SGD 868", "SGD 868\n\nFor AX2."],
+    ["SGD 868", "SGD 868\n\nShipping costs SGD 100."],
+    ["SGD 868", "SGD 868\n\nPrice applies to another variant."],
+  ])("withholds attribution when selected amount has unsafe context %j", (from, to) => {
+    const material = catalogMaterial(intent);
+    material.citations[0]!.text = material.citations[0]!.text.replace(from, to);
+    expect(project(material).products[0]!.priceEvidence.state).not.toBe("applicable");
+  });
+  it("never takes the neighboring row's amount", () => {
+    const material = catalogMaterial(intent);
+    const product = material.answer.products[0]!;
+    product.price.amount = 305;
+    product.price.attribution.support[0]!.quote = "SGD 305";
+    expect(project(material).products[0]!.priceEvidence.state).not.toBe("applicable");
+  });
+  it.each(["Gold", "Sil", "Silverado"])("requires an explicit exact selected variant %s", (variant) => {
+    const material = catalogMaterial(intent);
+    material.answer.products[0]!.variant = variant;
+    material.answer.products[0]!.price.variant = variant;
+    expect(project(material).products[0]!.priceEvidence.state).not.toBe("applicable");
+  });
+  it("does not turn money-only source support into complete request fit even without a budget", () => {
+    const material = catalogMaterial(intent);
+    const result = projectExaAnswer(material, { ...intent, budget: null });
+    if (result.status !== "ready") throw new Error("Expected fixture comparison");
+    expect(result.research.products[0]!.requestMatch.status).toBe("unknown");
+    expect(result.research.choice).toBeNull();
+  });
+  it("retains actual membership conditions and unresolved provider context distinctly", () => {
+    const material = catalogMaterial(intent);
+    material.citations[0]!.text += "\n\nMembership required.";
+    const product = project(material).products[0]!;
+    expect(product.priceEvidence.state).not.toBe("applicable");
+    expect(product.priceEvidence.alarms).toContainEqual(expect.objectContaining({ kind: "buyer-restriction" }));
+    expect(product.priceEvidence.report!.sourceReviews[0]!.conditions.map((condition) => condition.text)).toEqual(["Price as listed on Fixture Index."]);
+  });
+  it("keeps the complete 300-character native condition with its provenance label", () => {
+    const material = catalogMaterial(intent);
+    material.answer.products[0]!.price.sourceReviews[0]!.conditions[0]!.text = "Fixture provider uncertainty. " + "x".repeat(270);
+    const reported = material.answer.products[0]!.price.sourceReviews[0]!.conditions[0]!.text;
+    expect(project(material).products[0]!.priceEvidence.report!.sourceReviews[0]!.conditions[0]!.text).toBe(reported);
+  });
+  it.each(["", "\n\nNot tax included."])("does not promote an unproven native tax-included claim %j", (tail) => {
+    const material = catalogMaterial(intent);
+    material.answer.products[0]!.price.sourceReviews[0]!.conditions[0] = { quote: "tax included", text: "tax included", interpretation: "included-in-amount", rationale: "Fixture optimistic tax claim." };
+    material.citations[0]!.text += tail;
+    const product = project(material).products[0]!;
+    expect(product.priceEvidence.state).not.toBe("applicable");
+    expect(product.priceEvidence.state).not.toBe("applicable");
+    expect(product.priceEvidence.report!.sourceReviews[0]!.conditions.map((condition) => condition.text)).toEqual(["tax included"]);
+    if (tail) expect(product.priceEvidence.alarms).toContainEqual(expect.objectContaining({ kind: "incomplete-total" }));
+  });
+});
+
+describe("opaque peer catalog rows", () => {
+  const peers = "Fixture Other Eyeglasses - Black\n\n SGD 547 SGD 268 (51% off)\n\nFixture Other Brand Silver Navigator Sunglasses\n\n SGD 490 SGD 243 (50% off)\n\n";
+  it("retains the selected single amount beside opaque sale prices and a shared color name", () => {
+    const material = catalogMaterial(intent);
+    material.citations[0]!.text = peers + material.citations[0]!.text;
+    const result = project(material);
+    expect(result.products[0]!.priceEvidence.state).not.toBe("applicable");
+    expect(priceView(result.products[0]!.priceEvidence, result.sources).label).toBe("SGD 868.00");
+    expect(result.products[0]!.identity.status).toBe("supported");
+    expect(result.choice).toBeNull();
+    expect(result.sources[0]!.text).toContain(peers);
+  });
+  it.each(["SGD 868 SGD 500 (50% off)", "SGD 868–1200", "SGD 868 for three units", "SGD 868\n\nFor Gold only."])("rejects target ambiguity even beside opaque peer sales %s", (selected) => {
+    const material = catalogMaterial(intent);
+    material.citations[0]!.text = peers + material.citations[0]!.text.replace("SGD 868", selected);
+    expect(project(material).products[0]!.priceEvidence.state).not.toBe("applicable");
+  });
+  it.each([
+    "\n\nFixture Meridian Sunglasses - Silver costs SGD 999.",
+    "\n\nShipping costs SGD 100.",
+    "\n\nPrice applies to Gold only.",
+  ])("retains unsafe unscoped or target-naming clauses outside peer spans %s", (tail) => {
+    const material = catalogMaterial(intent);
+    material.citations[0]!.text = peers + material.citations[0]!.text + tail;
+    expect(project(material).products[0]!.priceEvidence.state).not.toBe("applicable");
+  });
+});
+
+
+describe("current snapshot binding validation", () => {
+  const mutations: Array<[string, (snapshot: ResearchSnapshot) => void]> = [
+    ["literal offset", (snapshot) => { snapshot.products[0]!.identity.support[0]!.literal.start++; }],
+    ["literal text", (snapshot) => { Object.assign(snapshot.products[0]!.identity.support[0]!.literal, { text: "Invented" }); }],
+    ["context containment", (snapshot) => { snapshot.products[0]!.identity.support[0]!.context.start++; }],
+    ["context text", (snapshot) => { Object.assign(snapshot.products[0]!.identity.support[0]!.context, { text: "Fixture invented context" }); }],
+    ["reported wording", (snapshot) => { snapshot.products[0]!.identity.support[0]!.origin = { kind: "provider", reportedQuote: "Fixture changed words SGD 868", match: "whitespace" }; }],
+    ["match kind", (snapshot) => { const span = snapshot.products[0]!.identity.support[0]!; if (span.origin.kind === "provider") span.origin.match = "literal"; }],
+    ["cut metadata", (snapshot) => { snapshot.sources[0]!.originalLength++; }],
+    ["duplicate equivalent match", (snapshot) => { snapshot.sources[0]!.text += "\n\nFixture Meridian Sunglasses - Silver SGD 868"; snapshot.sources[0]!.originalLength = snapshot.sources[0]!.text.length; }],
+  ];
+  it.each(mutations)("rejects forged %s at the current response boundary", (_name, mutate) => {
+    const snapshot = project();
+    expect(ResearchSnapshotSchema.safeParse(snapshot).success).toBe(true);
+    mutate(snapshot);
+    expect(ResearchSnapshotSchema.safeParse(snapshot).success).toBe(false);
+  });
+});
+
+
+describe("money-only request evidence", () => {
+  const variants = ["SGD 35", "35 SGD", "35SGD", "35", "S$35", "35 S$", "$35", "35.00", "SGD 35.00", "35 SGD.", "(35 SGD)", "SGD 35–40", "35 / 40 SGD", "SGD 35 + SGD 40", "35 Singapore dollars", "Singapore dollars35", "Price: SGD35", "SGD35 per unit", "SGD35 including tax", "35to40SGD", "SGD35×2", "SGD35÷2", "SGD35≤40"];
+  for (const budget of [null, { minimum: 30, maximum: 40, currency: "SGD" }]) {
+    it.each(variants)(`keeps %s unknown with ${budget ? "bounded" : "no"} budget`, (quote) => {
+      const request = { ...initialConversation().intent, productDescription: "Fixture USB-C powerbank", budget };
+      const raw = nativeMaterial(request);
+      const sourceMoney = ["35", "35.00"].includes(quote) ? `SGD ${quote}` : quote;
+      const material = JSON.parse(JSON.stringify(raw).replaceAll("SGD 35", sourceMoney));
+      material.answer.products[0].requestMatch = { ...material.answer.products[0].requestMatch, support: [{ url: material.citations[0].url, quote }] };
+      const result = projectExaAnswer(material, request);
+      if (result.status !== "ready") throw new Error("Expected fixture comparison");
+      expect(result.research.products[0]!.identity.status).toBe("supported");
+      expect(result.research.products[0]!.requestMatch.status).toBe("unknown");
+      expect(result.research.products[0]!.eligible).toBe(false);
+      expect(result.research.choice).toBeNull();
+    });
+    it(`retains whole-objective sentence evidence with ${budget ? "bounded" : "no"} budget`, () => {
+      const request = { ...initialConversation().intent, productDescription: "Fixture USB-C powerbank", budget };
+      const result = projectExaAnswer(nativeMaterial(request), request);
+      if (result.status !== "ready") throw new Error("Expected fixture comparison");
+      expect(result.research.products[0]!.requestMatch.status).toBe("supported");
+      expect(result.research.choice?.productId).toBe("model-a");
+    });
+  }
+});
+
+describe("ambiguous catalog headings", () => {
+  it.each([
+    "Fixture Meridian Sunglasses - Silver",
+    "Fixture Meridian Sunglasses -  Silver",
+    "fixture meridian sunglasses - silver",
+    "Fixture Meridian Sunglasses",
+    "Meridian Sunglasses - Silver",
+    "Meridian Sunglasses - Silver (standard)",
+    "Meridian Sunglasses - Silver Edition",
+    "Meridian Sunglasses - Silver Extended Fixture Description",
+    "Silver Edition",
+    "Silver colorway",
+    "Silver-Standard",
+    "Silver52mm",
+    "Meridian Sunglasses - Silver, size 52",
+    "New Silver colorway",
+    "Limited Silver52mm",
+    "Silver",
+    " silver ",
+  ])("retains unresolved target heading %j as adverse context", (heading) => {
+    const material = catalogMaterial(intent);
+    material.citations[0]!.text += `\n\n${heading}\n\nSGD 999`;
+    const result = project(material);
+    expect(result.products[0]!.priceEvidence.state).not.toBe("applicable");
+    expect(result.sources[0]!.text).toBe(material.citations[0]!.text);
+    expect(result.choice).toBeNull();
+  });
+  it("retains a distinct full heading sharing only the selected color", () => {
+    const material = catalogMaterial(intent);
+    material.citations[0]!.text += "\n\nFixture Other Silver Sunglasses\n\nSGD 999 SGD 499 (50% off)";
+    expect(project(material).products[0]!.priceEvidence.state).not.toBe("applicable");
+    expect(project(material).products[0]!.priceEvidence.state).toBe("observed");
+  });
+});
+
+
+describe("unique catalog heading binding", () => {
+  it("retains the raw heading span when its only difference is whitespace", () => {
+    const material = catalogMaterial(intent);
+    material.citations[0]!.text = material.citations[0]!.text.replace("Fixture Meridian Sunglasses - Silver", "Fixture Meridian Sunglasses -  Silver");
+    const snapshot = project(material);
+    expect(snapshot.products[0]!.identity.status).toBe("supported");
+    expect(snapshot.products[0]!.priceEvidence.state).not.toBe("applicable");
+    expect(priceView(snapshot.products[0]!.priceEvidence, snapshot.sources).label).toBe("SGD 868.00");
+    expect(snapshot.sources[0]!.text).toBe(material.citations[0]!.text);
+  });
+  it("does not use adverse case folding to create a positive heading binding", () => {
+    const material = catalogMaterial(intent);
+    material.citations[0]!.text = material.citations[0]!.text.replace("Fixture Meridian Sunglasses - Silver", "fixture meridian sunglasses - silver");
+    material.answer.products[0]!.identity.support[0]!.quote = material.citations[0]!.text;
+    expect(project(material).products[0]!.priceEvidence.state).not.toBe("applicable");
+  });
+});
+
+describe("monetary grammar and open product descriptions", () => {
+  it.each(["RTX4080", "USB3", "ABC35", "USDock35", "🔬35", "Fixture Orinth lunar spectrometer 7"])("does not classify %s as currency by its letter count", (name) => {
+    const request = { ...initialConversation().intent, productDescription: `Fixture ${name}`, budget: null };
+    const raw = nativeMaterial(request);
+    const source = raw.citations[0]!.text;
+    const material = JSON.parse(JSON.stringify(raw).replaceAll(JSON.stringify(source).slice(1, -1), JSON.stringify(`Fixture data: ${name}. ${source}`).slice(1, -1)));
+    material.answer.products[0].requestMatch = { ...material.answer.products[0].requestMatch, support: [{ url: material.citations[0].url, quote: name }] };
+    const result = projectExaAnswer(material, request);
+    if (result.status !== "ready") throw new Error("Expected fixture comparison");
+    expect(result.research.products[0]!.requestMatch.support).toHaveLength(1);
+    expect(result.research.products[0]!.requestMatch.status).toBe("supported");
+    const span = result.research.products[0]!.requestMatch.support[0]!;
+    expect(result.research.sources[0]!.text.slice(span.literal.start, span.literal.end)).toBe(name);
+  });
+  it.each(["tax included", "including GST", "per unit", "for one unit", "membership required", "this price requires a voucher and a coupon", "mandatory shipping charges", "only available with membership"])("downgrades money with the existing condition %s", (condition) => {
+    const request = { ...initialConversation().intent, productDescription: "Fixture powerbank", budget: null };
+    const quote = `CHF35, ${condition}`;
+    const material = JSON.parse(JSON.stringify(nativeMaterial(request)).replaceAll("SGD 35", quote));
+    material.answer.products[0].price.currency = "CHF";
+    material.answer.products[0].requestMatch = { ...material.answer.products[0].requestMatch, support: [{ url: material.citations[0].url, quote }] };
+    const result = projectExaAnswer(material, request);
+    if (result.status !== "ready") throw new Error("Expected fixture comparison");
+    expect(result.research.products[0]!.requestMatch.status).toBe("unknown");
+    expect(result.research.choice).toBeNull();
+  });
+});
+
+it("uses the explicit budget currency for monetary evidence when no native price exists", () => {
+  const request = { ...initialConversation().intent, productDescription: "Fixture powerbank", budget: { currency: "CAD", maximum: 40 } };
+  const material = JSON.parse(JSON.stringify(nativeMaterial(request)).replaceAll("SGD 35", "CAD35"));
+  material.answer.products[0].price = null;
+  material.answer.products[0].requestMatch = { ...material.answer.products[0].requestMatch, support: [{ url: material.citations[0].url, quote: "CAD35 per unit" }] };
+  const source = material.citations[0].text;
+  const updated = JSON.parse(JSON.stringify(material).replaceAll(JSON.stringify(source).slice(1, -1), JSON.stringify(source + " Fixture monetary note: CAD35 per unit.").slice(1, -1)));
+  const result = projectExaAnswer(updated, request);
+  if (result.status !== "ready") throw new Error("Expected fixture comparison");
+  expect(result.research.products[0]!.requestMatch.support).toHaveLength(1);
+  expect(result.research.products[0]!.requestMatch.status).toBe("unknown");
+});
+
+describe("monetary token boundaries", () => {
+  const quotes = [
+    ...[" ", "\n", "\t", "\r\n", "\u00a0", "  \t"].flatMap((space) => [
+      `35 Singapore${space}dollars`,
+      `United${space}States${space}dollars35`,
+    ]),
+    "SGD35 x 3", "SGD35x3", "3 X SGD35", "SGD35 X 3 x 2",
+    "SGD35 per item", "SGD35 per piece", "SGD35 for one item", "SGD35 for 3 pieces",
+    "SGD35 per\nitem", "SGD35 for\t3\tunits", "SGD35 including\ntax",
+    "SGD35 plus SGD5", "SGD35plusSGD5", "SGD35 minus SGD5", "SGD35minusSGD5",
+    "SGD35 times 3", "SGD35times3", "SGD35 divided by 3", "SGD35 multiplied by 3",
+    "SGD35 each", "SGD35 per piece", "SGD35 excl. GST", "SGD35 incl. tax",
+    "SGD35 excl VAT", "SGD35 incl GST", "SGD35 excluding\nGST", "SGD35 excl.GST", "SGD35 incl.tax", "35 United\tStates dollars",
+  ];
+  it.each(quotes)("withholds complete fit from monetary tokens %j without altering the reported quote", (quote) => {
+    const request = { ...initialConversation().intent, productDescription: "Fixture USB-C powerbank", budget: null };
+    const material = nativeMaterial(request);
+    material.citations[0]!.text += `\n\nFixture monetary note: ${quote}.`;
+    material.answer.products[0]!.requestMatch.support = [{ url: material.citations[0]!.url, quote }];
+    const result = projectExaAnswer(material, request);
+    if (result.status !== "ready") throw new Error("Expected fixture comparison");
+    const product = result.research.products[0]!;
+    expect(product.requestMatch.support[0]).toMatchObject({ origin: { kind: "provider", reportedQuote: quote } });
+    const span = product.requestMatch.support[0]!;
+    expect(result.research.sources[0]!.text.slice(span.literal.start, span.literal.end)).toBe(quote);
+    expect(product.requestMatch.status).toBe("unknown");
+    expect(product.eligible).toBe(false);
+    expect(result.research.choice).toBeNull();
+    expect(result.research.sources[0]!.text).toBe(material.citations[0]!.text);
+  });
+  it.each(["X35", "RTX4080x3", "35 X-ray", "Orinth 35 x 3 spectrometer", "SGD35 for Orinth lunar spectrometer", "X 35", "35X", "Fixture plus35", "Fixture each35"])("retains open objective or model text %j beside numeric and monetary tokens", (quote) => {
+    const request = { ...initialConversation().intent, productDescription: `Fixture ${quote}`, budget: null };
+    const material = nativeMaterial(request);
+    material.citations[0]!.text = `Fixture data. ${quote}.\n\n${material.citations[0]!.text}`;
+    material.answer.products[0]!.requestMatch.support = [{ url: material.citations[0]!.url, quote }];
+    const result = projectExaAnswer(material, request);
+    if (result.status !== "ready") throw new Error("Expected fixture comparison");
+    expect(result.research.products[0]!.requestMatch.status).toBe("supported");
+    const span = result.research.products[0]!.requestMatch.support[0]!;
+    expect(span).toMatchObject({ origin: { reportedQuote: quote } });
+    expect(result.research.sources[0]!.text.slice(span.literal.start, span.literal.end)).toBe(quote);
+  });
+});

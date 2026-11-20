@@ -1,0 +1,769 @@
+{
+  "scenarioId": "FN-CD-004",
+  "initialPreferences": {
+    "version": 5,
+    "productDescription": "",
+    "criteria": [],
+    "budget": null,
+    "budgetClarified": false,
+    "pendingChange": null,
+    "region": "SG",
+    "responseLength": "concise",
+    "revision": 0
+  },
+  "finalPreferences": {
+    "version": 5,
+    "productDescription": "",
+    "criteria": [
+      {
+        "id": "criterion-1",
+        "wording": "Stability matters more than folded size.",
+        "strength": "flexible",
+        "origin": {
+          "kind": "message",
+          "text": "Stability matters more than folded size."
+        }
+      },
+      {
+        "id": "criterion-4",
+        "wording": "It must support a 2 kg camera setup.",
+        "strength": "hard",
+        "origin": {
+          "kind": "message",
+          "text": "It must support a 2 kg camera setup."
+        }
+      }
+    ],
+    "budget": null,
+    "budgetClarified": false,
+    "pendingChange": null,
+    "region": "SG",
+    "responseLength": "concise",
+    "revision": 6
+  },
+  "material": {
+    "id": "unknown:FN-CD-004",
+    "kind": "synthetic",
+    "label": "Explicit synthetic provider double. Not genuine Exa research.",
+    "capturedAt": null,
+    "provenance": [
+      "Independently fixed test input before application execution",
+      "No current product or market claim",
+      "Original independent provider recipe unknown; fixed profile powerbank.",
+      "Synthetic claims, prices and availability statements remain visibly labeled. No live research or inventory.",
+      "Input suitability gap: no matching product profile. Relevance and recommendation usefulness are unassessed, never counted as a shopping success."
+    ],
+    "sha256": "eb2d09b51178dbdbf26105ef1373e92fa164114cb73a39b763760cba63bee1f7",
+    "body": {
+      "requestId": "synthetic-offline-input",
+      "costDollars": {
+        "total": 0.005
+      },
+      "citations": [
+        {
+          "url": "https://fixture.example.com/powerbank",
+          "title": "Synthetic fixture power bank",
+          "text": "Synthetic Anker Pocket 10 black is a portable power bank with USB-C fast charging.\nSynthetic Anker Pocket 10 black costs SGD 35.00 for one unit, tax included."
+        }
+      ],
+      "answer": {
+        "products": [
+          {
+            "id": "synthetic-pocket-10",
+            "name": "Synthetic Anker Pocket 10",
+            "variant": "black",
+            "identity": {
+              "status": "supported",
+              "scope": "exact-variant",
+              "rationale": "Synthetic test assessment, not a live product claim.",
+              "support": [
+                {
+                  "url": "https://fixture.example.com/powerbank",
+                  "quote": "Synthetic Anker Pocket 10 black is a portable power bank with USB-C fast charging."
+                }
+              ]
+            },
+            "requestMatch": {
+              "status": "unknown",
+              "scope": "unclear",
+              "rationale": "Synthetic input intentionally lacks qualifying evidence.",
+              "support": []
+            },
+            "criteria": [],
+            "attributes": [
+              {
+                "name": "Charging",
+                "assessment": {
+                  "status": "supported",
+                  "scope": "exact-variant",
+                  "rationale": "Synthetic test assessment, not a live product claim.",
+                  "support": [
+                    {
+                      "url": "https://fixture.example.com/powerbank",
+                      "quote": "Synthetic Anker Pocket 10 black is a portable power bank with USB-C fast charging."
+                    }
+                  ]
+                }
+              }
+            ],
+            "price": null,
+            "budget": {
+              "status": "unknown",
+              "scope": "unclear",
+              "rationale": "Synthetic input intentionally lacks qualifying evidence.",
+              "support": []
+            }
+          }
+        ],
+        "choice": null,
+        "limitations": [
+          "Synthetic provider double for automated evaluation. No real products, current prices, availability or merchant verification."
+        ]
+      }
+    },
+    "status": 200
+  },
+  "interpretation": {
+    "mode": "fixed-proposals",
+    "inputHash": "ba136b479052387d0ab913a7bb4d802eebe4f7e17be79846d908e5fd87c4044a",
+    "openAIHttpRequests": 0,
+    "invocations": 3,
+    "suppliedTurns": [
+      {
+        "turnIndex": 0,
+        "message": "Find a small tripod for a mirrorless camera, under EUR 100.",
+        "proposal": {
+          "disposition": "research",
+          "actions": [
+            {
+              "kind": "start-request",
+              "source": {
+                "start": 13,
+                "end": 43,
+                "text": "tripod for a mirrorless camera"
+              }
+            },
+            {
+              "kind": "add-criterion",
+              "source": {
+                "start": 7,
+                "end": 12,
+                "text": "small"
+              },
+              "strength": "flexible"
+            },
+            {
+              "kind": "budget",
+              "source": {
+                "start": 45,
+                "end": 58,
+                "text": "under EUR 100"
+              },
+              "operation": "clarify",
+              "draft": {
+                "amount": 100,
+                "minimum": null,
+                "currency": null
+              }
+            }
+          ]
+        },
+        "limitations": [
+          "The stated currency is unsupported by the allowed SGD/USD draft. Its numeric amount is retained with currency null. No currency conversion or substitute currency is proposed."
+        ]
+      },
+      {
+        "turnIndex": 1,
+        "message": "I don't want the cheapest if it's shaky. Stability matters more than folded size.",
+        "proposal": {
+          "disposition": "research",
+          "actions": [
+            {
+              "kind": "add-criterion",
+              "source": {
+                "start": 41,
+                "end": 81,
+                "text": "Stability matters more than folded size."
+              },
+              "strength": "flexible"
+            }
+          ]
+        },
+        "limitations": [
+          "Relative preference priority is preserved in wording. The action contract has no explicit weighting or priority edge."
+        ]
+      },
+      {
+        "turnIndex": 2,
+        "message": "It must support a 2 kg camera setup.",
+        "proposal": {
+          "disposition": "research",
+          "actions": [
+            {
+              "kind": "add-criterion",
+              "source": {
+                "start": 0,
+                "end": 36,
+                "text": "It must support a 2 kg camera setup."
+              },
+              "strength": "hard"
+            }
+          ]
+        }
+      }
+    ],
+    "limitations": []
+  },
+  "turns": [
+    {
+      "index": 0,
+      "action": {
+        "kind": "message",
+        "text": "Find a small tripod for a mirrorless camera, under EUR 100."
+      },
+      "initialPreferences": {
+        "version": 5,
+        "productDescription": "",
+        "criteria": [],
+        "budget": null,
+        "budgetClarified": false,
+        "pendingChange": null,
+        "region": "SG",
+        "responseLength": "concise",
+        "revision": 0
+      },
+      "finalPreferences": {
+        "version": 5,
+        "productDescription": "",
+        "criteria": [],
+        "budget": null,
+        "budgetClarified": false,
+        "pendingChange": null,
+        "region": "SG",
+        "responseLength": "concise",
+        "revision": 0
+      },
+      "response": {
+        "responseVersion": 5,
+        "preferences": {
+          "version": 5,
+          "productDescription": "",
+          "criteria": [],
+          "budget": null,
+          "budgetClarified": false,
+          "pendingChange": null,
+          "region": "SG",
+          "responseLength": "concise",
+          "revision": 0
+        },
+        "notes": [],
+        "kind": "research-unavailable",
+        "message": "I could not interpret that request right now. Your accepted preferences and any pending answer are retained. Try again after intent interpretation is available.",
+        "reason": "intent-unavailable"
+      },
+      "providerCalls": 0,
+      "cancelled": false
+    },
+    {
+      "index": 1,
+      "action": {
+        "kind": "message",
+        "text": "I don't want the cheapest if it's shaky. Stability matters more than folded size."
+      },
+      "initialPreferences": {
+        "version": 5,
+        "productDescription": "",
+        "criteria": [],
+        "budget": null,
+        "budgetClarified": false,
+        "pendingChange": null,
+        "region": "SG",
+        "responseLength": "concise",
+        "revision": 0
+      },
+      "finalPreferences": {
+        "version": 5,
+        "productDescription": "",
+        "criteria": [
+          {
+            "id": "criterion-1",
+            "wording": "Stability matters more than folded size.",
+            "strength": "flexible",
+            "origin": {
+              "kind": "message",
+              "text": "Stability matters more than folded size."
+            }
+          }
+        ],
+        "budget": null,
+        "budgetClarified": false,
+        "pendingChange": null,
+        "region": "SG",
+        "responseLength": "concise",
+        "revision": 3
+      },
+      "response": {
+        "responseVersion": 5,
+        "preferences": {
+          "version": 5,
+          "productDescription": "",
+          "criteria": [
+            {
+              "id": "criterion-1",
+              "wording": "Stability matters more than folded size.",
+              "strength": "flexible",
+              "origin": {
+                "kind": "message",
+                "text": "Stability matters more than folded size."
+              }
+            }
+          ],
+          "budget": null,
+          "budgetClarified": false,
+          "pendingChange": null,
+          "region": "SG",
+          "responseLength": "concise",
+          "revision": 3
+        },
+        "notes": [],
+        "kind": "clarification",
+        "message": "What are you shopping for? Describe the product and what matters to you.",
+        "reason": "description"
+      },
+      "providerCalls": 0,
+      "cancelled": false
+    },
+    {
+      "index": 2,
+      "action": {
+        "kind": "message",
+        "text": "It must support a 2 kg camera setup."
+      },
+      "initialPreferences": {
+        "version": 5,
+        "productDescription": "",
+        "criteria": [
+          {
+            "id": "criterion-1",
+            "wording": "Stability matters more than folded size.",
+            "strength": "flexible",
+            "origin": {
+              "kind": "message",
+              "text": "Stability matters more than folded size."
+            }
+          }
+        ],
+        "budget": null,
+        "budgetClarified": false,
+        "pendingChange": null,
+        "region": "SG",
+        "responseLength": "concise",
+        "revision": 3
+      },
+      "finalPreferences": {
+        "version": 5,
+        "productDescription": "",
+        "criteria": [
+          {
+            "id": "criterion-1",
+            "wording": "Stability matters more than folded size.",
+            "strength": "flexible",
+            "origin": {
+              "kind": "message",
+              "text": "Stability matters more than folded size."
+            }
+          },
+          {
+            "id": "criterion-4",
+            "wording": "It must support a 2 kg camera setup.",
+            "strength": "hard",
+            "origin": {
+              "kind": "message",
+              "text": "It must support a 2 kg camera setup."
+            }
+          }
+        ],
+        "budget": null,
+        "budgetClarified": false,
+        "pendingChange": null,
+        "region": "SG",
+        "responseLength": "concise",
+        "revision": 6
+      },
+      "response": {
+        "responseVersion": 5,
+        "preferences": {
+          "version": 5,
+          "productDescription": "",
+          "criteria": [
+            {
+              "id": "criterion-1",
+              "wording": "Stability matters more than folded size.",
+              "strength": "flexible",
+              "origin": {
+                "kind": "message",
+                "text": "Stability matters more than folded size."
+              }
+            },
+            {
+              "id": "criterion-4",
+              "wording": "It must support a 2 kg camera setup.",
+              "strength": "hard",
+              "origin": {
+                "kind": "message",
+                "text": "It must support a 2 kg camera setup."
+              }
+            }
+          ],
+          "budget": null,
+          "budgetClarified": false,
+          "pendingChange": null,
+          "region": "SG",
+          "responseLength": "concise",
+          "revision": 6
+        },
+        "notes": [],
+        "kind": "clarification",
+        "message": "What are you shopping for? Describe the product and what matters to you.",
+        "reason": "description"
+      },
+      "providerCalls": 0,
+      "cancelled": false
+    }
+  ],
+  "events": [
+    {
+      "sequence": 1,
+      "turn": 0,
+      "kind": "app-request",
+      "elapsedMs": 1.99,
+      "body": {
+        "phase": "prepare",
+        "message": "Find a small tripod for a mirrorless camera, under EUR 100.",
+        "preferences": {
+          "version": 5,
+          "productDescription": "",
+          "criteria": [],
+          "budget": null,
+          "budgetClarified": false,
+          "pendingChange": null,
+          "region": "SG",
+          "responseLength": "concise",
+          "revision": 0
+        },
+        "operationId": "9d7a3d4d-1fe3-414b-b9d9-ad3838d97623"
+      }
+    },
+    {
+      "sequence": 2,
+      "turn": 0,
+      "kind": "interpreter-request",
+      "elapsedMs": 2.63,
+      "body": {
+        "operationId": "9d7a3d4d-1fe3-414b-b9d9-ad3838d97623",
+        "message": "Find a small tripod for a mirrorless camera, under EUR 100.",
+        "questionId": null,
+        "inputHash": "ba136b479052387d0ab913a7bb4d802eebe4f7e17be79846d908e5fd87c4044a",
+        "label": "Independently authored synthetic proposals. Conditional technical behavior only."
+      }
+    },
+    {
+      "sequence": 3,
+      "turn": 0,
+      "kind": "interpreter-response",
+      "elapsedMs": 2.65,
+      "body": {
+        "status": "ready",
+        "interpretation": {
+          "disposition": "research",
+          "actions": [
+            {
+              "kind": "start-request",
+              "source": {
+                "start": 13,
+                "end": 43,
+                "text": "tripod for a mirrorless camera"
+              }
+            },
+            {
+              "kind": "add-criterion",
+              "source": {
+                "start": 7,
+                "end": 12,
+                "text": "small"
+              },
+              "strength": "flexible"
+            },
+            {
+              "kind": "budget",
+              "source": {
+                "start": 45,
+                "end": 58,
+                "text": "under EUR 100"
+              },
+              "operation": "clarify",
+              "draft": {
+                "amount": 100,
+                "minimum": null,
+                "currency": null
+              }
+            }
+          ]
+        },
+        "bindings": [],
+        "limitations": [
+          "The stated currency is unsupported by the allowed SGD/USD draft. Its numeric amount is retained with currency null. No currency conversion or substitute currency is proposed."
+        ]
+      }
+    },
+    {
+      "sequence": 4,
+      "turn": 0,
+      "kind": "app-response",
+      "elapsedMs": 2.9,
+      "body": {
+        "status": 200,
+        "body": {
+          "responseVersion": 5,
+          "preferences": {
+            "version": 5,
+            "productDescription": "",
+            "criteria": [],
+            "budget": null,
+            "budgetClarified": false,
+            "pendingChange": null,
+            "region": "SG",
+            "responseLength": "concise",
+            "revision": 0
+          },
+          "notes": [],
+          "kind": "research-unavailable",
+          "message": "I could not interpret that request right now. Your accepted preferences and any pending answer are retained. Try again after intent interpretation is available.",
+          "reason": "intent-unavailable"
+        }
+      }
+    },
+    {
+      "sequence": 5,
+      "turn": 1,
+      "kind": "app-request",
+      "elapsedMs": 2.93,
+      "body": {
+        "phase": "prepare",
+        "message": "I don't want the cheapest if it's shaky. Stability matters more than folded size.",
+        "preferences": {
+          "version": 5,
+          "productDescription": "",
+          "criteria": [],
+          "budget": null,
+          "budgetClarified": false,
+          "pendingChange": null,
+          "region": "SG",
+          "responseLength": "concise",
+          "revision": 0
+        },
+        "operationId": "7d2c0012-7af8-44d4-9e7e-d755d4b1fe87"
+      }
+    },
+    {
+      "sequence": 6,
+      "turn": 1,
+      "kind": "interpreter-request",
+      "elapsedMs": 3.29,
+      "body": {
+        "operationId": "7d2c0012-7af8-44d4-9e7e-d755d4b1fe87",
+        "message": "I don't want the cheapest if it's shaky. Stability matters more than folded size.",
+        "questionId": null,
+        "inputHash": "ba136b479052387d0ab913a7bb4d802eebe4f7e17be79846d908e5fd87c4044a",
+        "label": "Independently authored synthetic proposals. Conditional technical behavior only."
+      }
+    },
+    {
+      "sequence": 7,
+      "turn": 1,
+      "kind": "interpreter-response",
+      "elapsedMs": 3.3,
+      "body": {
+        "status": "ready",
+        "interpretation": {
+          "disposition": "research",
+          "actions": [
+            {
+              "kind": "add-criterion",
+              "source": {
+                "start": 41,
+                "end": 81,
+                "text": "Stability matters more than folded size."
+              },
+              "strength": "flexible"
+            }
+          ]
+        },
+        "bindings": [],
+        "limitations": [
+          "Relative preference priority is preserved in wording. The action contract has no explicit weighting or priority edge."
+        ]
+      }
+    },
+    {
+      "sequence": 8,
+      "turn": 1,
+      "kind": "app-response",
+      "elapsedMs": 3.53,
+      "body": {
+        "status": 200,
+        "body": {
+          "responseVersion": 5,
+          "preferences": {
+            "version": 5,
+            "productDescription": "",
+            "criteria": [
+              {
+                "id": "criterion-1",
+                "wording": "Stability matters more than folded size.",
+                "strength": "flexible",
+                "origin": {
+                  "kind": "message",
+                  "text": "Stability matters more than folded size."
+                }
+              }
+            ],
+            "budget": null,
+            "budgetClarified": false,
+            "pendingChange": null,
+            "region": "SG",
+            "responseLength": "concise",
+            "revision": 3
+          },
+          "notes": [],
+          "kind": "clarification",
+          "message": "What are you shopping for? Describe the product and what matters to you.",
+          "reason": "description"
+        }
+      }
+    },
+    {
+      "sequence": 9,
+      "turn": 2,
+      "kind": "app-request",
+      "elapsedMs": 3.56,
+      "body": {
+        "phase": "prepare",
+        "message": "It must support a 2 kg camera setup.",
+        "preferences": {
+          "version": 5,
+          "productDescription": "",
+          "criteria": [
+            {
+              "id": "criterion-1",
+              "wording": "Stability matters more than folded size.",
+              "strength": "flexible",
+              "origin": {
+                "kind": "message",
+                "text": "Stability matters more than folded size."
+              }
+            }
+          ],
+          "budget": null,
+          "budgetClarified": false,
+          "pendingChange": null,
+          "region": "SG",
+          "responseLength": "concise",
+          "revision": 3
+        },
+        "operationId": "07d87a9e-f5e0-4685-af5e-8942766d1898"
+      }
+    },
+    {
+      "sequence": 10,
+      "turn": 2,
+      "kind": "interpreter-request",
+      "elapsedMs": 3.89,
+      "body": {
+        "operationId": "07d87a9e-f5e0-4685-af5e-8942766d1898",
+        "message": "It must support a 2 kg camera setup.",
+        "questionId": null,
+        "inputHash": "ba136b479052387d0ab913a7bb4d802eebe4f7e17be79846d908e5fd87c4044a",
+        "label": "Independently authored synthetic proposals. Conditional technical behavior only."
+      }
+    },
+    {
+      "sequence": 11,
+      "turn": 2,
+      "kind": "interpreter-response",
+      "elapsedMs": 3.9,
+      "body": {
+        "status": "ready",
+        "interpretation": {
+          "disposition": "research",
+          "actions": [
+            {
+              "kind": "add-criterion",
+              "source": {
+                "start": 0,
+                "end": 36,
+                "text": "It must support a 2 kg camera setup."
+              },
+              "strength": "hard"
+            }
+          ]
+        },
+        "bindings": [],
+        "limitations": []
+      }
+    },
+    {
+      "sequence": 12,
+      "turn": 2,
+      "kind": "app-response",
+      "elapsedMs": 4.12,
+      "body": {
+        "status": 200,
+        "body": {
+          "responseVersion": 5,
+          "preferences": {
+            "version": 5,
+            "productDescription": "",
+            "criteria": [
+              {
+                "id": "criterion-1",
+                "wording": "Stability matters more than folded size.",
+                "strength": "flexible",
+                "origin": {
+                  "kind": "message",
+                  "text": "Stability matters more than folded size."
+                }
+              },
+              {
+                "id": "criterion-4",
+                "wording": "It must support a 2 kg camera setup.",
+                "strength": "hard",
+                "origin": {
+                  "kind": "message",
+                  "text": "It must support a 2 kg camera setup."
+                }
+              }
+            ],
+            "budget": null,
+            "budgetClarified": false,
+            "pendingChange": null,
+            "region": "SG",
+            "responseLength": "concise",
+            "revision": 6
+          },
+          "notes": [],
+          "kind": "clarification",
+          "message": "What are you shopping for? Describe the product and what matters to you.",
+          "reason": "description"
+        }
+      }
+    }
+  ],
+  "network": {
+    "denied": [],
+    "allowedOriginCount": 2,
+    "externalRequests": 0
+  },
+  "cleanup": true,
+  "applicationError": null
+}

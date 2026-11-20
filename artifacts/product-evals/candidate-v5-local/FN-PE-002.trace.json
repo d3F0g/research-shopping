@@ -1,0 +1,843 @@
+{
+  "scenarioId": "FN-PE-002",
+  "initialPreferences": {
+    "version": 5,
+    "productDescription": "",
+    "criteria": [],
+    "budget": null,
+    "budgetClarified": false,
+    "pendingChange": null,
+    "region": "SG",
+    "responseLength": "concise",
+    "revision": 0
+  },
+  "finalPreferences": {
+    "version": 5,
+    "productDescription": "",
+    "criteria": [
+      {
+        "id": "criterion-1",
+        "wording": "Only Anker",
+        "strength": "hard",
+        "origin": {
+          "kind": "message",
+          "text": "Only Anker"
+        }
+      },
+      {
+        "id": "criterion-4",
+        "wording": "USB-C PD at 30 W or more is required.",
+        "strength": "hard",
+        "origin": {
+          "kind": "message",
+          "text": "USB-C PD at 30 W or more is required."
+        }
+      }
+    ],
+    "budget": {
+      "amount": 90,
+      "currency": "SGD",
+      "minimum": 50
+    },
+    "budgetClarified": true,
+    "pendingChange": null,
+    "region": "SG",
+    "responseLength": "concise",
+    "revision": 6
+  },
+  "material": {
+    "id": "mixed-fit:FN-PE-002",
+    "kind": "synthetic",
+    "label": "Explicit synthetic provider double. Not genuine Exa research.",
+    "capturedAt": null,
+    "provenance": [
+      "Independently fixed test input before application execution",
+      "No current product or market claim",
+      "Original independent provider recipe mixed-fit; fixed profile powerbank.",
+      "Synthetic claims, prices and availability statements remain visibly labeled. No live research or inventory."
+    ],
+    "sha256": "884f895f25e5064618973b7354b7824f231770a515a778ec390584f9e1569fd6",
+    "body": {
+      "requestId": "synthetic-offline-input",
+      "costDollars": {
+        "total": 0.005
+      },
+      "citations": [
+        {
+          "url": "https://fixture.example.com/powerbank",
+          "title": "Synthetic fixture power bank",
+          "text": "Synthetic Anker Pocket 10 black is a portable power bank with USB-C fast charging.\nSynthetic Anker Pocket 10 black costs SGD 35.00 for one unit, tax included."
+        }
+      ],
+      "answer": {
+        "products": [
+          {
+            "id": "synthetic-pocket-10",
+            "name": "Synthetic Anker Pocket 10",
+            "variant": "black",
+            "identity": {
+              "status": "supported",
+              "scope": "exact-variant",
+              "rationale": "Synthetic test assessment, not a live product claim.",
+              "support": [
+                {
+                  "url": "https://fixture.example.com/powerbank",
+                  "quote": "Synthetic Anker Pocket 10 black is a portable power bank with USB-C fast charging."
+                }
+              ]
+            },
+            "requestMatch": {
+              "status": "supported",
+              "scope": "exact-variant",
+              "rationale": "Synthetic test assessment, not a live product claim.",
+              "support": [
+                {
+                  "url": "https://fixture.example.com/powerbank",
+                  "quote": "Synthetic Anker Pocket 10 black is a portable power bank with USB-C fast charging."
+                }
+              ]
+            },
+            "criteria": [],
+            "attributes": [
+              {
+                "name": "Charging",
+                "assessment": {
+                  "status": "supported",
+                  "scope": "exact-variant",
+                  "rationale": "Synthetic test assessment, not a live product claim.",
+                  "support": [
+                    {
+                      "url": "https://fixture.example.com/powerbank",
+                      "quote": "Synthetic Anker Pocket 10 black is a portable power bank with USB-C fast charging."
+                    }
+                  ]
+                }
+              }
+            ],
+            "price": {
+              "amount": 35,
+              "currency": "SGD",
+              "conditions": [
+                "One unit",
+                "Tax included"
+              ],
+              "conditionsResolved": true,
+              "variant": "black",
+              "assessment": {
+                "status": "supported",
+                "scope": "exact-variant",
+                "rationale": "Synthetic test assessment, not a live product claim.",
+                "support": [
+                  {
+                    "url": "https://fixture.example.com/powerbank",
+                    "quote": "Synthetic Anker Pocket 10 black costs SGD 35.00 for one unit, tax included."
+                  }
+                ]
+              }
+            },
+            "budget": {
+              "status": "supported",
+              "scope": "exact-variant",
+              "rationale": "Synthetic test assessment, not a live product claim.",
+              "support": [
+                {
+                  "url": "https://fixture.example.com/powerbank",
+                  "quote": "Synthetic Anker Pocket 10 black costs SGD 35.00 for one unit, tax included."
+                }
+              ]
+            }
+          }
+        ],
+        "choice": {
+          "productId": "synthetic-pocket-10",
+          "reasons": [
+            {
+              "kind": "field",
+              "name": "identity"
+            },
+            {
+              "kind": "field",
+              "name": "price"
+            }
+          ]
+        },
+        "limitations": [
+          "Synthetic provider double for automated evaluation. No real products, current prices, availability or merchant verification."
+        ]
+      }
+    },
+    "status": 200
+  },
+  "interpretation": {
+    "mode": "fixed-proposals",
+    "inputHash": "ba136b479052387d0ab913a7bb4d802eebe4f7e17be79846d908e5fd87c4044a",
+    "openAIHttpRequests": 0,
+    "ollamaHttpRequests": 0,
+    "consumedTurns": [
+      0,
+      1,
+      2
+    ],
+    "unconsumedTurns": [],
+    "invocations": 3,
+    "suppliedTurns": [
+      {
+        "turnIndex": 0,
+        "message": "I need a power bank that supports fast charging",
+        "proposal": {
+          "disposition": "research",
+          "actions": [
+            {
+              "kind": "start-request",
+              "source": {
+                "start": 9,
+                "end": 19,
+                "text": "power bank"
+              }
+            },
+            {
+              "kind": "add-criterion",
+              "source": {
+                "start": 25,
+                "end": 47,
+                "text": "supports fast charging"
+              },
+              "strength": "hard"
+            }
+          ]
+        },
+        "limitations": [
+          "Hard strength follows the literal requirement, including essential, needs, or a specific required specification. The proposal does not rewrite wording to satisfy a lexical guard."
+        ]
+      },
+      {
+        "turnIndex": 1,
+        "message": "Only Anker",
+        "proposal": {
+          "disposition": "research",
+          "actions": [
+            {
+              "kind": "add-criterion",
+              "source": {
+                "start": 0,
+                "end": 10,
+                "text": "Only Anker"
+              },
+              "strength": "hard"
+            }
+          ]
+        }
+      },
+      {
+        "turnIndex": 2,
+        "message": "USB-C PD at 30 W or more is required. SGD 50 to 90.",
+        "proposal": {
+          "disposition": "research",
+          "actions": [
+            {
+              "kind": "add-criterion",
+              "source": {
+                "start": 0,
+                "end": 37,
+                "text": "USB-C PD at 30 W or more is required."
+              },
+              "strength": "hard"
+            },
+            {
+              "kind": "budget",
+              "source": {
+                "start": 38,
+                "end": 50,
+                "text": "SGD 50 to 90"
+              },
+              "operation": "replace-range",
+              "draft": {
+                "amount": 90,
+                "minimum": 50,
+                "currency": "SGD"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "limitations": []
+  },
+  "turns": [
+    {
+      "index": 0,
+      "action": {
+        "kind": "message",
+        "text": "I need a power bank that supports fast charging"
+      },
+      "initialPreferences": {
+        "version": 5,
+        "productDescription": "",
+        "criteria": [],
+        "budget": null,
+        "budgetClarified": false,
+        "pendingChange": null,
+        "region": "SG",
+        "responseLength": "concise",
+        "revision": 0
+      },
+      "finalPreferences": {
+        "version": 5,
+        "productDescription": "",
+        "criteria": [],
+        "budget": null,
+        "budgetClarified": false,
+        "pendingChange": null,
+        "region": "SG",
+        "responseLength": "concise",
+        "revision": 0
+      },
+      "response": {
+        "responseVersion": 5,
+        "preferences": {
+          "version": 5,
+          "productDescription": "",
+          "criteria": [],
+          "budget": null,
+          "budgetClarified": false,
+          "pendingChange": null,
+          "region": "SG",
+          "responseLength": "concise",
+          "revision": 0
+        },
+        "notes": [],
+        "kind": "research-unavailable",
+        "message": "I could not safely interpret the complete message, so no part of it was applied. Your accepted preferences and any pending question are unchanged. This message needs additional interpretation, which is unavailable right now.",
+        "reason": "intent-unavailable"
+      },
+      "intentHandling": "synthetic-fallback",
+      "providerCalls": 0,
+      "cancelled": false
+    },
+    {
+      "index": 1,
+      "action": {
+        "kind": "message",
+        "text": "Only Anker"
+      },
+      "initialPreferences": {
+        "version": 5,
+        "productDescription": "",
+        "criteria": [],
+        "budget": null,
+        "budgetClarified": false,
+        "pendingChange": null,
+        "region": "SG",
+        "responseLength": "concise",
+        "revision": 0
+      },
+      "finalPreferences": {
+        "version": 5,
+        "productDescription": "",
+        "criteria": [
+          {
+            "id": "criterion-1",
+            "wording": "Only Anker",
+            "strength": "hard",
+            "origin": {
+              "kind": "message",
+              "text": "Only Anker"
+            }
+          }
+        ],
+        "budget": null,
+        "budgetClarified": false,
+        "pendingChange": null,
+        "region": "SG",
+        "responseLength": "concise",
+        "revision": 3
+      },
+      "response": {
+        "responseVersion": 5,
+        "preferences": {
+          "version": 5,
+          "productDescription": "",
+          "criteria": [
+            {
+              "id": "criterion-1",
+              "wording": "Only Anker",
+              "strength": "hard",
+              "origin": {
+                "kind": "message",
+                "text": "Only Anker"
+              }
+            }
+          ],
+          "budget": null,
+          "budgetClarified": false,
+          "pendingChange": null,
+          "region": "SG",
+          "responseLength": "concise",
+          "revision": 3
+        },
+        "notes": [],
+        "kind": "clarification",
+        "message": "What are you shopping for? Describe the product and what matters to you.",
+        "reason": "description"
+      },
+      "intentHandling": "synthetic-fallback",
+      "providerCalls": 0,
+      "cancelled": false
+    },
+    {
+      "index": 2,
+      "action": {
+        "kind": "message",
+        "text": "USB-C PD at 30 W or more is required. SGD 50 to 90."
+      },
+      "initialPreferences": {
+        "version": 5,
+        "productDescription": "",
+        "criteria": [
+          {
+            "id": "criterion-1",
+            "wording": "Only Anker",
+            "strength": "hard",
+            "origin": {
+              "kind": "message",
+              "text": "Only Anker"
+            }
+          }
+        ],
+        "budget": null,
+        "budgetClarified": false,
+        "pendingChange": null,
+        "region": "SG",
+        "responseLength": "concise",
+        "revision": 3
+      },
+      "finalPreferences": {
+        "version": 5,
+        "productDescription": "",
+        "criteria": [
+          {
+            "id": "criterion-1",
+            "wording": "Only Anker",
+            "strength": "hard",
+            "origin": {
+              "kind": "message",
+              "text": "Only Anker"
+            }
+          },
+          {
+            "id": "criterion-4",
+            "wording": "USB-C PD at 30 W or more is required.",
+            "strength": "hard",
+            "origin": {
+              "kind": "message",
+              "text": "USB-C PD at 30 W or more is required."
+            }
+          }
+        ],
+        "budget": {
+          "amount": 90,
+          "currency": "SGD",
+          "minimum": 50
+        },
+        "budgetClarified": true,
+        "pendingChange": null,
+        "region": "SG",
+        "responseLength": "concise",
+        "revision": 6
+      },
+      "response": {
+        "responseVersion": 5,
+        "preferences": {
+          "version": 5,
+          "productDescription": "",
+          "criteria": [
+            {
+              "id": "criterion-1",
+              "wording": "Only Anker",
+              "strength": "hard",
+              "origin": {
+                "kind": "message",
+                "text": "Only Anker"
+              }
+            },
+            {
+              "id": "criterion-4",
+              "wording": "USB-C PD at 30 W or more is required.",
+              "strength": "hard",
+              "origin": {
+                "kind": "message",
+                "text": "USB-C PD at 30 W or more is required."
+              }
+            }
+          ],
+          "budget": {
+            "amount": 90,
+            "currency": "SGD",
+            "minimum": 50
+          },
+          "budgetClarified": true,
+          "pendingChange": null,
+          "region": "SG",
+          "responseLength": "concise",
+          "revision": 6
+        },
+        "notes": [],
+        "kind": "clarification",
+        "message": "What are you shopping for? Describe the product and what matters to you.",
+        "reason": "description"
+      },
+      "intentHandling": "synthetic-fallback",
+      "providerCalls": 0,
+      "cancelled": false
+    }
+  ],
+  "events": [
+    {
+      "sequence": 1,
+      "turn": 0,
+      "kind": "app-request",
+      "attemptId": "56bd3ec4-657f-42ef-a0a1-757cf5b5fb51",
+      "elapsedMs": 1.6,
+      "body": {
+        "phase": "prepare",
+        "message": "I need a power bank that supports fast charging",
+        "preferences": {
+          "version": 5,
+          "productDescription": "",
+          "criteria": [],
+          "budget": null,
+          "budgetClarified": false,
+          "pendingChange": null,
+          "region": "SG",
+          "responseLength": "concise",
+          "revision": 0
+        },
+        "operationId": "26a0dcb1-e533-48cf-a5d9-95bfee1629c7"
+      }
+    },
+    {
+      "sequence": 2,
+      "turn": 0,
+      "kind": "interpreter-request",
+      "attemptId": "56bd3ec4-657f-42ef-a0a1-757cf5b5fb51",
+      "elapsedMs": 2.67,
+      "body": {
+        "operationId": "26a0dcb1-e533-48cf-a5d9-95bfee1629c7",
+        "message": "I need a power bank that supports fast charging",
+        "questionId": null,
+        "inputHash": "ba136b479052387d0ab913a7bb4d802eebe4f7e17be79846d908e5fd87c4044a",
+        "label": "Independently authored synthetic proposals. Conditional technical behavior only."
+      }
+    },
+    {
+      "sequence": 3,
+      "turn": 0,
+      "kind": "interpreter-response",
+      "attemptId": "56bd3ec4-657f-42ef-a0a1-757cf5b5fb51",
+      "elapsedMs": 2.69,
+      "body": {
+        "status": "ready",
+        "interpretation": {
+          "disposition": "research",
+          "actions": [
+            {
+              "kind": "start-request",
+              "source": {
+                "start": 9,
+                "end": 19,
+                "text": "power bank"
+              }
+            },
+            {
+              "kind": "add-criterion",
+              "source": {
+                "start": 25,
+                "end": 47,
+                "text": "supports fast charging"
+              },
+              "strength": "hard"
+            }
+          ]
+        },
+        "bindings": [],
+        "limitations": [
+          "Hard strength follows the literal requirement, including essential, needs, or a specific required specification. The proposal does not rewrite wording to satisfy a lexical guard."
+        ]
+      }
+    },
+    {
+      "sequence": 4,
+      "turn": 0,
+      "kind": "app-response",
+      "attemptId": "56bd3ec4-657f-42ef-a0a1-757cf5b5fb51",
+      "elapsedMs": 3.05,
+      "body": {
+        "status": 200,
+        "body": {
+          "responseVersion": 5,
+          "preferences": {
+            "version": 5,
+            "productDescription": "",
+            "criteria": [],
+            "budget": null,
+            "budgetClarified": false,
+            "pendingChange": null,
+            "region": "SG",
+            "responseLength": "concise",
+            "revision": 0
+          },
+          "notes": [],
+          "kind": "research-unavailable",
+          "message": "I could not safely interpret the complete message, so no part of it was applied. Your accepted preferences and any pending question are unchanged. This message needs additional interpretation, which is unavailable right now.",
+          "reason": "intent-unavailable"
+        }
+      }
+    },
+    {
+      "sequence": 5,
+      "turn": 1,
+      "kind": "app-request",
+      "attemptId": "fd3e5203-31db-47fa-8deb-db2816a8d9a9",
+      "elapsedMs": 3.08,
+      "body": {
+        "phase": "prepare",
+        "message": "Only Anker",
+        "preferences": {
+          "version": 5,
+          "productDescription": "",
+          "criteria": [],
+          "budget": null,
+          "budgetClarified": false,
+          "pendingChange": null,
+          "region": "SG",
+          "responseLength": "concise",
+          "revision": 0
+        },
+        "operationId": "0b881b57-f9d7-436f-9b35-90d92fe1aa6e"
+      }
+    },
+    {
+      "sequence": 6,
+      "turn": 1,
+      "kind": "interpreter-request",
+      "attemptId": "fd3e5203-31db-47fa-8deb-db2816a8d9a9",
+      "elapsedMs": 3.53,
+      "body": {
+        "operationId": "0b881b57-f9d7-436f-9b35-90d92fe1aa6e",
+        "message": "Only Anker",
+        "questionId": null,
+        "inputHash": "ba136b479052387d0ab913a7bb4d802eebe4f7e17be79846d908e5fd87c4044a",
+        "label": "Independently authored synthetic proposals. Conditional technical behavior only."
+      }
+    },
+    {
+      "sequence": 7,
+      "turn": 1,
+      "kind": "interpreter-response",
+      "attemptId": "fd3e5203-31db-47fa-8deb-db2816a8d9a9",
+      "elapsedMs": 3.54,
+      "body": {
+        "status": "ready",
+        "interpretation": {
+          "disposition": "research",
+          "actions": [
+            {
+              "kind": "add-criterion",
+              "source": {
+                "start": 0,
+                "end": 10,
+                "text": "Only Anker"
+              },
+              "strength": "hard"
+            }
+          ]
+        },
+        "bindings": [],
+        "limitations": []
+      }
+    },
+    {
+      "sequence": 8,
+      "turn": 1,
+      "kind": "app-response",
+      "attemptId": "fd3e5203-31db-47fa-8deb-db2816a8d9a9",
+      "elapsedMs": 3.92,
+      "body": {
+        "status": 200,
+        "body": {
+          "responseVersion": 5,
+          "preferences": {
+            "version": 5,
+            "productDescription": "",
+            "criteria": [
+              {
+                "id": "criterion-1",
+                "wording": "Only Anker",
+                "strength": "hard",
+                "origin": {
+                  "kind": "message",
+                  "text": "Only Anker"
+                }
+              }
+            ],
+            "budget": null,
+            "budgetClarified": false,
+            "pendingChange": null,
+            "region": "SG",
+            "responseLength": "concise",
+            "revision": 3
+          },
+          "notes": [],
+          "kind": "clarification",
+          "message": "What are you shopping for? Describe the product and what matters to you.",
+          "reason": "description"
+        }
+      }
+    },
+    {
+      "sequence": 9,
+      "turn": 2,
+      "kind": "app-request",
+      "attemptId": "0d1ef8da-e4db-4a48-8d12-5c6716e68ce3",
+      "elapsedMs": 3.96,
+      "body": {
+        "phase": "prepare",
+        "message": "USB-C PD at 30 W or more is required. SGD 50 to 90.",
+        "preferences": {
+          "version": 5,
+          "productDescription": "",
+          "criteria": [
+            {
+              "id": "criterion-1",
+              "wording": "Only Anker",
+              "strength": "hard",
+              "origin": {
+                "kind": "message",
+                "text": "Only Anker"
+              }
+            }
+          ],
+          "budget": null,
+          "budgetClarified": false,
+          "pendingChange": null,
+          "region": "SG",
+          "responseLength": "concise",
+          "revision": 3
+        },
+        "operationId": "329224a1-5e52-4592-bd8f-dd786543f999"
+      }
+    },
+    {
+      "sequence": 10,
+      "turn": 2,
+      "kind": "interpreter-request",
+      "attemptId": "0d1ef8da-e4db-4a48-8d12-5c6716e68ce3",
+      "elapsedMs": 4.48,
+      "body": {
+        "operationId": "329224a1-5e52-4592-bd8f-dd786543f999",
+        "message": "USB-C PD at 30 W or more is required. SGD 50 to 90.",
+        "questionId": null,
+        "inputHash": "ba136b479052387d0ab913a7bb4d802eebe4f7e17be79846d908e5fd87c4044a",
+        "label": "Independently authored synthetic proposals. Conditional technical behavior only."
+      }
+    },
+    {
+      "sequence": 11,
+      "turn": 2,
+      "kind": "interpreter-response",
+      "attemptId": "0d1ef8da-e4db-4a48-8d12-5c6716e68ce3",
+      "elapsedMs": 4.5,
+      "body": {
+        "status": "ready",
+        "interpretation": {
+          "disposition": "research",
+          "actions": [
+            {
+              "kind": "add-criterion",
+              "source": {
+                "start": 0,
+                "end": 37,
+                "text": "USB-C PD at 30 W or more is required."
+              },
+              "strength": "hard"
+            },
+            {
+              "kind": "budget",
+              "source": {
+                "start": 38,
+                "end": 50,
+                "text": "SGD 50 to 90"
+              },
+              "operation": "replace-range",
+              "draft": {
+                "amount": 90,
+                "minimum": 50,
+                "currency": "SGD"
+              }
+            }
+          ]
+        },
+        "bindings": [],
+        "limitations": []
+      }
+    },
+    {
+      "sequence": 12,
+      "turn": 2,
+      "kind": "app-response",
+      "attemptId": "0d1ef8da-e4db-4a48-8d12-5c6716e68ce3",
+      "elapsedMs": 5.32,
+      "body": {
+        "status": 200,
+        "body": {
+          "responseVersion": 5,
+          "preferences": {
+            "version": 5,
+            "productDescription": "",
+            "criteria": [
+              {
+                "id": "criterion-1",
+                "wording": "Only Anker",
+                "strength": "hard",
+                "origin": {
+                  "kind": "message",
+                  "text": "Only Anker"
+                }
+              },
+              {
+                "id": "criterion-4",
+                "wording": "USB-C PD at 30 W or more is required.",
+                "strength": "hard",
+                "origin": {
+                  "kind": "message",
+                  "text": "USB-C PD at 30 W or more is required."
+                }
+              }
+            ],
+            "budget": {
+              "amount": 90,
+              "currency": "SGD",
+              "minimum": 50
+            },
+            "budgetClarified": true,
+            "pendingChange": null,
+            "region": "SG",
+            "responseLength": "concise",
+            "revision": 6
+          },
+          "notes": [],
+          "kind": "clarification",
+          "message": "What are you shopping for? Describe the product and what matters to you.",
+          "reason": "description"
+        }
+      }
+    }
+  ],
+  "network": {
+    "denied": [],
+    "allowedOriginCount": 2,
+    "externalRequests": 0
+  },
+  "cleanup": true,
+  "applicationError": null
+}

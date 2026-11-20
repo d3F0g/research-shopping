@@ -1,39 +1,27 @@
-# Chat-first frontend standard
+# Fieldnote V2 frontend standard
 
-Fieldnote is a shopping conversation. The interface has a minimal header, centered message history and a compact composer at the bottom during conversations. First visits use dark mode. The theme toggle persists an explicit light or dark preference.
+Fieldnote is a centered shopping conversation with a minimal header and compact bottom composer. The first visit is dark. Explicit light or dark selection persists after refresh. Recommendations, contextual preferences and source evidence belong within the conversation. Ordinary replies remain ordinary messages.
 
-## Compose the conversation
+## Official components
 
-Use the actual official shadcn/ui components and current AI Elements patterns. The installed Message Scroller, Message, Bubble and Input Group components already provide the chat foundation. Compose recommendation cards, comparisons, citations, evidence and recorded tool activity inside assistant messages.
+Generated shadcn source remains unmodified. The current CLI command, official registry/pattern URLs and eighteen file hashes are recorded in [registry-provenance.json](../src/client/components/registry-provenance.json). The base-nova registry and official neutral theme provide tokens and variants. CSS and caller classes cover layout and responsiveness.
 
-Keep the empty chat quiet. Do not add a permanent filter sidebar, large preference form, introductory panel or empty-results placeholder. Ordinary acknowledgments remain ordinary text. Recommendations need concise reasons and useful tradeoffs, with evidence and comparisons behind disclosure controls.
+The official [Chat composition](https://ui.shadcn.com/docs/ai-elements/base/chat) uses Message Scroller, Message, Bubble and Input Group. The [Prompt Input pattern](https://ui.shadcn.com/docs/ai-elements/base/prompt-input) provides the composer. Trace and its disclosure compositions show actual transport activity and expandable evidence. Hover Card and safe links provide source navigation.
 
-Extract preferences from each message before asking a question. Keep accepted shopping preferences in structured session state. Ask for a missing material fact in a compact inline card, offer quick choices, and allow optional questions to be skipped. Do not ask for facts already provided. Users can change their preferences through follow-up messages or contextual editing controls.
+Use standard Cards for useful recommendations and compact contextual controls. Keep alternatives and complete evidence behind disclosures. Do not restore the old dashboard, category/brand menus, permanent filters, large prechat form or decorative styling.
 
-Retain earlier user and assistant messages. A historical response records the preferences and results from that turn. Current constraints govern new research and selection. Invalidate stale pending work explicitly when history stays mounted. Do not rely on removing a message to cancel its requests.
+## Preserve actual behavior
 
-## Official component provenance
+The server owns accepted intent. A pending question retains its original request, identity and missing field separately from accepted preferences. The client sends messages or validated edits and renders authoritative results. Historical snapshots remain separate from current requirements and cannot revive abandoned research.
 
-The original shadcn CLI 4.23.0 setup uses the base-nova registry and Lucide icons. The source snapshots and SHA256 values remain in [the provenance manifest](../artifacts/frontend-standard/provenance/registry-manifest.json). Reuse these generated components. Fetch new components from the official registry rather than writing substitutes.
+Transport is complete JSON rather than simulated token streaming. Show preparation and research only while actual operations are pending. The composer discloses that shopping submissions can trigger a paid Exa call. Held evidence and presentation changes spend nothing.
 
-Current official documentation defines AI Elements as compositions of shadcn/ui components. A separate model or legacy AI SDK Elements package is unnecessary for this deterministic application. The [Chat pattern](https://ui.shadcn.com/docs/ai-elements/base/chat) composes Message Scroller, Message, Bubble and Input Group. The [Prompt Input pattern](https://ui.shadcn.com/docs/ai-elements/base/prompt-input) supplies the textarea and send action.
+Source-based assessments, native excerpts, expanded context and merchant verification have different meanings. Display uncertainty and relevant adverse conditions prominently. Missing images remain absent. Citation images are attributed representative illustrations with exact-variant uncertainty. Test substitute products and prices remain visibly labeled.
 
-Use the [official Vite theme-provider pattern](https://ui.shadcn.com/docs/dark-mode/vite), with dark as the application default. Keep theme tokens centralized. Use local Geist, readable functional type, consistent spacing, contrast and visible focus. Respect reduced motion. Mobile controls, disclosures and composer must remain usable while history scrolls.
+## Verify rendered interaction
 
-## Preserve truthful behavior
+Use the [project verification skill](../.agents/skills/verify-research-shopping/SKILL.md), package browser journeys and independent visual QA. Inspect actual desktop, mobile and short-mobile viewport screenshots in both themes. DOM visibility alone cannot establish that the first useful answer is in view.
 
-The backend returns complete JSON. Show pending state only while actual work is pending. Do not simulate streaming tokens, reasoning or intermediate tool activity. Recorded provider outcomes appear only after the server returns them.
+Issue #52 exposed estimated rich-message heights scrolling past the answer. The caller uses actual content layout and the documented message-scroller API while keeping generated source unchanged. Issue #40 also requires no overlap between the floating scroll action and source or preference controls. Verify rectangle intersections and actual hit targets, keyboard focus, touch, history scrolling and the bottom composer.
 
-Every sample price, claim and stock status remains visibly fixture data. Manufacturer references provide context, not verification of sample claims or current offers. Optional Exa source excerpts retain their separate contract and explicit paid action. They do not establish inventory or merchant identity.
-
-Preserve budget drafts, accepted hard limits, unknown constraints, preference cleanup, safe exact-product handoff, cancellation and stale-response guards. Repeated messages need unique accessible IDs and message-scoped selectors. A successful historical response must not authorize an action under obsolete preferences.
-
-## Verify the actual interface
-
-Run the project [verification skill](../.agents/skills/verify-research-shopping/SKILL.md), behavioral tests and API/security tests. Inspect actual desktop and mobile screenshots. Required chat states include the first dark visit, minimal empty state, ordinary messages, inline preference cards, multi-turn changes, recommendations inside assistant messages, evidence, comparison, safe handoff and a usable bottom composer. Verify both themes after refresh and verify mobile scrolling.
-
-Independent visual QA must judge the rendered layout against the chat-first brief. A test pass cannot approve the old dashboard composition. Preserve existing behavior and security assertions when adapting selectors.
-
-The user approved the issue #30 design in PR #33. Its screenshot-review milestone is satisfied. Future routine frontend PRs merge autonomously after CI, independent visual QA, security verification and repository policies pass. Request human design approval only for a milestone the user explicitly designates. Production deployments and sensitive operations retain their separate approval requirements.
-
-Historical frontend evidence is retained under artifacts/frontend-standard. Those runs describe older candidates and do not establish acceptance of this redesign. The inherited picomatch advisory remains tracked in [issue #27](https://github.com/d3F0g/research-shopping/issues/27). Earlier zero-audit records are historical results.
+The user explicitly designated final V2 appearance/evaluation review. Leave the integration PR unmerged until that review. Earlier PR #33 approval applies to its historical milestone and does not waive this one. Older screenshots under `artifacts/frontend-standard/` remain historical evidence.

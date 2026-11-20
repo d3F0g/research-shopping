@@ -1,0 +1,47 @@
+
+> research-shopping@0.1.0 test:e2e
+> EXA_RESEARCH_ENABLED=false playwright test
+
+2026-11-19T07:51:21.509Z pw:webserver HTTP GET: http://127.0.0.1:5297/api/health
+2026-11-19T07:51:21.513Z pw:webserver Error while checking if http://127.0.0.1:5297/api/health is available: connect ECONNREFUSED 127.0.0.1:5297
+2026-11-19T07:51:21.513Z pw:webserver Starting WebServer process npx concurrently -k "npm:dev:web" "npx tsx tests/helpers/browser-server.ts"...
+2026-11-19T07:51:21.514Z pw:webserver Process started
+2026-11-19T07:51:21.514Z pw:webserver Waiting for availability...
+2026-11-19T07:51:21.514Z pw:webserver HTTP GET: http://127.0.0.1:5297/api/health
+2026-11-19T07:51:21.515Z pw:webserver Error while checking if http://127.0.0.1:5297/api/health is available: connect ECONNREFUSED 127.0.0.1:5297
+2026-11-19T07:51:21.515Z pw:webserver Waiting 100ms
+2026-11-19T07:51:21.617Z pw:webserver HTTP GET: http://127.0.0.1:5297/api/health
+2026-11-19T07:51:21.618Z pw:webserver Error while checking if http://127.0.0.1:5297/api/health is available: connect ECONNREFUSED 127.0.0.1:5297
+2026-11-19T07:51:21.618Z pw:webserver Waiting 250ms
+2026-11-19T07:51:21.871Z pw:webserver HTTP GET: http://127.0.0.1:5297/api/health
+2026-11-19T07:51:21.871Z pw:webserver Error while checking if http://127.0.0.1:5297/api/health is available: connect ECONNREFUSED 127.0.0.1:5297
+2026-11-19T07:51:21.871Z pw:webserver Waiting 500ms
+[WebServer] [dev:web] [WebServer]
+[WebServer] [dev:web] > research-shopping@0.1.0 dev:web
+[WebServer] [dev:web] > vite --host 127.0.0.1
+[WebServer] [dev:web]
+2026-11-19T07:51:22.371Z pw:webserver HTTP GET: http://127.0.0.1:5297/api/health
+2026-11-19T07:51:22.372Z pw:webserver Error while checking if http://127.0.0.1:5297/api/health is available: connect ECONNREFUSED 127.0.0.1:5297
+2026-11-19T07:51:22.372Z pw:webserver Waiting 1000ms
+[WebServer] [dev:web] [WebServer]
+[WebServer] [dev:web]   VITE v7.3.8  ready in 594 ms
+[WebServer] [dev:web]
+[WebServer] [dev:web]   ➜  Local:   http://127.0.0.1:5297/
+2026-11-19T07:51:23.375Z pw:webserver HTTP GET: http://127.0.0.1:5297/api/health
+2026-11-19T07:51:23.394Z pw:webserver HTTP Status: 200
+2026-11-19T07:51:23.394Z pw:webserver WebServer available
+
+Running 8 tests using 1 worker
+
+  ✓  1 [chromium] › tests/e2e/v2-chat.spec.ts:9:3 › desktop chat currency, evidence, history, theme and composer (3.8s)
+  ✓  2 [chromium] › tests/e2e/v2-chat.spec.ts:9:3 › mobile chat currency, evidence, history, theme and composer (1.3s)
+  ✓  3 [chromium] › tests/e2e/v2-chat.spec.ts:9:3 › short-mobile chat currency, evidence, history, theme and composer (1.3s)
+  ✓  4 [chromium] › tests/e2e/v2-chat.spec.ts:146:1 › edits the actual open objective, requirements and both budget bounds (717ms)
+  ✓  5 [chromium] › tests/e2e/v2-chat.spec.ts:200:1 › keeps free replies during research and stops abandoned transport before new results publish (2.4s)
+  ✓  6 [chromium] › tests/e2e/v2-held-replies.spec.ts:10:3 › desktop concise held evidence, disclosure and punctuated brand release (1.7s)
+  ✓  7 [chromium] › tests/e2e/v2-held-replies.spec.ts:10:3 › mobile concise held evidence, disclosure and punctuated brand release (1.7s)
+  ✓  8 [chromium] › tests/e2e/v2-held-replies.spec.ts:10:3 › short-mobile concise held evidence, disclosure and punctuated brand release (1.6s)
+2026-11-19T07:51:38.822Z pw:webserver Terminating the WebServer
+2026-11-19T07:51:38.833Z pw:webserver Terminated the WebServer
+
+  8 passed (17.4s)

@@ -1,0 +1,552 @@
+{
+  "scenarioId": "FN-EH-005",
+  "initialPreferences": {
+    "version": 5,
+    "productDescription": "",
+    "criteria": [],
+    "budget": null,
+    "budgetClarified": false,
+    "pendingChange": null,
+    "region": "SG",
+    "responseLength": "concise",
+    "revision": 0
+  },
+  "finalPreferences": {
+    "version": 5,
+    "productDescription": "",
+    "criteria": [
+      {
+        "id": "criterion-1",
+        "wording": "I only need one.",
+        "strength": "hard",
+        "origin": {
+          "kind": "message",
+          "text": "I only need one."
+        }
+      }
+    ],
+    "budget": null,
+    "budgetClarified": false,
+    "pendingChange": null,
+    "region": "SG",
+    "responseLength": "concise",
+    "revision": 3
+  },
+  "material": {
+    "id": "conditional-price:FN-EH-005",
+    "kind": "synthetic",
+    "label": "Explicit synthetic provider double. Not genuine Exa research.",
+    "capturedAt": null,
+    "provenance": [
+      "Independently fixed test input before application execution",
+      "No current product or market claim",
+      "Original independent provider recipe conditional-price; fixed profile powerbank.",
+      "Synthetic claims, prices and availability statements remain visibly labeled. No live research or inventory.",
+      "Input suitability gap: no matching product profile. Relevance and recommendation usefulness are unassessed, never counted as a shopping success."
+    ],
+    "sha256": "6a196fb9df4ad0fe1c15f9ffa492481430191b3448de60f3392e05ba8cd2d6d8",
+    "body": {
+      "requestId": "synthetic-offline-input",
+      "costDollars": {
+        "total": 0.005
+      },
+      "citations": [
+        {
+          "url": "https://fixture.example.com/powerbank",
+          "title": "Synthetic fixture power bank",
+          "text": "Synthetic Anker Pocket 10 black is a portable power bank with USB-C fast charging.\nSynthetic Anker Pocket 10 black ordinary price is SGD 75.00 for one unit. Members only with a voucher can pay SGD 35."
+        }
+      ],
+      "answer": {
+        "products": [
+          {
+            "id": "synthetic-pocket-10",
+            "name": "Synthetic Anker Pocket 10",
+            "variant": "black",
+            "identity": {
+              "status": "supported",
+              "scope": "exact-variant",
+              "rationale": "Synthetic test assessment, not a live product claim.",
+              "support": [
+                {
+                  "url": "https://fixture.example.com/powerbank",
+                  "quote": "Synthetic Anker Pocket 10 black is a portable power bank with USB-C fast charging."
+                }
+              ]
+            },
+            "requestMatch": {
+              "status": "supported",
+              "scope": "exact-variant",
+              "rationale": "Synthetic test assessment, not a live product claim.",
+              "support": [
+                {
+                  "url": "https://fixture.example.com/powerbank",
+                  "quote": "Synthetic Anker Pocket 10 black is a portable power bank with USB-C fast charging."
+                }
+              ]
+            },
+            "criteria": [],
+            "attributes": [
+              {
+                "name": "Charging",
+                "assessment": {
+                  "status": "supported",
+                  "scope": "exact-variant",
+                  "rationale": "Synthetic test assessment, not a live product claim.",
+                  "support": [
+                    {
+                      "url": "https://fixture.example.com/powerbank",
+                      "quote": "Synthetic Anker Pocket 10 black is a portable power bank with USB-C fast charging."
+                    }
+                  ]
+                }
+              }
+            ],
+            "price": {
+              "amount": 35,
+              "currency": "SGD",
+              "conditions": [
+                "Members only",
+                "Voucher required"
+              ],
+              "conditionsResolved": false,
+              "variant": "black",
+              "assessment": {
+                "status": "supported",
+                "scope": "exact-variant",
+                "rationale": "Synthetic conditional price, eligibility unresolved.",
+                "support": [
+                  {
+                    "url": "https://fixture.example.com/powerbank",
+                    "quote": "Synthetic Anker Pocket 10 black ordinary price is SGD 75.00 for one unit. Members only with a voucher can pay SGD 35."
+                  }
+                ]
+              }
+            },
+            "budget": {
+              "status": "unknown",
+              "scope": "unclear",
+              "rationale": "Synthetic input intentionally lacks qualifying evidence.",
+              "support": []
+            }
+          }
+        ],
+        "choice": null,
+        "limitations": [
+          "Synthetic provider double for automated evaluation. No real products, current prices, availability or merchant verification."
+        ]
+      }
+    },
+    "status": 200
+  },
+  "interpretation": {
+    "mode": "fixed-proposals",
+    "inputHash": "ba136b479052387d0ab913a7bb4d802eebe4f7e17be79846d908e5fd87c4044a",
+    "openAIHttpRequests": 0,
+    "ollamaHttpRequests": 0,
+    "consumedTurns": [
+      0,
+      1
+    ],
+    "unconsumedTurns": [],
+    "invocations": 2,
+    "suppliedTurns": [
+      {
+        "turnIndex": 0,
+        "message": "Find a tabletop easel under EUR 50.",
+        "proposal": {
+          "disposition": "research",
+          "actions": [
+            {
+              "kind": "start-request",
+              "source": {
+                "start": 7,
+                "end": 21,
+                "text": "tabletop easel"
+              }
+            },
+            {
+              "kind": "budget",
+              "source": {
+                "start": 22,
+                "end": 34,
+                "text": "under EUR 50"
+              },
+              "operation": "clarify",
+              "draft": {
+                "amount": 50,
+                "minimum": null,
+                "currency": null
+              }
+            }
+          ]
+        },
+        "limitations": [
+          "The stated currency is unsupported by the allowed SGD/USD draft. Its numeric amount is retained with currency null. No currency conversion or substitute currency is proposed."
+        ]
+      },
+      {
+        "turnIndex": 1,
+        "message": "I only need one. That EUR 35 price says a minimum order of four.",
+        "proposal": {
+          "disposition": "acknowledge",
+          "actions": [
+            {
+              "kind": "add-criterion",
+              "source": {
+                "start": 0,
+                "end": 16,
+                "text": "I only need one."
+              },
+              "strength": "hard"
+            }
+          ]
+        },
+        "limitations": [
+          "The action contract has no held-evidence answer or comparison operation. Acknowledge requests no new research and does not fabricate comparison content.",
+          "EUR 35 and minimum order of four describe a quoted offer, not a new budget or requested quantity of four."
+        ]
+      }
+    ],
+    "limitations": []
+  },
+  "turns": [
+    {
+      "index": 0,
+      "action": {
+        "kind": "message",
+        "text": "Find a tabletop easel under EUR 50."
+      },
+      "initialPreferences": {
+        "version": 5,
+        "productDescription": "",
+        "criteria": [],
+        "budget": null,
+        "budgetClarified": false,
+        "pendingChange": null,
+        "region": "SG",
+        "responseLength": "concise",
+        "revision": 0
+      },
+      "finalPreferences": {
+        "version": 5,
+        "productDescription": "",
+        "criteria": [],
+        "budget": null,
+        "budgetClarified": false,
+        "pendingChange": null,
+        "region": "SG",
+        "responseLength": "concise",
+        "revision": 0
+      },
+      "response": {
+        "responseVersion": 5,
+        "preferences": {
+          "version": 5,
+          "productDescription": "",
+          "criteria": [],
+          "budget": null,
+          "budgetClarified": false,
+          "pendingChange": null,
+          "region": "SG",
+          "responseLength": "concise",
+          "revision": 0
+        },
+        "notes": [],
+        "kind": "research-unavailable",
+        "message": "I could not safely interpret the complete message, so no part of it was applied. Your accepted preferences and any pending question are unchanged. This message needs additional interpretation, which is unavailable right now.",
+        "reason": "intent-unavailable"
+      },
+      "intentHandling": "synthetic-fallback",
+      "providerCalls": 0,
+      "cancelled": false
+    },
+    {
+      "index": 1,
+      "action": {
+        "kind": "message",
+        "text": "I only need one. That EUR 35 price says a minimum order of four."
+      },
+      "initialPreferences": {
+        "version": 5,
+        "productDescription": "",
+        "criteria": [],
+        "budget": null,
+        "budgetClarified": false,
+        "pendingChange": null,
+        "region": "SG",
+        "responseLength": "concise",
+        "revision": 0
+      },
+      "finalPreferences": {
+        "version": 5,
+        "productDescription": "",
+        "criteria": [
+          {
+            "id": "criterion-1",
+            "wording": "I only need one.",
+            "strength": "hard",
+            "origin": {
+              "kind": "message",
+              "text": "I only need one."
+            }
+          }
+        ],
+        "budget": null,
+        "budgetClarified": false,
+        "pendingChange": null,
+        "region": "SG",
+        "responseLength": "concise",
+        "revision": 3
+      },
+      "response": {
+        "responseVersion": 5,
+        "preferences": {
+          "version": 5,
+          "productDescription": "",
+          "criteria": [
+            {
+              "id": "criterion-1",
+              "wording": "I only need one.",
+              "strength": "hard",
+              "origin": {
+                "kind": "message",
+                "text": "I only need one."
+              }
+            }
+          ],
+          "budget": null,
+          "budgetClarified": false,
+          "pendingChange": null,
+          "region": "SG",
+          "responseLength": "concise",
+          "revision": 3
+        },
+        "notes": [],
+        "kind": "message",
+        "message": "Your preferences and earlier research are still here."
+      },
+      "intentHandling": "synthetic-fallback",
+      "providerCalls": 0,
+      "cancelled": false
+    }
+  ],
+  "events": [
+    {
+      "sequence": 1,
+      "turn": 0,
+      "kind": "app-request",
+      "attemptId": "d71f01ce-b789-478a-add3-3516495754b8",
+      "elapsedMs": 1.5,
+      "body": {
+        "phase": "prepare",
+        "message": "Find a tabletop easel under EUR 50.",
+        "preferences": {
+          "version": 5,
+          "productDescription": "",
+          "criteria": [],
+          "budget": null,
+          "budgetClarified": false,
+          "pendingChange": null,
+          "region": "SG",
+          "responseLength": "concise",
+          "revision": 0
+        },
+        "operationId": "019f497c-6df8-4930-8909-026c13ee723c"
+      }
+    },
+    {
+      "sequence": 2,
+      "turn": 0,
+      "kind": "interpreter-request",
+      "attemptId": "d71f01ce-b789-478a-add3-3516495754b8",
+      "elapsedMs": 2.74,
+      "body": {
+        "operationId": "019f497c-6df8-4930-8909-026c13ee723c",
+        "message": "Find a tabletop easel under EUR 50.",
+        "questionId": null,
+        "inputHash": "ba136b479052387d0ab913a7bb4d802eebe4f7e17be79846d908e5fd87c4044a",
+        "label": "Independently authored synthetic proposals. Conditional technical behavior only."
+      }
+    },
+    {
+      "sequence": 3,
+      "turn": 0,
+      "kind": "interpreter-response",
+      "attemptId": "d71f01ce-b789-478a-add3-3516495754b8",
+      "elapsedMs": 2.77,
+      "body": {
+        "status": "ready",
+        "interpretation": {
+          "disposition": "research",
+          "actions": [
+            {
+              "kind": "start-request",
+              "source": {
+                "start": 7,
+                "end": 21,
+                "text": "tabletop easel"
+              }
+            },
+            {
+              "kind": "budget",
+              "source": {
+                "start": 22,
+                "end": 34,
+                "text": "under EUR 50"
+              },
+              "operation": "clarify",
+              "draft": {
+                "amount": 50,
+                "minimum": null,
+                "currency": null
+              }
+            }
+          ]
+        },
+        "bindings": [],
+        "limitations": [
+          "The stated currency is unsupported by the allowed SGD/USD draft. Its numeric amount is retained with currency null. No currency conversion or substitute currency is proposed."
+        ]
+      }
+    },
+    {
+      "sequence": 4,
+      "turn": 0,
+      "kind": "app-response",
+      "attemptId": "d71f01ce-b789-478a-add3-3516495754b8",
+      "elapsedMs": 3.3,
+      "body": {
+        "status": 200,
+        "body": {
+          "responseVersion": 5,
+          "preferences": {
+            "version": 5,
+            "productDescription": "",
+            "criteria": [],
+            "budget": null,
+            "budgetClarified": false,
+            "pendingChange": null,
+            "region": "SG",
+            "responseLength": "concise",
+            "revision": 0
+          },
+          "notes": [],
+          "kind": "research-unavailable",
+          "message": "I could not safely interpret the complete message, so no part of it was applied. Your accepted preferences and any pending question are unchanged. This message needs additional interpretation, which is unavailable right now.",
+          "reason": "intent-unavailable"
+        }
+      }
+    },
+    {
+      "sequence": 5,
+      "turn": 1,
+      "kind": "app-request",
+      "attemptId": "5383ffc1-1f23-4fac-a7ef-5ca0cd1ea5b2",
+      "elapsedMs": 3.36,
+      "body": {
+        "phase": "prepare",
+        "message": "I only need one. That EUR 35 price says a minimum order of four.",
+        "preferences": {
+          "version": 5,
+          "productDescription": "",
+          "criteria": [],
+          "budget": null,
+          "budgetClarified": false,
+          "pendingChange": null,
+          "region": "SG",
+          "responseLength": "concise",
+          "revision": 0
+        },
+        "operationId": "9dea57bb-e5df-4bb1-8a37-30f868e7c9e3"
+      }
+    },
+    {
+      "sequence": 6,
+      "turn": 1,
+      "kind": "interpreter-request",
+      "attemptId": "5383ffc1-1f23-4fac-a7ef-5ca0cd1ea5b2",
+      "elapsedMs": 4.13,
+      "body": {
+        "operationId": "9dea57bb-e5df-4bb1-8a37-30f868e7c9e3",
+        "message": "I only need one. That EUR 35 price says a minimum order of four.",
+        "questionId": null,
+        "inputHash": "ba136b479052387d0ab913a7bb4d802eebe4f7e17be79846d908e5fd87c4044a",
+        "label": "Independently authored synthetic proposals. Conditional technical behavior only."
+      }
+    },
+    {
+      "sequence": 7,
+      "turn": 1,
+      "kind": "interpreter-response",
+      "attemptId": "5383ffc1-1f23-4fac-a7ef-5ca0cd1ea5b2",
+      "elapsedMs": 4.15,
+      "body": {
+        "status": "ready",
+        "interpretation": {
+          "disposition": "acknowledge",
+          "actions": [
+            {
+              "kind": "add-criterion",
+              "source": {
+                "start": 0,
+                "end": 16,
+                "text": "I only need one."
+              },
+              "strength": "hard"
+            }
+          ]
+        },
+        "bindings": [],
+        "limitations": [
+          "The action contract has no held-evidence answer or comparison operation. Acknowledge requests no new research and does not fabricate comparison content.",
+          "EUR 35 and minimum order of four describe a quoted offer, not a new budget or requested quantity of four."
+        ]
+      }
+    },
+    {
+      "sequence": 8,
+      "turn": 1,
+      "kind": "app-response",
+      "attemptId": "5383ffc1-1f23-4fac-a7ef-5ca0cd1ea5b2",
+      "elapsedMs": 4.67,
+      "body": {
+        "status": 200,
+        "body": {
+          "responseVersion": 5,
+          "preferences": {
+            "version": 5,
+            "productDescription": "",
+            "criteria": [
+              {
+                "id": "criterion-1",
+                "wording": "I only need one.",
+                "strength": "hard",
+                "origin": {
+                  "kind": "message",
+                  "text": "I only need one."
+                }
+              }
+            ],
+            "budget": null,
+            "budgetClarified": false,
+            "pendingChange": null,
+            "region": "SG",
+            "responseLength": "concise",
+            "revision": 3
+          },
+          "notes": [],
+          "kind": "message",
+          "message": "Your preferences and earlier research are still here."
+        }
+      }
+    }
+  ],
+  "network": {
+    "denied": [],
+    "allowedOriginCount": 2,
+    "externalRequests": 0
+  },
+  "cleanup": true,
+  "applicationError": null
+}

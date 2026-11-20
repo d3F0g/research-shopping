@@ -1,0 +1,13 @@
+{
+  "datasetVersion": "1.0.0",
+  "assertionVersion": "2.0.0",
+  "reportSchemaVersion": 2,
+  "applicationCommit": "bb51c38748b35d838b44109d72ab4dc9a9847d8c",
+  "suiteCodeCommit": "c2d53075cf841e6e1c0fc0d3dfe0a45d60619729",
+  "reportSha256": "a9577869cd991fdd4713ef4bc5a6a5842b1d5839282d7e4a18a404cab2a32a56",
+  "reportDataPreserved": true,
+  "originalDatasetSha256": "c452827b9aa87bc0b47c3e9a4cc6427a42bbf0303539bc2c09a2093ed754cb8f",
+  "independentReview": "Final exact-head engineering verdicts are recorded in PR47. These artifacts do not establish product acceptance or v5 integration.",
+  "scope": "Unchanged initial v4 normal application. Not the newer unmerged v5 application.",
+  "recordedAt": "2026-11-19T04:17:24.459538+00:00"
+}

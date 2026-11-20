@@ -1,0 +1,10 @@
+import {writeFileSync} from 'node:fs';
+import {randomUUID} from 'node:crypto';
+import {initialConversation} from '../../../src/domain/conversation';
+import {reduceTurn} from '../../../src/domain/turn-reducer';
+import {projectExaAnswer} from '../../../src/server/exa-research';
+import {nativeMaterial} from '../../../tests/helpers/v2-material';
+const intent=reduceTurn(initialConversation(),{phase:'prepare',operationId:randomUUID(),message:'a USB-C powerbank between SGD30 and40'}).state.intent;
+const cases=['Fixture data: Fixture Powerbank Model A is a USB-C powerbank. Model A costs SGD 65 while Model B costs SGD 35, tax included.','Fixture data: Fixture Powerbank Model A is a USB-C powerbank. Model A costs SGD 35 to SGD 65 depending on configuration, tax included.','Fixture data: Fixture Powerbank Model A is a USB-C powerbank. Model A costs SGD 35 for one unit, tax included.'];
+const result=cases.map(text=>{const m=nativeMaterial(intent);return {text,result:projectExaAnswer(JSON.parse(JSON.stringify(m).replaceAll(JSON.stringify(m.citations[0].text).slice(1,-1),JSON.stringify(text).slice(1,-1))),intent)};});
+writeFileSync('artifacts/fieldnote-v2/security/variant-probes.json',JSON.stringify({head:process.env.REVIEW_HEAD,cases:result},null,2));console.log(JSON.stringify(result.map(({text,result})=>({text,result:result.status==='ready'?{choice:result.research.choice,price:result.research.products[0]?.price}:result})),null,2));

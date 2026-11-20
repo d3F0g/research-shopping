@@ -1,0 +1,134 @@
+
+> research-shopping@0.1.0 eval:test
+> EXA_RESEARCH_ENABLED=false node --import tsx --test evals/v2/tests/*.test.ts
+
+TAP version 13
+# Subtest: all historical report contracts remain independently valid
+ok 1 - all historical report contracts remain independently valid
+  ---
+  duration_ms: 534.68525
+  type: 'test'
+  ...
+# Subtest: frozen original dataset retains sixty unchanged inputs
+ok 2 - frozen original dataset retains sixty unchanged inputs
+  ---
+  duration_ms: 3.587417
+  type: 'test'
+  ...
+# Subtest: actual raw state projects without invented hard requirements or bounds
+ok 3 - actual raw state projects without invented hard requirements or bounds
+  ---
+  duration_ms: 0.553708
+  type: 'test'
+  ...
+# Subtest: report validator detects fabricated state, checks, provider counts and attempt ownership
+ok 4 - report validator detects fabricated state, checks, provider counts and attempt ownership
+  ---
+  duration_ms: 61.617084
+  type: 'test'
+  ...
+# Subtest: same-contract comparison rejects changed grader and adapter implementation hashes
+ok 5 - same-contract comparison rejects changed grader and adapter implementation hashes
+  ---
+  duration_ms: 58.435666
+  type: 'test'
+  ...
+# Subtest: V2 bridge rejects incomplete or changed frozen inputs
+ok 6 - V2 bridge rejects incomplete or changed frozen inputs
+  ---
+  duration_ms: 147.3365
+  type: 'test'
+  ...
+# Subtest: frozen hard-requirement and bounded-dispatch assertions stay sensitive
+ok 7 - frozen hard-requirement and bounded-dispatch assertions stay sensitive
+  ---
+  duration_ms: 0.251042
+  type: 'test'
+  ...
+# Subtest: blinded packets preserve held evidence and exclude application identity
+ok 8 - blinded packets preserve held evidence and exclude application identity
+  ---
+  duration_ms: 78.711625
+  type: 'test'
+  ...
+# Subtest: nullable independent judgments record uncertainty and calibration disagreement
+ok 9 - nullable independent judgments record uncertainty and calibration disagreement
+  ---
+  duration_ms: 60.465666
+  type: 'test'
+  ...
+# Subtest: semantic importer rejects duplicate labels, changed payload and self-grading
+ok 10 - semantic importer rejects duplicate labels, changed payload and self-grading
+  ---
+  duration_ms: 53.977625
+  type: 'test'
+  ...
+# Subtest: semantic importer rejects unknown dimensions and omitted packets
+ok 11 - semantic importer rejects unknown dimensions and omitted packets
+  ---
+  duration_ms: 55.506042
+  type: 'test'
+  ...
+# Subtest: completed research packets retain actual response prose and bind it to their hash
+ok 12 - completed research packets retain actual response prose and bind it to their hash
+  ---
+  duration_ms: 184.054208
+  type: 'test'
+  ...
+# Subtest: adapter boundary imports no expected milestone or interpretation proposal input
+ok 13 - adapter boundary imports no expected milestone or interpretation proposal input
+  ---
+  duration_ms: 3.242709
+  type: 'test'
+  ...
+# Subtest: real HTTP currency answer resumes original request and both bounds once
+ok 14 - real HTTP currency answer resumes original request and both bounds once
+  ---
+  duration_ms: 196.620292
+  type: 'test'
+  ...
+# Subtest: prepared identity retries cache actual research and ordinary messages spend nothing
+ok 15 - prepared identity retries cache actual research and ordinary messages spend nothing
+  ---
+  duration_ms: 19.715958
+  type: 'test'
+  ...
+# Subtest: late SDK settlement remains bound to its originating HTTP attempt after a new turn
+ok 16 - late SDK settlement remains bound to its originating HTTP attempt after a new turn
+  ---
+  duration_ms: 1210.863708
+  type: 'test'
+  ...
+# Subtest: cancellation reaches actual SDK body and cannot publish late recommendations
+ok 17 - cancellation reaches actual SDK body and cannot publish late recommendations
+  ---
+  duration_ms: 22.484708
+  type: 'test'
+  ...
+# Subtest: provider failure and missing configuration never select synthetic fallback
+ok 18 - provider failure and missing configuration never select synthetic fallback
+  ---
+  duration_ms: 190.45525
+  type: 'test'
+  ...
+# Subtest: unsafe citations and conditional prices remain adverse to recommendation
+ok 19 - unsafe citations and conditional prices remain adverse to recommendation
+  ---
+  duration_ms: 34.108
+  type: 'test'
+  ...
+# Subtest: native quotations stay distinct from complete context and mutations fail provenance
+ok 20 - native quotations stay distinct from complete context and mutations fail provenance
+  ---
+  duration_ms: 12.234083
+  type: 'test'
+  ...
+1..20
+# tests 20
+# suites 0
+# pass 20
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1879.650375

@@ -1,0 +1,73 @@
+{
+  "commit": "e88f894acd85616d11ec76a01b23d1a75a43f45c",
+  "dirty": "?? .audit/fieldnote-v2/root-scroll-green.mjs\n?? artifacts/fieldnote-v2/root-scroll-green/\n",
+  "material": "Explicit automated test SDK loopback fixture. No paid call.",
+  "results": [
+    {
+      "viewport": {
+        "name": "desktop",
+        "width": 1440,
+        "height": 1000
+      },
+      "heading": {
+        "x": 372,
+        "y": 186.75,
+        "width": 180,
+        "height": 19.25
+      },
+      "composer": {
+        "x": 361,
+        "y": 853,
+        "width": 718,
+        "height": 64
+      },
+      "leadingRecommendationInViewport": true
+    },
+    {
+      "viewport": {
+        "name": "mobile",
+        "width": 390,
+        "height": 844
+      },
+      "heading": {
+        "x": 28,
+        "y": 209.25,
+        "width": 180,
+        "height": 19.25
+      },
+      "composer": {
+        "x": 13,
+        "y": 681,
+        "width": 364,
+        "height": 64
+      },
+      "leadingRecommendationInViewport": true
+    },
+    {
+      "viewport": {
+        "name": "short-mobile",
+        "width": 390,
+        "height": 600
+      },
+      "heading": {
+        "x": 28,
+        "y": 209.25,
+        "width": 180,
+        "height": 19.25
+      },
+      "composer": {
+        "x": 13,
+        "y": 437,
+        "width": 364,
+        "height": 64
+      },
+      "leadingRecommendationInViewport": true
+    }
+  ],
+  "cleanup": true,
+  "portsFree": [
+    3193,
+    5293
+  ],
+  "appSource": "Exact detached e88f894. Only new audit script and generated evidence differ from tracked files."
+}

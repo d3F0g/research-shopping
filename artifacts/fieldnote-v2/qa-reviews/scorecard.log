@@ -1,0 +1,5 @@
+
+> research-shopping@0.1.0 eval:scorecard
+> EXA_RESEARCH_ENABLED=false node --import tsx evals/v2/scorecard-cli.ts
+
+{"artifact":"/Users/josiahwong/Documents/research-shopping-v2-qa/artifacts/fieldnote-v2/qa/scorecard/scorecard.json","unchangedInputs":60,"differentHistoricalMaterial":[],"acceptance":"inconclusive"}

@@ -1,0 +1,63 @@
+{
+  "result": "passed",
+  "applicationCommit": "91c92b2750cbbdc4bdaaa197ddd59bb0d1a8660c",
+  "base": "9d2a3c5e336a6652ec6b02e0c3deff6617fb7d11",
+  "node": "v22.20.0",
+  "playwright": "1.65.1",
+  "commands": [
+    "npm run typecheck",
+    "npm run test:e2e -- --reporter=list,json --output=artifacts/fieldnote-v2/ci-metadata/test-results"
+  ],
+  "typecheckExit": 0,
+  "browserExit": 0,
+  "stats": {
+    "startTime": "2026-11-19T07:51:21.481Z",
+    "duration": 17352.534,
+    "expected": 8,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "metadata": {
+    "ci": {
+      "commitHref": "https://github.com/d3F0g/research-shopping/commit/91c92b2750cbbdc4bdaaa197ddd59bb0d1a8660c",
+      "commitHash": "91c92b2750cbbdc4bdaaa197ddd59bb0d1a8660c",
+      "prHref": "https://github.com/d3F0g/research-shopping/pull/53",
+      "prTitle": "Local PR CI metadata reproduction",
+      "prBaseHash": "9d2a3c5e336a6652ec6b02e0c3deff6617fb7d11",
+      "buildHref": "https://github.com/d3F0g/research-shopping/actions/runs/0"
+    },
+    "gitCommit": {
+      "shortHash": "91c92b2",
+      "hash": "91c92b2750cbbdc4bdaaa197ddd59bb0d1a8660c",
+      "subject": "fix: skip inline Playwright git diff metadata",
+      "body": "fix: skip inline Playwright git diff metadata\n",
+      "author": {
+        "name": "d3F0g",
+        "email": "joqeewee@gmail.com",
+        "time": 1795074609000
+      },
+      "committer": {
+        "name": "d3F0g",
+        "email": "joqeewee@gmail.com",
+        "time": 1795074609000
+      },
+      "branch": "rebuild/fieldnote-v2-ci-metadata"
+    },
+    "actualWorkers": 1
+  },
+  "inlineGitDiffPresent": false,
+  "sourceChangesAfterRun": "",
+  "savedBrowserArtifacts": 24,
+  "historicalArtifactsRestored": true,
+  "ownedPortsFreeAfterRun": [
+    3197,
+    5297
+  ],
+  "limits": [
+    "Local PR-like CI environment, not hosted Linux CI. GITHUB_RUN_ID=0 is synthetic.",
+    "Node v22.20.0 locally, original hosted failure used v22.23.4.",
+    "Actual Chromium, Hono service and Exa SDK use only an explicitly labeled local HTTP substitute. No live provider, paid ledger, private environment or existing database.",
+    "No test source or assertion changed. Source correctness, live product usefulness and independent visual acceptance are outside this metadata fix."
+  ]
+}

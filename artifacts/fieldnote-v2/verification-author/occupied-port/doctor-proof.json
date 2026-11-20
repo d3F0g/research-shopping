@@ -1,0 +1,8 @@
+{
+  "result": "passed",
+  "occupiedPort": 3273,
+  "helperExit": 1,
+  "helperSpawnedNoProcesses": true,
+  "existingListenerUnchanged": true,
+  "stdout": "{\"result\":\"failed\",\"cleanup\":true,\"artifacts\":\"/Users/josiahwong/Documents/research-shopping-v2-verification/artifacts/fieldnote-v2/verification-skill/occupied-port\",\"commit\":\"e88f894acd85616d11ec76a01b23d1a75a43f45c\"}\n"
+}

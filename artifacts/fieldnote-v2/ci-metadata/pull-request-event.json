@@ -1,0 +1,9 @@
+{
+  "pull_request": {
+    "title": "Local PR CI metadata reproduction",
+    "number": 53,
+    "base": {
+      "sha": "9d2a3c5e336a6652ec6b02e0c3deff6617fb7d11"
+    }
+  }
+}

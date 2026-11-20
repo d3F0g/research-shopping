@@ -1,0 +1,31 @@
+{
+  "checks": 7,
+  "providerCalls": 7,
+  "cutObservation": {
+    "choice": {
+      "productId": "model-a",
+      "rationale": "Fixture data: the cited Model A passage supports this assessment."
+    },
+    "eligible": true,
+    "priceConditionsResolved": true,
+    "sourceCut": true
+  },
+  "failures": [
+    {
+      "mode": "error",
+      "reason": "provider-error"
+    },
+    {
+      "mode": "malformed",
+      "reason": "invalid-response"
+    },
+    {
+      "mode": "empty",
+      "reason": "empty"
+    },
+    {
+      "mode": "hang",
+      "reason": "timeout"
+    }
+  ]
+}

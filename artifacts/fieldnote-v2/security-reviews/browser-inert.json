@@ -1,0 +1,21 @@
+{
+  "head": "5ad8f4adc792aa423c5c1fcfa04dd531386fa5d0",
+  "status": "passed",
+  "calls": 1,
+  "dialogs": [],
+  "external": [],
+  "links": [
+    {
+      "href": "https://manufacturer.com/model-a",
+      "rel": "noreferrer noopener"
+    }
+  ],
+  "checks": [
+    "User script string rendered literally.",
+    "Provider product-name HTML rendered literally.",
+    "Unsafe source/image URL discarded.",
+    "No inline handlers or script execution.",
+    "Fixture label visible.",
+    "Source handoffs use noopener noreferrer."
+  ]
+}

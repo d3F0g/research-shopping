@@ -1,0 +1,9 @@
+
+ RUN  v4.1.12 /Users/josiahwong/Documents/research-shopping-price-v5
+
+
+ Test Files  19 passed (19)
+      Tests  575 passed (575)
+   Start at  12:37:38
+   Duration  3.17s (transform 992ms, setup 0ms, import 2.92s, tests 7.16s, environment 459ms)
+

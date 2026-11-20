@@ -1,0 +1,13 @@
+
+> research-shopping@0.1.0 test
+> EXA_RESEARCH_ENABLED=false vitest run
+
+
+ RUN  v4.1.12 /Users/josiahwong/Documents/research-shopping-v2-qa
+
+
+ Test Files  6 passed (6)
+      Tests  154 passed (154)
+   Start at  15:16:27
+   Duration  1.87s (transform 1.32s, setup 0ms, import 2.80s, tests 3.68s, environment 1ms)
+

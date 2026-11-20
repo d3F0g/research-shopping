@@ -1,0 +1,104 @@
+[
+  {
+    "script": "evidence-probes",
+    "case": "uncut-positive-control",
+    "expectedChoice": true,
+    "actualChoice": true
+  },
+  {
+    "script": "evidence-probes",
+    "case": "known-price-qualifier-discarded-after-cut",
+    "expectedChoice": false,
+    "actualChoice": false
+  },
+  {
+    "script": "evidence-probes",
+    "case": "adjacent-tax-exclusion",
+    "expectedChoice": false,
+    "actualChoice": false
+  },
+  {
+    "script": "evidence-probes",
+    "case": "negative-sgd-amount",
+    "expectedChoice": false,
+    "actualChoice": false
+  },
+  {
+    "script": "evidence-probes",
+    "case": "source-instruction-as-support",
+    "expectedChoice": false,
+    "actualChoice": false
+  },
+  {
+    "script": "price-variants",
+    "case": 0,
+    "expectedChoice": false,
+    "actualChoice": false
+  },
+  {
+    "script": "price-variants",
+    "case": 1,
+    "expectedChoice": false,
+    "actualChoice": false
+  },
+  {
+    "script": "price-variants",
+    "case": 2,
+    "expectedChoice": false,
+    "actualChoice": false
+  },
+  {
+    "script": "price-variants",
+    "case": 3,
+    "expectedChoice": true,
+    "actualChoice": true
+  },
+  {
+    "script": "variant-probes",
+    "case": 0,
+    "expectedChoice": false,
+    "actualChoice": false
+  },
+  {
+    "script": "variant-probes",
+    "case": 1,
+    "expectedChoice": false,
+    "actualChoice": false
+  },
+  {
+    "script": "variant-probes",
+    "case": 2,
+    "expectedChoice": true,
+    "actualChoice": true
+  },
+  {
+    "script": "cross-source-probes",
+    "case": "second-product-distinct-source-control",
+    "expectedChoice": true,
+    "actualChoice": true
+  },
+  {
+    "script": "cross-source-probes",
+    "case": "mixed-source-contradiction-short-variant",
+    "expectedChoice": false,
+    "actualChoice": false
+  },
+  {
+    "script": "cross-source-probes",
+    "case": "mixed-source-shipping-short-variant",
+    "expectedChoice": false,
+    "actualChoice": false
+  },
+  {
+    "script": "cross-source-probes",
+    "case": "mixed-source-contradiction-full-name",
+    "expectedChoice": false,
+    "actualChoice": false
+  },
+  {
+    "script": "price-provenance-probes",
+    "case": "unbound-public-price-support",
+    "expectedChoice": false,
+    "actualChoice": false
+  }
+]

@@ -1,0 +1,20 @@
+{
+  "base": "9d2a3c5e336a6652ec6b02e0c3deff6617fb7d11",
+  "head": "e0b7317f4bd00ce49141229943279e0da357cdbc",
+  "command": [
+    "git",
+    "-c",
+    "credential.interactive=false",
+    "diff",
+    "9d2a3c5e336a6652ec6b02e0c3deff6617fb7d11",
+    "HEAD"
+  ],
+  "node": "v22.20.0",
+  "bytes": 778617084,
+  "decodedChunkCharacters": 778615951,
+  "maxStringLength": 536870888,
+  "exceedsMaxStringLength": true,
+  "sha256": "daaea621be6978b795473362ba640d67f4114e94f7ee99513c43426be904ad20",
+  "collection": "Each stdout chunk is counted and hashed independently. No complete diff string is allocated.",
+  "limit": "Measures the actual PR-base-to-HEAD patch, including preserved generated evidence. This does not execute Playwright's unsafe concatenation."
+}

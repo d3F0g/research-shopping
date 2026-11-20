@@ -1,0 +1,23 @@
+{
+  "application": "fd1f505c116e5112af5597292c5f6c1d9499b824",
+  "web": "http://127.0.0.1:5290",
+  "api": "http://127.0.0.1:3190",
+  "apiStatus": 200,
+  "webStatus": 200,
+  "health": {
+    "status": "ok",
+    "mode": "research",
+    "provider": "exa",
+    "automaticPaidChecks": false
+  },
+  "owned_session": 50458,
+  "apiPid": 29176,
+  "webPid": 29179,
+  "paidCallsMadeByRoot": 0,
+  "manualAllowanceCheckpoint": {
+    "remainingRequests": 7,
+    "remainingReservedUsd": 0.35,
+    "acknowledgedHistoricalUnknown": 2
+  },
+  "limitation": "Health and preview startup establish no live research usefulness. User manual results requested separately."
+}

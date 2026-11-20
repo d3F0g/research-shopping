@@ -1,0 +1,26 @@
+{
+  "verdict": "PASS",
+  "reviewedHead": "43bafcf9e3d113a2a0ccc01c9baf7377def6d3ef",
+  "priorIndependentPass": "e0b7317f4bd00ce49141229943279e0da357cdbc",
+  "metadataRuntimeEvidenceCommit": "91c92b2750cbbdc4bdaaa197ddd59bb0d1a8660c",
+  "trees": {
+    "src": "e1d7c10c59e1251216e3ba99c0a55c5157109fd9",
+    "tests": "34fcff169cc5c133a48f7c6a8a011cf07633a683",
+    "evals": "dce0f3ae33d2a1abcf5d6f98c9e7a71c724686e5",
+    ".agents": "2ff71d237e681ab17a0cda8caa25ebd1ea3108f7",
+    "package.json": "ceacd3a814a308492036dd00147892a3e0a39195",
+    "package-lock.json": "3dffbdc5b18c3ec533264aa6a293d0a3cda9d524"
+  },
+  "config": "90c22216c9c4afc794eb0c820e517afa289a5be7",
+  "runtime": {
+    "expected": 8,
+    "unexpected": 0,
+    "skipped": 0,
+    "flaky": 0,
+    "errors": 0,
+    "gitDiffPresent": false,
+    "commitMetadataPresent": true,
+    "prBase": "9d2a3c5e336a6652ec6b02e0c3deff6617fb7d11"
+  },
+  "scope": "Metadata-only exact binding. No suite rerun and no claim of hosted CI success."
+}

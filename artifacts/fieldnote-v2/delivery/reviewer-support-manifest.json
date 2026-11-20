@@ -1,0 +1,1087 @@
+{
+  "archive": "reviewer-support.tar.gz",
+  "sha256": "8d3bd76897d7475b765f1601c93aaced456112c40fcad1413740d4545e3f152a",
+  "bytes": 494874,
+  "members": [
+    {
+      "path": "artifacts/fieldnote-v2/security/account-browser.txt",
+      "sha256": "2e27c94e6a2fe5b9a209d6af3fe8b84f0b994d382d18c59f264e5e7b9941083e",
+      "bytes": 555
+    },
+    {
+      "path": "artifacts/fieldnote-v2/security/account-context-e0b7317.json",
+      "sha256": "5949e4635010f46e3984920977cd581976b85b44ca0ddf1bc55395b6baf94324",
+      "bytes": 427
+    },
+    {
+      "path": "artifacts/fieldnote-v2/security/account-context-e0b7317.txt",
+      "sha256": "ffa7292109ba901c8d769717de7bea36104df2cb0f7827b627c82a607ddc3209",
+      "bytes": 176
+    },
+    {
+      "path": "artifacts/fieldnote-v2/security/account-detail-final.txt",
+      "sha256": "6b3a753515c8fbfd3167e6cdfe3238bd0f176e68e7d26e0b9f7c1e64293c8650",
+      "bytes": 165
+    },
+    {
+      "path": "artifacts/fieldnote-v2/security/account-detail.json",
+      "sha256": "8e34ea3dc24afae29c15260238edf07074e7f2b619230ad508d5199292c88732",
+      "bytes": 360
+    },
+    {
+      "path": "artifacts/fieldnote-v2/security/account-detail.txt",
+      "sha256": "6b3a753515c8fbfd3167e6cdfe3238bd0f176e68e7d26e0b9f7c1e64293c8650",
+      "bytes": 165
+    },
+    {
+      "path": "artifacts/fieldnote-v2/security/account-http.json",
+      "sha256": "f323311644cc994eeb23e9a551468b918bbaa97256a7858c3307c7a1895a4665",
+      "bytes": 468
+    },
+    {
+      "path": "artifacts/fieldnote-v2/security/account-http.txt",
+      "sha256": "2cdb1f419f41b11e5a8adb18ed23bfe576556507a7b4d9a0e901e77d038ca5d1",
+      "bytes": 358
+    },
+    {
+      "path": "artifacts/fieldnote-v2/security/accounts/browser.json",
+      "sha256": "f6140c392071eea74c2c0a1498d4bf822933fb6882bc44b66a321187d0ce1308",
+      "bytes": 862
+    },
+    {
+      "path": "artifacts/fieldnote-v2/security/accounts/crash.json",
+      "sha256": "b1808143114da177e74e6c9632e5d2aec4591d4306e6311806e1e3311fd90aca",
+      "bytes": 624
+    },
+    {
+      "path": "artifacts/fieldnote-v2/security/accounts/desktop-deleted.png",
+      "sha256": "b738e3cbc9c861a630857295ab358ab844cc4e989a1d0751e857d00aa525d24e",
+      "bytes": 65192
+    },
+    {
+      "path": "artifacts/fieldnote-v2/security/accounts/desktop-saved-research.png",
+      "sha256": "a143bffd3ea82538a42f4b7837a1575a41c6db059584ebeccdc923610fbab826",
+      "bytes": 73218
+    },
+    {
+      "path": "artifacts/fieldnote-v2/security/accounts/mobile-deleted.png",
+      "sha256": "1a1fcb2f4d6b7380245959ec12ddcfa6e4de56f9005e6a32b2e4dd94e93cf4ef",
+      "bytes": 43056
+    },
+    {
+      "path": "artifacts/fieldnote-v2/security/accounts/mobile-saved-research.png",
+      "sha256": "8c1699cef964e7f2f63d3e8708dbe0ae21400abe246ffdf8c61c01550404e8d4",
+      "bytes": 54075
+    },
+    {
+      "path": "artifacts/fieldnote-v2/security/browser-detail-final.txt",
+      "sha256": "cecc5e5ce4f129b8a933af14eb71566a662fc7e30e66447c14bcbd5d88def5be",
+      "bytes": 70
+    },
+    {
+      "path": "artifacts/fieldnote-v2/security/browser-detail.json",
+      "sha256": "dd31b9f32152037ffbce6d58a087975b03c1807241c4c8e23c3809a0eb1bc47e",
+      "bytes": 613
+    },
+    {
+      "path": "artifacts/fieldnote-v2/security/browser-detail.txt",
+      "sha256": "cecc5e5ce4f129b8a933af14eb71566a662fc7e30e66447c14bcbd5d88def5be",
+      "bytes": 70
+    },
+    {
+      "path": "artifacts/fieldnote-v2/security/browser-inert.json",
+      "sha256": "abfa06c75897bc4b0ea6873dc8d772d0c41acef8a3331c7316c530a033e1b0f8",
+      "bytes": 527
+    },
+    {
+      "path": "artifacts/fieldnote-v2/security/browser-inert.txt",
+      "sha256": "21e54bad1c8eb7d000aa633b41dfc6b513a4eeaeb172b363469ef31228974736",
+      "bytes": 199
+    },
+    {
+      "path": "artifacts/fieldnote-v2/security/cleanup.json",
+      "sha256": "a40e0e18a1be926ea9850ed2c1adcfb2a16e07b9ef9d381d1bdb122ab92627f8",
+      "bytes": 176
+    },
+    {
+      "path": "artifacts/fieldnote-v2/security/context-http-e0b7317.json",
+      "sha256": "5b95a112b825b24dd0e77f6b7c1b17824948728daa0bc63398fcbb2823e7717e",
+      "bytes": 1075
+    },
+    {
+      "path": "artifacts/fieldnote-v2/security/context-http-e0b7317.txt",
+      "sha256": "a87de343ae14dc6181807d55c6c42be79e80e9ab2b782804a023632b3edb66f6",
+      "bytes": 590
+    },
+    {
+      "path": "artifacts/fieldnote-v2/security/crash.txt",
+      "sha256": "4f2e1f08928fe18cde3c7aeb7f1f6ece34941e80d7f07048282db2213259b5a5",
+      "bytes": 120
+    },
+    {
+      "path": "artifacts/fieldnote-v2/security/cross-source-probes.json",
+      "sha256": "5051901e1c9c3cba03b5c85930c33081fa5d45bf01e50502eb816200b7138c53",
+      "bytes": 80439
+    },
+    {
+      "path": "artifacts/fieldnote-v2/security/cross-source-probes.txt",
+      "sha256": "d02e8bddf0203ceb050bb655a1267d33ff8154d8cc85468b96672d46cc695899",
+      "bytes": 4781
+    },
+    {
+      "path": "artifacts/fieldnote-v2/security/eval-preservation.txt",
+      "sha256": "f3504394f1861ff0569b3bb39f0d8a171f34f2f9fa81dc3031dbbe64ef3728b7",
+      "bytes": 232
+    },
+    {
+      "path": "artifacts/fieldnote-v2/security/eval-tests-3143114.txt",
+      "sha256": "6e7045c06e7fc8b72a3110eef75d60a61b67f705acbc05e56b4ed4be7b215352",
+      "bytes": 4606
+    },
+    {
+      "path": "artifacts/fieldnote-v2/security/eval-tests-520a20d.txt",
+      "sha256": "f8a410b778175649bb5af83bfd66d0a0552bff94da96477b6600c4140d8251f2",
+      "bytes": 4615
+    },
+    {
+      "path": "artifacts/fieldnote-v2/security/eval-tests-e0b7317.txt",
+      "sha256": "4c29d5d540ff13241cce3bf6f1926cd0f505adae54d897b09a8641d678b1d77a",
+      "bytes": 4611
+    },
+    {
+      "path": "artifacts/fieldnote-v2/security/eval-tests-final.txt",
+      "sha256": "d6f25ea47011909d799595c11687b5fdb9d89cf0787172f56323a2dd46312042",
+      "bytes": 4604
+    },
+    {
+      "path": "artifacts/fieldnote-v2/security/eval-tests.txt",
+      "sha256": "f2a753af32e12997df00c3311949adfec7942253132b7360c8acac66fb62f76f",
+      "bytes": 4379
+    },
+    {
+      "path": "artifacts/fieldnote-v2/security/evidence-probes.json",
+      "sha256": "41eda255912b4983c07e7f7804330d23bd72370e11f23bd6049e8b134ef3e76d",
+      "bytes": 111591
+    },
+    {
+      "path": "artifacts/fieldnote-v2/security/evidence-probes.txt",
+      "sha256": "d6dd5a0805356b46fa24a8077980b1c3da3cb119dd0fe0547c7f2ea8d66e1efb",
+      "bytes": 4787
+    },
+    {
+      "path": "artifacts/fieldnote-v2/security/green-3143114/cross-source-probes.json",
+      "sha256": "5051901e1c9c3cba03b5c85930c33081fa5d45bf01e50502eb816200b7138c53",
+      "bytes": 80439
+    },
+    {
+      "path": "artifacts/fieldnote-v2/security/green-3143114/cross-source-probes.txt",
+      "sha256": "d02e8bddf0203ceb050bb655a1267d33ff8154d8cc85468b96672d46cc695899",
+      "bytes": 4781
+    },
+    {
+      "path": "artifacts/fieldnote-v2/security/green-3143114/evidence-probes.json",
+      "sha256": "4d0afbee4a34d1c9a600b141f7d9337ff439a8469010a7cff50e4f674fb8956f",
+      "bytes": 109874
+    },
+    {
+      "path": "artifacts/fieldnote-v2/security/green-3143114/evidence-probes.txt",
+      "sha256": "b18ed4e3b65fc16dfb25b6b6daf14aa8b653e3d08eaaa221d0c8881243e98700",
+      "bytes": 2656
+    },
+    {
+      "path": "artifacts/fieldnote-v2/security/green-3143114/http-probes.json",
+      "sha256": "31e81ed2acdca49f123398ee5bebac181282cda0c83cb5214b07817a4ae7a0cb",
+      "bytes": 8248
+    },
+    {
+      "path": "artifacts/fieldnote-v2/security/green-3143114/http-probes.txt",
+      "sha256": "4492957daa8e456ad7e3300fb127711764bda74f7ecd584f7e32f9975b32eff2",
+      "bytes": 417
+    },
+    {
+      "path": "artifacts/fieldnote-v2/security/green-3143114/price-provenance-probes.json",
+      "sha256": "b0d4d43b7f0489919ac41ce3d9b994b2b5ce46575d95a3b64efb90e94c28405a",
+      "bytes": 9017
+    },
+    {
+      "path": "artifacts/fieldnote-v2/security/green-3143114/price-provenance-probes.txt",
+      "sha256": "6ed10065b386a6cbec4f3541db09b72432593bb18041aef35eb948a58f21cb2c",
+      "bytes": 38
+    },
+    {
+      "path": "artifacts/fieldnote-v2/security/green-3143114/price-variants.json",
+      "sha256": "b75e6a26065e41f1567a21e80ac3f126286f8668d26695aa085156c3eb575829",
+      "bytes": 30682
+    },
+    {
+      "path": "artifacts/fieldnote-v2/security/green-3143114/price-variants.txt",
+      "sha256": "f730da3c6afbe50e7d038046873a07943dc6a9973fe0eef1e2b8a15ef93f7adc",
+      "bytes": 5015
+    },
+    {
+      "path": "artifacts/fieldnote-v2/security/green-3143114/probe-assertions.json",
+      "sha256": "ce3307cc774d1b2874695c4b0701ae521d2dadf79789619e884f1cf3369befe1",
+      "bytes": 2236
+    },
+    {
+      "path": "artifacts/fieldnote-v2/security/green-3143114/variant-probes.json",
+      "sha256": "465251b665a285422f09230069e571cf60a2a41168578f410ea28ed77e7ee680",
+      "bytes": 21403
+    },
+    {
+      "path": "artifacts/fieldnote-v2/security/green-3143114/variant-probes.txt",
+      "sha256": "bd434dd7959fb42bf3b769b44d7a4ee257f555623c5b3b38ac1436612925b551",
+      "bytes": 2659
+    },
+    {
+      "path": "artifacts/fieldnote-v2/security/green-520a20d/evidence-probes.json",
+      "sha256": "4e9e57106c618ee24eaf98401e3998ea2bc9a68f8001cb07ba37140a32c357b5",
+      "bytes": 109874
+    },
+    {
+      "path": "artifacts/fieldnote-v2/security/green-520a20d/evidence-probes.txt",
+      "sha256": "b18ed4e3b65fc16dfb25b6b6daf14aa8b653e3d08eaaa221d0c8881243e98700",
+      "bytes": 2656
+    },
+    {
+      "path": "artifacts/fieldnote-v2/security/green-520a20d/http-probes.json",
+      "sha256": "bc57717a5878b4e434089e5a60090a2fdda217dab521505c2037cf00584e4e1b",
+      "bytes": 8245
+    },
+    {
+      "path": "artifacts/fieldnote-v2/security/green-520a20d/http-probes.txt",
+      "sha256": "4492957daa8e456ad7e3300fb127711764bda74f7ecd584f7e32f9975b32eff2",
+      "bytes": 417
+    },
+    {
+      "path": "artifacts/fieldnote-v2/security/green-520a20d/price-variants.json",
+      "sha256": "d1093d3cd8ca41dca8101b58f9ad8600a597b90a92ee04a7413f8ca7260f2b7e",
+      "bytes": 30682
+    },
+    {
+      "path": "artifacts/fieldnote-v2/security/green-520a20d/price-variants.txt",
+      "sha256": "f730da3c6afbe50e7d038046873a07943dc6a9973fe0eef1e2b8a15ef93f7adc",
+      "bytes": 5015
+    },
+    {
+      "path": "artifacts/fieldnote-v2/security/green-520a20d/variant-probes.json",
+      "sha256": "8b3ccbd98417ddd5d690ba6180bec6602fd28ad0f43dae4e50d9787299b0f126",
+      "bytes": 21403
+    },
+    {
+      "path": "artifacts/fieldnote-v2/security/green-520a20d/variant-probes.txt",
+      "sha256": "bd434dd7959fb42bf3b769b44d7a4ee257f555623c5b3b38ac1436612925b551",
+      "bytes": 2659
+    },
+    {
+      "path": "artifacts/fieldnote-v2/security/http-probes.json",
+      "sha256": "31e81ed2acdca49f123398ee5bebac181282cda0c83cb5214b07817a4ae7a0cb",
+      "bytes": 8248
+    },
+    {
+      "path": "artifacts/fieldnote-v2/security/http-probes.txt",
+      "sha256": "4492957daa8e456ad7e3300fb127711764bda74f7ecd584f7e32f9975b32eff2",
+      "bytes": 417
+    },
+    {
+      "path": "artifacts/fieldnote-v2/security/inert-detail-mobile.png",
+      "sha256": "af5db5fd3ca65553312b32cfad50e9a57b62698081217d2585312c759f7fbfb0",
+      "bytes": 78486
+    },
+    {
+      "path": "artifacts/fieldnote-v2/security/inert-source-mobile.png",
+      "sha256": "3db8a1594e03a3fb21f81936dd413df4e65f081f559eb317720cbf242a67ca01",
+      "bytes": 57759
+    },
+    {
+      "path": "artifacts/fieldnote-v2/security/local-preserved-8fdc2b2/.audit/fieldnote-v2/security/evidence-probes.ts",
+      "sha256": "9c4504040a845accceb3dba4b44c245df1fbfbd55b402412a4ec536814c76af4",
+      "bytes": 2608
+    },
+    {
+      "path": "artifacts/fieldnote-v2/security/local-preserved-8fdc2b2/.audit/fieldnote-v2/security/price-variants.ts",
+      "sha256": "a70b094e55846b25a5c87e19cd52ae5ee69a87659837b12cc368daf6345eae02",
+      "bytes": 1620
+    },
+    {
+      "path": "artifacts/fieldnote-v2/security/local-preserved-8fdc2b2/.audit/fieldnote-v2/security/variant-probes.ts",
+      "sha256": "feae7ee52c35bbe789e43c8246c9f06b0a9784685b96bce7fa7d0dac7bada475",
+      "bytes": 1444
+    },
+    {
+      "path": "artifacts/fieldnote-v2/security/local-preserved-8fdc2b2/artifacts/fieldnote-v2/security/evidence-probes.json",
+      "sha256": "4d0afbee4a34d1c9a600b141f7d9337ff439a8469010a7cff50e4f674fb8956f",
+      "bytes": 109874
+    },
+    {
+      "path": "artifacts/fieldnote-v2/security/local-preserved-8fdc2b2/artifacts/fieldnote-v2/security/evidence-probes.txt",
+      "sha256": "b18ed4e3b65fc16dfb25b6b6daf14aa8b653e3d08eaaa221d0c8881243e98700",
+      "bytes": 2656
+    },
+    {
+      "path": "artifacts/fieldnote-v2/security/local-preserved-8fdc2b2/artifacts/fieldnote-v2/security/price-variants.json",
+      "sha256": "b75e6a26065e41f1567a21e80ac3f126286f8668d26695aa085156c3eb575829",
+      "bytes": 30682
+    },
+    {
+      "path": "artifacts/fieldnote-v2/security/local-preserved-8fdc2b2/artifacts/fieldnote-v2/security/variant-probes.json",
+      "sha256": "465251b665a285422f09230069e571cf60a2a41168578f410ea28ed77e7ee680",
+      "bytes": 21403
+    },
+    {
+      "path": "artifacts/fieldnote-v2/security/npm-audit-final.json",
+      "sha256": "f5f2ddb075be72d4925921071a108df4d03af48cc46bcba0b7a583f8def05400",
+      "bytes": 366
+    },
+    {
+      "path": "artifacts/fieldnote-v2/security/npm-audit.json",
+      "sha256": "f5f2ddb075be72d4925921071a108df4d03af48cc46bcba0b7a583f8def05400",
+      "bytes": 366
+    },
+    {
+      "path": "artifacts/fieldnote-v2/security/npm-ci.txt",
+      "sha256": "e5f05adc8da8b05577c2383679622092f59ebf922a505dca63b761da52b92d0b",
+      "bytes": 144
+    },
+    {
+      "path": "artifacts/fieldnote-v2/security/positive-controls.json",
+      "sha256": "15c35317697f0c6bd1a2bb68d4a0021d1ed19ecd0ec33aece3538b76e9c2f64e",
+      "bytes": 59767
+    },
+    {
+      "path": "artifacts/fieldnote-v2/security/positive-controls.txt",
+      "sha256": "3825783323fb846f911b5b693e405f740a3e3479913a409c762fc14b610b2c2d",
+      "bytes": 144
+    },
+    {
+      "path": "artifacts/fieldnote-v2/security/postgres-3143114.txt",
+      "sha256": "ef3b4478c7e0aac8f49e6fab3c293afb696786c4c2d9308dfd30b4bbba6144cc",
+      "bytes": 319
+    },
+    {
+      "path": "artifacts/fieldnote-v2/security/postgres.txt",
+      "sha256": "bddb80fd875a8c76ea92456b7ee97bd5d70bfb8dfd893dd238f77223fe5f887e",
+      "bytes": 318
+    },
+    {
+      "path": "artifacts/fieldnote-v2/security/pre-fix-5ad8/http-probes.json",
+      "sha256": "1c19433771e7dd2f2f95bec5e9b91fcee014d0313d39ab8887a8aa65c91fede4",
+      "bytes": 8401
+    },
+    {
+      "path": "artifacts/fieldnote-v2/security/pre-fix-5ad8/http-probes.txt",
+      "sha256": "c57681aa69adf4b91d29ca373c0e6bcf44be089f1ecfa962c312f5ee91e1f6a8",
+      "bytes": 573
+    },
+    {
+      "path": "artifacts/fieldnote-v2/security/price-provenance-probes.json",
+      "sha256": "b0d4d43b7f0489919ac41ce3d9b994b2b5ce46575d95a3b64efb90e94c28405a",
+      "bytes": 9017
+    },
+    {
+      "path": "artifacts/fieldnote-v2/security/price-provenance-probes.txt",
+      "sha256": "6ed10065b386a6cbec4f3541db09b72432593bb18041aef35eb948a58f21cb2c",
+      "bytes": 38
+    },
+    {
+      "path": "artifacts/fieldnote-v2/security/price-variants.json",
+      "sha256": "9534fc2d5a23822900489f93b7cd170fcc192cd8eb18bb5264bbab96a337dea2",
+      "bytes": 30631
+    },
+    {
+      "path": "artifacts/fieldnote-v2/security/price-variants.txt",
+      "sha256": "f730da3c6afbe50e7d038046873a07943dc6a9973fe0eef1e2b8a15ef93f7adc",
+      "bytes": 5015
+    },
+    {
+      "path": "artifacts/fieldnote-v2/security/red-520a20d/cross-source-probes.json",
+      "sha256": "a9c6022acb10b6111ac024233240237237927013aad9e7d1a711eedc9b02e4fb",
+      "bytes": 80441
+    },
+    {
+      "path": "artifacts/fieldnote-v2/security/red-520a20d/cross-source-probes.txt",
+      "sha256": "d6bdca80be8f75ea69c3d29be4407d05e9bf4e9472386dc4c389033707548fd1",
+      "bytes": 4847
+    },
+    {
+      "path": "artifacts/fieldnote-v2/security/red-520a20d/price-provenance-probes.json",
+      "sha256": "1f00499125456c738661c77b12d03f4579aacc846a03faf7756f8025a6090d9c",
+      "bytes": 9964
+    },
+    {
+      "path": "artifacts/fieldnote-v2/security/red-520a20d/price-provenance-probes.txt",
+      "sha256": "01c7a78489de091f8267e3d6781411a08407e5664e1c29e5a28f0677addf5a96",
+      "bytes": 833
+    },
+    {
+      "path": "artifacts/fieldnote-v2/security/red-a00/evidence-probes.json",
+      "sha256": "41eda255912b4983c07e7f7804330d23bd72370e11f23bd6049e8b134ef3e76d",
+      "bytes": 111591
+    },
+    {
+      "path": "artifacts/fieldnote-v2/security/red-a00/evidence-probes.txt",
+      "sha256": "d6dd5a0805356b46fa24a8077980b1c3da3cb119dd0fe0547c7f2ea8d66e1efb",
+      "bytes": 4787
+    },
+    {
+      "path": "artifacts/fieldnote-v2/security/red-d858/price-variants.json",
+      "sha256": "635407b5f34dd3abec1bb70f6347b462b246c5eeb3da8c42af8a9688250bec08",
+      "bytes": 30685
+    },
+    {
+      "path": "artifacts/fieldnote-v2/security/red-d858/price-variants.txt",
+      "sha256": "46a8dc53feef18a0cd34e04d18c27d5a7bc97e96b55861d8a5216f90b1006b49",
+      "bytes": 5114
+    },
+    {
+      "path": "artifacts/fieldnote-v2/security/red-d858/variant-probes.json",
+      "sha256": "6d569140cb694ae8a0ec946f25b08b7e61eaf618147fed5150d2b14f0222b637",
+      "bytes": 22579
+    },
+    {
+      "path": "artifacts/fieldnote-v2/security/red-d858/variant-probes.txt",
+      "sha256": "ab9d59bf354f50756b5178ab87754d9c05db132525a0eb33106e99f185ebc5c7",
+      "bytes": 3723
+    },
+    {
+      "path": "artifacts/fieldnote-v2/security/restart.json",
+      "sha256": "d7027ebfcb7677e9da5a5e1c77c87c90a52bfbdb30e91559e8c7eaf870a80ee6",
+      "bytes": 761
+    },
+    {
+      "path": "artifacts/fieldnote-v2/security/restart.txt",
+      "sha256": "7ca4fab0cd36f2bdbcef2a607125c37916056f75240aebaf4100d47bf9208137",
+      "bytes": 436
+    },
+    {
+      "path": "artifacts/fieldnote-v2/security/reviewed-code-8fdc2b2.json",
+      "sha256": "99134ac27f7433a1a6abff9aaf7557a9bb41160ba61c707136c4f43cf29b4e58",
+      "bytes": 8141
+    },
+    {
+      "path": "artifacts/fieldnote-v2/security/reviewed-code.json",
+      "sha256": "2b6229a548af841d4d25d25b90663bce1a24c5008c8fc65a614bee005bfb99bc",
+      "bytes": 8377
+    },
+    {
+      "path": "artifacts/fieldnote-v2/security/typecheck-3143114.txt",
+      "sha256": "6d54aea70781581ceabcb7da2d4b8aaed0fe7d4253ad1705edca787108cb6461",
+      "bytes": 53
+    },
+    {
+      "path": "artifacts/fieldnote-v2/security/typecheck-520a20d.txt",
+      "sha256": "6d54aea70781581ceabcb7da2d4b8aaed0fe7d4253ad1705edca787108cb6461",
+      "bytes": 53
+    },
+    {
+      "path": "artifacts/fieldnote-v2/security/typecheck-e0b7317.txt",
+      "sha256": "6d54aea70781581ceabcb7da2d4b8aaed0fe7d4253ad1705edca787108cb6461",
+      "bytes": 53
+    },
+    {
+      "path": "artifacts/fieldnote-v2/security/typecheck-final.txt",
+      "sha256": "6d54aea70781581ceabcb7da2d4b8aaed0fe7d4253ad1705edca787108cb6461",
+      "bytes": 53
+    },
+    {
+      "path": "artifacts/fieldnote-v2/security/typecheck.txt",
+      "sha256": "6d54aea70781581ceabcb7da2d4b8aaed0fe7d4253ad1705edca787108cb6461",
+      "bytes": 53
+    },
+    {
+      "path": "artifacts/fieldnote-v2/security/unit-api-tests-3143114.txt",
+      "sha256": "b23bf6070b39f99e74fe4a296786dd2ae4d263fcab80a7ff342bd06a9dcc5835",
+      "bytes": 319
+    },
+    {
+      "path": "artifacts/fieldnote-v2/security/unit-api-tests-520a20d.txt",
+      "sha256": "135f9ab48fdba41b357d8bf6ad2c6740716a0a07448a2096869a9f468096613e",
+      "bytes": 319
+    },
+    {
+      "path": "artifacts/fieldnote-v2/security/unit-api-tests-e0b7317.txt",
+      "sha256": "60a37d7f358e6745b016a17d76ed782eb506b356b4fd0d73c7d0b81664fd7116",
+      "bytes": 319
+    },
+    {
+      "path": "artifacts/fieldnote-v2/security/unit-api-tests-final.txt",
+      "sha256": "533382e1581f536ec52c44f5a7830039084d6a3215e1166748884a6ec1cd1344",
+      "bytes": 319
+    },
+    {
+      "path": "artifacts/fieldnote-v2/security/unit-api-tests.txt",
+      "sha256": "1c1691380989b3240c9ec7b073a042fcdc4f283e08bef95f6211bf5d0510e22a",
+      "bytes": 317
+    },
+    {
+      "path": "artifacts/fieldnote-v2/security/variant-probes.json",
+      "sha256": "4c077db61b4b9c2aad3271fb935596f2cd9d1104efe0fb166eaa896b6ebade5d",
+      "bytes": 22525
+    },
+    {
+      "path": "artifacts/fieldnote-v2/security/variant-probes.txt",
+      "sha256": "bd434dd7959fb42bf3b769b44d7a4ee257f555623c5b3b38ac1436612925b551",
+      "bytes": 2659
+    },
+    {
+      "path": ".audit/fieldnote-v2/security/account-context.mjs",
+      "sha256": "710ed380a15c8ab0beca648ae77d47fb332bc9bf2e188fe9a47e690a68823454",
+      "bytes": 3818
+    },
+    {
+      "path": ".audit/fieldnote-v2/security/account-detail.mjs",
+      "sha256": "84c0503d2ea24500813b5809259fbe71ed2f81e4f34a6391484353aa3c7bd38c",
+      "bytes": 2706
+    },
+    {
+      "path": ".audit/fieldnote-v2/security/account-http.mjs",
+      "sha256": "0cbf9ff3dce2db445a2767863958c2a97955ccf2eedddd03b9d0cde11b34c55a",
+      "bytes": 3056
+    },
+    {
+      "path": ".audit/fieldnote-v2/security/account-test-runtime.mjs",
+      "sha256": "0fecc978cde7fb78b2aa47db252375e3174b42bfb6d6e4d5ca8bc021f05a9a70",
+      "bytes": 3735
+    },
+    {
+      "path": ".audit/fieldnote-v2/security/binding-43bafcf.json",
+      "sha256": "53c8ea6003dfd0f74764a1baa2fc095cd4b06a422d3437f56b3213d012ebc05a",
+      "bytes": 8668
+    },
+    {
+      "path": ".audit/fieldnote-v2/security/binding-43bafcf.md",
+      "sha256": "e4682f5bf9e30ce683cebe309f7a72c5d9eac533c5a6b0d7c36edb193927b0a4",
+      "bytes": 3219
+    },
+    {
+      "path": ".audit/fieldnote-v2/security/browser-detail.ts",
+      "sha256": "3fc7006fe0612aa035b2129b5625b935bcbc3a86dd710ac5aadc63c3fe364c4a",
+      "bytes": 5744
+    },
+    {
+      "path": ".audit/fieldnote-v2/security/browser-inert.ts",
+      "sha256": "410aeb8a8172a13ee59f82416f3b98ec2b7ded06d4ba28c03ea0cce980a1ff36",
+      "bytes": 4832
+    },
+    {
+      "path": ".audit/fieldnote-v2/security/context-http.ts",
+      "sha256": "6cdb01601cbb8ed09d99106cd765ab10048572137c8aae8c95897f76d34b4672",
+      "bytes": 6357
+    },
+    {
+      "path": ".audit/fieldnote-v2/security/cross-source-probes.ts",
+      "sha256": "31d218fb128e0471e5b478359253e6845331c55a02c0913dac05688b035b9e2a",
+      "bytes": 1892
+    },
+    {
+      "path": ".audit/fieldnote-v2/security/evidence-probes.ts",
+      "sha256": "9c4504040a845accceb3dba4b44c245df1fbfbd55b402412a4ec536814c76af4",
+      "bytes": 2608
+    },
+    {
+      "path": ".audit/fieldnote-v2/security/http-probes.ts",
+      "sha256": "f67d1254b618238b5f926f569eb396902c563db5554df2d95501bc2723fa3812",
+      "bytes": 8811
+    },
+    {
+      "path": ".audit/fieldnote-v2/security/interim-review-d858-520.md",
+      "sha256": "74adf32fd7b4064b86f7192a77ff181fdf295ed0214b50f63637a417ebf5bacb",
+      "bytes": 13104
+    },
+    {
+      "path": ".audit/fieldnote-v2/security/positive-controls.ts",
+      "sha256": "83df71dbe86a0cf6d50e9ab5de72b97bae9c5782f32b6a4046cb1606191b87e6",
+      "bytes": 3467
+    },
+    {
+      "path": ".audit/fieldnote-v2/security/price-provenance-probes.ts",
+      "sha256": "7d1e328f5449a6c80896ebbf50c162a5832d5665e78f714a1662c1c24e3d679e",
+      "bytes": 1198
+    },
+    {
+      "path": ".audit/fieldnote-v2/security/price-variants.ts",
+      "sha256": "a70b094e55846b25a5c87e19cd52ae5ee69a87659837b12cc368daf6345eae02",
+      "bytes": 1620
+    },
+    {
+      "path": ".audit/fieldnote-v2/security/restart-repro.mjs",
+      "sha256": "63cb6b3cd1e99a6530856ea9cc273b43080d09e91fc95534fee4a2e6e3f51a68",
+      "bytes": 5409
+    },
+    {
+      "path": ".audit/fieldnote-v2/security/review-8fdc2b2.md",
+      "sha256": "ec949499b009f158c9ba8b9bb5097903e62a0a0bb190192bbdbfa6eff05ff5d1",
+      "bytes": 13289
+    },
+    {
+      "path": ".audit/fieldnote-v2/security/review.md",
+      "sha256": "62040ac3afb8c9a27977433475eb3f6de34e457d50b6b4da2fc311d00167c291",
+      "bytes": 15763
+    },
+    {
+      "path": ".audit/fieldnote-v2/security/variant-probes.ts",
+      "sha256": "feae7ee52c35bbe789e43c8246c9f06b0a9784685b96bce7fa7d0dac7bada475",
+      "bytes": 1444
+    },
+    {
+      "path": ".audit/fieldnote-v2/security/verify-personalization-browser.mjs",
+      "sha256": "5eed64e8ccad8b8101449349f67af723f2aa786886e9f27252087c00fc6e3c25",
+      "bytes": 7403
+    },
+    {
+      "path": ".audit/fieldnote-v2/security/verify-personalization-crash.mjs",
+      "sha256": "cace3d7638757354311958015aa537cc5fe759cb1d14a85ac3fe972cf04fd86e",
+      "bytes": 4991
+    },
+    {
+      "path": ".audit/fieldnote-v2/qa/context-positive.mjs",
+      "sha256": "1c94ba34c4cbcd8e2188e5114e2e076ad1cadf7d639c714fb2b7021d312d7420",
+      "bytes": 14492
+    },
+    {
+      "path": ".audit/fieldnote-v2/qa/context-targeted.mjs",
+      "sha256": "c588eae3a22bd1df37a1979aa81c104b249153173e83c8a9504476e6684eee4a",
+      "bytes": 7100
+    },
+    {
+      "path": ".audit/fieldnote-v2/qa/extended-delta.mjs",
+      "sha256": "512076b15d42bfe4d3eac9e6ebcd64c6a70b8aa3dcfd7e270c72f902868c8f84",
+      "bytes": 11709
+    },
+    {
+      "path": ".audit/fieldnote-v2/qa/extended-final.mjs",
+      "sha256": "6ebec823670dadc275346428b2dfd9a1d7318fac4349501ab4f874cf6edc0345",
+      "bytes": 11732
+    },
+    {
+      "path": ".audit/fieldnote-v2/qa/extended-meaning.mjs",
+      "sha256": "5986734b7e9dec82aa7615e48f8e5df0119d52a788d5afaf330e5d3ffb26234e",
+      "bytes": 12752
+    },
+    {
+      "path": ".audit/fieldnote-v2/qa/extended.mjs",
+      "sha256": "634c3e8f204ea935359914717fef1efe24fe5d55fa973ee5986bebb3d0929954",
+      "bytes": 10359
+    },
+    {
+      "path": ".audit/fieldnote-v2/qa/playwright.config.ts",
+      "sha256": "c0070c2b6769da68d97bd5945a43bc2baae6861fc6e97622d71c9b231d20ef21",
+      "bytes": 736
+    },
+    {
+      "path": ".audit/fieldnote-v2/qa/qualified-browser-server.ts",
+      "sha256": "da4d5cdd1d8853a22c3356768ae1f30444f1e72d811a461fe0d779cb79178310",
+      "bytes": 3943
+    },
+    {
+      "path": ".audit/fieldnote-v2/qa/qualified-extended.mjs",
+      "sha256": "89ad82a6c9d18910c4811e0acda4451ee7165f99e38805ba0b0f675748c00073",
+      "bytes": 11768
+    },
+    {
+      "path": ".audit/fieldnote-v2/qa/review-43bafcf-metadata.md",
+      "sha256": "cf72f7c4a5927d07088a138a6d61fba701354f58181d5f32f8a417f556a0a24a",
+      "bytes": 5782
+    },
+    {
+      "path": ".audit/fieldnote-v2/qa/review-8d679f3.md",
+      "sha256": "01b3e95f23ebd530486634f0f15ec1b570107b6fb5998ed41192cee201e4ff74",
+      "bytes": 7559
+    },
+    {
+      "path": ".audit/fieldnote-v2/qa/review-8fdc2b2.md",
+      "sha256": "4aa6d4ba31cbac2ceb0a64ac8b7969f6f2b65d6a15af632048e759d457d28e17",
+      "bytes": 14423
+    },
+    {
+      "path": ".audit/fieldnote-v2/qa/review-d858ca7.md",
+      "sha256": "a91d81e2eda5720e41ac6c6ac1b248a681e114880586069c1a86e8fe299eee0a",
+      "bytes": 12253
+    },
+    {
+      "path": ".audit/fieldnote-v2/qa/review-e0b7317.md",
+      "sha256": "7e6d35a11ac8fb9b6a3bf21a7af8dd671abdfc24a709977d92238f4778967678",
+      "bytes": 12354
+    },
+    {
+      "path": ".audit/fieldnote-v2/qa/v2-chat.spec.ts",
+      "sha256": "02ed1a9e2231804366afdf76e4da9f63de0beca234ab5ee271ac10e4187ec902",
+      "bytes": 9585
+    },
+    {
+      "path": ".audit/fieldnote-v2/qa/v2-held-replies.spec.ts",
+      "sha256": "ee87a7786dc7dac465f9eb1978e267ae738e09ae734896368eccb39ee4f13b77",
+      "bytes": 6194
+    },
+    {
+      "path": ".audit/fieldnote-v2/qa/verify-account-detail.mjs",
+      "sha256": "92b7a138d4fe88fe25760a6818898b774055f7b11ddfb1f5f50c75cfe6b1c288",
+      "bytes": 8749
+    },
+    {
+      "path": ".audit/fieldnote-v2/qa/verify-personalization-browser.mjs",
+      "sha256": "2e6150181fdfe3022e7a544e453ad8a77faa52875d1539759791480a1e1970d0",
+      "bytes": 7171
+    },
+    {
+      "path": ".audit/fieldnote-v2/qa/verify-personalization-crash.mjs",
+      "sha256": "868ed29e3612060ed4a77d76cc3961553f66d5efb19c38166514aa09b913b49f",
+      "bytes": 5037
+    },
+    {
+      "path": ".audit/fieldnote-v2/qa/verify-personalization-restart.mjs",
+      "sha256": "c531ac4437f0897e6c0acf7ffa2cb878306909c20e0b58182dfea7888b402f4c",
+      "bytes": 5452
+    },
+    {
+      "path": ".audit/fieldnote-v2/qa/vite.mjs",
+      "sha256": "1c05f6e9e6a81918ceb48432986c9c054b5e01ad8048fa0f9b54391df84c89ec",
+      "bytes": 98
+    },
+    {
+      "path": "artifacts/fieldnote-v2/qa/accounts-checks.log",
+      "sha256": "7065cdebe16c9fe3ed580bc1e3f0902b95c7054b63adfeb0cbfff24721aecff4",
+      "bytes": 2232
+    },
+    {
+      "path": "artifacts/fieldnote-v2/qa/build.log",
+      "sha256": "ba1141a571c101668cb069f5363fa192448edd33ec8fb11c583c6a0a0124b2fa",
+      "bytes": 1726
+    },
+    {
+      "path": "artifacts/fieldnote-v2/qa/candidate8d-accounts-detail.log",
+      "sha256": "2e27c94e6a2fe5b9a209d6af3fe8b84f0b994d382d18c59f264e5e7b9941083e",
+      "bytes": 555
+    },
+    {
+      "path": "artifacts/fieldnote-v2/qa/candidate8d-build.log",
+      "sha256": "24117f0dcf22062f2c84cb244acfb530844e8e3fc1fd991028ed67bca6391f4f",
+      "bytes": 1726
+    },
+    {
+      "path": "artifacts/fieldnote-v2/qa/candidate8d-eval.log",
+      "sha256": "33e64a386bd724fdcfc9e76abff74c335fa7eac786e35cec5cbcc1d21f86e4dd",
+      "bytes": 2071
+    },
+    {
+      "path": "artifacts/fieldnote-v2/qa/candidate8d-evaltest.log",
+      "sha256": "c4915eb56b66dc3e0291af704e656e43a5e330fc4e3cc26d7a7fd3d7a9d8989b",
+      "bytes": 4606
+    },
+    {
+      "path": "artifacts/fieldnote-v2/qa/candidate8d-evaltype.log",
+      "sha256": "298a0d7d35d21cbb61b6c70c6d75f90c13830be7da3728026e909cddd847409f",
+      "bytes": 84
+    },
+    {
+      "path": "artifacts/fieldnote-v2/qa/candidate8d-package-browser.log",
+      "sha256": "5f4263e3b0d8770feb809c5ea7fdb2925c0eb2b1640ab31226d7a454ca93449e",
+      "bytes": 1154
+    },
+    {
+      "path": "artifacts/fieldnote-v2/qa/candidate8d-preservation.log",
+      "sha256": "f3504394f1861ff0569b3bb39f0d8a171f34f2f9fa81dc3031dbbe64ef3728b7",
+      "bytes": 232
+    },
+    {
+      "path": "artifacts/fieldnote-v2/qa/candidate8d-scorecard.log",
+      "sha256": "ce906991c267fd05f36baf5ba30e091031ba40bf5bd738153f8b8cdf3d06d616",
+      "bytes": 328
+    },
+    {
+      "path": "artifacts/fieldnote-v2/qa/candidate8d-smoke.log",
+      "sha256": "d1e9b38719ef555c8f582a0c77df83a4826161452b49186c15611b01be53a7ec",
+      "bytes": 197
+    },
+    {
+      "path": "artifacts/fieldnote-v2/qa/candidate8d-strict.log",
+      "sha256": "d856fb708777f86eb26f4a349cafb7f348eea37f40f0c4dda34f08f19d79a569",
+      "bytes": 288
+    },
+    {
+      "path": "artifacts/fieldnote-v2/qa/candidate8d-test.log",
+      "sha256": "eebb78a1780a466c43e2fa19c0c0005545ad64c5159056b6179d887cd98de2cb",
+      "bytes": 313
+    },
+    {
+      "path": "artifacts/fieldnote-v2/qa/eval-preservation.log",
+      "sha256": "f3504394f1861ff0569b3bb39f0d8a171f34f2f9fa81dc3031dbbe64ef3728b7",
+      "bytes": 232
+    },
+    {
+      "path": "artifacts/fieldnote-v2/qa/eval-test.log",
+      "sha256": "6081fc71d0f7a1e1edbccf0b7e8afc227cf4ac06467a9318d836de01ac2e1e77",
+      "bytes": 4372
+    },
+    {
+      "path": "artifacts/fieldnote-v2/qa/eval-typecheck.log",
+      "sha256": "298a0d7d35d21cbb61b6c70c6d75f90c13830be7da3728026e909cddd847409f",
+      "bytes": 84
+    },
+    {
+      "path": "artifacts/fieldnote-v2/qa/eval.log",
+      "sha256": "17f8946dc451246408588a7306c5d4738056c7622a52510f34837e4343ca0cb0",
+      "bytes": 2059
+    },
+    {
+      "path": "artifacts/fieldnote-v2/qa/extended-complete.log",
+      "sha256": "ea5ce05bc0993ba08941fcb927a408e38ca8752031881fd6b896ae8cb5e8867c",
+      "bytes": 935
+    },
+    {
+      "path": "artifacts/fieldnote-v2/qa/extended-delta.log",
+      "sha256": "7f85dcd5a0706c9c72280321495993491109c864c426ce5d928c319a26ffd268",
+      "bytes": 554
+    },
+    {
+      "path": "artifacts/fieldnote-v2/qa/extended-retry.log",
+      "sha256": "677604312b2c79eac9adfb00be6993ddcbf2789e35f097b1df625b3f254c26be",
+      "bytes": 1456
+    },
+    {
+      "path": "artifacts/fieldnote-v2/qa/extended.log",
+      "sha256": "14732a3a23a4397979ea73b00a46cd3aea6e6b07812561def225b8cb3b0018c0",
+      "bytes": 4076
+    },
+    {
+      "path": "artifacts/fieldnote-v2/qa/final-build.log",
+      "sha256": "ab3fa64acd79f9598f7b2d4816cb7ac75215d43b8f67915e402c55b3323effe5",
+      "bytes": 1726
+    },
+    {
+      "path": "artifacts/fieldnote-v2/qa/final-e0b-build.log",
+      "sha256": "421866fc34df7f362ed777de8789f7040889af2047acc2578bc9b12c9e150530",
+      "bytes": 1726
+    },
+    {
+      "path": "artifacts/fieldnote-v2/qa/final-e0b-eval.log",
+      "sha256": "4322b314798e46a60e7efdc0a4981021b719c5ff1f977e078b050a83f92f208e",
+      "bytes": 2069
+    },
+    {
+      "path": "artifacts/fieldnote-v2/qa/final-e0b-evaltest.log",
+      "sha256": "bd99958021aedc6cb41db865450b14b2120b0bce486dbac085c8dd1a5e5b6740",
+      "bytes": 4600
+    },
+    {
+      "path": "artifacts/fieldnote-v2/qa/final-e0b-evaltype.log",
+      "sha256": "298a0d7d35d21cbb61b6c70c6d75f90c13830be7da3728026e909cddd847409f",
+      "bytes": 84
+    },
+    {
+      "path": "artifacts/fieldnote-v2/qa/final-e0b-meaning-recheck.log",
+      "sha256": "3a698265784baa8fe438cc9eb0de17a28107acc951fefaa7c7847e55891f9248",
+      "bytes": 700
+    },
+    {
+      "path": "artifacts/fieldnote-v2/qa/final-e0b-meaning.log",
+      "sha256": "ba8155fcc083350aebbd2e97fc0b3a43a0f69ca01994af3fac5efecbadbf5830",
+      "bytes": 709
+    },
+    {
+      "path": "artifacts/fieldnote-v2/qa/final-e0b-positive.log",
+      "sha256": "11e4fb9a290fe878ed3c361c1e741c987510d2232972187198ea8edcd8838801",
+      "bytes": 709
+    },
+    {
+      "path": "artifacts/fieldnote-v2/qa/final-e0b-preservation.log",
+      "sha256": "f3504394f1861ff0569b3bb39f0d8a171f34f2f9fa81dc3031dbbe64ef3728b7",
+      "bytes": 232
+    },
+    {
+      "path": "artifacts/fieldnote-v2/qa/final-e0b-scorecard.log",
+      "sha256": "c312836c003202e6abc9e72f5a101846fb5eeb19334285e233cb9733ff424a3a",
+      "bytes": 326
+    },
+    {
+      "path": "artifacts/fieldnote-v2/qa/final-e0b-semantic-import.log",
+      "sha256": "387d2105b1f713bf6c4b8f119c159e23a7cba431d3de88c9f706c5928bccfac8",
+      "bytes": 333
+    },
+    {
+      "path": "artifacts/fieldnote-v2/qa/final-e0b-smoke.log",
+      "sha256": "cd0d4062deea80b9341b471b853fa35092e7dbe5437969a099d5a41636585d87",
+      "bytes": 195
+    },
+    {
+      "path": "artifacts/fieldnote-v2/qa/final-e0b-strict.log",
+      "sha256": "42a9a3df4b5151cac2af01be6196d12165e41d3a8b956038e9575b5af5f0de9c",
+      "bytes": 286
+    },
+    {
+      "path": "artifacts/fieldnote-v2/qa/final-e0b-targeted.log",
+      "sha256": "b08066c74ef3fe5105f52a777679c43d189a449a8a0a61da33ace4ace5c36291",
+      "bytes": 326
+    },
+    {
+      "path": "artifacts/fieldnote-v2/qa/final-e0b-test.log",
+      "sha256": "1d89489c3dcd52787511a64d127bdf817799839b6c103aaf0d8cfd8e10b28b22",
+      "bytes": 313
+    },
+    {
+      "path": "artifacts/fieldnote-v2/qa/final-eval-preservation.log",
+      "sha256": "f3504394f1861ff0569b3bb39f0d8a171f34f2f9fa81dc3031dbbe64ef3728b7",
+      "bytes": 232
+    },
+    {
+      "path": "artifacts/fieldnote-v2/qa/final-eval-test.log",
+      "sha256": "1bb2dfa025e87d4cb34e86fee1e75f5ac78d8b94f069e3ac2b33555a49c2a1de",
+      "bytes": 4387
+    },
+    {
+      "path": "artifacts/fieldnote-v2/qa/final-eval-typecheck.log",
+      "sha256": "298a0d7d35d21cbb61b6c70c6d75f90c13830be7da3728026e909cddd847409f",
+      "bytes": 84
+    },
+    {
+      "path": "artifacts/fieldnote-v2/qa/final-eval.log",
+      "sha256": "8482c54fed34c01fa9535bc94ccd9744c5852f7d622452b991b3756c1ecee8bc",
+      "bytes": 2065
+    },
+    {
+      "path": "artifacts/fieldnote-v2/qa/final-smoke.log",
+      "sha256": "92efa8db9309dabc54b06512a17db6c479624dd83981bf815959a5b48defa7aa",
+      "bytes": 191
+    },
+    {
+      "path": "artifacts/fieldnote-v2/qa/final-test.log",
+      "sha256": "82d179c1537311fceeed33898ab30bc6b747eb6fe458619ca257cda10f04fc2d",
+      "bytes": 313
+    },
+    {
+      "path": "artifacts/fieldnote-v2/qa/final8fd-build.log",
+      "sha256": "a670903cf48582eee6be8afe26b6cd58cdf7f885bc8b6da72f75fc825457f3ad",
+      "bytes": 1726
+    },
+    {
+      "path": "artifacts/fieldnote-v2/qa/final8fd-eval.log",
+      "sha256": "451a462eb5508820d3926563b555d01ed3d5c4701b06dd932cbc51833f2733fe",
+      "bytes": 2068
+    },
+    {
+      "path": "artifacts/fieldnote-v2/qa/final8fd-evaltest.log",
+      "sha256": "6d8453f20c0cd87c15a63cc67842cdee9cad8adf2a01b4fcaa2212a0d2d03a7c",
+      "bytes": 4603
+    },
+    {
+      "path": "artifacts/fieldnote-v2/qa/final8fd-evaltype.log",
+      "sha256": "298a0d7d35d21cbb61b6c70c6d75f90c13830be7da3728026e909cddd847409f",
+      "bytes": 84
+    },
+    {
+      "path": "artifacts/fieldnote-v2/qa/final8fd-extended.log",
+      "sha256": "7f85dcd5a0706c9c72280321495993491109c864c426ce5d928c319a26ffd268",
+      "bytes": 554
+    },
+    {
+      "path": "artifacts/fieldnote-v2/qa/final8fd-meaning.log",
+      "sha256": "ebe61c1ce17229ac6ef9ecb32f955dc3e23c3f2c20b432656f670274d17c98e6",
+      "bytes": 1677
+    },
+    {
+      "path": "artifacts/fieldnote-v2/qa/final8fd-package-browser.log",
+      "sha256": "dbce99dac5123c9cb5ae230727965619e217872375124e574395c187463e2c49",
+      "bytes": 1154
+    },
+    {
+      "path": "artifacts/fieldnote-v2/qa/final8fd-preservation.log",
+      "sha256": "f3504394f1861ff0569b3bb39f0d8a171f34f2f9fa81dc3031dbbe64ef3728b7",
+      "bytes": 232
+    },
+    {
+      "path": "artifacts/fieldnote-v2/qa/final8fd-qualified-final.log",
+      "sha256": "7f85dcd5a0706c9c72280321495993491109c864c426ce5d928c319a26ffd268",
+      "bytes": 554
+    },
+    {
+      "path": "artifacts/fieldnote-v2/qa/final8fd-qualified-recheck.log",
+      "sha256": "14d0e3996b53d2500a5e5530b6342a94db1bd8bbeccc1fafa747c19896128e51",
+      "bytes": 1042
+    },
+    {
+      "path": "artifacts/fieldnote-v2/qa/final8fd-qualified.log",
+      "sha256": "14d0e3996b53d2500a5e5530b6342a94db1bd8bbeccc1fafa747c19896128e51",
+      "bytes": 1042
+    },
+    {
+      "path": "artifacts/fieldnote-v2/qa/final8fd-registry.log",
+      "sha256": "bce169891b7ed13343700e830443e67a4b79f202416b929a0f001b011f817a81",
+      "bytes": 149
+    },
+    {
+      "path": "artifacts/fieldnote-v2/qa/final8fd-scorecard.log",
+      "sha256": "a957fa1bbc5bb5853c55ff039adf780a48197237a56c883f468714d2f02f1352",
+      "bytes": 325
+    },
+    {
+      "path": "artifacts/fieldnote-v2/qa/final8fd-semantic-import.log",
+      "sha256": "03220b0c03d05d0b77a3b544d871f382e5397d36999e74c8a1240c8d64387d66",
+      "bytes": 332
+    },
+    {
+      "path": "artifacts/fieldnote-v2/qa/final8fd-smoke.log",
+      "sha256": "4a5685c782968e289b9a9d4d7aee7eda6a7eabd7a5e3c3eccb122d5aaaf3fe91",
+      "bytes": 194
+    },
+    {
+      "path": "artifacts/fieldnote-v2/qa/final8fd-strict.log",
+      "sha256": "eb560c2f18a998712a3f0d4e226ae0cf00f870b2b06d10aac8cceeaf10764c6d",
+      "bytes": 285
+    },
+    {
+      "path": "artifacts/fieldnote-v2/qa/final8fd-test.log",
+      "sha256": "dd8ef31891d337eab648e9ff2890ecb1e1b3a4088d9de4438b5e8a6c7ab44d52",
+      "bytes": 313
+    },
+    {
+      "path": "artifacts/fieldnote-v2/qa/initial-smoke.log",
+      "sha256": "851d3ab5e5304cd33b4bb10fe9a286b8cf319e513aee173bc1d0a677ce48d11b",
+      "bytes": 194
+    },
+    {
+      "path": "artifacts/fieldnote-v2/qa/npm-ci.log",
+      "sha256": "e5f05adc8da8b05577c2383679622092f59ebf922a505dca63b761da52b92d0b",
+      "bytes": 144
+    },
+    {
+      "path": "artifacts/fieldnote-v2/qa/package-browser-retry.log",
+      "sha256": "c6a5daf6d47a59fbc8200bc89d671676cd3bc75a1df14a8db8537d1669ad4fc6",
+      "bytes": 720
+    },
+    {
+      "path": "artifacts/fieldnote-v2/qa/package-browser.log",
+      "sha256": "ab026b362b6dfa58867199bfbb785dbf4f78e855de547707d73ee7a13fdd1cc8",
+      "bytes": 1120
+    },
+    {
+      "path": "artifacts/fieldnote-v2/qa/registry.log",
+      "sha256": "bce169891b7ed13343700e830443e67a4b79f202416b929a0f001b011f817a81",
+      "bytes": 149
+    },
+    {
+      "path": "artifacts/fieldnote-v2/qa/scorecard.log",
+      "sha256": "a6b2e9e744eca69c15cce5ae710b744e6a27918a48acfd41523299bbc80e3204",
+      "bytes": 316
+    },
+    {
+      "path": "artifacts/fieldnote-v2/qa/semantic-export.log",
+      "sha256": "c8f958ea7a27b0ed0d7d895a785f99d33ffbd1b02db17726ea4373c960d5e22b",
+      "bytes": 432
+    },
+    {
+      "path": "artifacts/fieldnote-v2/qa/stable-smoke.log",
+      "sha256": "a9c71acbc96039ac4dae17581d5209464a53219c9e8d91bb7999002bd0ddc89d",
+      "bytes": 192
+    },
+    {
+      "path": "artifacts/fieldnote-v2/qa/strict-browser.log",
+      "sha256": "312833b01d3c8048c7b121300bcde21881bad02e3071cc450180ef535d3cd4bf",
+      "bytes": 903
+    },
+    {
+      "path": "artifacts/fieldnote-v2/qa/test.log",
+      "sha256": "76611bea9c078d36c3bd5ba7fd3dce1b368a3d991c7b683a96809c856034b0f7",
+      "bytes": 313
+    }
+  ]
+}

@@ -1,0 +1,5 @@
+
+> research-shopping@0.1.0 eval:judge
+> EXA_RESEARCH_ENABLED=false node --import tsx evals/v2/semantic/run.ts
+
+{"status":"reporting-only","judgments":10,"disagreements":10,"humanCalibration":"pending","artifact":"/Users/josiahwong/Documents/research-shopping-v2-qa/artifacts/fieldnote-v2/qa/final8fd/semantic/semantic-report.json"}

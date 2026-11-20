@@ -1,0 +1,19 @@
+{
+  "reviewedMetadataHead": "43bafcf9e3d113a2a0ccc01c9baf7377def6d3ef",
+  "srcTree": "e1d7c10c59e1251216e3ba99c0a55c5157109fd9",
+  "all98SecurityBlobsMatch": true,
+  "sameApplicationTestEvalSkillTreesAs": "e0b7317f4bd00ce49141229943279e0da357cdbc",
+  "rootFinalChecks": {
+    "evalPreservation": {
+      "unchangedCommittedAssets": 389,
+      "adaptedPaths": [
+        ".github/workflows/product-evals.yml"
+      ]
+    },
+    "officialRegistryFiles": 18,
+    "mainProtection": "404 Branch not protected",
+    "rulesets": []
+  },
+  "hostedFinalCI": "pending final push; inspect PR53 checks on final head",
+  "runtimeEvidence": "Independent reports and exact checksummed raw QA archive; no new full suite claimed"
+}

@@ -1,0 +1,33 @@
+
+ RUN  v4.1.12 /Users/josiahwong/Documents/research-shopping-price-v5
+
+ ❯ tests/api/v5-grouped-price.test.ts (29 tests | 1 failed | 28 skipped) 153ms
+     × requires every source review to cite its own retained source, including sources without money 152ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/api/v5-grouped-price.test.ts > bounded native groups and a shared identified money inventory > requires every source review to cite its own retained source, including sources without money
+AssertionError: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ tests/api/v5-grouped-price.test.ts:27:66
+     25|     for (const product of packet.answer.products) product.price!.sourc…
+     26|     const wrong = project(packet);
+     27|     expect(wrong.products.every((product) => !product.eligible)).toBe(…
+       |                                                                  ^
+     28|     expect(wrong.choice).toBeNull();
+     29|     for (const product of own.products) {
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 28 skipped (29)
+   Start at  12:27:36
+   Duration  448ms (transform 113ms, setup 0ms, import 209ms, tests 153ms, environment 0ms)
+

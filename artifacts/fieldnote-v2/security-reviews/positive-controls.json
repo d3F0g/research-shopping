@@ -1,0 +1,1335 @@
+{
+  "head": "31431143795433d68906d09792986259dc932993",
+  "status": "passed",
+  "actualSdkCalls": 2,
+  "proof": [
+    {
+      "mode": "shared",
+      "input": {
+        "answer": {
+          "products": [
+            {
+              "id": "q-0",
+              "name": "Fixture Quartz One",
+              "variant": "standard",
+              "identity": {
+                "status": "supported",
+                "scope": "exact-variant",
+                "rationale": "Fixture data: the cited Model A passage supports this assessment.",
+                "support": [
+                  {
+                    "url": "https://manufacturer.com/quartz-0",
+                    "quote": "Fixture data. Fixture Quartz One standard is a USB-C powerbank. Fixture Quartz One standard costs SGD 35 for one unit, tax included."
+                  }
+                ]
+              },
+              "requestMatch": {
+                "status": "supported",
+                "scope": "exact-variant",
+                "rationale": "Fixture data: the cited Model A passage supports this assessment.",
+                "support": [
+                  {
+                    "url": "https://manufacturer.com/quartz-0",
+                    "quote": "Fixture data. Fixture Quartz One standard is a USB-C powerbank. Fixture Quartz One standard costs SGD 35 for one unit, tax included."
+                  }
+                ]
+              },
+              "criteria": [
+                {
+                  "criterionId": "request-9bc81579-2c48-4890-b0d6-0738541cc4fa",
+                  "assessment": {
+                    "status": "supported",
+                    "scope": "exact-variant",
+                    "rationale": "Fixture data: the cited Model A passage supports this assessment.",
+                    "support": [
+                      {
+                        "url": "https://manufacturer.com/quartz-0",
+                        "quote": "Fixture data. Fixture Quartz One standard is a USB-C powerbank. Fixture Quartz One standard costs SGD 35 for one unit, tax included."
+                      }
+                    ]
+                  }
+                }
+              ],
+              "attributes": [
+                {
+                  "name": "Battery life",
+                  "assessment": {
+                    "status": "supported",
+                    "scope": "exact-variant",
+                    "rationale": "Fixture data: the cited Model A passage supports this assessment.",
+                    "support": [
+                      {
+                        "url": "https://manufacturer.com/quartz-0",
+                        "quote": "Fixture data. Fixture Quartz One standard is a USB-C powerbank. Fixture Quartz One standard costs SGD 35 for one unit, tax included."
+                      }
+                    ]
+                  }
+                }
+              ],
+              "price": {
+                "amount": 35,
+                "currency": "SGD",
+                "variant": "standard",
+                "conditions": [
+                  "tax included"
+                ],
+                "conditionsResolved": true,
+                "assessment": {
+                  "status": "supported",
+                  "scope": "exact-variant",
+                  "rationale": "Fixture data: the cited Model A passage supports this assessment.",
+                  "support": [
+                    {
+                      "url": "https://manufacturer.com/quartz-0",
+                      "quote": "Fixture data. Fixture Quartz One standard is a USB-C powerbank. Fixture Quartz One standard costs SGD 35 for one unit, tax included."
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "id": "q-1",
+              "name": "Fixture Quartz Two",
+              "variant": "standard",
+              "identity": {
+                "status": "supported",
+                "scope": "exact-variant",
+                "rationale": "Fixture data: the cited Model A passage supports this assessment.",
+                "support": [
+                  {
+                    "url": "https://manufacturer.com/quartz-1",
+                    "quote": "Fixture data. Fixture Quartz Two standard is a USB-C powerbank. Fixture Quartz Two standard costs SGD 36 for one unit, tax included."
+                  }
+                ]
+              },
+              "requestMatch": {
+                "status": "supported",
+                "scope": "exact-variant",
+                "rationale": "Fixture data: the cited Model A passage supports this assessment.",
+                "support": [
+                  {
+                    "url": "https://manufacturer.com/quartz-1",
+                    "quote": "Fixture data. Fixture Quartz Two standard is a USB-C powerbank. Fixture Quartz Two standard costs SGD 36 for one unit, tax included."
+                  }
+                ]
+              },
+              "criteria": [
+                {
+                  "criterionId": "request-9bc81579-2c48-4890-b0d6-0738541cc4fa",
+                  "assessment": {
+                    "status": "supported",
+                    "scope": "exact-variant",
+                    "rationale": "Fixture data: the cited Model A passage supports this assessment.",
+                    "support": [
+                      {
+                        "url": "https://manufacturer.com/quartz-1",
+                        "quote": "Fixture data. Fixture Quartz Two standard is a USB-C powerbank. Fixture Quartz Two standard costs SGD 36 for one unit, tax included."
+                      }
+                    ]
+                  }
+                }
+              ],
+              "attributes": [
+                {
+                  "name": "Battery life",
+                  "assessment": {
+                    "status": "supported",
+                    "scope": "exact-variant",
+                    "rationale": "Fixture data: the cited Model A passage supports this assessment.",
+                    "support": [
+                      {
+                        "url": "https://manufacturer.com/quartz-1",
+                        "quote": "Fixture data. Fixture Quartz Two standard is a USB-C powerbank. Fixture Quartz Two standard costs SGD 36 for one unit, tax included."
+                      }
+                    ]
+                  }
+                }
+              ],
+              "price": {
+                "amount": 36,
+                "currency": "SGD",
+                "variant": "standard",
+                "conditions": [
+                  "tax included"
+                ],
+                "conditionsResolved": true,
+                "assessment": {
+                  "status": "supported",
+                  "scope": "exact-variant",
+                  "rationale": "Fixture data: the cited Model A passage supports this assessment.",
+                  "support": [
+                    {
+                      "url": "https://manufacturer.com/quartz-1",
+                      "quote": "Fixture data. Fixture Quartz Two standard is a USB-C powerbank. Fixture Quartz Two standard costs SGD 36 for one unit, tax included."
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "id": "q-2",
+              "name": "Fixture Quartz Three",
+              "variant": "standard",
+              "identity": {
+                "status": "supported",
+                "scope": "exact-variant",
+                "rationale": "Fixture data: the cited Model A passage supports this assessment.",
+                "support": [
+                  {
+                    "url": "https://manufacturer.com/quartz-2",
+                    "quote": "Fixture data. Fixture Quartz Three standard is a USB-C powerbank. Fixture Quartz Three standard costs SGD 37 for one unit, tax included."
+                  }
+                ]
+              },
+              "requestMatch": {
+                "status": "supported",
+                "scope": "exact-variant",
+                "rationale": "Fixture data: the cited Model A passage supports this assessment.",
+                "support": [
+                  {
+                    "url": "https://manufacturer.com/quartz-2",
+                    "quote": "Fixture data. Fixture Quartz Three standard is a USB-C powerbank. Fixture Quartz Three standard costs SGD 37 for one unit, tax included."
+                  }
+                ]
+              },
+              "criteria": [
+                {
+                  "criterionId": "request-9bc81579-2c48-4890-b0d6-0738541cc4fa",
+                  "assessment": {
+                    "status": "supported",
+                    "scope": "exact-variant",
+                    "rationale": "Fixture data: the cited Model A passage supports this assessment.",
+                    "support": [
+                      {
+                        "url": "https://manufacturer.com/quartz-2",
+                        "quote": "Fixture data. Fixture Quartz Three standard is a USB-C powerbank. Fixture Quartz Three standard costs SGD 37 for one unit, tax included."
+                      }
+                    ]
+                  }
+                }
+              ],
+              "attributes": [
+                {
+                  "name": "Battery life",
+                  "assessment": {
+                    "status": "supported",
+                    "scope": "exact-variant",
+                    "rationale": "Fixture data: the cited Model A passage supports this assessment.",
+                    "support": [
+                      {
+                        "url": "https://manufacturer.com/quartz-2",
+                        "quote": "Fixture data. Fixture Quartz Three standard is a USB-C powerbank. Fixture Quartz Three standard costs SGD 37 for one unit, tax included."
+                      }
+                    ]
+                  }
+                }
+              ],
+              "price": {
+                "amount": 37,
+                "currency": "SGD",
+                "variant": "standard",
+                "conditions": [
+                  "tax included"
+                ],
+                "conditionsResolved": true,
+                "assessment": {
+                  "status": "supported",
+                  "scope": "exact-variant",
+                  "rationale": "Fixture data: the cited Model A passage supports this assessment.",
+                  "support": [
+                    {
+                      "url": "https://manufacturer.com/quartz-2",
+                      "quote": "Fixture data. Fixture Quartz Three standard is a USB-C powerbank. Fixture Quartz Three standard costs SGD 37 for one unit, tax included."
+                    }
+                  ]
+                }
+              }
+            }
+          ],
+          "choice": {
+            "productId": "q-0"
+          },
+          "limitations": [
+            "Fixture data only. No live research or merchant verification."
+          ]
+        },
+        "citations": [
+          {
+            "url": "https://manufacturer.com/quartz-0",
+            "text": "Fixture data. Fixture Quartz One standard is a USB-C powerbank. Fixture Quartz One standard costs SGD 35 for one unit, tax included.",
+            "title": "Fixture Fixture Quartz One"
+          },
+          {
+            "url": "https://manufacturer.com/quartz-1",
+            "text": "Fixture data. Fixture Quartz Two standard is a USB-C powerbank. Fixture Quartz Two standard costs SGD 36 for one unit, tax included.",
+            "title": "Fixture Fixture Quartz Two"
+          },
+          {
+            "url": "https://manufacturer.com/quartz-2",
+            "text": "Fixture data. Fixture Quartz Three standard is a USB-C powerbank. Fixture Quartz Three standard costs SGD 37 for one unit, tax included.",
+            "title": "Fixture Fixture Quartz Three"
+          }
+        ],
+        "costDollars": {
+          "total": 0.005
+        },
+        "requestId": "fixture-request"
+      },
+      "result": {
+        "status": "ready",
+        "research": {
+          "version": 2,
+          "evidenceVersion": 2,
+          "dataKind": "web-research",
+          "retrievedAt": "2026-11-19T07:23:17.598Z",
+          "intent": {
+            "intentVersion": 2,
+            "originalText": "a USB-C powerbank between SGD30 and40",
+            "productDescription": "a USB-C powerbank between SGD30 and40",
+            "requirements": [
+              {
+                "id": "request-9bc81579-2c48-4890-b0d6-0738541cc4fa",
+                "text": "a USB-C powerbank between SGD30 and40",
+                "strength": "hard",
+                "originMessageId": "9bc81579-2c48-4890-b0d6-0738541cc4fa",
+                "kind": "request"
+              }
+            ],
+            "budget": {
+              "minimum": 30,
+              "maximum": 40,
+              "currency": "SGD"
+            },
+            "region": null,
+            "responseLength": "concise"
+          },
+          "summary": "Fixture Quartz One is a source-supported option for your requirements. Fixture data: the cited Model A passage supports this assessment.",
+          "products": [
+            {
+              "id": "q-0",
+              "name": "Fixture Quartz One",
+              "variant": "standard",
+              "identity": {
+                "status": "supported",
+                "scope": "exact-variant",
+                "rationale": "Fixture data: the cited Model A passage supports this assessment.",
+                "support": [
+                  {
+                    "sourceId": "source-1",
+                    "originalQuote": "Fixture data. Fixture Quartz One standard is a USB-C powerbank. Fixture Quartz One standard costs SGD 35 for one unit, tax included.",
+                    "originalStart": 0,
+                    "originalEnd": 132,
+                    "quote": "Fixture data. Fixture Quartz One standard is a USB-C powerbank. Fixture Quartz One standard costs SGD 35 for one unit, tax included.",
+                    "start": 0,
+                    "end": 132
+                  }
+                ]
+              },
+              "requestMatch": {
+                "status": "supported",
+                "scope": "exact-variant",
+                "rationale": "Fixture data: the cited Model A passage supports this assessment.",
+                "support": [
+                  {
+                    "sourceId": "source-1",
+                    "originalQuote": "Fixture data. Fixture Quartz One standard is a USB-C powerbank. Fixture Quartz One standard costs SGD 35 for one unit, tax included.",
+                    "originalStart": 0,
+                    "originalEnd": 132,
+                    "quote": "Fixture data. Fixture Quartz One standard is a USB-C powerbank. Fixture Quartz One standard costs SGD 35 for one unit, tax included.",
+                    "start": 0,
+                    "end": 132
+                  }
+                ]
+              },
+              "requirements": [
+                {
+                  "requirementId": "request-9bc81579-2c48-4890-b0d6-0738541cc4fa",
+                  "assessment": {
+                    "status": "supported",
+                    "scope": "exact-variant",
+                    "rationale": "Fixture data: the cited Model A passage supports this assessment.",
+                    "support": [
+                      {
+                        "sourceId": "source-1",
+                        "originalQuote": "Fixture data. Fixture Quartz One standard is a USB-C powerbank. Fixture Quartz One standard costs SGD 35 for one unit, tax included.",
+                        "originalStart": 0,
+                        "originalEnd": 132,
+                        "quote": "Fixture data. Fixture Quartz One standard is a USB-C powerbank. Fixture Quartz One standard costs SGD 35 for one unit, tax included.",
+                        "start": 0,
+                        "end": 132
+                      }
+                    ]
+                  }
+                }
+              ],
+              "attributes": [
+                {
+                  "name": "Battery life",
+                  "assessment": {
+                    "status": "supported",
+                    "scope": "exact-variant",
+                    "rationale": "Fixture data: the cited Model A passage supports this assessment.",
+                    "support": [
+                      {
+                        "sourceId": "source-1",
+                        "originalQuote": "Fixture data. Fixture Quartz One standard is a USB-C powerbank. Fixture Quartz One standard costs SGD 35 for one unit, tax included.",
+                        "originalStart": 0,
+                        "originalEnd": 132,
+                        "quote": "Fixture data. Fixture Quartz One standard is a USB-C powerbank. Fixture Quartz One standard costs SGD 35 for one unit, tax included.",
+                        "start": 0,
+                        "end": 132
+                      }
+                    ]
+                  }
+                }
+              ],
+              "price": {
+                "amount": 35,
+                "currency": "SGD",
+                "variant": "standard",
+                "conditions": [
+                  "tax included"
+                ],
+                "conditionsResolved": true,
+                "assessment": {
+                  "status": "supported",
+                  "scope": "exact-variant",
+                  "rationale": "Fixture data: the cited Model A passage supports this assessment.",
+                  "support": [
+                    {
+                      "sourceId": "source-1",
+                      "originalQuote": "Fixture data. Fixture Quartz One standard is a USB-C powerbank. Fixture Quartz One standard costs SGD 35 for one unit, tax included.",
+                      "originalStart": 0,
+                      "originalEnd": 132,
+                      "quote": "Fixture data. Fixture Quartz One standard is a USB-C powerbank. Fixture Quartz One standard costs SGD 35 for one unit, tax included.",
+                      "start": 0,
+                      "end": 132
+                    }
+                  ]
+                }
+              },
+              "stock": "unverified",
+              "eligible": true,
+              "blockers": []
+            },
+            {
+              "id": "q-1",
+              "name": "Fixture Quartz Two",
+              "variant": "standard",
+              "identity": {
+                "status": "supported",
+                "scope": "exact-variant",
+                "rationale": "Fixture data: the cited Model A passage supports this assessment.",
+                "support": [
+                  {
+                    "sourceId": "source-2",
+                    "originalQuote": "Fixture data. Fixture Quartz Two standard is a USB-C powerbank. Fixture Quartz Two standard costs SGD 36 for one unit, tax included.",
+                    "originalStart": 0,
+                    "originalEnd": 132,
+                    "quote": "Fixture data. Fixture Quartz Two standard is a USB-C powerbank. Fixture Quartz Two standard costs SGD 36 for one unit, tax included.",
+                    "start": 0,
+                    "end": 132
+                  }
+                ]
+              },
+              "requestMatch": {
+                "status": "supported",
+                "scope": "exact-variant",
+                "rationale": "Fixture data: the cited Model A passage supports this assessment.",
+                "support": [
+                  {
+                    "sourceId": "source-2",
+                    "originalQuote": "Fixture data. Fixture Quartz Two standard is a USB-C powerbank. Fixture Quartz Two standard costs SGD 36 for one unit, tax included.",
+                    "originalStart": 0,
+                    "originalEnd": 132,
+                    "quote": "Fixture data. Fixture Quartz Two standard is a USB-C powerbank. Fixture Quartz Two standard costs SGD 36 for one unit, tax included.",
+                    "start": 0,
+                    "end": 132
+                  }
+                ]
+              },
+              "requirements": [
+                {
+                  "requirementId": "request-9bc81579-2c48-4890-b0d6-0738541cc4fa",
+                  "assessment": {
+                    "status": "supported",
+                    "scope": "exact-variant",
+                    "rationale": "Fixture data: the cited Model A passage supports this assessment.",
+                    "support": [
+                      {
+                        "sourceId": "source-2",
+                        "originalQuote": "Fixture data. Fixture Quartz Two standard is a USB-C powerbank. Fixture Quartz Two standard costs SGD 36 for one unit, tax included.",
+                        "originalStart": 0,
+                        "originalEnd": 132,
+                        "quote": "Fixture data. Fixture Quartz Two standard is a USB-C powerbank. Fixture Quartz Two standard costs SGD 36 for one unit, tax included.",
+                        "start": 0,
+                        "end": 132
+                      }
+                    ]
+                  }
+                }
+              ],
+              "attributes": [
+                {
+                  "name": "Battery life",
+                  "assessment": {
+                    "status": "supported",
+                    "scope": "exact-variant",
+                    "rationale": "Fixture data: the cited Model A passage supports this assessment.",
+                    "support": [
+                      {
+                        "sourceId": "source-2",
+                        "originalQuote": "Fixture data. Fixture Quartz Two standard is a USB-C powerbank. Fixture Quartz Two standard costs SGD 36 for one unit, tax included.",
+                        "originalStart": 0,
+                        "originalEnd": 132,
+                        "quote": "Fixture data. Fixture Quartz Two standard is a USB-C powerbank. Fixture Quartz Two standard costs SGD 36 for one unit, tax included.",
+                        "start": 0,
+                        "end": 132
+                      }
+                    ]
+                  }
+                }
+              ],
+              "price": {
+                "amount": 36,
+                "currency": "SGD",
+                "variant": "standard",
+                "conditions": [
+                  "tax included"
+                ],
+                "conditionsResolved": true,
+                "assessment": {
+                  "status": "supported",
+                  "scope": "exact-variant",
+                  "rationale": "Fixture data: the cited Model A passage supports this assessment.",
+                  "support": [
+                    {
+                      "sourceId": "source-2",
+                      "originalQuote": "Fixture data. Fixture Quartz Two standard is a USB-C powerbank. Fixture Quartz Two standard costs SGD 36 for one unit, tax included.",
+                      "originalStart": 0,
+                      "originalEnd": 132,
+                      "quote": "Fixture data. Fixture Quartz Two standard is a USB-C powerbank. Fixture Quartz Two standard costs SGD 36 for one unit, tax included.",
+                      "start": 0,
+                      "end": 132
+                    }
+                  ]
+                }
+              },
+              "stock": "unverified",
+              "eligible": true,
+              "blockers": []
+            },
+            {
+              "id": "q-2",
+              "name": "Fixture Quartz Three",
+              "variant": "standard",
+              "identity": {
+                "status": "supported",
+                "scope": "exact-variant",
+                "rationale": "Fixture data: the cited Model A passage supports this assessment.",
+                "support": [
+                  {
+                    "sourceId": "source-3",
+                    "originalQuote": "Fixture data. Fixture Quartz Three standard is a USB-C powerbank. Fixture Quartz Three standard costs SGD 37 for one unit, tax included.",
+                    "originalStart": 0,
+                    "originalEnd": 136,
+                    "quote": "Fixture data. Fixture Quartz Three standard is a USB-C powerbank. Fixture Quartz Three standard costs SGD 37 for one unit, tax included.",
+                    "start": 0,
+                    "end": 136
+                  }
+                ]
+              },
+              "requestMatch": {
+                "status": "supported",
+                "scope": "exact-variant",
+                "rationale": "Fixture data: the cited Model A passage supports this assessment.",
+                "support": [
+                  {
+                    "sourceId": "source-3",
+                    "originalQuote": "Fixture data. Fixture Quartz Three standard is a USB-C powerbank. Fixture Quartz Three standard costs SGD 37 for one unit, tax included.",
+                    "originalStart": 0,
+                    "originalEnd": 136,
+                    "quote": "Fixture data. Fixture Quartz Three standard is a USB-C powerbank. Fixture Quartz Three standard costs SGD 37 for one unit, tax included.",
+                    "start": 0,
+                    "end": 136
+                  }
+                ]
+              },
+              "requirements": [
+                {
+                  "requirementId": "request-9bc81579-2c48-4890-b0d6-0738541cc4fa",
+                  "assessment": {
+                    "status": "supported",
+                    "scope": "exact-variant",
+                    "rationale": "Fixture data: the cited Model A passage supports this assessment.",
+                    "support": [
+                      {
+                        "sourceId": "source-3",
+                        "originalQuote": "Fixture data. Fixture Quartz Three standard is a USB-C powerbank. Fixture Quartz Three standard costs SGD 37 for one unit, tax included.",
+                        "originalStart": 0,
+                        "originalEnd": 136,
+                        "quote": "Fixture data. Fixture Quartz Three standard is a USB-C powerbank. Fixture Quartz Three standard costs SGD 37 for one unit, tax included.",
+                        "start": 0,
+                        "end": 136
+                      }
+                    ]
+                  }
+                }
+              ],
+              "attributes": [
+                {
+                  "name": "Battery life",
+                  "assessment": {
+                    "status": "supported",
+                    "scope": "exact-variant",
+                    "rationale": "Fixture data: the cited Model A passage supports this assessment.",
+                    "support": [
+                      {
+                        "sourceId": "source-3",
+                        "originalQuote": "Fixture data. Fixture Quartz Three standard is a USB-C powerbank. Fixture Quartz Three standard costs SGD 37 for one unit, tax included.",
+                        "originalStart": 0,
+                        "originalEnd": 136,
+                        "quote": "Fixture data. Fixture Quartz Three standard is a USB-C powerbank. Fixture Quartz Three standard costs SGD 37 for one unit, tax included.",
+                        "start": 0,
+                        "end": 136
+                      }
+                    ]
+                  }
+                }
+              ],
+              "price": {
+                "amount": 37,
+                "currency": "SGD",
+                "variant": "standard",
+                "conditions": [
+                  "tax included"
+                ],
+                "conditionsResolved": true,
+                "assessment": {
+                  "status": "supported",
+                  "scope": "exact-variant",
+                  "rationale": "Fixture data: the cited Model A passage supports this assessment.",
+                  "support": [
+                    {
+                      "sourceId": "source-3",
+                      "originalQuote": "Fixture data. Fixture Quartz Three standard is a USB-C powerbank. Fixture Quartz Three standard costs SGD 37 for one unit, tax included.",
+                      "originalStart": 0,
+                      "originalEnd": 136,
+                      "quote": "Fixture data. Fixture Quartz Three standard is a USB-C powerbank. Fixture Quartz Three standard costs SGD 37 for one unit, tax included.",
+                      "start": 0,
+                      "end": 136
+                    }
+                  ]
+                }
+              },
+              "stock": "unverified",
+              "eligible": true,
+              "blockers": []
+            }
+          ],
+          "choice": {
+            "productId": "q-0",
+            "rationale": "Fixture data: the cited Model A passage supports this assessment."
+          },
+          "sources": [
+            {
+              "id": "source-1",
+              "url": "https://manufacturer.com/quartz-0",
+              "title": "Fixture Fixture Quartz One",
+              "text": "Fixture data. Fixture Quartz One standard is a USB-C powerbank. Fixture Quartz One standard costs SGD 35 for one unit, tax included.",
+              "originalLength": 132,
+              "textTruncated": false
+            },
+            {
+              "id": "source-2",
+              "url": "https://manufacturer.com/quartz-1",
+              "title": "Fixture Fixture Quartz Two",
+              "text": "Fixture data. Fixture Quartz Two standard is a USB-C powerbank. Fixture Quartz Two standard costs SGD 36 for one unit, tax included.",
+              "originalLength": 132,
+              "textTruncated": false
+            },
+            {
+              "id": "source-3",
+              "url": "https://manufacturer.com/quartz-2",
+              "title": "Fixture Fixture Quartz Three",
+              "text": "Fixture data. Fixture Quartz Three standard is a USB-C powerbank. Fixture Quartz Three standard costs SGD 37 for one unit, tax included.",
+              "originalLength": 136,
+              "textTruncated": false
+            }
+          ],
+          "limitations": [
+            "Assessments are source-based AI interpretations. Quotations prove provenance, not semantic entailment.",
+            "Prices are unverified page observations. Stock, delivery and current merchant offers remain unknown.",
+            "Fixture data only. No live research or merchant verification."
+          ],
+          "requestId": "fixture-request",
+          "reportedCostUsd": 0.005
+        }
+      }
+    },
+    {
+      "mode": "unique",
+      "input": {
+        "answer": {
+          "products": [
+            {
+              "id": "q-0",
+              "name": "Fixture Quartz One",
+              "variant": "Model A",
+              "identity": {
+                "status": "supported",
+                "scope": "exact-variant",
+                "rationale": "Fixture data: the cited Model A passage supports this assessment.",
+                "support": [
+                  {
+                    "url": "https://manufacturer.com/quartz-0",
+                    "quote": "Fixture data. Fixture Quartz One Model A is a USB-C powerbank. Model A costs SGD 35 for one unit, tax included."
+                  }
+                ]
+              },
+              "requestMatch": {
+                "status": "supported",
+                "scope": "exact-variant",
+                "rationale": "Fixture data: the cited Model A passage supports this assessment.",
+                "support": [
+                  {
+                    "url": "https://manufacturer.com/quartz-0",
+                    "quote": "Fixture data. Fixture Quartz One Model A is a USB-C powerbank. Model A costs SGD 35 for one unit, tax included."
+                  }
+                ]
+              },
+              "criteria": [
+                {
+                  "criterionId": "request-9bc81579-2c48-4890-b0d6-0738541cc4fa",
+                  "assessment": {
+                    "status": "supported",
+                    "scope": "exact-variant",
+                    "rationale": "Fixture data: the cited Model A passage supports this assessment.",
+                    "support": [
+                      {
+                        "url": "https://manufacturer.com/quartz-0",
+                        "quote": "Fixture data. Fixture Quartz One Model A is a USB-C powerbank. Model A costs SGD 35 for one unit, tax included."
+                      }
+                    ]
+                  }
+                }
+              ],
+              "attributes": [
+                {
+                  "name": "Battery life",
+                  "assessment": {
+                    "status": "supported",
+                    "scope": "exact-variant",
+                    "rationale": "Fixture data: the cited Model A passage supports this assessment.",
+                    "support": [
+                      {
+                        "url": "https://manufacturer.com/quartz-0",
+                        "quote": "Fixture data. Fixture Quartz One Model A is a USB-C powerbank. Model A costs SGD 35 for one unit, tax included."
+                      }
+                    ]
+                  }
+                }
+              ],
+              "price": {
+                "amount": 35,
+                "currency": "SGD",
+                "variant": "Model A",
+                "conditions": [
+                  "tax included"
+                ],
+                "conditionsResolved": true,
+                "assessment": {
+                  "status": "supported",
+                  "scope": "exact-variant",
+                  "rationale": "Fixture data: the cited Model A passage supports this assessment.",
+                  "support": [
+                    {
+                      "url": "https://manufacturer.com/quartz-0",
+                      "quote": "Fixture data. Fixture Quartz One Model A is a USB-C powerbank. Model A costs SGD 35 for one unit, tax included."
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "id": "q-1",
+              "name": "Fixture Quartz Two",
+              "variant": "Model B",
+              "identity": {
+                "status": "supported",
+                "scope": "exact-variant",
+                "rationale": "Fixture data: the cited Model A passage supports this assessment.",
+                "support": [
+                  {
+                    "url": "https://manufacturer.com/quartz-1",
+                    "quote": "Fixture data. Fixture Quartz Two Model B is a USB-C powerbank. Model B costs SGD 36 for one unit, tax included."
+                  }
+                ]
+              },
+              "requestMatch": {
+                "status": "supported",
+                "scope": "exact-variant",
+                "rationale": "Fixture data: the cited Model A passage supports this assessment.",
+                "support": [
+                  {
+                    "url": "https://manufacturer.com/quartz-1",
+                    "quote": "Fixture data. Fixture Quartz Two Model B is a USB-C powerbank. Model B costs SGD 36 for one unit, tax included."
+                  }
+                ]
+              },
+              "criteria": [
+                {
+                  "criterionId": "request-9bc81579-2c48-4890-b0d6-0738541cc4fa",
+                  "assessment": {
+                    "status": "supported",
+                    "scope": "exact-variant",
+                    "rationale": "Fixture data: the cited Model A passage supports this assessment.",
+                    "support": [
+                      {
+                        "url": "https://manufacturer.com/quartz-1",
+                        "quote": "Fixture data. Fixture Quartz Two Model B is a USB-C powerbank. Model B costs SGD 36 for one unit, tax included."
+                      }
+                    ]
+                  }
+                }
+              ],
+              "attributes": [
+                {
+                  "name": "Battery life",
+                  "assessment": {
+                    "status": "supported",
+                    "scope": "exact-variant",
+                    "rationale": "Fixture data: the cited Model A passage supports this assessment.",
+                    "support": [
+                      {
+                        "url": "https://manufacturer.com/quartz-1",
+                        "quote": "Fixture data. Fixture Quartz Two Model B is a USB-C powerbank. Model B costs SGD 36 for one unit, tax included."
+                      }
+                    ]
+                  }
+                }
+              ],
+              "price": {
+                "amount": 36,
+                "currency": "SGD",
+                "variant": "Model B",
+                "conditions": [
+                  "tax included"
+                ],
+                "conditionsResolved": true,
+                "assessment": {
+                  "status": "supported",
+                  "scope": "exact-variant",
+                  "rationale": "Fixture data: the cited Model A passage supports this assessment.",
+                  "support": [
+                    {
+                      "url": "https://manufacturer.com/quartz-1",
+                      "quote": "Fixture data. Fixture Quartz Two Model B is a USB-C powerbank. Model B costs SGD 36 for one unit, tax included."
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "id": "q-2",
+              "name": "Fixture Quartz Three",
+              "variant": "Model C",
+              "identity": {
+                "status": "supported",
+                "scope": "exact-variant",
+                "rationale": "Fixture data: the cited Model A passage supports this assessment.",
+                "support": [
+                  {
+                    "url": "https://manufacturer.com/quartz-2",
+                    "quote": "Fixture data. Fixture Quartz Three Model C is a USB-C powerbank. Model C costs SGD 37 for one unit, tax included."
+                  }
+                ]
+              },
+              "requestMatch": {
+                "status": "supported",
+                "scope": "exact-variant",
+                "rationale": "Fixture data: the cited Model A passage supports this assessment.",
+                "support": [
+                  {
+                    "url": "https://manufacturer.com/quartz-2",
+                    "quote": "Fixture data. Fixture Quartz Three Model C is a USB-C powerbank. Model C costs SGD 37 for one unit, tax included."
+                  }
+                ]
+              },
+              "criteria": [
+                {
+                  "criterionId": "request-9bc81579-2c48-4890-b0d6-0738541cc4fa",
+                  "assessment": {
+                    "status": "supported",
+                    "scope": "exact-variant",
+                    "rationale": "Fixture data: the cited Model A passage supports this assessment.",
+                    "support": [
+                      {
+                        "url": "https://manufacturer.com/quartz-2",
+                        "quote": "Fixture data. Fixture Quartz Three Model C is a USB-C powerbank. Model C costs SGD 37 for one unit, tax included."
+                      }
+                    ]
+                  }
+                }
+              ],
+              "attributes": [
+                {
+                  "name": "Battery life",
+                  "assessment": {
+                    "status": "supported",
+                    "scope": "exact-variant",
+                    "rationale": "Fixture data: the cited Model A passage supports this assessment.",
+                    "support": [
+                      {
+                        "url": "https://manufacturer.com/quartz-2",
+                        "quote": "Fixture data. Fixture Quartz Three Model C is a USB-C powerbank. Model C costs SGD 37 for one unit, tax included."
+                      }
+                    ]
+                  }
+                }
+              ],
+              "price": {
+                "amount": 37,
+                "currency": "SGD",
+                "variant": "Model C",
+                "conditions": [
+                  "tax included"
+                ],
+                "conditionsResolved": true,
+                "assessment": {
+                  "status": "supported",
+                  "scope": "exact-variant",
+                  "rationale": "Fixture data: the cited Model A passage supports this assessment.",
+                  "support": [
+                    {
+                      "url": "https://manufacturer.com/quartz-2",
+                      "quote": "Fixture data. Fixture Quartz Three Model C is a USB-C powerbank. Model C costs SGD 37 for one unit, tax included."
+                    }
+                  ]
+                }
+              }
+            }
+          ],
+          "choice": {
+            "productId": "q-0"
+          },
+          "limitations": [
+            "Fixture data only. No live research or merchant verification."
+          ]
+        },
+        "citations": [
+          {
+            "url": "https://manufacturer.com/quartz-0",
+            "text": "Fixture data. Fixture Quartz One Model A is a USB-C powerbank. Model A costs SGD 35 for one unit, tax included.",
+            "title": "Fixture Fixture Quartz One"
+          },
+          {
+            "url": "https://manufacturer.com/quartz-1",
+            "text": "Fixture data. Fixture Quartz Two Model B is a USB-C powerbank. Model B costs SGD 36 for one unit, tax included.",
+            "title": "Fixture Fixture Quartz Two"
+          },
+          {
+            "url": "https://manufacturer.com/quartz-2",
+            "text": "Fixture data. Fixture Quartz Three Model C is a USB-C powerbank. Model C costs SGD 37 for one unit, tax included.",
+            "title": "Fixture Fixture Quartz Three"
+          }
+        ],
+        "costDollars": {
+          "total": 0.005
+        },
+        "requestId": "fixture-request"
+      },
+      "result": {
+        "status": "ready",
+        "research": {
+          "version": 2,
+          "evidenceVersion": 2,
+          "dataKind": "web-research",
+          "retrievedAt": "2026-11-19T07:23:17.610Z",
+          "intent": {
+            "intentVersion": 2,
+            "originalText": "a USB-C powerbank between SGD30 and40",
+            "productDescription": "a USB-C powerbank between SGD30 and40",
+            "requirements": [
+              {
+                "id": "request-9bc81579-2c48-4890-b0d6-0738541cc4fa",
+                "text": "a USB-C powerbank between SGD30 and40",
+                "strength": "hard",
+                "originMessageId": "9bc81579-2c48-4890-b0d6-0738541cc4fa",
+                "kind": "request"
+              }
+            ],
+            "budget": {
+              "minimum": 30,
+              "maximum": 40,
+              "currency": "SGD"
+            },
+            "region": null,
+            "responseLength": "concise"
+          },
+          "summary": "Fixture Quartz One is a source-supported option for your requirements. Fixture data: the cited Model A passage supports this assessment.",
+          "products": [
+            {
+              "id": "q-0",
+              "name": "Fixture Quartz One",
+              "variant": "Model A",
+              "identity": {
+                "status": "supported",
+                "scope": "exact-variant",
+                "rationale": "Fixture data: the cited Model A passage supports this assessment.",
+                "support": [
+                  {
+                    "sourceId": "source-1",
+                    "originalQuote": "Fixture data. Fixture Quartz One Model A is a USB-C powerbank. Model A costs SGD 35 for one unit, tax included.",
+                    "originalStart": 0,
+                    "originalEnd": 111,
+                    "quote": "Fixture data. Fixture Quartz One Model A is a USB-C powerbank. Model A costs SGD 35 for one unit, tax included.",
+                    "start": 0,
+                    "end": 111
+                  }
+                ]
+              },
+              "requestMatch": {
+                "status": "supported",
+                "scope": "exact-variant",
+                "rationale": "Fixture data: the cited Model A passage supports this assessment.",
+                "support": [
+                  {
+                    "sourceId": "source-1",
+                    "originalQuote": "Fixture data. Fixture Quartz One Model A is a USB-C powerbank. Model A costs SGD 35 for one unit, tax included.",
+                    "originalStart": 0,
+                    "originalEnd": 111,
+                    "quote": "Fixture data. Fixture Quartz One Model A is a USB-C powerbank. Model A costs SGD 35 for one unit, tax included.",
+                    "start": 0,
+                    "end": 111
+                  }
+                ]
+              },
+              "requirements": [
+                {
+                  "requirementId": "request-9bc81579-2c48-4890-b0d6-0738541cc4fa",
+                  "assessment": {
+                    "status": "supported",
+                    "scope": "exact-variant",
+                    "rationale": "Fixture data: the cited Model A passage supports this assessment.",
+                    "support": [
+                      {
+                        "sourceId": "source-1",
+                        "originalQuote": "Fixture data. Fixture Quartz One Model A is a USB-C powerbank. Model A costs SGD 35 for one unit, tax included.",
+                        "originalStart": 0,
+                        "originalEnd": 111,
+                        "quote": "Fixture data. Fixture Quartz One Model A is a USB-C powerbank. Model A costs SGD 35 for one unit, tax included.",
+                        "start": 0,
+                        "end": 111
+                      }
+                    ]
+                  }
+                }
+              ],
+              "attributes": [
+                {
+                  "name": "Battery life",
+                  "assessment": {
+                    "status": "supported",
+                    "scope": "exact-variant",
+                    "rationale": "Fixture data: the cited Model A passage supports this assessment.",
+                    "support": [
+                      {
+                        "sourceId": "source-1",
+                        "originalQuote": "Fixture data. Fixture Quartz One Model A is a USB-C powerbank. Model A costs SGD 35 for one unit, tax included.",
+                        "originalStart": 0,
+                        "originalEnd": 111,
+                        "quote": "Fixture data. Fixture Quartz One Model A is a USB-C powerbank. Model A costs SGD 35 for one unit, tax included.",
+                        "start": 0,
+                        "end": 111
+                      }
+                    ]
+                  }
+                }
+              ],
+              "price": {
+                "amount": 35,
+                "currency": "SGD",
+                "variant": "Model A",
+                "conditions": [
+                  "tax included"
+                ],
+                "conditionsResolved": true,
+                "assessment": {
+                  "status": "supported",
+                  "scope": "exact-variant",
+                  "rationale": "Fixture data: the cited Model A passage supports this assessment.",
+                  "support": [
+                    {
+                      "sourceId": "source-1",
+                      "originalQuote": "Fixture data. Fixture Quartz One Model A is a USB-C powerbank. Model A costs SGD 35 for one unit, tax included.",
+                      "originalStart": 0,
+                      "originalEnd": 111,
+                      "quote": "Fixture data. Fixture Quartz One Model A is a USB-C powerbank. Model A costs SGD 35 for one unit, tax included.",
+                      "start": 0,
+                      "end": 111
+                    }
+                  ]
+                }
+              },
+              "stock": "unverified",
+              "eligible": true,
+              "blockers": []
+            },
+            {
+              "id": "q-1",
+              "name": "Fixture Quartz Two",
+              "variant": "Model B",
+              "identity": {
+                "status": "supported",
+                "scope": "exact-variant",
+                "rationale": "Fixture data: the cited Model A passage supports this assessment.",
+                "support": [
+                  {
+                    "sourceId": "source-2",
+                    "originalQuote": "Fixture data. Fixture Quartz Two Model B is a USB-C powerbank. Model B costs SGD 36 for one unit, tax included.",
+                    "originalStart": 0,
+                    "originalEnd": 111,
+                    "quote": "Fixture data. Fixture Quartz Two Model B is a USB-C powerbank. Model B costs SGD 36 for one unit, tax included.",
+                    "start": 0,
+                    "end": 111
+                  }
+                ]
+              },
+              "requestMatch": {
+                "status": "supported",
+                "scope": "exact-variant",
+                "rationale": "Fixture data: the cited Model A passage supports this assessment.",
+                "support": [
+                  {
+                    "sourceId": "source-2",
+                    "originalQuote": "Fixture data. Fixture Quartz Two Model B is a USB-C powerbank. Model B costs SGD 36 for one unit, tax included.",
+                    "originalStart": 0,
+                    "originalEnd": 111,
+                    "quote": "Fixture data. Fixture Quartz Two Model B is a USB-C powerbank. Model B costs SGD 36 for one unit, tax included.",
+                    "start": 0,
+                    "end": 111
+                  }
+                ]
+              },
+              "requirements": [
+                {
+                  "requirementId": "request-9bc81579-2c48-4890-b0d6-0738541cc4fa",
+                  "assessment": {
+                    "status": "supported",
+                    "scope": "exact-variant",
+                    "rationale": "Fixture data: the cited Model A passage supports this assessment.",
+                    "support": [
+                      {
+                        "sourceId": "source-2",
+                        "originalQuote": "Fixture data. Fixture Quartz Two Model B is a USB-C powerbank. Model B costs SGD 36 for one unit, tax included.",
+                        "originalStart": 0,
+                        "originalEnd": 111,
+                        "quote": "Fixture data. Fixture Quartz Two Model B is a USB-C powerbank. Model B costs SGD 36 for one unit, tax included.",
+                        "start": 0,
+                        "end": 111
+                      }
+                    ]
+                  }
+                }
+              ],
+              "attributes": [
+                {
+                  "name": "Battery life",
+                  "assessment": {
+                    "status": "supported",
+                    "scope": "exact-variant",
+                    "rationale": "Fixture data: the cited Model A passage supports this assessment.",
+                    "support": [
+                      {
+                        "sourceId": "source-2",
+                        "originalQuote": "Fixture data. Fixture Quartz Two Model B is a USB-C powerbank. Model B costs SGD 36 for one unit, tax included.",
+                        "originalStart": 0,
+                        "originalEnd": 111,
+                        "quote": "Fixture data. Fixture Quartz Two Model B is a USB-C powerbank. Model B costs SGD 36 for one unit, tax included.",
+                        "start": 0,
+                        "end": 111
+                      }
+                    ]
+                  }
+                }
+              ],
+              "price": {
+                "amount": 36,
+                "currency": "SGD",
+                "variant": "Model B",
+                "conditions": [
+                  "tax included"
+                ],
+                "conditionsResolved": true,
+                "assessment": {
+                  "status": "supported",
+                  "scope": "exact-variant",
+                  "rationale": "Fixture data: the cited Model A passage supports this assessment.",
+                  "support": [
+                    {
+                      "sourceId": "source-2",
+                      "originalQuote": "Fixture data. Fixture Quartz Two Model B is a USB-C powerbank. Model B costs SGD 36 for one unit, tax included.",
+                      "originalStart": 0,
+                      "originalEnd": 111,
+                      "quote": "Fixture data. Fixture Quartz Two Model B is a USB-C powerbank. Model B costs SGD 36 for one unit, tax included.",
+                      "start": 0,
+                      "end": 111
+                    }
+                  ]
+                }
+              },
+              "stock": "unverified",
+              "eligible": true,
+              "blockers": []
+            },
+            {
+              "id": "q-2",
+              "name": "Fixture Quartz Three",
+              "variant": "Model C",
+              "identity": {
+                "status": "supported",
+                "scope": "exact-variant",
+                "rationale": "Fixture data: the cited Model A passage supports this assessment.",
+                "support": [
+                  {
+                    "sourceId": "source-3",
+                    "originalQuote": "Fixture data. Fixture Quartz Three Model C is a USB-C powerbank. Model C costs SGD 37 for one unit, tax included.",
+                    "originalStart": 0,
+                    "originalEnd": 113,
+                    "quote": "Fixture data. Fixture Quartz Three Model C is a USB-C powerbank. Model C costs SGD 37 for one unit, tax included.",
+                    "start": 0,
+                    "end": 113
+                  }
+                ]
+              },
+              "requestMatch": {
+                "status": "supported",
+                "scope": "exact-variant",
+                "rationale": "Fixture data: the cited Model A passage supports this assessment.",
+                "support": [
+                  {
+                    "sourceId": "source-3",
+                    "originalQuote": "Fixture data. Fixture Quartz Three Model C is a USB-C powerbank. Model C costs SGD 37 for one unit, tax included.",
+                    "originalStart": 0,
+                    "originalEnd": 113,
+                    "quote": "Fixture data. Fixture Quartz Three Model C is a USB-C powerbank. Model C costs SGD 37 for one unit, tax included.",
+                    "start": 0,
+                    "end": 113
+                  }
+                ]
+              },
+              "requirements": [
+                {
+                  "requirementId": "request-9bc81579-2c48-4890-b0d6-0738541cc4fa",
+                  "assessment": {
+                    "status": "supported",
+                    "scope": "exact-variant",
+                    "rationale": "Fixture data: the cited Model A passage supports this assessment.",
+                    "support": [
+                      {
+                        "sourceId": "source-3",
+                        "originalQuote": "Fixture data. Fixture Quartz Three Model C is a USB-C powerbank. Model C costs SGD 37 for one unit, tax included.",
+                        "originalStart": 0,
+                        "originalEnd": 113,
+                        "quote": "Fixture data. Fixture Quartz Three Model C is a USB-C powerbank. Model C costs SGD 37 for one unit, tax included.",
+                        "start": 0,
+                        "end": 113
+                      }
+                    ]
+                  }
+                }
+              ],
+              "attributes": [
+                {
+                  "name": "Battery life",
+                  "assessment": {
+                    "status": "supported",
+                    "scope": "exact-variant",
+                    "rationale": "Fixture data: the cited Model A passage supports this assessment.",
+                    "support": [
+                      {
+                        "sourceId": "source-3",
+                        "originalQuote": "Fixture data. Fixture Quartz Three Model C is a USB-C powerbank. Model C costs SGD 37 for one unit, tax included.",
+                        "originalStart": 0,
+                        "originalEnd": 113,
+                        "quote": "Fixture data. Fixture Quartz Three Model C is a USB-C powerbank. Model C costs SGD 37 for one unit, tax included.",
+                        "start": 0,
+                        "end": 113
+                      }
+                    ]
+                  }
+                }
+              ],
+              "price": {
+                "amount": 37,
+                "currency": "SGD",
+                "variant": "Model C",
+                "conditions": [
+                  "tax included"
+                ],
+                "conditionsResolved": true,
+                "assessment": {
+                  "status": "supported",
+                  "scope": "exact-variant",
+                  "rationale": "Fixture data: the cited Model A passage supports this assessment.",
+                  "support": [
+                    {
+                      "sourceId": "source-3",
+                      "originalQuote": "Fixture data. Fixture Quartz Three Model C is a USB-C powerbank. Model C costs SGD 37 for one unit, tax included.",
+                      "originalStart": 0,
+                      "originalEnd": 113,
+                      "quote": "Fixture data. Fixture Quartz Three Model C is a USB-C powerbank. Model C costs SGD 37 for one unit, tax included.",
+                      "start": 0,
+                      "end": 113
+                    }
+                  ]
+                }
+              },
+              "stock": "unverified",
+              "eligible": true,
+              "blockers": []
+            }
+          ],
+          "choice": {
+            "productId": "q-0",
+            "rationale": "Fixture data: the cited Model A passage supports this assessment."
+          },
+          "sources": [
+            {
+              "id": "source-1",
+              "url": "https://manufacturer.com/quartz-0",
+              "title": "Fixture Fixture Quartz One",
+              "text": "Fixture data. Fixture Quartz One Model A is a USB-C powerbank. Model A costs SGD 35 for one unit, tax included.",
+              "originalLength": 111,
+              "textTruncated": false
+            },
+            {
+              "id": "source-2",
+              "url": "https://manufacturer.com/quartz-1",
+              "title": "Fixture Fixture Quartz Two",
+              "text": "Fixture data. Fixture Quartz Two Model B is a USB-C powerbank. Model B costs SGD 36 for one unit, tax included.",
+              "originalLength": 111,
+              "textTruncated": false
+            },
+            {
+              "id": "source-3",
+              "url": "https://manufacturer.com/quartz-2",
+              "title": "Fixture Fixture Quartz Three",
+              "text": "Fixture data. Fixture Quartz Three Model C is a USB-C powerbank. Model C costs SGD 37 for one unit, tax included.",
+              "originalLength": 113,
+              "textTruncated": false
+            }
+          ],
+          "limitations": [
+            "Assessments are source-based AI interpretations. Quotations prove provenance, not semantic entailment.",
+            "Prices are unverified page observations. Stock, delivery and current merchant offers remain unknown.",
+            "Fixture data only. No live research or merchant verification."
+          ],
+          "requestId": "fixture-request",
+          "reportedCostUsd": 0.005
+        }
+      }
+    }
+  ]
+}

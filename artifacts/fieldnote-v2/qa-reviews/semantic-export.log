@@ -1,0 +1,5 @@
+
+> research-shopping@0.1.0 eval:judge
+> EXA_RESEARCH_ENABLED=false node --import tsx evals/v2/semantic/run.ts
+
+{"status":"exported","packets":10,"blindInput":"/Users/josiahwong/Documents/research-shopping-v2-qa/artifacts/fieldnote-v2/qa/semantic/packets.json","privateMapping":"/Users/josiahwong/Documents/research-shopping-v2-qa/artifacts/fieldnote-v2/qa/semantic/private-manifest.json","humanCalibration":"pending","paidCalls":0}

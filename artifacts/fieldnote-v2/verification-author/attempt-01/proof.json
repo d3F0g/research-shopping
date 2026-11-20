@@ -1,0 +1,98 @@
+{
+  "repo": "/Users/josiahwong/Documents/research-shopping-v2",
+  "apiPort": 3273,
+  "webPort": 5383,
+  "artifacts": "/Users/josiahwong/Documents/research-shopping-v2-verification/artifacts/fieldnote-v2/verification-skill/attempt-01",
+  "commit": "d8a0971ba0ac0888e328234fa00de545ec0fe4be",
+  "worktreeStatus": "M src/client/App.tsx\n M src/client/ResearchAnswer.tsx\n M tests/e2e/v2-chat.spec.ts\n?? artifacts/fieldnote-v2/desktop-empty.png\n?? artifacts/fieldnote-v2/desktop-evidence.png\n?? artifacts/fieldnote-v2/desktop-light-ordinary.png\n?? artifacts/fieldnote-v2/desktop-research.png\n?? artifacts/fieldnote-v2/mobile-empty.png\n?? artifacts/fieldnote-v2/mobile-evidence.png\n?? artifacts/fieldnote-v2/mobile-light-ordinary.png\n?? artifacts/fieldnote-v2/mobile-research.png",
+  "composition": "Automated test only. Actual Hono + Exa SDK against owned loopback substitute.",
+  "result": "failed",
+  "cleanup": true,
+  "processes": [
+    {
+      "name": "test-api",
+      "pid": 54306
+    },
+    {
+      "name": "vite",
+      "pid": 54307
+    }
+  ],
+  "journeys": [
+    {
+      "viewport": {
+        "name": "desktop",
+        "width": 1440,
+        "height": 1000
+      },
+      "result": "failed",
+      "checks": [
+        "Fresh OS-light context defaults dark; light and dark selections survive refresh."
+      ],
+      "composer": {
+        "textbox": {
+          "x": 361,
+          "y": 853,
+          "width": 718,
+          "height": 64,
+          "right": 1079,
+          "bottom": 917,
+          "viewportWidth": 1440,
+          "viewportHeight": 1000,
+          "clipTop": 0,
+          "clipBottom": 1000
+        },
+        "send": {
+          "x": 1037,
+          "y": 923,
+          "width": 32,
+          "height": 32,
+          "right": 1069,
+          "bottom": 955,
+          "viewportWidth": 1440,
+          "viewportHeight": 1000,
+          "clipTop": 0,
+          "clipBottom": 1000
+        }
+      }
+    }
+  ],
+  "limits": [
+    "No live Exa retrieval, billing, merchant reachability, inventory, semantic factuality, or PostgreSQL/account acceptance.",
+    "Cancellation at the browser transport boundary does not establish SDK socket cancellation. Run the package API tests.",
+    "Screenshots require independent visual inspection. This helper does not approve the final V2 PR."
+  ],
+  "environment": {
+    "inherited": [
+      "API_PORT",
+      "EXA_RESEARCH_ENABLED",
+      "HOME",
+      "LANG",
+      "LC_ALL",
+      "NODE_ENV",
+      "PATH",
+      "TMPDIR",
+      "VITE_API_PORT",
+      "WEB_PORT"
+    ],
+    "privateProviderAndDatabaseVariables": "not inherited",
+    "environmentFiles": "not loaded"
+  },
+  "health": {
+    "status": "ok",
+    "mode": "research",
+    "provider": "exa",
+    "automaticPaidChecks": false
+  },
+  "error": "apiRequestContext.get: Invalid URL\n    at /Users/josiahwong/Documents/research-shopping-v2-verification/.agents/skills/verify-research-shopping/scripts/smoke.mjs:111:40\n    at async send (/Users/josiahwong/Documents/research-shopping-v2-verification/.agents/skills/verify-research-shopping/scripts/smoke.mjs:110:5)\n    at async file:///Users/josiahwong/Documents/research-shopping-v2-verification/.agents/skills/verify-research-shopping/scripts/smoke.mjs:202:22",
+  "failureState": {
+    "width": 1440,
+    "height": 1000,
+    "documentWidth": 1440,
+    "viewport": {
+      "scrollTop": 114,
+      "scrollHeight": 898,
+      "clientHeight": 784
+    }
+  }
+}

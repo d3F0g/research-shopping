@@ -1,0 +1,364 @@
+{
+  "version": 2,
+  "archive": "publication-review-receipts.tar.gz",
+  "sha256": "0bd2419ed59492a99ce05c893e8f83895345643741bde08f316b2c61f59c62c1",
+  "bytes": 103274,
+  "scope": "Original sanitized publication-review receipts plus byte-preserved retired interim/review scripts and reports. They are historical owned synthetic engineering evidence, not current production dependencies or live acceptance. No actual operator capture or scan needles. Original archive and manifest are nested exactly. Restore dot-audit paths relative to original checkout; do not execute archived programs without review.",
+  "retiredLoosePaths": [
+    ".audit/fieldnote-v2/qa-interim/extended.mjs",
+    ".audit/fieldnote-v2/qa-interim/playwright.config.ts",
+    ".audit/fieldnote-v2/qa-interim/review-d858ca7.md",
+    ".audit/fieldnote-v2/qa-interim/v2-chat.spec.ts",
+    ".audit/fieldnote-v2/qa-interim/verify-personalization-browser.mjs",
+    ".audit/fieldnote-v2/qa-interim/verify-personalization-crash.mjs",
+    ".audit/fieldnote-v2/qa-interim/verify-personalization-restart.mjs",
+    ".audit/fieldnote-v2/qa-interim/vite.mjs",
+    ".audit/fieldnote-v2/qa-reviews/extended-delta.mjs",
+    ".audit/fieldnote-v2/qa-reviews/extended-final.mjs",
+    ".audit/fieldnote-v2/qa-reviews/extended-meaning.mjs",
+    ".audit/fieldnote-v2/qa-reviews/extended.mjs",
+    ".audit/fieldnote-v2/qa-reviews/playwright.config.ts",
+    ".audit/fieldnote-v2/qa-reviews/qualified-browser-server.ts",
+    ".audit/fieldnote-v2/qa-reviews/qualified-extended.mjs",
+    ".audit/fieldnote-v2/qa-reviews/review-8d679f3.md",
+    ".audit/fieldnote-v2/qa-reviews/review-8fdc2b2.md",
+    ".audit/fieldnote-v2/qa-reviews/review-d858ca7.md",
+    ".audit/fieldnote-v2/qa-reviews/v2-chat.spec.ts",
+    ".audit/fieldnote-v2/qa-reviews/v2-held-replies.spec.ts",
+    ".audit/fieldnote-v2/qa-reviews/verify-account-detail.mjs",
+    ".audit/fieldnote-v2/qa-reviews/verify-personalization-browser.mjs",
+    ".audit/fieldnote-v2/qa-reviews/verify-personalization-crash.mjs",
+    ".audit/fieldnote-v2/qa-reviews/verify-personalization-restart.mjs",
+    ".audit/fieldnote-v2/qa-reviews/vite.mjs",
+    ".audit/fieldnote-v2/security-interim/account-http.mjs",
+    ".audit/fieldnote-v2/security-interim/account-test-runtime.mjs",
+    ".audit/fieldnote-v2/security-interim/browser-inert.ts",
+    ".audit/fieldnote-v2/security-interim/evidence-probes.ts",
+    ".audit/fieldnote-v2/security-interim/http-probes.ts",
+    ".audit/fieldnote-v2/security-interim/price-variants.ts",
+    ".audit/fieldnote-v2/security-interim/restart-repro.mjs",
+    ".audit/fieldnote-v2/security-interim/review.md",
+    ".audit/fieldnote-v2/security-interim/variant-probes.ts",
+    ".audit/fieldnote-v2/security-interim/verify-personalization-browser.mjs",
+    ".audit/fieldnote-v2/security-interim/verify-personalization-crash.mjs",
+    ".audit/fieldnote-v2/security-reviews/account-detail.mjs",
+    ".audit/fieldnote-v2/security-reviews/account-http.mjs",
+    ".audit/fieldnote-v2/security-reviews/account-test-runtime.mjs",
+    ".audit/fieldnote-v2/security-reviews/browser-detail.ts",
+    ".audit/fieldnote-v2/security-reviews/browser-inert.ts",
+    ".audit/fieldnote-v2/security-reviews/cross-source-probes.ts",
+    ".audit/fieldnote-v2/security-reviews/evidence-probes.ts",
+    ".audit/fieldnote-v2/security-reviews/http-probes.ts",
+    ".audit/fieldnote-v2/security-reviews/interim-review-d858-520.md",
+    ".audit/fieldnote-v2/security-reviews/positive-controls.ts",
+    ".audit/fieldnote-v2/security-reviews/price-provenance-probes.ts",
+    ".audit/fieldnote-v2/security-reviews/price-variants.ts",
+    ".audit/fieldnote-v2/security-reviews/restart-repro.mjs",
+    ".audit/fieldnote-v2/security-reviews/review.md",
+    ".audit/fieldnote-v2/security-reviews/variant-probes.ts",
+    ".audit/fieldnote-v2/security-reviews/verify-personalization-browser.mjs",
+    ".audit/fieldnote-v2/security-reviews/verify-personalization-crash.mjs"
+  ],
+  "members": [
+    {
+      "path": ".audit/fieldnote-v2/qa-interim/extended.mjs",
+      "bytes": 10359,
+      "sha256": "634c3e8f204ea935359914717fef1efe24fe5d55fa973ee5986bebb3d0929954"
+    },
+    {
+      "path": ".audit/fieldnote-v2/qa-interim/playwright.config.ts",
+      "bytes": 708,
+      "sha256": "2745f61b27c76f814ee567c972af9def4e7a23196091418c7eadaa1de833b08b"
+    },
+    {
+      "path": ".audit/fieldnote-v2/qa-interim/review-d858ca7.md",
+      "bytes": 12253,
+      "sha256": "a91d81e2eda5720e41ac6c6ac1b248a681e114880586069c1a86e8fe299eee0a"
+    },
+    {
+      "path": ".audit/fieldnote-v2/qa-interim/v2-chat.spec.ts",
+      "bytes": 9540,
+      "sha256": "a5f5e725b3092572067988c815e704b69d3aabfa146bd1219d6a99b56e870f09"
+    },
+    {
+      "path": ".audit/fieldnote-v2/qa-interim/verify-personalization-browser.mjs",
+      "bytes": 7171,
+      "sha256": "2e6150181fdfe3022e7a544e453ad8a77faa52875d1539759791480a1e1970d0"
+    },
+    {
+      "path": ".audit/fieldnote-v2/qa-interim/verify-personalization-crash.mjs",
+      "bytes": 5037,
+      "sha256": "868ed29e3612060ed4a77d76cc3961553f66d5efb19c38166514aa09b913b49f"
+    },
+    {
+      "path": ".audit/fieldnote-v2/qa-interim/verify-personalization-restart.mjs",
+      "bytes": 5452,
+      "sha256": "c531ac4437f0897e6c0acf7ffa2cb878306909c20e0b58182dfea7888b402f4c"
+    },
+    {
+      "path": ".audit/fieldnote-v2/qa-interim/vite.mjs",
+      "bytes": 98,
+      "sha256": "1c05f6e9e6a81918ceb48432986c9c054b5e01ad8048fa0f9b54391df84c89ec"
+    },
+    {
+      "path": ".audit/fieldnote-v2/qa-reviews/extended-delta.mjs",
+      "bytes": 11709,
+      "sha256": "512076b15d42bfe4d3eac9e6ebcd64c6a70b8aa3dcfd7e270c72f902868c8f84"
+    },
+    {
+      "path": ".audit/fieldnote-v2/qa-reviews/extended-final.mjs",
+      "bytes": 11732,
+      "sha256": "6ebec823670dadc275346428b2dfd9a1d7318fac4349501ab4f874cf6edc0345"
+    },
+    {
+      "path": ".audit/fieldnote-v2/qa-reviews/extended-meaning.mjs",
+      "bytes": 12752,
+      "sha256": "5986734b7e9dec82aa7615e48f8e5df0119d52a788d5afaf330e5d3ffb26234e"
+    },
+    {
+      "path": ".audit/fieldnote-v2/qa-reviews/extended.mjs",
+      "bytes": 10359,
+      "sha256": "634c3e8f204ea935359914717fef1efe24fe5d55fa973ee5986bebb3d0929954"
+    },
+    {
+      "path": ".audit/fieldnote-v2/qa-reviews/playwright.config.ts",
+      "bytes": 736,
+      "sha256": "c0070c2b6769da68d97bd5945a43bc2baae6861fc6e97622d71c9b231d20ef21"
+    },
+    {
+      "path": ".audit/fieldnote-v2/qa-reviews/qualified-browser-server.ts",
+      "bytes": 3943,
+      "sha256": "da4d5cdd1d8853a22c3356768ae1f30444f1e72d811a461fe0d779cb79178310"
+    },
+    {
+      "path": ".audit/fieldnote-v2/qa-reviews/qualified-extended.mjs",
+      "bytes": 11768,
+      "sha256": "89ad82a6c9d18910c4811e0acda4451ee7165f99e38805ba0b0f675748c00073"
+    },
+    {
+      "path": ".audit/fieldnote-v2/qa-reviews/review-8d679f3.md",
+      "bytes": 7559,
+      "sha256": "01b3e95f23ebd530486634f0f15ec1b570107b6fb5998ed41192cee201e4ff74"
+    },
+    {
+      "path": ".audit/fieldnote-v2/qa-reviews/review-8fdc2b2.md",
+      "bytes": 14423,
+      "sha256": "4aa6d4ba31cbac2ceb0a64ac8b7969f6f2b65d6a15af632048e759d457d28e17"
+    },
+    {
+      "path": ".audit/fieldnote-v2/qa-reviews/review-d858ca7.md",
+      "bytes": 12253,
+      "sha256": "a91d81e2eda5720e41ac6c6ac1b248a681e114880586069c1a86e8fe299eee0a"
+    },
+    {
+      "path": ".audit/fieldnote-v2/qa-reviews/v2-chat.spec.ts",
+      "bytes": 9585,
+      "sha256": "02ed1a9e2231804366afdf76e4da9f63de0beca234ab5ee271ac10e4187ec902"
+    },
+    {
+      "path": ".audit/fieldnote-v2/qa-reviews/v2-held-replies.spec.ts",
+      "bytes": 6194,
+      "sha256": "ee87a7786dc7dac465f9eb1978e267ae738e09ae734896368eccb39ee4f13b77"
+    },
+    {
+      "path": ".audit/fieldnote-v2/qa-reviews/verify-account-detail.mjs",
+      "bytes": 8749,
+      "sha256": "92b7a138d4fe88fe25760a6818898b774055f7b11ddfb1f5f50c75cfe6b1c288"
+    },
+    {
+      "path": ".audit/fieldnote-v2/qa-reviews/verify-personalization-browser.mjs",
+      "bytes": 7171,
+      "sha256": "2e6150181fdfe3022e7a544e453ad8a77faa52875d1539759791480a1e1970d0"
+    },
+    {
+      "path": ".audit/fieldnote-v2/qa-reviews/verify-personalization-crash.mjs",
+      "bytes": 5037,
+      "sha256": "868ed29e3612060ed4a77d76cc3961553f66d5efb19c38166514aa09b913b49f"
+    },
+    {
+      "path": ".audit/fieldnote-v2/qa-reviews/verify-personalization-restart.mjs",
+      "bytes": 5452,
+      "sha256": "c531ac4437f0897e6c0acf7ffa2cb878306909c20e0b58182dfea7888b402f4c"
+    },
+    {
+      "path": ".audit/fieldnote-v2/qa-reviews/vite.mjs",
+      "bytes": 98,
+      "sha256": "1c05f6e9e6a81918ceb48432986c9c054b5e01ad8048fa0f9b54391df84c89ec"
+    },
+    {
+      "path": ".audit/fieldnote-v2/security-interim/account-http.mjs",
+      "bytes": 3056,
+      "sha256": "0cbf9ff3dce2db445a2767863958c2a97955ccf2eedddd03b9d0cde11b34c55a"
+    },
+    {
+      "path": ".audit/fieldnote-v2/security-interim/account-test-runtime.mjs",
+      "bytes": 3735,
+      "sha256": "0fecc978cde7fb78b2aa47db252375e3174b42bfb6d6e4d5ca8bc021f05a9a70"
+    },
+    {
+      "path": ".audit/fieldnote-v2/security-interim/browser-inert.ts",
+      "bytes": 4832,
+      "sha256": "410aeb8a8172a13ee59f82416f3b98ec2b7ded06d4ba28c03ea0cce980a1ff36"
+    },
+    {
+      "path": ".audit/fieldnote-v2/security-interim/evidence-probes.ts",
+      "bytes": 2608,
+      "sha256": "9c4504040a845accceb3dba4b44c245df1fbfbd55b402412a4ec536814c76af4"
+    },
+    {
+      "path": ".audit/fieldnote-v2/security-interim/http-probes.ts",
+      "bytes": 8811,
+      "sha256": "f67d1254b618238b5f926f569eb396902c563db5554df2d95501bc2723fa3812"
+    },
+    {
+      "path": ".audit/fieldnote-v2/security-interim/price-variants.ts",
+      "bytes": 1620,
+      "sha256": "a70b094e55846b25a5c87e19cd52ae5ee69a87659837b12cc368daf6345eae02"
+    },
+    {
+      "path": ".audit/fieldnote-v2/security-interim/restart-repro.mjs",
+      "bytes": 5409,
+      "sha256": "63cb6b3cd1e99a6530856ea9cc273b43080d09e91fc95534fee4a2e6e3f51a68"
+    },
+    {
+      "path": ".audit/fieldnote-v2/security-interim/review.md",
+      "bytes": 10930,
+      "sha256": "6410398fd4a8b2a317e683261c35e560c827cac4943012762b1700ce5810cc38"
+    },
+    {
+      "path": ".audit/fieldnote-v2/security-interim/variant-probes.ts",
+      "bytes": 1444,
+      "sha256": "feae7ee52c35bbe789e43c8246c9f06b0a9784685b96bce7fa7d0dac7bada475"
+    },
+    {
+      "path": ".audit/fieldnote-v2/security-interim/verify-personalization-browser.mjs",
+      "bytes": 7403,
+      "sha256": "5eed64e8ccad8b8101449349f67af723f2aa786886e9f27252087c00fc6e3c25"
+    },
+    {
+      "path": ".audit/fieldnote-v2/security-interim/verify-personalization-crash.mjs",
+      "bytes": 4991,
+      "sha256": "cace3d7638757354311958015aa537cc5fe759cb1d14a85ac3fe972cf04fd86e"
+    },
+    {
+      "path": ".audit/fieldnote-v2/security-reviews/account-detail.mjs",
+      "bytes": 2706,
+      "sha256": "84c0503d2ea24500813b5809259fbe71ed2f81e4f34a6391484353aa3c7bd38c"
+    },
+    {
+      "path": ".audit/fieldnote-v2/security-reviews/account-http.mjs",
+      "bytes": 3056,
+      "sha256": "0cbf9ff3dce2db445a2767863958c2a97955ccf2eedddd03b9d0cde11b34c55a"
+    },
+    {
+      "path": ".audit/fieldnote-v2/security-reviews/account-test-runtime.mjs",
+      "bytes": 3735,
+      "sha256": "0fecc978cde7fb78b2aa47db252375e3174b42bfb6d6e4d5ca8bc021f05a9a70"
+    },
+    {
+      "path": ".audit/fieldnote-v2/security-reviews/browser-detail.ts",
+      "bytes": 5744,
+      "sha256": "3fc7006fe0612aa035b2129b5625b935bcbc3a86dd710ac5aadc63c3fe364c4a"
+    },
+    {
+      "path": ".audit/fieldnote-v2/security-reviews/browser-inert.ts",
+      "bytes": 4832,
+      "sha256": "410aeb8a8172a13ee59f82416f3b98ec2b7ded06d4ba28c03ea0cce980a1ff36"
+    },
+    {
+      "path": ".audit/fieldnote-v2/security-reviews/cross-source-probes.ts",
+      "bytes": 1892,
+      "sha256": "31d218fb128e0471e5b478359253e6845331c55a02c0913dac05688b035b9e2a"
+    },
+    {
+      "path": ".audit/fieldnote-v2/security-reviews/evidence-probes.ts",
+      "bytes": 2608,
+      "sha256": "9c4504040a845accceb3dba4b44c245df1fbfbd55b402412a4ec536814c76af4"
+    },
+    {
+      "path": ".audit/fieldnote-v2/security-reviews/http-probes.ts",
+      "bytes": 8811,
+      "sha256": "f67d1254b618238b5f926f569eb396902c563db5554df2d95501bc2723fa3812"
+    },
+    {
+      "path": ".audit/fieldnote-v2/security-reviews/interim-review-d858-520.md",
+      "bytes": 13104,
+      "sha256": "74adf32fd7b4064b86f7192a77ff181fdf295ed0214b50f63637a417ebf5bacb"
+    },
+    {
+      "path": ".audit/fieldnote-v2/security-reviews/positive-controls.ts",
+      "bytes": 3467,
+      "sha256": "83df71dbe86a0cf6d50e9ab5de72b97bae9c5782f32b6a4046cb1606191b87e6"
+    },
+    {
+      "path": ".audit/fieldnote-v2/security-reviews/price-provenance-probes.ts",
+      "bytes": 1198,
+      "sha256": "7d1e328f5449a6c80896ebbf50c162a5832d5665e78f714a1662c1c24e3d679e"
+    },
+    {
+      "path": ".audit/fieldnote-v2/security-reviews/price-variants.ts",
+      "bytes": 1620,
+      "sha256": "a70b094e55846b25a5c87e19cd52ae5ee69a87659837b12cc368daf6345eae02"
+    },
+    {
+      "path": ".audit/fieldnote-v2/security-reviews/restart-repro.mjs",
+      "bytes": 5409,
+      "sha256": "63cb6b3cd1e99a6530856ea9cc273b43080d09e91fc95534fee4a2e6e3f51a68"
+    },
+    {
+      "path": ".audit/fieldnote-v2/security-reviews/review.md",
+      "bytes": 13289,
+      "sha256": "ec949499b009f158c9ba8b9bb5097903e62a0a0bb190192bbdbfa6eff05ff5d1"
+    },
+    {
+      "path": ".audit/fieldnote-v2/security-reviews/variant-probes.ts",
+      "bytes": 1444,
+      "sha256": "feae7ee52c35bbe789e43c8246c9f06b0a9784685b96bce7fa7d0dac7bada475"
+    },
+    {
+      "path": ".audit/fieldnote-v2/security-reviews/verify-personalization-browser.mjs",
+      "bytes": 7403,
+      "sha256": "5eed64e8ccad8b8101449349f67af723f2aa786886e9f27252087c00fc6e3c25"
+    },
+    {
+      "path": ".audit/fieldnote-v2/security-reviews/verify-personalization-crash.mjs",
+      "bytes": 4991,
+      "sha256": "cace3d7638757354311958015aa537cc5fe759cb1d14a85ac3fe972cf04fd86e"
+    },
+    {
+      "path": "preserved/original-publication-review-receipts-manifest.json",
+      "bytes": 1220,
+      "sha256": "014917775200b694e03a6918ec9e07556cde4bb76f055abe28de9c850dc001a1"
+    },
+    {
+      "path": "preserved/original-publication-review-receipts.tar.gz",
+      "bytes": 12323,
+      "sha256": "43bad00682e00af9340388638b5d7aa65a2eb8585f6d7f411e97ffd8309520ac"
+    },
+    {
+      "path": "reviews/distinct-model-closeout-d4648c9.md",
+      "bytes": 8917,
+      "sha256": "76bdd936ab26896b99ebb66e988227cc2aba52949debbf7f1cae606934006876"
+    },
+    {
+      "path": "reviews/qa-sanitized-tip-5717e0f.md",
+      "bytes": 4384,
+      "sha256": "dfe7dca9011b81b23fcf10801861c75e1063cd34ed24315b2198e109572492cc"
+    },
+    {
+      "path": "reviews/qa-verifier-and-metadata-d4648c9.md",
+      "bytes": 7660,
+      "sha256": "0c2715c29347d183764a07fab4662d629a212f4356ea12dd4724b02cf7865fc9"
+    },
+    {
+      "path": "reviews/security-publication-review.md",
+      "bytes": 3395,
+      "sha256": "f25bf0f1fe4ed4fd2dc415152067fdac85042f3bf8632641b703ceaf7444243a"
+    },
+    {
+      "path": "reviews/security-verifier-and-metadata-d4648c9.md",
+      "bytes": 8202,
+      "sha256": "223a3b64df84aebd2188f6e8e8bc34eb9567a9e50a77c5d6f3a2b47eafa0d621"
+    }
+  ]
+}

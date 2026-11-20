@@ -1,0 +1,112 @@
+[
+  {
+    "id": "CAL-001",
+    "status": "evaluation-author-reference-human-review-pending",
+    "userTurns": [
+      "I want to buy a powerbank that costs around $30-40",
+      "SGD"
+    ],
+    "assistantBeforeFinalTurn": "Which currency should I use for the 30 to 40 range?",
+    "observedFinalResponse": "I'll look for power banks priced from SGD 30 to SGD 40.",
+    "observedEvents": [
+      "One research dispatch starts after the final user turn.",
+      "No product result has arrived yet."
+    ],
+    "referenceScores": {
+      "intentUnderstanding": 4,
+      "relevance": null,
+      "usefulness": 3,
+      "reasoning": null,
+      "naturalness": 4,
+      "conciseness": 4,
+      "adaptation": 4,
+      "clarificationNecessity": 4
+    },
+    "criticalFailures": [],
+    "anchor": "Currency ambiguity was resolved with one necessary question. The product and both bounds survive. Research started, but no recommendation usefulness or product relevance can yet be graded.",
+    "disagreementToRecord": "Whether this interim acknowledgement earns usefulness 3 or should remain unscored. It cannot earn a completed-shopping success verdict."
+  },
+  {
+    "id": "CAL-002",
+    "status": "evaluation-author-reference-human-review-pending",
+    "userTurns": [
+      "Headphones for long flights under S$500",
+      "Actually make it S$300",
+      "No Sony products"
+    ],
+    "observedFinalResponse": "The Sony Fixture Travel Pro is the best choice at SGD 399. It is worth stretching your budget for the long flight.",
+    "referenceScores": {
+      "intentUnderstanding": 1,
+      "relevance": 1,
+      "usefulness": 0,
+      "reasoning": 0,
+      "naturalness": 3,
+      "conciseness": 4,
+      "adaptation": 0,
+      "clarificationNecessity": null
+    },
+    "criticalFailures": [
+      "Confident choice violates the retained SGD 300 ceiling.",
+      "Confident choice violates the Sony exclusion."
+    ],
+    "anchor": "Fluent concise prose does not rescue explicit constraint violations. The response may retain the broad product class, but it fails the requested recommendation.",
+    "disagreementToRecord": "Exact low relevance score may vary. Both hard-constraint critical failures are deterministic and are not judge-discretion questions."
+  },
+  {
+    "id": "CAL-003",
+    "status": "evaluation-author-reference-human-review-pending",
+    "userTurns": [
+      "Find a compact photo printer under GBP 100.",
+      "I won't join a membership. Which one should I get?"
+    ],
+    "heldEvidence": [
+      "Synthetic Printer A costs GBP 89 for members and GBP 119 without membership.",
+      "Synthetic Printer B has supported compact-printer identity but no observed price.",
+      "Neither source establishes current stock."
+    ],
+    "observedFinalResponse": "Neither option has a confirmed fit for your budget. A costs GBP 119 without membership. B has no usable price evidence. I would keep both unresolved rather than recommend either as under GBP 100.",
+    "referenceScores": {
+      "intentUnderstanding": 4,
+      "relevance": 4,
+      "usefulness": 4,
+      "reasoning": 4,
+      "naturalness": 4,
+      "conciseness": 4,
+      "adaptation": 4,
+      "clarificationNecessity": 4
+    },
+    "criticalFailures": [],
+    "anchor": "Withholding a confident choice is useful when no candidate meets the evidence requirements. A judge must not penalize this response merely because it names no winner.",
+    "disagreementToRecord": "Whether a next-step suggestion would improve usefulness. It must not require relaxing the user's budget or membership constraint."
+  },
+  {
+    "id": "CAL-004",
+    "status": "evaluation-author-reference-human-review-pending",
+    "userTurns": [
+      "Find three binocular options for birdwatching under USD 250.",
+      "Compare the first and third options. Keep it short."
+    ],
+    "heldEvidence": [
+      "Displayed option 1 is Synthetic A. Source supports a wider field of view and an observed USD 210 price.",
+      "Displayed option 3 is Synthetic C. Source supports lower weight and an observed USD 230 price.",
+      "No source establishes which has better optical sharpness."
+    ],
+    "observedFinalResponse": "A has the wider supported field of view; C is lighter. Both observed prices are under USD 250. The sources do not establish a sharpness winner. Choose A for easier bird tracking or C if carrying weight matters more.",
+    "observedEvents": [
+      "No research dispatch occurs for the comparison turn."
+    ],
+    "referenceScores": {
+      "intentUnderstanding": 4,
+      "relevance": 4,
+      "usefulness": 4,
+      "reasoning": 4,
+      "naturalness": 4,
+      "conciseness": 4,
+      "adaptation": 4,
+      "clarificationNecessity": 4
+    },
+    "criticalFailures": [],
+    "anchor": "The response resolves displayed ordinal references, compares supported tradeoffs, preserves uncertainty, and answers concisely without new research. It does not invent an overall quality score.",
+    "disagreementToRecord": "Whether bird-tracking benefit is supported by the supplied field-of-view context. A judge should flag any inference that lacks adequate domain evidence rather than treating fluent wording as proof."
+  }
+]

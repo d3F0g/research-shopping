@@ -1,0 +1,4 @@
+Database migrations applied.
+Actual Better Auth cookies with known cross-user prepared and operation IDs cannot read, execute, or cancel another workspace. Caller ownership fields rejected.
+HTTP account mutation requires valid cookie, exact Origin, JSON media type and bounded body.
+Revoked real cookie cannot dispatch an already prepared account operation.

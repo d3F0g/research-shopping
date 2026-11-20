@@ -1,0 +1,3 @@
+3:16:27 PM [vite] http proxy error: /api/health
+Error: connect ECONNREFUSED 127.0.0.1:3273
+    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1637:16)

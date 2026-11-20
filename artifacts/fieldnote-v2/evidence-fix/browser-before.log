@@ -1,0 +1,5 @@
+
+> research-shopping@0.1.0 eval:browser
+> EXA_RESEARCH_ENABLED=false node --import tsx evals/v2/browser.ts
+
+{"artifact":"/Users/josiahwong/Documents/research-shopping-v2-evidence-fix/artifacts/fieldnote-v2/evidence-fix/browser-before/proof.json","result":"failed","screenshots":15,"failures":[{"name":"actual-products-rendered","result":"fail","observed":{"products":0}},{"name":"currency-answer-resumes-with-both-bounds","result":"fail","observed":{"calls":0,"intent":{"intentVersion":2,"originalText":"I want to buy a powerbank around $30-40.","productDescription":"I want to buy a powerbank around $30-40.","requirements":[{"id":"request-b9d3618d-79bd-41b7-a771-87d6d5139299","text":"I want to buy a powerbank around $30-40.","strength":"hard","originMessageId":"b9d3618d-79bd-41b7-a771-87d6d5139299","kind":"request"}],"budget":{"minimum":30,"maximum":40,"currency":"SGD"},"region":null,"responseLength":"concise"}}}]}

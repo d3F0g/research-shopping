@@ -1,0 +1,151 @@
+{
+  "repo": "/Users/josiahwong/Documents/research-shopping-v2",
+  "apiPort": 3273,
+  "webPort": 5383,
+  "artifacts": "/Users/josiahwong/Documents/research-shopping-v2-verification/artifacts/fieldnote-v2/verification-skill/attempt-02",
+  "commit": "d8a0971ba0ac0888e328234fa00de545ec0fe4be",
+  "worktreeStatus": "M AGENTS.md\n M package.json\n M src/client/App.tsx\n M src/client/ResearchAnswer.tsx\n?? artifacts/fieldnote-v2/desktop-empty.png\n?? artifacts/fieldnote-v2/desktop-evidence.png\n?? artifacts/fieldnote-v2/desktop-light-ordinary.png\n?? artifacts/fieldnote-v2/desktop-research.png\n?? artifacts/fieldnote-v2/mobile-empty.png\n?? artifacts/fieldnote-v2/mobile-evidence.png\n?? artifacts/fieldnote-v2/mobile-light-ordinary.png\n?? artifacts/fieldnote-v2/mobile-research.png\n?? src/client/useFieldnote.ts",
+  "composition": "Automated test only. Actual Hono + Exa SDK against owned loopback substitute.",
+  "result": "failed",
+  "cleanup": true,
+  "processes": [
+    {
+      "name": "test-api",
+      "pid": 55156
+    },
+    {
+      "name": "vite",
+      "pid": 55158
+    }
+  ],
+  "journeys": [
+    {
+      "viewport": {
+        "name": "desktop",
+        "width": 1440,
+        "height": 1000
+      },
+      "result": "failed",
+      "checks": [
+        "Fresh OS-light context defaults dark; light and dark selections survive refresh.",
+        "Typed currency preserves request and both bounds, automatically researches once, labels fixture evidence and places the leading recommendation inside the viewport before manual scrolling."
+      ],
+      "composer": {
+        "textbox": {
+          "x": 361,
+          "y": 853,
+          "width": 718,
+          "height": 64,
+          "right": 1079,
+          "bottom": 917,
+          "viewportWidth": 1440,
+          "viewportHeight": 1000,
+          "clipTop": 0,
+          "clipBottom": 1000
+        },
+        "send": {
+          "x": 1037,
+          "y": 923,
+          "width": 32,
+          "height": 32,
+          "right": 1069,
+          "bottom": 955,
+          "viewportWidth": 1440,
+          "viewportHeight": 1000,
+          "clipTop": 0,
+          "clipBottom": 1000
+        }
+      },
+      "initialGeometry": {
+        "answer": {
+          "x": 361,
+          "y": 81.25,
+          "width": 718,
+          "height": 45.5,
+          "right": 1079,
+          "bottom": 126.75,
+          "viewportWidth": 1440,
+          "viewportHeight": 1000,
+          "clipTop": 56,
+          "clipBottom": 840
+        },
+        "title": {
+          "x": 372,
+          "y": 186.75,
+          "width": 180,
+          "height": 19.25,
+          "right": 552,
+          "bottom": 206,
+          "viewportWidth": 1440,
+          "viewportHeight": 1000,
+          "clipTop": 56,
+          "clipBottom": 840
+        },
+        "composer": {
+          "textbox": {
+            "x": 361,
+            "y": 853,
+            "width": 718,
+            "height": 64,
+            "right": 1079,
+            "bottom": 917,
+            "viewportWidth": 1440,
+            "viewportHeight": 1000,
+            "clipTop": 0,
+            "clipBottom": 1000
+          },
+          "send": {
+            "x": 1037,
+            "y": 923,
+            "width": 32,
+            "height": 32,
+            "right": 1069,
+            "bottom": 955,
+            "viewportWidth": 1440,
+            "viewportHeight": 1000,
+            "clipTop": 0,
+            "clipBottom": 1000
+          }
+        }
+      }
+    }
+  ],
+  "limits": [
+    "No live Exa retrieval, billing, merchant reachability, inventory, semantic factuality, or PostgreSQL/account acceptance.",
+    "Cancellation at the browser transport boundary does not establish SDK socket cancellation. Run the package API tests.",
+    "Screenshots require independent visual inspection. This helper does not approve the final V2 PR."
+  ],
+  "environment": {
+    "inherited": [
+      "API_PORT",
+      "EXA_RESEARCH_ENABLED",
+      "HOME",
+      "LANG",
+      "LC_ALL",
+      "NODE_ENV",
+      "PATH",
+      "TMPDIR",
+      "VITE_API_PORT",
+      "WEB_PORT"
+    ],
+    "privateProviderAndDatabaseVariables": "not inherited",
+    "environmentFiles": "not loaded"
+  },
+  "health": {
+    "status": "ok",
+    "mode": "research",
+    "provider": "exa",
+    "automaticPaidChecks": false
+  },
+  "error": "locator.getAttribute: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('link', { name: 'View product source opens in a new tab', exact: true }).first()\u001b[22m\n\n    at /Users/josiahwong/Documents/research-shopping-v2-verification/.agents/skills/verify-research-shopping/scripts/smoke.mjs:227:31",
+  "failureState": {
+    "width": 1440,
+    "height": 1000,
+    "documentWidth": 1440,
+    "viewport": {
+      "scrollTop": 178,
+      "scrollHeight": 2404,
+      "clientHeight": 784
+    }
+  }
+}

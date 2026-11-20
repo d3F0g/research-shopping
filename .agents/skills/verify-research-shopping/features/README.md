@@ -1,27 +1,13 @@
-# Fieldnote verification map
+# V2 feature map
 
-Use a fresh browser context and the fixture app for each independent journey. The [skill entrypoint](../SKILL.md) owns launch, doctor, evidence, and cleanup. `scripts/smoke.mjs` records its driven chat and product-link subset. It does not replace independent visual judgment. The other paths need their own browser checks or matching tests in `tests/e2e`.
+| Journey | Guide | Current implementation | Maintained package coverage |
+| --- | --- | --- | --- |
+| Chat, themes, scrolling, initial answer | [Chat](chat.md) | `src/client/App.tsx`, `theme-provider.tsx`, official message-scroller components | `tests/e2e/v2-chat.spec.ts` |
+| Clarification and contextual edits | [Preferences](preferences.md) | `src/domain/turn-reducer.ts`, `src/client/PreferenceEditor.tsx` | `tests/unit/v2-conversation.test.ts`, `tests/api/v2-app.test.ts` |
+| Prepare then research | [Research](research.md) | `src/server/conversations.ts`, `research-executor.ts`, `exa-research.ts` | `tests/api/v2-app.test.ts`, `tests/api/v2-exa.test.ts` |
+| Assessments, prices, citations, images | [Evidence](evidence.md) | `src/domain/research.ts`, `src/client/ResearchAnswer.tsx` | `tests/api/v2-exa.test.ts`, browser suite |
+| Safe product/source navigation | [Links](selection.md) | `src/domain/safe-url.ts`, `ResearchAnswer.tsx` | provider and API boundary tests |
+| Cancellation, reset, sessions, optional accounts | [Session recovery](session-recovery.md) | `src/server/conversations.ts`, `app.ts`, `accounts.ts`, `workspace-store.ts` | API and conversation tests; inspect account scripts separately |
+| Live provider and billing limits | [Live research boundaries](web-research.md) | `src/server/index.ts`, `research-quota.ts` | quota tests and local SDK transports |
 
-## Features
-
-- [Conversation and theme](chat.md) covers dark first visit, persisted theme, retained messages, contextual questions and the scrolling composer.
-
-- [Research requests](research.md) covers typed requests, example buttons, ambiguity, and no matches.
-- [Hard limits and preferences](preferences.md) covers editable constraints, category changes, priorities, and answer length.
-- [Evidence and uncertainty](evidence.md) covers claim disclosures, fixed fixture timestamps, unknown claims, and conflicts.
-- [Product selection](selection.md) covers exact product identity and safe manufacturer-link handoff.
-- [Session and recovery](session-recovery.md) covers reset, independent contexts, failed requests, and stale responses.
-
-- [Optional Exa web context](web-research.md) covers explicit retrieval, source disclosures, live-versus-stubbed evidence, safe links, and cancellation.
-
-## Proof standard
-
-Record the commit, worktree state, feature, entry point, actions, and observed results. Keep screenshots and traces with the report. Every fixture claim, price, and stock state must stay visibly labeled. An API result alone does not prove its UI rendering. A screenshot alone does not prove the action or boundary behavior.
-
-Browser recipes use Playwright's `page`, `context`, and `expect`. Choose stable roles and labels first. Scope `.product-card` and repeated controls to their assistant turn. Global first-card selectors can select a historical result. Do not treat an untested entry point as covered by a different path.
-
-## Package checks
-
-Run `npm test` for domain, API and SDK boundaries. Run `npm run test:e2e` for the real Chromium journeys. Read the current test titles in `tests/e2e/research-shopping.spec.ts` before choosing a focused `--grep` pattern. A focused selection does not prove all mapped paths.
-
-The browser suite covers fixture recommendations, hard limits, priorities, unknown requirements, exact handoff rejection, session isolation, stale requests, recovery, evidence, comparisons, recorded activity and optional source behavior. Chat changes also need dark-default/theme persistence, ordinary messages, contextual questions/skip, retained turns, obsolete actions and mobile scrolling/composer evidence. Confirm the named tests actually exercise these behaviors on the reviewed candidate instead of inheriting a previous candidate's counts.
+The smoke helper exercises only its stated subset. There is no `/api/select`, synthetic runtime catalog, fixed category form, or optional web-context action in V2. Compare current paths and scripts before expanding a verification claim.

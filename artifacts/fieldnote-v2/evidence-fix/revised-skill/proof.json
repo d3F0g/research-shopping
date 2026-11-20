@@ -1,0 +1,102 @@
+{
+  "repo": "/Users/josiahwong/Documents/research-shopping-v2-evidence-fix",
+  "apiPort": 3473,
+  "webPort": 5583,
+  "artifacts": "/Users/josiahwong/Documents/research-shopping-v2-evidence-fix/artifacts/fieldnote-v2/evidence-fix/revised-skill",
+  "commit": "1b779bdcdac41fe2add45ccf0eba5c01c0da7ef5",
+  "worktreeStatus": "?? artifacts/fieldnote-v2/evidence-fix/",
+  "sourceState": {
+    "status": "",
+    "diffSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "composition": "Automated test only. Actual Hono + Exa SDK against owned loopback substitute.",
+  "result": "failed",
+  "cleanup": true,
+  "processes": [
+    {
+      "name": "test-api",
+      "pid": 21079
+    },
+    {
+      "name": "vite",
+      "pid": 21080
+    }
+  ],
+  "journeys": [
+    {
+      "viewport": {
+        "name": "desktop",
+        "width": 1440,
+        "height": 1000
+      },
+      "result": "failed",
+      "checks": [
+        "Fresh OS-light context defaults dark; light and dark selections survive refresh."
+      ],
+      "composer": {
+        "textbox": {
+          "x": 361,
+          "y": 853,
+          "width": 718,
+          "height": 64,
+          "right": 1079,
+          "bottom": 917,
+          "viewportWidth": 1440,
+          "viewportHeight": 1000,
+          "clipTop": 0,
+          "clipBottom": 1000
+        },
+        "send": {
+          "x": 1037,
+          "y": 923,
+          "width": 32,
+          "height": 32,
+          "right": 1069,
+          "bottom": 955,
+          "viewportWidth": 1440,
+          "viewportHeight": 1000,
+          "clipTop": 0,
+          "clipBottom": 1000
+        }
+      }
+    }
+  ],
+  "limits": [
+    "No live Exa retrieval, billing, merchant reachability, inventory, semantic factuality, or PostgreSQL/account acceptance.",
+    "Cancellation at the browser transport boundary does not establish SDK socket cancellation. Run the package API tests.",
+    "Screenshots require independent visual inspection. This helper does not approve the final V2 PR."
+  ],
+  "environment": {
+    "inherited": [
+      "API_PORT",
+      "EXA_RESEARCH_ENABLED",
+      "HOME",
+      "LANG",
+      "LC_ALL",
+      "NODE_ENV",
+      "PATH",
+      "TMPDIR",
+      "VITE_API_PORT",
+      "WEB_PORT"
+    ],
+    "privateProviderAndDatabaseVariables": "not inherited",
+    "environmentFiles": "not loaded"
+  },
+  "health": {
+    "status": "ok",
+    "mode": "research",
+    "provider": "exa",
+    "automaticPaidChecks": false
+  },
+  "error": "AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:\n\n  assert(resolved.final.research.choice)\n\n    at file:///Users/josiahwong/Documents/research-shopping-v2-evidence-fix/.agents/skills/verify-research-shopping/scripts/smoke.mjs:241:69\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)",
+  "failureState": {
+    "width": 1440,
+    "height": 1000,
+    "documentWidth": 1440,
+    "viewport": {
+      "scrollTop": 178,
+      "scrollHeight": 1726,
+      "clientHeight": 784
+    }
+  }
+}

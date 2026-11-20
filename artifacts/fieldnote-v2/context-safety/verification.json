@@ -1,0 +1,509 @@
+{
+  "baseCommit": "8fdc2b24707dee23493b0f3f51097bf222c86310",
+  "applicationCommit": "ce3d65a751c206101f8bd9ace397d12cc457924d",
+  "ciPathCommit": "c60b054c87ab65c3d894f1148732cb8fbe619cca",
+  "composition": "Hono in-process HTTP requests, actual installed Exa SDK, owned loopback fake-key transport, in-memory quota. No paid request, private environment, existing database or live usage ledger.",
+  "reproduction": {
+    "command": "npm test -- tests/api/v2-context-safety.test.ts tests/unit/v2-conversation.test.ts",
+    "passed": 64,
+    "failed": 4,
+    "log": "reproduction.log"
+  },
+  "verification": [
+    {
+      "command": "npm test",
+      "testFiles": 7,
+      "passed": 183,
+      "failed": 0,
+      "log": "tests.log"
+    },
+    {
+      "command": "npm run typecheck",
+      "exitCode": 0,
+      "log": "typecheck.log"
+    },
+    {
+      "command": "actionlint .github/workflows/ci.yml",
+      "exitCode": 0,
+      "log": "actionlint.log"
+    },
+    {
+      "command": "npm run eval -- --out artifacts/fieldnote-v2/context-safety/eval --gate critical",
+      "exitCode": 0,
+      "application": {
+        "commit": "ce3d65a751c206101f8bd9ace397d12cc457924d",
+        "tree": "e1d7c10c59e1251216e3ba99c0a55c5157109fd9",
+        "dirty": false,
+        "sourceHash": "e4ed7dffa423df6bfab63ee0e8c9808bea5517b8764c7cae38aa7a03e93c8434"
+      },
+      "summary": {
+        "total": 60,
+        "executed": 60,
+        "passed": 11,
+        "failed": 0,
+        "blocked": 48,
+        "unsupported": 1,
+        "infrastructureErrors": 0,
+        "criticalFailures": 0,
+        "criticalScenarios": 0,
+        "observedTurns": 140,
+        "observedClarifications": 6,
+        "categories": {
+          "conversational-understanding": {
+            "passed": 1,
+            "assessed": 1,
+            "unassessed": 4,
+            "rate": 1
+          },
+          "preference-extraction": {
+            "passed": 2,
+            "assessed": 2,
+            "unassessed": 3,
+            "rate": 1
+          },
+          "contextual-clarification": {
+            "passed": 2,
+            "assessed": 2,
+            "unassessed": 3,
+            "rate": 1
+          },
+          "budget-currency": {
+            "passed": 1,
+            "assessed": 1,
+            "unassessed": 4,
+            "rate": 1
+          },
+          "preference-retention": {
+            "passed": 2,
+            "assessed": 2,
+            "unassessed": 3,
+            "rate": 1
+          },
+          "corrections-dissatisfaction": {
+            "passed": 1,
+            "assessed": 1,
+            "unassessed": 4,
+            "rate": 1
+          },
+          "research-selection": {
+            "passed": 1,
+            "assessed": 1,
+            "unassessed": 4,
+            "rate": 1
+          },
+          "product-relevance": {
+            "passed": 0,
+            "assessed": 0,
+            "unassessed": 5,
+            "rate": null
+          },
+          "comparison-quality": {
+            "passed": 0,
+            "assessed": 0,
+            "unassessed": 5,
+            "rate": null
+          },
+          "evidence-honesty": {
+            "passed": 0,
+            "assessed": 0,
+            "unassessed": 5,
+            "rate": null
+          },
+          "chat-interaction": {
+            "passed": 0,
+            "assessed": 0,
+            "unassessed": 5,
+            "rate": null
+          },
+          "recovery-safety": {
+            "passed": 1,
+            "assessed": 1,
+            "unassessed": 4,
+            "rate": 1
+          }
+        },
+        "metrics": {
+          "conversational-task-success": {
+            "passed": 0,
+            "assessed": 0,
+            "unassessed": 60,
+            "rate": null
+          },
+          "deterministic-case-contract": {
+            "passed": 11,
+            "assessed": 11,
+            "unassessed": 49,
+            "rate": 1
+          },
+          "unnecessary-clarification-rate": {
+            "passed": 0,
+            "assessed": 0,
+            "unassessed": 6,
+            "rate": null
+          },
+          "hard-constraint-preservation": {
+            "passed": 251,
+            "assessed": 251,
+            "unassessed": 0,
+            "rate": 1
+          },
+          "citation-price-attribution": {
+            "passed": 793,
+            "assessed": 793,
+            "unassessed": 0,
+            "rate": 1
+          },
+          "research-call-restraint": {
+            "passed": 279,
+            "assessed": 279,
+            "unassessed": 0,
+            "rate": 1
+          },
+          "research-usefulness": {
+            "passed": 0,
+            "assessed": 0,
+            "unassessed": 60,
+            "rate": null
+          },
+          "product-relevance": {
+            "passed": 0,
+            "assessed": 0,
+            "unassessed": 60,
+            "rate": null
+          },
+          "user-experience": {
+            "passed": 0,
+            "assessed": 0,
+            "unassessed": 60,
+            "rate": null
+          }
+        },
+        "acceptance": "inconclusive"
+      },
+      "log": "eval.log"
+    }
+  ],
+  "traceArchive": {
+    "path": "eval-traces.tar.gz",
+    "sha256": "26e85c9ab919393db7c86a95ffc0c4c0b71911645df0581cf34c7dc17d2ed34b",
+    "entries": [
+      {
+        "path": "./FN-MR-003.trace.json",
+        "sha256": "fad4b2c21e28f05718089e232bb1f9053918a46c2e2862121d5d4160e2d62738",
+        "bytes": 745639
+      },
+      {
+        "path": "./FN-PQ-004.trace.json",
+        "sha256": "319433dc3140e4261ec76cf976600a6594bcfbbf8056c2771606f0debbc70031",
+        "bytes": 142553
+      },
+      {
+        "path": "./FN-CU-004.trace.json",
+        "sha256": "ce10c23fca8b9c01b411c3c80cdf7a6e1f20302c758e795cc06fb0d2b83e03b9",
+        "bytes": 493579
+      },
+      {
+        "path": "./FN-RT-005.trace.json",
+        "sha256": "2182646c99310d570926af5e75a48b5b37669e0a1d41e0a65ea31181dba2573e",
+        "bytes": 27687
+      },
+      {
+        "path": "./FN-PQ-001.trace.json",
+        "sha256": "7ec9dbaeb4f6a597f6c8eba68ba45ea197eb8c2cb7fd410d17db66af45e5c68b",
+        "bytes": 485836
+      },
+      {
+        "path": "./FN-EH-005.trace.json",
+        "sha256": "65210cf2bc4dc22745d19c1d1e386bc8bcc40a2b458cb913ac2e215d0210bde6",
+        "bytes": 207312
+      },
+      {
+        "path": "./FN-PR-003.trace.json",
+        "sha256": "13fda329dc02acd5835bad9754d66a424d8387717ed1c4f2c6679386059eecfb",
+        "bytes": 232325
+      },
+      {
+        "path": "./FN-BC-002.trace.json",
+        "sha256": "4a8dcd68ade7ca3bea782b3bc7b37c8f93307d7f01540d730d4078850a9cb398",
+        "bytes": 144488
+      },
+      {
+        "path": "./FN-CU-001.trace.json",
+        "sha256": "c10f3e7b40301324b0d1e1fe301fe8298c333da47f93a4aeed472c14437323d0",
+        "bytes": 104969
+      },
+      {
+        "path": "./FN-ER-003.trace.json",
+        "sha256": "fb4a6d972a6a7ae75a31da6cc42e2140c6ea93e1797a4d61e39445fd4e99b69f",
+        "bytes": 303824
+      },
+      {
+        "path": "./report.json",
+        "sha256": "576270a74ab077e8e61e2456f6d8431a1fce5b9f64840f6249b9d7be4b0a542b",
+        "bytes": 28535336
+      },
+      {
+        "path": "./FN-CD-005.trace.json",
+        "sha256": "fba63852daab4dca9b8050e2f4f2906d1bae4e7f30cbfc23afd6d30103068cfe",
+        "bytes": 957674
+      },
+      {
+        "path": "./FN-UI-003.trace.json",
+        "sha256": "e9270e34e82832e851a2eacc28679b162639bef97c1fddeed014ea569d31db52",
+        "bytes": 439647
+      },
+      {
+        "path": "./FN-PE-002.trace.json",
+        "sha256": "aa66fcb09641cc00f8f19bc5998965c2303d5eec04f66bc226ab7b2c5bf06baf",
+        "bytes": 424079
+      },
+      {
+        "path": "./FN-CC-005.trace.json",
+        "sha256": "39f9168821c7c8c6874592076b4aa28f5a0b315892125af007651146af4cddf4",
+        "bytes": 488117
+      },
+      {
+        "path": "./summary.md",
+        "sha256": "d9ecc8d362db895db1fee065e6379bc8f815225323ad04d3fef4ef05ce4b2e40",
+        "bytes": 1876
+      },
+      {
+        "path": "./FN-UI-004.trace.json",
+        "sha256": "2ab7055b41de320ecf56fe0bead59fcd97e0ff00b4d3bf0f654fc4534a96be04",
+        "bytes": 518091
+      },
+      {
+        "path": "./FN-CC-002.trace.json",
+        "sha256": "bfe1596dbde7772e9dcc96eba31507843152b44ef5e367f2bd6f45fb1fdca8b8",
+        "bytes": 323318
+      },
+      {
+        "path": "./FN-PE-005.trace.json",
+        "sha256": "96a49faab3257692a3cabee6de23d3f4be8488ebaea9f46d97da94b8ebff5d6a",
+        "bytes": 219828
+      },
+      {
+        "path": "./FN-MR-001.trace.json",
+        "sha256": "9c1727db52deae6a2001d917cd0a42e63d3d16006635bc9706150a509fd6f4a0",
+        "bytes": 765121
+      },
+      {
+        "path": "./FN-CD-002.trace.json",
+        "sha256": "5eb94466f11241b8f8a105a51b78f97aa5e851892b0dfb7ca98e3c3fa81cac69",
+        "bytes": 964626
+      },
+      {
+        "path": "./FN-ER-004.trace.json",
+        "sha256": "41c720db247d67bcfc2629dbe0fdb7f520a1a9cf9a15d159e45e9648268d3440",
+        "bytes": 264041
+      },
+      {
+        "path": "./FN-PR-004.trace.json",
+        "sha256": "dfd2d33c85c8c9b94b89fd74abfaa34439e1764378460fefd4ab9d3399b98642",
+        "bytes": 235105
+      },
+      {
+        "path": "./FN-BC-005.trace.json",
+        "sha256": "190577fce25111d7cb7fa9d9a9b18cacec22e444cbdaeefee7b59666c5e747c0",
+        "bytes": 131028
+      },
+      {
+        "path": "./FN-EH-002.trace.json",
+        "sha256": "2ff041fea219005f822fbf965a3b331bcac50e8901fecf66e6d4e04ff023d05c",
+        "bytes": 416873
+      },
+      {
+        "path": "./FN-ER-001.trace.json",
+        "sha256": "dc7359d38a7fd985bd3a89f1df5331a3315d9e0ae8eec9aa14545b12c687e88c",
+        "bytes": 92507
+      },
+      {
+        "path": "./FN-CU-003.trace.json",
+        "sha256": "ddf318bfac6bf6eae1ce62a11709c66f6b28d84366e73916fc2058e9f7194cfe",
+        "bytes": 236234
+      },
+      {
+        "path": "./FN-RT-002.trace.json",
+        "sha256": "e9f875ca0ccb8ea58b1114c860a2057fc283def273b83dd930921b88f045b445",
+        "bytes": 325605
+      },
+      {
+        "path": "./FN-PQ-003.trace.json",
+        "sha256": "5a070005e06df12f2f13361505a3fccaecb070272c40c33324162e6e65ae170c",
+        "bytes": 118618
+      },
+      {
+        "path": "./FN-PR-001.trace.json",
+        "sha256": "ff8580a6f527aff922f234dbae9072f36e8294fa8a133810bb5df72cab6298ba",
+        "bytes": 497789
+      },
+      {
+        "path": "./FN-MR-004.trace.json",
+        "sha256": "eec72df900e65c48fb7605272678734177944e4d07659158373d69e8a304368f",
+        "bytes": 336223
+      },
+      {
+        "path": "./FN-UI-001.trace.json",
+        "sha256": "19fcd417293bfeea8097e915d13493ca72ca822e29e4242982610edf587eb6df",
+        "bytes": 298829
+      },
+      {
+        "path": "./FN-EH-004.trace.json",
+        "sha256": "24f6434dfbb983978efe0a4b108ea46fefca47036b4691ce41380cc40d9a0a37",
+        "bytes": 310645
+      },
+      {
+        "path": "./FN-PR-002.trace.json",
+        "sha256": "9d3ae1eafc703d93dca7c58186dc27723ce2c3bea91ae559edc36bfd232d4ba2",
+        "bytes": 196997
+      },
+      {
+        "path": "./FN-BC-003.trace.json",
+        "sha256": "f66cb83b028ccae243f7065f25c8e32fa08c3aa79244f091c5d6073a7d13c7c5",
+        "bytes": 229637
+      },
+      {
+        "path": "./FN-CD-004.trace.json",
+        "sha256": "7d787409c9fb0995fe469149af97299332324a59bafcf7cc7c6afd4cb0a9ebc9",
+        "bytes": 371174
+      },
+      {
+        "path": "./FN-ER-002.trace.json",
+        "sha256": "2173c3bff4e2a64f505b41e886b41559d8c17cfddc1ea8753efb77fdf89f7c11",
+        "bytes": 187130
+      },
+      {
+        "path": "./FN-RT-001.trace.json",
+        "sha256": "b4310593019846b8339c4b0aa4e10005ddc23177e51fc3b1e3155698cc52e560",
+        "bytes": 308065
+      },
+      {
+        "path": "./FN-UI-002.trace.json",
+        "sha256": "5d864d01cc50e8a4a3aa9ac81697f584b18d40746dfd61e93db40aebf5104e89",
+        "bytes": 196163
+      },
+      {
+        "path": "./FN-CC-004.trace.json",
+        "sha256": "87cb10087520a80157ec8a40a44bda28b9ea1ab28250f337384d0e911249f67e",
+        "bytes": 539192
+      },
+      {
+        "path": "./FN-PE-003.trace.json",
+        "sha256": "8a924a839376ec241053223487711a83d2f2d5e6461a4f493ca89eccc87cb316",
+        "bytes": 535496
+      },
+      {
+        "path": "./FN-MR-002.trace.json",
+        "sha256": "3d01ee56538e233bb7b01e8810a93421e8aec285aada6e8055e8a5e7a613fe64",
+        "bytes": 963471
+      },
+      {
+        "path": "./FN-CC-001.trace.json",
+        "sha256": "1c62b89cdc155382e9a23bc90a790c4554900c6cc422ea4463d6f4eb34123db7",
+        "bytes": 116857
+      },
+      {
+        "path": "./FN-PQ-005.trace.json",
+        "sha256": "99e4a3deccadd37f437caa3c7070bb199b4c23597d89638865315439565ee134",
+        "bytes": 292616
+      },
+      {
+        "path": "./FN-EH-001.trace.json",
+        "sha256": "c490e0a136ae9f3b232a459616daaad409d1737b0c6b3d9ac40eac497396dc9b",
+        "bytes": 350407
+      },
+      {
+        "path": "./FN-CU-005.trace.json",
+        "sha256": "4975ffe25542c477a4036653db5c03fafbb880fed3355237c5600286061851ae",
+        "bytes": 507030
+      },
+      {
+        "path": "./FN-RT-004.trace.json",
+        "sha256": "d922eb91662c9dc1c1e6aeb81525b4c8cab40aae850e8eb59245dd9bdae1e30f",
+        "bytes": 512142
+      },
+      {
+        "path": "./FN-CD-001.trace.json",
+        "sha256": "8be73c58dd5a53d2ae278f01ccceda34776c2553b54fff1f66cd948587a5bddc",
+        "bytes": 611016
+      },
+      {
+        "path": "./FN-CU-002.trace.json",
+        "sha256": "221db9bd2605e566e1dd29f0d4c19fec84e2e81b1d3792960e9c0b720950eba5",
+        "bytes": 227127
+      },
+      {
+        "path": "./FN-RT-003.trace.json",
+        "sha256": "2c8d642e793c70e1bcc74bda67a6829ca4836f446c8e29345c56d015f056aff9",
+        "bytes": 195846
+      },
+      {
+        "path": "./FN-BC-001.trace.json",
+        "sha256": "2d1f610f4d21caa85792d28dcfd97ae41dbb56bbe7e4ab841b5278c7f0e64314",
+        "bytes": 477482
+      },
+      {
+        "path": "./FN-PQ-002.trace.json",
+        "sha256": "ffde56191cd23fa55e9d632c8482384d27403f22a39474b3fce03cc03d616f24",
+        "bytes": 292288
+      },
+      {
+        "path": "./FN-PE-001.trace.json",
+        "sha256": "42dba0d9cdf368e1f84b7bbf7ef023c21e06b4413ad25da2ac85c2926923b87c",
+        "bytes": 918194
+      },
+      {
+        "path": "./FN-MR-005.trace.json",
+        "sha256": "ccf696240131246c280f588fe8963e6acfaeac8f0910f553b2c5e25589443f6f",
+        "bytes": 341645
+      },
+      {
+        "path": "./FN-UI-005.trace.json",
+        "sha256": "fc56568cc1fe10e2bab5bc9ac0a61537ba6ffc9a54510332a4df35bd2c3e708a",
+        "bytes": 742016
+      },
+      {
+        "path": "./FN-PE-004.trace.json",
+        "sha256": "7abf46af1f36674eb5be6447ebc6ed10e0705c2bcd557a1cd7e3c47ae3af5c52",
+        "bytes": 243050
+      },
+      {
+        "path": "./FN-CC-003.trace.json",
+        "sha256": "ac7abedece5d460bbe97864d1a5f9bc75124cf5e21ab85586728b92421305131",
+        "bytes": 212886
+      },
+      {
+        "path": "./FN-ER-005.trace.json",
+        "sha256": "9b5f60c444a0a675774cc54a8bd0700042b24ef65a8ae2c22af554774efaefaa",
+        "bytes": 74979
+      },
+      {
+        "path": "./FN-CD-003.trace.json",
+        "sha256": "0d745262564ea703408f8d9ecbcb2741e6b0fe0e829af0a0e5e19b17c418aa7b",
+        "bytes": 505726
+      },
+      {
+        "path": "./FN-PR-005.trace.json",
+        "sha256": "995685b8a26b98c99ae3cadf6ccaf76ddc2691469919a62110b4c453b9934075",
+        "bytes": 506122
+      },
+      {
+        "path": "./FN-BC-004.trace.json",
+        "sha256": "eaf0b60514e2c257c79af2b3e3e01c00a3a9e9e2b5230b601d106754b8d8f06b",
+        "bytes": 142522
+      },
+      {
+        "path": "./FN-EH-003.trace.json",
+        "sha256": "08609b7fc4edecd8c826ee87e8a239ed9332de6ffb01419d296a8ed3a561bc63",
+        "bytes": 285900
+      }
+    ]
+  },
+  "limits": [
+    "The unchanged evaluation dataset and baseline remain unedited. The 60-case result remains inconclusive with 48 blocked and 1 unsupported.",
+    "These checks establish deterministic request handling and local SDK transport behavior, not live Exa usefulness or merchant eligibility.",
+    "Unsupported combined contextual edits remain pending. No general-purpose semantic parser or external inference provider was added.",
+    "Independent browser, security and comment review remain owned by the orchestrator.",
+    "The CI-only commit changes upload paths. It does not change application source, checks, permissions, services or job status."
+  ]
+}

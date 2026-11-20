@@ -1,0 +1,47 @@
+{
+  "applicationCommit": "e0b7317f4bd00ce49141229943279e0da357cdbc",
+  "srcTree": "e1d7c10c59e1251216e3ba99c0a55c5157109fd9",
+  "screenshots": [
+    {
+      "source": "artifacts/fieldnote-v2/qa/final-e0b/smoke/desktop-01-dark-empty.png",
+      "file": "desktop-01-dark-empty.png",
+      "sha256": "8721f02eb577d33d1079555a5b155ce045f3fa52a33bbc06b9bc6ca849cbac29"
+    },
+    {
+      "source": "artifacts/fieldnote-v2/qa/final-e0b/smoke/desktop-02-light-empty.png",
+      "file": "desktop-02-light-empty.png",
+      "sha256": "ee25eafe3f7c498467c1e161d255491405e67752603cac627d6e1e58ecd90d95"
+    },
+    {
+      "source": "artifacts/fieldnote-v2/qa/final-e0b/smoke/desktop-05-research-initial.png",
+      "file": "desktop-05-research-initial.png",
+      "sha256": "867f1481ecf418b3674416139f35bcef2a2ccb9ec7bada967b5b719c006325ca"
+    },
+    {
+      "source": "artifacts/fieldnote-v2/qa/final-e0b/smoke/mobile-05-research-initial.png",
+      "file": "mobile-05-research-initial.png",
+      "sha256": "e1073a712ec3b62884062c44547077469df0a884c79d1f9408f6564df7be8ce9"
+    },
+    {
+      "source": "artifacts/fieldnote-v2/qa/final-e0b/smoke/short-mobile-05-research-initial.png",
+      "file": "short-mobile-05-research-initial.png",
+      "sha256": "f7a0ca245f0dc4dc9c1bd483136a6942dbe34873104d22c1f1cabefa8cd5e89a"
+    },
+    {
+      "source": "artifacts/fieldnote-v2/qa/final-e0b/smoke/mobile-08-preferences.png",
+      "file": "mobile-08-preferences.png",
+      "sha256": "d88ae51f9cf7e43264e9ca02e8a4ff0ed452e23a280a928bb847a195d8737788"
+    },
+    {
+      "source": "artifacts/fieldnote-v2/qa/final-e0b/smoke/mobile-06-evidence.png",
+      "file": "mobile-06-evidence.png",
+      "sha256": "af5b4d5242fa7f27b14bcb88c334386da80fa9eb24781f770697266eac3e4029"
+    }
+  ],
+  "rawArchive": {
+    "file": "qa-e0b7317-raw.tar.gz",
+    "sha256": "050b0c101059adf1f17bec136d3e924396bfbd582d25231e7347c44a43eece32",
+    "bytes": 38956810
+  },
+  "labels": "Actual local Chromium; explicitly synthetic provider evidence. No live Exa acceptance."
+}

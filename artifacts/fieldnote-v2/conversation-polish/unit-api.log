@@ -1,0 +1,13 @@
+
+> research-shopping@0.1.0 test
+> EXA_RESEARCH_ENABLED=false vitest run
+
+
+ RUN  v4.1.12 /Users/josiahwong/Documents/research-shopping-v2-conversation-polish
+
+
+ Test Files  5 passed (5)
+      Tests  128 passed (128)
+   Start at  15:12:44
+   Duration  1.25s (transform 836ms, setup 0ms, import 1.45s, tests 2.27s, environment 0ms)
+

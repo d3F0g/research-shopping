@@ -1,0 +1,7 @@
+RUN  v4.1.12 /Users/josiahwong/Documents/research-shopping-v2-accounts
+
+
+ Test Files  1 passed (1)
+      Tests  26 passed (26)
+   Start at  14:26:55
+   Duration  2.11s (transform 90ms, setup 0ms, import 372ms, tests 1.65s, environment 0ms)

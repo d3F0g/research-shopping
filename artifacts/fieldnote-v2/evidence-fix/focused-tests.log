@@ -1,0 +1,13 @@
+
+> research-shopping@0.1.0 test
+> EXA_RESEARCH_ENABLED=false vitest run
+
+
+ RUN  v4.1.12 /Users/josiahwong/Documents/research-shopping-v2-evidence-fix
+
+
+ Test Files  3 passed (3)
+      Tests  58 passed (58)
+   Start at  15:02:35
+   Duration  553ms (transform 232ms, setup 0ms, import 550ms, tests 475ms, environment 0ms)
+

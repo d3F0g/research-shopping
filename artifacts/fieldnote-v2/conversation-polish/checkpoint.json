@@ -1,0 +1,41 @@
+{
+  "commit": "8e507b7df7f02a0606f63f5c9b2f7780adce4c9a",
+  "composition": "Reducer reproduction with labeled synthetic retained evidence only",
+  "battery": {
+    "characters": 253,
+    "words": 37,
+    "hasDetail": true
+  },
+  "brand": {
+    "kind": "brand",
+    "retainedAfterRelease": false
+  },
+  "thousands": {
+    "kind": "clarification",
+    "budget": null,
+    "pending": {
+      "kind": "currency",
+      "id": "bbef91bb-6bfd-494d-a405-8e19c41b5ad3",
+      "originalRequest": "Necklaces between1kto2k",
+      "draft": {
+        "intentVersion": 2,
+        "originalText": "Necklaces between1kto2k",
+        "productDescription": "Necklaces between1kto2k",
+        "requirements": [
+          {
+            "id": "request-bbef91bb-6bfd-494d-a405-8e19c41b5ad3",
+            "text": "Necklaces between1kto2k",
+            "strength": "hard",
+            "originMessageId": "bbef91bb-6bfd-494d-a405-8e19c41b5ad3",
+            "kind": "request"
+          }
+        ],
+        "budget": null,
+        "region": null,
+        "responseLength": "concise"
+      },
+      "minimum": 1000,
+      "maximum": 2000
+    }
+  }
+}

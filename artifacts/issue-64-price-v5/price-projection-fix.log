@@ -1,0 +1,22 @@
+TAP version 13
+# Subtest: normalized applicable price preserves separately labeled native attribution and money-witness offsets
+ok 1 - normalized applicable price preserves separately labeled native attribution and money-witness offsets
+  ---
+  duration_ms: 361.771417
+  type: 'test'
+  ...
+# Subtest: native money whitespace remains explicit and cannot hide forged projected offsets
+ok 2 - native money whitespace remains explicit and cannot hide forged projected offsets
+  ---
+  duration_ms: 32.112125
+  type: 'test'
+  ...
+1..2
+# tests 2
+# suites 0
+# pass 2
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 785.856917

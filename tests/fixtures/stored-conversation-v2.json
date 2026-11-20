@@ -1,0 +1,205 @@
+{
+  "provenance": {
+    "label": "Fixture data. Actual stored state from a historical automated V2 run. Values are unchanged.",
+    "commit": "33fadc7e3cfde2207528adb32b650287e758d343",
+    "path": "artifacts/fieldnote-v2/conversation-polish/full60/FN-CU-001.trace.json",
+    "pointer": "/rawTurns/1/after",
+    "blob": "1d29c94369fbf96377be9c562c815fd67dfd14e3"
+  },
+  "state": {
+    "version": 2,
+    "revision": 2,
+    "intent": {
+      "intentVersion": 2,
+      "originalText": "I want to buy a powerbank that costs around $30-40",
+      "productDescription": "I want to buy a powerbank that costs around $30-40",
+      "requirements": [
+        {
+          "id": "request-968ebfbf-1d52-4632-bf68-59f78883fcb2",
+          "text": "I want to buy a powerbank that costs around $30-40",
+          "strength": "hard",
+          "originMessageId": "968ebfbf-1d52-4632-bf68-59f78883fcb2",
+          "kind": "request"
+        }
+      ],
+      "budget": {
+        "minimum": 30,
+        "maximum": 40,
+        "currency": "SGD"
+      },
+      "region": null,
+      "responseLength": "concise"
+    },
+    "pending": null,
+    "messages": [
+      {
+        "id": "968ebfbf-1d52-4632-bf68-59f78883fcb2",
+        "role": "user",
+        "text": "I want to buy a powerbank that costs around $30-40"
+      },
+      {
+        "id": "968ebfbf-1d52-4632-bf68-59f78883fcb2-reply",
+        "role": "assistant",
+        "text": "Which currency, for example SGD or USD?"
+      },
+      {
+        "id": "1ae25ca8-ad36-4e97-bc78-e22a7dd78e57",
+        "role": "user",
+        "text": "SGD"
+      },
+      {
+        "id": "1ae25ca8-ad36-4e97-bc78-e22a7dd78e57-research",
+        "role": "assistant",
+        "text": "Here are useful comparisons. I cannot confidently choose a compliant option until the listed evidence gaps are resolved.",
+        "research": {
+          "version": 2,
+          "evidenceVersion": 2,
+          "dataKind": "web-research",
+          "retrievedAt": "2026-11-19T07:12:44.713Z",
+          "intent": {
+            "intentVersion": 2,
+            "originalText": "I want to buy a powerbank that costs around $30-40",
+            "productDescription": "I want to buy a powerbank that costs around $30-40",
+            "requirements": [
+              {
+                "id": "request-968ebfbf-1d52-4632-bf68-59f78883fcb2",
+                "text": "I want to buy a powerbank that costs around $30-40",
+                "strength": "hard",
+                "originMessageId": "968ebfbf-1d52-4632-bf68-59f78883fcb2",
+                "kind": "request"
+              }
+            ],
+            "budget": {
+              "minimum": 30,
+              "maximum": 40,
+              "currency": "SGD"
+            },
+            "region": null,
+            "responseLength": "concise"
+          },
+          "summary": "Here are useful comparisons. I cannot confidently choose a compliant option until the listed evidence gaps are resolved.",
+          "products": [
+            {
+              "id": "synthetic-pocket-10",
+              "name": "Synthetic Anker Pocket 10",
+              "variant": "black",
+              "identity": {
+                "status": "supported",
+                "scope": "exact-variant",
+                "rationale": "Synthetic test assessment, not a live product claim.",
+                "support": [
+                  {
+                    "sourceId": "source-1",
+                    "originalQuote": "Synthetic Anker Pocket 10 black is a portable power bank with USB-C fast charging.",
+                    "originalStart": 0,
+                    "originalEnd": 82,
+                    "quote": "Synthetic Anker Pocket 10 black is a portable power bank with USB-C fast charging.\nSynthetic Anker Pocket 10 black costs SGD 35.00 for one unit, tax included.",
+                    "start": 0,
+                    "end": 158
+                  }
+                ]
+              },
+              "requestMatch": {
+                "status": "supported",
+                "scope": "exact-variant",
+                "rationale": "Synthetic test assessment, not a live product claim.",
+                "support": [
+                  {
+                    "sourceId": "source-1",
+                    "originalQuote": "Synthetic Anker Pocket 10 black is a portable power bank with USB-C fast charging.",
+                    "originalStart": 0,
+                    "originalEnd": 82,
+                    "quote": "Synthetic Anker Pocket 10 black is a portable power bank with USB-C fast charging.\nSynthetic Anker Pocket 10 black costs SGD 35.00 for one unit, tax included.",
+                    "start": 0,
+                    "end": 158
+                  }
+                ]
+              },
+              "requirements": [
+                {
+                  "requirementId": "request-968ebfbf-1d52-4632-bf68-59f78883fcb2",
+                  "assessment": {
+                    "status": "unknown",
+                    "scope": "unclear",
+                    "rationale": "No unambiguous source assessment covers this complete requirement.",
+                    "support": []
+                  }
+                }
+              ],
+              "attributes": [
+                {
+                  "name": "Charging",
+                  "assessment": {
+                    "status": "supported",
+                    "scope": "exact-variant",
+                    "rationale": "Synthetic test assessment, not a live product claim.",
+                    "support": [
+                      {
+                        "sourceId": "source-1",
+                        "originalQuote": "Synthetic Anker Pocket 10 black is a portable power bank with USB-C fast charging.",
+                        "originalStart": 0,
+                        "originalEnd": 82,
+                        "quote": "Synthetic Anker Pocket 10 black is a portable power bank with USB-C fast charging.\nSynthetic Anker Pocket 10 black costs SGD 35.00 for one unit, tax included.",
+                        "start": 0,
+                        "end": 158
+                      }
+                    ]
+                  }
+                }
+              ],
+              "price": {
+                "amount": 35,
+                "currency": "SGD",
+                "variant": "black",
+                "conditions": [
+                  "One unit",
+                  "Tax included"
+                ],
+                "conditionsResolved": true,
+                "assessment": {
+                  "status": "supported",
+                  "scope": "exact-variant",
+                  "rationale": "Synthetic test assessment, not a live product claim.",
+                  "support": [
+                    {
+                      "sourceId": "source-1",
+                      "originalQuote": "Synthetic Anker Pocket 10 black costs SGD 35.00 for one unit, tax included.",
+                      "originalStart": 83,
+                      "originalEnd": 158,
+                      "quote": "Synthetic Anker Pocket 10 black is a portable power bank with USB-C fast charging.\nSynthetic Anker Pocket 10 black costs SGD 35.00 for one unit, tax included.",
+                      "start": 0,
+                      "end": 158
+                    }
+                  ]
+                }
+              },
+              "stock": "unverified",
+              "eligible": false,
+              "blockers": [
+                "I want to buy a powerbank that costs around $30-40 (unknown)"
+              ]
+            }
+          ],
+          "choice": null,
+          "sources": [
+            {
+              "id": "source-1",
+              "url": "https://fixture.example.com/powerbank",
+              "title": "Synthetic fixture power bank",
+              "text": "Synthetic Anker Pocket 10 black is a portable power bank with USB-C fast charging.\nSynthetic Anker Pocket 10 black costs SGD 35.00 for one unit, tax included.",
+              "originalLength": 158,
+              "textTruncated": false
+            }
+          ],
+          "limitations": [
+            "Assessments are source-based AI interpretations. Quotations prove provenance, not semantic entailment.",
+            "Prices are unverified page observations. Stock, delivery and current merchant offers remain unknown.",
+            "Synthetic provider double for automated evaluation. No real products, current prices, availability or merchant verification."
+          ],
+          "requestId": "synthetic-offline-input",
+          "reportedCostUsd": 0.005
+        }
+      }
+    ]
+  }
+}

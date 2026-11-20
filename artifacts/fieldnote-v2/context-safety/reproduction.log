@@ -1,0 +1,86 @@
+
+> research-shopping@0.1.0 test
+> EXA_RESEARCH_ENABLED=false vitest run
+
+
+ RUN  v4.1.12 /Users/josiahwong/Documents/research-shopping-v2-context-safety
+
+ ❯ tests/api/v2-context-safety.test.ts (2 tests | 2 failed) 69ms
+     × answers source disagreement from retained passages without another reservation or request 54ms
+     × retains both bounds and buyer restrictions without applying a conditional quoted price 14ms
+ ❯ tests/unit/v2-conversation.test.ts (66 tests | 2 failed) 109ms
+     × inspects reported source disagreement without accepting the report as a requirement 4ms
+     × keeps a referenced product price separate from the budget and retains buyer eligibility 1ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 4 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/api/v2-context-safety.test.ts > context meaning through Hono and the actual Exa SDK > answers source disagreement from retained passages without another reservation or request
+AssertionError: expected 'research' to be 'message' // Object.is equality
+
+Expected: "message"
+Received: "research"
+
+ ❯ tests/api/v2-context-safety.test.ts:77:27
+     75|     expect(researched.kind).toBe("research");
+     76|     const followup = await client.submit("One source says waterproof a…
+     77|     expect(followup.kind).toBe("message");
+       |                           ^
+     78|     expect(followup.state.intent).toEqual(researched.state.intent);
+     79|     expect(followup.state.messages.slice(0, researched.state.messages.…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/4]⎯
+
+ FAIL  tests/api/v2-context-safety.test.ts > context meaning through Hono and the actual Exa SDK > retains both bounds and buyer restrictions without applying a conditional quoted price
+AssertionError: expected 'research' to be 'message' // Object.is equality
+
+Expected: "message"
+Received: "research"
+
+ ❯ tests/api/v2-context-safety.test.ts:95:27
+     93|     expect(researched.kind).toBe("research");
+     94|     const followup = await client.submit("That GBP89 one looks good. I…
+     95|     expect(followup.kind).toBe("message");
+       |                           ^
+     96|     expect(followup.state.intent.budget).toEqual({ minimum: 50, maximu…
+     97|     expect(followup.state.intent.requirements.slice(0, researched.stat…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/4]⎯
+
+ FAIL  tests/unit/v2-conversation.test.ts > free contextual operations > inspects reported source disagreement without accepting the report as a requirement
+AssertionError: expected 'research' to be 'message' // Object.is equality
+
+Expected: "message"
+Received: "research"
+
+ ❯ tests/unit/v2-conversation.test.ts:67:25
+     65|     const state = turn(initialConversation(), "Find a waterproof backp…
+     66|     const result = turn(state, "One source says waterproof and another…
+     67|     expect(result.kind).toBe("message");
+       |                         ^
+     68|     expect(result.state.intent).toEqual(state.intent);
+     69|     expect(result.state.messages.at(-1)?.text).toContain("no retained …
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/4]⎯
+
+ FAIL  tests/unit/v2-conversation.test.ts > free contextual operations > keeps a referenced product price separate from the budget and retains buyer eligibility
+AssertionError: expected 'research' to be 'message' // Object.is equality
+
+Expected: "message"
+Received: "research"
+
+ ❯ tests/unit/v2-conversation.test.ts:75:25
+     73|     const history = structuredClone(state.messages);
+     74|     const result = turn(state, "That GBP89 one looks good. I'm not a m…
+     75|     expect(result.kind).toBe("message");
+       |                         ^
+     76|     expect(result.state.intent.budget).toEqual({ minimum: 50, maximum:…
+     77|     expect(result.state.intent.requirements.slice(0, state.intent.requ…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/4]⎯
+
+
+ Test Files  2 failed (2)
+      Tests  4 failed | 64 passed (68)
+   Start at  15:33:54
+   Duration  430ms (transform 198ms, setup 0ms, import 438ms, tests 178ms, environment 0ms)
+

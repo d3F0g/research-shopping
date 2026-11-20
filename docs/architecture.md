@@ -1,49 +1,54 @@
-# Application architecture
+# Fieldnote V2 architecture
 
-The first milestone is a local, fixture-backed research-to-merchant assistant. It demonstrates preference understanding, evidence-aware comparison, a recommendation, product selection, and a safe merchant product link. Fixtures establish reproducible behavior. They do not establish current prices, inventory, delivery, or unrestricted language understanding.
+Fieldnote keeps conversation state in Hono and uses one native Exa Answer operation for each explicit research request. Exa is the sole external AI research and structured-answer provider. There is no application OpenAI API, Codex-auth inference, local interpreter dependency, runtime catalog or category registry.
 
-## Design decision
+## State and ownership
 
-Candidate A's functional pipeline is the base. Candidate B contributes discriminated conversation results, preference patches, recovery behavior, and UI states. A separate event/effect framework and free-running manager agent are deferred. They add lifecycle complexity before the bounded request needs it.
+`src/domain/conversation.ts` defines current intent, typed pending questions, immutable message snapshots and prepare/research inputs. `turn-reducer.ts` owns accepted changes. Complete user wording and raw hard groups stay visible to research. Unsupported compound edits remain pending rather than partly changing preferences. The server interprets text; the client sends messages or explicit contextual edits.
 
-An independent Astra judge scored A 20/25 and B 19/25 across evidence honesty, multi-turn completeness, integration replacement, security/failure behavior, and maintainability. The judge agreed with the hybrid. The exposed parent identity did not permit verification of model-family independence. See the [candidate A](architecture-candidate-a.md) and [candidate B](architecture-candidate-b.md) summaries. These design scores are judgments, not runtime measurements.
+Budget minimum, maximum and currency are separate fields. Currency clarification retains its identity, original request and both numeric bounds. Presentation changes and held evidence actions do not dispatch research. The server resolves displayed product order and recomputes recommendation eligibility under current requirements.
 
-## Domain
-
-The application models preferences, product identity, research claims, merchant offers, and turn results separately. Hard constraints determine eligibility before flexible priorities influence ranking. Preference patches distinguish changing a value, removing it, and leaving it unchanged.
-
-Claims retain supported, unknown, or conflicting status. Sources carry fixture provenance and fixed observation times. Offers attach price, currency, availability, region, and merchant URL to a product. A research source does not establish merchant inventory. Freshness and truth are separate concerns.
-
-The result union distinguishes ordinary messages, clarification, recommendations, no-match, and failure. Product selection resolves trusted catalog identity through the backend and returns a validated link. It never places an order.
+`src/server/conversations.ts` owns guest sessions and prepared operations. Operations bind the owning session, epoch and immutable research intent. Claiming is atomic. Duplicates join or replay rather than reserve twice. Requirement changes, Stop and New chat invalidate publication. Presentation-only changes preserve valid in-flight work.
 
 ```mermaid
 flowchart LR
-  User[User request or preference change] --> UI[React conversation]
-  UI --> HTTP[Validated Hono API]
-  HTTP --> Core[Bounded shopping pipeline]
-  Core --> Discovery[Discovery provider]
-  Core --> Research[Research provider]
-  Core --> Merchant[Merchant provider]
-  Discovery --> Fixture[Explicit fixture adapters]
-  Research --> Fixture
-  Merchant --> Fixture
-  Core --> Result[Comparison and recommendation]
-  Result --> UI
-  UI --> Selection[Select product ID]
-  Selection --> HTTP
-  HTTP --> Handoff[Safe merchant product link]
+  UI [Official chat components] --> Prepare [Validated Hono prepare]
+  Prepare --> State [Authoritative conversation reducer]
+  State --> Held [Free held-evidence reply]
+  State --> Pending [Typed material clarification]
+  State --> Prepared [Owned prepared operation]
+  Prepared --> Quota [Persistent conservative admission]
+  Quota --> Exa [One Exa Answer SDK request]
+  Exa --> Evidence [Source and price boundary]
+  Evidence --> Eligibility [Server recommendation eligibility]
+  Eligibility --> Snapshot [Immutable response snapshot]
+  Snapshot --> UI
 ```
 
-## Boundaries
+## Evidence
 
-Runtime schemas validate browser input and provider output. Core ranking and preference logic operate on typed values. Adapters own external data normalization, evidence status, and failure behavior. The API owns media types, payload bounds, origin policy, request IDs, and safe error responses. React renders plain text and validated links.
+`src/server/exa-research.ts` validates native output and binds observations to retained safe citation URLs and literal source text. Each support retains the exact native excerpt and expanded complete context with offsets. Truncation and missing completeness cannot gain certainty through native quotations. Identity, request relevance, hard criteria, attributes and observed prices remain separate assessments.
 
-The engineering agents are separate from the product runtime. Codex agents research, implement, test, and review the repository. The product's first version uses a deterministic planner and fixture adapters, with explicit language/category limits. No model-produced fact is accepted as source evidence.
+The server computes eligibility. Unknown hard fit is not satisfied. Budgeted choices require qualifying exact-variant observed money, explicit requested currency, both bounds and resolved conditions. Known negative, conflicting and conditional context remains material. Source-based model interpretation is labeled separately from deterministic provenance checks and merchant verification.
 
-## State and expansion
+The server orders by eligibility and supported flexible-preference coverage. Equal or incomparable coverage stays a tie. Native prose cannot override computed eligibility. Stock, delivery and current merchant offers remain unknown without an authorized merchant integration. Safe source navigation does not prove merchant authorization.
 
-The client keeps an ordered turn ledger in useConversation. Each turn retains its submitted message, accepted response snapshot and selection/source state. One controller owns active preferences, valid drafts, request cancellation and current action authority. Earlier messages stay readable; historical offers do not authorize a fresh handoff. Contextual questions collect missing useful preferences without a permanent form. The theme alone persists in localStorage.
+## Costs and cancellation
 
-The local milestone uses tab-scoped state with a New chat reset. It does not claim authenticated cross-device or restart persistence. PostgreSQL belongs behind authentication and ownership checks when durable multi-user state becomes necessary.
+`research-executor.ts` combines the actual SDK request with the unchanged conservative quota contract. Admission is persistent before dispatch. Unknown cost retains its reservation and stops the program. Cancellation reaches the SDK transport and response body. A returned known provider cost is recorded even if publication is cancelled. No automatic retry, fixture fallback or allowance renewal occurs. Local exposure limits are not provider balance or a provider-enforced spending cap.
 
-Live providers replace adapters through the same contracts. Each integration needs credentialed runtime evidence before it can be called verified. Live offer checks need currency, region, product variant, price, stock status, retrieval time, expiry, and selection-time refresh. See the [capability matrix](capability-gaps.md) and [security model](security-model.md).
+Issue #42 remains externally blocked. Automated development, CI and evaluations use owned loopback transports and isolated accounting doubles. The original key, ledger, grant and historical unknown charges are outside this rebuild's writes.
+
+## Optional accounts
+
+Better Auth and PostgreSQL preserve reviewed authentication and transaction mechanics from PR #41. `workspace-store.ts` locks actual sessions and account-owned rows, validates after lock waits and claims durable operations before provider work. Research runs outside transactions. Publication checks ownership, session, epoch, operation and request identity. Replay receipts do not promise exactly-once external billing.
+
+V2 adds a separate workspace table. Existing migrations and historical workspace rows remain intact. Stored current state and immutable responses have bounded versioned schemas. Retention is30 days, at most 50 whole turns and256 KiB. Account outage never silently writes to a guest. Immediate cross-process transport cancellation remains limited; durable publication fencing is still enforced.
+
+## Frontend and evaluation
+
+React composes unmodified official shadcn components and AI Elements. Neutral official tokens, default dark mode, persistent theme, minimal header, centered history and a compact composer define the layout. Transport phases reflect actual requests rather than simulated streaming. Contextual editing and recommendations remain inside the conversation.
+
+All sixty independent scenarios and historical reports are preserved. `evals/v2/` observes actual Hono and SDK loopback traffic and mechanically projects current state for unchanged assertions. Raw current responses remain beside the projection. Exact native excerpts and complete contexts have separate checks. Semantic entailment and live usefulness are not inferred from quote containment, green CI or synthetic responses.
+
+The [decision record](../.codex/pstack-runs/fieldnote-v2/architecture.md) compares the alternatives and identifies reused, adapted and retired components. The final V2 PR stays unmerged for the designated user review.

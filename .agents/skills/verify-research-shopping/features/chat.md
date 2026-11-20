@@ -1,43 +1,13 @@
-# Conversation and theme
+# Chat and viewport acceptance
 
-Fieldnote keeps user and assistant messages in one conversation. Contextual questions and shopping content belong inside assistant turns. The composer stays available while history scrolls.
+Start an owned offline instance with the skill helper. Use fresh OS-light contexts to establish dark default. Toggle light and dark, refreshing after each choice. Inspect both themes at desktop and mobile sizes.
 
-## First visit and theme
+Submit `hello`. Require an ordinary assistant message and no provider call or cards. A useful shopping request must not require an optional budget form. Capture the minimal empty state and ordinary reply.
 
-Start with a fresh browser context whose operating-system preference is light. Navigate to the owned local app. Require dark tokens on the document before changing any preference. Take a desktop viewport screenshot of the empty chat. Require no permanent filter editor, large request form, empty-results panel or introductory page scroll.
+Submit `I want to buy a powerbank around $30-40.` and then type `SGD.`. Require both bounds, the original objective, automatic research, truthful activity tied to actual transport, and a concise leading answer. Preserve earlier messages across comparisons and preference edits.
 
-Use the actual theme toggle to choose light mode, refresh and require light mode to remain selected. Capture the rendered light state. Choose dark mode, refresh and require dark mode to remain selected. A fresh independent context must still begin dark. Do not set localStorage directly as proof of the toggle.
+Capture the settled recommendation before any manual scroll. Measure its paragraph and first product name against both the viewport and clipping conversation container. Content that exists but has a negative visible position fails. Issue #52 demonstrated that `toBeVisible()` could pass with the leading answer above the mobile viewport. Never repair framing before this check.
 
-## Ordinary messages
+Use 1440×1000, 390×844, and a short mobile height. Scroll older and newer history deliberately after the initial-view gate. Require the composer and send action to stay readable, visible, and anchored. Check visible source and edit controls for any rectangle overlap with the floating scroll button. Sample corners and edges as well as the center with hit-testing. Check that the document does not overflow horizontally and that expanded content stays within the conversation.
 
-Submit a greeting through the composer. Require the submitted message and a truthful assistant reply in the conversation. The reply must remain ordinary text without a product shortlist, preference form or fabricated provider activity.
-
-After a shopping response, submit a brief acknowledgment. Require the original exchange and acknowledgment exchange to remain. Current preferences must remain unchanged, including any unresolved hard constraint. Unknown shopping requirements must still receive an honest clarification instead of being treated as acknowledgments.
-
-## Contextual preferences
-
-In a fresh conversation, submit a request missing a material fact, such as `Something good for work`. Require a compact preference question inside the assistant turn. Use the displayed quick choice and observe the resulting accepted preference. Do not require an optional question to block research. When an optional question is shown, exercise its skip action and verify the conversation continues without inventing that preference.
-
-Submit a complete request such as `Wireless headphones for long flights, under S$500`. Require the response to preserve its category and SGD 500 budget without asking for either again. Inspect the actual turn response as well as the visible preference summary or contextual editor.
-
-Open contextual preference editing only through its visible trigger. Verify a single mounted editor and readable mobile controls. Close it without losing accepted changes or previous messages. The initial screen must not expose this editor permanently.
-
-## Multi-turn results
-
-Capture the first request and response. Then submit `under S$200` through the same composer. Require both user messages and both accepted assistant responses to remain in history. Inspect the second response to require its SGD 200 cap, unchanged relevant hard constraints, and eligible fixture offers.
-
-Scope card, comparison, evidence and selection controls to the intended assistant message. A historical result is a snapshot. It cannot silently replace the current shortlist or provide an action under obsolete preferences. Opening old evidence must not mutate current accepted preferences.
-
-## Scrolling and composer
-
-Use desktop 1440px and mobile 390px viewports, including a short mobile height. Capture viewport screenshots rather than relying only on full-page images. Read older messages by scrolling the conversation, then return to the latest turn. Require no forced jump while the user reads history.
-
-At both scroll positions, require the composer to remain visible and keyboard-operable. Focus it, enter a multiline message with Shift+Enter, and verify Enter submits once. The composer must not cover an actionable card, disclosure, error or handoff. Require no body-level horizontal overflow.
-
-Verify visible keyboard focus, touch-sized actions, readable contrast in both themes and reduced-motion behavior. Screenshots prove rendered appearance only after inspection. Independently judge the result against the chat-first brief; passing existing dashboard tests is insufficient.
-
-## Evidence and limits
-
-Keep actual request/response observations, message retention, theme transitions, scroll/composer measurements, desktop/mobile screenshots, trace, candidate SHA, worktree status and owned-process cleanup. Record exact states covered. In-memory conversation history does not establish refresh, cross-tab or cross-device persistence. Theme persistence is a separate promise.
-
-The issue #30 redesign requires user review of screenshots and design confirmation before merge. Independent visual QA is necessary and does not substitute for that confirmation.
+For composer changes, exercise keyboard focus, Enter, Shift+Enter, and composition events separately. The smoke helper does not establish all keyboard or assistive-technology behavior. Inspect official component provenance in the repository and actual screenshots. Tests do not approve a dashboard or modified generated primitives.

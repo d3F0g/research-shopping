@@ -1,0 +1,13 @@
+{
+  "fullReport": "../eval/report.json",
+  "fullRunId": "5f3c0a221a626ca8c9b06ea7",
+  "ids": [
+    "FN-CU-001",
+    "FN-PR-003",
+    "FN-RT-002",
+    "FN-PQ-003",
+    "FN-EH-001",
+    "FN-BC-005"
+  ],
+  "reason": "Purposeful engineering sample for currency, unfamiliar input, comparison/disclosure, held question, conflicting evidence and conditional price. Not representative or blind to prior QA context."
+}

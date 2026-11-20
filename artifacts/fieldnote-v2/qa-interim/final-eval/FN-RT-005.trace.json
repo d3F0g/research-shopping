@@ -1,0 +1,863 @@
+{
+  "scenarioId": "FN-RT-005",
+  "initialPreferences": {
+    "productDescription": "",
+    "criteria": [],
+    "budget": null,
+    "budgetClarified": false,
+    "pendingChange": null,
+    "region": null,
+    "responseLength": "concise",
+    "revision": 0,
+    "version": 2
+  },
+  "finalPreferences": {
+    "productDescription": "Find a film changing bag under EUR 40.\nCan you search now?",
+    "criteria": [
+      {
+        "id": "request-f627991f-fb34-445b-b056-7890d471b2d5",
+        "wording": "Find a film changing bag under EUR 40.",
+        "strength": "hard"
+      },
+      {
+        "id": "requirement-5617f5a8-ca7e-4413-aa4c-43bc7a562e57",
+        "wording": "Can you search now?",
+        "strength": "hard"
+      }
+    ],
+    "budget": {
+      "amount": 40,
+      "currency": "EUR"
+    },
+    "budgetClarified": true,
+    "pendingChange": null,
+    "region": null,
+    "responseLength": "concise",
+    "revision": 2,
+    "version": 2
+  },
+  "rawInitialState": {
+    "version": 2,
+    "revision": 0,
+    "intent": {
+      "intentVersion": 2,
+      "originalText": "",
+      "productDescription": "",
+      "requirements": [],
+      "budget": null,
+      "region": null,
+      "responseLength": "concise"
+    },
+    "pending": null,
+    "messages": []
+  },
+  "rawTurns": [
+    {
+      "index": 0,
+      "before": {
+        "version": 2,
+        "revision": 0,
+        "intent": {
+          "intentVersion": 2,
+          "originalText": "",
+          "productDescription": "",
+          "requirements": [],
+          "budget": null,
+          "region": null,
+          "responseLength": "concise"
+        },
+        "pending": null,
+        "messages": []
+      },
+      "after": {
+        "version": 2,
+        "revision": 1,
+        "intent": {
+          "intentVersion": 2,
+          "originalText": "Find a film changing bag under EUR 40.",
+          "productDescription": "Find a film changing bag under EUR 40.",
+          "requirements": [
+            {
+              "id": "request-f627991f-fb34-445b-b056-7890d471b2d5",
+              "text": "Find a film changing bag under EUR 40.",
+              "strength": "hard",
+              "originMessageId": "f627991f-fb34-445b-b056-7890d471b2d5",
+              "kind": "request"
+            }
+          ],
+          "budget": {
+            "maximum": 40,
+            "currency": "EUR"
+          },
+          "region": null,
+          "responseLength": "concise"
+        },
+        "pending": null,
+        "messages": [
+          {
+            "id": "f627991f-fb34-445b-b056-7890d471b2d5",
+            "role": "user",
+            "text": "Find a film changing bag under EUR 40."
+          },
+          {
+            "id": "68fcc716-abcb-437d-acf7-78e5f97c8552",
+            "role": "assistant",
+            "text": "Exa research is not configured. Your request is saved; no products or prices were invented."
+          }
+        ]
+      },
+      "response": {
+        "responseVersion": 2,
+        "kind": "research-unavailable",
+        "reason": "not-configured",
+        "message": "Exa research is not configured. Your request is saved; no products or prices were invented.",
+        "state": {
+          "version": 2,
+          "revision": 1,
+          "intent": {
+            "intentVersion": 2,
+            "originalText": "Find a film changing bag under EUR 40.",
+            "productDescription": "Find a film changing bag under EUR 40.",
+            "requirements": [
+              {
+                "id": "request-f627991f-fb34-445b-b056-7890d471b2d5",
+                "text": "Find a film changing bag under EUR 40.",
+                "strength": "hard",
+                "originMessageId": "f627991f-fb34-445b-b056-7890d471b2d5",
+                "kind": "request"
+              }
+            ],
+            "budget": {
+              "maximum": 40,
+              "currency": "EUR"
+            },
+            "region": null,
+            "responseLength": "concise"
+          },
+          "pending": null,
+          "messages": [
+            {
+              "id": "f627991f-fb34-445b-b056-7890d471b2d5",
+              "role": "user",
+              "text": "Find a film changing bag under EUR 40."
+            },
+            {
+              "id": "68fcc716-abcb-437d-acf7-78e5f97c8552",
+              "role": "assistant",
+              "text": "Exa research is not configured. Your request is saved; no products or prices were invented."
+            }
+          ]
+        }
+      }
+    },
+    {
+      "index": 1,
+      "before": {
+        "version": 2,
+        "revision": 1,
+        "intent": {
+          "intentVersion": 2,
+          "originalText": "Find a film changing bag under EUR 40.",
+          "productDescription": "Find a film changing bag under EUR 40.",
+          "requirements": [
+            {
+              "id": "request-f627991f-fb34-445b-b056-7890d471b2d5",
+              "text": "Find a film changing bag under EUR 40.",
+              "strength": "hard",
+              "originMessageId": "f627991f-fb34-445b-b056-7890d471b2d5",
+              "kind": "request"
+            }
+          ],
+          "budget": {
+            "maximum": 40,
+            "currency": "EUR"
+          },
+          "region": null,
+          "responseLength": "concise"
+        },
+        "pending": null,
+        "messages": [
+          {
+            "id": "f627991f-fb34-445b-b056-7890d471b2d5",
+            "role": "user",
+            "text": "Find a film changing bag under EUR 40."
+          },
+          {
+            "id": "68fcc716-abcb-437d-acf7-78e5f97c8552",
+            "role": "assistant",
+            "text": "Exa research is not configured. Your request is saved; no products or prices were invented."
+          }
+        ]
+      },
+      "after": {
+        "version": 2,
+        "revision": 2,
+        "intent": {
+          "intentVersion": 2,
+          "originalText": "Find a film changing bag under EUR 40.",
+          "productDescription": "Find a film changing bag under EUR 40.\nCan you search now?",
+          "requirements": [
+            {
+              "id": "request-f627991f-fb34-445b-b056-7890d471b2d5",
+              "text": "Find a film changing bag under EUR 40.",
+              "strength": "hard",
+              "originMessageId": "f627991f-fb34-445b-b056-7890d471b2d5",
+              "kind": "request"
+            },
+            {
+              "id": "requirement-5617f5a8-ca7e-4413-aa4c-43bc7a562e57",
+              "text": "Can you search now?",
+              "strength": "hard",
+              "originMessageId": "5617f5a8-ca7e-4413-aa4c-43bc7a562e57",
+              "kind": "preference"
+            }
+          ],
+          "budget": {
+            "maximum": 40,
+            "currency": "EUR"
+          },
+          "region": null,
+          "responseLength": "concise"
+        },
+        "pending": null,
+        "messages": [
+          {
+            "id": "f627991f-fb34-445b-b056-7890d471b2d5",
+            "role": "user",
+            "text": "Find a film changing bag under EUR 40."
+          },
+          {
+            "id": "68fcc716-abcb-437d-acf7-78e5f97c8552",
+            "role": "assistant",
+            "text": "Exa research is not configured. Your request is saved; no products or prices were invented."
+          },
+          {
+            "id": "5617f5a8-ca7e-4413-aa4c-43bc7a562e57",
+            "role": "user",
+            "text": "Can you search now?"
+          },
+          {
+            "id": "b42cd50f-ec05-4f9b-bdff-547c84d9d7cb",
+            "role": "assistant",
+            "text": "Exa research is not configured. Your request is saved; no products or prices were invented."
+          }
+        ]
+      },
+      "response": {
+        "responseVersion": 2,
+        "kind": "research-unavailable",
+        "reason": "not-configured",
+        "message": "Exa research is not configured. Your request is saved; no products or prices were invented.",
+        "state": {
+          "version": 2,
+          "revision": 2,
+          "intent": {
+            "intentVersion": 2,
+            "originalText": "Find a film changing bag under EUR 40.",
+            "productDescription": "Find a film changing bag under EUR 40.\nCan you search now?",
+            "requirements": [
+              {
+                "id": "request-f627991f-fb34-445b-b056-7890d471b2d5",
+                "text": "Find a film changing bag under EUR 40.",
+                "strength": "hard",
+                "originMessageId": "f627991f-fb34-445b-b056-7890d471b2d5",
+                "kind": "request"
+              },
+              {
+                "id": "requirement-5617f5a8-ca7e-4413-aa4c-43bc7a562e57",
+                "text": "Can you search now?",
+                "strength": "hard",
+                "originMessageId": "5617f5a8-ca7e-4413-aa4c-43bc7a562e57",
+                "kind": "preference"
+              }
+            ],
+            "budget": {
+              "maximum": 40,
+              "currency": "EUR"
+            },
+            "region": null,
+            "responseLength": "concise"
+          },
+          "pending": null,
+          "messages": [
+            {
+              "id": "f627991f-fb34-445b-b056-7890d471b2d5",
+              "role": "user",
+              "text": "Find a film changing bag under EUR 40."
+            },
+            {
+              "id": "68fcc716-abcb-437d-acf7-78e5f97c8552",
+              "role": "assistant",
+              "text": "Exa research is not configured. Your request is saved; no products or prices were invented."
+            },
+            {
+              "id": "5617f5a8-ca7e-4413-aa4c-43bc7a562e57",
+              "role": "user",
+              "text": "Can you search now?"
+            },
+            {
+              "id": "b42cd50f-ec05-4f9b-bdff-547c84d9d7cb",
+              "role": "assistant",
+              "text": "Exa research is not configured. Your request is saved; no products or prices were invented."
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "material": {
+    "id": "missing-config",
+    "kind": "synthetic",
+    "label": "Explicit synthetic provider double. Not genuine Exa research.",
+    "capturedAt": null,
+    "provenance": [
+      "Independently fixed test input before application execution",
+      "No current product or market claim"
+    ],
+    "sha256": "8363c9d99dd141144fa140f9d68d693d7d4eb1ffdaeb5ae61ccb4fba390cc1e9",
+    "body": {
+      "label": "Synthetic missing provider configuration; no SDK composed"
+    },
+    "status": 200
+  },
+  "turns": [
+    {
+      "index": 0,
+      "action": {
+        "kind": "message",
+        "text": "Find a film changing bag under EUR 40."
+      },
+      "initialPreferences": {
+        "productDescription": "",
+        "criteria": [],
+        "budget": null,
+        "budgetClarified": false,
+        "pendingChange": null,
+        "region": null,
+        "responseLength": "concise",
+        "revision": 0,
+        "version": 2
+      },
+      "finalPreferences": {
+        "productDescription": "Find a film changing bag under EUR 40.",
+        "criteria": [
+          {
+            "id": "request-f627991f-fb34-445b-b056-7890d471b2d5",
+            "wording": "Find a film changing bag under EUR 40.",
+            "strength": "hard"
+          }
+        ],
+        "budget": {
+          "amount": 40,
+          "currency": "EUR"
+        },
+        "budgetClarified": true,
+        "pendingChange": null,
+        "region": null,
+        "responseLength": "concise",
+        "revision": 1,
+        "version": 2
+      },
+      "response": {
+        "responseVersion": 2,
+        "kind": "research-unavailable",
+        "reason": "not-configured",
+        "message": "Exa research is not configured. Your request is saved; no products or prices were invented.",
+        "state": {
+          "version": 2,
+          "revision": 1,
+          "intent": {
+            "intentVersion": 2,
+            "originalText": "Find a film changing bag under EUR 40.",
+            "productDescription": "Find a film changing bag under EUR 40.",
+            "requirements": [
+              {
+                "id": "request-f627991f-fb34-445b-b056-7890d471b2d5",
+                "text": "Find a film changing bag under EUR 40.",
+                "strength": "hard",
+                "originMessageId": "f627991f-fb34-445b-b056-7890d471b2d5",
+                "kind": "request"
+              }
+            ],
+            "budget": {
+              "maximum": 40,
+              "currency": "EUR"
+            },
+            "region": null,
+            "responseLength": "concise"
+          },
+          "pending": null,
+          "messages": [
+            {
+              "id": "f627991f-fb34-445b-b056-7890d471b2d5",
+              "role": "user",
+              "text": "Find a film changing bag under EUR 40."
+            },
+            {
+              "id": "68fcc716-abcb-437d-acf7-78e5f97c8552",
+              "role": "assistant",
+              "text": "Exa research is not configured. Your request is saved; no products or prices were invented."
+            }
+          ]
+        }
+      },
+      "intentHandling": "local",
+      "providerCalls": 0,
+      "cancelled": false
+    },
+    {
+      "index": 1,
+      "action": {
+        "kind": "message",
+        "text": "Can you search now?"
+      },
+      "initialPreferences": {
+        "productDescription": "Find a film changing bag under EUR 40.",
+        "criteria": [
+          {
+            "id": "request-f627991f-fb34-445b-b056-7890d471b2d5",
+            "wording": "Find a film changing bag under EUR 40.",
+            "strength": "hard"
+          }
+        ],
+        "budget": {
+          "amount": 40,
+          "currency": "EUR"
+        },
+        "budgetClarified": true,
+        "pendingChange": null,
+        "region": null,
+        "responseLength": "concise",
+        "revision": 1,
+        "version": 2
+      },
+      "finalPreferences": {
+        "productDescription": "Find a film changing bag under EUR 40.\nCan you search now?",
+        "criteria": [
+          {
+            "id": "request-f627991f-fb34-445b-b056-7890d471b2d5",
+            "wording": "Find a film changing bag under EUR 40.",
+            "strength": "hard"
+          },
+          {
+            "id": "requirement-5617f5a8-ca7e-4413-aa4c-43bc7a562e57",
+            "wording": "Can you search now?",
+            "strength": "hard"
+          }
+        ],
+        "budget": {
+          "amount": 40,
+          "currency": "EUR"
+        },
+        "budgetClarified": true,
+        "pendingChange": null,
+        "region": null,
+        "responseLength": "concise",
+        "revision": 2,
+        "version": 2
+      },
+      "response": {
+        "responseVersion": 2,
+        "kind": "research-unavailable",
+        "reason": "not-configured",
+        "message": "Exa research is not configured. Your request is saved; no products or prices were invented.",
+        "state": {
+          "version": 2,
+          "revision": 2,
+          "intent": {
+            "intentVersion": 2,
+            "originalText": "Find a film changing bag under EUR 40.",
+            "productDescription": "Find a film changing bag under EUR 40.\nCan you search now?",
+            "requirements": [
+              {
+                "id": "request-f627991f-fb34-445b-b056-7890d471b2d5",
+                "text": "Find a film changing bag under EUR 40.",
+                "strength": "hard",
+                "originMessageId": "f627991f-fb34-445b-b056-7890d471b2d5",
+                "kind": "request"
+              },
+              {
+                "id": "requirement-5617f5a8-ca7e-4413-aa4c-43bc7a562e57",
+                "text": "Can you search now?",
+                "strength": "hard",
+                "originMessageId": "5617f5a8-ca7e-4413-aa4c-43bc7a562e57",
+                "kind": "preference"
+              }
+            ],
+            "budget": {
+              "maximum": 40,
+              "currency": "EUR"
+            },
+            "region": null,
+            "responseLength": "concise"
+          },
+          "pending": null,
+          "messages": [
+            {
+              "id": "f627991f-fb34-445b-b056-7890d471b2d5",
+              "role": "user",
+              "text": "Find a film changing bag under EUR 40."
+            },
+            {
+              "id": "68fcc716-abcb-437d-acf7-78e5f97c8552",
+              "role": "assistant",
+              "text": "Exa research is not configured. Your request is saved; no products or prices were invented."
+            },
+            {
+              "id": "5617f5a8-ca7e-4413-aa4c-43bc7a562e57",
+              "role": "user",
+              "text": "Can you search now?"
+            },
+            {
+              "id": "b42cd50f-ec05-4f9b-bdff-547c84d9d7cb",
+              "role": "assistant",
+              "text": "Exa research is not configured. Your request is saved; no products or prices were invented."
+            }
+          ]
+        }
+      },
+      "intentHandling": "local",
+      "providerCalls": 0,
+      "cancelled": false
+    }
+  ],
+  "events": [
+    {
+      "sequence": 1,
+      "turn": 0,
+      "attemptId": "5e859251-6dd4-4283-8439-c43f41d69fce",
+      "kind": "app-request",
+      "elapsedMs": 1.81,
+      "body": {
+        "method": "GET",
+        "path": "/api/session"
+      }
+    },
+    {
+      "sequence": 2,
+      "turn": 0,
+      "attemptId": "5e859251-6dd4-4283-8439-c43f41d69fce",
+      "kind": "app-response",
+      "elapsedMs": 2.66,
+      "body": {
+        "status": 200,
+        "body": {
+          "responseVersion": 2,
+          "state": {
+            "version": 2,
+            "revision": 0,
+            "intent": {
+              "intentVersion": 2,
+              "originalText": "",
+              "productDescription": "",
+              "requirements": [],
+              "budget": null,
+              "region": null,
+              "responseLength": "concise"
+            },
+            "pending": null,
+            "messages": []
+          }
+        }
+      }
+    },
+    {
+      "sequence": 3,
+      "turn": 0,
+      "attemptId": "26ccc97d-0e70-4675-bf1b-9ef7092a479c",
+      "kind": "app-request",
+      "elapsedMs": 5.79,
+      "body": {
+        "phase": "prepare",
+        "operationId": "f627991f-fb34-445b-b056-7890d471b2d5",
+        "message": "Find a film changing bag under EUR 40."
+      }
+    },
+    {
+      "sequence": 4,
+      "turn": 0,
+      "attemptId": "26ccc97d-0e70-4675-bf1b-9ef7092a479c",
+      "kind": "app-response",
+      "elapsedMs": 6.57,
+      "body": {
+        "status": 200,
+        "body": {
+          "responseVersion": 2,
+          "kind": "prepared",
+          "preparedId": "7052644e-9656-4a75-99fe-54f7b2dc7643",
+          "state": {
+            "version": 2,
+            "revision": 1,
+            "intent": {
+              "intentVersion": 2,
+              "originalText": "Find a film changing bag under EUR 40.",
+              "productDescription": "Find a film changing bag under EUR 40.",
+              "requirements": [
+                {
+                  "id": "request-f627991f-fb34-445b-b056-7890d471b2d5",
+                  "text": "Find a film changing bag under EUR 40.",
+                  "strength": "hard",
+                  "originMessageId": "f627991f-fb34-445b-b056-7890d471b2d5",
+                  "kind": "request"
+                }
+              ],
+              "budget": {
+                "maximum": 40,
+                "currency": "EUR"
+              },
+              "region": null,
+              "responseLength": "concise"
+            },
+            "pending": null,
+            "messages": [
+              {
+                "id": "f627991f-fb34-445b-b056-7890d471b2d5",
+                "role": "user",
+                "text": "Find a film changing bag under EUR 40."
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "sequence": 5,
+      "turn": 0,
+      "attemptId": "703428b5-90a7-4495-b4b4-28ee3eeeaa38",
+      "kind": "app-request",
+      "elapsedMs": 8.59,
+      "body": {
+        "phase": "research",
+        "preparedId": "7052644e-9656-4a75-99fe-54f7b2dc7643"
+      }
+    },
+    {
+      "sequence": 6,
+      "turn": 0,
+      "attemptId": "703428b5-90a7-4495-b4b4-28ee3eeeaa38",
+      "kind": "app-response",
+      "elapsedMs": 9.33,
+      "body": {
+        "status": 200,
+        "body": {
+          "responseVersion": 2,
+          "kind": "research-unavailable",
+          "reason": "not-configured",
+          "message": "Exa research is not configured. Your request is saved; no products or prices were invented.",
+          "state": {
+            "version": 2,
+            "revision": 1,
+            "intent": {
+              "intentVersion": 2,
+              "originalText": "Find a film changing bag under EUR 40.",
+              "productDescription": "Find a film changing bag under EUR 40.",
+              "requirements": [
+                {
+                  "id": "request-f627991f-fb34-445b-b056-7890d471b2d5",
+                  "text": "Find a film changing bag under EUR 40.",
+                  "strength": "hard",
+                  "originMessageId": "f627991f-fb34-445b-b056-7890d471b2d5",
+                  "kind": "request"
+                }
+              ],
+              "budget": {
+                "maximum": 40,
+                "currency": "EUR"
+              },
+              "region": null,
+              "responseLength": "concise"
+            },
+            "pending": null,
+            "messages": [
+              {
+                "id": "f627991f-fb34-445b-b056-7890d471b2d5",
+                "role": "user",
+                "text": "Find a film changing bag under EUR 40."
+              },
+              {
+                "id": "68fcc716-abcb-437d-acf7-78e5f97c8552",
+                "role": "assistant",
+                "text": "Exa research is not configured. Your request is saved; no products or prices were invented."
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "sequence": 7,
+      "turn": 1,
+      "attemptId": "17251ce8-4350-4e93-a82b-8bd1ef81a7e0",
+      "kind": "app-request",
+      "elapsedMs": 11.7,
+      "body": {
+        "phase": "prepare",
+        "operationId": "5617f5a8-ca7e-4413-aa4c-43bc7a562e57",
+        "message": "Can you search now?"
+      }
+    },
+    {
+      "sequence": 8,
+      "turn": 1,
+      "attemptId": "17251ce8-4350-4e93-a82b-8bd1ef81a7e0",
+      "kind": "app-response",
+      "elapsedMs": 12.37,
+      "body": {
+        "status": 200,
+        "body": {
+          "responseVersion": 2,
+          "kind": "prepared",
+          "preparedId": "f6c2b113-c2e8-4f52-b94a-21128a8b0275",
+          "state": {
+            "version": 2,
+            "revision": 2,
+            "intent": {
+              "intentVersion": 2,
+              "originalText": "Find a film changing bag under EUR 40.",
+              "productDescription": "Find a film changing bag under EUR 40.\nCan you search now?",
+              "requirements": [
+                {
+                  "id": "request-f627991f-fb34-445b-b056-7890d471b2d5",
+                  "text": "Find a film changing bag under EUR 40.",
+                  "strength": "hard",
+                  "originMessageId": "f627991f-fb34-445b-b056-7890d471b2d5",
+                  "kind": "request"
+                },
+                {
+                  "id": "requirement-5617f5a8-ca7e-4413-aa4c-43bc7a562e57",
+                  "text": "Can you search now?",
+                  "strength": "hard",
+                  "originMessageId": "5617f5a8-ca7e-4413-aa4c-43bc7a562e57",
+                  "kind": "preference"
+                }
+              ],
+              "budget": {
+                "maximum": 40,
+                "currency": "EUR"
+              },
+              "region": null,
+              "responseLength": "concise"
+            },
+            "pending": null,
+            "messages": [
+              {
+                "id": "f627991f-fb34-445b-b056-7890d471b2d5",
+                "role": "user",
+                "text": "Find a film changing bag under EUR 40."
+              },
+              {
+                "id": "68fcc716-abcb-437d-acf7-78e5f97c8552",
+                "role": "assistant",
+                "text": "Exa research is not configured. Your request is saved; no products or prices were invented."
+              },
+              {
+                "id": "5617f5a8-ca7e-4413-aa4c-43bc7a562e57",
+                "role": "user",
+                "text": "Can you search now?"
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "sequence": 9,
+      "turn": 1,
+      "attemptId": "19f5dd80-e5f2-4620-948d-ba4757b61d73",
+      "kind": "app-request",
+      "elapsedMs": 13.79,
+      "body": {
+        "phase": "research",
+        "preparedId": "f6c2b113-c2e8-4f52-b94a-21128a8b0275"
+      }
+    },
+    {
+      "sequence": 10,
+      "turn": 1,
+      "attemptId": "19f5dd80-e5f2-4620-948d-ba4757b61d73",
+      "kind": "app-response",
+      "elapsedMs": 14.19,
+      "body": {
+        "status": 200,
+        "body": {
+          "responseVersion": 2,
+          "kind": "research-unavailable",
+          "reason": "not-configured",
+          "message": "Exa research is not configured. Your request is saved; no products or prices were invented.",
+          "state": {
+            "version": 2,
+            "revision": 2,
+            "intent": {
+              "intentVersion": 2,
+              "originalText": "Find a film changing bag under EUR 40.",
+              "productDescription": "Find a film changing bag under EUR 40.\nCan you search now?",
+              "requirements": [
+                {
+                  "id": "request-f627991f-fb34-445b-b056-7890d471b2d5",
+                  "text": "Find a film changing bag under EUR 40.",
+                  "strength": "hard",
+                  "originMessageId": "f627991f-fb34-445b-b056-7890d471b2d5",
+                  "kind": "request"
+                },
+                {
+                  "id": "requirement-5617f5a8-ca7e-4413-aa4c-43bc7a562e57",
+                  "text": "Can you search now?",
+                  "strength": "hard",
+                  "originMessageId": "5617f5a8-ca7e-4413-aa4c-43bc7a562e57",
+                  "kind": "preference"
+                }
+              ],
+              "budget": {
+                "maximum": 40,
+                "currency": "EUR"
+              },
+              "region": null,
+              "responseLength": "concise"
+            },
+            "pending": null,
+            "messages": [
+              {
+                "id": "f627991f-fb34-445b-b056-7890d471b2d5",
+                "role": "user",
+                "text": "Find a film changing bag under EUR 40."
+              },
+              {
+                "id": "68fcc716-abcb-437d-acf7-78e5f97c8552",
+                "role": "assistant",
+                "text": "Exa research is not configured. Your request is saved; no products or prices were invented."
+              },
+              {
+                "id": "5617f5a8-ca7e-4413-aa4c-43bc7a562e57",
+                "role": "user",
+                "text": "Can you search now?"
+              },
+              {
+                "id": "b42cd50f-ec05-4f9b-bdff-547c84d9d7cb",
+                "role": "assistant",
+                "text": "Exa research is not configured. Your request is saved; no products or prices were invented."
+              }
+            ]
+          }
+        }
+      }
+    }
+  ],
+  "network": {
+    "denied": [],
+    "allowedOriginCount": 2,
+    "externalRequests": 0
+  },
+  "interpretation": {
+    "mode": "unavailable",
+    "inputHash": null,
+    "openAIHttpRequests": 0,
+    "ollamaHttpRequests": 0,
+    "consumedTurns": [],
+    "unconsumedTurns": [],
+    "invocations": 0,
+    "suppliedTurns": [],
+    "limitations": []
+  },
+  "cleanup": true,
+  "applicationError": null
+}

@@ -1,0 +1,35 @@
+The goal is to preserve the approved Fieldnote UI while retaining source-bound identity and observed money without inventing applicability or recommendation eligibility.
+
+Candidate 579ec5311932248b19fb382d7a767caff809137d is on fix/fieldnote-v3-literal-evidence in /Users/josiahwong/Documents/research-shopping-v3-literal-evidence. Base is 33fadc7e3cfde2207528adb32b650287e758d343. Root owns GitHub, docs, private replay, independent QA/security, and merge decisions. No push or GitHub mutation was made.
+
+The implementation separates provider-reported wording, unique literal UTF-16 spans, and complete raw context. Evidence version 3 has fixed schema and binding modules. The declared whitespace set is ASCII tab through carriage return, ASCII space, and NBSP. It collapses runs to one separator and preserves every other code unit. Duplicate equivalent matches, punctuation changes, word omission, Unicode folding, zero-width changes, forged offsets and cut metadata cannot bind.
+
+Named catalog money remains an observation with separate applicability. The selected row requires the exact named variant and one amount. Peer sale rows can remain opaque even when they share a color token. Only their own raw monetary spans are treated as peer context. Unscoped target prices, ranges, quantity and variant qualifiers still withhold attribution. Native unresolved conditions remain false. Generic native condition text is labeled Provider-reported, unverified. Money-only request-match support is unknown. The summary leads with the known named amount and states unresolved purchase conditions and full fit. Choice remains server-computed and null when compliance is not established.
+
+Research and conversation envelopes remain version 2. Intent remains version 2. Workspace writes use schema 3. The old evidence-2 research, conversation and wrapper readers are frozen. The evidence-3 snapshot and whitespace matcher are also fixed version owners. Readable history is deeply readonly. Migration changes only the wrapper, active validation, epoch/revision and stale operational receipt status. Old messages are not rebound or reassessed. Prepared/running paid operations are interrupted without touching billing records. The old research and conversation definitions were compared against the base and match verbatim.
+
+An actual historical conversation is checked in tests/fixtures/stored-conversation-v2.json. It is an unchanged extract from artifacts/fieldnote-v2/conversation-polish/full60/FN-CU-001.trace.json at /rawTurns/1/after, from base 33fadc7. Its source blob hash and pointer are tested. Owned PostgreSQL and real browser checks preserve all of its message values beside new evidence-3 results, reject stale preparation, isolate another account, and survive database/API restart.
+
+Current evaluation remains report schema 5, with adapter fieldnote-v2-http-1.1.0 and assertions fieldnote-v2-grounded-1.2.0. Independent provenance checks bind reported wording to the corresponding actual native assessment and validate offsets, whitespace uniqueness, source cuts and context. Replacing the provider report with whitespace-equivalent literal text fails native preservation. Historical whitespace-containment checks become explicitly blocked when that representation cannot express a valid current binding. No fabricated historical native quote is emitted. Frozen schema-5 readers validate older recorded hashes, checks, summaries and transport consistency without regrading them or executing embedded source.
+
+Verification commands and evidence are listed below. Final exact-head results are also in the corresponding /tmp/fieldnote-v3-final-*.log files.
+
+- npm run typecheck and npm run eval:typecheck pass.
+- npm test passes 300 tests in 12 files.
+- npm run eval:test passes 24 tests.
+- npm run test:postgres passes 28 tests on an owned temporary PostgreSQL 17 cluster.
+- npm run test:e2e passes 8 browser journeys. Its generated captures are archived under artifacts/fieldnote-v3/e2e. Only the runner-written historical destinations were restored to their original tracked bytes afterward.
+- npm run eval -- --gate critical --out artifacts/fieldnote-v3/verified-full60 executes all 60 cases. Results are 11 passed, 0 failed, 48 blocked, 1 unsupported, 0 infrastructure errors, and 0 critical failures. Deterministic acceptance remains inconclusive. The 140 observed turns and frozen gaps are retained.
+- npm run verify:evidence:history passes at desktop 1440x1000 and mobile 390x844. Proof and screenshots are under artifacts/fieldnote-v3/history-browser. Both the quote and composer bounds are checked. Panel transitions settle before evidence capture. Source pictures absent from the sanitized catalog fixture remain absent. Initial observed-fact screenshots are captured before evidence scrolling.
+- npm run verify:offline passes desktop, mobile and short-mobile journeys. Proof is under artifacts/fieldnote-v3/final-verification-skill, with cleanup true.
+- npm run build and npm run verify:registry pass. All 18 official component files match recorded CLI output. Vite retains its existing bundle-size warning.
+- actionlint .github/workflows/ci.yml passes. The existing verify job now invokes verify:evidence:history against the same owned PostgreSQL service/container with unchanged contents:read permissions. Existing checks remain.
+- npm run eval:preservation verifies 389 unchanged committed assets and the pre-existing separately adapted product-evals workflow from the 390-entry manifest.
+
+The no-comments reviewer inspected head e10c6a2 plus the readonly correction. No narrating comments or suppression findings were introduced. Two redundant checks were reported and removed. The already accepted dead price-parser relevant state was also removed. No reviewer changed files.
+
+Model the Domain changed the public support record and separated observed attribution from applicability. Fix Root Causes moved the repair to source binding and price attribution rather than eligibility or UI claims. Type System Discipline required independent fixed evidence versions, frozen history and current-only operational responses. Minimize Reader Load removed the duplicate observation guard and repeated citation metadata scan.
+
+All research used synthetic local transports or pure projection. No private environment, credentials, ledger, grant, human capture or existing database was accessed. No external provider or billable call was made. The original uncaptured invalid-schema failure is not established as fixed. Root alone replayed the private capture. Semantic usefulness, current inventory, merchant authorization and purchase eligibility remain outside these automated proofs. Independent exact-head QA/security and actual GitHub CI remain root's gates.
+
+Tracked files are clean. Controlled artifacts/fieldnote-v3 remains untracked for root to archive selectively. It contains earlier successful author runs as well as the current proofs. The bounded image-readiness failure and an earlier evidence framing capture are preserved separately. Their temporary browser/server/database resources were cleaned up.

@@ -1,0 +1,1315 @@
+{
+  "repo": "/Users/josiahwong/Documents/research-shopping-v2-evidence-fix",
+  "apiPort": 3473,
+  "webPort": 5583,
+  "artifacts": "/Users/josiahwong/Documents/research-shopping-v2-evidence-fix/artifacts/fieldnote-v2/evidence-fix/final-skill",
+  "commit": "b192bce14a5a10d829d783eecc3596c42c045c45",
+  "worktreeStatus": "?? artifacts/fieldnote-v2/evidence-fix/",
+  "sourceState": {
+    "status": "",
+    "diffSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "composition": "Automated test only. Actual Hono + Exa SDK against owned loopback substitute.",
+  "result": "passed",
+  "cleanup": true,
+  "processes": [
+    {
+      "name": "test-api",
+      "pid": 7302
+    },
+    {
+      "name": "vite",
+      "pid": 7303
+    }
+  ],
+  "journeys": [
+    {
+      "viewport": {
+        "name": "desktop",
+        "width": 1440,
+        "height": 1000
+      },
+      "result": "passed",
+      "checks": [
+        "Fresh OS-light context defaults dark; light and dark selections survive refresh.",
+        "Typed currency preserves request and both bounds, automatically researches once, labels fixture evidence and places the leading recommendation inside the viewport before manual scrolling.",
+        "Evidence exposes literal fixture quotation and a safe retained source link; held comparison uses zero provider calls; contextual editor updates maximum to 50 while retaining minimum 30, SGD and historical messages.",
+        "Provider failure retains the request without fixture fallback; Stop then New chat prevents a held browser research request from dispatching or publishing late results.",
+        "Separate browser context does not inherit or observe another session."
+      ],
+      "composer": {
+        "textbox": {
+          "x": 361,
+          "y": 853,
+          "width": 718,
+          "height": 64,
+          "right": 1079,
+          "bottom": 917,
+          "viewportWidth": 1440,
+          "viewportHeight": 1000,
+          "clipTop": 0,
+          "clipBottom": 1000
+        },
+        "send": {
+          "x": 1037,
+          "y": 923,
+          "width": 32,
+          "height": 32,
+          "right": 1069,
+          "bottom": 955,
+          "viewportWidth": 1440,
+          "viewportHeight": 1000,
+          "clipTop": 0,
+          "clipBottom": 1000
+        }
+      },
+      "currencyResolution": {
+        "originalRequest": "I want to buy a powerbank around $30-40.",
+        "pendingMinimum": 30,
+        "pendingMaximum": 40,
+        "acceptedBudget": {
+          "minimum": 30,
+          "maximum": 40,
+          "currency": "SGD"
+        },
+        "localCallsBefore": 0,
+        "localCallsAfter": 1,
+        "dataKind": "test-fixture",
+        "choice": {
+          "productId": "model-a",
+          "rationale": "Fixture data: the cited Model A passage supports this assessment."
+        }
+      },
+      "initialSourceControl": {
+        "rect": {
+          "x": 372,
+          "y": 527.75,
+          "width": 180.234375,
+          "height": 32
+        },
+        "visible": {
+          "left": 372,
+          "top": 527.75,
+          "right": 552.234375,
+          "bottom": 559.75
+        },
+        "floating": [
+          {
+            "name": "Scroll to end",
+            "rect": {
+              "x": 1396,
+              "y": 796,
+              "width": 28,
+              "height": 28
+            },
+            "intersection": {
+              "width": 0,
+              "height": 0,
+              "area": 0
+            }
+          }
+        ],
+        "hits": [
+          {
+            "x": 378,
+            "y": 533.75,
+            "targetReached": true,
+            "hit": "A",
+            "slot": "button"
+          },
+          {
+            "x": 378,
+            "y": 543.75,
+            "targetReached": true,
+            "hit": "A",
+            "slot": "button"
+          },
+          {
+            "x": 378,
+            "y": 553.75,
+            "targetReached": true,
+            "hit": "A",
+            "slot": "button"
+          },
+          {
+            "x": 462.1171875,
+            "y": 533.75,
+            "targetReached": true,
+            "hit": "A",
+            "slot": "button"
+          },
+          {
+            "x": 462.1171875,
+            "y": 543.75,
+            "targetReached": true,
+            "hit": "A",
+            "slot": "button"
+          },
+          {
+            "x": 462.1171875,
+            "y": 553.75,
+            "targetReached": true,
+            "hit": "A",
+            "slot": "button"
+          },
+          {
+            "x": 546.234375,
+            "y": 533.75,
+            "targetReached": true,
+            "hit": "A",
+            "slot": "button"
+          },
+          {
+            "x": 546.234375,
+            "y": 543.75,
+            "targetReached": true,
+            "hit": "A",
+            "slot": "button"
+          },
+          {
+            "x": 546.234375,
+            "y": 553.75,
+            "targetReached": true,
+            "hit": "A",
+            "slot": "button"
+          }
+        ]
+      },
+      "initialGeometry": {
+        "answer": {
+          "x": 361,
+          "y": 81.25,
+          "width": 686,
+          "height": 45.5,
+          "right": 1047,
+          "bottom": 126.75,
+          "viewportWidth": 1440,
+          "viewportHeight": 1000,
+          "clipTop": 56,
+          "clipBottom": 840
+        },
+        "title": {
+          "x": 372,
+          "y": 186.75,
+          "width": 180,
+          "height": 19.25,
+          "right": 552,
+          "bottom": 206,
+          "viewportWidth": 1440,
+          "viewportHeight": 1000,
+          "clipTop": 56,
+          "clipBottom": 840
+        },
+        "composer": {
+          "textbox": {
+            "x": 361,
+            "y": 853,
+            "width": 718,
+            "height": 64,
+            "right": 1079,
+            "bottom": 917,
+            "viewportWidth": 1440,
+            "viewportHeight": 1000,
+            "clipTop": 0,
+            "clipBottom": 1000
+          },
+          "send": {
+            "x": 1037,
+            "y": 923,
+            "width": 32,
+            "height": 32,
+            "right": 1069,
+            "bottom": 955,
+            "viewportWidth": 1440,
+            "viewportHeight": 1000,
+            "clipTop": 0,
+            "clipBottom": 1000
+          }
+        }
+      },
+      "sourceLink": "https://manufacturer.com/model-a",
+      "preferenceEdit": {
+        "acceptedBudget": {
+          "minimum": 30,
+          "maximum": 50,
+          "currency": "SGD"
+        },
+        "heldComparisonCallsBefore": 1,
+        "callsAfterHeldComparison": 1,
+        "callsAfterEdit": 2,
+        "retainedMessages": 6
+      }
+    },
+    {
+      "viewport": {
+        "name": "mobile",
+        "width": 390,
+        "height": 844
+      },
+      "result": "passed",
+      "checks": [
+        "Fresh OS-light context defaults dark; light and dark selections survive refresh.",
+        "Typed currency preserves request and both bounds, automatically researches once, labels fixture evidence and places the leading recommendation inside the viewport before manual scrolling.",
+        "Evidence exposes literal fixture quotation and a safe retained source link; held comparison uses zero provider calls; contextual editor updates maximum to 50 while retaining minimum 30, SGD and historical messages.",
+        "Provider failure retains the request without fixture fallback; Stop then New chat prevents a held browser research request from dispatching or publishing late results.",
+        "Separate browser context does not inherit or observe another session."
+      ],
+      "composer": {
+        "textbox": {
+          "x": 13,
+          "y": 681,
+          "width": 364,
+          "height": 64,
+          "right": 377,
+          "bottom": 745,
+          "viewportWidth": 390,
+          "viewportHeight": 844,
+          "clipTop": 0,
+          "clipBottom": 844
+        },
+        "send": {
+          "x": 335,
+          "y": 751,
+          "width": 32,
+          "height": 32,
+          "right": 367,
+          "bottom": 783,
+          "viewportWidth": 390,
+          "viewportHeight": 844,
+          "clipTop": 0,
+          "clipBottom": 844
+        }
+      },
+      "currencyResolution": {
+        "originalRequest": "I want to buy a powerbank around $30-40.",
+        "pendingMinimum": 30,
+        "pendingMaximum": 40,
+        "acceptedBudget": {
+          "minimum": 30,
+          "maximum": 40,
+          "currency": "SGD"
+        },
+        "localCallsBefore": 3,
+        "localCallsAfter": 4,
+        "dataKind": "test-fixture",
+        "choice": {
+          "productId": "model-a",
+          "rationale": "Fixture data: the cited Model A passage supports this assessment."
+        }
+      },
+      "initialSourceControl": {
+        "rect": {
+          "x": 28,
+          "y": 660.25,
+          "width": 180.234375,
+          "height": 32
+        },
+        "visible": {
+          "left": 28,
+          "top": 660.25,
+          "right": 208.234375,
+          "bottom": 668
+        },
+        "floating": [
+          {
+            "name": "Scroll to end",
+            "rect": {
+              "x": 346,
+              "y": 624,
+              "width": 28,
+              "height": 28
+            },
+            "intersection": {
+              "width": 0,
+              "height": 0,
+              "area": 0
+            }
+          }
+        ],
+        "hits": []
+      },
+      "initialGeometry": {
+        "answer": {
+          "x": 17,
+          "y": 81,
+          "width": 316,
+          "height": 91,
+          "right": 333,
+          "bottom": 172,
+          "viewportWidth": 390,
+          "viewportHeight": 844,
+          "clipTop": 56,
+          "clipBottom": 668
+        },
+        "title": {
+          "x": 28,
+          "y": 232,
+          "width": 180,
+          "height": 19.25,
+          "right": 208,
+          "bottom": 251.25,
+          "viewportWidth": 390,
+          "viewportHeight": 844,
+          "clipTop": 56,
+          "clipBottom": 668
+        },
+        "composer": {
+          "textbox": {
+            "x": 13,
+            "y": 681,
+            "width": 364,
+            "height": 64,
+            "right": 377,
+            "bottom": 745,
+            "viewportWidth": 390,
+            "viewportHeight": 844,
+            "clipTop": 0,
+            "clipBottom": 844
+          },
+          "send": {
+            "x": 335,
+            "y": 751,
+            "width": 32,
+            "height": 32,
+            "right": 367,
+            "bottom": 783,
+            "viewportWidth": 390,
+            "viewportHeight": 844,
+            "clipTop": 0,
+            "clipBottom": 844
+          }
+        }
+      },
+      "sourceLink": "https://manufacturer.com/model-a",
+      "preferenceEdit": {
+        "acceptedBudget": {
+          "minimum": 30,
+          "maximum": 50,
+          "currency": "SGD"
+        },
+        "heldComparisonCallsBefore": 4,
+        "callsAfterHeldComparison": 4,
+        "callsAfterEdit": 5,
+        "retainedMessages": 6
+      }
+    },
+    {
+      "viewport": {
+        "name": "short-mobile",
+        "width": 390,
+        "height": 600
+      },
+      "result": "passed",
+      "checks": [
+        "Fresh OS-light context defaults dark; light and dark selections survive refresh.",
+        "Failed source illustration is removed; product, evidence and source link remain.",
+        "Typed currency preserves request and both bounds, automatically researches once, labels fixture evidence and places the leading recommendation inside the viewport before manual scrolling.",
+        "Evidence exposes literal fixture quotation and a safe retained source link; held comparison uses zero provider calls; contextual editor updates maximum to 50 while retaining minimum 30, SGD and historical messages.",
+        "Provider failure retains the request without fixture fallback; Stop then New chat prevents a held browser research request from dispatching or publishing late results.",
+        "Separate browser context does not inherit or observe another session."
+      ],
+      "composer": {
+        "textbox": {
+          "x": 13,
+          "y": 437,
+          "width": 364,
+          "height": 64,
+          "right": 377,
+          "bottom": 501,
+          "viewportWidth": 390,
+          "viewportHeight": 600,
+          "clipTop": 0,
+          "clipBottom": 600
+        },
+        "send": {
+          "x": 335,
+          "y": 507,
+          "width": 32,
+          "height": 32,
+          "right": 367,
+          "bottom": 539,
+          "viewportWidth": 390,
+          "viewportHeight": 600,
+          "clipTop": 0,
+          "clipBottom": 600
+        }
+      },
+      "currencyResolution": {
+        "originalRequest": "I want to buy a powerbank around $30-40.",
+        "pendingMinimum": 30,
+        "pendingMaximum": 40,
+        "acceptedBudget": {
+          "minimum": 30,
+          "maximum": 40,
+          "currency": "SGD"
+        },
+        "localCallsBefore": 6,
+        "localCallsAfter": 7,
+        "dataKind": "test-fixture",
+        "choice": {
+          "productId": "model-a",
+          "rationale": "Fixture data: the cited Model A passage supports this assessment."
+        }
+      },
+      "initialSourceControl": {
+        "rect": {
+          "x": 28,
+          "y": 500.25,
+          "width": 180.234375,
+          "height": 32
+        },
+        "visible": {
+          "left": 28,
+          "top": 500.25,
+          "right": 208.234375,
+          "bottom": 424
+        },
+        "floating": [
+          {
+            "name": "Scroll to end",
+            "rect": {
+              "x": 346,
+              "y": 380,
+              "width": 28,
+              "height": 28
+            },
+            "intersection": {
+              "width": 0,
+              "height": 0,
+              "area": 0
+            }
+          }
+        ],
+        "hits": []
+      },
+      "initialGeometry": {
+        "answer": {
+          "x": 17,
+          "y": 81,
+          "width": 316,
+          "height": 91,
+          "right": 333,
+          "bottom": 172,
+          "viewportWidth": 390,
+          "viewportHeight": 600,
+          "clipTop": 56,
+          "clipBottom": 424
+        },
+        "title": {
+          "x": 28,
+          "y": 232,
+          "width": 180,
+          "height": 19.25,
+          "right": 208,
+          "bottom": 251.25,
+          "viewportWidth": 390,
+          "viewportHeight": 600,
+          "clipTop": 56,
+          "clipBottom": 424
+        },
+        "composer": {
+          "textbox": {
+            "x": 13,
+            "y": 437,
+            "width": 364,
+            "height": 64,
+            "right": 377,
+            "bottom": 501,
+            "viewportWidth": 390,
+            "viewportHeight": 600,
+            "clipTop": 0,
+            "clipBottom": 600
+          },
+          "send": {
+            "x": 335,
+            "y": 507,
+            "width": 32,
+            "height": 32,
+            "right": 367,
+            "bottom": 539,
+            "viewportWidth": 390,
+            "viewportHeight": 600,
+            "clipTop": 0,
+            "clipBottom": 600
+          }
+        }
+      },
+      "sourceLink": "https://manufacturer.com/model-a",
+      "preferenceEdit": {
+        "acceptedBudget": {
+          "minimum": 30,
+          "maximum": 50,
+          "currency": "SGD"
+        },
+        "heldComparisonCallsBefore": 7,
+        "callsAfterHeldComparison": 7,
+        "callsAfterEdit": 8,
+        "retainedMessages": 6
+      }
+    }
+  ],
+  "limits": [
+    "No live Exa retrieval, billing, merchant reachability, inventory, semantic factuality, or PostgreSQL/account acceptance.",
+    "Cancellation at the browser transport boundary does not establish SDK socket cancellation. Run the package API tests.",
+    "Screenshots require independent visual inspection. This helper does not approve the final V2 PR."
+  ],
+  "environment": {
+    "inherited": [
+      "API_PORT",
+      "EXA_RESEARCH_ENABLED",
+      "HOME",
+      "LANG",
+      "LC_ALL",
+      "NODE_ENV",
+      "PATH",
+      "TMPDIR",
+      "VITE_API_PORT",
+      "WEB_PORT"
+    ],
+    "privateProviderAndDatabaseVariables": "not inherited",
+    "environmentFiles": "not loaded"
+  },
+  "health": {
+    "status": "ok",
+    "mode": "research",
+    "provider": "exa",
+    "automaticPaidChecks": false
+  },
+  "controlChecks": [
+    {
+      "label": "Initial source link",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "rect": {
+        "x": 372,
+        "y": 527.75,
+        "width": 180.234375,
+        "height": 32
+      },
+      "visible": {
+        "left": 372,
+        "top": 527.75,
+        "right": 552.234375,
+        "bottom": 559.75
+      },
+      "floating": [
+        {
+          "name": "Scroll to end",
+          "rect": {
+            "x": 1396,
+            "y": 796,
+            "width": 28,
+            "height": 28
+          },
+          "intersection": {
+            "width": 0,
+            "height": 0,
+            "area": 0
+          }
+        }
+      ],
+      "hits": [
+        {
+          "x": 378,
+          "y": 533.75,
+          "targetReached": true,
+          "hit": "A",
+          "slot": "button"
+        },
+        {
+          "x": 378,
+          "y": 543.75,
+          "targetReached": true,
+          "hit": "A",
+          "slot": "button"
+        },
+        {
+          "x": 378,
+          "y": 553.75,
+          "targetReached": true,
+          "hit": "A",
+          "slot": "button"
+        },
+        {
+          "x": 462.1171875,
+          "y": 533.75,
+          "targetReached": true,
+          "hit": "A",
+          "slot": "button"
+        },
+        {
+          "x": 462.1171875,
+          "y": 543.75,
+          "targetReached": true,
+          "hit": "A",
+          "slot": "button"
+        },
+        {
+          "x": 462.1171875,
+          "y": 553.75,
+          "targetReached": true,
+          "hit": "A",
+          "slot": "button"
+        },
+        {
+          "x": 546.234375,
+          "y": 533.75,
+          "targetReached": true,
+          "hit": "A",
+          "slot": "button"
+        },
+        {
+          "x": 546.234375,
+          "y": 543.75,
+          "targetReached": true,
+          "hit": "A",
+          "slot": "button"
+        },
+        {
+          "x": 546.234375,
+          "y": 553.75,
+          "targetReached": true,
+          "hit": "A",
+          "slot": "button"
+        }
+      ]
+    },
+    {
+      "label": "Scrolled source link",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "rect": {
+        "x": 372,
+        "y": 431.5,
+        "width": 180.234375,
+        "height": 32
+      },
+      "visible": {
+        "left": 372,
+        "top": 431.5,
+        "right": 552.234375,
+        "bottom": 463.5
+      },
+      "floating": [
+        {
+          "name": "Scroll to end",
+          "rect": {
+            "x": 1396,
+            "y": 796,
+            "width": 28,
+            "height": 28
+          },
+          "intersection": {
+            "width": 0,
+            "height": 0,
+            "area": 0
+          }
+        }
+      ],
+      "hits": [
+        {
+          "x": 378,
+          "y": 437.5,
+          "targetReached": true,
+          "hit": "A",
+          "slot": "button"
+        },
+        {
+          "x": 378,
+          "y": 447.5,
+          "targetReached": true,
+          "hit": "A",
+          "slot": "button"
+        },
+        {
+          "x": 378,
+          "y": 457.5,
+          "targetReached": true,
+          "hit": "A",
+          "slot": "button"
+        },
+        {
+          "x": 462.1171875,
+          "y": 437.5,
+          "targetReached": true,
+          "hit": "A",
+          "slot": "button"
+        },
+        {
+          "x": 462.1171875,
+          "y": 447.5,
+          "targetReached": true,
+          "hit": "A",
+          "slot": "button"
+        },
+        {
+          "x": 462.1171875,
+          "y": 457.5,
+          "targetReached": true,
+          "hit": "A",
+          "slot": "button"
+        },
+        {
+          "x": 546.234375,
+          "y": 437.5,
+          "targetReached": true,
+          "hit": "A",
+          "slot": "button"
+        },
+        {
+          "x": 546.234375,
+          "y": 447.5,
+          "targetReached": true,
+          "hit": "A",
+          "slot": "button"
+        },
+        {
+          "x": 546.234375,
+          "y": 457.5,
+          "targetReached": true,
+          "hit": "A",
+          "slot": "button"
+        }
+      ]
+    },
+    {
+      "label": "Apply preferences",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "rect": {
+        "x": 372,
+        "y": 743,
+        "width": 149.625,
+        "height": 32
+      },
+      "visible": {
+        "left": 372,
+        "top": 743,
+        "right": 521.625,
+        "bottom": 775
+      },
+      "floating": [],
+      "hits": [
+        {
+          "x": 378,
+          "y": 749,
+          "targetReached": true,
+          "hit": "BUTTON",
+          "slot": "button"
+        },
+        {
+          "x": 378,
+          "y": 759,
+          "targetReached": true,
+          "hit": "BUTTON",
+          "slot": "button"
+        },
+        {
+          "x": 378,
+          "y": 769,
+          "targetReached": true,
+          "hit": "BUTTON",
+          "slot": "button"
+        },
+        {
+          "x": 446.8125,
+          "y": 749,
+          "targetReached": true,
+          "hit": "BUTTON",
+          "slot": "button"
+        },
+        {
+          "x": 446.8125,
+          "y": 759,
+          "targetReached": true,
+          "hit": "BUTTON",
+          "slot": "button"
+        },
+        {
+          "x": 446.8125,
+          "y": 769,
+          "targetReached": true,
+          "hit": "BUTTON",
+          "slot": "button"
+        },
+        {
+          "x": 515.625,
+          "y": 749,
+          "targetReached": true,
+          "hit": "BUTTON",
+          "slot": "button"
+        },
+        {
+          "x": 515.625,
+          "y": 759,
+          "targetReached": true,
+          "hit": "BUTTON",
+          "slot": "button"
+        },
+        {
+          "x": 515.625,
+          "y": 769,
+          "targetReached": true,
+          "hit": "BUTTON",
+          "slot": "button"
+        }
+      ]
+    },
+    {
+      "label": "Initial source link",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 28,
+        "y": 660.25,
+        "width": 180.234375,
+        "height": 32
+      },
+      "visible": {
+        "left": 28,
+        "top": 660.25,
+        "right": 208.234375,
+        "bottom": 668
+      },
+      "floating": [
+        {
+          "name": "Scroll to end",
+          "rect": {
+            "x": 346,
+            "y": 624,
+            "width": 28,
+            "height": 28
+          },
+          "intersection": {
+            "width": 0,
+            "height": 0,
+            "area": 0
+          }
+        }
+      ],
+      "hits": []
+    },
+    {
+      "label": "Scrolled source link",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 28,
+        "y": 345.5,
+        "width": 180.234375,
+        "height": 32
+      },
+      "visible": {
+        "left": 28,
+        "top": 345.5,
+        "right": 208.234375,
+        "bottom": 377.5
+      },
+      "floating": [
+        {
+          "name": "Scroll to end",
+          "rect": {
+            "x": 346,
+            "y": 624,
+            "width": 28,
+            "height": 28
+          },
+          "intersection": {
+            "width": 0,
+            "height": 0,
+            "area": 0
+          }
+        }
+      ],
+      "hits": [
+        {
+          "x": 34,
+          "y": 351.5,
+          "targetReached": true,
+          "hit": "A",
+          "slot": "button"
+        },
+        {
+          "x": 34,
+          "y": 361.5,
+          "targetReached": true,
+          "hit": "A",
+          "slot": "button"
+        },
+        {
+          "x": 34,
+          "y": 371.5,
+          "targetReached": true,
+          "hit": "A",
+          "slot": "button"
+        },
+        {
+          "x": 118.1171875,
+          "y": 351.5,
+          "targetReached": true,
+          "hit": "A",
+          "slot": "button"
+        },
+        {
+          "x": 118.1171875,
+          "y": 361.5,
+          "targetReached": true,
+          "hit": "A",
+          "slot": "button"
+        },
+        {
+          "x": 118.1171875,
+          "y": 371.5,
+          "targetReached": true,
+          "hit": "A",
+          "slot": "button"
+        },
+        {
+          "x": 202.234375,
+          "y": 351.5,
+          "targetReached": true,
+          "hit": "A",
+          "slot": "button"
+        },
+        {
+          "x": 202.234375,
+          "y": 361.5,
+          "targetReached": true,
+          "hit": "A",
+          "slot": "button"
+        },
+        {
+          "x": 202.234375,
+          "y": 371.5,
+          "targetReached": true,
+          "hit": "A",
+          "slot": "button"
+        }
+      ]
+    },
+    {
+      "label": "Apply preferences",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rect": {
+        "x": 28,
+        "y": 600,
+        "width": 149.625,
+        "height": 32
+      },
+      "visible": {
+        "left": 28,
+        "top": 600,
+        "right": 177.625,
+        "bottom": 632
+      },
+      "floating": [],
+      "hits": [
+        {
+          "x": 34,
+          "y": 606,
+          "targetReached": true,
+          "hit": "BUTTON",
+          "slot": "button"
+        },
+        {
+          "x": 34,
+          "y": 616,
+          "targetReached": true,
+          "hit": "BUTTON",
+          "slot": "button"
+        },
+        {
+          "x": 34,
+          "y": 626,
+          "targetReached": true,
+          "hit": "BUTTON",
+          "slot": "button"
+        },
+        {
+          "x": 102.8125,
+          "y": 606,
+          "targetReached": true,
+          "hit": "BUTTON",
+          "slot": "button"
+        },
+        {
+          "x": 102.8125,
+          "y": 616,
+          "targetReached": true,
+          "hit": "BUTTON",
+          "slot": "button"
+        },
+        {
+          "x": 102.8125,
+          "y": 626,
+          "targetReached": true,
+          "hit": "BUTTON",
+          "slot": "button"
+        },
+        {
+          "x": 171.625,
+          "y": 606,
+          "targetReached": true,
+          "hit": "BUTTON",
+          "slot": "button"
+        },
+        {
+          "x": 171.625,
+          "y": 616,
+          "targetReached": true,
+          "hit": "BUTTON",
+          "slot": "button"
+        },
+        {
+          "x": 171.625,
+          "y": 626,
+          "targetReached": true,
+          "hit": "BUTTON",
+          "slot": "button"
+        }
+      ]
+    },
+    {
+      "label": "Initial source link",
+      "viewport": {
+        "width": 390,
+        "height": 600
+      },
+      "rect": {
+        "x": 28,
+        "y": 500.25,
+        "width": 180.234375,
+        "height": 32
+      },
+      "visible": {
+        "left": 28,
+        "top": 500.25,
+        "right": 208.234375,
+        "bottom": 424
+      },
+      "floating": [
+        {
+          "name": "Scroll to end",
+          "rect": {
+            "x": 346,
+            "y": 380,
+            "width": 28,
+            "height": 28
+          },
+          "intersection": {
+            "width": 0,
+            "height": 0,
+            "area": 0
+          }
+        }
+      ],
+      "hits": []
+    },
+    {
+      "label": "Scrolled source link",
+      "viewport": {
+        "width": 390,
+        "height": 600
+      },
+      "rect": {
+        "x": 28,
+        "y": 223.5,
+        "width": 180.234375,
+        "height": 32
+      },
+      "visible": {
+        "left": 28,
+        "top": 223.5,
+        "right": 208.234375,
+        "bottom": 255.5
+      },
+      "floating": [
+        {
+          "name": "Scroll to end",
+          "rect": {
+            "x": 346,
+            "y": 380,
+            "width": 28,
+            "height": 28
+          },
+          "intersection": {
+            "width": 0,
+            "height": 0,
+            "area": 0
+          }
+        }
+      ],
+      "hits": [
+        {
+          "x": 34,
+          "y": 229.5,
+          "targetReached": true,
+          "hit": "A",
+          "slot": "button"
+        },
+        {
+          "x": 34,
+          "y": 239.5,
+          "targetReached": true,
+          "hit": "A",
+          "slot": "button"
+        },
+        {
+          "x": 34,
+          "y": 249.5,
+          "targetReached": true,
+          "hit": "A",
+          "slot": "button"
+        },
+        {
+          "x": 118.1171875,
+          "y": 229.5,
+          "targetReached": true,
+          "hit": "A",
+          "slot": "button"
+        },
+        {
+          "x": 118.1171875,
+          "y": 239.5,
+          "targetReached": true,
+          "hit": "A",
+          "slot": "button"
+        },
+        {
+          "x": 118.1171875,
+          "y": 249.5,
+          "targetReached": true,
+          "hit": "A",
+          "slot": "button"
+        },
+        {
+          "x": 202.234375,
+          "y": 229.5,
+          "targetReached": true,
+          "hit": "A",
+          "slot": "button"
+        },
+        {
+          "x": 202.234375,
+          "y": 239.5,
+          "targetReached": true,
+          "hit": "A",
+          "slot": "button"
+        },
+        {
+          "x": 202.234375,
+          "y": 249.5,
+          "targetReached": true,
+          "hit": "A",
+          "slot": "button"
+        }
+      ]
+    },
+    {
+      "label": "Apply preferences",
+      "viewport": {
+        "width": 390,
+        "height": 600
+      },
+      "rect": {
+        "x": 28,
+        "y": 356,
+        "width": 149.625,
+        "height": 32
+      },
+      "visible": {
+        "left": 28,
+        "top": 356,
+        "right": 177.625,
+        "bottom": 388
+      },
+      "floating": [],
+      "hits": [
+        {
+          "x": 34,
+          "y": 362,
+          "targetReached": true,
+          "hit": "BUTTON",
+          "slot": "button"
+        },
+        {
+          "x": 34,
+          "y": 372,
+          "targetReached": true,
+          "hit": "BUTTON",
+          "slot": "button"
+        },
+        {
+          "x": 34,
+          "y": 382,
+          "targetReached": true,
+          "hit": "BUTTON",
+          "slot": "button"
+        },
+        {
+          "x": 102.8125,
+          "y": 362,
+          "targetReached": true,
+          "hit": "BUTTON",
+          "slot": "button"
+        },
+        {
+          "x": 102.8125,
+          "y": 372,
+          "targetReached": true,
+          "hit": "BUTTON",
+          "slot": "button"
+        },
+        {
+          "x": 102.8125,
+          "y": 382,
+          "targetReached": true,
+          "hit": "BUTTON",
+          "slot": "button"
+        },
+        {
+          "x": 171.625,
+          "y": 362,
+          "targetReached": true,
+          "hit": "BUTTON",
+          "slot": "button"
+        },
+        {
+          "x": 171.625,
+          "y": 372,
+          "targetReached": true,
+          "hit": "BUTTON",
+          "slot": "button"
+        },
+        {
+          "x": 171.625,
+          "y": 382,
+          "targetReached": true,
+          "hit": "BUTTON",
+          "slot": "button"
+        }
+      ]
+    }
+  ],
+  "commitAfter": "b192bce14a5a10d829d783eecc3596c42c045c45",
+  "worktreeStatusAfter": "?? artifacts/fieldnote-v2/evidence-fix/",
+  "sourceStateAfter": {
+    "status": "",
+    "diffSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "cleanCandidate": true,
+  "acceptance": "Offline browser subset passed. Independent visual and product reviews remain required."
+}

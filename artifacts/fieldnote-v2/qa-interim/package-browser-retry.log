@@ -1,0 +1,10 @@
+
+Running 5 tests using 1 worker
+
+  ✓  1 .audit/fieldnote-v2/qa/v2-chat.spec.ts:9:3 › desktop chat currency, evidence, history, theme and composer (2.4s)
+  ✓  2 .audit/fieldnote-v2/qa/v2-chat.spec.ts:9:3 › mobile chat currency, evidence, history, theme and composer (1.2s)
+  ✓  3 .audit/fieldnote-v2/qa/v2-chat.spec.ts:9:3 › short-mobile chat currency, evidence, history, theme and composer (1.2s)
+  ✓  4 .audit/fieldnote-v2/qa/v2-chat.spec.ts:146:1 › edits the actual open objective, requirements and both budget bounds (661ms)
+  ✓  5 .audit/fieldnote-v2/qa/v2-chat.spec.ts:200:1 › keeps free replies during research and stops abandoned transport before new results publish (2.4s)
+
+  5 passed (8.8s)

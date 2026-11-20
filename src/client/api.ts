@@ -1,89 +1,34 @@
-import {
-  SelectionResultSchema,
-  TurnResponseSchema,
-  type Preferences,
-  type ProductId,
-} from "../domain/contracts";
-import { isSafeCatalogHandoff } from "../domain/merchant-links";
-import {
-  WebResearchResponseSchema,
-  type ShortlistResearchRequest,
-} from "../domain/web-research";
+import type {
+  ConversationState,
+  PrepareInput,
+  TurnResponse,
+} from "../domain/conversation";
 
-export async function runTurn(
-  message: string,
-  preferences: Preferences,
-  signal: AbortSignal,
-) {
-  let response: Response;
-  try {
-    response = await fetch("/api/turn", {
-      method: "POST",
-      headers: { "content-type": "application/json" },
-      body: JSON.stringify({ message, preferences }),
-      signal,
-    });
-  } catch (error) {
-    if (signal.aborted) throw error;
-    throw new Error("Research could not finish. Check the connection and try again.");
-  }
-  if (!response.ok) throw new Error("Research could not finish. Try again.");
-  const result = TurnResponseSchema.safeParse(await response.json());
-  if (!result.success) throw new Error("The research service returned an unreadable result.");
-  return result.data;
+export async function api<T>(
+  path: string,
+  body?: unknown,
+  signal?: AbortSignal,
+): Promise<T> {
+  const response = await fetch(path, {
+    method: body === undefined ? "GET" : "POST",
+    credentials: "same-origin",
+    ...(body === undefined
+      ? {}
+      : {
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(body),
+        }),
+    signal,
+  });
+  if (!response.ok)
+    throw new Error(
+      `Request failed (${response.status}). Your message is retained.`,
+    );
+  return (await response.json()) as T;
 }
-
-export async function selectProduct(
-  productId: ProductId,
-  preferences: Preferences,
-  signal: AbortSignal,
-) {
-  let response: Response;
-  try {
-    response = await fetch("/api/select", {
-      method: "POST",
-      headers: { "content-type": "application/json" },
-      body: JSON.stringify({ productId, preferences }),
-      signal,
-    });
-  } catch (error) {
-    if (signal.aborted) throw error;
-    throw new Error("A sample handoff is unavailable. Check the connection and try again.");
-  }
-  if (!response.ok) throw new Error("A fresh sample handoff is unavailable. Try the selection again.");
-  const result = SelectionResultSchema.safeParse(await response.json());
-  if (!result.success) throw new Error("The selection service returned an unreadable result.");
-  if (result.data.kind === "handoff" && (
-    result.data.productId !== productId
-    || !isSafeCatalogHandoff(result.data.productId, result.data.productName, result.data.productUrl, result.data.offer)
-  )) throw new Error("The selection service returned an unsafe product link.");
-  return result.data;
-}
-
-export async function researchShortlist(
-  request: ShortlistResearchRequest,
-  signal: AbortSignal,
-) {
-  let response: Response;
-  try {
-    response = await fetch("/api/research", {
-      method: "POST",
-      headers: { "content-type": "application/json" },
-      body: JSON.stringify(request),
-      signal,
-    });
-  } catch (error) {
-    if (signal.aborted) throw error;
-    throw new Error("Web research could not finish. Check the connection and try again.");
-  }
-  if (!response.ok) throw new Error("Web research could not finish. Try again.");
-  let payload: unknown;
-  try {
-    payload = await response.json();
-  } catch {
-    throw new Error("Web research returned an unreadable result.");
-  }
-  const result = WebResearchResponseSchema.safeParse(payload);
-  if (!result.success) throw new Error("Web research returned an unreadable result.");
-  return result.data;
-}
+export const getSession = (signal?: AbortSignal) =>
+  api<{ state: ConversationState }>("/api/session", undefined, signal);
+export const prepare = (input: PrepareInput, signal: AbortSignal) =>
+  api<TurnResponse>("/api/turn", input, signal);
+export const research = (preparedId: string, signal: AbortSignal) =>
+  api<TurnResponse>("/api/turn", { phase: "research", preparedId }, signal);

@@ -1,0 +1,413 @@
+{
+  "milestone": "Application and evaluator corrections independently pass; additive final evidence package awaits publication review and hosted CI",
+  "source": "e169be934f74fb61507b5c7b62c4aeaefc2106a8",
+  "base": "33fadc7e3cfde2207528adb32b650287e758d343",
+  "trunk_base": "9d2a3c5e336a6652ec6b02e0c3deff6617fb7d11",
+  "branch": "rebuild/fieldnote-v2",
+  "worktree": "/Users/josiahwong/Documents/research-shopping-v2",
+  "pr": "https://github.com/d3F0g/research-shopping/pull/53",
+  "tracking_issue": 55,
+  "user_approval": "CurrentUI andPR53 approved; no newhumanappearancegate",
+  "merge_policy": "Everyprojectgate stillrequired; no production/sensitiveoperations",
+  "root_checks": {
+    "appHead": "e169be934f74fb61507b5c7b62c4aeaefc2106a8",
+    "nativeBrowserCases": 7,
+    "screenshotsInspected": 6,
+    "evalHead": "347f3a17bd5881918f49edd361f4cd4527ae832c",
+    "evalIntegrityTests": 36,
+    "evaluationCases": 60,
+    "sourceClean": true,
+    "ownedPortsFree": true,
+    "paidCalls": 0
+  },
+  "author_checks": {
+    "source": "270e7d494d1e52d5fbd9ac6415d0775fd08bb2ae",
+    "appSource": "e169be934f74fb61507b5c7b62c4aeaefc2106a8",
+    "unit_api": 582,
+    "e2e": 31,
+    "postgres": 28,
+    "evalIntegrity": 36,
+    "registry": 18,
+    "preservation": 389,
+    "accountHistoryBrowser": "passed final source, actual disposable PostgreSQL/API restarts",
+    "reportMember": "price-owner/artifacts/issue-64-price-v5/application-report.md"
+  },
+  "evaluation": {
+    "source": "270e7d494d1e52d5fbd9ac6415d0775fd08bb2ae",
+    "composition": "Explicit V5 synthetic material for three valid scenarios only; original native1 inputs, frozen assertions and baselines unchanged",
+    "executed": 60,
+    "pass": 11,
+    "fail": 0,
+    "blocked": 48,
+    "unsupported": 1,
+    "critical": 0,
+    "infrastructure": 0,
+    "acceptance": "INCONCLUSIVE",
+    "limits": "Usefulness, semantic relevance and user experience remain unassessed; both earlier failed reports retained"
+  },
+  "reviews": {
+    "qa": "Final exactdf32 PASS; 456unit29eval28PG24E2E, 18registry, 3viewportskill/history,23accountitems,12adversarial; new verifier2b23matrix+controlsPASS",
+    "security": "Final exactdf32 PASS, 13adversarial+456unit24E2E23accountitems; new verifier2b strict200/409+negativecontrolsPASS",
+    "publication": "Exact b4 metadata/identicaldc61 scoped QA and Astra security PASS, full reports in PR53 comment7016434787. Existing transcript provenance references remain; no blanket erasure.",
+    "current_blocker": "Prior df32/2b runtime passes preserved; newly proved native guest identity Issue65 blocks current source. New exact combined-head QA/security required after fix."
+  },
+  "hosted_ci": {
+    "authority": "https://github.com/d3F0g/research-shopping/pull/53/checks",
+    "policy": "Inspect actual current-head workflow jobs before landing. Local proofs are not hostedCI.",
+    "receipt_checkpoint": "f3 pushCI44547663196 and Product evaluation44547693265 passed; PRCI44547693260 failed initial browser account-response wait. Actual mobile artifact shows page-loaded only, no account requests, empty body and white screenshot. Identical-tree proposal d11 CI44547917562 passed. No failed check dismissed.",
+    "current_code_head": "2b17471229a29e28f2ec0bc05211b3eff3b62466",
+    "current_code_runs": {
+      "push_ci": {
+        "id": 44570356420,
+        "conclusion": "success"
+      },
+      "pr_ci": {
+        "id": 44570387703,
+        "conclusion": "success"
+      },
+      "product_evaluation": {
+        "id": 44570387817,
+        "conclusion": "success"
+      }
+    },
+    "inspection": "Actual workflow jobs/steps inspected, including account browser, mixed history/restart and24E2E. New metadata head will need its own CI.",
+    "post_authorized_rewrite": {
+      "head": "dc61d3bae93fd347495ecbb5973d7877513ec91d",
+      "push": {
+        "id": 44667287279,
+        "conclusion": "failure",
+        "case": "stale session bootstrap success, server readback lackshello"
+      },
+      "pr": {
+        "id": 44667308510,
+        "conclusion": "success"
+      },
+      "evaluation": {
+        "id": 44667308567,
+        "conclusion": "success"
+      },
+      "policy": "No blind rerun; full failed artifact/log retained. New native browser repro proves identity switch, distinct from Issue56 blank."
+    }
+  },
+  "preview": {
+    "application": "df32c4b3be6b09280369fc4eb38bf4e127312d41",
+    "api": "http://127.0.0.1:3190",
+    "web": "http://127.0.0.1:5290",
+    "owned_session": 2797,
+    "automaticPaidChecks": false,
+    "health": "API/web200 providerexa automaticPaidChecksfalse",
+    "manual_grant_latest": "4 requests/USD0.20 reserved at read-only inspection; historical unknown2 unchanged",
+    "sourceEquivalentHead": "dc61d3bae93fd347495ecbb5973d7877513ec91d"
+  },
+  "manual_allowance_checkpoint": "4 manual requests/USD0.20 reserved ready; acknowledged historical unknown2 unchanged; root paidcalls0",
+  "human_acceptance": "Fresh watches answer validates and yields3 relevant exact-identity/request-fit candidates but no qualifying price or observation. Root private offline replay reproduces ready3/priceNULL/choiceNULL. No live usefulness pass.",
+  "blockers": [
+    "Fresh additive final package publication QA/security pending; all1179 previous bundle members remain byte-identical",
+    "Shared feature remains dc61 with prior failed push CI preserved; new current-head CI and separate skill PR gates pending",
+    "Varied real request-to-comparison-and-recommendation usefulness remains unverified; four human requests remain at last checkpoint"
+  ],
+  "next": "After final metadata QA/security, publish A and the dedicated one-file Issue66 review PR B by normal fast-forward. Inspect every actual current-head CI job. Hold BOTH PRs for root PR53 varied live acceptance. Run the human preview at reviewed combined B, whose application source equals A. After acceptance, consolidate the independently reviewed and CI-passing selector patch into PR53, close the separate review follow-up as superseded, recheck final head source/reviews/CI, then land root PR53 to main under all gates. Do not merge the child into the feature ahead of its parent.",
+  "historical_program_checkpoints": {
+    "milestone": "Final V4 candidate passes package and class regressions; independent reviews and hostedCI pending",
+    "completed": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14
+    ],
+    "base": "9d2a3c5e336a6652ec6b02e0c3deff6617fb7d11",
+    "branch": "rebuild/fieldnote-v2",
+    "worktree": "/Users/josiahwong/Documents/research-shopping-v2",
+    "agents": {
+      "v2_independent_qa": "PASS e0b application; PASS43bafcf metadata binding",
+      "v2_security_review": "PASS e0b application; PASS43bafcf metadata binding",
+      "v2_distinct_trail_review": "gpt-6-astra complete; evidence packaging corrected and verified; final CI remains"
+    },
+    "blockers": [
+      "Independent final QA/security verdicts pending",
+      "Current-head hosted CI pending",
+      "Varied real human request-to-recommendation acceptance remains unverified; manual request results pending"
+    ],
+    "next": "Complete reviewer/trail reports, archive finalproof, push currentheadCI, inspect humanmanualresults; mergeonlyif everyprojectgatepasses",
+    "tracking_issue": "https://github.com/d3F0g/research-shopping/issues/51",
+    "autonomous_continuation": "No supported task heartbeat scheduling tool exposed. Continue active turn and preserve resume capsule; no future wake armed.",
+    "contracts_commit": "cc2e8ce",
+    "preservation_commit": "6c50e13",
+    "preservation_verification": {
+      "tracked_assets": 390,
+      "blob_mismatches": 0
+    },
+    "core_commit": "8da8888",
+    "core_author_checks": {
+      "tests": 66,
+      "typecheck": "passed",
+      "scope": "Bounded author core/unit/API checks",
+      "independent_acceptance": false
+    },
+    "initial_v2_evaluation": {
+      "commit": "8da8888",
+      "cases": 60,
+      "pass": 1,
+      "fail": 45,
+      "blocked": 13,
+      "unsupported": 1,
+      "critical_failures": 55,
+      "infrastructure_errors": 0,
+      "notes": "36 exact-quotation equality checks differ after retained paragraph expansion;19 other critical state/budget/criterion failures remain. Frozen assertions unchanged."
+    },
+    "app_commit": "fd1f505c116e5112af5597292c5f6c1d9499b824",
+    "eval_code_commit": "48632fc",
+    "account_commits": [
+      "2317135",
+      "acdcdb3"
+    ],
+    "latest_completed_v2_eval": {
+      "application": "e0b7317",
+      "pass": 11,
+      "fail": 0,
+      "blocked": 48,
+      "unsupported": 1,
+      "critical_failures": 0,
+      "infrastructure_errors": 0,
+      "acceptance": "INCONCLUSIVE"
+    },
+    "open_defects": [
+      "Issue55 final reviews pending; no unaddressed known counterexample at fd1"
+    ],
+    "review_verdicts": {
+      "qa": "579ec53 pending; prior33 scopedoffline PASS",
+      "security": "579ec53 pending; prior33 scopedoffline PASS",
+      "comment": "dead relevant removed; final cleanup and decision trail pending"
+    },
+    "root_checks": {
+      "code_commit": "8fdc2b2",
+      "unit_api": 162,
+      "eval_integrity": 20,
+      "typechecks": "passed",
+      "build": "passed with538.11kB chunkwarning",
+      "full60": {
+        "pass": 11,
+        "fail": 0,
+        "blocked": 48,
+        "unsupported": 1,
+        "critical": 0,
+        "infra": 0
+      },
+      "project_skill": "passed3viewports cleanuptrue"
+    },
+    "candidate_before_delivery_docs": "43bafcf9e3d113a2a0ccc01c9baf7377def6d3ef",
+    "pr": "https://github.com/d3F0g/research-shopping/pull/53",
+    "hosted_ci": {
+      "head": "e81b890dbf421d2ad65c551c5e404ca5e656d5f5",
+      "push_ci": "44485054844 success",
+      "pr_ci": "44485077685 success",
+      "pr_eval": "44485077687 success",
+      "current_followup": "not pushed; no current hosted CI"
+    },
+    "final_candidate_binding": "fd1 code reviewed inprogress. Root450unit29eval pass; private8eareplayV4 passes; finalfd1derivedreceipt pending.",
+    "user_ui_review": "Approved current UI and PR53 in latest user message; no redesign requested",
+    "merge_authorization": "Final task-specific gate satisfied; all project gates still required",
+    "current_issue": 55,
+    "current_source_commit": "fd1f505c116e5112af5597292c5f6c1d9499b824",
+    "human_capture_sha256": "277f90338e732d5722564a64b71771faa566c15fccfe999942778aa1d07c9a29",
+    "preview": {
+      "application": "fd1f505c116e5112af5597292c5f6c1d9499b824",
+      "api": "http://127.0.0.1:3190",
+      "web": "http://127.0.0.1:5290",
+      "owned_session": 50458,
+      "automaticPaidChecks": false,
+      "health": "200ok providerexa automaticPaidChecksfalse",
+      "manual_grant_latest": "7 requests/USD0.35reserved; acknowledgedhistoricalunknown2 unchanged"
+    }
+  },
+  "publication_boundary": {
+    "status": "Exact user-authorized history correction complete; new local metadata/archive package still requires independent publication review",
+    "scope": "Captured-response detail and private diagnostic paths appeared in earlier resume. No raw capture file was committed.",
+    "safe_action": "Sanitized resume/state/decision tree passes targeted QA/security and public archive scan",
+    "history": "User explicitly approved one-time exact lease b4 to dc61; executed and remote confirmed. Authorization consumed, not general force-push permission. Other refs/caches/clones and preexisting transcript-provenance references remain.",
+    "proposal": "dc61 now actual shared PR53 head. Equal tree5e60995fc72ecc2e47156a87b93cc612fdaa2704; owned local ref synchronized with expected-old guard; main unchanged."
+  },
+  "verification_fix": {
+    "issue": 56,
+    "author_red": "3525db9177d66af0b77831b9ca9e884aceef7305",
+    "author_fix": "44d2ec292f49dadda80a7ca58897808a7fcbbb44",
+    "root_cherry_pick": "ec40245",
+    "scope": "Historyverifieronly; app/timeout unchanged",
+    "proof": "Ownedtwo-viewportPG/APIrestart/isolation/staleactionproofand10browserpassowner44d; no claim that all28PGtests were rerun",
+    "initial_followup": {
+      "base": "4af739cfed7861740eb2d5c4a6dcf7c4c46e292b",
+      "red": "65bfc4cd41e674e42fad652edf216c8c5f1f2e93",
+      "fix": "a123f1afe8253835aadd3dd59ee7881df88c990b",
+      "root_runtime": "Exact red failed original five-second initial matcher; exact fix passed both actual owned PG/API/SDK/browser journeys, cleanup true",
+      "scope": "Verifier only; initial exact browser GET readiness, original DOM assertions and reload checks retained; original hosted timing unproven"
+    },
+    "blank_bootstrap_followup": {
+      "owner_worktree": "/Users/josiahwong/Documents/research-shopping-history-bootstrap",
+      "branch": "fix/history-blank-bootstrap",
+      "base": "f3c1cf413b21b88b8707815f627d7b1a7442a0aa",
+      "status": "Bounded frozen34 protocol complete: original plus three additional hosted attempts all pass with complete observed traces. No further repeats; old blank cause unknown, instrumentation may perturb timing. Issue56 open.",
+      "premise": "Controlled delayed account requests do not explain a blank page with no account request. Inspect document/module/browser and owned process diagnostics before fixing.",
+      "ci_run": 44550970924,
+      "total_attempts": 4
+    }
+  },
+  "integration": {
+    "worktree": "/Users/josiahwong/Documents/research-shopping-v4-integration",
+    "branch": "integrate/fieldnote-v4-draft7-card",
+    "head": "2b17471229a29e28f2ec0bc05211b3eff3b62466",
+    "server_author": "9e902bb388bda3bf1b1f6df033208b02faf51a8f",
+    "card_author": "01d7bc0215e50a58682e2d6b4a4c3e19e26d98b2",
+    "status": "Final independent df32 QA/security PASS; verifier2b separate QA/security PASS, app bytes identical",
+    "dependencies": "Own copied node_modules excluding shared Vite caches; reviewed human preview now rootdf32 application bytes",
+    "new_chat_fix": "Historical783e9ec red then afd9502 fixed reset; finaldf32 also fixes later Stop/bootstrap publishers"
+  },
+  "verifier_source": "2b17471229a29e28f2ec0bc05211b3eff3b62466",
+  "capability_gaps": [
+    "Issue56 original blank cause unproven after bounded four observed passes, no further repeats",
+    "Issue62 signed-in revision conflict retains data but needs explicit browser refresh; no cross-refresh draft promise",
+    "Original live malformed response remains rejected; Draft7 request correction has no claimed causal/live guarantee"
+  ],
+  "current_shared_head": "dc61d3bae93fd347495ecbb5973d7877513ec91d",
+  "active_design": {
+    "price_grounding": "/tmp/fieldnote-price-architecture/grounding.md",
+    "price_candidates": [
+      "/tmp/fieldnote-price-architecture/a",
+      "/tmp/fieldnote-price-architecture/b"
+    ],
+    "price_judge": "/tmp/fieldnote-price-architecture/judge",
+    "session_grounding": "/tmp/fieldnote-session-architecture/grounding.md",
+    "root_native_proof": "/tmp/fieldnote-dc61-ci-notes/root-independent-native/proof.json",
+    "issues": [
+      64,
+      65
+    ]
+  },
+  "active_candidates": {
+    "app": "e169be934f74fb61507b5c7b62c4aeaefc2106a8",
+    "skill": "4c867e2dc77983019218f4390e834e727f97c5c4",
+    "session": "2ae29416925765f0aa8089e82266570c73544fc3",
+    "gate_cleanup": "aeb6f1784585daae76e903a30cc6ba3388dda63b",
+    "status": "Appsrc e169, price projection270, skill4c87, scorecard842 independently reviewed; final package adds metadata and proof only",
+    "combinedReview": "347f3a17bd5881918f49edd361f4cd4527ae832c",
+    "evaluator": "270e7d494d1e52d5fbd9ac6415d0775fd08bb2ae",
+    "scorecardReview": "842c394c8477dd7d23a9a2dddf16f65dc9c00576"
+  },
+  "current_root_runtime": {
+    "head": "e169be934f74fb61507b5c7b62c4aeaefc2106a8",
+    "cases": 7,
+    "result": "passed",
+    "scope": "Real owned Hono/Exa SDK/local HTTP/Chromium. Five native session transport cases and desktop/mobile positive/adverse prices with free held replies. All six price screenshots inspected. Source clean and owned ports free.",
+    "paidCalls": 0,
+    "liveProductAcceptance": false
+  },
+  "current_owner_checks": {
+    "appHead": "e169be934f74fb61507b5c7b62c4aeaefc2106a8",
+    "unit_api": 582,
+    "e2e": 31,
+    "postgres": 28,
+    "build": "passed",
+    "eval_tests": 36,
+    "registry": 18,
+    "preservation": 389,
+    "skillHead": "4c867e2dc77983019218f4390e834e727f97c5c4",
+    "skill": "passed3viewports/sourceclean/cleanuptrue",
+    "evaluation": "Corrected actual bound price-support projection; final11pass0fail48blocked1unsupported0critical/infra INCONCLUSIVE; original14critical report retained"
+  },
+  "current_independent_reviews": {
+    "head": "347f3a17bd5881918f49edd361f4cd4527ae832c",
+    "runtimeHead": "4c867e2dc77983019218f4390e834e727f97c5c4",
+    "qa": "Scoped functional and visual PASS;582unit31E2E28PG36eval,3viewports,29screenshots, actual baseline/candidate SDK pair, accounts/history/restart; exact app source equality verified",
+    "security": "Scoped PASS;61 independent boundaries,13stored mutations,10evalforgeries,native cookie/header/body/history readbacks,SDK cancellation,safe links,source equality and archive verification",
+    "cleanup": "e169 PASS no blockers; nonblocking redundant comparison/assertion and extra EOF blank retained",
+    "publication": "Initiala45 PASS but held atthen-newscorecardfailure; finaladditive package pendingnewreadback",
+    "scorecard": "Exact842 independentQA andAstra security PASS, narrowed to2evaluatorfiles with noapp change"
+  },
+  "previous_v4_root_checks": {
+    "head": "fd1f505",
+    "unit_api": 450,
+    "eval_tests": 29,
+    "build": "passed existingchunkadvisory",
+    "red_to_green": "52d6001 13failed155pass ->fd1 213focusedpass",
+    "private_capture": "Finalfd1pureprojectionPASS priceNULL/obs868/fullcontext/nativewrapperexact;0paidcalls"
+  },
+  "previous_v4_author_checks": {
+    "head": "fd1f505",
+    "unit_api": 450,
+    "eval_tests": 29,
+    "e2e": 10,
+    "typechecks": "bothpassed",
+    "registry": 18,
+    "preservation": "389frozenunchanged",
+    "postgres": "28pass8ea boundunchangedhistoryblobs",
+    "history_browser": "8ea2viewportsPG/APIrestart boundunchangedblobs",
+    "offline_skill": "4cfa3viewportscleanuptrue UIunchangedfd1"
+  },
+  "previous_v4_evaluation": {
+    "head": "fd1f505",
+    "executed": 60,
+    "pass": 11,
+    "fail": 0,
+    "blocked": 48,
+    "unsupported": 1,
+    "critical": 0,
+    "infrastructure": 0,
+    "acceptance": "INCONCLUSIVE"
+  },
+  "previous_v4_reviews": {
+    "qa": "Final exactdf32 PASS; 456unit29eval28PG24E2E, 18registry, 3viewportskill/history,23accountitems,12adversarial; new verifier2b23matrix+controlsPASS",
+    "security": "Final exactdf32 PASS, 13adversarial+456unit24E2E23accountitems; new verifier2b strict200/409+negativecontrolsPASS",
+    "publication": "Exact b4 metadata/identicaldc61 scoped QA and Astra security PASS, full reports in PR53 comment7016434787. Existing transcript provenance references remain; no blanket erasure.",
+    "current_blocker": "Prior df32/2b runtime passes preserved; newly proved native guest identity Issue65 blocks current source. New exact combined-head QA/security required after fix."
+  },
+  "proof_bundle": {
+    "manifest": "artifacts/fieldnote-v2/evidence-gap-followup/continuation-v5-proof-manifest.json",
+    "archives": [
+      "continuation-v5-proof-01.tar.gz",
+      "continuation-v5-proof-02.tar.gz"
+    ],
+    "members": 1478,
+    "rootReadback": "Every member verified size/SHA256 and regular relative path; all three author/reviewer seals verified",
+    "privateScan": "Current exact recursive tar/zip root comparison outcome is in continuation-v5-proof-manifest.json; actual private values remain withheld",
+    "previousBundleMembersBytePreserved": 1179
+  },
+  "scorecard_followup": {
+    "issue": 67,
+    "base": "a45cac153f9bdafab9c9d7c2972f0889ef854799",
+    "rootReproHead": "347f3a17bd5881918f49edd361f4cd4527ae832c",
+    "failure": "Changed V2 research material for FN-CU-001",
+    "ownerWorktree": "/tmp/fieldnote-v5-scorecard-owner",
+    "scope": [
+      "evals/v2/scorecard.ts",
+      "evals/v2/tests/integrity.test.ts"
+    ],
+    "publication": "Prior a45 package QA/security PASS remains scoped to1179members and explicitly held onthen-unfixedIssue67; fresh additive1478member readback required",
+    "appSourceUnchanged": true,
+    "status": "Offline fixed and independently verified; current hosted CI pending",
+    "owner": "842c394c8477dd7d23a9a2dddf16f65dc9c00576",
+    "rootCherryPicks": [
+      "400abd2",
+      "c18202d"
+    ],
+    "qa": "PASS exact842;40evaltests,32generic-valid/canonical-rejectedforgeries,actualred/fixedCLI,389preserved",
+    "security": "PASS exact842;92generic-validforgeries,4boundarychecks,2realCLIrejectionswithmodifiedembeddedsourceandnoexecution,16integritytests,actual60CLI/typecheck/389preservation",
+    "root": "ActualscorecardCLIpassonretained347report;57same3different/203descriptivepaired;all3excluded;INCONCLUSIVE"
+  },
+  "delivery_order": {
+    "authority": "User AGENTS dependency order and Engineering workflow; root PR53 is the lowest unmerged trunk dependency",
+    "currentAction": "Dedicated Issue66 one-file PR is an independent review and CI lane, held open with PR53",
+    "humanPreview": "Reviewed combined B, same application source as A; no automatic paid proof",
+    "afterLiveAcceptance": "Consolidate the verified selector patch into root PR53, close follow-up as superseded, revalidate final head, then trunk landing",
+    "prohibited": "No child PR merge into feature before parent; no force push, admin bypass or weakened gate",
+    "supersedes": "Earlier local next-step notes that planned merging the verification child first are historical and are superseded by this current plan"
+  }
+}

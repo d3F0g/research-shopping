@@ -1,0 +1,91 @@
+Fieldnote V2 CI metadata fix
+
+Goal
+Make the unchanged browser suite execute in pull-request CI without collecting
+the entire preserved generated-evidence patch into one JavaScript string.
+
+Candidate
+Base application commit e0b7317f4bd00ce49141229943279e0da357cdbc.
+Config commit 91c92b2750cbbdc4bdaaa197ddd59bb0d1a8660c.
+Only playwright.config.ts changes outside this evidence directory.
+The typed configuration shape is captureGitInfo with independent commit and
+diff booleans. The fix selects commit=true and diff=false.
+
+Reproduction and mechanism
+The hosted PR job failed before browser launch with the following output.
+
+RangeError: Invalid string length
+    at Socket.<anonymous> (/home/runner/work/research-shopping/research-shopping/node_modules/playwright-core/lib/coreBundle.js:10459:56)
+
+hosted-failure.txt preserves the supplied complete step log from run 44481618019.
+Saved text logs and excerpts strip trailing whitespace only.
+Installed Playwright 1.65.1 primary source and types are preserved in
+playwright-primary-source.txt. The runner enables diff capture by default when
+CI metadata exists. GitHub's pull_request.base.sha becomes ci.prBaseHash.
+gitDiff runs git diff <base> HEAD. spawnAsync appends every stdout chunk to one
+string. The runner's 100,000-character substring happens after collection.
+
+The exact base-to-e0b7317 Git diff stream contained 778,617,084 bytes and
+778,615,951 separately decoded chunk characters. Node v22.20.0 reports
+MAX_STRING_LENGTH=536,870,888. Each chunk was counted and hashed independently.
+No complete diff string was allocated. diff-size.json retains the exact base,
+head, command and SHA-256. This is a patch-size measurement, not a performance
+claim. The actual hosted failure used Node v22.23.4.
+
+Run from the worktree root to repeat the bounded size measurement.
+node artifacts/fieldnote-v2/ci-metadata/count-pr-diff.mjs
+
+Fix and verification
+The supported captureGitInfo option prevents the optional inline diff capture.
+Commit details and PR metadata remain enabled. No heap override, vendor patch,
+test skip, timeout change, provider change or assertion change was added.
+
+The owned offline runner executed the following package commands against the
+clean config commit with CI=true, GITHUB_ACTIONS=true and a synthetic PR event.
+The event's base SHA is 9d2a3c5e336a6652ec6b02e0c3deff6617fb7d11.
+
+npm run typecheck
+npm run test:e2e -- --reporter=list,json --output=artifacts/fieldnote-v2/ci-metadata/test-results
+
+Typecheck exited 0. The unchanged browser suite produced this output.
+
+  8 passed (17.4s)
+
+proof.json and playwright-report.json retain 8 expected tests, zero unexpected,
+zero skipped and zero flaky. They retain the exact gitCommit.hash and PR base
+SHA. metadata has no gitDiff property. browser-run.txt retains the complete run.
+The 24 screenshots and per-viewport proofs are in browser-artifacts. Prior
+tracked artifacts were snapshotted before the run and restored byte-for-byte.
+The runner verified both owned ports, 3197 and 5297, were free afterward.
+
+Run the owned offline verification again with the following command.
+node artifacts/fieldnote-v2/ci-metadata/run-ci-proof.mjs
+
+The runner inherits only PATH, HOME and TMPDIR. It injects no authentication
+secrets. It rejects private Vite environment files by presence, without reading
+them. NODE_ENV=test and EXA_RESEARCH_ENABLED=false select the explicit automated
+Hono and Exa SDK composition with an owned local HTTP substitute. No live Exa,
+paid ledger, private environment content or existing database was used.
+
+Limits
+This local macOS run does not establish hosted Linux CI success. Root must push
+the candidate and inspect the actual PR workflow. GITHUB_RUN_ID=0 is explicitly
+synthetic. The configuration change does not establish live shopping usefulness,
+merchant availability, source factuality or independent visual acceptance.
+Desktop and short-mobile research screenshots were inspected only to confirm
+the run produced actual labeled browser UI evidence.
+
+Decision principles
+Fix Root Causes selected the supported metadata capture boundary after tracing
+the PR-only failure through ci.prBaseHash, gitDiff and stdout concatenation.
+Laziness Protocol kept the application change to one typed configuration line.
+Model the Domain used the existing independent commit and diff flags.
+Explain the Number kept bytes separate from decoded characters and recorded the
+actual V8 string bound beside the exact stream hash.
+Build the Lever retained rerunnable bounded counting and CI verification tools.
+Prove It Works required all eight real Chromium journeys and direct JSON
+metadata assertions, rather than treating typecheck as runtime proof.
+Sequence Work into Verifiable Units separated the config commit from proof.
+
+Focused cleanup found no new comments, compatibility paths, suppression rules or
+unrelated source edits. Root owns independent QA, security, GitHub and delivery.

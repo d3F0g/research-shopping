@@ -1,0 +1,25 @@
+verify	Run npm run test:e2e	﻿2026-11-19T07:43:24.9637105Z ##[group]Run npm run test:e2e
+verify	Run npm run test:e2e	2026-11-19T07:43:24.9637313Z ^[[36;1mnpm run test:e2e^[[0m
+verify	Run npm run test:e2e	2026-11-19T07:43:24.9678037Z shell: /usr/bin/bash -e {0}
+verify	Run npm run test:e2e	2026-11-19T07:43:24.9678185Z env:
+verify	Run npm run test:e2e	2026-11-19T07:43:24.9678307Z   EXA_RESEARCH_ENABLED: false
+verify	Run npm run test:e2e	2026-11-19T07:43:24.9678451Z   DEBUG: pw:webserver
+verify	Run npm run test:e2e	2026-11-19T07:43:24.9678576Z ##[endgroup]
+verify	Run npm run test:e2e	2026-11-19T07:43:25.0349434Z
+verify	Run npm run test:e2e	2026-11-19T07:43:25.0349998Z > research-shopping@0.1.0 test:e2e
+verify	Run npm run test:e2e	2026-11-19T07:43:25.0350346Z > EXA_RESEARCH_ENABLED=false playwright test
+verify	Run npm run test:e2e	2026-11-19T07:43:25.0350481Z
+verify	Run npm run test:e2e	2026-11-19T07:43:28.7254831Z /home/runner/work/research-shopping/research-shopping/node_modules/playwright-core/lib/coreBundle.js:10459
+verify	Run npm run test:e2e	2026-11-19T07:43:28.7255607Z       child.stdout.on("data", (data) => stdout += data.toString());
+verify	Run npm run test:e2e	2026-11-19T07:43:28.7256027Z                                                        ^
+verify	Run npm run test:e2e	2026-11-19T07:43:28.7256264Z
+verify	Run npm run test:e2e	2026-11-19T07:43:28.7256408Z RangeError: Invalid string length
+verify	Run npm run test:e2e	2026-11-19T07:43:28.7256929Z     at Socket.<anonymous> (/home/runner/work/research-shopping/research-shopping/node_modules/playwright-core/lib/coreBundle.js:10459:56)
+verify	Run npm run test:e2e	2026-11-19T07:43:28.7257568Z     at Socket.emit (node:events:519:28)
+verify	Run npm run test:e2e	2026-11-19T07:43:28.7257771Z     at addChunk (node:internal/streams/readable:561:12)
+verify	Run npm run test:e2e	2026-11-19T07:43:28.7258026Z     at readableAddChunkPushByteMode (node:internal/streams/readable:512:3)
+verify	Run npm run test:e2e	2026-11-19T07:43:28.7258303Z     at Socket.Readable.push (node:internal/streams/readable:392:5)
+verify	Run npm run test:e2e	2026-11-19T07:43:28.7258566Z     at Pipe.onStreamRead (node:internal/stream_base_commons:189:23)
+verify	Run npm run test:e2e	2026-11-19T07:43:28.7258711Z
+verify	Run npm run test:e2e	2026-11-19T07:43:28.7258771Z Node.js v22.23.4
+verify	Run npm run test:e2e	2026-11-19T07:43:28.7861187Z ##[error]Process completed with exit code 1.

@@ -1,0 +1,15 @@
+# Versioned source binding decision
+
+The human-triggered response is now captured and privately replayed. Its native identity quotation changes only whitespace, and the selected named price is an actual contiguous catalog row. The exact native quote is not a literal source substring. Do not relabel it as one.
+
+Two independent sketches were reviewed in `.audit/fieldnote-v2/evidence-gap/literal-design/`. Choose an owned binding record with separate provider-reported wording, literal source span and complete context, under new current evidence version 3. Keep historical evidence version 2 and its stored codecs frozen. Conversation/intent envelope versions remain independent. This is the smaller choice than a general source-first observation index or page parser.
+
+A single offset-aware binder owns exact and unique whitespace-only matching. It preserves every non-whitespace UTF-16 code unit and raw offsets. Punctuation, case, ellipses, omitted words, multiple matches, cuts and source instructions cannot be repaired by normalization. Context remains one contiguous raw source passage.
+
+Separate observed money attribution from applicability. A narrow named row can retain the exact amount/currency/selected variant when the price support is bound within or immediately adjacent to the same literal identity row. Retain every whitespace character in the raw passage. Do not attach a neighboring product's money or erase range, variant, quantity and conditional context. Existing sentence/card successes and all adverse cases remain required. An unrelated catalog price can leave applicability unresolved without erasing the selected literal observation. Unknown context that can change attribution still withholds the observation.
+
+The actual provider marked conditions unresolved. That flag stays false. No merchant verification, inventory, full request fit or confident choice may be manufactured by observing a named amount. Provider-only generic condition text is not a literal source quotation. The UI can front-load known source observations with unresolved conditions prominent, using the existing cards/disclosures and official components. It must not advertise all products as fits or override the server's null compliant choice.
+
+Freeze old research/messages on read. Introduce a current workspace wrapper that accepts mixed historical/current messages. Migrate only the active wrapper/preferences explicitly, invalidate stale prepared paid work, and preserve actual old requests/responses/evidence values. No destructive SQL migration or existing database access. Test old evidence-2 history beside new evidence-3 results through owned PostgreSQL restart/isolation.
+
+The original live invalid-schema response remains uncaptured. Do not claim its exact cause was fixed. The captured live valid response establishes whitespace/catalog binding mechanisms. Root alone can replay that private response without a new provider call. Public tests use derived synthetic format fixtures with explicit labels, never real private captures.

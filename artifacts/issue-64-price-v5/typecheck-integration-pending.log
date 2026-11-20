@@ -1,0 +1,8 @@
+
+> research-shopping@0.1.0 typecheck
+> tsc --noEmit
+
+tests/helpers/browser-server.ts(35,42): error TS2339: Property 'assessment' does not exist on type '{ amount: number | null; currency: string | null; variant: string | null; moneySupport: { url: string; quote: string; }; attribution: { status: "unknown" | "supported" | "contradicted" | "conflict"; scope: "exact-variant" | ... 1 more ... | "unclear"; rationale: string; support: { ...; }[]; }; priceBasis: { ...; }; ...'.
+tests/helpers/browser-server.ts(36,42): error TS2339: Property 'assessment' does not exist on type '{ amount: number | null; currency: string | null; variant: string | null; moneySupport: { url: string; quote: string; }; attribution: { status: "unknown" | "supported" | "contradicted" | "conflict"; scope: "exact-variant" | ... 1 more ... | "unclear"; rationale: string; support: { ...; }[]; }; priceBasis: { ...; }; ...'.
+tests/helpers/browser-server.ts(72,15): error TS2339: Property 'assessment' does not exist on type '{ amount: number | null; currency: string | null; variant: string | null; moneySupport: { url: string; quote: string; }; attribution: { status: "unknown" | "supported" | "contradicted" | "conflict"; scope: "exact-variant" | ... 1 more ... | "unclear"; rationale: string; support: { ...; }[]; }; priceBasis: { ...; }; ...'.
+tests/helpers/browser-server.ts(83,191): error TS2339: Property 'assessment' does not exist on type '{ amount: number | null; currency: string | null; variant: string | null; moneySupport: { url: string; quote: string; }; attribution: { status: "unknown" | "supported" | "contradicted" | "conflict"; scope: "exact-variant" | ... 1 more ... | "unclear"; rationale: string; support: { ...; }[]; }; priceBasis: { ...; }; ...'.

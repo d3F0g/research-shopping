@@ -1,0 +1,159 @@
+
+> research-shopping@0.1.0 test
+> EXA_RESEARCH_ENABLED=false vitest run
+
+
+ RUN  v4.1.12 /Users/josiahwong/Documents/research-shopping-v2-evidence-fix
+
+ ❯ tests/api/v2-price-boundary.test.ts (20 tests | 14 failed) 43ms
+     × does not recommend the misleading observation Model A costs SGD 35, not tax included. 15ms
+     × does not recommend the misleading observation Model A costs SGD 35 without tax included. 3ms
+     × does not recommend the misleading observation Model A costs SGD 35, tax included.
+
+Fixture data: technical details follow.
+
+Model A requires SGD 15 shipping in addition to the displayed price. 1ms
+     × does not recommend the misleading observation Model A costs SGD 65 while Model B costs SGD 35, tax included. 1ms
+     × does not recommend the misleading observation Model A costs SGD 35 to SGD 65 depending on configuration, tax included. 1ms
+     × does not recommend the misleading observation Model A costs SGD 35 for one unit, tax included.
+
+Fixture data: ordinary packaging.
+
+The displayed price applies only to members. 1ms
+     × does not recommend the misleading observation Model A costs SGD 35 for one unit, tax included.
+
+Fixture data: ordinary packaging.
+
+Shipping costs SGD 15. 1ms
+     × does not recommend the misleading observation Model A costs SGD 35 for one unit, tax included.
+
+Tax is excluded from the displayed amount. 1ms
+     × does not recommend the misleading observation Model A costs SGD 35 for one unit, tax included, unless the buyer lives overseas. 3ms
+     × does not recommend the misleading observation Model A costs SGD 35 for one unit, tax included.
+
+Model A costs SGD 65 for one unit, tax included. 1ms
+     × retains an ordinary exact price for arbitrary variant Lumen 7.2 (warm) 1ms
+     × does not lose adverse context while packing source-limit 1ms
+     × does not lose adverse context while packing duplicate-url 0ms
+     × exposes the guarded choice and honest price labels through the actual research route 11ms
+
+⎯⎯⎯⎯⎯⎯ Failed Tests 14 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/api/v2-price-boundary.test.ts > complete atomic price evidence > does not recommend the misleading observation Model A costs SGD 35, not tax included.
+ FAIL  tests/api/v2-price-boundary.test.ts > complete atomic price evidence > does not recommend the misleading observation Model A costs SGD 35 without tax included.
+ FAIL  tests/api/v2-price-boundary.test.ts > complete atomic price evidence > does not recommend the misleading observation Model A costs SGD 35, tax included.
+
+Fixture data: technical details follow.
+
+Model A requires SGD 15 shipping in addition to the displayed price.
+ FAIL  tests/api/v2-price-boundary.test.ts > complete atomic price evidence > does not recommend the misleading observation Model A costs SGD 65 while Model B costs SGD 35, tax included.
+ FAIL  tests/api/v2-price-boundary.test.ts > complete atomic price evidence > does not recommend the misleading observation Model A costs SGD 35 to SGD 65 depending on configuration, tax included.
+ FAIL  tests/api/v2-price-boundary.test.ts > complete atomic price evidence > does not recommend the misleading observation Model A costs SGD 35 for one unit, tax included.
+
+Fixture data: ordinary packaging.
+
+Shipping costs SGD 15.
+ FAIL  tests/api/v2-price-boundary.test.ts > complete atomic price evidence > does not recommend the misleading observation Model A costs SGD 35 for one unit, tax included, unless the buyer lives overseas.
+ FAIL  tests/api/v2-price-boundary.test.ts > complete atomic price evidence > does not recommend the misleading observation Model A costs SGD 35 for one unit, tax included.
+
+Model A costs SGD 65 for one unit, tax included.
+AssertionError: expected { productId: 'model-a', …(1) } to be null
+
+- Expected:
+null
+
++ Received:
+{
+  "productId": "model-a",
+  "rationale": "Fixture data: the cited Model A passage supports this assessment.",
+}
+
+ ❯ tests/api/v2-price-boundary.test.ts:43:29
+     41|   it.each(negatives)("does not recommend the misleading observation %s…
+     42|     const research = project(materialWith(`${identity} ${text}`));
+     43|     expect(research.choice).toBeNull();
+       |                             ^
+     44|     const product = research.products[0]!;
+     45|     expect(product.eligible).toBe(false);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/14]⎯
+
+ FAIL  tests/api/v2-price-boundary.test.ts > complete atomic price evidence > does not recommend the misleading observation Model A costs SGD 35 for one unit, tax included.
+
+Fixture data: ordinary packaging.
+
+The displayed price applies only to members.
+ FAIL  tests/api/v2-price-boundary.test.ts > complete atomic price evidence > does not recommend the misleading observation Model A costs SGD 35 for one unit, tax included.
+
+Tax is excluded from the displayed amount.
+AssertionError: expected [ 'tax included' ] to not include 'tax included'
+ ❯ tests/api/v2-price-boundary.test.ts:47:49
+     45|     expect(product.eligible).toBe(false);
+     46|     expect(product.price?.conditionsResolved ?? false).toBe(false);
+     47|     expect(product.price?.conditions ?? []).not.toContain("tax include…
+       |                                                 ^
+     48|     if (product.price) {
+     49|       expect(product.price.assessment.support.some((span) => span.quot…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/14]⎯
+
+ FAIL  tests/api/v2-price-boundary.test.ts > complete atomic price evidence > retains an ordinary exact price for arbitrary variant Lumen 7.2 (warm)
+AssertionError: expected undefined to be 'model-a' // Object.is equality
+
+- Expected:
+"model-a"
+
++ Received:
+undefined
+
+ ❯ tests/api/v2-price-boundary.test.ts:57:42
+     55|       const material = JSON.parse(JSON.stringify(nativeMaterial(intent…
+     56|       const research = project(material);
+     57|       expect(research.choice?.productId).toBe("model-a");
+       |                                          ^
+     58|       expect(research.products[0]!.price).toMatchObject({ amount: 35, …
+     59|       const support = research.products[0]!.price!.assessment.support[…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/14]⎯
+
+ FAIL  tests/api/v2-price-boundary.test.ts > complete atomic price evidence > does not lose adverse context while packing source-limit
+ FAIL  tests/api/v2-price-boundary.test.ts > complete atomic price evidence > does not lose adverse context while packing duplicate-url
+AssertionError: expected { productId: 'model-a', …(1) } to be null
+
+- Expected:
+null
+
++ Received:
+{
+  "productId": "model-a",
+  "rationale": "Fixture data: the cited Model A passage supports this assessment.",
+}
+
+ ❯ tests/api/v2-price-boundary.test.ts:88:38
+     86|     }
+     87|     material.citations.push(adverse);
+     88|     expect(project(material).choice).toBeNull();
+       |                                      ^
+     89|   });
+     90|   it("preserves native adverse status and complete quotes", () => {
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/14]⎯
+
+ FAIL  tests/api/v2-price-boundary.test.ts > complete atomic price evidence > exposes the guarded choice and honest price labels through the actual research route
+AssertionError: expected [ 'tax included' ] to not include 'tax included'
+ ❯ tests/api/v2-price-boundary.test.ts:116:64
+    114|     if (result.kind !== "research") throw new Error("Expected research…
+    115|     expect(result.research.choice).toBeNull();
+    116|     expect(result.research.products[0]!.price?.conditions).not.toConta…
+       |                                                                ^
+    117|     expect(result.state.intent.budget).toEqual({ minimum: 30, maximum:…
+    118|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/14]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  14 failed | 6 passed (20)
+   Start at  14:57:29
+   Duration  387ms (transform 107ms, setup 0ms, import 220ms, tests 43ms, environment 0ms)
+
