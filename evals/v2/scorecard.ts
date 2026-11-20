@@ -1,5 +1,5 @@
 import { loadDataset } from "../dataset";
-import { scenarioMaterial } from "../inputs/materials";
+import { currentScenarioMaterial } from "./materials";
 import { hash } from "../hash";
 import { validateReport, type AnyReport } from "./report";
 import type { RunReport } from "./contracts";
@@ -15,7 +15,7 @@ export async function crossContractScorecard(baseline: AnyReport, candidate: Run
   const rows = canonical.map((contract) => {
     const before = baseline.cases.find((row) => row.id === contract.id)!;
     const after = candidate.cases.find((row) => row.id === contract.id)!;
-    const material = scenarioMaterial(contract.provider, contract.id);
+    const material = currentScenarioMaterial(contract.provider, contract.id);
     if (after.materialHash !== hash(material) || hash(after.material) !== hash(material)) throw new Error(`Changed V2 research material for ${contract.id}`);
     if (before.scenarioHash !== after.scenarioHash || before.expectationHash !== after.expectationHash) throw new Error(`Changed public actions or expectations for ${contract.id}`);
     const sameMaterial = before.materialHash === after.materialHash;
