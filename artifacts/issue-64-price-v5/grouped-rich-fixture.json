@@ -1,0 +1,1234 @@
+{
+  "answer": {
+    "answerVersion": 2,
+    "products": [
+      {
+        "id": "fixture-tool-0",
+        "name": "Fixture tool S0R0",
+        "variant": "standard",
+        "identity": {
+          "status": "supported",
+          "scope": "exact-variant",
+          "rationale": "Fixture AI source interpretation, not merchant verification.",
+          "support": [
+            {
+              "url": "https://example.com/source-0",
+              "quote": "Fixture data. Fixture tool S0R0 standard. Item price SGD 437.00. One item, tax included."
+            }
+          ]
+        },
+        "requestMatch": {
+          "status": "supported",
+          "scope": "exact-variant",
+          "rationale": "Fixture AI source interpretation, not merchant verification.",
+          "support": [
+            {
+              "url": "https://example.com/source-0",
+              "quote": "Fixture data. Fixture tool S0R0 standard. Item price SGD 437.00. One item, tax included."
+            }
+          ]
+        },
+        "criteria": [],
+        "attributes": [],
+        "price": {
+          "amount": 437,
+          "currency": "SGD",
+          "variant": "standard",
+          "moneySupport": {
+            "url": "https://example.com/source-0",
+            "quote": "Fixture data. Fixture tool S0R0 standard. Item price SGD 437.00. One item, tax included."
+          },
+          "attribution": {
+            "status": "supported",
+            "scope": "exact-variant",
+            "rationale": "Fixture AI source interpretation, not merchant verification.",
+            "support": [
+              {
+                "url": "https://example.com/source-0",
+                "quote": "Fixture data. Fixture tool S0R0 standard. Item price SGD 437.00. One item, tax included."
+              }
+            ]
+          },
+          "priceBasis": {
+            "kind": "single-item",
+            "assessment": {
+              "status": "supported",
+              "scope": "exact-variant",
+              "rationale": "Fixture AI source interpretation, not merchant verification.",
+              "support": [
+                {
+                  "url": "https://example.com/source-0",
+                  "quote": "Fixture data. Fixture tool S0R0 standard. Item price SGD 437.00. One item, tax included."
+                }
+              ]
+            }
+          },
+          "sourceReviews": [
+            {
+              "url": "https://example.com/source-0",
+              "reviewComplete": true,
+              "relation": "applies",
+              "assessment": {
+                "status": "supported",
+                "scope": "exact-variant",
+                "rationale": "Fixture AI source interpretation, not merchant verification.",
+                "support": [
+                  {
+                    "url": "https://example.com/source-0",
+                    "quote": "Fixture data. Fixture tool S0R0 standard. Item price SGD 437.00. One item, tax included."
+                  }
+                ]
+              },
+              "moneyMentions": [
+                {
+                  "quote": "Fixture data. Fixture tool S0R0 standard. Item price SGD 437.00. One item, tax included.",
+                  "role": "selected",
+                  "scope": "selected-variant",
+                  "assessment": {
+                    "status": "supported",
+                    "scope": "exact-variant",
+                    "rationale": "Fixture AI source interpretation, not merchant verification.",
+                    "support": [
+                      {
+                        "url": "https://example.com/source-0",
+                        "quote": "Fixture data. Fixture tool S0R0 standard. Item price SGD 437.00. One item, tax included."
+                      }
+                    ]
+                  }
+                },
+                {
+                  "quote": "Fixture data. Fixture tool S0R1 standard. Item price SGD 438.00. One item, tax included.\nFixture data. Fixture tool S0R2 standard. Item price SGD 439.00. One item, tax included.\nFixture data. Fixture tool S0R3 standard. Item price SGD 440.00. One item, tax included.\nFixture data. Fixture tool S0R4 standard. Item price SGD 441.00. One item, tax included.\nFixture data. Fixture tool S0R5 standard. Item price SGD 442.00. One item, tax included.",
+                  "role": "other-product",
+                  "scope": "other-subjects",
+                  "assessment": {
+                    "status": "supported",
+                    "scope": "exact-variant",
+                    "rationale": "Fixture AI source interpretation, not merchant verification.",
+                    "support": [
+                      {
+                        "url": "https://example.com/source-0",
+                        "quote": "Fixture data. Fixture tool S0R1 standard. Item price SGD 438.00. One item, tax included."
+                      }
+                    ]
+                  }
+                }
+              ],
+              "conditions": []
+            },
+            {
+              "url": "https://example.com/source-1",
+              "reviewComplete": true,
+              "relation": "other-product-or-topic",
+              "assessment": {
+                "status": "supported",
+                "scope": "exact-variant",
+                "rationale": "Fixture AI source interpretation, not merchant verification.",
+                "support": [
+                  {
+                    "url": "https://example.com/source-1",
+                    "quote": "Fixture data. Fixture tool S1R0 standard. Item price SGD 437.00. One item, tax included."
+                  }
+                ]
+              },
+              "moneyMentions": [
+                {
+                  "quote": "Fixture data. Fixture tool S1R0 standard. Item price SGD 437.00. One item, tax included.\nFixture data. Fixture tool S1R1 standard. Item price SGD 438.00. One item, tax included.\nFixture data. Fixture tool S1R2 standard. Item price SGD 439.00. One item, tax included.",
+                  "role": "other-product",
+                  "scope": "other-subjects",
+                  "assessment": {
+                    "status": "supported",
+                    "scope": "exact-variant",
+                    "rationale": "Fixture AI source interpretation, not merchant verification.",
+                    "support": [
+                      {
+                        "url": "https://example.com/source-1",
+                        "quote": "Fixture data. Fixture tool S1R0 standard. Item price SGD 437.00. One item, tax included."
+                      }
+                    ]
+                  }
+                }
+              ],
+              "conditions": []
+            },
+            {
+              "url": "https://example.com/source-2",
+              "reviewComplete": true,
+              "relation": "other-product-or-topic",
+              "assessment": {
+                "status": "supported",
+                "scope": "exact-variant",
+                "rationale": "Fixture AI source interpretation, not merchant verification.",
+                "support": [
+                  {
+                    "url": "https://example.com/source-2",
+                    "quote": "Fixture data. Fixture tool S2R0 standard. Item price SGD 437.00. One item, tax included."
+                  }
+                ]
+              },
+              "moneyMentions": [
+                {
+                  "quote": "Fixture data. Fixture tool S2R0 standard. Item price SGD 437.00. One item, tax included.\nFixture data. Fixture tool S2R1 standard. Item price SGD 438.00. One item, tax included.",
+                  "role": "other-product",
+                  "scope": "other-subjects",
+                  "assessment": {
+                    "status": "supported",
+                    "scope": "exact-variant",
+                    "rationale": "Fixture AI source interpretation, not merchant verification.",
+                    "support": [
+                      {
+                        "url": "https://example.com/source-2",
+                        "quote": "Fixture data. Fixture tool S2R0 standard. Item price SGD 437.00. One item, tax included."
+                      }
+                    ]
+                  }
+                }
+              ],
+              "conditions": []
+            },
+            {
+              "url": "https://example.com/source-3",
+              "reviewComplete": true,
+              "relation": "other-product-or-topic",
+              "assessment": {
+                "status": "supported",
+                "scope": "exact-variant",
+                "rationale": "Fixture AI source interpretation, not merchant verification.",
+                "support": [
+                  {
+                    "url": "https://example.com/source-3",
+                    "quote": "Fixture data. Fixture tool S3R0 standard. Item price SGD 437.00. One item, tax included."
+                  }
+                ]
+              },
+              "moneyMentions": [
+                {
+                  "quote": "Fixture data. Fixture tool S3R0 standard. Item price SGD 437.00. One item, tax included.\nFixture data. Fixture tool S3R1 standard. Item price SGD 438.00. One item, tax included.\nFixture data. Fixture tool S3R2 standard. Item price SGD 439.00. One item, tax included.\nFixture data. Fixture tool S3R3 standard. Item price SGD 440.00. One item, tax included.\nFixture data. Fixture tool S3R4 standard. Item price SGD 441.00. One item, tax included.\nFixture data. Fixture tool S3R5 standard. Item price SGD 442.00. One item, tax included.\nFixture data. Fixture tool S3R6 standard. Item price SGD 443.00. One item, tax included.\nFixture data. Fixture tool S3R7 standard. Item price SGD 444.00. One item, tax included.\nFixture data. Fixture tool S3R8 standard. Item price SGD 445.00. One item, tax included.\nFixture data. Fixture tool S3R9 standard. Item price SGD 446.00. One item, tax included.\nFixture data. Fixture tool S3R10 standard. Item price SGD 447.00. One item, tax included.\nFixture data. Fixture tool S3R11 standard. Item price SGD 448.00. One item, tax included.\nFixture data. Fixture tool S3R12 standard. Item price SGD 449.00. One item, tax included.\nFixture data. Fixture tool S3R13 standard. Item price SGD 450.00. One item, tax included.\nFixture data. Fixture tool S3R14 standard. Item price SGD 451.00. One item, tax included.\nFixture data. Fixture tool S3R15 standard. Item price SGD 452.00. One item, tax included.\nFixture data. Fixture tool S3R16 standard. Item price SGD 453.00. One item, tax included.\nFixture data. Fixture tool S3R17 standard. Item price SGD 454.00. One item, tax included.\nFixture data. Fixture tool S3R18 standard. Item price SGD 455.00. One item, tax included.\nFixture data. Fixture tool S3R19 standard. Item price SGD 456.00. One item, tax included.\nFixture data. Fixture tool S3R20 standard. Item price SGD 457.00. One item, tax included.\nFixture data. Fixture tool S3R21 standard. Item price SGD 458.00. One item, tax included.\nFixture data. Fixture tool S3R22 standard. Item price SGD 459.00. One item, tax included.\nFixture data. Fixture tool S3R23 standard. Item price SGD 460.00. One item, tax included.\nFixture data. Fixture tool S3R24 standard. Item price SGD 461.00. One item, tax included.\nFixture data. Fixture tool S3R25 standard. Item price SGD 462.00. One item, tax included.\nFixture data. Fixture tool S3R26 standard. Item price SGD 463.00. One item, tax included.\nFixture data. Fixture tool S3R27 standard. Item price SGD 464.00. One item, tax included.\nFixture data. Fixture tool S3R28 standard. Item price SGD 465.00. One item, tax included.\nFixture data. Fixture tool S3R29 standard. Item price SGD 466.00. One item, tax included.\nFixture data. Fixture tool S3R30 standard. Item price SGD 467.00. One item, tax included.\nFixture data. Fixture tool S3R31 standard. Item price SGD 468.00. One item, tax included.\nFixture data. Fixture tool S3R32 standard. Item price SGD 469.00. One item, tax included.\nFixture data. Fixture tool S3R33 standard. Item price SGD 470.00. One item, tax included.\nFixture data. Fixture tool S3R34 standard. Item price SGD 471.00. One item, tax included.\nFixture data. Fixture tool S3R35 standard. Item price SGD 472.00. One item, tax included.\nFixture data. Fixture tool S3R36 standard. Item price SGD 473.00. One item, tax included.\nFixture data. Fixture tool S3R37 standard. Item price SGD 474.00. One item, tax included.\nFixture data. Fixture tool S3R38 standard. Item price SGD 475.00. One item, tax included.\nFixture data. Fixture tool S3R39 standard. Item price SGD 476.00. One item, tax included.\nFixture data. Fixture tool S3R40 standard. Item price SGD 477.00. One item, tax included.\nFixture data. Fixture tool S3R41 standard. Item price SGD 478.00. One item, tax included.",
+                  "role": "other-product",
+                  "scope": "other-subjects",
+                  "assessment": {
+                    "status": "supported",
+                    "scope": "exact-variant",
+                    "rationale": "Fixture AI source interpretation, not merchant verification.",
+                    "support": [
+                      {
+                        "url": "https://example.com/source-3",
+                        "quote": "Fixture data. Fixture tool S3R0 standard. Item price SGD 437.00. One item, tax included."
+                      }
+                    ]
+                  }
+                },
+                {
+                  "quote": "Fixture data. Fixture tool S3R42 standard. Item price SGD 479.00. One item, tax included.\nFixture data. Fixture tool S3R43 standard. Item price SGD 480.00. One item, tax included.\nFixture data. Fixture tool S3R44 standard. Item price SGD 481.00. One item, tax included.\nFixture data. Fixture tool S3R45 standard. Item price SGD 482.00. One item, tax included.\nFixture data. Fixture tool S3R46 standard. Item price SGD 483.00. One item, tax included.\nFixture data. Fixture tool S3R47 standard. Item price SGD 484.00. One item, tax included.\nFixture data. Fixture tool S3R48 standard. Item price SGD 485.00. One item, tax included.\nFixture data. Fixture tool S3R49 standard. Item price SGD 486.00. One item, tax included.\nFixture data. Fixture tool S3R50 standard. Item price SGD 487.00. One item, tax included.\nFixture data. Fixture tool S3R51 standard. Item price SGD 488.00. One item, tax included.\nFixture data. Fixture tool S3R52 standard. Item price SGD 489.00. One item, tax included.\nFixture data. Fixture tool S3R53 standard. Item price SGD 490.00. One item, tax included.\nFixture data. Fixture tool S3R54 standard. Item price SGD 491.00. One item, tax included.\nFixture data. Fixture tool S3R55 standard. Item price SGD 492.00. One item, tax included.\nFixture data. Fixture tool S3R56 standard. Item price SGD 493.00. One item, tax included.\nFixture data. Fixture tool S3R57 standard. Item price SGD 494.00. One item, tax included.\nFixture data. Fixture tool S3R58 standard. Item price SGD 495.00. One item, tax included.\nFixture data. Fixture tool S3R59 standard. Item price SGD 496.00. One item, tax included.\nFixture data. Fixture tool S3R60 standard. Item price SGD 497.00. One item, tax included.\nFixture data. Fixture tool S3R61 standard. Item price SGD 498.00. One item, tax included.\nFixture data. Fixture tool S3R62 standard. Item price SGD 499.00. One item, tax included.\nFixture data. Fixture tool S3R63 standard. Item price SGD 500.00. One item, tax included.\nFixture data. Fixture tool S3R64 standard. Item price SGD 501.00. One item, tax included.\nFixture data. Fixture tool S3R65 standard. Item price SGD 502.00. One item, tax included.\nFixture data. Fixture tool S3R66 standard. Item price SGD 503.00. One item, tax included.\nFixture data. Fixture tool S3R67 standard. Item price SGD 504.00. One item, tax included.\nFixture data. Fixture tool S3R68 standard. Item price SGD 505.00. One item, tax included.\nFixture data. Fixture tool S3R69 standard. Item price SGD 506.00. One item, tax included.\nFixture data. Fixture tool S3R70 standard. Item price SGD 507.00. One item, tax included.\nFixture data. Fixture tool S3R71 standard. Item price SGD 508.00. One item, tax included.\nFixture data. Fixture tool S3R72 standard. Item price SGD 509.00. One item, tax included.\nFixture data. Fixture tool S3R73 standard. Item price SGD 510.00. One item, tax included.\nFixture data. Fixture tool S3R74 standard. Item price SGD 511.00. One item, tax included.\nFixture data. Fixture tool S3R75 standard. Item price SGD 512.00. One item, tax included.\nFixture data. Fixture tool S3R76 standard. Item price SGD 513.00. One item, tax included.\nFixture data. Fixture tool S3R77 standard. Item price SGD 514.00. One item, tax included.\nFixture data. Fixture tool S3R78 standard. Item price SGD 515.00. One item, tax included.\nFixture data. Fixture tool S3R79 standard. Item price SGD 516.00. One item, tax included.\nFixture data. Fixture tool S3R80 standard. Item price SGD 517.00. One item, tax included.\nFixture data. Fixture tool S3R81 standard. Item price SGD 518.00. One item, tax included.\nFixture data. Fixture tool S3R82 standard. Item price SGD 519.00. One item, tax included.\nFixture data. Fixture tool S3R83 standard. Item price SGD 520.00. One item, tax included.",
+                  "role": "other-product",
+                  "scope": "other-subjects",
+                  "assessment": {
+                    "status": "supported",
+                    "scope": "exact-variant",
+                    "rationale": "Fixture AI source interpretation, not merchant verification.",
+                    "support": [
+                      {
+                        "url": "https://example.com/source-3",
+                        "quote": "Fixture data. Fixture tool S3R42 standard. Item price SGD 479.00. One item, tax included."
+                      }
+                    ]
+                  }
+                },
+                {
+                  "quote": "Fixture data. Fixture tool S3R84 standard. Item price SGD 521.00. One item, tax included.\nFixture data. Fixture tool S3R85 standard. Item price SGD 522.00. One item, tax included.\nFixture data. Fixture tool S3R86 standard. Item price SGD 523.00. One item, tax included.\nFixture data. Fixture tool S3R87 standard. Item price SGD 524.00. One item, tax included.",
+                  "role": "other-product",
+                  "scope": "other-subjects",
+                  "assessment": {
+                    "status": "supported",
+                    "scope": "exact-variant",
+                    "rationale": "Fixture AI source interpretation, not merchant verification.",
+                    "support": [
+                      {
+                        "url": "https://example.com/source-3",
+                        "quote": "Fixture data. Fixture tool S3R84 standard. Item price SGD 521.00. One item, tax included."
+                      }
+                    ]
+                  }
+                }
+              ],
+              "conditions": []
+            },
+            {
+              "url": "https://example.com/source-4",
+              "reviewComplete": true,
+              "relation": "other-product-or-topic",
+              "assessment": {
+                "status": "supported",
+                "scope": "exact-variant",
+                "rationale": "Fixture AI source interpretation, not merchant verification.",
+                "support": [
+                  {
+                    "url": "https://example.com/source-4",
+                    "quote": "Fixture data. Fixture tool S4R0 standard. Item price SGD 437.00. One item, tax included."
+                  }
+                ]
+              },
+              "moneyMentions": [
+                {
+                  "quote": "Fixture data. Fixture tool S4R0 standard. Item price SGD 437.00. One item, tax included.\nFixture data. Fixture tool S4R1 standard. Item price SGD 438.00. One item, tax included.\nFixture data. Fixture tool S4R2 standard. Item price SGD 439.00. One item, tax included.\nFixture data. Fixture tool S4R3 standard. Item price SGD 440.00. One item, tax included.\nFixture data. Fixture tool S4R4 standard. Item price SGD 441.00. One item, tax included.\nFixture data. Fixture tool S4R5 standard. Item price SGD 442.00. One item, tax included.\nFixture data. Fixture tool S4R6 standard. Item price SGD 443.00. One item, tax included.\nFixture data. Fixture tool S4R7 standard. Item price SGD 444.00. One item, tax included.\nFixture data. Fixture tool S4R8 standard. Item price SGD 445.00. One item, tax included.\nFixture data. Fixture tool S4R9 standard. Item price SGD 446.00. One item, tax included.\nFixture data. Fixture tool S4R10 standard. Item price SGD 447.00. One item, tax included.\nFixture data. Fixture tool S4R11 standard. Item price SGD 448.00. One item, tax included.\nFixture data. Fixture tool S4R12 standard. Item price SGD 449.00. One item, tax included.\nFixture data. Fixture tool S4R13 standard. Item price SGD 450.00. One item, tax included.\nFixture data. Fixture tool S4R14 standard. Item price SGD 451.00. One item, tax included.\nFixture data. Fixture tool S4R15 standard. Item price SGD 452.00. One item, tax included.\nFixture data. Fixture tool S4R16 standard. Item price SGD 453.00. One item, tax included.\nFixture data. Fixture tool S4R17 standard. Item price SGD 454.00. One item, tax included.\nFixture data. Fixture tool S4R18 standard. Item price SGD 455.00. One item, tax included.\nFixture data. Fixture tool S4R19 standard. Item price SGD 456.00. One item, tax included.\nFixture data. Fixture tool S4R20 standard. Item price SGD 457.00. One item, tax included.\nFixture data. Fixture tool S4R21 standard. Item price SGD 458.00. One item, tax included.\nFixture data. Fixture tool S4R22 standard. Item price SGD 459.00. One item, tax included.\nFixture data. Fixture tool S4R23 standard. Item price SGD 460.00. One item, tax included.\nFixture data. Fixture tool S4R24 standard. Item price SGD 461.00. One item, tax included.\nFixture data. Fixture tool S4R25 standard. Item price SGD 462.00. One item, tax included.\nFixture data. Fixture tool S4R26 standard. Item price SGD 463.00. One item, tax included.\nFixture data. Fixture tool S4R27 standard. Item price SGD 464.00. One item, tax included.\nFixture data. Fixture tool S4R28 standard. Item price SGD 465.00. One item, tax included.\nFixture data. Fixture tool S4R29 standard. Item price SGD 466.00. One item, tax included.\nFixture data. Fixture tool S4R30 standard. Item price SGD 467.00. One item, tax included.\nFixture data. Fixture tool S4R31 standard. Item price SGD 468.00. One item, tax included.\nFixture data. Fixture tool S4R32 standard. Item price SGD 469.00. One item, tax included.\nFixture data. Fixture tool S4R33 standard. Item price SGD 470.00. One item, tax included.\nFixture data. Fixture tool S4R34 standard. Item price SGD 471.00. One item, tax included.\nFixture data. Fixture tool S4R35 standard. Item price SGD 472.00. One item, tax included.\nFixture data. Fixture tool S4R36 standard. Item price SGD 473.00. One item, tax included.\nFixture data. Fixture tool S4R37 standard. Item price SGD 474.00. One item, tax included.\nFixture data. Fixture tool S4R38 standard. Item price SGD 475.00. One item, tax included.",
+                  "role": "other-product",
+                  "scope": "other-subjects",
+                  "assessment": {
+                    "status": "supported",
+                    "scope": "exact-variant",
+                    "rationale": "Fixture AI source interpretation, not merchant verification.",
+                    "support": [
+                      {
+                        "url": "https://example.com/source-4",
+                        "quote": "Fixture data. Fixture tool S4R0 standard. Item price SGD 437.00. One item, tax included."
+                      }
+                    ]
+                  }
+                }
+              ],
+              "conditions": []
+            },
+            {
+              "url": "https://example.com/source-5",
+              "reviewComplete": true,
+              "relation": "other-product-or-topic",
+              "assessment": {
+                "status": "supported",
+                "scope": "exact-variant",
+                "rationale": "Fixture AI source interpretation, not merchant verification.",
+                "support": [
+                  {
+                    "url": "https://example.com/source-5",
+                    "quote": "Fixture data. Fixture tool S5R0 standard. Item price SGD 437.00. One item, tax included."
+                  }
+                ]
+              },
+              "moneyMentions": [
+                {
+                  "quote": "Fixture data. Fixture tool S5R0 standard. Item price SGD 437.00. One item, tax included.\nFixture data. Fixture tool S5R1 standard. Item price SGD 438.00. One item, tax included.\nFixture data. Fixture tool S5R2 standard. Item price SGD 439.00. One item, tax included.",
+                  "role": "other-product",
+                  "scope": "other-subjects",
+                  "assessment": {
+                    "status": "supported",
+                    "scope": "exact-variant",
+                    "rationale": "Fixture AI source interpretation, not merchant verification.",
+                    "support": [
+                      {
+                        "url": "https://example.com/source-5",
+                        "quote": "Fixture data. Fixture tool S5R0 standard. Item price SGD 437.00. One item, tax included."
+                      }
+                    ]
+                  }
+                }
+              ],
+              "conditions": []
+            },
+            {
+              "url": "https://example.com/source-6",
+              "reviewComplete": true,
+              "relation": "other-product-or-topic",
+              "assessment": {
+                "status": "supported",
+                "scope": "exact-variant",
+                "rationale": "Fixture AI source interpretation, not merchant verification.",
+                "support": [
+                  {
+                    "url": "https://example.com/source-6",
+                    "quote": "Fixture data. Fixture tool S6R0 standard. Item price SGD 437.00. One item, tax included."
+                  }
+                ]
+              },
+              "moneyMentions": [
+                {
+                  "quote": "Fixture data. Fixture tool S6R0 standard. Item price SGD 437.00. One item, tax included.\nFixture data. Fixture tool S6R1 standard. Item price SGD 438.00. One item, tax included.\nFixture data. Fixture tool S6R2 standard. Item price SGD 439.00. One item, tax included.\nFixture data. Fixture tool S6R3 standard. Item price SGD 440.00. One item, tax included.\nFixture data. Fixture tool S6R4 standard. Item price SGD 441.00. One item, tax included.\nFixture data. Fixture tool S6R5 standard. Item price SGD 442.00. One item, tax included.\nFixture data. Fixture tool S6R6 standard. Item price SGD 443.00. One item, tax included.\nFixture data. Fixture tool S6R7 standard. Item price SGD 444.00. One item, tax included.\nFixture data. Fixture tool S6R8 standard. Item price SGD 445.00. One item, tax included.\nFixture data. Fixture tool S6R9 standard. Item price SGD 446.00. One item, tax included.\nFixture data. Fixture tool S6R10 standard. Item price SGD 447.00. One item, tax included.\nFixture data. Fixture tool S6R11 standard. Item price SGD 448.00. One item, tax included.\nFixture data. Fixture tool S6R12 standard. Item price SGD 449.00. One item, tax included.\nFixture data. Fixture tool S6R13 standard. Item price SGD 450.00. One item, tax included.\nFixture data. Fixture tool S6R14 standard. Item price SGD 451.00. One item, tax included.\nFixture data. Fixture tool S6R15 standard. Item price SGD 452.00. One item, tax included.\nFixture data. Fixture tool S6R16 standard. Item price SGD 453.00. One item, tax included.\nFixture data. Fixture tool S6R17 standard. Item price SGD 454.00. One item, tax included.\nFixture data. Fixture tool S6R18 standard. Item price SGD 455.00. One item, tax included.\nFixture data. Fixture tool S6R19 standard. Item price SGD 456.00. One item, tax included.\nFixture data. Fixture tool S6R20 standard. Item price SGD 457.00. One item, tax included.\nFixture data. Fixture tool S6R21 standard. Item price SGD 458.00. One item, tax included.\nFixture data. Fixture tool S6R22 standard. Item price SGD 459.00. One item, tax included.\nFixture data. Fixture tool S6R23 standard. Item price SGD 460.00. One item, tax included.\nFixture data. Fixture tool S6R24 standard. Item price SGD 461.00. One item, tax included.\nFixture data. Fixture tool S6R25 standard. Item price SGD 462.00. One item, tax included.\nFixture data. Fixture tool S6R26 standard. Item price SGD 463.00. One item, tax included.\nFixture data. Fixture tool S6R27 standard. Item price SGD 464.00. One item, tax included.\nFixture data. Fixture tool S6R28 standard. Item price SGD 465.00. One item, tax included.\nFixture data. Fixture tool S6R29 standard. Item price SGD 466.00. One item, tax included.\nFixture data. Fixture tool S6R30 standard. Item price SGD 467.00. One item, tax included.\nFixture data. Fixture tool S6R31 standard. Item price SGD 468.00. One item, tax included.\nFixture data. Fixture tool S6R32 standard. Item price SGD 469.00. One item, tax included.\nFixture data. Fixture tool S6R33 standard. Item price SGD 470.00. One item, tax included.",
+                  "role": "other-product",
+                  "scope": "other-subjects",
+                  "assessment": {
+                    "status": "supported",
+                    "scope": "exact-variant",
+                    "rationale": "Fixture AI source interpretation, not merchant verification.",
+                    "support": [
+                      {
+                        "url": "https://example.com/source-6",
+                        "quote": "Fixture data. Fixture tool S6R0 standard. Item price SGD 437.00. One item, tax included."
+                      }
+                    ]
+                  }
+                }
+              ],
+              "conditions": []
+            },
+            {
+              "url": "https://example.com/source-7",
+              "reviewComplete": true,
+              "relation": "other-product-or-topic",
+              "assessment": {
+                "status": "supported",
+                "scope": "exact-variant",
+                "rationale": "Fixture AI source interpretation, not merchant verification.",
+                "support": [
+                  {
+                    "url": "https://example.com/source-7",
+                    "quote": "Fixture data. Fixture tool S7R0 standard. Item price SGD 437.00. One item, tax included."
+                  }
+                ]
+              },
+              "moneyMentions": [
+                {
+                  "quote": "Fixture data. Fixture tool S7R0 standard. Item price SGD 437.00. One item, tax included.\nFixture data. Fixture tool S7R1 standard. Item price SGD 438.00. One item, tax included.\nFixture data. Fixture tool S7R2 standard. Item price SGD 439.00. One item, tax included.\nFixture data. Fixture tool S7R3 standard. Item price SGD 440.00. One item, tax included.\nFixture data. Fixture tool S7R4 standard. Item price SGD 441.00. One item, tax included.\nFixture data. Fixture tool S7R5 standard. Item price SGD 442.00. One item, tax included.",
+                  "role": "other-product",
+                  "scope": "other-subjects",
+                  "assessment": {
+                    "status": "supported",
+                    "scope": "exact-variant",
+                    "rationale": "Fixture AI source interpretation, not merchant verification.",
+                    "support": [
+                      {
+                        "url": "https://example.com/source-7",
+                        "quote": "Fixture data. Fixture tool S7R0 standard. Item price SGD 437.00. One item, tax included."
+                      }
+                    ]
+                  }
+                }
+              ],
+              "conditions": []
+            }
+          ]
+        }
+      },
+      {
+        "id": "fixture-tool-1",
+        "name": "Fixture tool S1R0",
+        "variant": "standard",
+        "identity": {
+          "status": "supported",
+          "scope": "exact-variant",
+          "rationale": "Fixture AI source interpretation, not merchant verification.",
+          "support": [
+            {
+              "url": "https://example.com/source-1",
+              "quote": "Fixture data. Fixture tool S1R0 standard. Item price SGD 437.00. One item, tax included."
+            }
+          ]
+        },
+        "requestMatch": {
+          "status": "supported",
+          "scope": "exact-variant",
+          "rationale": "Fixture AI source interpretation, not merchant verification.",
+          "support": [
+            {
+              "url": "https://example.com/source-1",
+              "quote": "Fixture data. Fixture tool S1R0 standard. Item price SGD 437.00. One item, tax included."
+            }
+          ]
+        },
+        "criteria": [],
+        "attributes": [],
+        "price": {
+          "amount": 437,
+          "currency": "SGD",
+          "variant": "standard",
+          "moneySupport": {
+            "url": "https://example.com/source-1",
+            "quote": "Fixture data. Fixture tool S1R0 standard. Item price SGD 437.00. One item, tax included."
+          },
+          "attribution": {
+            "status": "supported",
+            "scope": "exact-variant",
+            "rationale": "Fixture AI source interpretation, not merchant verification.",
+            "support": [
+              {
+                "url": "https://example.com/source-1",
+                "quote": "Fixture data. Fixture tool S1R0 standard. Item price SGD 437.00. One item, tax included."
+              }
+            ]
+          },
+          "priceBasis": {
+            "kind": "single-item",
+            "assessment": {
+              "status": "supported",
+              "scope": "exact-variant",
+              "rationale": "Fixture AI source interpretation, not merchant verification.",
+              "support": [
+                {
+                  "url": "https://example.com/source-1",
+                  "quote": "Fixture data. Fixture tool S1R0 standard. Item price SGD 437.00. One item, tax included."
+                }
+              ]
+            }
+          },
+          "sourceReviews": [
+            {
+              "url": "https://example.com/source-0",
+              "reviewComplete": true,
+              "relation": "other-product-or-topic",
+              "assessment": {
+                "status": "supported",
+                "scope": "exact-variant",
+                "rationale": "Fixture AI source interpretation, not merchant verification.",
+                "support": [
+                  {
+                    "url": "https://example.com/source-0",
+                    "quote": "Fixture data. Fixture tool S0R0 standard. Item price SGD 437.00. One item, tax included."
+                  }
+                ]
+              },
+              "moneyMentions": [
+                {
+                  "quote": "Fixture data. Fixture tool S0R0 standard. Item price SGD 437.00. One item, tax included.\nFixture data. Fixture tool S0R1 standard. Item price SGD 438.00. One item, tax included.\nFixture data. Fixture tool S0R2 standard. Item price SGD 439.00. One item, tax included.\nFixture data. Fixture tool S0R3 standard. Item price SGD 440.00. One item, tax included.\nFixture data. Fixture tool S0R4 standard. Item price SGD 441.00. One item, tax included.\nFixture data. Fixture tool S0R5 standard. Item price SGD 442.00. One item, tax included.",
+                  "role": "other-product",
+                  "scope": "other-subjects",
+                  "assessment": {
+                    "status": "supported",
+                    "scope": "exact-variant",
+                    "rationale": "Fixture AI source interpretation, not merchant verification.",
+                    "support": [
+                      {
+                        "url": "https://example.com/source-0",
+                        "quote": "Fixture data. Fixture tool S0R0 standard. Item price SGD 437.00. One item, tax included."
+                      }
+                    ]
+                  }
+                }
+              ],
+              "conditions": []
+            },
+            {
+              "url": "https://example.com/source-1",
+              "reviewComplete": true,
+              "relation": "applies",
+              "assessment": {
+                "status": "supported",
+                "scope": "exact-variant",
+                "rationale": "Fixture AI source interpretation, not merchant verification.",
+                "support": [
+                  {
+                    "url": "https://example.com/source-1",
+                    "quote": "Fixture data. Fixture tool S1R0 standard. Item price SGD 437.00. One item, tax included."
+                  }
+                ]
+              },
+              "moneyMentions": [
+                {
+                  "quote": "Fixture data. Fixture tool S1R0 standard. Item price SGD 437.00. One item, tax included.",
+                  "role": "selected",
+                  "scope": "selected-variant",
+                  "assessment": {
+                    "status": "supported",
+                    "scope": "exact-variant",
+                    "rationale": "Fixture AI source interpretation, not merchant verification.",
+                    "support": [
+                      {
+                        "url": "https://example.com/source-1",
+                        "quote": "Fixture data. Fixture tool S1R0 standard. Item price SGD 437.00. One item, tax included."
+                      }
+                    ]
+                  }
+                },
+                {
+                  "quote": "Fixture data. Fixture tool S1R1 standard. Item price SGD 438.00. One item, tax included.\nFixture data. Fixture tool S1R2 standard. Item price SGD 439.00. One item, tax included.",
+                  "role": "other-product",
+                  "scope": "other-subjects",
+                  "assessment": {
+                    "status": "supported",
+                    "scope": "exact-variant",
+                    "rationale": "Fixture AI source interpretation, not merchant verification.",
+                    "support": [
+                      {
+                        "url": "https://example.com/source-1",
+                        "quote": "Fixture data. Fixture tool S1R1 standard. Item price SGD 438.00. One item, tax included."
+                      }
+                    ]
+                  }
+                }
+              ],
+              "conditions": []
+            },
+            {
+              "url": "https://example.com/source-2",
+              "reviewComplete": true,
+              "relation": "other-product-or-topic",
+              "assessment": {
+                "status": "supported",
+                "scope": "exact-variant",
+                "rationale": "Fixture AI source interpretation, not merchant verification.",
+                "support": [
+                  {
+                    "url": "https://example.com/source-2",
+                    "quote": "Fixture data. Fixture tool S2R0 standard. Item price SGD 437.00. One item, tax included."
+                  }
+                ]
+              },
+              "moneyMentions": [
+                {
+                  "quote": "Fixture data. Fixture tool S2R0 standard. Item price SGD 437.00. One item, tax included.\nFixture data. Fixture tool S2R1 standard. Item price SGD 438.00. One item, tax included.",
+                  "role": "other-product",
+                  "scope": "other-subjects",
+                  "assessment": {
+                    "status": "supported",
+                    "scope": "exact-variant",
+                    "rationale": "Fixture AI source interpretation, not merchant verification.",
+                    "support": [
+                      {
+                        "url": "https://example.com/source-2",
+                        "quote": "Fixture data. Fixture tool S2R0 standard. Item price SGD 437.00. One item, tax included."
+                      }
+                    ]
+                  }
+                }
+              ],
+              "conditions": []
+            },
+            {
+              "url": "https://example.com/source-3",
+              "reviewComplete": true,
+              "relation": "other-product-or-topic",
+              "assessment": {
+                "status": "supported",
+                "scope": "exact-variant",
+                "rationale": "Fixture AI source interpretation, not merchant verification.",
+                "support": [
+                  {
+                    "url": "https://example.com/source-3",
+                    "quote": "Fixture data. Fixture tool S3R0 standard. Item price SGD 437.00. One item, tax included."
+                  }
+                ]
+              },
+              "moneyMentions": [
+                {
+                  "quote": "Fixture data. Fixture tool S3R0 standard. Item price SGD 437.00. One item, tax included.\nFixture data. Fixture tool S3R1 standard. Item price SGD 438.00. One item, tax included.\nFixture data. Fixture tool S3R2 standard. Item price SGD 439.00. One item, tax included.\nFixture data. Fixture tool S3R3 standard. Item price SGD 440.00. One item, tax included.\nFixture data. Fixture tool S3R4 standard. Item price SGD 441.00. One item, tax included.\nFixture data. Fixture tool S3R5 standard. Item price SGD 442.00. One item, tax included.\nFixture data. Fixture tool S3R6 standard. Item price SGD 443.00. One item, tax included.\nFixture data. Fixture tool S3R7 standard. Item price SGD 444.00. One item, tax included.\nFixture data. Fixture tool S3R8 standard. Item price SGD 445.00. One item, tax included.\nFixture data. Fixture tool S3R9 standard. Item price SGD 446.00. One item, tax included.\nFixture data. Fixture tool S3R10 standard. Item price SGD 447.00. One item, tax included.\nFixture data. Fixture tool S3R11 standard. Item price SGD 448.00. One item, tax included.\nFixture data. Fixture tool S3R12 standard. Item price SGD 449.00. One item, tax included.\nFixture data. Fixture tool S3R13 standard. Item price SGD 450.00. One item, tax included.\nFixture data. Fixture tool S3R14 standard. Item price SGD 451.00. One item, tax included.\nFixture data. Fixture tool S3R15 standard. Item price SGD 452.00. One item, tax included.\nFixture data. Fixture tool S3R16 standard. Item price SGD 453.00. One item, tax included.\nFixture data. Fixture tool S3R17 standard. Item price SGD 454.00. One item, tax included.\nFixture data. Fixture tool S3R18 standard. Item price SGD 455.00. One item, tax included.\nFixture data. Fixture tool S3R19 standard. Item price SGD 456.00. One item, tax included.\nFixture data. Fixture tool S3R20 standard. Item price SGD 457.00. One item, tax included.\nFixture data. Fixture tool S3R21 standard. Item price SGD 458.00. One item, tax included.\nFixture data. Fixture tool S3R22 standard. Item price SGD 459.00. One item, tax included.\nFixture data. Fixture tool S3R23 standard. Item price SGD 460.00. One item, tax included.\nFixture data. Fixture tool S3R24 standard. Item price SGD 461.00. One item, tax included.\nFixture data. Fixture tool S3R25 standard. Item price SGD 462.00. One item, tax included.\nFixture data. Fixture tool S3R26 standard. Item price SGD 463.00. One item, tax included.\nFixture data. Fixture tool S3R27 standard. Item price SGD 464.00. One item, tax included.\nFixture data. Fixture tool S3R28 standard. Item price SGD 465.00. One item, tax included.\nFixture data. Fixture tool S3R29 standard. Item price SGD 466.00. One item, tax included.\nFixture data. Fixture tool S3R30 standard. Item price SGD 467.00. One item, tax included.\nFixture data. Fixture tool S3R31 standard. Item price SGD 468.00. One item, tax included.\nFixture data. Fixture tool S3R32 standard. Item price SGD 469.00. One item, tax included.\nFixture data. Fixture tool S3R33 standard. Item price SGD 470.00. One item, tax included.\nFixture data. Fixture tool S3R34 standard. Item price SGD 471.00. One item, tax included.\nFixture data. Fixture tool S3R35 standard. Item price SGD 472.00. One item, tax included.\nFixture data. Fixture tool S3R36 standard. Item price SGD 473.00. One item, tax included.\nFixture data. Fixture tool S3R37 standard. Item price SGD 474.00. One item, tax included.\nFixture data. Fixture tool S3R38 standard. Item price SGD 475.00. One item, tax included.\nFixture data. Fixture tool S3R39 standard. Item price SGD 476.00. One item, tax included.\nFixture data. Fixture tool S3R40 standard. Item price SGD 477.00. One item, tax included.\nFixture data. Fixture tool S3R41 standard. Item price SGD 478.00. One item, tax included.",
+                  "role": "other-product",
+                  "scope": "other-subjects",
+                  "assessment": {
+                    "status": "supported",
+                    "scope": "exact-variant",
+                    "rationale": "Fixture AI source interpretation, not merchant verification.",
+                    "support": [
+                      {
+                        "url": "https://example.com/source-3",
+                        "quote": "Fixture data. Fixture tool S3R0 standard. Item price SGD 437.00. One item, tax included."
+                      }
+                    ]
+                  }
+                },
+                {
+                  "quote": "Fixture data. Fixture tool S3R42 standard. Item price SGD 479.00. One item, tax included.\nFixture data. Fixture tool S3R43 standard. Item price SGD 480.00. One item, tax included.\nFixture data. Fixture tool S3R44 standard. Item price SGD 481.00. One item, tax included.\nFixture data. Fixture tool S3R45 standard. Item price SGD 482.00. One item, tax included.\nFixture data. Fixture tool S3R46 standard. Item price SGD 483.00. One item, tax included.\nFixture data. Fixture tool S3R47 standard. Item price SGD 484.00. One item, tax included.\nFixture data. Fixture tool S3R48 standard. Item price SGD 485.00. One item, tax included.\nFixture data. Fixture tool S3R49 standard. Item price SGD 486.00. One item, tax included.\nFixture data. Fixture tool S3R50 standard. Item price SGD 487.00. One item, tax included.\nFixture data. Fixture tool S3R51 standard. Item price SGD 488.00. One item, tax included.\nFixture data. Fixture tool S3R52 standard. Item price SGD 489.00. One item, tax included.\nFixture data. Fixture tool S3R53 standard. Item price SGD 490.00. One item, tax included.\nFixture data. Fixture tool S3R54 standard. Item price SGD 491.00. One item, tax included.\nFixture data. Fixture tool S3R55 standard. Item price SGD 492.00. One item, tax included.\nFixture data. Fixture tool S3R56 standard. Item price SGD 493.00. One item, tax included.\nFixture data. Fixture tool S3R57 standard. Item price SGD 494.00. One item, tax included.\nFixture data. Fixture tool S3R58 standard. Item price SGD 495.00. One item, tax included.\nFixture data. Fixture tool S3R59 standard. Item price SGD 496.00. One item, tax included.\nFixture data. Fixture tool S3R60 standard. Item price SGD 497.00. One item, tax included.\nFixture data. Fixture tool S3R61 standard. Item price SGD 498.00. One item, tax included.\nFixture data. Fixture tool S3R62 standard. Item price SGD 499.00. One item, tax included.\nFixture data. Fixture tool S3R63 standard. Item price SGD 500.00. One item, tax included.\nFixture data. Fixture tool S3R64 standard. Item price SGD 501.00. One item, tax included.\nFixture data. Fixture tool S3R65 standard. Item price SGD 502.00. One item, tax included.\nFixture data. Fixture tool S3R66 standard. Item price SGD 503.00. One item, tax included.\nFixture data. Fixture tool S3R67 standard. Item price SGD 504.00. One item, tax included.\nFixture data. Fixture tool S3R68 standard. Item price SGD 505.00. One item, tax included.\nFixture data. Fixture tool S3R69 standard. Item price SGD 506.00. One item, tax included.\nFixture data. Fixture tool S3R70 standard. Item price SGD 507.00. One item, tax included.\nFixture data. Fixture tool S3R71 standard. Item price SGD 508.00. One item, tax included.\nFixture data. Fixture tool S3R72 standard. Item price SGD 509.00. One item, tax included.\nFixture data. Fixture tool S3R73 standard. Item price SGD 510.00. One item, tax included.\nFixture data. Fixture tool S3R74 standard. Item price SGD 511.00. One item, tax included.\nFixture data. Fixture tool S3R75 standard. Item price SGD 512.00. One item, tax included.\nFixture data. Fixture tool S3R76 standard. Item price SGD 513.00. One item, tax included.\nFixture data. Fixture tool S3R77 standard. Item price SGD 514.00. One item, tax included.\nFixture data. Fixture tool S3R78 standard. Item price SGD 515.00. One item, tax included.\nFixture data. Fixture tool S3R79 standard. Item price SGD 516.00. One item, tax included.\nFixture data. Fixture tool S3R80 standard. Item price SGD 517.00. One item, tax included.\nFixture data. Fixture tool S3R81 standard. Item price SGD 518.00. One item, tax included.\nFixture data. Fixture tool S3R82 standard. Item price SGD 519.00. One item, tax included.\nFixture data. Fixture tool S3R83 standard. Item price SGD 520.00. One item, tax included.",
+                  "role": "other-product",
+                  "scope": "other-subjects",
+                  "assessment": {
+                    "status": "supported",
+                    "scope": "exact-variant",
+                    "rationale": "Fixture AI source interpretation, not merchant verification.",
+                    "support": [
+                      {
+                        "url": "https://example.com/source-3",
+                        "quote": "Fixture data. Fixture tool S3R42 standard. Item price SGD 479.00. One item, tax included."
+                      }
+                    ]
+                  }
+                },
+                {
+                  "quote": "Fixture data. Fixture tool S3R84 standard. Item price SGD 521.00. One item, tax included.\nFixture data. Fixture tool S3R85 standard. Item price SGD 522.00. One item, tax included.\nFixture data. Fixture tool S3R86 standard. Item price SGD 523.00. One item, tax included.\nFixture data. Fixture tool S3R87 standard. Item price SGD 524.00. One item, tax included.",
+                  "role": "other-product",
+                  "scope": "other-subjects",
+                  "assessment": {
+                    "status": "supported",
+                    "scope": "exact-variant",
+                    "rationale": "Fixture AI source interpretation, not merchant verification.",
+                    "support": [
+                      {
+                        "url": "https://example.com/source-3",
+                        "quote": "Fixture data. Fixture tool S3R84 standard. Item price SGD 521.00. One item, tax included."
+                      }
+                    ]
+                  }
+                }
+              ],
+              "conditions": []
+            },
+            {
+              "url": "https://example.com/source-4",
+              "reviewComplete": true,
+              "relation": "other-product-or-topic",
+              "assessment": {
+                "status": "supported",
+                "scope": "exact-variant",
+                "rationale": "Fixture AI source interpretation, not merchant verification.",
+                "support": [
+                  {
+                    "url": "https://example.com/source-4",
+                    "quote": "Fixture data. Fixture tool S4R0 standard. Item price SGD 437.00. One item, tax included."
+                  }
+                ]
+              },
+              "moneyMentions": [
+                {
+                  "quote": "Fixture data. Fixture tool S4R0 standard. Item price SGD 437.00. One item, tax included.\nFixture data. Fixture tool S4R1 standard. Item price SGD 438.00. One item, tax included.\nFixture data. Fixture tool S4R2 standard. Item price SGD 439.00. One item, tax included.\nFixture data. Fixture tool S4R3 standard. Item price SGD 440.00. One item, tax included.\nFixture data. Fixture tool S4R4 standard. Item price SGD 441.00. One item, tax included.\nFixture data. Fixture tool S4R5 standard. Item price SGD 442.00. One item, tax included.\nFixture data. Fixture tool S4R6 standard. Item price SGD 443.00. One item, tax included.\nFixture data. Fixture tool S4R7 standard. Item price SGD 444.00. One item, tax included.\nFixture data. Fixture tool S4R8 standard. Item price SGD 445.00. One item, tax included.\nFixture data. Fixture tool S4R9 standard. Item price SGD 446.00. One item, tax included.\nFixture data. Fixture tool S4R10 standard. Item price SGD 447.00. One item, tax included.\nFixture data. Fixture tool S4R11 standard. Item price SGD 448.00. One item, tax included.\nFixture data. Fixture tool S4R12 standard. Item price SGD 449.00. One item, tax included.\nFixture data. Fixture tool S4R13 standard. Item price SGD 450.00. One item, tax included.\nFixture data. Fixture tool S4R14 standard. Item price SGD 451.00. One item, tax included.\nFixture data. Fixture tool S4R15 standard. Item price SGD 452.00. One item, tax included.\nFixture data. Fixture tool S4R16 standard. Item price SGD 453.00. One item, tax included.\nFixture data. Fixture tool S4R17 standard. Item price SGD 454.00. One item, tax included.\nFixture data. Fixture tool S4R18 standard. Item price SGD 455.00. One item, tax included.\nFixture data. Fixture tool S4R19 standard. Item price SGD 456.00. One item, tax included.\nFixture data. Fixture tool S4R20 standard. Item price SGD 457.00. One item, tax included.\nFixture data. Fixture tool S4R21 standard. Item price SGD 458.00. One item, tax included.\nFixture data. Fixture tool S4R22 standard. Item price SGD 459.00. One item, tax included.\nFixture data. Fixture tool S4R23 standard. Item price SGD 460.00. One item, tax included.\nFixture data. Fixture tool S4R24 standard. Item price SGD 461.00. One item, tax included.\nFixture data. Fixture tool S4R25 standard. Item price SGD 462.00. One item, tax included.\nFixture data. Fixture tool S4R26 standard. Item price SGD 463.00. One item, tax included.\nFixture data. Fixture tool S4R27 standard. Item price SGD 464.00. One item, tax included.\nFixture data. Fixture tool S4R28 standard. Item price SGD 465.00. One item, tax included.\nFixture data. Fixture tool S4R29 standard. Item price SGD 466.00. One item, tax included.\nFixture data. Fixture tool S4R30 standard. Item price SGD 467.00. One item, tax included.\nFixture data. Fixture tool S4R31 standard. Item price SGD 468.00. One item, tax included.\nFixture data. Fixture tool S4R32 standard. Item price SGD 469.00. One item, tax included.\nFixture data. Fixture tool S4R33 standard. Item price SGD 470.00. One item, tax included.\nFixture data. Fixture tool S4R34 standard. Item price SGD 471.00. One item, tax included.\nFixture data. Fixture tool S4R35 standard. Item price SGD 472.00. One item, tax included.\nFixture data. Fixture tool S4R36 standard. Item price SGD 473.00. One item, tax included.\nFixture data. Fixture tool S4R37 standard. Item price SGD 474.00. One item, tax included.\nFixture data. Fixture tool S4R38 standard. Item price SGD 475.00. One item, tax included.",
+                  "role": "other-product",
+                  "scope": "other-subjects",
+                  "assessment": {
+                    "status": "supported",
+                    "scope": "exact-variant",
+                    "rationale": "Fixture AI source interpretation, not merchant verification.",
+                    "support": [
+                      {
+                        "url": "https://example.com/source-4",
+                        "quote": "Fixture data. Fixture tool S4R0 standard. Item price SGD 437.00. One item, tax included."
+                      }
+                    ]
+                  }
+                }
+              ],
+              "conditions": []
+            },
+            {
+              "url": "https://example.com/source-5",
+              "reviewComplete": true,
+              "relation": "other-product-or-topic",
+              "assessment": {
+                "status": "supported",
+                "scope": "exact-variant",
+                "rationale": "Fixture AI source interpretation, not merchant verification.",
+                "support": [
+                  {
+                    "url": "https://example.com/source-5",
+                    "quote": "Fixture data. Fixture tool S5R0 standard. Item price SGD 437.00. One item, tax included."
+                  }
+                ]
+              },
+              "moneyMentions": [
+                {
+                  "quote": "Fixture data. Fixture tool S5R0 standard. Item price SGD 437.00. One item, tax included.\nFixture data. Fixture tool S5R1 standard. Item price SGD 438.00. One item, tax included.\nFixture data. Fixture tool S5R2 standard. Item price SGD 439.00. One item, tax included.",
+                  "role": "other-product",
+                  "scope": "other-subjects",
+                  "assessment": {
+                    "status": "supported",
+                    "scope": "exact-variant",
+                    "rationale": "Fixture AI source interpretation, not merchant verification.",
+                    "support": [
+                      {
+                        "url": "https://example.com/source-5",
+                        "quote": "Fixture data. Fixture tool S5R0 standard. Item price SGD 437.00. One item, tax included."
+                      }
+                    ]
+                  }
+                }
+              ],
+              "conditions": []
+            },
+            {
+              "url": "https://example.com/source-6",
+              "reviewComplete": true,
+              "relation": "other-product-or-topic",
+              "assessment": {
+                "status": "supported",
+                "scope": "exact-variant",
+                "rationale": "Fixture AI source interpretation, not merchant verification.",
+                "support": [
+                  {
+                    "url": "https://example.com/source-6",
+                    "quote": "Fixture data. Fixture tool S6R0 standard. Item price SGD 437.00. One item, tax included."
+                  }
+                ]
+              },
+              "moneyMentions": [
+                {
+                  "quote": "Fixture data. Fixture tool S6R0 standard. Item price SGD 437.00. One item, tax included.\nFixture data. Fixture tool S6R1 standard. Item price SGD 438.00. One item, tax included.\nFixture data. Fixture tool S6R2 standard. Item price SGD 439.00. One item, tax included.\nFixture data. Fixture tool S6R3 standard. Item price SGD 440.00. One item, tax included.\nFixture data. Fixture tool S6R4 standard. Item price SGD 441.00. One item, tax included.\nFixture data. Fixture tool S6R5 standard. Item price SGD 442.00. One item, tax included.\nFixture data. Fixture tool S6R6 standard. Item price SGD 443.00. One item, tax included.\nFixture data. Fixture tool S6R7 standard. Item price SGD 444.00. One item, tax included.\nFixture data. Fixture tool S6R8 standard. Item price SGD 445.00. One item, tax included.\nFixture data. Fixture tool S6R9 standard. Item price SGD 446.00. One item, tax included.\nFixture data. Fixture tool S6R10 standard. Item price SGD 447.00. One item, tax included.\nFixture data. Fixture tool S6R11 standard. Item price SGD 448.00. One item, tax included.\nFixture data. Fixture tool S6R12 standard. Item price SGD 449.00. One item, tax included.\nFixture data. Fixture tool S6R13 standard. Item price SGD 450.00. One item, tax included.\nFixture data. Fixture tool S6R14 standard. Item price SGD 451.00. One item, tax included.\nFixture data. Fixture tool S6R15 standard. Item price SGD 452.00. One item, tax included.\nFixture data. Fixture tool S6R16 standard. Item price SGD 453.00. One item, tax included.\nFixture data. Fixture tool S6R17 standard. Item price SGD 454.00. One item, tax included.\nFixture data. Fixture tool S6R18 standard. Item price SGD 455.00. One item, tax included.\nFixture data. Fixture tool S6R19 standard. Item price SGD 456.00. One item, tax included.\nFixture data. Fixture tool S6R20 standard. Item price SGD 457.00. One item, tax included.\nFixture data. Fixture tool S6R21 standard. Item price SGD 458.00. One item, tax included.\nFixture data. Fixture tool S6R22 standard. Item price SGD 459.00. One item, tax included.\nFixture data. Fixture tool S6R23 standard. Item price SGD 460.00. One item, tax included.\nFixture data. Fixture tool S6R24 standard. Item price SGD 461.00. One item, tax included.\nFixture data. Fixture tool S6R25 standard. Item price SGD 462.00. One item, tax included.\nFixture data. Fixture tool S6R26 standard. Item price SGD 463.00. One item, tax included.\nFixture data. Fixture tool S6R27 standard. Item price SGD 464.00. One item, tax included.\nFixture data. Fixture tool S6R28 standard. Item price SGD 465.00. One item, tax included.\nFixture data. Fixture tool S6R29 standard. Item price SGD 466.00. One item, tax included.\nFixture data. Fixture tool S6R30 standard. Item price SGD 467.00. One item, tax included.\nFixture data. Fixture tool S6R31 standard. Item price SGD 468.00. One item, tax included.\nFixture data. Fixture tool S6R32 standard. Item price SGD 469.00. One item, tax included.\nFixture data. Fixture tool S6R33 standard. Item price SGD 470.00. One item, tax included.",
+                  "role": "other-product",
+                  "scope": "other-subjects",
+                  "assessment": {
+                    "status": "supported",
+                    "scope": "exact-variant",
+                    "rationale": "Fixture AI source interpretation, not merchant verification.",
+                    "support": [
+                      {
+                        "url": "https://example.com/source-6",
+                        "quote": "Fixture data. Fixture tool S6R0 standard. Item price SGD 437.00. One item, tax included."
+                      }
+                    ]
+                  }
+                }
+              ],
+              "conditions": []
+            },
+            {
+              "url": "https://example.com/source-7",
+              "reviewComplete": true,
+              "relation": "other-product-or-topic",
+              "assessment": {
+                "status": "supported",
+                "scope": "exact-variant",
+                "rationale": "Fixture AI source interpretation, not merchant verification.",
+                "support": [
+                  {
+                    "url": "https://example.com/source-7",
+                    "quote": "Fixture data. Fixture tool S7R0 standard. Item price SGD 437.00. One item, tax included."
+                  }
+                ]
+              },
+              "moneyMentions": [
+                {
+                  "quote": "Fixture data. Fixture tool S7R0 standard. Item price SGD 437.00. One item, tax included.\nFixture data. Fixture tool S7R1 standard. Item price SGD 438.00. One item, tax included.\nFixture data. Fixture tool S7R2 standard. Item price SGD 439.00. One item, tax included.\nFixture data. Fixture tool S7R3 standard. Item price SGD 440.00. One item, tax included.\nFixture data. Fixture tool S7R4 standard. Item price SGD 441.00. One item, tax included.\nFixture data. Fixture tool S7R5 standard. Item price SGD 442.00. One item, tax included.",
+                  "role": "other-product",
+                  "scope": "other-subjects",
+                  "assessment": {
+                    "status": "supported",
+                    "scope": "exact-variant",
+                    "rationale": "Fixture AI source interpretation, not merchant verification.",
+                    "support": [
+                      {
+                        "url": "https://example.com/source-7",
+                        "quote": "Fixture data. Fixture tool S7R0 standard. Item price SGD 437.00. One item, tax included."
+                      }
+                    ]
+                  }
+                }
+              ],
+              "conditions": []
+            }
+          ]
+        }
+      },
+      {
+        "id": "fixture-tool-2",
+        "name": "Fixture tool S2R0",
+        "variant": "standard",
+        "identity": {
+          "status": "supported",
+          "scope": "exact-variant",
+          "rationale": "Fixture AI source interpretation, not merchant verification.",
+          "support": [
+            {
+              "url": "https://example.com/source-2",
+              "quote": "Fixture data. Fixture tool S2R0 standard. Item price SGD 437.00. One item, tax included."
+            }
+          ]
+        },
+        "requestMatch": {
+          "status": "supported",
+          "scope": "exact-variant",
+          "rationale": "Fixture AI source interpretation, not merchant verification.",
+          "support": [
+            {
+              "url": "https://example.com/source-2",
+              "quote": "Fixture data. Fixture tool S2R0 standard. Item price SGD 437.00. One item, tax included."
+            }
+          ]
+        },
+        "criteria": [],
+        "attributes": [],
+        "price": {
+          "amount": 437,
+          "currency": "SGD",
+          "variant": "standard",
+          "moneySupport": {
+            "url": "https://example.com/source-2",
+            "quote": "Fixture data. Fixture tool S2R0 standard. Item price SGD 437.00. One item, tax included."
+          },
+          "attribution": {
+            "status": "supported",
+            "scope": "exact-variant",
+            "rationale": "Fixture AI source interpretation, not merchant verification.",
+            "support": [
+              {
+                "url": "https://example.com/source-2",
+                "quote": "Fixture data. Fixture tool S2R0 standard. Item price SGD 437.00. One item, tax included."
+              }
+            ]
+          },
+          "priceBasis": {
+            "kind": "single-item",
+            "assessment": {
+              "status": "supported",
+              "scope": "exact-variant",
+              "rationale": "Fixture AI source interpretation, not merchant verification.",
+              "support": [
+                {
+                  "url": "https://example.com/source-2",
+                  "quote": "Fixture data. Fixture tool S2R0 standard. Item price SGD 437.00. One item, tax included."
+                }
+              ]
+            }
+          },
+          "sourceReviews": [
+            {
+              "url": "https://example.com/source-0",
+              "reviewComplete": true,
+              "relation": "other-product-or-topic",
+              "assessment": {
+                "status": "supported",
+                "scope": "exact-variant",
+                "rationale": "Fixture AI source interpretation, not merchant verification.",
+                "support": [
+                  {
+                    "url": "https://example.com/source-0",
+                    "quote": "Fixture data. Fixture tool S0R0 standard. Item price SGD 437.00. One item, tax included."
+                  }
+                ]
+              },
+              "moneyMentions": [
+                {
+                  "quote": "Fixture data. Fixture tool S0R0 standard. Item price SGD 437.00. One item, tax included.\nFixture data. Fixture tool S0R1 standard. Item price SGD 438.00. One item, tax included.\nFixture data. Fixture tool S0R2 standard. Item price SGD 439.00. One item, tax included.\nFixture data. Fixture tool S0R3 standard. Item price SGD 440.00. One item, tax included.\nFixture data. Fixture tool S0R4 standard. Item price SGD 441.00. One item, tax included.\nFixture data. Fixture tool S0R5 standard. Item price SGD 442.00. One item, tax included.",
+                  "role": "other-product",
+                  "scope": "other-subjects",
+                  "assessment": {
+                    "status": "supported",
+                    "scope": "exact-variant",
+                    "rationale": "Fixture AI source interpretation, not merchant verification.",
+                    "support": [
+                      {
+                        "url": "https://example.com/source-0",
+                        "quote": "Fixture data. Fixture tool S0R0 standard. Item price SGD 437.00. One item, tax included."
+                      }
+                    ]
+                  }
+                }
+              ],
+              "conditions": []
+            },
+            {
+              "url": "https://example.com/source-1",
+              "reviewComplete": true,
+              "relation": "other-product-or-topic",
+              "assessment": {
+                "status": "supported",
+                "scope": "exact-variant",
+                "rationale": "Fixture AI source interpretation, not merchant verification.",
+                "support": [
+                  {
+                    "url": "https://example.com/source-1",
+                    "quote": "Fixture data. Fixture tool S1R0 standard. Item price SGD 437.00. One item, tax included."
+                  }
+                ]
+              },
+              "moneyMentions": [
+                {
+                  "quote": "Fixture data. Fixture tool S1R0 standard. Item price SGD 437.00. One item, tax included.\nFixture data. Fixture tool S1R1 standard. Item price SGD 438.00. One item, tax included.\nFixture data. Fixture tool S1R2 standard. Item price SGD 439.00. One item, tax included.",
+                  "role": "other-product",
+                  "scope": "other-subjects",
+                  "assessment": {
+                    "status": "supported",
+                    "scope": "exact-variant",
+                    "rationale": "Fixture AI source interpretation, not merchant verification.",
+                    "support": [
+                      {
+                        "url": "https://example.com/source-1",
+                        "quote": "Fixture data. Fixture tool S1R0 standard. Item price SGD 437.00. One item, tax included."
+                      }
+                    ]
+                  }
+                }
+              ],
+              "conditions": []
+            },
+            {
+              "url": "https://example.com/source-2",
+              "reviewComplete": true,
+              "relation": "applies",
+              "assessment": {
+                "status": "supported",
+                "scope": "exact-variant",
+                "rationale": "Fixture AI source interpretation, not merchant verification.",
+                "support": [
+                  {
+                    "url": "https://example.com/source-2",
+                    "quote": "Fixture data. Fixture tool S2R0 standard. Item price SGD 437.00. One item, tax included."
+                  }
+                ]
+              },
+              "moneyMentions": [
+                {
+                  "quote": "Fixture data. Fixture tool S2R0 standard. Item price SGD 437.00. One item, tax included.",
+                  "role": "selected",
+                  "scope": "selected-variant",
+                  "assessment": {
+                    "status": "supported",
+                    "scope": "exact-variant",
+                    "rationale": "Fixture AI source interpretation, not merchant verification.",
+                    "support": [
+                      {
+                        "url": "https://example.com/source-2",
+                        "quote": "Fixture data. Fixture tool S2R0 standard. Item price SGD 437.00. One item, tax included."
+                      }
+                    ]
+                  }
+                },
+                {
+                  "quote": "Fixture data. Fixture tool S2R1 standard. Item price SGD 438.00. One item, tax included.",
+                  "role": "other-product",
+                  "scope": "other-subjects",
+                  "assessment": {
+                    "status": "supported",
+                    "scope": "exact-variant",
+                    "rationale": "Fixture AI source interpretation, not merchant verification.",
+                    "support": [
+                      {
+                        "url": "https://example.com/source-2",
+                        "quote": "Fixture data. Fixture tool S2R1 standard. Item price SGD 438.00. One item, tax included."
+                      }
+                    ]
+                  }
+                }
+              ],
+              "conditions": []
+            },
+            {
+              "url": "https://example.com/source-3",
+              "reviewComplete": true,
+              "relation": "other-product-or-topic",
+              "assessment": {
+                "status": "supported",
+                "scope": "exact-variant",
+                "rationale": "Fixture AI source interpretation, not merchant verification.",
+                "support": [
+                  {
+                    "url": "https://example.com/source-3",
+                    "quote": "Fixture data. Fixture tool S3R0 standard. Item price SGD 437.00. One item, tax included."
+                  }
+                ]
+              },
+              "moneyMentions": [
+                {
+                  "quote": "Fixture data. Fixture tool S3R0 standard. Item price SGD 437.00. One item, tax included.\nFixture data. Fixture tool S3R1 standard. Item price SGD 438.00. One item, tax included.\nFixture data. Fixture tool S3R2 standard. Item price SGD 439.00. One item, tax included.\nFixture data. Fixture tool S3R3 standard. Item price SGD 440.00. One item, tax included.\nFixture data. Fixture tool S3R4 standard. Item price SGD 441.00. One item, tax included.\nFixture data. Fixture tool S3R5 standard. Item price SGD 442.00. One item, tax included.\nFixture data. Fixture tool S3R6 standard. Item price SGD 443.00. One item, tax included.\nFixture data. Fixture tool S3R7 standard. Item price SGD 444.00. One item, tax included.\nFixture data. Fixture tool S3R8 standard. Item price SGD 445.00. One item, tax included.\nFixture data. Fixture tool S3R9 standard. Item price SGD 446.00. One item, tax included.\nFixture data. Fixture tool S3R10 standard. Item price SGD 447.00. One item, tax included.\nFixture data. Fixture tool S3R11 standard. Item price SGD 448.00. One item, tax included.\nFixture data. Fixture tool S3R12 standard. Item price SGD 449.00. One item, tax included.\nFixture data. Fixture tool S3R13 standard. Item price SGD 450.00. One item, tax included.\nFixture data. Fixture tool S3R14 standard. Item price SGD 451.00. One item, tax included.\nFixture data. Fixture tool S3R15 standard. Item price SGD 452.00. One item, tax included.\nFixture data. Fixture tool S3R16 standard. Item price SGD 453.00. One item, tax included.\nFixture data. Fixture tool S3R17 standard. Item price SGD 454.00. One item, tax included.\nFixture data. Fixture tool S3R18 standard. Item price SGD 455.00. One item, tax included.\nFixture data. Fixture tool S3R19 standard. Item price SGD 456.00. One item, tax included.\nFixture data. Fixture tool S3R20 standard. Item price SGD 457.00. One item, tax included.\nFixture data. Fixture tool S3R21 standard. Item price SGD 458.00. One item, tax included.\nFixture data. Fixture tool S3R22 standard. Item price SGD 459.00. One item, tax included.\nFixture data. Fixture tool S3R23 standard. Item price SGD 460.00. One item, tax included.\nFixture data. Fixture tool S3R24 standard. Item price SGD 461.00. One item, tax included.\nFixture data. Fixture tool S3R25 standard. Item price SGD 462.00. One item, tax included.\nFixture data. Fixture tool S3R26 standard. Item price SGD 463.00. One item, tax included.\nFixture data. Fixture tool S3R27 standard. Item price SGD 464.00. One item, tax included.\nFixture data. Fixture tool S3R28 standard. Item price SGD 465.00. One item, tax included.\nFixture data. Fixture tool S3R29 standard. Item price SGD 466.00. One item, tax included.\nFixture data. Fixture tool S3R30 standard. Item price SGD 467.00. One item, tax included.\nFixture data. Fixture tool S3R31 standard. Item price SGD 468.00. One item, tax included.\nFixture data. Fixture tool S3R32 standard. Item price SGD 469.00. One item, tax included.\nFixture data. Fixture tool S3R33 standard. Item price SGD 470.00. One item, tax included.\nFixture data. Fixture tool S3R34 standard. Item price SGD 471.00. One item, tax included.\nFixture data. Fixture tool S3R35 standard. Item price SGD 472.00. One item, tax included.\nFixture data. Fixture tool S3R36 standard. Item price SGD 473.00. One item, tax included.\nFixture data. Fixture tool S3R37 standard. Item price SGD 474.00. One item, tax included.\nFixture data. Fixture tool S3R38 standard. Item price SGD 475.00. One item, tax included.\nFixture data. Fixture tool S3R39 standard. Item price SGD 476.00. One item, tax included.\nFixture data. Fixture tool S3R40 standard. Item price SGD 477.00. One item, tax included.\nFixture data. Fixture tool S3R41 standard. Item price SGD 478.00. One item, tax included.",
+                  "role": "other-product",
+                  "scope": "other-subjects",
+                  "assessment": {
+                    "status": "supported",
+                    "scope": "exact-variant",
+                    "rationale": "Fixture AI source interpretation, not merchant verification.",
+                    "support": [
+                      {
+                        "url": "https://example.com/source-3",
+                        "quote": "Fixture data. Fixture tool S3R0 standard. Item price SGD 437.00. One item, tax included."
+                      }
+                    ]
+                  }
+                },
+                {
+                  "quote": "Fixture data. Fixture tool S3R42 standard. Item price SGD 479.00. One item, tax included.\nFixture data. Fixture tool S3R43 standard. Item price SGD 480.00. One item, tax included.\nFixture data. Fixture tool S3R44 standard. Item price SGD 481.00. One item, tax included.\nFixture data. Fixture tool S3R45 standard. Item price SGD 482.00. One item, tax included.\nFixture data. Fixture tool S3R46 standard. Item price SGD 483.00. One item, tax included.\nFixture data. Fixture tool S3R47 standard. Item price SGD 484.00. One item, tax included.\nFixture data. Fixture tool S3R48 standard. Item price SGD 485.00. One item, tax included.\nFixture data. Fixture tool S3R49 standard. Item price SGD 486.00. One item, tax included.\nFixture data. Fixture tool S3R50 standard. Item price SGD 487.00. One item, tax included.\nFixture data. Fixture tool S3R51 standard. Item price SGD 488.00. One item, tax included.\nFixture data. Fixture tool S3R52 standard. Item price SGD 489.00. One item, tax included.\nFixture data. Fixture tool S3R53 standard. Item price SGD 490.00. One item, tax included.\nFixture data. Fixture tool S3R54 standard. Item price SGD 491.00. One item, tax included.\nFixture data. Fixture tool S3R55 standard. Item price SGD 492.00. One item, tax included.\nFixture data. Fixture tool S3R56 standard. Item price SGD 493.00. One item, tax included.\nFixture data. Fixture tool S3R57 standard. Item price SGD 494.00. One item, tax included.\nFixture data. Fixture tool S3R58 standard. Item price SGD 495.00. One item, tax included.\nFixture data. Fixture tool S3R59 standard. Item price SGD 496.00. One item, tax included.\nFixture data. Fixture tool S3R60 standard. Item price SGD 497.00. One item, tax included.\nFixture data. Fixture tool S3R61 standard. Item price SGD 498.00. One item, tax included.\nFixture data. Fixture tool S3R62 standard. Item price SGD 499.00. One item, tax included.\nFixture data. Fixture tool S3R63 standard. Item price SGD 500.00. One item, tax included.\nFixture data. Fixture tool S3R64 standard. Item price SGD 501.00. One item, tax included.\nFixture data. Fixture tool S3R65 standard. Item price SGD 502.00. One item, tax included.\nFixture data. Fixture tool S3R66 standard. Item price SGD 503.00. One item, tax included.\nFixture data. Fixture tool S3R67 standard. Item price SGD 504.00. One item, tax included.\nFixture data. Fixture tool S3R68 standard. Item price SGD 505.00. One item, tax included.\nFixture data. Fixture tool S3R69 standard. Item price SGD 506.00. One item, tax included.\nFixture data. Fixture tool S3R70 standard. Item price SGD 507.00. One item, tax included.\nFixture data. Fixture tool S3R71 standard. Item price SGD 508.00. One item, tax included.\nFixture data. Fixture tool S3R72 standard. Item price SGD 509.00. One item, tax included.\nFixture data. Fixture tool S3R73 standard. Item price SGD 510.00. One item, tax included.\nFixture data. Fixture tool S3R74 standard. Item price SGD 511.00. One item, tax included.\nFixture data. Fixture tool S3R75 standard. Item price SGD 512.00. One item, tax included.\nFixture data. Fixture tool S3R76 standard. Item price SGD 513.00. One item, tax included.\nFixture data. Fixture tool S3R77 standard. Item price SGD 514.00. One item, tax included.\nFixture data. Fixture tool S3R78 standard. Item price SGD 515.00. One item, tax included.\nFixture data. Fixture tool S3R79 standard. Item price SGD 516.00. One item, tax included.\nFixture data. Fixture tool S3R80 standard. Item price SGD 517.00. One item, tax included.\nFixture data. Fixture tool S3R81 standard. Item price SGD 518.00. One item, tax included.\nFixture data. Fixture tool S3R82 standard. Item price SGD 519.00. One item, tax included.\nFixture data. Fixture tool S3R83 standard. Item price SGD 520.00. One item, tax included.",
+                  "role": "other-product",
+                  "scope": "other-subjects",
+                  "assessment": {
+                    "status": "supported",
+                    "scope": "exact-variant",
+                    "rationale": "Fixture AI source interpretation, not merchant verification.",
+                    "support": [
+                      {
+                        "url": "https://example.com/source-3",
+                        "quote": "Fixture data. Fixture tool S3R42 standard. Item price SGD 479.00. One item, tax included."
+                      }
+                    ]
+                  }
+                },
+                {
+                  "quote": "Fixture data. Fixture tool S3R84 standard. Item price SGD 521.00. One item, tax included.\nFixture data. Fixture tool S3R85 standard. Item price SGD 522.00. One item, tax included.\nFixture data. Fixture tool S3R86 standard. Item price SGD 523.00. One item, tax included.\nFixture data. Fixture tool S3R87 standard. Item price SGD 524.00. One item, tax included.",
+                  "role": "other-product",
+                  "scope": "other-subjects",
+                  "assessment": {
+                    "status": "supported",
+                    "scope": "exact-variant",
+                    "rationale": "Fixture AI source interpretation, not merchant verification.",
+                    "support": [
+                      {
+                        "url": "https://example.com/source-3",
+                        "quote": "Fixture data. Fixture tool S3R84 standard. Item price SGD 521.00. One item, tax included."
+                      }
+                    ]
+                  }
+                }
+              ],
+              "conditions": []
+            },
+            {
+              "url": "https://example.com/source-4",
+              "reviewComplete": true,
+              "relation": "other-product-or-topic",
+              "assessment": {
+                "status": "supported",
+                "scope": "exact-variant",
+                "rationale": "Fixture AI source interpretation, not merchant verification.",
+                "support": [
+                  {
+                    "url": "https://example.com/source-4",
+                    "quote": "Fixture data. Fixture tool S4R0 standard. Item price SGD 437.00. One item, tax included."
+                  }
+                ]
+              },
+              "moneyMentions": [
+                {
+                  "quote": "Fixture data. Fixture tool S4R0 standard. Item price SGD 437.00. One item, tax included.\nFixture data. Fixture tool S4R1 standard. Item price SGD 438.00. One item, tax included.\nFixture data. Fixture tool S4R2 standard. Item price SGD 439.00. One item, tax included.\nFixture data. Fixture tool S4R3 standard. Item price SGD 440.00. One item, tax included.\nFixture data. Fixture tool S4R4 standard. Item price SGD 441.00. One item, tax included.\nFixture data. Fixture tool S4R5 standard. Item price SGD 442.00. One item, tax included.\nFixture data. Fixture tool S4R6 standard. Item price SGD 443.00. One item, tax included.\nFixture data. Fixture tool S4R7 standard. Item price SGD 444.00. One item, tax included.\nFixture data. Fixture tool S4R8 standard. Item price SGD 445.00. One item, tax included.\nFixture data. Fixture tool S4R9 standard. Item price SGD 446.00. One item, tax included.\nFixture data. Fixture tool S4R10 standard. Item price SGD 447.00. One item, tax included.\nFixture data. Fixture tool S4R11 standard. Item price SGD 448.00. One item, tax included.\nFixture data. Fixture tool S4R12 standard. Item price SGD 449.00. One item, tax included.\nFixture data. Fixture tool S4R13 standard. Item price SGD 450.00. One item, tax included.\nFixture data. Fixture tool S4R14 standard. Item price SGD 451.00. One item, tax included.\nFixture data. Fixture tool S4R15 standard. Item price SGD 452.00. One item, tax included.\nFixture data. Fixture tool S4R16 standard. Item price SGD 453.00. One item, tax included.\nFixture data. Fixture tool S4R17 standard. Item price SGD 454.00. One item, tax included.\nFixture data. Fixture tool S4R18 standard. Item price SGD 455.00. One item, tax included.\nFixture data. Fixture tool S4R19 standard. Item price SGD 456.00. One item, tax included.\nFixture data. Fixture tool S4R20 standard. Item price SGD 457.00. One item, tax included.\nFixture data. Fixture tool S4R21 standard. Item price SGD 458.00. One item, tax included.\nFixture data. Fixture tool S4R22 standard. Item price SGD 459.00. One item, tax included.\nFixture data. Fixture tool S4R23 standard. Item price SGD 460.00. One item, tax included.\nFixture data. Fixture tool S4R24 standard. Item price SGD 461.00. One item, tax included.\nFixture data. Fixture tool S4R25 standard. Item price SGD 462.00. One item, tax included.\nFixture data. Fixture tool S4R26 standard. Item price SGD 463.00. One item, tax included.\nFixture data. Fixture tool S4R27 standard. Item price SGD 464.00. One item, tax included.\nFixture data. Fixture tool S4R28 standard. Item price SGD 465.00. One item, tax included.\nFixture data. Fixture tool S4R29 standard. Item price SGD 466.00. One item, tax included.\nFixture data. Fixture tool S4R30 standard. Item price SGD 467.00. One item, tax included.\nFixture data. Fixture tool S4R31 standard. Item price SGD 468.00. One item, tax included.\nFixture data. Fixture tool S4R32 standard. Item price SGD 469.00. One item, tax included.\nFixture data. Fixture tool S4R33 standard. Item price SGD 470.00. One item, tax included.\nFixture data. Fixture tool S4R34 standard. Item price SGD 471.00. One item, tax included.\nFixture data. Fixture tool S4R35 standard. Item price SGD 472.00. One item, tax included.\nFixture data. Fixture tool S4R36 standard. Item price SGD 473.00. One item, tax included.\nFixture data. Fixture tool S4R37 standard. Item price SGD 474.00. One item, tax included.\nFixture data. Fixture tool S4R38 standard. Item price SGD 475.00. One item, tax included.",
+                  "role": "other-product",
+                  "scope": "other-subjects",
+                  "assessment": {
+                    "status": "supported",
+                    "scope": "exact-variant",
+                    "rationale": "Fixture AI source interpretation, not merchant verification.",
+                    "support": [
+                      {
+                        "url": "https://example.com/source-4",
+                        "quote": "Fixture data. Fixture tool S4R0 standard. Item price SGD 437.00. One item, tax included."
+                      }
+                    ]
+                  }
+                }
+              ],
+              "conditions": []
+            },
+            {
+              "url": "https://example.com/source-5",
+              "reviewComplete": true,
+              "relation": "other-product-or-topic",
+              "assessment": {
+                "status": "supported",
+                "scope": "exact-variant",
+                "rationale": "Fixture AI source interpretation, not merchant verification.",
+                "support": [
+                  {
+                    "url": "https://example.com/source-5",
+                    "quote": "Fixture data. Fixture tool S5R0 standard. Item price SGD 437.00. One item, tax included."
+                  }
+                ]
+              },
+              "moneyMentions": [
+                {
+                  "quote": "Fixture data. Fixture tool S5R0 standard. Item price SGD 437.00. One item, tax included.\nFixture data. Fixture tool S5R1 standard. Item price SGD 438.00. One item, tax included.\nFixture data. Fixture tool S5R2 standard. Item price SGD 439.00. One item, tax included.",
+                  "role": "other-product",
+                  "scope": "other-subjects",
+                  "assessment": {
+                    "status": "supported",
+                    "scope": "exact-variant",
+                    "rationale": "Fixture AI source interpretation, not merchant verification.",
+                    "support": [
+                      {
+                        "url": "https://example.com/source-5",
+                        "quote": "Fixture data. Fixture tool S5R0 standard. Item price SGD 437.00. One item, tax included."
+                      }
+                    ]
+                  }
+                }
+              ],
+              "conditions": []
+            },
+            {
+              "url": "https://example.com/source-6",
+              "reviewComplete": true,
+              "relation": "other-product-or-topic",
+              "assessment": {
+                "status": "supported",
+                "scope": "exact-variant",
+                "rationale": "Fixture AI source interpretation, not merchant verification.",
+                "support": [
+                  {
+                    "url": "https://example.com/source-6",
+                    "quote": "Fixture data. Fixture tool S6R0 standard. Item price SGD 437.00. One item, tax included."
+                  }
+                ]
+              },
+              "moneyMentions": [
+                {
+                  "quote": "Fixture data. Fixture tool S6R0 standard. Item price SGD 437.00. One item, tax included.\nFixture data. Fixture tool S6R1 standard. Item price SGD 438.00. One item, tax included.\nFixture data. Fixture tool S6R2 standard. Item price SGD 439.00. One item, tax included.\nFixture data. Fixture tool S6R3 standard. Item price SGD 440.00. One item, tax included.\nFixture data. Fixture tool S6R4 standard. Item price SGD 441.00. One item, tax included.\nFixture data. Fixture tool S6R5 standard. Item price SGD 442.00. One item, tax included.\nFixture data. Fixture tool S6R6 standard. Item price SGD 443.00. One item, tax included.\nFixture data. Fixture tool S6R7 standard. Item price SGD 444.00. One item, tax included.\nFixture data. Fixture tool S6R8 standard. Item price SGD 445.00. One item, tax included.\nFixture data. Fixture tool S6R9 standard. Item price SGD 446.00. One item, tax included.\nFixture data. Fixture tool S6R10 standard. Item price SGD 447.00. One item, tax included.\nFixture data. Fixture tool S6R11 standard. Item price SGD 448.00. One item, tax included.\nFixture data. Fixture tool S6R12 standard. Item price SGD 449.00. One item, tax included.\nFixture data. Fixture tool S6R13 standard. Item price SGD 450.00. One item, tax included.\nFixture data. Fixture tool S6R14 standard. Item price SGD 451.00. One item, tax included.\nFixture data. Fixture tool S6R15 standard. Item price SGD 452.00. One item, tax included.\nFixture data. Fixture tool S6R16 standard. Item price SGD 453.00. One item, tax included.\nFixture data. Fixture tool S6R17 standard. Item price SGD 454.00. One item, tax included.\nFixture data. Fixture tool S6R18 standard. Item price SGD 455.00. One item, tax included.\nFixture data. Fixture tool S6R19 standard. Item price SGD 456.00. One item, tax included.\nFixture data. Fixture tool S6R20 standard. Item price SGD 457.00. One item, tax included.\nFixture data. Fixture tool S6R21 standard. Item price SGD 458.00. One item, tax included.\nFixture data. Fixture tool S6R22 standard. Item price SGD 459.00. One item, tax included.\nFixture data. Fixture tool S6R23 standard. Item price SGD 460.00. One item, tax included.\nFixture data. Fixture tool S6R24 standard. Item price SGD 461.00. One item, tax included.\nFixture data. Fixture tool S6R25 standard. Item price SGD 462.00. One item, tax included.\nFixture data. Fixture tool S6R26 standard. Item price SGD 463.00. One item, tax included.\nFixture data. Fixture tool S6R27 standard. Item price SGD 464.00. One item, tax included.\nFixture data. Fixture tool S6R28 standard. Item price SGD 465.00. One item, tax included.\nFixture data. Fixture tool S6R29 standard. Item price SGD 466.00. One item, tax included.\nFixture data. Fixture tool S6R30 standard. Item price SGD 467.00. One item, tax included.\nFixture data. Fixture tool S6R31 standard. Item price SGD 468.00. One item, tax included.\nFixture data. Fixture tool S6R32 standard. Item price SGD 469.00. One item, tax included.\nFixture data. Fixture tool S6R33 standard. Item price SGD 470.00. One item, tax included.",
+                  "role": "other-product",
+                  "scope": "other-subjects",
+                  "assessment": {
+                    "status": "supported",
+                    "scope": "exact-variant",
+                    "rationale": "Fixture AI source interpretation, not merchant verification.",
+                    "support": [
+                      {
+                        "url": "https://example.com/source-6",
+                        "quote": "Fixture data. Fixture tool S6R0 standard. Item price SGD 437.00. One item, tax included."
+                      }
+                    ]
+                  }
+                }
+              ],
+              "conditions": []
+            },
+            {
+              "url": "https://example.com/source-7",
+              "reviewComplete": true,
+              "relation": "other-product-or-topic",
+              "assessment": {
+                "status": "supported",
+                "scope": "exact-variant",
+                "rationale": "Fixture AI source interpretation, not merchant verification.",
+                "support": [
+                  {
+                    "url": "https://example.com/source-7",
+                    "quote": "Fixture data. Fixture tool S7R0 standard. Item price SGD 437.00. One item, tax included."
+                  }
+                ]
+              },
+              "moneyMentions": [
+                {
+                  "quote": "Fixture data. Fixture tool S7R0 standard. Item price SGD 437.00. One item, tax included.\nFixture data. Fixture tool S7R1 standard. Item price SGD 438.00. One item, tax included.\nFixture data. Fixture tool S7R2 standard. Item price SGD 439.00. One item, tax included.\nFixture data. Fixture tool S7R3 standard. Item price SGD 440.00. One item, tax included.\nFixture data. Fixture tool S7R4 standard. Item price SGD 441.00. One item, tax included.\nFixture data. Fixture tool S7R5 standard. Item price SGD 442.00. One item, tax included.",
+                  "role": "other-product",
+                  "scope": "other-subjects",
+                  "assessment": {
+                    "status": "supported",
+                    "scope": "exact-variant",
+                    "rationale": "Fixture AI source interpretation, not merchant verification.",
+                    "support": [
+                      {
+                        "url": "https://example.com/source-7",
+                        "quote": "Fixture data. Fixture tool S7R0 standard. Item price SGD 437.00. One item, tax included."
+                      }
+                    ]
+                  }
+                }
+              ],
+              "conditions": []
+            }
+          ]
+        }
+      }
+    ],
+    "choice": {
+      "productId": "fixture-tool-0"
+    },
+    "limitations": [
+      "Invented fixture data only."
+    ]
+  },
+  "citations": [
+    {
+      "url": "https://example.com/source-0",
+      "title": "Invented fixture listing",
+      "text": "Fixture data. Fixture tool S0R0 standard. Item price SGD 437.00. One item, tax included.\nFixture data. Fixture tool S0R1 standard. Item price SGD 438.00. One item, tax included.\nFixture data. Fixture tool S0R2 standard. Item price SGD 439.00. One item, tax included.\nFixture data. Fixture tool S0R3 standard. Item price SGD 440.00. One item, tax included.\nFixture data. Fixture tool S0R4 standard. Item price SGD 441.00. One item, tax included.\nFixture data. Fixture tool S0R5 standard. Item price SGD 442.00. One item, tax included."
+    },
+    {
+      "url": "https://example.com/source-1",
+      "title": "Invented fixture listing",
+      "text": "Fixture data. Fixture tool S1R0 standard. Item price SGD 437.00. One item, tax included.\nFixture data. Fixture tool S1R1 standard. Item price SGD 438.00. One item, tax included.\nFixture data. Fixture tool S1R2 standard. Item price SGD 439.00. One item, tax included."
+    },
+    {
+      "url": "https://example.com/source-2",
+      "title": "Invented fixture listing",
+      "text": "Fixture data. Fixture tool S2R0 standard. Item price SGD 437.00. One item, tax included.\nFixture data. Fixture tool S2R1 standard. Item price SGD 438.00. One item, tax included."
+    },
+    {
+      "url": "https://example.com/source-3",
+      "title": "Invented fixture listing",
+      "text": "Fixture data. Fixture tool S3R0 standard. Item price SGD 437.00. One item, tax included.\nFixture data. Fixture tool S3R1 standard. Item price SGD 438.00. One item, tax included.\nFixture data. Fixture tool S3R2 standard. Item price SGD 439.00. One item, tax included.\nFixture data. Fixture tool S3R3 standard. Item price SGD 440.00. One item, tax included.\nFixture data. Fixture tool S3R4 standard. Item price SGD 441.00. One item, tax included.\nFixture data. Fixture tool S3R5 standard. Item price SGD 442.00. One item, tax included.\nFixture data. Fixture tool S3R6 standard. Item price SGD 443.00. One item, tax included.\nFixture data. Fixture tool S3R7 standard. Item price SGD 444.00. One item, tax included.\nFixture data. Fixture tool S3R8 standard. Item price SGD 445.00. One item, tax included.\nFixture data. Fixture tool S3R9 standard. Item price SGD 446.00. One item, tax included.\nFixture data. Fixture tool S3R10 standard. Item price SGD 447.00. One item, tax included.\nFixture data. Fixture tool S3R11 standard. Item price SGD 448.00. One item, tax included.\nFixture data. Fixture tool S3R12 standard. Item price SGD 449.00. One item, tax included.\nFixture data. Fixture tool S3R13 standard. Item price SGD 450.00. One item, tax included.\nFixture data. Fixture tool S3R14 standard. Item price SGD 451.00. One item, tax included.\nFixture data. Fixture tool S3R15 standard. Item price SGD 452.00. One item, tax included.\nFixture data. Fixture tool S3R16 standard. Item price SGD 453.00. One item, tax included.\nFixture data. Fixture tool S3R17 standard. Item price SGD 454.00. One item, tax included.\nFixture data. Fixture tool S3R18 standard. Item price SGD 455.00. One item, tax included.\nFixture data. Fixture tool S3R19 standard. Item price SGD 456.00. One item, tax included.\nFixture data. Fixture tool S3R20 standard. Item price SGD 457.00. One item, tax included.\nFixture data. Fixture tool S3R21 standard. Item price SGD 458.00. One item, tax included.\nFixture data. Fixture tool S3R22 standard. Item price SGD 459.00. One item, tax included.\nFixture data. Fixture tool S3R23 standard. Item price SGD 460.00. One item, tax included.\nFixture data. Fixture tool S3R24 standard. Item price SGD 461.00. One item, tax included.\nFixture data. Fixture tool S3R25 standard. Item price SGD 462.00. One item, tax included.\nFixture data. Fixture tool S3R26 standard. Item price SGD 463.00. One item, tax included.\nFixture data. Fixture tool S3R27 standard. Item price SGD 464.00. One item, tax included.\nFixture data. Fixture tool S3R28 standard. Item price SGD 465.00. One item, tax included.\nFixture data. Fixture tool S3R29 standard. Item price SGD 466.00. One item, tax included.\nFixture data. Fixture tool S3R30 standard. Item price SGD 467.00. One item, tax included.\nFixture data. Fixture tool S3R31 standard. Item price SGD 468.00. One item, tax included.\nFixture data. Fixture tool S3R32 standard. Item price SGD 469.00. One item, tax included.\nFixture data. Fixture tool S3R33 standard. Item price SGD 470.00. One item, tax included.\nFixture data. Fixture tool S3R34 standard. Item price SGD 471.00. One item, tax included.\nFixture data. Fixture tool S3R35 standard. Item price SGD 472.00. One item, tax included.\nFixture data. Fixture tool S3R36 standard. Item price SGD 473.00. One item, tax included.\nFixture data. Fixture tool S3R37 standard. Item price SGD 474.00. One item, tax included.\nFixture data. Fixture tool S3R38 standard. Item price SGD 475.00. One item, tax included.\nFixture data. Fixture tool S3R39 standard. Item price SGD 476.00. One item, tax included.\nFixture data. Fixture tool S3R40 standard. Item price SGD 477.00. One item, tax included.\nFixture data. Fixture tool S3R41 standard. Item price SGD 478.00. One item, tax included.\nFixture data. Fixture tool S3R42 standard. Item price SGD 479.00. One item, tax included.\nFixture data. Fixture tool S3R43 standard. Item price SGD 480.00. One item, tax included.\nFixture data. Fixture tool S3R44 standard. Item price SGD 481.00. One item, tax included.\nFixture data. Fixture tool S3R45 standard. Item price SGD 482.00. One item, tax included.\nFixture data. Fixture tool S3R46 standard. Item price SGD 483.00. One item, tax included.\nFixture data. Fixture tool S3R47 standard. Item price SGD 484.00. One item, tax included.\nFixture data. Fixture tool S3R48 standard. Item price SGD 485.00. One item, tax included.\nFixture data. Fixture tool S3R49 standard. Item price SGD 486.00. One item, tax included.\nFixture data. Fixture tool S3R50 standard. Item price SGD 487.00. One item, tax included.\nFixture data. Fixture tool S3R51 standard. Item price SGD 488.00. One item, tax included.\nFixture data. Fixture tool S3R52 standard. Item price SGD 489.00. One item, tax included.\nFixture data. Fixture tool S3R53 standard. Item price SGD 490.00. One item, tax included.\nFixture data. Fixture tool S3R54 standard. Item price SGD 491.00. One item, tax included.\nFixture data. Fixture tool S3R55 standard. Item price SGD 492.00. One item, tax included.\nFixture data. Fixture tool S3R56 standard. Item price SGD 493.00. One item, tax included.\nFixture data. Fixture tool S3R57 standard. Item price SGD 494.00. One item, tax included.\nFixture data. Fixture tool S3R58 standard. Item price SGD 495.00. One item, tax included.\nFixture data. Fixture tool S3R59 standard. Item price SGD 496.00. One item, tax included.\nFixture data. Fixture tool S3R60 standard. Item price SGD 497.00. One item, tax included.\nFixture data. Fixture tool S3R61 standard. Item price SGD 498.00. One item, tax included.\nFixture data. Fixture tool S3R62 standard. Item price SGD 499.00. One item, tax included.\nFixture data. Fixture tool S3R63 standard. Item price SGD 500.00. One item, tax included.\nFixture data. Fixture tool S3R64 standard. Item price SGD 501.00. One item, tax included.\nFixture data. Fixture tool S3R65 standard. Item price SGD 502.00. One item, tax included.\nFixture data. Fixture tool S3R66 standard. Item price SGD 503.00. One item, tax included.\nFixture data. Fixture tool S3R67 standard. Item price SGD 504.00. One item, tax included.\nFixture data. Fixture tool S3R68 standard. Item price SGD 505.00. One item, tax included.\nFixture data. Fixture tool S3R69 standard. Item price SGD 506.00. One item, tax included.\nFixture data. Fixture tool S3R70 standard. Item price SGD 507.00. One item, tax included.\nFixture data. Fixture tool S3R71 standard. Item price SGD 508.00. One item, tax included.\nFixture data. Fixture tool S3R72 standard. Item price SGD 509.00. One item, tax included.\nFixture data. Fixture tool S3R73 standard. Item price SGD 510.00. One item, tax included.\nFixture data. Fixture tool S3R74 standard. Item price SGD 511.00. One item, tax included.\nFixture data. Fixture tool S3R75 standard. Item price SGD 512.00. One item, tax included.\nFixture data. Fixture tool S3R76 standard. Item price SGD 513.00. One item, tax included.\nFixture data. Fixture tool S3R77 standard. Item price SGD 514.00. One item, tax included.\nFixture data. Fixture tool S3R78 standard. Item price SGD 515.00. One item, tax included.\nFixture data. Fixture tool S3R79 standard. Item price SGD 516.00. One item, tax included.\nFixture data. Fixture tool S3R80 standard. Item price SGD 517.00. One item, tax included.\nFixture data. Fixture tool S3R81 standard. Item price SGD 518.00. One item, tax included.\nFixture data. Fixture tool S3R82 standard. Item price SGD 519.00. One item, tax included.\nFixture data. Fixture tool S3R83 standard. Item price SGD 520.00. One item, tax included.\nFixture data. Fixture tool S3R84 standard. Item price SGD 521.00. One item, tax included.\nFixture data. Fixture tool S3R85 standard. Item price SGD 522.00. One item, tax included.\nFixture data. Fixture tool S3R86 standard. Item price SGD 523.00. One item, tax included.\nFixture data. Fixture tool S3R87 standard. Item price SGD 524.00. One item, tax included."
+    },
+    {
+      "url": "https://example.com/source-4",
+      "title": "Invented fixture listing",
+      "text": "Fixture data. Fixture tool S4R0 standard. Item price SGD 437.00. One item, tax included.\nFixture data. Fixture tool S4R1 standard. Item price SGD 438.00. One item, tax included.\nFixture data. Fixture tool S4R2 standard. Item price SGD 439.00. One item, tax included.\nFixture data. Fixture tool S4R3 standard. Item price SGD 440.00. One item, tax included.\nFixture data. Fixture tool S4R4 standard. Item price SGD 441.00. One item, tax included.\nFixture data. Fixture tool S4R5 standard. Item price SGD 442.00. One item, tax included.\nFixture data. Fixture tool S4R6 standard. Item price SGD 443.00. One item, tax included.\nFixture data. Fixture tool S4R7 standard. Item price SGD 444.00. One item, tax included.\nFixture data. Fixture tool S4R8 standard. Item price SGD 445.00. One item, tax included.\nFixture data. Fixture tool S4R9 standard. Item price SGD 446.00. One item, tax included.\nFixture data. Fixture tool S4R10 standard. Item price SGD 447.00. One item, tax included.\nFixture data. Fixture tool S4R11 standard. Item price SGD 448.00. One item, tax included.\nFixture data. Fixture tool S4R12 standard. Item price SGD 449.00. One item, tax included.\nFixture data. Fixture tool S4R13 standard. Item price SGD 450.00. One item, tax included.\nFixture data. Fixture tool S4R14 standard. Item price SGD 451.00. One item, tax included.\nFixture data. Fixture tool S4R15 standard. Item price SGD 452.00. One item, tax included.\nFixture data. Fixture tool S4R16 standard. Item price SGD 453.00. One item, tax included.\nFixture data. Fixture tool S4R17 standard. Item price SGD 454.00. One item, tax included.\nFixture data. Fixture tool S4R18 standard. Item price SGD 455.00. One item, tax included.\nFixture data. Fixture tool S4R19 standard. Item price SGD 456.00. One item, tax included.\nFixture data. Fixture tool S4R20 standard. Item price SGD 457.00. One item, tax included.\nFixture data. Fixture tool S4R21 standard. Item price SGD 458.00. One item, tax included.\nFixture data. Fixture tool S4R22 standard. Item price SGD 459.00. One item, tax included.\nFixture data. Fixture tool S4R23 standard. Item price SGD 460.00. One item, tax included.\nFixture data. Fixture tool S4R24 standard. Item price SGD 461.00. One item, tax included.\nFixture data. Fixture tool S4R25 standard. Item price SGD 462.00. One item, tax included.\nFixture data. Fixture tool S4R26 standard. Item price SGD 463.00. One item, tax included.\nFixture data. Fixture tool S4R27 standard. Item price SGD 464.00. One item, tax included.\nFixture data. Fixture tool S4R28 standard. Item price SGD 465.00. One item, tax included.\nFixture data. Fixture tool S4R29 standard. Item price SGD 466.00. One item, tax included.\nFixture data. Fixture tool S4R30 standard. Item price SGD 467.00. One item, tax included.\nFixture data. Fixture tool S4R31 standard. Item price SGD 468.00. One item, tax included.\nFixture data. Fixture tool S4R32 standard. Item price SGD 469.00. One item, tax included.\nFixture data. Fixture tool S4R33 standard. Item price SGD 470.00. One item, tax included.\nFixture data. Fixture tool S4R34 standard. Item price SGD 471.00. One item, tax included.\nFixture data. Fixture tool S4R35 standard. Item price SGD 472.00. One item, tax included.\nFixture data. Fixture tool S4R36 standard. Item price SGD 473.00. One item, tax included.\nFixture data. Fixture tool S4R37 standard. Item price SGD 474.00. One item, tax included.\nFixture data. Fixture tool S4R38 standard. Item price SGD 475.00. One item, tax included."
+    },
+    {
+      "url": "https://example.com/source-5",
+      "title": "Invented fixture listing",
+      "text": "Fixture data. Fixture tool S5R0 standard. Item price SGD 437.00. One item, tax included.\nFixture data. Fixture tool S5R1 standard. Item price SGD 438.00. One item, tax included.\nFixture data. Fixture tool S5R2 standard. Item price SGD 439.00. One item, tax included."
+    },
+    {
+      "url": "https://example.com/source-6",
+      "title": "Invented fixture listing",
+      "text": "Fixture data. Fixture tool S6R0 standard. Item price SGD 437.00. One item, tax included.\nFixture data. Fixture tool S6R1 standard. Item price SGD 438.00. One item, tax included.\nFixture data. Fixture tool S6R2 standard. Item price SGD 439.00. One item, tax included.\nFixture data. Fixture tool S6R3 standard. Item price SGD 440.00. One item, tax included.\nFixture data. Fixture tool S6R4 standard. Item price SGD 441.00. One item, tax included.\nFixture data. Fixture tool S6R5 standard. Item price SGD 442.00. One item, tax included.\nFixture data. Fixture tool S6R6 standard. Item price SGD 443.00. One item, tax included.\nFixture data. Fixture tool S6R7 standard. Item price SGD 444.00. One item, tax included.\nFixture data. Fixture tool S6R8 standard. Item price SGD 445.00. One item, tax included.\nFixture data. Fixture tool S6R9 standard. Item price SGD 446.00. One item, tax included.\nFixture data. Fixture tool S6R10 standard. Item price SGD 447.00. One item, tax included.\nFixture data. Fixture tool S6R11 standard. Item price SGD 448.00. One item, tax included.\nFixture data. Fixture tool S6R12 standard. Item price SGD 449.00. One item, tax included.\nFixture data. Fixture tool S6R13 standard. Item price SGD 450.00. One item, tax included.\nFixture data. Fixture tool S6R14 standard. Item price SGD 451.00. One item, tax included.\nFixture data. Fixture tool S6R15 standard. Item price SGD 452.00. One item, tax included.\nFixture data. Fixture tool S6R16 standard. Item price SGD 453.00. One item, tax included.\nFixture data. Fixture tool S6R17 standard. Item price SGD 454.00. One item, tax included.\nFixture data. Fixture tool S6R18 standard. Item price SGD 455.00. One item, tax included.\nFixture data. Fixture tool S6R19 standard. Item price SGD 456.00. One item, tax included.\nFixture data. Fixture tool S6R20 standard. Item price SGD 457.00. One item, tax included.\nFixture data. Fixture tool S6R21 standard. Item price SGD 458.00. One item, tax included.\nFixture data. Fixture tool S6R22 standard. Item price SGD 459.00. One item, tax included.\nFixture data. Fixture tool S6R23 standard. Item price SGD 460.00. One item, tax included.\nFixture data. Fixture tool S6R24 standard. Item price SGD 461.00. One item, tax included.\nFixture data. Fixture tool S6R25 standard. Item price SGD 462.00. One item, tax included.\nFixture data. Fixture tool S6R26 standard. Item price SGD 463.00. One item, tax included.\nFixture data. Fixture tool S6R27 standard. Item price SGD 464.00. One item, tax included.\nFixture data. Fixture tool S6R28 standard. Item price SGD 465.00. One item, tax included.\nFixture data. Fixture tool S6R29 standard. Item price SGD 466.00. One item, tax included.\nFixture data. Fixture tool S6R30 standard. Item price SGD 467.00. One item, tax included.\nFixture data. Fixture tool S6R31 standard. Item price SGD 468.00. One item, tax included.\nFixture data. Fixture tool S6R32 standard. Item price SGD 469.00. One item, tax included.\nFixture data. Fixture tool S6R33 standard. Item price SGD 470.00. One item, tax included."
+    },
+    {
+      "url": "https://example.com/source-7",
+      "title": "Invented fixture listing",
+      "text": "Fixture data. Fixture tool S7R0 standard. Item price SGD 437.00. One item, tax included.\nFixture data. Fixture tool S7R1 standard. Item price SGD 438.00. One item, tax included.\nFixture data. Fixture tool S7R2 standard. Item price SGD 439.00. One item, tax included.\nFixture data. Fixture tool S7R3 standard. Item price SGD 440.00. One item, tax included.\nFixture data. Fixture tool S7R4 standard. Item price SGD 441.00. One item, tax included.\nFixture data. Fixture tool S7R5 standard. Item price SGD 442.00. One item, tax included."
+    }
+  ]
+}

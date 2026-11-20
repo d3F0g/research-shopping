@@ -1,0 +1,64 @@
+import { expect, test } from "@playwright/test";
+import { mkdir, writeFile } from "node:fs/promises";
+import type { TurnResponse } from "../../src/domain/conversation";
+
+for (const viewport of [{ width: 1440, height: 1000 }, { width: 390, height: 844 }]) {
+  test(`${viewport.width}px ordinary price comparison and optimistic buyer restriction through the SDK`, async ({ page }) => {
+    await page.setViewportSize(viewport);
+    await page.goto("/");
+    await expect(page.locator("html")).toHaveClass("dark");
+    const directory = "artifacts/issue-64-price-v5/usefulness-browser";
+    await mkdir(directory, { recursive: true });
+    const composer = page.getByRole("textbox", { name: "Message", exact: true });
+    const send = async (message: string) => {
+      await composer.fill(message);
+      await page.getByRole("button", { name: "Send message", exact: true }).click();
+    };
+    const calls = async () => (await page.request.get("/api/test-stats").then((response) => response.json())).calls as number;
+    const before = await calls();
+    const response = page.waitForResponse((result) => result.url().endsWith("/api/turn") && result.request().postDataJSON()?.phase === "research");
+    await send("Find a price v5 fixture quartz wristwatch with a steel case between SGD400 and500");
+    const result = await (await response).json() as TurnResponse;
+    if (result.kind !== "research") throw new Error("Expected actual SDK fixture comparison");
+    expect(result.research.evidenceVersion).toBe(5);
+    expect(result.research.products.map((product) => product.priceEvidence.state)).toEqual(["applicable", "applicable", "applicable"]);
+    expect(result.research.products.map((product) => product.eligible)).toEqual([true, true, true]);
+    expect(result.research.choice?.productId).toBe("fixture-watch-0");
+    expect(result.research.sources).toHaveLength(3);
+    expect(await calls()).toBe(before + 1);
+    await expect(page.getByText("Fixture data. Automated test substitute.", { exact: true })).toBeVisible();
+    await expect(page.getByText(result.research.products[0]!.name, { exact: true })).toBeInViewport();
+    await expect(page.getByText(result.research.summary, { exact: true })).toBeInViewport();
+    await expect(page.locator("strong").filter({ hasText: "SGD 437.00" })).toBeVisible();
+    await page.screenshot({ path: `${directory}/${viewport.width}-prices-dark.png` });
+    await page.getByRole("button", { name: "Switch to light mode", exact: true }).click();
+    await page.reload();
+    await expect(page.locator("html")).toHaveClass("light");
+    await expect(page.getByText(result.research.products[0]!.name, { exact: true })).toBeVisible();
+    await send("Compare the first two.");
+    await expect(page.getByText(/Fixture Meridian Watch Q17 steel: Case/)).toBeVisible();
+    await send("Just show me the best one.");
+    await expect(page.getByText(/Fixture Meridian Watch Q17 steel is the retained source-supported option/)).toBeVisible();
+    await send("Show me more details.");
+    await expect.poll(async () => (await page.request.get("/api/session").then((entry) => entry.json())).state.messages.at(-1).text).toContain("SGD 437.00");
+    expect(await calls()).toBe(before + 1);
+    await expect(composer).toBeInViewport();
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+    await page.screenshot({ path: `${directory}/${viewport.width}-held-light.png` });
+    await page.getByRole("button", { name: "New chat", exact: true }).click();
+    await expect(page.getByRole("heading", { name: "What are you looking for?" })).toBeVisible();
+    const negativeResponse = page.waitForResponse((entry) => entry.url().endsWith("/api/turn") && entry.request().postDataJSON()?.phase === "research");
+    await send("Find a club price v5 fixture quartz wristwatch with a steel case between SGD400 and500");
+    const negative = await (await negativeResponse).json() as TurnResponse;
+    if (negative.kind !== "research") throw new Error("Expected honest adverse comparison");
+    expect(negative.research.choice).toBeNull();
+    expect(negative.research.products.every((product) => !product.eligible && product.priceEvidence.alarms.some((alarm) => alarm.kind === "buyer-restriction"))).toBe(true);
+    expect(negative.research.sources[2]!.text).toContain("only after joining the annual club");
+    await expect(page.getByText(/Source context contains a restriction/).first()).toBeVisible();
+    await page.screenshot({ path: `${directory}/${viewport.width}-buyer-restriction.png` });
+    await send("Just show me the best one.");
+    await expect(page.getByText(/I cannot choose a compliant best option/)).toBeVisible();
+    expect(await calls()).toBe(before + 2);
+    await writeFile(`${directory}/${viewport.width}-proof.json`, JSON.stringify({ fixtureOnly: true, nativeCalls: 2, freeFollowupCalls: 0, positive: result.research, adverse: negative.research, limits: "Synthetic real-browser/Hono/SDK transport. No live usefulness, inventory or merchant authority established." }, null, 2) + "\n");
+  });
+}

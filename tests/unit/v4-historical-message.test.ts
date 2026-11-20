@@ -20,7 +20,7 @@ describe("actual mixed V2 and V3 historical messages", () => {
     state.messages.unshift(...actualStoredConversationV2().messages);
     const migrated = readWorkspaceData({ ...emptyWorkspace(), schema: 3, state });
     expect(migrated.migrated).toBe(true);
-    expect(migrated.data.schema).toBe(4);
+    expect(migrated.data.schema).toBe(5);
     expect(migrated.data.state.messages).toEqual(state.messages);
     expect(migrated.data.state.messages.filter((message) => message.research).map((message) => message.research!.evidenceVersion)).toEqual([2, 3]);
     expect(migrated.data.pending).toBeNull();

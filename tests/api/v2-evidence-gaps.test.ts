@@ -38,7 +38,7 @@ function merchantMaterial(intent: ShoppingIntent, priceBlock: string) {
   product.price!.variant = "AX1";
   const text = `Fixture data: Fixture Meridian Sunglasses AX1 are sunglasses, exact variant AX1.\n\n${priceBlock}`;
   const support = [{ url: material.citations[0]!.url, quote: text }];
-  const assessment = {
+  const assessment: typeof product.identity = {
     status: "supported",
     scope: "exact-variant",
     rationale: "Fixture data: the exact AX1 passage supports this assessment.",
@@ -48,7 +48,13 @@ function merchantMaterial(intent: ShoppingIntent, priceBlock: string) {
   product.requestMatch = assessment;
   product.criteria = intent.requirements.map((r) => ({ criterionId: r.id, assessment }));
   product.attributes = [];
-  product.price!.assessment = assessment;
+  const moneyQuote = /SGD\s*850(?:\.00)?|\$850(?:\.00)?/.exec(text)?.[0] ?? text;
+  const priceAssessment = { ...assessment, support: [{ url: support[0]!.url, quote: moneyQuote }] };
+  product.price!.moneySupport = priceAssessment.support[0]!;
+  product.price!.attribution = assessment;
+  product.price!.priceBasis = { kind: "single-item", assessment };
+  product.price!.sourceReviews = [{ url: support[0]!.url, reviewComplete: true, relation: "applies", assessment,
+    moneyMentions: [{ quote: moneyQuote, role: "selected", scope: "selected-variant", assessment: priceAssessment }], conditions: [] }];
   material.citations[0]!.text = text;
   return material;
 }
@@ -153,9 +159,7 @@ describe("shopping retrieval and ordinary source price blocks", () => {
     const result = projectExaAnswer(merchantMaterial(intent, block), intent);
     expect(result.status).toBe("ready");
     if (result.status !== "ready") throw new Error("No comparison");
-    expect(result.research.products[0]!.price).toMatchObject({
-      amount: 850, currency: "SGD", variant: "AX1", conditionsResolved: true,
-    });
+    expect(result.research.products[0]!.priceEvidence).toMatchObject({ state: "applicable", variant: "AX1", usableMoney: { minorUnits: 85000, currency: "SGD" } });
     expect(result.research.products[0]!.eligible).toBe(true);
     expect(result.research.choice?.productId).toBe("model-a");
   });
@@ -167,7 +171,7 @@ describe("shopping retrieval and ordinary source price blocks", () => {
     material.answer.products[0]!.identity.support[0]!.quote = text;
     const result = projectExaAnswer(material, intent);
     if (result.status !== "ready") throw new Error("No comparison");
-    expect(result.research.products[0]!.price?.amount).toBe(850);
+    expect(result.research.products[0]!.priceEvidence).toMatchObject({ state: "applicable", usableMoney: { minorUnits: 85000 } });
     expect(result.research.choice?.productId).toBe("model-a");
   });
   it.each([
@@ -177,12 +181,10 @@ describe("shopping retrieval and ordinary source price blocks", () => {
     const intent = sunglassesIntent();
     const material = merchantMaterial(intent, block);
     material.citations[0]!.url = url.replace(/\/$/u, "");
-    material.answer.products[0]!.identity.support[0]!.url = url;
+    material.answer = JSON.parse(JSON.stringify(material.answer).replaceAll("https://manufacturer.com/model-a", url));
     const result = projectExaAnswer(material, intent);
     if (result.status !== "ready") throw new Error("No comparison");
-    expect(result.research.products[0]!.price).toMatchObject({
-      amount: 850, currency: "SGD", variant: "AX1", conditionsResolved: true,
-    });
+    expect(result.research.products[0]!.priceEvidence).toMatchObject({ state: "applicable", variant: "AX1", usableMoney: { minorUnits: 85000, currency: "SGD" } });
     expect(result.research.choice?.productId).toBe("model-a");
   });
   it("keeps two uniquely scoped price cards usable without mixing their prices", () => {
@@ -194,10 +196,18 @@ describe("shopping retrieval and ordinary source price blocks", () => {
     other.variant = "BX2";
     other.price!.amount = 950;
     other.price!.variant = "BX2";
+    for (const [product, selected, otherMoney] of [[material.answer.products[0]!, "SGD850", "SGD950"], [other, "SGD950", "SGD850"]] as const) {
+      const report = product.price!;
+      report.moneySupport.quote = selected;
+      report.sourceReviews[0]!.moneyMentions = [
+        { quote: selected, role: "selected", scope: "selected-variant", assessment: { ...report.attribution, support: [{ url: report.moneySupport.url, quote: selected }] } },
+        { quote: otherMoney, role: "other-product", scope: "other-subjects", assessment: { ...report.attribution, support: [{ url: report.moneySupport.url, quote: otherMoney }] } },
+      ];
+    }
     material.answer.products.push(other);
     const result = projectExaAnswer(material, intent);
     if (result.status !== "ready") throw new Error("No comparison");
-    expect(result.research.products.map((product) => [product.id, product.price?.amount, product.eligible])).toEqual([
+    expect(result.research.products.map((product) => [product.id, product.priceEvidence.state === "applicable" ? product.priceEvidence.usableMoney.minorUnits / 100 : null, product.eligible])).toEqual([
       ["model-a", 850, true], ["model-b", 950, true],
     ]);
   });
@@ -218,7 +228,7 @@ describe("shopping retrieval and ordinary source price blocks", () => {
     const result = projectExaAnswer(merchantMaterial(intent, block), intent);
     if (result.status !== "ready") throw new Error("No comparison");
     expect(result.research.choice).toBeNull();
-    expect(result.research.products[0]!.price).toBeNull();
+    expect(result.research.products[0]!.priceEvidence.state).not.toBe("applicable");
   });
   it("does not display another native price variant under the selected product", () => {
     const intent = sunglassesIntent();
@@ -226,14 +236,15 @@ describe("shopping retrieval and ordinary source price blocks", () => {
     material.answer.products[0]!.price!.variant = "AX2";
     const result = projectExaAnswer(material, intent);
     if (result.status !== "ready") throw new Error("No comparison");
-    expect(result.research.products[0]!.price).toBeNull();
+    expect(result.research.products[0]!.priceEvidence.state).not.toBe("applicable");
     expect(result.research.choice).toBeNull();
   });
   it("retains a literal known membership price condition prominently without making a choice", () => {
     const intent = sunglassesIntent();
     const result = projectExaAnswer(merchantMaterial(intent, "Fixture Meridian Sunglasses AX1\nSGD850\nTax included.\nMembership required."), intent);
     if (result.status !== "ready") throw new Error("No comparison");
-    expect(result.research.products[0]!.price).toMatchObject({ amount: 850, variant: "AX1", conditionsResolved: false, conditions: ["Membership required"] });
+    expect(result.research.products[0]!.priceEvidence).toMatchObject({ state: "observed", alarms: expect.arrayContaining([expect.objectContaining({ kind: "buyer-restriction" })]) });
+    expect(result.research.sources[0]!.text).toContain("Membership required");
     expect(result.research.choice).toBeNull();
   });
   it.each([
@@ -302,11 +313,9 @@ describe("private projection diagnostics at the SDK boundary", () => {
     expect(body.research.intent.budget).toEqual({ minimum: 800, maximum: 1000, currency: "SGD" });
     expect(body.research.products[0].eligible).toBe(mode === "complete");
     if (mode === "other-variant" || mode === "range") {
-      expect(body.research.products[0].price).toBeNull();
+      expect(body.research.products[0].priceEvidence.state).not.toBe("applicable");
     } else {
-      expect(body.research.products[0].price).toMatchObject({
-        amount: 850, currency: "SGD", variant: "AX1", conditionsResolved: mode === "complete",
-      });
+      expect(body.research.products[0].priceEvidence.state).toBe(mode === "complete" ? "applicable" : "observed");
     }
     expect(body.research.choice?.productId ?? null).toBe(mode === "complete" ? "model-a" : null);
     expect(reservations).toBe(1);
@@ -317,7 +326,7 @@ describe("private projection diagnostics at the SDK boundary", () => {
     directories.push(path);
     await chmod(path, 0o700);
     const material = nativeMaterial(sunglassesIntent());
-    material.answer.products[0]!.identity.status = "unexpected-fixture-status";
+    Object.assign(material.answer.products[0]!.identity, { status: "unexpected-fixture-status" });
     const sdk = await endpoint(material);
     let reservations = 0;
     const settlements: unknown[] = [];

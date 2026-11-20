@@ -1,0 +1,24 @@
+{
+  "invented": true,
+  "occurrencesBySource": [
+    6,
+    3,
+    2,
+    88,
+    39,
+    3,
+    34,
+    6
+  ],
+  "occurrences": 181,
+  "groupsByProduct": [
+    11,
+    11,
+    11
+  ],
+  "sourceCharacters": 16232,
+  "answerCharacters": 75202,
+  "answerUtf8Bytes": 75202,
+  "envelopeCharacters": 92304,
+  "maximumQuote": 3779
+}

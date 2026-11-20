@@ -1,0 +1,33 @@
+{
+  "fixtureOnly": true,
+  "answerCharacters": 75202,
+  "answerUtf8Bytes": 75202,
+  "snapshotUtf8Bytes": 163041,
+  "workspaceUtf8Bytes": 163517,
+  "acceptedWorkspace": true,
+  "sources": 8,
+  "occurrencesBySource": [
+    6,
+    3,
+    2,
+    88,
+    39,
+    3,
+    34,
+    6
+  ],
+  "groupsPerProduct": [
+    11,
+    11,
+    11
+  ],
+  "applicable": [
+    "applicable",
+    "applicable",
+    "applicable"
+  ],
+  "choice": {
+    "productId": "fixture-tool-0",
+    "rationale": "Fixture AI source interpretation, not merchant verification."
+  }
+}

@@ -1,0 +1,36 @@
+
+ RUN  v4.1.12 /Users/josiahwong/Documents/research-shopping-price-v5
+
+ ❯ tests/api/v2-price-boundary.test.ts (75 tests | 4 failed | 71 skipped) 34ms
+     × recognizes the generic single-unit shape for one photometer without a product registry 26ms
+     × recognizes the generic single-unit shape for one cradle without a product registry 3ms
+     × recognizes the generic single-unit shape for one spectroscope without a product registry 2ms
+     × recognizes the generic single-unit shape for one widget without a product registry 1ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 4 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/api/v2-price-boundary.test.ts > V5 complete ordinary prices and independent source alarms > recognizes the generic single-unit shape for one photometer without a product registry
+ FAIL  tests/api/v2-price-boundary.test.ts > V5 complete ordinary prices and independent source alarms > recognizes the generic single-unit shape for one cradle without a product registry
+ FAIL  tests/api/v2-price-boundary.test.ts > V5 complete ordinary prices and independent source alarms > recognizes the generic single-unit shape for one spectroscope without a product registry
+ FAIL  tests/api/v2-price-boundary.test.ts > V5 complete ordinary prices and independent source alarms > recognizes the generic single-unit shape for one widget without a product registry
+AssertionError: expected 'observed' to be 'applicable' // Object.is equality
+
+Expected: "applicable"
+Received: "observed"
+
+ ❯ tests/api/v2-price-boundary.test.ts:46:57
+     44|     for (const text of [`Item price SGD 437.00.\n\nFor one ${unit}.`, …
+     45|       const research = project(priceMaterial(intent, { text: `${identi…
+     46|       expect(research.products[0]!.priceEvidence.state).toBe("applicab…
+       |                                                         ^
+     47|       expect(research.choice?.productId).toBe("fixture-q17");
+     48|     }
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/4]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  4 failed | 71 skipped (75)
+   Start at  12:29:13
+   Duration  357ms (transform 141ms, setup 0ms, import 238ms, tests 34ms, environment 0ms)
+

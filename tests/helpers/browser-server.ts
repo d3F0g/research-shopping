@@ -7,6 +7,8 @@ import { createExaProductResearch } from "../../src/server/exa-research";
 import { nativeMaterial } from "./v2-material";
 import { catalogMaterial } from "./v3-catalog-material";
 import type { ShoppingIntent } from "../../src/domain/conversation";
+import { comparisonMaterial } from "./v5-comparison-material";
+import { sessionGates } from "./session-gates";
 
 if (
   process.env.NODE_ENV !== "test" ||
@@ -32,11 +34,16 @@ const upstream = createServer(async (request, response) => {
     material.citations[0]!.text += `\n\n${heading}\n\nSGD 999`;
     if (intent.productDescription.includes("qualified")) {
       material.citations[0]!.text += "\n\nFor Gold only.";
-      material.answer.products[0]!.price.assessment.status = "contradicted";
-      material.answer.products[0]!.price.assessment.rationale = "Fixture provider says this amount does not apply to the chosen variant.";
+      material.answer.products[0]!.price.attribution.status = "contradicted";
+      material.answer.products[0]!.price.attribution.rationale = "Fixture provider says this amount does not apply to the chosen variant.";
     }
     response.setHeader("content-type", "application/json");
     response.end(JSON.stringify(material));
+    return;
+  }
+  if (intent.productDescription.includes("price v5 fixture")) {
+    response.setHeader("content-type", "application/json");
+    response.end(JSON.stringify(comparisonMaterial(intent, intent.productDescription.includes("club"))));
     return;
   }
   const material = nativeMaterial(intent);
@@ -69,18 +76,36 @@ const upstream = createServer(async (request, response) => {
       p.requestMatch,
       ...p.criteria.map((c) => c.assessment),
       ...p.attributes.map((a) => a.assessment),
-      p.price.assessment,
+      p.price.attribution,
+      p.price.priceBasis.assessment,
     ])
       assessment.support = [{ url, quote: text }];
+    p.price.moneySupport = { url, quote: text };
     return p;
   });
+  for (const [index, product] of material.answer.products.entries()) {
+    product.price.sourceReviews = material.citations.map((source, sourceIndex) => {
+      const assessment = { ...product.identity, support: [{ url: source.url, quote: source.text }] };
+      return { url: source.url, reviewComplete: true, relation: sourceIndex === index ? "applies" : "other-product-or-topic", assessment,
+        moneyMentions: [{ quote: source.text, role: sourceIndex === index ? "selected" : "other-product", scope: sourceIndex === index ? "selected-variant" : "other-subjects", assessment }],
+        conditions: [{ quote: "tax included", text: "tax included", interpretation: "included-in-amount", rationale: "Fixture source includes tax in the amount." }],
+      };
+    });
+  }
   if (intent.productDescription.includes("money-only fixture")) {
     for (const [index, product] of material.answer.products.entries()) {
       const amount = String(product.price.amount);
       const quote = intent.productDescription.includes("suffix") ? `${amount} SGD` : amount;
       const citation = material.citations[index]!;
       citation.text = citation.text.replace(`SGD ${amount}`, intent.productDescription.includes("suffix") ? quote : `SGD ${amount}`);
-      for (const assessment of [product.identity, ...product.criteria.map((criterion) => criterion.assessment), ...product.attributes.map((attribute) => attribute.assessment), product.price.assessment]) assessment.support = [{ url: citation.url, quote: citation.text }];
+      for (const assessment of [product.identity, ...product.criteria.map((criterion) => criterion.assessment), ...product.attributes.map((attribute) => attribute.assessment), product.price.attribution, product.price.priceBasis.assessment]) assessment.support = [{ url: citation.url, quote: citation.text }];
+      product.price.moneySupport = { url: citation.url, quote: citation.text };
+      for (const candidate of material.answer.products) {
+        const review = candidate.price.sourceReviews[index]!;
+        review.assessment.support = [{ url: citation.url, quote: citation.text }];
+        review.moneyMentions[0]!.quote = citation.text;
+        review.moneyMentions[0]!.assessment.support = [{ url: citation.url, quote: citation.text }];
+      }
       product.requestMatch = { ...product.requestMatch, support: [{ url: citation.url, quote }] };
     }
   }
@@ -114,4 +139,4 @@ const conversations = createConversationService({
 const config = configFromEnvironment(process.env);
 const app = createApp({ conversations }, config);
 app.get("/api/test-stats", (c) => c.json({ calls }));
-serve({ fetch: app.fetch, hostname: "127.0.0.1", port: config.apiPort });
+serve({ fetch: sessionGates(app.fetch), hostname: "127.0.0.1", port: config.apiPort });

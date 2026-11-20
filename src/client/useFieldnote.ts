@@ -28,6 +28,7 @@ export function useFieldnote() {
   const submission = useRef(0);
   const active = useRef<AbortController | null>(null);
   const preparing = useRef<AbortController | null>(null);
+  const bootstrap = useRef<AbortController | null>(null);
   function updateAccount(next: VisibleAccount) {
     accountRef.current = next;
     setAccount(next);
@@ -46,12 +47,20 @@ export function useFieldnote() {
       setFocusMessage(result.workspace.state.messages.at(-1)?.id ?? null);
   }
   async function reload() {
+    bootstrap.current?.abort();
+    const controller = new AbortController();
+    bootstrap.current = controller;
     const ownGeneration = generation.current;
     const ownSubmission = submission.current;
     setReady(false);
     try {
-      const next = await api<AccountState>("/api/account");
+      const next = await api<AccountState>(
+        "/api/account",
+        undefined,
+        controller.signal,
+      );
       if (
+        controller.signal.aborted ||
         ownGeneration !== generation.current ||
         ownSubmission !== submission.current
       ) return;
@@ -65,8 +74,9 @@ export function useFieldnote() {
       const nextState =
         next.status === "signed-in"
           ? next.workspace.state
-          : (await getSession()).state;
+          : (await getSession(controller.signal)).state;
       if (
+        controller.signal.aborted ||
         ownGeneration !== generation.current ||
         ownSubmission !== submission.current
       ) return;
@@ -76,6 +86,7 @@ export function useFieldnote() {
       setReady(true);
     } catch {
       if (
+        controller.signal.aborted ||
         ownGeneration !== generation.current ||
         ownSubmission !== submission.current
       ) return;
@@ -83,11 +94,14 @@ export function useFieldnote() {
       setError(
         "The server is unavailable. Your draft is retained. Reload your account when it returns.",
       );
+    } finally {
+      if (bootstrap.current === controller) bootstrap.current = null;
     }
   }
   useEffect(() => {
     void reload();
     return () => {
+      bootstrap.current?.abort();
       preparing.current?.abort();
     };
   }, []);
@@ -101,6 +115,7 @@ export function useFieldnote() {
     expectedRevision?: number,
   ) {
     if (!text.trim() || !ready || resetting) return;
+    bootstrap.current?.abort();
     preparing.current?.abort();
     const prepareController = new AbortController();
     preparing.current = prepareController;
@@ -158,7 +173,7 @@ export function useFieldnote() {
         } else {
           const result = await research(preparedId, controller.signal);
           if (ownGeneration === generation.current) {
-            const fresh = await getSession();
+            const fresh = await getSession(controller.signal);
             if (ownGeneration === generation.current)
               accept(
                 fresh.state.revision >= result.state.revision
@@ -192,6 +207,7 @@ export function useFieldnote() {
   function interrupt() {
     generation.current++;
     submission.current++;
+    bootstrap.current?.abort();
     preparing.current?.abort();
     active.current?.abort();
     preparing.current = null;

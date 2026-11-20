@@ -7,7 +7,8 @@ import { join, resolve } from "node:path";
 import { parseArgs } from "node:util";
 import { chromium, expect, type Browser, type BrowserContext, type Page, type Locator } from "@playwright/test";
 import { offlineNetwork } from "../network";
-import { scenarioMaterial } from "../inputs/materials";
+import { NativeAnswerSchema } from "../../src/server/exa-answer-v2";
+import { currentScenarioMaterial } from "./materials";
 import { materialPayloadHash } from "../hash";
 import { stableComposerGeometry } from "../browser/layout";
 import type { Json } from "../frozen-v4/contracts";
@@ -91,12 +92,13 @@ async function journey(name: string, body: () => Promise<void>) {
 }
 try {
   const webPort = await freePort();
-  const input = scenarioMaterial("supported", "FN-RT-002");
+  const input = currentScenarioMaterial("supported", "FN-RT-002");
+  const fixtureProductName = NativeAnswerSchema.parse((input.body as Record<string, Json>).answer).products[0]!.name;
   input.delayMs = 700;
   const citations = (input.body as Record<string, Json>).citations as Record<string, Json>[];
   citations[0]!.image = [...syntheticImages.keys()][0]!;
   citations[1]!.image = [...syntheticImages.keys()][1]!;
-  input.provenance.push("Browser-only fixed delay and explicitly synthetic citation-image metadata. Main sixty-case materials and source/product text are unchanged.");
+  input.provenance.push("Browser-only fixed delay and explicitly synthetic citation-image metadata. Original native1 materials remain unchanged; this is the separate labeled V5 test composition.");
   input.sha256 = materialPayloadHash(input);
   const { ownedApplication } = await import("./adapter");
   app = await ownedApplication(input, guard, { webPort });
@@ -188,7 +190,7 @@ try {
     await page.getByRole("button", { name: "New chat", exact: true }).click(); await expect(page.locator('[data-slot="card-title"]')).toHaveCount(0);
     const isolated = await pageFor("isolated-session");
     await expect(isolated.page.locator('[data-slot="card-title"]')).toHaveCount(0);
-    checked("isolated-cookie-session-empty", !(await isolated.page.locator("body").innerText()).includes("Synthetic Fieldglass"), "Independent browser profile retains no previous recommendation");
+    checked("isolated-cookie-session-empty", !(await isolated.page.locator("body").innerText()).includes(fixtureProductName), "Independent browser profile retains no previous recommendation");
     await screenshot(isolated.page, "13-isolated-session-desktop"); await isolated.finish();
   });
   await cancellation.finish();

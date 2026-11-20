@@ -1,4 +1,6 @@
+import { fixtureEnvironment } from "./test-environment.mjs";
 import { mkdtemp, rm } from "node:fs/promises";
+import { readFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { spawn, spawnSync } from "node:child_process";
@@ -67,9 +69,12 @@ export async function fixtureDatabase() {
   await new Promise((resolve) => listener.close(resolve));
   const directory = await mkdtemp(join(tmpdir(), "fieldnote-pg-test-"));
   const run = (name, args) => {
-    const result = spawnSync(executable(name), args, { encoding: "utf8" });
-    if (result.status !== 0)
-      throw new Error(`${name} failed for the temporary fixture cluster`);
+    const result = spawnSync(executable(name), args, { encoding: "utf8", env: fixtureEnvironment() });
+    if (result.status !== 0) {
+      let log = "";
+      try { log = readFileSync(join(directory, "postgres.log"), "utf8").slice(-4000); } catch {}
+      throw new Error(`${name} failed for owned temporary fixture ${directory}: ${result.stderr}\n${log}`);
+    }
   };
   const start = () =>
     run("pg_ctl", [
@@ -119,15 +124,14 @@ export async function fixtureDatabase() {
 export async function run(command, args, env) {
   const child = spawn(command, args, {
     stdio: "inherit",
-    env: {
-      ...process.env,
+    env: fixtureEnvironment({
       ...env,
       EXA_RESEARCH_ENABLED: "false",
       EXA_API_KEY: "",
       EXA_RESEARCH_LEDGER_PATH: "",
       FIELDNOTE_TEST_FIXTURES: "false",
       NODE_ENV: "test",
-    },
+    }),
   });
   const code = await new Promise((resolve) => child.once("exit", resolve));
   if (code !== 0) throw new Error(`${command} failed`);

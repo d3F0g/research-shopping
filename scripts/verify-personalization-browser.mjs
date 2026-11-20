@@ -5,8 +5,13 @@ import { chromium, expect } from "@playwright/test";
 import { accountRuntime } from "./account-test-runtime.mjs";
 const runtime = await accountRuntime({ web: true });
 const browser = await chromium.launch();
+async function fixtureContext(viewport) {
+  const context = await browser.newContext({ viewport });
+  await context.route("https://**", (route) => route.abort());
+  return context;
+}
 const proof = [];
-await mkdir("artifacts/fieldnote-v2/accounts", { recursive: true });
+await mkdir("artifacts/issue-64-price-v5/accounts", { recursive: true });
 async function authenticate(page, email, register) {
   await page.getByRole("button", { name: "Account", exact: true }).click();
   if (register)
@@ -45,52 +50,70 @@ try {
     try {
       for (const endpoint of ["account", "session"]) {
         for (const outcome of ["success", "failure"]) {
-          const context = await browser.newContext({ viewport: size });
+          const context = await fixtureContext(size);
           const page = await context.newPage();
           let release;
           let entered;
+          let delivered;
           let requests = 0;
           const held = new Promise((resolve) => { entered = resolve; });
           const gate = new Promise((resolve) => { release = resolve; });
-          await page.route(`**/api/${endpoint}`, async (route) => {
-            if (++requests !== 1) return route.continue();
-            const response = await route.fetch();
-            entered();
-            await gate;
-            await route.fulfill(outcome === "success" ? { response } : { status: 503, json: { error: "Fixture stale bootstrap failure" } });
-          });
+          const delivery = new Promise((resolve) => { delivered = resolve; });
           try {
             await page.goto(bootstrapRuntime.origin);
-            await held;
-            const callsBefore = (await page.request.get(`${bootstrapRuntime.origin}/api/test-stats`).then((response) => response.json())).calls;
-            await expect(page.getByRole("button", { name: "New chat", exact: true })).toBeEnabled();
             await send(page, "hello");
             await expect(page.getByText("Hi. What are you looking to buy?", { exact: true })).toBeVisible();
-            await authenticate(page, `fixture-bootstrap-${randomUUID()}@example.test`, true);
-            await send(page, "thanks");
-            await expect(page.getByText("thanks", { exact: true })).toBeVisible();
-            const composer = page.getByRole("textbox", { name: "Message", exact: true });
+            const callsBefore = (await page.request.get(`${bootstrapRuntime.origin}/api/test-stats`).then((response) => response.json())).calls;
+            await page.goto(`${bootstrapRuntime.origin}/tests/helpers/session-lifecycle.html`);
+            await expect(page.getByRole("button", { name: "Fixture send", exact: true })).toBeEnabled();
+            await page.route(`**/api/${endpoint}`, async (route) => {
+              if (++requests !== 1) return route.continue();
+              const response = await route.fetch();
+              entered();
+              await gate;
+              await route.fulfill(outcome === "success" ? { response } : { status: 503, json: { error: "Fixture stale bootstrap failure" } });
+              delivered();
+            });
+            await page.getByRole("button", { name: "Fixture reload", exact: true }).click();
+            await held;
+            const registration = await page.evaluate(async (email) => {
+              const response = await fetch("/api/auth/sign-up/email", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ email, name: "Fixture shopper", password: "fixture-browser-password-only" }) });
+              if (!response.ok) throw new Error(`Fixture registration failed ${response.status}`);
+              await window.fixtureChat.authenticated();
+              return response.status;
+            }, `fixture-bootstrap-${randomUUID()}@example.test`);
+            assert.equal(registration, 200);
+            const composer = page.getByLabel("Fixture draft", { exact: true });
+            const fixtureSend = page.getByRole("button", { name: "Fixture send", exact: true });
+            await expect(fixtureSend).toBeEnabled();
+            await composer.fill("thanks");
+            await fixtureSend.click();
+            const state = async () => JSON.parse(await page.getByTestId("state").innerText());
+            await expect.poll(async () => (await state()).state.messages.map((message) => message.text)).toEqual(["thanks", "You're welcome. Tell me what you would like to change."]);
             await composer.fill("Fixture draft after account creation");
-            const pendingResponse = page.waitForResponse((response) => response.url().endsWith(`/api/${endpoint}`));
+            const before = await state();
             release();
-            await (await pendingResponse).finished();
-            const account = await page.request.get(`${bootstrapRuntime.origin}/api/account`).then((response) => response.json());
-            assert.equal(account.status, "signed-in");
-            assert.equal(account.workspace.state.messages.some((message) => message.text === "thanks"), true);
+            await delivery;
+            await expect.poll(state).toEqual(before);
+            assert.equal(before.account.status, "signed-in");
+            assert.equal(before.error, "");
+            assert.equal(before.ready, true);
+            await expect(composer).toHaveValue("Fixture draft after account creation");
+            await expect(fixtureSend).toBeEnabled();
+            const account = await page.evaluate(async () => (await fetch("/api/account")).json());
+            assert.deepEqual(account.workspace.state.messages, before.state.messages);
             assert.equal(account.workspace.state.intent.budget, null);
+            await page.goto(bootstrapRuntime.origin);
             await expect(page.getByText("thanks", { exact: true })).toBeVisible();
             await expect(page.getByText("hello", { exact: true })).toHaveCount(0);
-            await expect(composer).toHaveValue("Fixture draft after account creation");
-            await expect(page.getByRole("button", { name: "Send message", exact: true })).toBeEnabled();
-            await expect(page.getByRole("alert")).toHaveCount(0);
             await page.getByRole("button", { name: "Account", exact: true }).click();
             await expect(page.getByText("Your saved conversation", { exact: true })).toBeVisible();
-            await page.screenshot({ path: `artifacts/fieldnote-v2/accounts/${size.name}-late-${endpoint}-${outcome}.png` });
+            await page.screenshot({ path: `artifacts/issue-64-price-v5/accounts/${size.name}-late-${endpoint}-${outcome}.png` });
             await page.getByRole("button", { name: "Close", exact: true }).click();
             await send(page, "hello");
             await expect(page.getByText("Hi. What are you looking to buy?", { exact: true })).toBeVisible();
             assert.equal((await page.request.get(`${bootstrapRuntime.origin}/api/test-stats`).then((response) => response.json())).calls, callsBefore);
-            proof.push(`${size.name} stale initial ${endpoint} ${outcome} preserves the signed-in conversation, draft and readiness without research.`);
+            proof.push(`${size.name} controlled hook lifecycle with an established guest cookie. A stale ${endpoint} ${outcome} after authentication preserves the exact signed-in conversation, draft and readiness without research. Normal account UI journeys run separately.`);
           } finally {
             release();
             await context.close();
@@ -103,7 +126,7 @@ try {
     for (const transition of ["new-chat", "sign-in"]) {
       for (const outcome of ["success", "failure"]) {
         const stopRuntime = await accountRuntime({ web: true });
-        const context = await browser.newContext({ viewport: size });
+        const context = await fixtureContext(size);
         let release = () => {};
         try {
           const page = await context.newPage();
@@ -147,7 +170,7 @@ try {
           assert.equal(current.state.intent.budget, null);
           assert.equal(current.state.messages.some((message) => message.text === "hello"), true);
           assert.equal(current.state.messages.some((message) => message.text === original), false);
-          await page.screenshot({ path: `artifacts/fieldnote-v2/accounts/${size.name}-late-stop-${transition}-${outcome}.png` });
+          await page.screenshot({ path: `artifacts/issue-64-price-v5/accounts/${size.name}-late-stop-${transition}-${outcome}.png` });
           await expect(page.getByText(original, { exact: true })).toHaveCount(0);
           await expect(page.getByText("Hi. What are you looking to buy?", { exact: true })).toBeVisible();
           await expect(page.getByRole("alert")).toHaveCount(0);
@@ -168,7 +191,7 @@ try {
     }
     {
       const conflictRuntime = await accountRuntime({ web: true });
-      const context = await browser.newContext({ viewport: size });
+      const context = await fixtureContext(size);
       let release = () => {};
       try {
         const page = await context.newPage();
@@ -204,7 +227,7 @@ try {
           error: typeof cancelled?.error === "string" ? cancelled.error.slice(0, 200) : null,
           submittedRevision: cancelCommand.revision,
         };
-        await writeFile(`artifacts/fieldnote-v2/accounts/${size.name}-stop-cancel-response.json`, JSON.stringify(cancellation, null, 2) + "\n");
+        await writeFile(`artifacts/issue-64-price-v5/accounts/${size.name}-stop-cancel-response.json`, JSON.stringify(cancellation, null, 2) + "\n");
         assert.ok(cancelStatus === 200 || cancelStatus === 409, `Unexpected cancellation response ${JSON.stringify(cancellation)}`);
         if (cancelStatus === 409)
           assert.deepEqual(cancelled, { error: "Saved conversation changed. Reload it before continuing." });
@@ -243,7 +266,7 @@ try {
         assert.equal(current.workspace.state.messages.some((message) => message.research), false);
         await expect(page.getByText(original, { exact: true })).toBeVisible();
         assert.equal((await stats()).calls, before.calls + 1);
-        await page.screenshot({ path: `artifacts/fieldnote-v2/accounts/${size.name}-stop-reset-conflict.png` });
+        await page.screenshot({ path: `artifacts/issue-64-price-v5/accounts/${size.name}-stop-reset-conflict.png` });
         const pendingResponse = page.waitForResponse((response) => response.url().endsWith("/api/workspace") && response.request().postDataJSON()?.phase === "cancel");
         release();
         const deliveredCancellation = await pendingResponse;
@@ -263,7 +286,7 @@ try {
         assert.equal(recovered.workspace.state.intent.budget, null);
         assert.equal((await stats()).calls, before.calls + 1);
         assert.equal((await stats()).closed, before.closed + 1);
-        await page.screenshot({ path: `artifacts/fieldnote-v2/accounts/${size.name}-stop-reset-conflict-recovered.png` });
+        await page.screenshot({ path: `artifacts/issue-64-price-v5/accounts/${size.name}-stop-reset-conflict-recovered.png` });
         proof.push(`${size.name} signed-in Stop returns ${cancelStatus}. New chat before cancellation confirmation reports a 409 conflict without constraint mutation or extra SDK calls. Explicit browser refresh then New chat recovers. The signed-in Account sheet has no reload control.`);
       } finally {
         release();
@@ -271,7 +294,7 @@ try {
         await conflictRuntime.close();
       }
     }
-    const context = await browser.newContext({ viewport: size });
+    const context = await fixtureContext(size);
     const page = await context.newPage();
     await page.goto(runtime.origin);
     await send(page, "Hello");
@@ -336,7 +359,7 @@ try {
       currency: "SGD",
     });
     await page.screenshot({
-      path: `artifacts/fieldnote-v2/accounts/${size.name}-saved-research.png`,
+      path: `artifacts/issue-64-price-v5/accounts/${size.name}-saved-research.png`,
     });
     await page.reload();
     await expect(
@@ -349,7 +372,7 @@ try {
       .click();
     await page.reload();
     await expect(page.locator("html")).toHaveClass("light");
-    const isolated = await browser.newContext({ viewport: size });
+    const isolated = await fixtureContext(size);
     const other = await isolated.newPage();
     await other.goto(runtime.origin);
     await authenticate(
@@ -434,7 +457,7 @@ try {
       .toBe(0);
     await page.getByRole("button", { name: "Close", exact: true }).click();
     await page.screenshot({
-      path: `artifacts/fieldnote-v2/accounts/${size.name}-deleted.png`,
+      path: `artifacts/issue-64-price-v5/accounts/${size.name}-deleted.png`,
     });
     proof.push(
       `${size.name} UI creates an account, keeps guest messages separate, saves both SGD30-40 bounds and fixture research, restores after refresh, isolates another account and deletes saved shopping data.`,
@@ -442,7 +465,7 @@ try {
     await context.close();
   }
   await writeFile(
-    "artifacts/fieldnote-v2/accounts/browser.json",
+    "artifacts/issue-64-price-v5/accounts/browser.json",
     JSON.stringify(
       {
         status: "passed",

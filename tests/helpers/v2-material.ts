@@ -1,9 +1,14 @@
+import type { z } from "zod";
+import type { NativeAnswerSchema } from "../../src/server/exa-research";
 import type { ShoppingIntent } from "../../src/domain/conversation";
-export function nativeMaterial(intent: ShoppingIntent) {
+type Answer = z.infer<typeof NativeAnswerSchema>;
+type Product = Omit<Answer["products"][number], "price"> & { price: NonNullable<Answer["products"][number]["price"]> };
+export type NativeFixture = { answer: Omit<Answer, "products" | "choice"> & { products: Product[]; choice: NonNullable<Answer["choice"]> }; citations: { url: string; title: string; text: string; image: string }[]; costDollars: { total: number }; requestId: string };
+export function nativeMaterial(intent: ShoppingIntent): NativeFixture {
   const source =
     "Fixture data: Fixture Powerbank Model A is a USB-C powerbank, 10000 mAh, with up to 12 hours battery life. Model A costs SGD 35 for one unit, tax included.";
   const support = [{ url: "https://manufacturer.com/model-a", quote: source }];
-  const assessment = {
+  const assessment: Product["identity"] = {
     status: "supported",
     scope: "exact-variant",
     rationale:
@@ -12,6 +17,7 @@ export function nativeMaterial(intent: ShoppingIntent) {
   };
   return {
     answer: {
+      answerVersion: 2,
       products: [
         {
           id: "model-a",
@@ -28,9 +34,13 @@ export function nativeMaterial(intent: ShoppingIntent) {
             amount: 35,
             currency: "SGD",
             variant: "Model A",
-            conditions: ["tax included"],
-            conditionsResolved: true,
-            assessment,
+            moneySupport: support[0]!,
+            attribution: assessment,
+            priceBasis: { kind: "single-item", assessment },
+            sourceReviews: [{ url: support[0]!.url, reviewComplete: true, relation: "applies", assessment,
+              moneyMentions: [{ quote: source, role: "selected", scope: "selected-variant", assessment }],
+              conditions: [{ quote: "tax included", text: "tax included", interpretation: "included-in-amount", rationale: "Fixture source includes tax in the amount." }],
+            }],
           },
         },
       ],

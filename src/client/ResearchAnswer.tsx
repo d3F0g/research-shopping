@@ -25,6 +25,7 @@ import {
   TraceIcon,
 } from "@/components/ui/trace";
 import type { RenderableResearch } from "../domain/conversation";
+import { priceView } from "../domain/price-view";
 import { evidenceContext, evidenceLabel } from "../domain/rendered-evidence";
 type ResearchProduct = RenderableResearch["products"][number];
 type Assessment = ResearchProduct["identity"];
@@ -78,7 +79,7 @@ function Evidence({
         return source ? (
           <div key={i}>
             <p className="text-xs text-muted-foreground">{evidenceLabel(span)}</p>
-            <Citation source={source} quote={evidenceContext(span)} />
+            <Citation source={source} quote={evidenceContext(span, snapshot.sources)} />
           </div>
         ) : null;
       })}
@@ -93,6 +94,8 @@ function Product({
   snapshot: ResearchSnapshot;
 }) {
   const [failed, setFailed] = useState(false);
+  const historicalPrice = "price" in product ? product.price : null;
+  const view = "priceEvidence" in product && snapshot.evidenceVersion === 5 ? priceView(product.priceEvidence, snapshot.sources) : null;
   const observation = "priceObservation" in product ? product.priceObservation : null;
   const observationSource = observation && snapshot.sources.find((source) => source.id === observation.row.sourceId);
   const source = snapshot.sources.find((s) =>
@@ -128,16 +131,16 @@ function Product({
           </figure>
         )}
         <p>
-          {product.price ? (
+          {view ? <><strong>{view.label}</strong>{view.description}</> : historicalPrice ? (
             <>
               <strong>
-                {product.price.currency} {product.price.amount.toFixed(2)}
+                {historicalPrice.currency} {historicalPrice.amount.toFixed(2)}
               </strong>{" "}
               observed, unverified
-              {product.price.conditions.length
-                ? ` · ${product.price.conditions.join(", ")}`
+              {historicalPrice.conditions.length
+                ? ` · ${historicalPrice.conditions.join(", ")}`
                 : ""}
-              {!product.price.conditionsResolved && " · Conditions unresolved"}
+              {!historicalPrice.conditionsResolved && " · Conditions unresolved"}
             </>
           ) : observation ? (
             <>Source row shows <strong>{observation.currency} {observation.amount.toFixed(2)}</strong>. Observed and unverified.</>
@@ -169,6 +172,10 @@ function Product({
               </TraceLine>
             </TraceCollapsibleTrigger>
             <TraceCollapsibleContent className="space-y-5">
+              {view?.details.map((detail, index) => {
+                const source = snapshot.sources.find((entry) => entry.id === detail.sourceId);
+                return source ? <div key={index} className="space-y-2"><p>{detail.label}</p><Citation source={source} quote={source.text.slice(detail.start, detail.end)} /></div> : null;
+              })}
               <Evidence
                 label="Product identity"
                 assessment={product.identity}
@@ -199,10 +206,10 @@ function Product({
                   snapshot={snapshot}
                 />
               ))}
-              {product.price && (
+              {historicalPrice && (
                 <Evidence
                   label="Observed price"
-                  assessment={product.price.assessment}
+                  assessment={historicalPrice.assessment}
                   snapshot={snapshot}
                 />
               )}
@@ -266,7 +273,7 @@ export function ResearchAnswer({ snapshot }: { snapshot: ResearchSnapshot }) {
               <p key={i}>{text}</p>
             ))}
             {snapshot.sources.map((s) => (
-              <p key={s.id}>
+              <Trace key={s.id}><TraceCollapsible><TraceCollapsibleTrigger><TraceLine><TraceTitle>{s.title || new URL(s.url).hostname}</TraceTitle></TraceLine></TraceCollapsibleTrigger><TraceCollapsibleContent>
                 <a
                   className="underline"
                   href={s.url}
@@ -277,7 +284,8 @@ export function ResearchAnswer({ snapshot }: { snapshot: ResearchSnapshot }) {
                 </a>
                 {s.textTruncated &&
                   " · Source text cut. Cut context cannot establish complete support."}
-              </p>
+                <blockquote className="mt-2 whitespace-pre-wrap break-words border-l pl-3">{s.text}</blockquote>
+              </TraceCollapsibleContent></TraceCollapsible></Trace>
             ))}
           </TraceCollapsibleContent>
         </TraceCollapsible>

@@ -1,0 +1,40 @@
+TAP version 13
+# Subtest: FN-CU-001 has a separately labeled V5 test composition while its original wire stays invalid
+ok 1 - FN-CU-001 has a separately labeled V5 test composition while its original wire stays invalid
+  ---
+  duration_ms: 13.124792
+  type: 'test'
+  ...
+# Subtest: FN-RT-002 has a separately labeled V5 test composition while its original wire stays invalid
+ok 2 - FN-RT-002 has a separately labeled V5 test composition while its original wire stays invalid
+  ---
+  duration_ms: 2.0605
+  type: 'test'
+  ...
+# Subtest: FN-PQ-001 has a separately labeled V5 test composition while its original wire stays invalid
+ok 3 - FN-PQ-001 has a separately labeled V5 test composition while its original wire stays invalid
+  ---
+  duration_ms: 2.448584
+  type: 'test'
+  ...
+# Subtest: new material composition does not rewrite adverse or unassigned frozen inputs
+ok 4 - new material composition does not rewrite adverse or unassigned frozen inputs
+  ---
+  duration_ms: 1.159334
+  type: 'test'
+  ...
+# Subtest: the frozen V4 provenance validator still binds its actual historical native1 evidence
+ok 5 - the frozen V4 provenance validator still binds its actual historical native1 evidence
+  ---
+  duration_ms: 26.636417
+  type: 'test'
+  ...
+1..5
+# tests 5
+# suites 0
+# pass 5
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 218.21075

@@ -1,3 +1,4 @@
+import { fixtureEnvironment } from "./test-environment.mjs";
 import { spawn } from "node:child_process";
 import { once } from "node:events";
 import { mkdtemp, rm } from "node:fs/promises";
@@ -21,8 +22,7 @@ export async function accountRuntime({ web = false } = {}) {
   const origin = `http://127.0.0.1:${webPort}`;
   const apiOrigin = `http://127.0.0.1:${apiPort}`;
   const ledger = join(directory, "usage.json");
-  const env = {
-    ...process.env,
+  const env = fixtureEnvironment({
     NODE_ENV: "test",
     EXA_RESEARCH_ENABLED: "false",
     EXA_API_KEY: "",
@@ -35,7 +35,7 @@ export async function accountRuntime({ web = false } = {}) {
     WEB_PORT: String(webPort),
     FIELDNOTE_AUTH_ORIGIN: origin,
     FIELDNOTE_AUTH_SECRET: "fixture-account-lifecycle-secret-long-enough",
-  };
+  });
   const processes = new Set();
   const diagnostics = [];
   let api;

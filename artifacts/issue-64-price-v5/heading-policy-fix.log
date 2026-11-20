@@ -1,0 +1,32 @@
+
+ RUN  v4.1.12 /Users/josiahwong/Documents/research-shopping-price-v5
+
+ ❯ tests/api/v5-heading-policy.test.ts (14 tests | 1 failed) 55ms
+   × does not require a table-label dictionary or reject its actual marked variant: Variant: Q17 steel
+SGD 437.00 4ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/api/v5-heading-policy.test.ts > does not require a table-label dictionary or reject its actual marked variant: Variant: Q17 steel
+SGD 437.00
+AssertionError: expected 'observed' to be 'applicable' // Object.is equality
+
+Expected: "applicable"
+Received: "observed"
+
+ ❯ tests/api/v5-heading-policy.test.ts:41:60
+     39|   const result = projectExaAnswer(priceMaterial(intent, { text: `${ide…
+     40|   if (result.status !== "ready") throw new Error("Expected fixture com…
+     41|   expect(result.research.products[0]!.priceEvidence.state).toBe("appli…
+       |                                                            ^
+     42| });
+     43| it("masks actual monetary occurrences before looking for a possible ad…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 13 passed (14)
+   Start at  12:36:58
+   Duration  295ms (transform 84ms, setup 0ms, import 159ms, tests 55ms, environment 0ms)
+

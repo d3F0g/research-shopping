@@ -154,7 +154,7 @@ describe("retained snapshot answers", () => {
     if (projected.status !== "ready") throw new Error("Fixture research was not projected");
     const research = projected.research;
     research.products = [0, 1, 2].map((index) => ({ ...structuredClone(research.products[0]!), id: `fixture-${index}`, name: `Fixture option ${index + 1}` }));
-    research.choice = { productId: "fixture-0", rationale: "Fixture data: this option has supported USB-C evidence." };
+    research.choice = { productId: "fixture-0", rationale: research.products[0]!.requestMatch.rationale };
     state.messages.push({ id: "fixture-response", role: "assistant", text: "Fixture data comparison", research });
     return StoredConversationSchema.parse(state);
   }
@@ -199,7 +199,7 @@ describe("retained snapshot answers", () => {
     const state = researched();
     const assessment = state.messages.at(-1)!.research!.products[0]!.attributes[0]!.assessment;
     assessment.rationale = "Up to 12 hours, only with ANC off; runtime with ANC enabled is unknown.";
-    const passage = evidenceContext(assessment.support[0]!);
+    const passage = evidenceContext(assessment.support[0]!, state.messages.at(-1)!.research!.sources);
     const answer = turn(state, "What about battery life?").state.messages.at(-1)!;
     expect(answer.text).toContain(`Battery life: (AI source assessment supported, exact-variant) ${assessment.rationale}`);
     expect(answer.text).not.toContain(passage);
@@ -233,9 +233,10 @@ describe("retained snapshot answers", () => {
   it("keeps oversized passages whole in canonical history and makes display omissions explicit", () => {
     const state = researched();
     const research = state.messages.at(-1)!.research!;
-    if (research.evidenceVersion !== 4) throw new Error("Expected current fixture evidence");
+    if (research.evidenceVersion !== 5) throw new Error("Expected current fixture evidence");
     research.products[0]!.attributes = Array.from({ length: 6 }, () => structuredClone(research.products[0]!.attributes[0]!));
-    for (const attribute of research.products[0]!.attributes) attribute.assessment.support = Array.from({ length: 3 }, () => ({ ...attribute.assessment.support[0]!, context: { start: 0, end: 4000, text: "x".repeat(4000) } }));
+    for (const [index, attribute] of research.products[0]!.attributes.entries()) attribute.assessment.support = Array.from({ length: 3 }, () => ({ ...attribute.assessment.support[0]!, context: { start: index * 4000, end: (index + 1) * 4000 } }));
+    research.sources[0]!.text = Array.from({ length: 6 }, (_, index) => "x".repeat(3999) + index).join("");
     const result = turn(state, "Compare the first two.");
     const answer = result.state.messages.at(-1)!;
     expect(answer.detail!.length).toBeLessThanOrEqual(24000);

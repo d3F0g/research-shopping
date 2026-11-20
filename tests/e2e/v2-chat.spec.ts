@@ -91,7 +91,7 @@ for (const viewport of [
       })
       .click();
     await expect(page.getByText(/^Product identity/).first()).toBeVisible();
-    await expect(page.locator("blockquote").first()).toContainText(
+    await expect(page.locator("blockquote").filter({ hasText: "Fixture data:" }).first()).toContainText(
       "Fixture data:",
     );
     await page.screenshot({
@@ -475,41 +475,54 @@ for (const endpoint of ["account", "session"]) {
 for (const endpoint of ["account", "session"]) {
   for (const outcome of ["success", "failure"]) {
     test(`a stale ${endpoint} bootstrap ${outcome} preserves a newer ordinary guest reply`, async ({ page }) => {
+      await page.goto("/");
+      await expect(page.getByRole("button", { name: "New chat", exact: true })).toBeEnabled();
+      const baseline = (await page.request.get("/api/test-stats").then((response) => response.json())).calls;
+      await page.goto("/tests/helpers/session-lifecycle.html");
+      const send = page.getByRole("button", { name: "Fixture send", exact: true });
+      const composer = page.getByLabel("Fixture draft", { exact: true });
+      await expect(send).toBeEnabled();
       let release!: () => void;
       let entered!: () => void;
+      let delivered!: () => void;
       let requests = 0;
       const held = new Promise<void>((resolve) => { entered = resolve; });
       const gate = new Promise<void>((resolve) => { release = resolve; });
+      const delivery = new Promise<void>((resolve) => { delivered = resolve; });
       await page.route(`**/api/${endpoint}`, async (route) => {
         if (++requests !== 1) return route.continue();
         const response = await route.fetch();
         entered();
         await gate;
         await route.fulfill(outcome === "success" ? { response } : { status: 503, json: { error: "Fixture stale bootstrap failure" } });
+        delivered();
       });
-      await page.goto("/");
+      await page.getByRole("button", { name: "Fixture reload", exact: true }).click();
       await held;
       try {
-        await expect(page.getByRole("button", { name: "New chat", exact: true })).toBeEnabled();
-        const baseline = (await page.request.get("/api/test-stats").then((response) => response.json())).calls;
-        const composer = page.getByRole("textbox", { name: "Message", exact: true });
-        const send = page.getByRole("button", { name: "Send message", exact: true });
+        await page.getByRole("button", { name: "Fixture reload", exact: true }).click();
+        await expect(send).toBeEnabled();
         await composer.fill("hello");
         await send.click();
-        await expect(page.getByText("Hi. What are you looking to buy?", { exact: true })).toBeVisible();
+        const state = async () => JSON.parse(await page.getByTestId("state").innerText());
+        await expect.poll(async () => (await state()).state.messages.map((message: { text: string }) => message.text)).toEqual(["hello", "Hi. What are you looking to buy?"]);
         await composer.fill("Fixture draft after guest reply");
-        const response = page.waitForResponse((response) => response.url().endsWith(`/api/${endpoint}`));
+        const before = await state();
         release();
-        await (await response).finished();
-        const current = await page.request.get("/api/session").then((response) => response.json());
-        expect(current.state.messages.some((message: { text: string }) => message.text === "hello")).toBe(true);
-        await expect(page.getByText("Hi. What are you looking to buy?", { exact: true })).toBeVisible();
-        await expect(page.getByRole("alert")).toHaveCount(0);
+        await delivery;
+        await expect.poll(state).toEqual(before);
+        const current = await page.evaluate(async () => (await fetch("/api/session")).json());
+        expect(current.state.messages).toEqual(before.state.messages);
         await expect(composer).toHaveValue("Fixture draft after guest reply");
         await expect(send).toBeEnabled();
+        expect(before.error).toBe("");
         await composer.fill("thanks");
         await send.click();
-        await expect(page.getByText("thanks", { exact: true })).toBeVisible();
+        const expected = ["hello", "Hi. What are you looking to buy?", "thanks", "You're welcome. Tell me what you would like to change."];
+        await expect.poll(async () => (await state()).state.messages.map((message: { text: string }) => message.text)).toEqual(expected);
+        await page.goto("/");
+        await expect(page.getByText(expected[3]!, { exact: true })).toBeVisible();
+        expect((await page.evaluate(async () => (await fetch("/api/session")).json())).state.messages.map((message: { text: string }) => message.text)).toEqual(expected);
         expect((await page.request.get("/api/test-stats").then((response) => response.json())).calls).toBe(baseline);
       } finally {
         release();

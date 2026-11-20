@@ -9,6 +9,9 @@ import { materialPayloadHash } from "../../hash";
 import { grade } from "../assertions";
 import { caseResult, makeReport, validateReport } from "../report";
 
+import { priceMaterial } from "../../../tests/helpers/v5-material";
+import { initialConversation } from "../../../src/domain/conversation";
+const quoteText = (snapshot: { sources: { id: string; text: string }[] }, span: { sourceId: string; literal: { start: number; end: number } }) => snapshot.sources.find((source) => source.id === span.sourceId)!.text.slice(span.literal.start, span.literal.end);
 const observe = async (...args: Parameters<typeof import("../adapter")["observe"]>) => (await import("../adapter")).observe(...args);
 const ownedApplication = async (...args: Parameters<typeof import("../adapter")["ownedApplication"]>) => (await import("../adapter")).ownedApplication(...args);
 
@@ -177,17 +180,23 @@ test("unsafe citations and conditional prices remain adverse to recommendation",
 test("native quotations stay distinct from complete context and mutations fail provenance", async () => {
   const guard = offlineNetwork();
   try {
-    const contract = scenario(["Find binoculars for birdwatching under USD 250"]);
-    const observed = await observe(contract, scenarioMaterial("mixed-fit", "FN-RT-002"), guard);
+    const contract = scenario(["Find a fixture quartz wristwatch under SGD500"]);
+    const native = priceMaterial(initialConversation().intent);
+    native.citations[0]!.text = native.citations[0]!.text.replace("a steel case.", "a steel case. Fixture extra mechanical details remain in the same source paragraph.");
+    const input = { ...material("powerbank"), id: "fixture-v5-watch-context", label: "Fixture V5 watch context only", body: JSON.parse(JSON.stringify(native)) as Json };
+    input.sha256 = materialPayloadHash(input);
+    const observed = await observe(contract, input, guard);
     const response = observed.rawTurns[0]!.response;
     assert.equal(response?.kind, "research"); if (response?.kind !== "research") return;
     const span = response.research.products[0]!.identity.support[0]!;
-    assert.ok(span.context.text.includes(span.literal.text));
+    const literal = quoteText(response.research, span);
+    const source = response.research.sources.find((item) => item.id === span.sourceId)!;
+    assert.ok(source.text.slice(span.context.start, span.context.end).includes(literal));
     assert.ok(span.context.start <= span.literal.start && span.context.end >= span.literal.end);
-    assert.ok(span.context.text.length > span.literal.text.length);
+    assert.ok(span.context.end - span.context.start > literal.length);
     const projected = observed.turns[0]!.response!.research as Record<string, Json>;
     const identity = (projected.products as Record<string, Json>[])[0]!.identity as { support: { quote: string }[] };
-    assert.equal(identity.support[0]!.quote, span.literal.text);
+    assert.equal(identity.support[0]!.quote, literal);
     if (span.origin.kind !== "provider") throw new Error("Expected provider support");
     span.origin.reportedQuote = "Synthetic invented native quotation";
     assert.equal(grade(contract, observed).find((item) => item.id === `native-complete-provenance:${response.research.products[0]!.id}`)!.status, "fail");
@@ -208,9 +217,9 @@ test("whitespace bindings preserve actual native reports and expose the historic
     const response = observed.rawTurns[0]!.response;
     assert.equal(response?.kind, "research"); if (response?.kind !== "research") return;
     const product = response.research.products[0]!;
-    assert.equal(product.price, null);
-    assert.equal(product.priceObservation?.amount, 868);
-    assert.equal(product.priceObservation?.reportedConditionsResolved, false);
+    assert.equal(product.priceEvidence.state, "observed");
+    assert.equal(product.priceEvidence.report?.amount, 868);
+    assert.equal(product.priceEvidence.report?.sourceReviews[0]!.conditions[0]!.interpretation, "unknown");
     assert.equal(response.research.choice, null);
     const checks = grade(contract, observed);
     assert.equal(checks.find((check) => check.id === `native-complete-provenance:${product.id}`)!.status, "pass");
@@ -222,7 +231,7 @@ test("whitespace bindings preserve actual native reports and expose the historic
     const raw = mutated.rawTurns[0]!.response;
     if (raw?.kind !== "research") throw new Error("Expected current fixture");
     const support = raw.research.products[0]!.identity.support[0]!;
-    support.origin = { kind: "provider", reportedQuote: support.literal.text, match: "literal" };
+    support.origin = { kind: "provider", reportedQuote: quoteText(raw.research, support), match: "literal" };
     assert.equal(ResearchSnapshotSchema.safeParse(raw.research).success, true);
     assert.equal(grade(contract, mutated).find((check) => check.id === `native-complete-provenance:${product.id}`)!.status, "fail");
     support.origin = { kind: "source-context" };
@@ -262,7 +271,7 @@ test("current provenance accepts equivalent object and JSON-string SDK answers",
   } finally { guard.close(); }
 });
 
-test("V4 catalog observations preserve raw row context and native claims independently", async () => {
+test("V5 catalog observations preserve source offsets and native claims independently", async () => {
   const { catalogMaterial } = await import("../../../tests/helpers/v3-catalog-material");
   const { initialConversation } = await import("../../../src/domain/conversation");
   const { projectExaAnswer } = await import("../../../src/server/exa-research");
@@ -277,16 +286,16 @@ test("V4 catalog observations preserve raw row context and native claims indepen
   const body = JSON.parse(JSON.stringify(native)) as Json;
   assert.equal(validCurrentProvenance(result.research, product, body), true);
   const mutations: Array<(item: typeof product) => void> = [
-    (item) => { item.priceObservation!.amount = 999; },
-    (item) => { item.priceObservation!.row.context.text = item.priceObservation!.row.literal.text; },
-    (item) => { item.priceObservation!.row.literal.start++; },
-    (item) => { Object.assign(item.priceObservation!, { variant: "Silver" }); },
-    (item) => { item.priceObservation!.reportedConditionsResolved = true; },
-    (item) => { item.priceObservation!.reportedConditions = ["Fixture invented eligibility condition"]; },
-    (item) => { item.priceObservation!.reportedAssessment.status = "contradicted"; },
-    (item) => { item.priceObservation!.reportedAssessment.rationale = "Fixture invented rationale"; },
-    (item) => { item.priceObservation!.reportedAssessment.support[0]!.origin = { kind: "source-context" }; },
-    (item) => { item.priceObservation!.reportedAssessment.support[0]!.origin = { kind: "provider", reportedQuote: item.priceObservation!.row.literal.text, match: "literal" }; },
+    (item) => { item.priceEvidence.report!.amount = 999; },
+    (item) => { item.priceEvidence.moneySupport!.start++; },
+    (item) => { item.priceEvidence.observations = []; },
+    (item) => { Object.assign(item.priceEvidence, { variant: "Silver" }); },
+    (item) => { item.priceEvidence.report!.sourceReviews[0]!.conditions[0]!.interpretation = "included-in-amount"; },
+    (item) => { item.priceEvidence.report!.sourceReviews[0]!.conditions[0]!.text = "Fixture invented eligibility condition"; },
+    (item) => { item.priceEvidence.report!.attribution.status = "contradicted"; },
+    (item) => { item.priceEvidence.report!.attribution.rationale = "Fixture invented rationale"; },
+    (item) => { item.priceEvidence.report!.attribution.support[0]!.quote = "Fixture invented attribution"; },
+    (item) => { item.priceEvidence.alarms = []; },
   ];
   for (const mutate of mutations) {
     const changed = structuredClone(product);

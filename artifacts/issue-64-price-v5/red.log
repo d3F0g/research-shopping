@@ -1,0 +1,84 @@
+
+ RUN  v4.1.12 /Users/josiahwong/Documents/research-shopping-price-v5
+
+ ❯ tests/api/v5-price-boundary.test.ts (5 tests | 5 failed) 40ms
+     × keeps an ordinary complete Markdown price usable on the original wire 17ms
+     × keeps an ordinary complete prose price usable on the original wire 3ms
+     × retains an ordinary complete price through the original real route 13ms
+     × uses a complete Markdown amount for both bounds and a computed choice 2ms
+     × retains an amount but blocks optimistic omission of a club requirement through the real route 4ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 5 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/api/v5-price-boundary.test.ts > Issue 64 original wire parser reproduction > keeps an ordinary complete Markdown price usable on the original wire
+ FAIL  tests/api/v5-price-boundary.test.ts > Issue 64 original wire parser reproduction > keeps an ordinary complete prose price usable on the original wire
+AssertionError: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ tests/api/v5-price-boundary.test.ts:25:51
+     23|     expect(result.status).toBe("ready");
+     24|     if (result.status !== "ready") throw new Error("Expected source co…
+     25|     expect(result.research.products[0]!.eligible).toBe(true);
+       |                                                   ^
+     26|     expect(result.research.choice?.productId).toBe("model-a");
+     27|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/5]⎯
+
+ FAIL  tests/api/v5-price-boundary.test.ts > Issue 64 original wire parser reproduction > retains an ordinary complete price through the original real route
+AssertionError: expected undefined to be 'model-a' // Object.is equality
+
+- Expected:
+"model-a"
+
++ Received:
+undefined
+
+ ❯ tests/api/v5-price-boundary.test.ts:37:45
+     35|     expect(body.kind).toBe("research");
+     36|     if (body.kind !== "research") throw new Error("Expected source com…
+     37|     expect(body.research.choice?.productId).toBe("model-a");
+       |                                             ^
+     38|   });
+     39| });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/5]⎯
+
+ FAIL  tests/api/v5-price-boundary.test.ts > V5 ordinary source prices and independent source alarms > uses a complete Markdown amount for both bounds and a computed choice
+AssertionError: expected 'unavailable' to be 'ready' // Object.is equality
+
+Expected: "ready"
+Received: "unavailable"
+
+ ❯ tests/api/v5-price-boundary.test.ts:44:27
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/5]⎯
+
+ FAIL  tests/api/v5-price-boundary.test.ts > V5 ordinary source prices and independent source alarms > retains an amount but blocks optimistic omission of a club requirement through the real route
+AssertionError: expected 'research-unavailable' to be 'research' // Object.is equality
+
+Expected: "research"
+Received: "research-unavailable"
+
+ ❯ tests/api/v5-price-boundary.test.ts:65:25
+     63|     if (prepared.kind !== "prepared") throw new Error("Expected prepar…
+     64|     const result = await post({ phase: "research", preparedId: prepare…
+     65|     expect(result.kind).toBe("research");
+       |                         ^
+     66|     if (result.kind !== "research") throw new Error("Expected research…
+     67|     expect(result.research).toMatchObject({ evidenceVersion: 5, choice…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/5]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  5 failed (5)
+   Start at  11:54:11
+   Duration  373ms (transform 135ms, setup 0ms, import 240ms, tests 40ms, environment 0ms)
+

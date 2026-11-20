@@ -17,7 +17,7 @@ describe("actual stored V2 conversation", () => {
     const state = actualStoredConversationV2();
     const migrated = readWorkspaceData({ ...emptyWorkspace(), schema: 2, state });
     expect(migrated.migrated).toBe(true);
-    expect(migrated.data.schema).toBe(4);
+    expect(migrated.data.schema).toBe(5);
     expect(migrated.data.state).toEqual(fixture.state);
     expect(migrated.data.state.messages.filter((message) => message.research).map((message) => message.research!.evidenceVersion)).toEqual([2]);
     expect(migrated.data.pending).toBeNull();

@@ -1,6 +1,8 @@
 import { grade as historicalGrade } from "../frozen-v4/assertions";
 import type { Check, Json, Scenario } from "../frozen-v4/contracts";
 import { validCurrentProvenance } from "./provenance";
+import { toMinorUnits } from "../../src/domain/price-evidence-v5";
+import { projectResponse } from "./projection";
 import { hash } from "../hash";
 import type { Observation } from "./contracts";
 
@@ -15,15 +17,22 @@ export function grade(scenario: Scenario, observation: Observation): Check[] {
     if (raw.response?.kind === "research") {
       const snapshot = raw.response.research;
       for (const product of snapshot.products) {
-        const assessments = [product.identity, product.requestMatch, ...product.requirements.map((item) => item.assessment), ...product.attributes.map((item) => item.assessment), ...(product.price ? [product.price.assessment] : []), ...(product.priceObservation ? [product.priceObservation.reportedAssessment] : [])];
+        const assessments = [product.identity, product.requestMatch, ...product.requirements.map((item) => item.assessment), ...product.attributes.map((item) => item.assessment)];
         const valid = validCurrentProvenance(snapshot, product, observation.material.body);
-        const aligned = assessments.some((assessment) => assessment.support.some((span) => span.origin.kind === "provider" && span.origin.match === "whitespace"));
+        const price = product.priceEvidence;
+        const moneySpan = price.moneySupport;
+        const priceAligned = price.state === "applicable" && moneySpan && price.report!.moneySupport.quote !== snapshot.sources.find((source) => source.id === moneySpan.sourceId)!.text.slice(moneySpan.start, moneySpan.end);
+        const attributionAligned = price.state === "applicable" && price.report!.attribution.support.some((claim, index) => {
+          const span = price.attributionSupport[index];
+          return span && claim.quote !== snapshot.sources.find((source) => source.id === span.sourceId)!.text.slice(span.start, span.end);
+        });
+        const aligned = priceAligned || attributionAligned || assessments.some((assessment) => assessment.support.some((span) => span.origin.kind === "provider" && span.origin.match === "whitespace"));
         const historical = checks.find((check) => check.id === `quote-containment:${product.id}` && check.turn === turn.index);
-        if (valid && aligned && historical) {
+        if (valid && aligned && historical && hash(projectResponse(raw.response)) === hash(turn.response)) {
           historical.status = "blocked";
-          historical.expected = "Historical quote containment cannot represent provider wording with whitespace alignment. Current evidence-4 provenance is checked separately; the actual provider report is preserved unchanged.";
+          historical.expected = "Historical quote containment cannot represent provider wording with whitespace alignment. Current evidence-5 provenance is checked separately; the actual provider report is preserved unchanged.";
         }
-        checks.push({ id: `native-complete-provenance:${product.id}`, turn: turn.index, status: valid ? "pass" : "fail", critical: true, expected: "Evidence-4 reports match actual provider wording; unique whitespace equivalence, literal UTF-16 offsets, complete context and actual source cut metadata are independently checked", observed: JSON.parse(JSON.stringify({ assessments, priceObservation: product.priceObservation })) as Json, evidence: observation.events.filter((item) => item.turn === turn.index).map((item) => item.sequence) });
+        checks.push({ id: `native-complete-provenance:${product.id}`, turn: turn.index, status: valid ? "pass" : "fail", critical: true, expected: "Evidence-5 reports match actual provider wording; unique whitespace equivalence, literal UTF-16 offsets, complete context and actual source cut metadata are independently checked", observed: JSON.parse(JSON.stringify({ assessments, priceEvidence: product.priceEvidence })) as Json, evidence: observation.events.filter((item) => item.turn === turn.index).map((item) => item.sequence) });
       }
     }
     const event = observation.events.find((item) => item.turn === turn.index && item.kind === "provider-request");
@@ -52,8 +61,8 @@ export function grade(scenario: Scenario, observation: Observation): Check[] {
       const chosen = research.products.find((item) => item.id === research.choice!.productId);
       const exact = (value: { status: string; scope: string; support: unknown[] } | undefined) => value?.status === "supported" && value.scope === "exact-variant" && value.support.length > 0;
       const intent = raw.after.intent;
-      const price = chosen?.price;
-      const fits = Boolean(chosen?.variant && exact(chosen.identity) && exact(chosen.requestMatch) && intent.requirements.filter((item) => item.strength === "hard").every((item) => exact(chosen.requirements.find((row) => row.requirementId === item.id)?.assessment)) && (!intent.budget || price && exact(price.assessment) && price.variant === chosen.variant && price.conditionsResolved && price.currency === intent.budget.currency && (intent.budget.minimum === undefined || price.amount >= intent.budget.minimum) && (intent.budget.maximum === undefined || price.amount <= intent.budget.maximum)));
+      const price = chosen?.priceEvidence;
+      const fits = Boolean(chosen?.variant && exact(chosen.identity) && exact(chosen.requestMatch) && intent.requirements.filter((item) => item.strength === "hard").every((item) => exact(chosen.requirements.find((row) => row.requirementId === item.id)?.assessment)) && (!intent.budget || price?.state === "applicable" && price.variant === chosen.variant && price.usableMoney.currency === intent.budget.currency && (intent.budget.minimum === undefined || price.usableMoney.minorUnits >= toMinorUnits(intent.budget.minimum)!) && (intent.budget.maximum === undefined || price.usableMoney.minorUnits <= toMinorUnits(intent.budget.maximum)!)));
       const check = checks.find((item) => item.id === "hard-choice-eligibility" && item.turn === turn.index)!;
       check.status = fits ? "pass" : "fail";
       check.expected = "Exact supported identity, full request, every hard requirement and qualifying explicit-currency price within both optional bounds";
