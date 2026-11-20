@@ -1,6 +1,6 @@
 # Fieldnote evidence follow-up
 
-The user approved the chat UI and PR #53 and asked that incorrectly missing evidence be fixed. Current application candidate is `fd1f505c116e5112af5597292c5f6c1d9499b824`. The approved layout and 18 official component files are preserved. Issue [#55](https://github.com/d3F0g/research-shopping/issues/55) tracks this work. Current hosted checks and landing decisions are recorded on [PR #53](https://github.com/d3F0g/research-shopping/pull/53); older e81 receipts do not certify this follow-up.
+The user approved the chat UI and PR #53 and asked that incorrectly missing evidence be fixed. The V4 checkpoints below are historical. The November 20 continuation uses application `e169be934f74fb61507b5c7b62c4aeaefc2106a8` and evaluator correction `270e7d494d1e52d5fbd9ac6415d0775fd08bb2ae`. The approved layout and 18 official component files are preserved. Issue [#55](https://github.com/d3F0g/research-shopping/issues/55) tracks this work. Current hosted checks and landing decisions are recorded on [PR #53](https://github.com/d3F0g/research-shopping/pull/53); older e81 receipts do not certify this follow-up.
 
 ## Actual captured response
 
@@ -73,3 +73,22 @@ Verifier2b174712 separately fixes an account-test precondition. It accepts only 
 The human preview remains at <http://127.0.0.1:5290> on the reviewed application. Root restarted only its owned3190/5290 processes after a read-only ready allowance check. Five existing manual requests and USD0.25 reserved allowance remained at that checkpoint. Root paid calls remain zero. A refreshed watches submission was requested once; its result is pending. Do not infer live usefulness from fixtures, source counts, schema validity or green CI.
 
 [Issue62](https://github.com/d3F0g/research-shopping/issues/62) tracks explicit refresh recovery after an honest signed-in revision conflict. [Issue56](https://github.com/d3F0g/research-shopping/issues/56) retains the unknown old blank-page cause. No application workaround, inflated timeout or retry-until-green was added. Current-head hosted results and subsequent manual findings are authoritative on PR53. Shared-history correction is prepared separately and still requires explicit authorization; no ref rewrite or historical erasure is claimed.
+
+
+## November 20 continuation
+
+The fresh human watches response produced three relevant products but no qualifying observed price. Root reproduced that outcome without another provider call. Wholly invented source passages then isolated the old positive sentence grammar as a cause. Ordinary Markdown and prose failed the old application and pass the V5 implementation through the real Hono service, Exa SDK and owned local HTTP transport. The old actual response is not repaired into new evidence.
+
+Issue [#64](https://github.com/d3F0g/research-shopping/issues/64) replaces that grammar with the [current source-price contract](exa-research.md#current-evidence-contract). Known restrictions, conflicting amounts, ambiguous currency, incomplete passages and uncertain variants remain explicit blockers. The approved UI is preserved. Source-based AI interpretations and merchant verification remain separate.
+
+Issue [#65](https://github.com/d3F0g/research-shopping/issues/65) records a newly reproduced native guest-session race after the approved history correction. Two initial cookie-issuing session responses could split visible and server history. Fix2ae aborts actual account/session bootstrap transport while retaining the existing generation and submission guards. Root independently passed five native transport cases, including pre-header and post-header cancellation, exact two-turn history, isolation, free replies and Stop/New chat. This does not establish simultaneous same-cookie tabs or independent roots. The earlier failed hosted workflow remains retained.
+
+The verification owner reproduced a separate first-blockquote assumption and fixed it in4c867e2. The named product identity quotation now matches exact retained source context; its product link matches the same source. All original fixture-label, safe-link and geometry checks remain. Three viewport journeys and screenshots pass. Issue [#66](https://github.com/d3F0g/research-shopping/issues/66) tracks the separate verification-skill PR.
+
+Owner application checks pass582 unit/API tests,31 browser cases and28 PostgreSQL tests, plus build,18 official component comparisons and389 preservation checks. Root independently passed seven native browser cases and inspected all six desktop/mobile price screenshots. At combined source347f3a1, root passed36 evaluator integrity tests and executed all60 cases. The result is11 passed,48 blocked,1 unsupported, zero failures, zero infrastructure errors and zero critical failures. Acceptance remains INCONCLUSIVE. Research usefulness and product relevance remain unassessed.
+
+The original native-1 baseline result and the first current-V5 composed report remain preserved. The latter correctly failed14 legacy checks because the adapter omitted actual bound offsets and the separate monetary witness. The correction maps those distinct native fields with their real source spans and adds negative controls. It does not change frozen assertions or relabel failures.
+
+Independent final functional/visual QA and security pass combined source347f3a1. Fresh final package publication review and new hosted CI remain pending at this documentation checkpoint. No additional paid requests have been made by root. Four user-submitted requests and USD0.20 reserved capacity remain; historical unknown charges and stopped records are unchanged. The human preview still runs the earlier reviewed application until the new candidate clears review. Varied live request-to-recommendation acceptance remains required.
+
+The user-approved exact history correction from b4 to dc61 is complete and confirmed on GitHub. That one-time authorization is consumed. Other refs, clones, caches and the three previously disclosed transcript-provenance references may retain earlier information. No global erasure is claimed. Subsequent publication uses normal fast-forward updates.
