@@ -28,7 +28,7 @@ The conservative local policy reserves USD 0.05 per attempt, allows at most 40 a
 
 Unknown charges, cancellation without reported cost, process interruption or excessive settlement retain reservations and stop further dispatch. Do not reset, clear, refund, relabel, replace or restore old ledger snapshots. Trustworthy provider records are needed for reconciliation. The original OpenAI experiment's stopped historical receipt is also preserved; it is not a runtime dependency.
 
-The earlier November 19 manual continuation acknowledged a specific baseline and allowed at most 10 additional user submissions within USD 0.50 reserved usage. A subsequent uncertain attempt stopped that grant. It is not available for automated verification. New grants need fresh explicit authorization. Grant creation and inspection must never reserve an attempt or contact Exa. The existing operator CLI and historical records remain intact.
+An earlier November 19 grant stopped after an uncertain attempt. The user explicitly authorized a separate manual continuation bound to the complete acknowledged baseline, allowing at most ten additional user submissions and USD 0.50 additional reserved usage. It preserves the original stopped flag and every historical attempt. Any new uncertain or excessive charge stops this grant. The November 20 read-only checkpoint has four manual requests and USD 0.20 reserved capacity remaining. Neither grant authorizes automated paid verification. New grants need fresh explicit authorization. Grant creation and inspection never reserve an attempt or contact Exa.
 
 Issue [#42](https://github.com/d3F0g/research-shopping/issues/42) tracks the exact billing blocker. This rebuild performs no new paid calls. Do not infer a timeout's charge from elapsed time, an empty result or an aggregate balance difference.
 
@@ -37,6 +37,18 @@ Issue [#42](https://github.com/d3F0g/research-shopping/issues/42) tracks the exa
 Each candidate keeps source-linked identity, variant, request fit, requirements, attributes, observed money and unresolved tradeoffs. Native excerpts and expanded context retain separate exact offsets. Known adverse or conditional context cannot disappear through display packing. Both requested price bounds are numerical hard gates. Bare dollar signs, seller location and hostnames cannot establish currency or manufacturer proof.
 
 Citation images are attributed source illustrations. They do not establish an exact-variant photograph. Missing or failed images use a neutral absence rather than invented imagery. Observed prices are unverified with merchants. Source counts, retrieval timestamps and page text do not prove current inventory, delivery or payable offers. Authorized merchant verification remains externally blocked in issue [#36](https://github.com/d3F0g/research-shopping/issues/36).
+
+## Current evidence contract
+
+The Issue #64 application uses native answer revision 2, evidence semantics 5 and workspace wrapper 5. Intent and response envelopes remain version 2. Current price evidence has three states. Absent means no uniquely bound monetary witness. Observed retains that witness and explicit blockers. Applicable additionally carries server-computed minor units, currency and exact-variant scope. Applicable is a source-based AI observation, never a merchant-verified offer.
+
+The server inventories monetary occurrences once beside each complete retained source. Exa supplies source-based attribution, purchase-basis and full-source reviews. At most 24 native quotation groups and eight conditions per product cover all monetary occurrences across at most ten sources. A contiguous group can cover several occurrences only with one consistent declared role and scope. The selected witness covers exactly one scalar amount and its explicit denomination. Uncovered or overlapping occurrences, mixed selected groups, incomplete context and unresolved conditions prevent applicability. The existing answer and workspace size limits remain unchanged.
+
+Literal quotation bindings establish provenance. They do not prove semantic entailment. The finite price-safety policy can refuse known restrictions, conflicts or uncertain attribution. It cannot authorize a price or be cleared by an optimistic native role. Arbitrary headings and ordinary prose subjects do not need a positive phrase dictionary. Known negative cases remain paired with optimistic-provider tests. Novel semantic mistakes remain possible and require product verification.
+
+The server computes choice eligibility from exact identity, complete request fit, every hard criterion and both optional numerical budget bounds in the requested currency. The card and free held-evidence replies use the same price view. Actual historical V2, V3 and V4 requests, questions, messages and research stay frozen. Only active preferences migrate. Old responses cannot gain new proof or paid actions.
+
+The current automated evaluator composes separately labeled V5 fixtures for three valid research scenarios. Original native-1 materials, frozen assertions, baselines and preservation assets remain unchanged. Normal runtime does not convert old provider output into the new contract.
 
 ## Verify without spending
 
