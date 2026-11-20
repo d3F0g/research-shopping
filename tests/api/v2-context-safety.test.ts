@@ -26,8 +26,10 @@ function material(intent: ShoppingIntent, kind: "conflict" | "conditional" | "or
   product.price.amount = 89;
   product.price.currency = kind === "conflict" ? "USD" : "GBP";
   if (kind === "conditional") {
-    product.price.conditions = ["membership and subscription required", "ordinary price GBP 119"];
-    product.price.conditionsResolved = false;
+    product.price.moneySupport.quote = "GBP 89";
+    const review = product.price.sourceReviews[0]!;
+    review.moneyMentions = [{ quote: "GBP 89", role: "selected", scope: "selected-variant", assessment: { ...review.assessment, support: [{ url: review.url, quote: "GBP 89" }] } }, { quote: "GBP 119", role: "reference", scope: "reference-only", assessment: { ...review.assessment, support: [{ url: review.url, quote: "GBP 119" }] } }];
+    review.conditions = [{ quote: "This price requires membership and a subscription.", text: "membership and subscription required", interpretation: "shopper-eligibility", rationale: "Fixture condition remains unresolved." }];
   }
   if (kind === "conflict") {
     const adverse = { url: "https://manufacturer.com/model-a-limits", title: "Fixture data limits", text: "Fixture data: Model A is only splash-resistant. Heavy-rain protection has not been established.", image: "https://manufacturer.com/model-a.png" };
@@ -114,7 +116,7 @@ describe("context meaning through Hono and the actual Exa SDK", () => {
     const result = await client.submit("That GBP89 one looks good.");
     expect(result.kind).toBe("message");
     expect(result.state.intent).toEqual(researched.state.intent);
-    expect(result.state.messages.at(-1)?.text).toContain("Observed GBP 89");
+    expect(result.state.messages.at(-1)?.text).toContain("GBP 89.00");
     const best = await client.submit("Just give me the best one.");
     expect(best.state.messages.at(-1)?.text).toContain("retained source-supported option");
     expect(client.requests).toHaveLength(1);
@@ -156,7 +158,7 @@ describe("context meaning through Hono and the actual Exa SDK", () => {
     const researched = await client.submit("Find a compact photo printer between GBP50 and100. No disposable batteries.");
     expect(researched.kind).toBe("research");
     if (researched.kind !== "research") throw new Error("No research");
-    expect(researched.research.products[0]!.price).toMatchObject({ amount: 89, currency: "GBP", conditionsResolved: false });
+    expect(researched.research.products[0]!.priceEvidence).toMatchObject({ state: "observed", alarms: expect.arrayContaining([expect.objectContaining({ kind: "buyer-restriction" })]) });
     expect(researched.research.choice).toBeNull();
     const followup = await client.submit("That GBP89 one looks good. I'm not a member and won't subscribe.");
     expect(followup.kind).toBe("message");

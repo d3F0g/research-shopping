@@ -1,6 +1,6 @@
 import { randomUUID } from "node:crypto";
 import { describe, expect, it, vi } from "vitest";
-import { initialConversation, type TurnResponse } from "../../src/domain/conversation";
+import { initialConversation, type ShoppingIntent, type TurnResponse } from "../../src/domain/conversation";
 import { projectExaAnswer } from "../../src/server/exa-research";
 import { createApp } from "../../src/server/app";
 import { createConversationService } from "../../src/server/conversations";
@@ -8,25 +8,26 @@ import { nativeMaterial } from "../helpers/v2-material";
 import { priceMaterial } from "../helpers/v5-material";
 
 const intent = { ...initialConversation().intent, productDescription: "a quartz wristwatch with a steel case", budget: { minimum: 400, maximum: 500, currency: "SGD" } };
-const oldWirePositive = (style = "Markdown") => {
-  const old = nativeMaterial(intent);
+const ordinaryPositive = (style = "Markdown", current: ShoppingIntent = intent) => {
+  const old = nativeMaterial(current);
   const text = style === "Markdown" ? "Fixture data. Fixture Powerbank Model A is a USB-C powerbank.\n\n| Model | Price |\n| Model A | SGD 437 |\n\nOne unit. Tax included. No membership or voucher is required." : "Fixture data. Fixture Powerbank Model A is a USB-C powerbank.\n\nChoose Model A for your order. The tag reads 437 SGD for one unit, including tax.";
   const material = JSON.parse(JSON.stringify(old).replaceAll(JSON.stringify(old.citations[0]!.text).slice(1, -1), JSON.stringify(text).slice(1, -1))) as typeof old;
   material.citations[0]!.text = text;
   material.answer.products[0]!.price.amount = 437;
+  material.answer.products[0]!.price.sourceReviews[0]!.conditions[0]!.quote = style === "Markdown" ? "Tax included" : "including tax";
   return material;
 };
 
-describe("Issue 64 original wire parser reproduction", () => {
-  it.each(["Markdown", "prose"])("keeps an ordinary complete %s price usable on the original wire", (style) => {
-    const result = projectExaAnswer(oldWirePositive(style), intent);
+describe("Issue 64 ordinary-format regression on the current wire", () => {
+  it.each(["Markdown", "prose"])("keeps an ordinary complete %s price usable on the current wire", (style) => {
+    const result = projectExaAnswer(ordinaryPositive(style), intent);
     expect(result.status).toBe("ready");
     if (result.status !== "ready") throw new Error("Expected source comparison");
     expect(result.research.products[0]!.eligible).toBe(true);
     expect(result.research.choice?.productId).toBe("model-a");
   });
-  it("retains an ordinary complete price through the original real route", async () => {
-    const app = createApp({ conversations: createConversationService({ research: async ({ intent: current }) => projectExaAnswer(oldWirePositive(), current), quota: { reserve: vi.fn(async () => "admitted" as const), settle: vi.fn(async () => {}) } }) });
+  it("retains an ordinary complete price through the current real route", async () => {
+    const app = createApp({ conversations: createConversationService({ research: async ({ intent: current }) => projectExaAnswer(ordinaryPositive("Markdown", current), current), quota: { reserve: vi.fn(async () => "admitted" as const), settle: vi.fn(async () => {}) } }) });
     const first = await app.request("http://localhost:3000/api/turn", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ phase: "prepare", operationId: randomUUID(), message: "a USB-C powerbank between SGD400 and500" }) });
     const prepared = await first.json() as TurnResponse;
     if (prepared.kind !== "prepared") throw new Error("Expected prepared research");

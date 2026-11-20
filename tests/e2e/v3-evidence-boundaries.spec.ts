@@ -8,7 +8,7 @@ for (const viewport of [{ width: 1440, height: 1000 }, { width: 390, height: 844
     await page.setViewportSize(viewport);
     await page.route("https://manufacturer.com/**", (route) => route.abort());
     await page.goto("/");
-    const directory = "artifacts/fieldnote-v4/boundary-browser";
+    const directory = "artifacts/issue-64-price-v5/boundary-browser";
     await mkdir(directory, { recursive: true });
     const outcomes = [];
     const scenarios = [
@@ -33,26 +33,32 @@ for (const viewport of [{ width: 1440, height: 1000 }, { width: 390, height: 844
       expect(result.research.choice).toBeNull();
       expect(result.research.products.every((product) => product.requestMatch.status === "unknown" && !product.eligible)).toBe(true);
       const product = result.research.products[0]!;
+      const observed = result.research.sources.flatMap((source) => source.moneyOccurrences).find((entry) => product.priceEvidence.observations.includes(entry.id));
+      expect(observed?.value).toMatchObject({ kind: "explicit", minorUnits: scenario.observed * 100, currency: "SGD" });
       if (scenario.observed === 868) {
-        expect(product.price).toBeNull();
-        expect(product.priceObservation?.amount).toBe(868);
-        expect(product.priceObservation?.row.context.text).toContain("SGD 999");
-      } else expect(product.price?.amount).toBe(scenario.observed);
+        expect(product.priceEvidence.state).toBe("observed");
+        expect(result.research.sources[0]!.text).toContain("SGD 999");
+        expect(product.priceEvidence.report!.sourceReviews[0]!.conditions[0]!.text).toBe("Price as listed on Fixture Index.");
+      }
       await expect(page.getByText("Fixture data. Automated test substitute.", { exact: true })).toBeVisible();
       await expect(page.getByText(result.research.summary, { exact: true })).toBeVisible();
-      if (scenario.observed === 868) await expect(page.getByText(/Provider-reported, unverified: Price as listed on Fixture Index/)).toBeVisible();
+      if (scenario.observed === 868) await expect(page.getByText(/Purchase conditions remain unresolved/).first()).toBeVisible();
       await expect(page.getByRole("textbox", { name: "Message", exact: true })).toBeInViewport();
       expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
       if ("adverse" in scenario) {
-        await expect(page.getByText(/Source context: For Gold only/)).toBeVisible();
-        await expect(page.getByText(/Provider price assessment contradicted, unverified/)).toBeVisible();
+        expect(product.priceEvidence.alarms.some((alarm) => alarm.kind === "variant-contradiction")).toBe(true);
+        expect(product.priceEvidence.report!.attribution.status).toBe("contradicted");
+        await expect(page.getByText(/Source context contains a restriction/).first()).toBeVisible();
       }
       await page.screenshot({ path: `${directory}/${viewport.width}-${scenario.id}.png` });
       if ("adverse" in scenario) {
         const disclosure = page.getByRole("button", { name: "Evidence and tradeoffs for Fixture Meridian Sunglasses - Silver", exact: true });
         await disclosure.click();
         await expect.poll(() => disclosure.evaluate((element) => element.parentElement!.querySelector("[data-slot=trace-collapsible-content]")!.getAnimations().length)).toBe(0);
-        const context = page.locator("blockquote").filter({ hasText: "New Silver colorway" });
+        await expect(page.getByText(/Provider price attribution contradicted, unverified/).first()).toBeVisible();
+        await page.getByRole("button", { name: "Sources and research limits", exact: true }).click();
+        await page.getByRole("button", { name: result.research.sources[0]!.title, exact: true }).click();
+        const context = page.locator("blockquote").filter({ hasText: "New Silver colorway" }).last();
         await expect(context).toContainText("SGD 999");
         await expect(context).toContainText("For Gold only.");
         await context.evaluate((element) => element.scrollIntoView({ block: "end" }));
@@ -68,7 +74,7 @@ for (const viewport of [{ width: 1440, height: 1000 }, { width: 390, height: 844
 for (const viewport of [{ width: 1440, height: 1000 }, { width: 390, height: 844 }]) {
   test(`${viewport.width}px separates AI fit claims and source previews from eligibility`, async ({ page }) => {
     await page.setViewportSize(viewport);
-    const directory = "artifacts/fieldnote-v4/card-interpretation";
+    const directory = "artifacts/issue-64-price-v5/card-interpretation";
     await mkdir(directory, { recursive: true });
     const rationale = "Fixture AI claims the selected product fits the requested price range.";
     const productName = "Fixture Meridian Sunglasses - Silver";
@@ -89,7 +95,7 @@ for (const viewport of [{ width: 1440, height: 1000 }, { width: 390, height: 844
         product.requestMatch.rationale = rationale;
         const source = snapshot.sources.find((entry: { id: string }) => entry.id === product.identity.support[0]?.sourceId);
         if (source) source.imageUrl = "https://manufacturer.com/fixture-page-preview.svg";
-        literal = product.identity.support[0].context.text;
+        literal = source.text.slice(product.identity.support[0].context.start, product.identity.support[0].context.end);
       }
       await route.fulfill({ response, json: body });
     });
@@ -99,7 +105,7 @@ for (const viewport of [{ width: 1440, height: 1000 }, { width: 390, height: 844
     await page.getByRole("button", { name: "Send message", exact: true }).click();
     const card = page.locator('[data-slot="card"]').filter({ has: page.getByText(productName, { exact: true }) });
     await expect(card.getByText("SGD 868.00", { exact: true })).toBeVisible();
-    await expect(card.getByText(/^Applicability to the selected variant is unresolved/)).toBeVisible();
+    await expect(card.getByText(/Purchase conditions remain unresolved/)).toBeVisible();
     await expect(card.getByText(/^Unresolved:/)).toBeVisible();
     await expect(card.getByText(rationale, { exact: false })).not.toBeVisible();
     await expect(card.getByText("Source-supported option", { exact: true })).toHaveCount(0);
@@ -118,7 +124,7 @@ for (const viewport of [{ width: 1440, height: 1000 }, { width: 390, height: 844
     const interpretation = card.getByText(rationale, { exact: false });
     await expect(interpretation).toBeVisible();
     await expect(interpretation).toContainText("AI assessment, unverified:");
-    expect(await card.locator("blockquote").first().textContent()).toBe(literal);
+    expect(await card.locator("blockquote").filter({ hasText: productName }).first().textContent()).toBe(literal);
     await interpretation.evaluate((element) => element.scrollIntoView({ block: "center" }));
     await expect(interpretation).toBeInViewport();
     await expect(composer).toBeInViewport();
@@ -126,10 +132,11 @@ for (const viewport of [{ width: 1440, height: 1000 }, { width: 390, height: 844
     await page.screenshot({ path: `${directory}/${viewport.width}-assessment.png`, animations: "disabled" });
     const original = await page.request.get("/api/session").then((response) => response.json());
     const retained = original.state.messages.find((message: { research?: { products: { name: string }[] } }) => message.research?.products[0]?.name === productName).research;
-    expect(retained.products[0].price).toBeNull();
+    expect(retained.products[0].priceEvidence.state).toBe("observed");
     expect(retained.products[0].eligible).toBe(false);
     expect(retained.choice).toBeNull();
-    expect(retained.products[0].identity.support[0].context.text).toBe(literal);
+    const span = retained.products[0].identity.support[0];
+    expect(retained.sources.find((source: { id: string }) => source.id === span.sourceId).text.slice(span.context.start, span.context.end)).toBe(literal);
     unresolved = false;
     await page.getByRole("button", { name: "New chat", exact: true }).click();
     await expect(page.getByRole("heading", { name: "What are you looking for?", exact: true })).toBeVisible();

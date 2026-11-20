@@ -1,326 +1,114 @@
 import { randomUUID } from "node:crypto";
 import { describe, expect, it, vi } from "vitest";
-import {
-  initialConversation,
-  type TurnResponse,
-} from "../../src/domain/conversation";
-import { reduceTurn } from "../../src/domain/turn-reducer";
+import { initialConversation, type ShoppingIntent, type TurnResponse } from "../../src/domain/conversation";
 import { projectExaAnswer } from "../../src/server/exa-research";
 import { createApp } from "../../src/server/app";
 import { createConversationService } from "../../src/server/conversations";
-import { nativeMaterial } from "../helpers/v2-material";
+import { priceView } from "../../src/domain/price-view";
+import { priceMaterial } from "../helpers/v5-material";
 
-const intent = reduceTurn(initialConversation(), {
-  phase: "prepare",
-  operationId: randomUUID(),
-  message: "a USB-C powerbank between SGD30 and40",
-}).state.intent;
-const identity =
-  "Fixture data: Fixture Powerbank Model A is a USB-C powerbank.";
-function materialWith(text: string, current = intent) {
-  const material = nativeMaterial(current);
-  return JSON.parse(
-    JSON.stringify(material).replaceAll(
-      JSON.stringify(material.citations[0]!.text).slice(1, -1),
-      JSON.stringify(text).slice(1, -1),
-    ),
-  ) as ReturnType<typeof nativeMaterial>;
+const intent = { ...initialConversation().intent, productDescription: "Fixture quartz wristwatch with a steel case", budget: { minimum: 400, maximum: 500, currency: "SGD" } };
+const identity = "Fixture data. Fixture Meridian Watch Q17 steel is a quartz wristwatch with a steel case.";
+const positives = [
+  "Q17 steel costs SGD 437.00 for one unit, tax included.",
+  "## Q17 steel\n\n| Selected model | Price | Purchase details |\n| --- | --- | --- |\n| Q17 steel | SGD 437.00 | One watch. Tax included. |\n\nNo membership or voucher is required.",
+  "Choose the steel Q17 for your order. The tag reads SGD 437.00 for one watch, including tax. This is the item amount without joining a club.",
+  "**Your selected option:** Q17 steel\n\n**Item price:** SGD 437.00\n\nOne watch, tax included.",
+  `Fixture specifications. ${"Complete fixture description. ".repeat(190)}\n\n**Item price:** SGD 437.00. One watch, tax included.`,
+];
+const negatives = [
+  "With a membership voucher.", "Membership required.", "Only available with membership.", "The displayed price applies only to members.", "A membership voucher is needed.", "This amount is available only after joining the annual club.",
+  "Not tax included.", "Without tax included.", "Tax is excluded from the displayed amount.", "Excludes GST.", "The price above excludes tax.", "Delivery charged separately at checkout.",
+  "Tax included unless a voucher is unavailable.", "The displayed price changes unless the buyer lives overseas.",
+  "Minimum purchase of three units.", "For three units.", "The displayed amount is for a box of three watches.", "Per-month installments.",
+  "For Q17 resin.", "For Q17 resin only.", "Price applies to Q17 resin only.", "Q17 resin variant only.",
+  "Shipping SGD 15 is mandatory.", "Shipping costs SGD 15.", "Q17 steel requires SGD 15 shipping in addition to the displayed price.",
+  "Q17 steel costs SGD 537.00 for one unit, tax included.",
+];
+function materialWith(text: string, current: ShoppingIntent = intent) {
+  const material = priceMaterial(current, { text: `${identity}\n\nQ17 steel costs SGD 437.00 for one unit, tax included.\n\n${text}` });
+  const review = material.answer.products[0]!.price.sourceReviews[0]!;
+  for (const match of material.citations[0]!.text.matchAll(/SGD\s+(?:537\.00|15)/g)) {
+    review.moneyMentions.push({ quote: match[0], role: "reference", scope: "reference-only", assessment: { ...review.assessment, support: [{ url: review.url, quote: match[0] }] } });
+  }
+  return material;
 }
-function project(material: ReturnType<typeof nativeMaterial>) {
-  const result = projectExaAnswer(material, intent);
-  if (result.status !== "ready")
-    throw new Error("Expected an honest comparison");
+function project(material: ReturnType<typeof priceMaterial>, current: ShoppingIntent = intent) {
+  const result = projectExaAnswer(material, current);
+  expect(result.status).toBe("ready");
+  if (result.status !== "ready") throw new Error("Expected a fixture comparison");
   return result.research;
 }
-const negatives = [
-  "Model A costs SGD 35, not tax included.",
-  "Model A costs SGD 35 without tax included.",
-  "Model A costs SGD 35, tax included.\n\nFixture data: technical details follow.\n\nModel A requires SGD 15 shipping in addition to the displayed price.",
-  "Model A costs SGD 65 while Model B costs SGD 35, tax included.",
-  "Model A costs SGD 35 to SGD 65 depending on configuration, tax included.",
-  "Model A costs SGD 35 for one unit, tax included.\n\nFixture data: ordinary packaging.\n\nThe displayed price applies only to members.",
-  "Model A costs SGD 35 for one unit, tax included.\n\nFixture data: ordinary packaging.\n\nShipping costs SGD 15.",
-  "Model A costs SGD 35 for one unit, tax included.\n\nTax is excluded from the displayed amount.",
-  "Model A costs SGD 35 for one unit, tax included, unless the buyer lives overseas.",
-  "Model A costs SGD 35 for one unit, tax included.\n\nModel A costs SGD 65 for one unit, tax included.",
-];
-describe("complete atomic price evidence", () => {
-  it.each(negatives)(
-    "does not recommend the misleading observation %s",
-    (text) => {
-      const research = project(materialWith(`${identity} ${text}`));
-      expect(research.choice).toBeNull();
-      const product = research.products[0]!;
-      expect(product.eligible).toBe(false);
-      expect(product.price?.conditionsResolved ?? false).toBe(false);
-      expect(product.price?.conditions ?? []).not.toContain("tax included");
-      if (product.price) {
-        expect(
-          product.price.assessment.support.some((span) =>
-            span.context.text.includes(text),
-          ),
-        ).toBe(true);
-      }
-      expect(research.intent.budget).toEqual({
-        minimum: 30,
-        maximum: 40,
-        currency: "SGD",
-      });
-    },
-  );
-  it.each(["Model A", "Lumen 7.2 (warm)", "Rook [wide] + amber"])(
-    "retains an ordinary exact price for arbitrary variant %s",
-    (variant) => {
-      const material = JSON.parse(
-        JSON.stringify(nativeMaterial(intent)).replaceAll("Model A", variant),
-      );
-      const research = project(material);
-      expect(research.choice?.productId).toBe("model-a");
-      expect(research.products[0]!.price).toMatchObject({
-        amount: 35,
-        currency: "SGD",
-        variant,
-        conditionsResolved: true,
-        conditions: ["tax included"],
-      });
-      const support = research.products[0]!.price!.assessment.support[0]!;
-      const source = research.sources.find(
-        (source) => source.id === support.sourceId,
-      )!;
-      expect(
-        source.text.slice(support.literal.start, support.literal.end),
-      ).toBe(support.literal.text);
-      expect(source.text.slice(support.context.start, support.context.end)).toBe(support.context.text);
-    },
-  );
-  it.each([29, 41])(
-    "preserves both numeric bounds for observed price %s",
-    (amount) => {
-      const material = materialWith(
-        `${identity} Model A costs SGD ${amount} for one unit, tax included.`,
-      );
-      material.answer.products[0]!.price.amount = amount;
-      const research = project(material);
-      expect(research.products[0]!.price?.conditionsResolved).toBe(true);
-      expect(research.choice).toBeNull();
-    },
-  );
-  it("does not infer explicit currency from a bare dollar or accept a different currency", () => {
-    expect(
-      project(
-        materialWith(
-          `${identity} Model A costs $35 for one unit, tax included.`,
-        ),
-      ).choice,
-    ).toBeNull();
-    const material = materialWith(
-      `${identity} Model A costs USD 35 for one unit, tax included.`,
-    );
-    material.answer.products[0]!.price.currency = "USD";
-    expect(project(material).choice).toBeNull();
+describe("V5 complete ordinary prices and independent source alarms", () => {
+  it.each(positives)("accepts ordinary complete source formatting %s", (text) => {
+    const research = project(priceMaterial(intent, { text: `${identity}\n\n${text}` }));
+    expect(research.products[0]!.priceEvidence).toMatchObject({ state: "applicable", usableMoney: { minorUnits: 43700, currency: "SGD" } });
+    expect(research.choice?.productId).toBe("fixture-q17");
   });
-  it.each(["source-limit", "duplicate-url"])(
-    "does not lose adverse context while packing %s",
-    (mode) => {
-      const material = nativeMaterial(intent);
-      const adverse = {
-        ...material.citations[0]!,
-        text: `${identity} Model A costs SGD 65.`,
-        url:
-          mode === "duplicate-url"
-            ? material.citations[0]!.url
-            : "https://manufacturer.com/terms",
-      };
-      if (mode === "source-limit") {
-        for (let i = 0; i < 9; i++)
-          material.citations.push({
-            ...material.citations[0]!,
-            url: `https://manufacturer.com/other-${i}`,
-            text: "Fixture data: unrelated technical specifications.",
-          });
-      } else {
-        material.citations.push({
-          ...material.citations[0]!,
-          url: "https://manufacturer.com/other",
-        });
-        material.answer.products[0]!.price.assessment.support[0]!.url =
-          "https://manufacturer.com/other";
-      }
-      material.citations.push(adverse);
-      expect(project(material).choice).toBeNull();
-    },
-  );
-  it("retains an adverse fourth source without inventing a native excerpt", () => {
-    const material = nativeMaterial(intent);
-    for (let i = 0; i < 3; i++)
-      material.citations.push({
-        ...material.citations[0]!,
-        url: `https://manufacturer.com/other-${i}`,
-        ...(i === 2
-          ? {
-              text: "Fixture data: Shipping costs SGD 15 in addition to the displayed price.",
-            }
-          : {}),
-      });
+  it.each(negatives)("blocks the source alarm even with optimistic empty conditions and favorable reference roles %s", (text) => {
+    const material = materialWith(text);
     const research = project(material);
+    const product = research.products[0]!;
+    expect(product.priceEvidence.state).toBe("observed");
+    expect(product.priceEvidence.alarms.length).toBeGreaterThan(0);
+    expect(product.eligible).toBe(false);
     expect(research.choice).toBeNull();
-    expect(
-      research.sources.some((source) =>
-        source.text.includes("Shipping costs SGD 15"),
-      ),
-    ).toBe(true);
-    const actualNativeQuotes =
-      material.answer.products[0]!.price.assessment.support.map(
-        (span) => span.quote,
-      );
-    for (const span of research.products[0]!.price!.assessment.support)
-      expect(actualNativeQuotes).toContain(span.origin.kind === "provider" ? span.origin.reportedQuote : null);
+    expect(priceView(product.priceEvidence, research.sources).text).toContain("SGD 437.00");
+    expect(research.sources[0]!.text).toBe(material.citations[0]!.text);
+    expect(research.intent).toEqual(intent);
   });
-  it.each([
-    ["Fixture Other Model B is a separate product.", true],
-    [
-      "Model A costs SGD 65 for one unit, tax included. Fixture Other Model B is a separate product.",
-      false,
-    ],
-    [
-      "Model A requires SGD 15 shipping in addition to the displayed price. Fixture Other Model B is a separate product.",
-      false,
-    ],
-  ])("retains mixed-source monetary context: %s", (text, eligible) => {
-    const material = nativeMaterial(intent);
-    const other = structuredClone(material.answer.products[0]!);
-    other.id = "model-b";
-    other.name = "Fixture Other Model B";
-    other.variant = "Model B";
-    other.identity.status = "unknown";
-    other.requestMatch.status = "unknown";
-    material.answer.products.push(other);
-    material.citations.push({
-      ...material.citations[0]!,
-      url: "https://manufacturer.com/other",
-      text,
-    });
-    const research = project(material);
-    expect(research.choice?.productId === "model-a").toBe(eligible);
-    expect(
-      research.products.find((product) => product.id === "model-a")!.eligible,
-    ).toBe(eligible);
-  });
-  it("does not promote an unquoted price source over identity-only native support", () => {
-    const material = materialWith(identity);
-    material.citations.push({
-      ...material.citations[0]!,
-      url: "https://manufacturer.com/actual-price",
-      text: "Model A costs SGD 35 for one unit, tax included.",
-    });
-    const research = project(material);
-    expect(research.choice).toBeNull();
-    expect(research.products[0]!.price?.conditionsResolved ?? false).toBe(
-      false,
-    );
-    for (const span of research.products[0]!.price?.assessment.support ?? [])
-      expect(
-        material.answer.products[0]!.price.assessment.support.map(
-          (native) => native.quote,
-        ),
-      ).toContain(span.origin.kind === "provider" ? span.origin.reportedQuote : null);
-  });
-  it.each(["shared", "distinct"])(
-    "keeps three products with %s variants usable on separate unambiguous pages",
-    (scope) => {
-      const material = nativeMaterial(intent);
-      material.answer.products = [];
-      material.citations = [];
-      for (let index = 0; index < 3; index++) {
-        const name = `Fixture Pebble ${index + 1}`;
-        const price = 35 + index;
-        const variant = scope === "shared" ? "standard" : `Model ${index + 1}`;
-        const priceSubject =
-          scope === "shared" ? `${name} ${variant}` : variant;
-        const text = `Fixture data. ${name} ${variant} is a USB-C powerbank. ${priceSubject} costs SGD ${price} for one unit, tax included.`;
-        const product = materialWith(text);
-        const item = product.answer.products[0]!;
-        item.id = `model-${index + 1}`;
-        item.name = name;
-        item.variant = variant;
-        item.price.variant = variant;
-        item.price.amount = price;
-        const url = `https://manufacturer.com/pebble-${index + 1}`;
-        const oldUrl = product.citations[0]!.url;
-        const changed = JSON.parse(
-          JSON.stringify(product).replaceAll(oldUrl, url),
-        ) as typeof product;
-        material.answer.products.push(changed.answer.products[0]!);
-        material.citations.push(changed.citations[0]!);
-      }
-      material.answer.choice.productId = "model-1";
-      const research = project(material);
-      expect(research.products.map((product) => product.eligible)).toEqual([
-        true,
-        true,
-        true,
-      ]);
-      expect(research.choice?.productId).toBe("model-1");
-    },
-  );
-  it("preserves native adverse status and complete quotes", () => {
-    const material = materialWith(
-      `${identity} Model A costs SGD 35 without tax included.`,
-    );
-    material.answer.products[0]!.price.assessment.status = "contradicted";
-    const research = project(material);
-    expect(research.products[0]!.price?.assessment.status).toBe("contradicted");
-    expect(research.products[0]!.price?.assessment.support[0]!.context.text).toContain(
-      "without tax included",
-    );
-    expect(research.choice).toBeNull();
-  });
-  it("exposes the guarded choice and honest price labels through the actual research route", async () => {
-    const app = createApp({
-      conversations: createConversationService({
-        research: async ({ intent }) =>
-          projectExaAnswer(
-            materialWith(`${identity} ${negatives[0]}`, intent),
-            intent,
-          ),
-        quota: {
-          reserve: vi.fn(async () => "admitted" as const),
-          settle: vi.fn(async () => {}),
-        },
-      }),
-    });
-    const session = await app.request("http://localhost:3000/api/session");
-    const cookie = session.headers.get("set-cookie")!.split(";")[0]!;
-    async function post(body: unknown) {
-      const response = await app.request("http://localhost:3000/api/turn", {
-        method: "POST",
-        headers: { cookie, "content-type": "application/json" },
-        body: JSON.stringify(body),
-      });
-      expect(response.status).toBe(200);
-      return (await response.json()) as TurnResponse;
-    }
-    const prepared = await post({
-      phase: "prepare",
-      operationId: randomUUID(),
-      message: "a USB-C powerbank between SGD30 and40",
-    });
-    if (prepared.kind !== "prepared")
-      throw new Error("Expected prepared research");
-    const result = await post({
-      phase: "research",
-      preparedId: prepared.preparedId,
-    });
-    if (result.kind !== "research")
-      throw new Error("Expected research response");
+  it.each(negatives)("preserves the same negative through the actual research route %s", async (text) => {
+    let calls = 0;
+    const app = createApp({ conversations: createConversationService({ research: async ({ intent: current }) => { calls++; return projectExaAnswer(materialWith(text, current), current); }, quota: { reserve: vi.fn(async () => "admitted" as const), settle: vi.fn(async () => {}) } }) });
+    const first = await app.request("http://localhost:3000/api/turn", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ phase: "prepare", operationId: randomUUID(), message: "a quartz wristwatch with a steel case between SGD400 and500" }) });
+    const prepared = await first.json() as TurnResponse;
+    if (prepared.kind !== "prepared") throw new Error("Expected prepared request");
+    const cookie = first.headers.get("set-cookie")!.split(";")[0]!;
+    const response = await app.request("http://localhost:3000/api/turn", { method: "POST", headers: { cookie, "content-type": "application/json" }, body: JSON.stringify({ phase: "research", preparedId: prepared.preparedId }) });
+    const result = await response.json() as TurnResponse;
+    expect(result.kind).toBe("research");
+    if (result.kind !== "research") throw new Error("Expected research");
     expect(result.research.choice).toBeNull();
-    expect(result.research.products[0]!.price?.conditions).not.toContain(
-      "tax included",
-    );
-    expect(result.state.intent.budget).toEqual({
-      minimum: 30,
-      maximum: 40,
-      currency: "SGD",
-    });
+    expect(result.research.products[0]).toMatchObject({ eligible: false, priceEvidence: { state: "observed" } });
+    expect(result.research.products[0]!.priceEvidence.alarms.length).toBeGreaterThan(0);
+    expect(result.research.sources[0]!.text).toContain(text);
+    expect(result.state.intent.budget).toEqual(intent.budget);
+    const held = await app.request("http://localhost:3000/api/turn", { method: "POST", headers: { cookie, "content-type": "application/json" }, body: JSON.stringify({ phase: "prepare", operationId: randomUUID(), message: "Show me more details." }) });
+    expect((await held.json() as TurnResponse).kind).toBe("message");
+    expect(calls).toBe(1);
+  });
+  it.each(["Q17 steel", "Lumen 7.2 (warm)", "Rook [wide] + amber"])("keeps arbitrary selected variant %s usable", (variant) => {
+    const material = priceMaterial(intent, { variant });
+    const research = project(material);
+    expect(research.choice?.productId).toBe("fixture-q17");
+    expect(research.products[0]!.priceEvidence).toMatchObject({ state: "applicable", variant });
+  });
+  it.each([399.99, 400, 500, 500.01])("enforces exact inclusive integer bounds for %s", (amount) => {
+    const quote = `SGD ${amount.toFixed(2)}`;
+    const research = project(priceMaterial(intent, { amount, quote, text: `${identity}\n\nItem price ${quote}. One watch, tax included.` }));
+    expect(research.products[0]!.priceEvidence.state).toBe("applicable");
+    expect(research.products[0]!.eligible).toBe(amount >= 400 && amount <= 500);
+    expect(research.intent.budget).toEqual(intent.budget);
+  });
+  it.each(["SGD 437.00 to SGD 537.00", "SGD 437.00–537.00", "SGD 437.00 for Q17 resin only", "| Q17 resin | SGD 437.00 | One watch |", "Q17 resin\nSGD 437.00\nTax included."])("keeps contradictory scalar, row and variant context %s", (text) => {
+    const research = project(priceMaterial(intent, { text: `${identity}\n\n${text}` }));
+    expect(research.choice).toBeNull();
+    expect(research.products[0]!.priceEvidence.alarms.length).toBeGreaterThan(0);
+  });
+  it("does not borrow currency from another row to repair a bare dollar monetary witness", () => {
+    const material = priceMaterial(intent, { text: `${identity}\n\nPrice: 437 SGD.\n\nNow $437.`, quote: "Now $437" });
+    const research = project(material);
+    expect(research.products[0]!.priceEvidence).toMatchObject({ state: "observed", blockers: expect.arrayContaining(["ambiguous-currency"]) });
+    expect(research.choice).toBeNull();
+    expect(research.sources[0]!.moneyOccurrences).toHaveLength(2);
+  });
+  it("preserves a literal amount when cut, discarded or unreviewed sources prevent applicability", () => {
+    const material = priceMaterial(intent);
+    material.citations[0]!.text += "\n\n" + "Fixture paragraph. ".repeat(1500) + "\n\nThe price excludes tax.";
+    const research = project(material);
+    expect(research.sources[0]!.textTruncated).toBe(true);
+    expect(research.sources[0]!.originalLength).toBe(material.citations[0]!.text.length);
+    expect(research.products[0]!.priceEvidence).toMatchObject({ state: "observed", blockers: expect.arrayContaining(["source-context-incomplete"]) });
+    expect(research.choice).toBeNull();
   });
 });

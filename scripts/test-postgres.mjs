@@ -1,3 +1,4 @@
+import { fixtureEnvironment } from "./test-environment.mjs";
 import { mkdtemp, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
@@ -119,15 +120,14 @@ export async function fixtureDatabase() {
 export async function run(command, args, env) {
   const child = spawn(command, args, {
     stdio: "inherit",
-    env: {
-      ...process.env,
+    env: fixtureEnvironment({
       ...env,
       EXA_RESEARCH_ENABLED: "false",
       EXA_API_KEY: "",
       EXA_RESEARCH_LEDGER_PATH: "",
       FIELDNOTE_TEST_FIXTURES: "false",
       NODE_ENV: "test",
-    },
+    }),
   });
   const code = await new Promise((resolve) => child.once("exit", resolve));
   if (code !== 0) throw new Error(`${command} failed`);

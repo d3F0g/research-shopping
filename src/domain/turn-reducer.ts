@@ -1,3 +1,4 @@
+import { priceView } from "./price-view";
 import { evidenceContext } from "./rendered-evidence";
 import { assessProduct } from "./research";
 import { BudgetSchema, MoneySchema, type ChatMessage, type ConversationState, type PrepareInput, type Requirement, type ShoppingIntent, type TurnDecision } from "./conversation";
@@ -100,14 +101,14 @@ function heldReply(state: ConversationState, mode: "compare" | "best" | "detail"
   const selected = ordinals.length ? research.products.filter((_, index) => ordinals.includes(index)) : research.products;
   if (!selected.length || ordinals.some((index) => !research.products[index])) return { text: "That option is not present in the retained comparison." };
   const unchanged = state.intent.requirements.filter((requirement) => requirement.strength === "hard").every((requirement) => research.intent.requirements.some((prior) => prior.id === requirement.id && prior.text === requirement.text && prior.strength === "hard"));
-  const current = research.evidenceVersion === 4 ? research.products.filter((product) => selected.some((entry) => entry.id === product.id)).map((product) => {
+  const current = research.evidenceVersion === 5 ? research.products.filter((product) => selected.some((entry) => entry.id === product.id)).map((product) => {
     const assessed = assessProduct(product, state.intent);
     return unchanged ? assessed : { ...assessed, eligible: false, blockers: [...assessed.blockers, "The retained evidence has not assessed the changed requirements."] };
   }) : selected.map((product) => ({ ...product, eligible: false, blockers: [...product.blockers, "Historical evidence is retained for reading and has not been reassessed under the current evidence contract."] }));
   const supportText = (assessment: typeof research.products[number]["identity"]) => {
     const spans = assessment.support.map((span) => {
       const source = research.sources.find((item) => item.id === span.sourceId);
-      return source ? ` "${evidenceContext(span)}" (${source.url})` : "";
+      return source ? ` "${evidenceContext(span, research.sources)}" (${source.url})` : "";
     }).join("");
     return `${assessment.rationale} (${assessment.status}).${spans}`;
   };
@@ -131,7 +132,7 @@ function heldReply(state: ConversationState, mode: "compare" | "best" | "detail"
       ? display(`${chosen.name} is the retained source-supported option. Merchant price, stock and delivery remain unverified.`, [`${fixture}${chosen.name}. ${research.choice!.rationale} ${supportText(chosen.requestMatch)}`])
       : display(`I cannot choose a compliant best option from the retained evidence.${!unchanged ? " The retained evidence has not assessed the changed requirements." : " The options have unresolved requirements."}`, current.map((product) => `${product.name}: ${product.blockers.join(" ")}`));
   }
-  const ordered = mode === "cheaper" ? [...current].sort((a, b) => a.eligible !== b.eligible ? Number(b.eligible) - Number(a.eligible) : a.eligible && a.price && b.price && a.price.currency === b.price.currency ? a.price.amount - b.price.amount : 0) : current;
+  const ordered = mode === "cheaper" ? [...current].sort((a, b) => a.eligible !== b.eligible ? Number(b.eligible) - Number(a.eligible) : a.eligible && "priceEvidence" in a && "priceEvidence" in b && a.priceEvidence.state === "applicable" && b.priceEvidence.state === "applicable" && a.priceEvidence.usableMoney.currency === b.priceEvidence.usableMoney.currency ? a.priceEvidence.usableMoney.minorUnits - b.priceEvidence.usableMoney.minorUnits : 0) : current;
   const topics = subject.toLowerCase().match(/[a-z][a-z-]{3,}/g)?.filter((word) => !["what", "about", "which", "their", "compare", "first", "second", "third", "options", "machine", "mean", "good", "stronger", "evidence"].includes(word)) ?? [];
   const rows = (product: typeof current[number]) => mode === "inspect-sources"
     ? [...product.attributes, { name: "Request fit", assessment: product.requestMatch }, ...product.requirements.map((row) => ({ name: research.intent.requirements.find((requirement) => requirement.id === row.requirementId)?.text ?? "Retained requirement", assessment: row.assessment }))].sort((a, b) => ({ conflict: 0, contradicted: 1, unknown: 2, supported: 3 }[a.assessment.status] - { conflict: 0, contradicted: 1, unknown: 2, supported: 3 }[b.assessment.status]))
@@ -143,9 +144,11 @@ function heldReply(state: ConversationState, mode: "compare" | "best" | "detail"
       const qualified = assessment.rationale;
       return `${name}: (${status})${assessment.support.length && qualified.length <= 180 ? ` ${qualified}` : ""}`;
     }).join("; ");
+    const historicalPrice = "price" in product ? product.price : null;
+    const view = "priceEvidence" in product && research.evidenceVersion === 5 ? priceView(product.priceEvidence, research.sources) : null;
     const observation = "priceObservation" in product ? product.priceObservation : null;
     const observationText = observation ? `Source row shows ${observation.currency} ${observation.amount}. Applicability to this variant remains unresolved. Provider price assessment ${observation.reportedAssessment.status}, unverified. Complete source context and reported conditions are in the details. ` : "";
-    const price = mode === "qualify-selection" || mode === "detail" || mode === "inspect-sources" ? product.price ? `Observed ${product.price.currency} ${product.price.amount}. ${product.price.conditionsResolved ? "This is an unverified page price." : "Its conditions are unresolved; it is not an applicable offer."} ` : observationText || "No qualifying observed price was retained. " : "";
+    const price = mode === "qualify-selection" || mode === "detail" || mode === "inspect-sources" ? view ? view.text + " " : historicalPrice ? `Observed ${historicalPrice.currency} ${historicalPrice.amount}. ${historicalPrice.conditionsResolved ? "This is an unverified page price." : "Its conditions are unresolved; it is not an applicable offer."} ` : observationText || "No qualifying observed price was retained. " : "";
     return { name: product.name, finding: `${price}${findings || "Missing attributes remain unknown."}${product.blockers.length ? `${mode === "qualify-selection" ? " I cannot confirm this option meets your current requirements." : ""} Unresolved requirements remain.` : ""}` };
   });
   const sameFinding = findingsByProduct.every((row) => row.finding === findingsByProduct[0]?.finding);
@@ -156,10 +159,15 @@ function heldReply(state: ConversationState, mode: "compare" | "best" | "detail"
   const full = ordered.map((product, index) => {
     const attributes = rows(product);
     const detail = attributes.length ? attributes.map((attribute) => `${attribute.name}: ${supportText(attribute.assessment)}`).join("; ") : "No supported detail was retained for this question. Missing attributes remain unknown.";
+    const historicalPrice = "price" in product ? product.price : null;
+    const view = "priceEvidence" in product && research.evidenceVersion === 5 ? priceView(product.priceEvidence, research.sources) : null;
     const observation = "priceObservation" in product ? product.priceObservation : null;
     const source = observation && research.sources.find((source) => source.id === observation.row.sourceId);
     const catalog = observation ? ` Source row shows ${observation.currency} ${observation.amount}. ${observation.attribution.rationale} Provider-reported conditions, unverified: ${observation.reportedConditions.join(" ")}. Provider price conditions ${observation.reportedConditionsResolved ? "reported resolved, unverified" : "unresolved"}. ${supportText(observation.reportedAssessment)} Complete source context: "${observation.row.context.text}" (${source?.url ?? ""}).` : "";
-    const price = product.price ? ` Observed ${product.price.currency} ${product.price.amount}. ${product.price.conditions.join(" ")} ${supportText(product.price.assessment)} Stock and delivery remain unverified.` : catalog || " No qualifying observed price was retained.";
+    const price = view ? ` ${view.text} ${view.details.map((entry) => {
+      const source = research.sources.find((source) => source.id === entry.sourceId);
+      return source ? `${entry.label} "${source.text.slice(entry.start, entry.end)}" (${source.url})` : "";
+    }).join(" ")}` : historicalPrice ? ` Observed ${historicalPrice.currency} ${historicalPrice.amount}. ${historicalPrice.conditions.join(" ")} ${supportText(historicalPrice.assessment)} Stock and delivery remain unverified.` : catalog || " No qualifying observed price was retained.";
     return `${index === 0 ? fixture : ""}${product.name}: ${detail}${price}${product.blockers.length ? ` Unresolved: ${product.blockers.join(" ")}` : ""}`;
   });
   return display((mode === "inspect-sources" ? "I can only report the retained AI source assessments below. Your description is not new source evidence; any conclusion beyond these assessments remains unknown.\n\n" : "") + brief, full);
