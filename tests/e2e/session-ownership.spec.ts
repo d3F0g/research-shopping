@@ -26,7 +26,10 @@ async function fixtureState(page: Page) {
   return JSON.parse(await page.getByTestId("state").innerText());
 }
 
-test.beforeEach(async ({ page }) => { await control(page, { action: "reset" }); });
+test.beforeEach(async ({ page }) => {
+  await mkdir(directory, { recursive: true });
+  await control(page, { action: "reset" });
+});
 test.afterEach(async ({ page }, info) => {
   await control(page, { action: "release" });
   await mkdir(directory, { recursive: true });
@@ -53,11 +56,13 @@ for (const phase of ["headers", "body"] as const) {
     await page.getByRole("button", { name: "Fixture send", exact: true }).click();
     await expect.poll(async () => texts(await fixtureState(page))).toEqual(hello);
     await input.fill("Fixture draft after hello");
-    expect(texts(await snapshot(page))).toEqual(hello);
+    const before = await snapshot(page);
+    expect(texts(before)).toEqual(hello);
     await control(page, { action: "release" });
     await expect.poll(async () => (await control(page)).events.some((event) => event.id === held.id && event.event === "released")).toBe(true);
     expect(await cookie(page)).toBe(owner);
-    expect(texts(await snapshot(page))).toEqual(hello);
+    const after = await snapshot(page);
+    expect(after.state.messages).toEqual(before.state.messages);
     expect(texts(await fixtureState(page))).toEqual(hello);
     await expect(input).toHaveValue("Fixture draft after hello");
     expect((await fixtureState(page)).error).toBe("");
@@ -73,6 +78,7 @@ for (const phase of ["headers", "body"] as const) {
     const replacement = events.find((event) => event.event === "request" && event.path === "/api/session" && event.id > held.id)!;
     expect(replacement.cookie).toBe(phase === "body" ? installed : null);
     expect(events.filter((event) => event.event === "created" && event.cookie).length).toBe(phase === "body" ? 1 : 2);
+    await writeFile(`${directory}/native-${phase}-history.json`, JSON.stringify({ before, after, followup: authoritative, reloaded: await snapshot(page), owner, installed, events }, null, 2));
   });
 }
 
@@ -115,3 +121,40 @@ test("native StrictMode bootstrap retains both guest turns and isolates another 
     expect(await cookie(other)).not.toBe(owner);
   } finally { await isolated.close(); }
 });
+
+for (const action of ["free reply", "Stop and New chat"]) {
+  test(`a native held research snapshot preserves ${action}`, async ({ page }) => {
+    await page.goto("/");
+    await expect(page.getByRole("button", { name: "New chat", exact: true })).toBeEnabled();
+    const baseline = (await page.request.get("/api/test-stats").then((response) => response.json())).calls;
+    await control(page, { action: "arm", phase: "body" });
+    const input = page.getByRole("textbox", { name: "Message", exact: true });
+    const send = page.getByRole("button", { name: "Send message", exact: true });
+    await input.fill("I want a fixture powerbank between SGD30 and40");
+    await send.click();
+    await expect.poll(async () => (await control(page)).gate?.entered).toBe(true);
+    const held = (await control(page)).events.find((event) => event.event === "held")!;
+    if (action === "Stop and New chat") {
+      await page.getByRole("button", { name: "Stop research", exact: true }).click();
+      await expect.poll(async () => (await control(page)).events.some((event) => event.id === held.id && event.event === "aborted")).toBe(true);
+      await page.getByRole("button", { name: "New chat", exact: true }).click();
+      await expect(page.getByRole("heading", { name: "What are you looking for?", exact: true })).toBeVisible();
+    }
+    await input.fill("hello");
+    await send.click();
+    await expect(page.getByText(hello[1]!, { exact: true })).toBeVisible();
+    await input.fill("Fixture draft during research snapshot");
+    const before = await snapshot(page);
+    await control(page, { action: "release" });
+    await expect.poll(async () => (await control(page)).events.some((event) => event.id === held.id && event.event === "released")).toBe(true);
+    await expect(page.getByRole("button", { name: "Stop research", exact: true })).toHaveCount(0);
+    expect((await snapshot(page)).state.messages).toEqual(before.state.messages);
+    await expect(input).toHaveValue("Fixture draft during research snapshot");
+    await expect(page.getByText(hello[1]!, { exact: true })).toBeVisible();
+    await expect(page.getByRole("alert")).toHaveCount(0);
+    await expect(send).toBeEnabled();
+    expect((await page.request.get("/api/test-stats").then((response) => response.json())).calls).toBe(baseline + 1);
+    if (action === "free reply") expect((await control(page)).events.some((event) => event.id === held.id && event.event === "aborted")).toBe(false);
+    else expect(texts(before)).toEqual(hello);
+  });
+}

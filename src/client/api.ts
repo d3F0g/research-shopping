@@ -26,8 +26,8 @@ export async function api<T>(
     );
   return (await response.json()) as T;
 }
-export const getSession = () =>
-  api<{ state: ConversationState }>("/api/session");
+export const getSession = (signal?: AbortSignal) =>
+  api<{ state: ConversationState }>("/api/session", undefined, signal);
 export const prepare = (input: PrepareInput, signal: AbortSignal) =>
   api<TurnResponse>("/api/turn", input, signal);
 export const research = (preparedId: string, signal: AbortSignal) =>
