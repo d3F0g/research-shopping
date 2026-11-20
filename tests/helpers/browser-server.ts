@@ -7,6 +7,7 @@ import { createExaProductResearch } from "../../src/server/exa-research";
 import { nativeMaterial } from "./v2-material";
 import { catalogMaterial } from "./v3-catalog-material";
 import type { ShoppingIntent } from "../../src/domain/conversation";
+import { sessionGates } from "./session-gates";
 
 if (
   process.env.NODE_ENV !== "test" ||
@@ -114,4 +115,4 @@ const conversations = createConversationService({
 const config = configFromEnvironment(process.env);
 const app = createApp({ conversations }, config);
 app.get("/api/test-stats", (c) => c.json({ calls }));
-serve({ fetch: app.fetch, hostname: "127.0.0.1", port: config.apiPort });
+serve({ fetch: sessionGates(app.fetch), hostname: "127.0.0.1", port: config.apiPort });
