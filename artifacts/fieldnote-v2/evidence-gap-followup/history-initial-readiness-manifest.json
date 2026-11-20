@@ -4804,11 +4804,11 @@
   "documentation": [
     {
       "path": "docs/fieldnote-evidence-followup.md",
-      "sha256": "55ff806c45987c84eb6987c2d3a5a9a75ed3d9cea16ca881c0327abb550d164f"
+      "sha256": "fd8cc06bc541516a3c50b28a0e9353199874a650c3beeab6aff8937f5bc406d1"
     },
     {
       "path": "artifacts/fieldnote-v2/evidence-gap-followup/EVIDENCE.md",
-      "sha256": "954d25e5d6873e458fd20f04c5d6ec5442a94032b0966bf1e236b0ca04ff4994"
+      "sha256": "45514c543dd12ed1288727c8796044532ff40981af674823d7d4caa8d4367ac5"
     }
   ],
   "limits": [

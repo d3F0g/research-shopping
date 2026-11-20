@@ -106,7 +106,7 @@
     "Shared feature remains dc61 with prior failed push CI preserved; new current-head CI and separate skill PR gates pending",
     "Varied real request-to-comparison-and-recommendation usefulness remains unverified; four human requests remain at last checkpoint"
   ],
-  "next": "Finish fresh final package QA/security at exact final B with source equal842, normal-fast-forward publish application A and separate Issue66 skill PR, inspect all actual workflow jobs, merge only that skill dependency once gates pass, and rebind/verify final feature head. Then update owned3190/5290 human preview after ready allowance inspection. Four human manual requests at last checkpoint, zero root paidcalls. PR53 remains draft/unmerged for varied live relevance/price/recommendation acceptance.",
+  "next": "After final metadata QA/security, publish A and the dedicated one-file Issue66 review PR B by normal fast-forward. Inspect every actual current-head CI job. Hold BOTH PRs for root PR53 varied live acceptance. Run the human preview at reviewed combined B, whose application source equals A. After acceptance, consolidate the independently reviewed and CI-passing selector patch into PR53, close the separate review follow-up as superseded, recheck final head source/reviews/CI, then land root PR53 to main under all gates. Do not merge the child into the feature ahead of its parent.",
   "historical_program_checkpoints": {
     "milestone": "Final V4 candidate passes package and class regressions; independent reviews and hostedCI pending",
     "completed": [
@@ -401,5 +401,13 @@
     "qa": "PASS exact842;40evaltests,32generic-valid/canonical-rejectedforgeries,actualred/fixedCLI,389preserved",
     "security": "PASS exact842;92generic-validforgeries,4boundarychecks,2realCLIrejectionswithmodifiedembeddedsourceandnoexecution,16integritytests,actual60CLI/typecheck/389preservation",
     "root": "ActualscorecardCLIpassonretained347report;57same3different/203descriptivepaired;all3excluded;INCONCLUSIVE"
+  },
+  "delivery_order": {
+    "authority": "User AGENTS dependency order and Engineering workflow; root PR53 is the lowest unmerged trunk dependency",
+    "currentAction": "Dedicated Issue66 one-file PR is an independent review and CI lane, held open with PR53",
+    "humanPreview": "Reviewed combined B, same application source as A; no automatic paid proof",
+    "afterLiveAcceptance": "Consolidate the verified selector patch into root PR53, close follow-up as superseded, revalidate final head, then trunk landing",
+    "prohibited": "No child PR merge into feature before parent; no force push, admin bypass or weakened gate",
+    "supersedes": "Earlier local next-step notes that planned merging the verification child first are historical and are superseded by this current plan"
   }
 }
