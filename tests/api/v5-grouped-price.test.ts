@@ -15,6 +15,45 @@ function project(packet: Packet) {
   return result.research;
 }
 describe("bounded native groups and a shared identified money inventory", () => {
+  it("requires every source review to cite its own retained source, including sources without money", () => {
+    const packet = rich();
+    const source = { url: "https://example.com/fixture-care", title: "Fixture care notes", text: "Fixture care notes. Keep the tool in its supplied case." };
+    packet.citations.push(source);
+    for (const product of packet.answer.products) product.price!.sourceReviews.push({ url: source.url, reviewComplete: true, relation: "other-product-or-topic", assessment: { ...product.identity, support: [{ url: source.url, quote: source.text }] }, moneyMentions: [], conditions: [] });
+    const own = project(packet);
+    expect(own.products.every((product) => product.eligible)).toBe(true);
+    for (const product of packet.answer.products) product.price!.sourceReviews.at(-1)!.assessment.support = product.identity.support;
+    const wrong = project(packet);
+    expect(wrong.products.every((product) => !product.eligible)).toBe(true);
+    expect(wrong.choice).toBeNull();
+    for (const product of own.products) {
+      const report = product.priceEvidence.report!;
+      report.sourceReviews.at(-1)!.assessment.support = report.attribution.support;
+    }
+    expect(ResearchSnapshotSchema.safeParse(own).success).toBe(false);
+  });
+  it("fits all ten sources, twenty-four groups and eight conditions without discarding money or context", () => {
+    const packet = rich();
+    for (let index = 8; index < 10; index++) packet.citations.push({ url: `https://example.com/fixture-reference-${index}`, title: "Fixture nonmonetary source", text: `Fixture reference ${index}. Complete maintenance instructions.` });
+    for (const product of packet.answer.products) {
+      const price = product.price!;
+      const review = price.sourceReviews[3]!, group = review.moneyMentions.shift()!, lines = group.quote.split("\n");
+      const pieces = [...lines.slice(0, 13), lines.slice(13).join("\n")];
+      review.moneyMentions.unshift(...pieces.map((quote) => ({ ...group, quote, assessment: { ...group.assessment, support: [{ url: review.url, quote: quote.split("\n")[0]! }] } })));
+      for (const [index, entry] of price.sourceReviews.entries()) entry.conditions = [{ quote: packet.citations[index]!.text.split("\n")[0]!, text: "Fixture tax included in item amount", interpretation: "included-in-amount", rationale: "Fixture source-based interpretation." }];
+      for (const source of packet.citations.slice(8)) price.sourceReviews.push({ url: source.url, reviewComplete: true, relation: "other-product-or-topic", assessment: { ...review.assessment, support: [{ url: source.url, quote: source.text }] }, moneyMentions: [], conditions: [] });
+      expect(price.sourceReviews.reduce((sum, entry) => sum + entry.moneyMentions.length, 0)).toBe(24);
+      expect(price.sourceReviews.reduce((sum, entry) => sum + entry.conditions.length, 0)).toBe(8);
+    }
+    expect(JSON.stringify(packet.answer).length).toBeLessThan(128000);
+    const snapshot = project(packet), workspace = emptyWorkspace();
+    expect(snapshot.products.map((product) => product.eligible)).toEqual([true, true, true]);
+    expect(snapshot.sources).toHaveLength(10);
+    expect(snapshot.sources.flatMap((source) => source.moneyOccurrences)).toHaveLength(181);
+    workspace.state.messages.push({ id: "fixture-max-contract", role: "assistant", text: snapshot.summary, research: snapshot });
+    expect(workspaceBytes(workspace)).toBeLessThan(WORKSPACE_LIMIT);
+    expect(boundWorkspace(workspace)).toBe(true);
+  });
   it.each(["object", "string"])("fits 181 real-shaped synthetic occurrences in an actual %s answer, snapshot and workspace", (mode) => {
     const packet = rich();
     expect(packet.answer.products.map((product) => product.price!.sourceReviews.reduce((sum, review) => sum + review.moneyMentions.length, 0))).toEqual([11, 11, 11]);

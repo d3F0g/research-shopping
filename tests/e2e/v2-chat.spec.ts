@@ -91,7 +91,7 @@ for (const viewport of [
       })
       .click();
     await expect(page.getByText(/^Product identity/).first()).toBeVisible();
-    await expect(page.locator("blockquote").first()).toContainText(
+    await expect(page.locator("blockquote").filter({ hasText: "Fixture data:" }).first()).toContainText(
       "Fixture data:",
     );
     await page.screenshot({

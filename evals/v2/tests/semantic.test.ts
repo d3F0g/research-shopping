@@ -3,11 +3,10 @@ import assert from "node:assert/strict";
 import { exportPackets, importJudgments, type Anchor } from "../semantic/packets";
 import { dimensions } from "../../semantic/rubric";
 import { caseResult, makeReport } from "../report";
-import { loadDataset } from "../../dataset";
-import { scenarioMaterial } from "../../inputs/materials";
+import { material } from "../../inputs/materials";
 import { offlineNetwork } from "../../network";
-import { hash } from "../../hash";
-import type { Json } from "../../frozen-v4/contracts";
+import { hash, materialPayloadHash } from "../../hash";
+import type { Json, Scenario } from "../../frozen-v4/contracts";
 
 const anchor: Anchor = { id: "calibration", userTurns: ["Find binoculars", "Compare the first and third"], heldEvidence: ["Synthetic A weighs 400 g. Synthetic C weighs 300 g."], observedFinalResponse: "C is lighter; other performance remains unknown.", referenceScores: Object.fromEntries(dimensions.map((dimension) => [dimension, dimension === "relevance" ? null : 3])) };
 async function fixture() {
@@ -48,9 +47,11 @@ test("semantic importer rejects unknown dimensions and omitted packets", async (
 });
 
 test("research and held-reply packets retain actual prose, disclosures and hashes", async () => {
-  const { scenarios } = await loadDataset();
-  const scenario = scenarios.find((scenario) => scenario.id === "FN-RT-002")!;
-  const input = scenarioMaterial(scenario.provider, scenario.id);
+  const scenario: Scenario = { id: "fixture-v5-exporter", revision: 1, category: "evidence-honesty", title: "Fixture V5 held evidence export", provider: "supported", actions: [{ kind: "message", text: "Find three fixture quartz wristwatches under SGD500" }, { kind: "message", text: "Compare the first and third options" }], expectedBehavior: ["Preserve actual current response and disclosure text"], milestones: [], review: { status: "author-drafted", reference: "Explicit V5 transport/exporter fixture. No product acceptance." } };
+  const { comparisonMaterial } = await import("../../../tests/helpers/v5-comparison-material");
+  const { initialConversation } = await import("../../../src/domain/conversation");
+  const input = { ...material("powerbank"), id: "fixture-v5-exporter", label: "Explicit fixture V5 exporter transport", body: JSON.parse(JSON.stringify(comparisonMaterial(initialConversation().intent))) as Json };
+  input.sha256 = materialPayloadHash(input);
   const guard = offlineNetwork();
   let observation;
   try { observation = await (await import("../adapter")).observe(scenario, input, guard); }

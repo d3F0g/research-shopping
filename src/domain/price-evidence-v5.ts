@@ -25,8 +25,8 @@ const MoneyValueSchema = z.discriminatedUnion("kind", [
 const OccurrenceSchema = z.strictObject({ id: z.string().max(160), literal: SourceRefSchema, amountSpan: SourceRefSchema, currencySpan: SourceRefSchema.nullable(), value: MoneyValueSchema });
 export const SourceSchema = BaseSourceSchema.safeExtend({ moneyOccurrences: z.array(OccurrenceSchema).max(12000) });
 export type ResearchSource = z.infer<typeof SourceSchema>;
-const AlarmSchema = z.strictObject({ policy: z.literal("price-safety-v1"), kind: z.enum(["buyer-restriction", "incomplete-total", "conditional-applicability", "purchase-basis", "variant-contradiction", "competing-amount", "source-instruction"]), support: SourceRefSchema });
-const BlockerSchema = z.enum(["missing-price-report", "missing-literal-money", "ambiguous-currency", "amount-currency-mismatch", "variant-unresolved", "non-scalar-basis", "conditions-unresolved", "conflicting-observations", "source-review-missing", "source-review-incomplete", "unaccounted-money", "source-context-incomplete", "unbound-support", "adverse-context"]);
+const AlarmSchema = z.strictObject({ policy: z.literal("price-safety-v1"), kind: z.enum(["buyer-restriction", "incomplete-total", "conditional-applicability", "purchase-basis", "variant-contradiction", "uncertain-attribution", "competing-amount", "source-instruction"]), support: SourceRefSchema });
+const BlockerSchema = z.enum(["missing-price-report", "missing-literal-money", "ambiguous-currency", "amount-currency-mismatch", "variant-unresolved", "non-scalar-basis", "conditions-unresolved", "conflicting-observations", "source-review-missing", "source-review-incomplete", "unaccounted-money", "source-context-incomplete", "unbound-support", "adverse-context", "attribution-context-uncertain"]);
 const ReviewSchema = z.strictObject({ sourceId: z.string().max(80), moneyMentions: z.array(z.strictObject({ occurrenceIds: z.array(z.string().max(160)).max(2000), role: Role, support: SourceRefSchema, assessmentSupport: z.array(SourceRefSchema).max(3) })).max(24), conditions: z.array(SourceRefSchema).max(8), assessmentSupport: z.array(SourceRefSchema).max(3) });
 const shared = { report: PriceReportSchema.nullable(), observations: z.array(z.string().max(160)).max(2000), reviews: z.array(ReviewSchema).max(10), alarms: z.array(AlarmSchema).max(240), moneySupport: SourceRefSchema.nullable(), attributionSupport: z.array(SourceRefSchema).max(3), basisSupport: z.array(SourceRefSchema).max(3) };
 export const PriceEvidenceSchema = z.discriminatedUnion("state", [
@@ -75,6 +75,7 @@ function moneyInventory(sources: BaseSource[]): Occurrence[] {
 }
 const escape = (value: string) => value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 const normalized = (value: string) => value.trim().replace(/^[*#\s]+|[*\s]+$/g, "").toLowerCase();
+const singleUnit = (value: string) => /^(?:one|1)\s+[\p{L}][\p{L}-]*(?![\p{L}\p{N}-])/iu.test(value.trim());
 function sourceAlarms(context: Context, inventory: Occurrence[], selected: Occurrence | undefined): Alarm[] {
   const alarms: Alarm[] = [];
   const add = (kind: Alarm["kind"], sourceId: string, start: number, end: number) => {
@@ -84,7 +85,17 @@ function sourceAlarms(context: Context, inventory: Occurrence[], selected: Occur
   };
   const subjects = [...new Set([context.product.name, context.product.variant, context.product.variant ? `${context.product.name} ${context.product.variant}` : null].filter((v): v is string => !!v))];
   const isSubject = (subject: string) => subjects.some((value) => normalized(subject) === normalized(value) || normalized(subject) === normalized(`${context.product.name} ${context.product.variant}`));
+  const markedScope = (value: string) => /^(?:#+\s*)?(?:model|variant)\s*[:#-]?\s+(.+)$/iu.exec(value.trim())?.[1];
+  const matchesSubject = (value: string) => isSubject(value) || !!markedScope(value) && isSubject(markedScope(value)!);
+  const explicitOtherScope = (value: string) => !!markedScope(value) && !matchesSubject(value);
   const assertions: Occurrence[] = [];
+  const identifierAt = (source: BaseSource, start: number, end: number) => {
+    const text = source.text.slice(start, end).split("");
+    for (const occurrence of inventory.filter((entry) => entry.literal.sourceId === source.id)) {
+      for (let index = Math.max(start, occurrence.literal.start); index < Math.min(end, occurrence.literal.end); index++) text[index - start] = " ";
+    }
+    return [...text.join("").matchAll(/[\p{L}\p{N}][\p{L}\p{N}._-]*/gu)].some(([token]) => /\p{L}/u.test(token) && /\p{N}/u.test(token));
+  };
   const policies: [Alarm["kind"], RegExp][] = [
     ["buyer-restriction", /\b(?:(?:membership(?: voucher)?|subscription|voucher|coupon)\s+(?:is\s+)?(?:required|needed)|(?:requires?|needs?)\s+(?:a\s+)?(?:membership|subscription|voucher|coupon)|(?:only\s+available\s+with|(?:only\s+)?with)\s+(?:a\s+)?(?:membership|subscription|voucher|coupon)|(?:only\s+to\s+members|members\s+only)|only\s+after\s+joining\s+(?:the\s+)?annual\s+club)\b/giu],
     ["incomplete-total", /\b(?:(?:not|without)\s+(?:tax|GST|VAT)\s+included|(?:excludes?|excluding)\s+(?:tax|GST|VAT)|(?:tax|GST|VAT)\s+(?:is\s+)?excluded|(?:delivery|shipping)\s+(?:is\s+)?charged\s+separately|mandatory\s+(?:delivery|shipping)(?:\s+charges?)?|(?:delivery|shipping)\s+(?:costs?|charges?)|(?:delivery|shipping)\s+in\s+addition|(?:delivery|shipping)\s+(?:[A-Z]{3}\s*|[$€£])\d[^.\n]*(?:mandatory|required))\b/giu],
@@ -97,7 +108,7 @@ function sourceAlarms(context: Context, inventory: Occurrence[], selected: Occur
     if (containsSourceInstructions(source.text)) add("source-instruction", source.id, 0, source.text.length);
     for (const match of source.text.matchAll(/(?:^|[.!?]\s+|\n)\s*(?:(?:price\s+applies\s+to|for)\s+([^\n.!?]+?)(?:\s+only)?|([^\n.!?]+?)\s+variant\s+only)[.!?]?(?=\n|$)/giu)) {
       const subject = (match[1] ?? match[2])!.trim();
-      if (/^(?:one|1)\s+(?:unit|item|piece|watch|lantern)s?(?:\b|$)/i.test(subject)) continue;
+      if (singleUnit(subject)) continue;
       if (!isSubject(subject)) add("variant-contradiction", source.id, match.index, match.index + match[0].length);
     }
     for (const item of inventory.filter((entry) => entry.literal.sourceId === source.id)) {
@@ -110,16 +121,18 @@ function sourceAlarms(context: Context, inventory: Occurrence[], selected: Occur
         const explicitSubject = /(?:^|[.!?\n]|\bwhile\s+)([^.!?\n]+?)\s+(?:costs?|is priced at|has a price of)\s*$/iu.exec(prefix)?.[1]?.trim();
         if (explicitSubject && !selectedAssertion && !isSubject(explicitSubject)) add("variant-contradiction", source.id, start - explicitSubject.length, end);
         const inlineVariant = /^\s+for\s+(.+?)\s+only(?:[.!?]|$)/iu.exec(source.text.slice(end))?.[1];
-        if (inlineVariant && !isSubject(inlineVariant)) add("variant-contradiction", source.id, start, end + inlineVariant.length + 10);
+        if (inlineVariant && !singleUnit(inlineVariant) && !isSubject(inlineVariant)) add("variant-contradiction", source.id, start, end + inlineVariant.length + 10);
         const lineStart = source.text.lastIndexOf("\n", start) + 1;
         const line = source.text.slice(lineStart, start);
         if (/^\s*(?:price\s*:?\s*)?$/iu.test(line)) {
           const previous = source.text.slice(0, lineStart).trimEnd();
           const heading = previous.slice(previous.lastIndexOf("\n") + 1).trim();
-          if (heading && heading.length <= 160 && !/[.!?:]$/u.test(heading) && !isSubject(heading)) add("variant-contradiction", source.id, previous.length - heading.length, end);
+          if (explicitOtherScope(heading)) add("variant-contradiction", source.id, previous.length - heading.length, end);
+          else if (heading && !matchesSubject(heading) && identifierAt(source, previous.length - heading.length, previous.length)) add("uncertain-attribution", source.id, previous.length - heading.length, end);
         }
         const cell = /^\s*\|\s*([^|]+?)\s*\|\s*$/u.exec(line)?.[1];
-        if (cell && !/^(?:item\s+|current\s+)?price$/iu.test(cell) && !isSubject(cell)) add("variant-contradiction", source.id, start - line.length, end);
+        if (cell && explicitOtherScope(cell)) add("variant-contradiction", source.id, lineStart, end);
+        else if (cell && !matchesSubject(cell) && identifierAt(source, lineStart, start)) add("uncertain-attribution", source.id, lineStart, end);
       }
       const suffix = source.text.slice(end, end + 100);
       if (/^\s*(?:[-–—]|to)\s*(?:[A-Z]{3}\s*)?\d/u.test(suffix) || item.value.kind === "ambiguous" && item.value.reason === "range-endpoint") add("purchase-basis", source.id, start, end);
@@ -153,7 +166,8 @@ export function bindPriceEvidence(report: PriceReport | null, context: Context):
   const alarms = sourceAlarms(context, inventory, selected);
   const reviews: z.infer<typeof ReviewSchema>[] = [];
   if (!context.complete || context.sources.some((source) => source.textTruncated)) blockers.add("source-context-incomplete");
-  if (alarms.length) blockers.add("adverse-context");
+  if (alarms.some((alarm) => alarm.kind !== "uncertain-attribution")) blockers.add("adverse-context");
+  if (alarms.some((alarm) => alarm.kind === "uncertain-attribution")) blockers.add("attribution-context-uncertain");
   if (report) {
     if (!selected) blockers.add("missing-literal-money");
     if (selected?.value.kind === "ambiguous") blockers.add("ambiguous-currency");
@@ -166,6 +180,7 @@ export function bindPriceEvidence(report: PriceReport | null, context: Context):
       if (matches.length !== 1) { blockers.add("source-review-missing"); continue; }
       const review = matches[0]!;
       if (!review.reviewComplete || review.relation === "unknown" || !judgment(review.assessment, false)) blockers.add("source-review-incomplete");
+      if (review.assessment.support.some((support) => support.sourceId !== source.id)) blockers.add("unbound-support");
       const mentions: z.infer<typeof ReviewSchema>["moneyMentions"] = [];
       for (const mention of review.moneyMentions) {
         const span = bind({ sourceId: source.id, quote: mention.quote });

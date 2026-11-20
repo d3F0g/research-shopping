@@ -240,9 +240,7 @@ describe("real SDK transport and bounded evidence", () => {
         expect(result.research.products[0]!.priceEvidence.state === "applicable").toBe(
           false,
         );
-        expect(result.research.products[0]!.priceEvidence.alarms.map((alarm) => alarm.kind)).not.toContain(
-          "tax included",
-        );
+        expect(result.research.products[0]!.priceEvidence.alarms.map((alarm) => alarm.kind)).toContain("incomplete-total");
       }
       expect(JSON.stringify(result)).not.toContain("fake-loopback-key");
     },
@@ -278,9 +276,14 @@ describe("real SDK transport and bounded evidence", () => {
       expect(
         result.research.products[0]!.priceEvidence.state === "applicable",
       ).toBe(false);
-      expect(
-        result.research.products[0]!.priceEvidence.alarms.map((alarm) => alarm.kind),
-      ).not.toContain("tax included");
+      const price = result.research.products[0]!.priceEvidence;
+      if (text.includes("Model B")) {
+        expect(price).toMatchObject({ state: "observed", blockers: expect.arrayContaining(["missing-literal-money"]) });
+        expect(result.research.sources[0]!.moneyOccurrences.map((entry) => entry.value)).toEqual([
+          { kind: "explicit", minorUnits: 6500, currency: "SGD" },
+          { kind: "explicit", minorUnits: 3500, currency: "SGD" },
+        ]);
+      } else expect(price.alarms.length).toBeGreaterThan(0);
     },
   );
   it.each(["is not wireless", "wired audio only", "without wireless audio"])(

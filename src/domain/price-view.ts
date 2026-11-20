@@ -16,6 +16,7 @@ const blockers = {
   "source-context-incomplete": "Source context was cut, discarded or conflicting.",
   "unbound-support": "A reported quotation has no unique literal source binding.",
   "adverse-context": "Source context contains a restriction or conflicting price information.",
+  "attribution-context-uncertain": "Variant applicability is uncertain beside another possible source identifier.",
 };
 export function priceView(price: DeepReadonly<PriceEvidence>, sources: readonly DeepReadonly<ResearchSource>[]) {
   const inventory = sources.flatMap((source) => source.moneyOccurrences);
@@ -31,7 +32,7 @@ export function priceView(price: DeepReadonly<PriceEvidence>, sources: readonly 
     : unresolved.join(" ");
   const reviewed = new Set(price.reviews.flatMap((review) => review.moneyMentions.flatMap((group) => group.occurrenceIds)));
   const details = [
-    ...price.alarms.map((alarm) => ({ label: `Source-context restriction (${alarm.kind}). This is derived context, not a provider quotation.`, ...alarm.support })),
+    ...price.alarms.map((alarm) => ({ label: alarm.kind === "uncertain-attribution" ? "Variant applicability is uncertain beside a possible source identifier. This is derived context, not proof of another product." : `Source-context restriction (${alarm.kind}). This is derived context, not a provider quotation.`, ...alarm.support })),
     ...price.reviews.flatMap((review) => review.conditions.map((support, index) => ({ label: `Provider-reported condition, unverified. ${price.report?.sourceReviews.find((entry) => entry.sourceId === review.sourceId)?.conditions[index]?.text ?? ""}`, ...support }))),
     ...inventory.filter((entry) => !reviewed.has(entry.id)).map((entry) => ({ label: "Unreviewed source amount. Applicability remains unknown.", ...entry.literal })),
     ...price.attributionSupport.map((support) => ({ label: `Provider price attribution ${price.report!.attribution.status}, unverified: ${price.report!.attribution.rationale}`, ...support })),

@@ -56,12 +56,17 @@ for (const viewport of [{ width: 1440, height: 1000 }, { width: 390, height: 844
         await disclosure.click();
         await expect.poll(() => disclosure.evaluate((element) => element.parentElement!.querySelector("[data-slot=trace-collapsible-content]")!.getAnimations().length)).toBe(0);
         await expect(page.getByText(/Provider price attribution contradicted, unverified/).first()).toBeVisible();
-        await page.getByRole("button", { name: "Sources and research limits", exact: true }).click();
-        await page.getByRole("button", { name: result.research.sources[0]!.title, exact: true }).click();
+        const sourcesDisclosure = page.getByRole("button", { name: "Sources and research limits", exact: true });
+        await sourcesDisclosure.click();
+        await expect.poll(() => sourcesDisclosure.evaluate((element) => element.parentElement!.querySelector("[data-slot=trace-collapsible-content]")!.getAnimations().length)).toBe(0);
+        const sourceDisclosure = page.getByRole("button", { name: result.research.sources[0]!.title, exact: true });
+        await sourceDisclosure.click();
+        await expect(sourceDisclosure).toHaveAttribute("aria-expanded", "true");
+        await expect.poll(() => sourceDisclosure.evaluate((element) => element.parentElement!.querySelector("[data-slot=trace-collapsible-content]")!.getAnimations().length)).toBe(0);
         const context = page.locator("blockquote").filter({ hasText: "New Silver colorway" }).last();
         await expect(context).toContainText("SGD 999");
         await expect(context).toContainText("For Gold only.");
-        await context.evaluate((element) => element.scrollIntoView({ block: "end" }));
+        await context.scrollIntoViewIfNeeded();
         await expect(context).toBeInViewport();
         await page.screenshot({ path: `${directory}/${viewport.width}-${scenario.id}-context.png`, animations: "disabled" });
       }

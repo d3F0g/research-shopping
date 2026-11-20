@@ -235,8 +235,8 @@ describe("retained snapshot answers", () => {
     const research = state.messages.at(-1)!.research!;
     if (research.evidenceVersion !== 5) throw new Error("Expected current fixture evidence");
     research.products[0]!.attributes = Array.from({ length: 6 }, () => structuredClone(research.products[0]!.attributes[0]!));
-    for (const attribute of research.products[0]!.attributes) attribute.assessment.support = Array.from({ length: 3 }, () => ({ ...attribute.assessment.support[0]!, context: { start: 0, end: 4000 } }));
-    research.sources[0]!.text = "x".repeat(4000);
+    for (const [index, attribute] of research.products[0]!.attributes.entries()) attribute.assessment.support = Array.from({ length: 3 }, () => ({ ...attribute.assessment.support[0]!, context: { start: index * 4000, end: (index + 1) * 4000 } }));
+    research.sources[0]!.text = Array.from({ length: 6 }, (_, index) => "x".repeat(3999) + index).join("");
     const result = turn(state, "Compare the first two.");
     const answer = result.state.messages.at(-1)!;
     expect(answer.detail!.length).toBeLessThanOrEqual(24000);

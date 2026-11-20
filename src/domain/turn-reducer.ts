@@ -105,10 +105,18 @@ function heldReply(state: ConversationState, mode: "compare" | "best" | "detail"
     const assessed = assessProduct(product, state.intent);
     return unchanged ? assessed : { ...assessed, eligible: false, blockers: [...assessed.blockers, "The retained evidence has not assessed the changed requirements."] };
   }) : selected.map((product) => ({ ...product, eligible: false, blockers: [...product.blockers, "Historical evidence is retained for reading and has not been reassessed under the current evidence contract."] }));
+  const quotedPassages = new Set<string>();
+  const passageText = (sourceId: string, text: string) => {
+    const source = research.sources.find((item) => item.id === sourceId);
+    if (!source) return "";
+    const key = JSON.stringify([sourceId, text]);
+    if (quotedPassages.has(key)) return ` Same quoted source passage (${source.url}).`;
+    quotedPassages.add(key);
+    return ` "${text}" (${source.url})`;
+  };
   const supportText = (assessment: typeof research.products[number]["identity"]) => {
     const spans = assessment.support.map((span) => {
-      const source = research.sources.find((item) => item.id === span.sourceId);
-      return source ? ` "${evidenceContext(span, research.sources)}" (${source.url})` : "";
+      return passageText(span.sourceId, evidenceContext(span, research.sources));
     }).join("");
     return `${assessment.rationale} (${assessment.status}).${spans}`;
   };
@@ -166,7 +174,7 @@ function heldReply(state: ConversationState, mode: "compare" | "best" | "detail"
     const catalog = observation ? ` Source row shows ${observation.currency} ${observation.amount}. ${observation.attribution.rationale} Provider-reported conditions, unverified: ${observation.reportedConditions.join(" ")}. Provider price conditions ${observation.reportedConditionsResolved ? "reported resolved, unverified" : "unresolved"}. ${supportText(observation.reportedAssessment)} Complete source context: "${observation.row.context.text}" (${source?.url ?? ""}).` : "";
     const price = view ? ` ${view.text} ${view.details.map((entry) => {
       const source = research.sources.find((source) => source.id === entry.sourceId);
-      return source ? `${entry.label} "${source.text.slice(entry.start, entry.end)}" (${source.url})` : "";
+      return source ? `${entry.label}${passageText(source.id, source.text.slice(entry.start, entry.end))}` : "";
     }).join(" ")}` : historicalPrice ? ` Observed ${historicalPrice.currency} ${historicalPrice.amount}. ${historicalPrice.conditions.join(" ")} ${supportText(historicalPrice.assessment)} Stock and delivery remain unverified.` : catalog || " No qualifying observed price was retained.";
     return `${index === 0 ? fixture : ""}${product.name}: ${detail}${price}${product.blockers.length ? ` Unresolved: ${product.blockers.join(" ")}` : ""}`;
   });

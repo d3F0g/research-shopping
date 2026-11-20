@@ -40,6 +40,16 @@ function project(material: ReturnType<typeof priceMaterial>, current: ShoppingIn
   return result.research;
 }
 describe("V5 complete ordinary prices and independent source alarms", () => {
+  it.each(["photometer", "cradle", "spectroscope", "widget"])("recognizes the generic single-unit shape for one %s without a product registry", (unit) => {
+    for (const text of [`Item price SGD 437.00.\n\nFor one ${unit}.`, `Item price SGD 437.00 for one ${unit} only.`, `Item price SGD 437.00.\n\nFor one ${unit}, tax included.`]) {
+      const research = project(priceMaterial(intent, { text: `${identity}\n\n${text}` }));
+      expect(research.products[0]!.priceEvidence.state).toBe("applicable");
+      expect(research.choice?.productId).toBe("fixture-q17");
+    }
+    const otherVariant = project(priceMaterial(intent, { text: `${identity}\n\nItem price SGD 437.00 for Q17 resin only.` }));
+    expect(otherVariant.products[0]!.priceEvidence.alarms.some((alarm) => alarm.kind === "variant-contradiction")).toBe(true);
+    expect(otherVariant.choice).toBeNull();
+  });
   it.each(positives)("accepts ordinary complete source formatting %s", (text) => {
     const research = project(priceMaterial(intent, { text: `${identity}\n\n${text}` }));
     expect(research.products[0]!.priceEvidence).toMatchObject({ state: "applicable", usableMoney: { minorUnits: 43700, currency: "SGD" } });
