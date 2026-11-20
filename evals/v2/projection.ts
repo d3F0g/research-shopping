@@ -1,6 +1,20 @@
 import type { ConversationState, RenderableResearch, TurnResponse } from "../../src/domain/conversation";
 import type { Intent, Json } from "../frozen-v4/contracts";
 
+type CurrentProduct = Extract<RenderableResearch, { evidenceVersion: 5 }>["products"][number];
+function projectCurrentPrice(price: CurrentProduct["priceEvidence"]): Json {
+  if (price.state !== "applicable") return null;
+  if (!price.report || !price.moneySupport) throw new Error("Applicable V5 money requires its native report and bound monetary witness");
+  const report = price.report;
+  const attribution = report.attribution.support.map((claim, index) => {
+    const bound = price.attributionSupport[index];
+    if (!bound || bound.sourceId !== claim.sourceId) throw new Error("V5 attribution has no matching bound native quotation");
+    return { ...bound, quote: claim.quote, origin: { kind: "provider", field: "price.attribution", reportedQuote: claim.quote } };
+  });
+  const money = { ...price.moneySupport, quote: report.moneySupport.quote, origin: { kind: "provider", field: "price.moneySupport", reportedQuote: report.moneySupport.quote } };
+  return { amount: price.usableMoney.minorUnits / 100, currency: price.usableMoney.currency, variant: price.variant, selectedOccurrenceId: price.selectedOccurrenceId, conditionsResolved: true, conditions: report.sourceReviews.flatMap((review) => review.conditions.map((condition) => condition.text)), assessment: { ...report.attribution, support: [...attribution, money] } };
+}
+
 export function projectIntent(state: ConversationState): Intent {
   const { intent, pending } = state;
   const budget = intent.budget ? { ...(intent.budget.maximum === undefined ? {} : { amount: intent.budget.maximum }), ...(intent.budget.minimum === undefined ? {} : { minimum: intent.budget.minimum }), currency: intent.budget.currency } : null;
@@ -22,7 +36,7 @@ export function projectResponse(response: TurnResponse | { kind: "research"; res
       ? { ...span, quote: span.origin.kind === "provider" ? span.origin.reportedQuote : ("text" in span.literal ? span.literal.text : research.sources.find((source) => source.id === span.sourceId)!.text.slice(span.literal.start, span.literal.end)), start: span.literal.start, end: span.literal.end }
       : { ...span, quote: span.originalQuote, start: span.originalStart, end: span.originalEnd }) });
     projected.research = { ...JSON.parse(JSON.stringify(research)) as Record<string, Json>, products: research.products.map((product) => ({ ...JSON.parse(JSON.stringify(product)) as Record<string, Json>, identity: assessment(product.identity), requestMatch: assessment(product.requestMatch), criteria: product.requirements.map(({ requirementId, assessment: value }) => ({ criterionId: requirementId, assessment: assessment(value) })), attributes: product.attributes.map((row) => ({ name: row.name, assessment: assessment(row.assessment) })), price: "priceEvidence" in product
-      ? product.priceEvidence.state === "applicable" ? { amount: product.priceEvidence.usableMoney.minorUnits / 100, currency: product.priceEvidence.usableMoney.currency, variant: product.priceEvidence.variant, conditionsResolved: true, conditions: product.priceEvidence.report!.sourceReviews.flatMap((review) => review.conditions.map((condition) => condition.text)), assessment: { ...product.priceEvidence.report!.attribution, support: product.priceEvidence.report!.attribution.support.map((span) => ({ ...span, quote: span.quote })) } } : null
+      ? projectCurrentPrice(product.priceEvidence)
       : product.price ? { ...product.price, conditions: [...product.price.conditions], assessment: assessment(product.price.assessment) } : null })) };
   }
   return projected;

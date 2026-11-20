@@ -2,6 +2,7 @@ import { grade as historicalGrade } from "../frozen-v4/assertions";
 import type { Check, Json, Scenario } from "../frozen-v4/contracts";
 import { validCurrentProvenance } from "./provenance";
 import { toMinorUnits } from "../../src/domain/price-evidence-v5";
+import { projectResponse } from "./projection";
 import { hash } from "../hash";
 import type { Observation } from "./contracts";
 
@@ -18,9 +19,16 @@ export function grade(scenario: Scenario, observation: Observation): Check[] {
       for (const product of snapshot.products) {
         const assessments = [product.identity, product.requestMatch, ...product.requirements.map((item) => item.assessment), ...product.attributes.map((item) => item.assessment)];
         const valid = validCurrentProvenance(snapshot, product, observation.material.body);
-        const aligned = assessments.some((assessment) => assessment.support.some((span) => span.origin.kind === "provider" && span.origin.match === "whitespace"));
+        const price = product.priceEvidence;
+        const moneySpan = price.moneySupport;
+        const priceAligned = price.state === "applicable" && moneySpan && price.report!.moneySupport.quote !== snapshot.sources.find((source) => source.id === moneySpan.sourceId)!.text.slice(moneySpan.start, moneySpan.end);
+        const attributionAligned = price.state === "applicable" && price.report!.attribution.support.some((claim, index) => {
+          const span = price.attributionSupport[index];
+          return span && claim.quote !== snapshot.sources.find((source) => source.id === span.sourceId)!.text.slice(span.start, span.end);
+        });
+        const aligned = priceAligned || attributionAligned || assessments.some((assessment) => assessment.support.some((span) => span.origin.kind === "provider" && span.origin.match === "whitespace"));
         const historical = checks.find((check) => check.id === `quote-containment:${product.id}` && check.turn === turn.index);
-        if (valid && aligned && historical) {
+        if (valid && aligned && historical && hash(projectResponse(raw.response)) === hash(turn.response)) {
           historical.status = "blocked";
           historical.expected = "Historical quote containment cannot represent provider wording with whitespace alignment. Current evidence-5 provenance is checked separately; the actual provider report is preserved unchanged.";
         }
