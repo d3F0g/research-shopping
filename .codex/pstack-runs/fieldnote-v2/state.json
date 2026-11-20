@@ -1,5 +1,5 @@
 {
-  "milestone": "Reviewed application df32 running locally; verifier2b QA/security and all hosted workflows pass; live/history gates remain",
+  "milestone": "V5 application and native-session fix pass owner and root runtime; independent reviews and evaluator projection correction pending",
   "source": "df32c4b3be6b09280369fc4eb38bf4e127312d41",
   "base": "33fadc7e3cfde2207528adb32b650287e758d343",
   "trunk_base": "9d2a3c5e336a6652ec6b02e0c3deff6617fb7d11",
@@ -43,7 +43,8 @@
   "reviews": {
     "qa": "Final exactdf32 PASS; 456unit29eval28PG24E2E, 18registry, 3viewportskill/history,23accountitems,12adversarial; new verifier2b23matrix+controlsPASS",
     "security": "Final exactdf32 PASS, 13adversarial+456unit24E2E23accountitems; new verifier2b strict200/409+negativecontrolsPASS",
-    "publication": "Current continuation metadata requires fresh exact-tree review before push; old7f history remains"
+    "publication": "Exact b4 metadata/identicaldc61 scoped QA and Astra security PASS, full reports in PR53 comment7016434787. Existing transcript provenance references remain; no blanket erasure.",
+    "current_blocker": "Prior df32/2b runtime passes preserved; newly proved native guest identity Issue65 blocks current source. New exact combined-head QA/security required after fix."
   },
   "hosted_ci": {
     "authority": "https://github.com/d3F0g/research-shopping/pull/53/checks",
@@ -64,7 +65,24 @@
         "conclusion": "success"
       }
     },
-    "inspection": "Actual workflow jobs/steps inspected, including account browser, mixed history/restart and24E2E. New metadata head will need its own CI."
+    "inspection": "Actual workflow jobs/steps inspected, including account browser, mixed history/restart and24E2E. New metadata head will need its own CI.",
+    "post_authorized_rewrite": {
+      "head": "dc61d3bae93fd347495ecbb5973d7877513ec91d",
+      "push": {
+        "id": 44667287279,
+        "conclusion": "failure",
+        "case": "stale session bootstrap success, server readback lackshello"
+      },
+      "pr": {
+        "id": 44667308510,
+        "conclusion": "success"
+      },
+      "evaluation": {
+        "id": 44667308567,
+        "conclusion": "success"
+      },
+      "policy": "No blind rerun; full failed artifact/log retained. New native browser repro proves identity switch, distinct from Issue56 blank."
+    }
   },
   "preview": {
     "application": "df32c4b3be6b09280369fc4eb38bf4e127312d41",
@@ -73,17 +91,18 @@
     "owned_session": 2797,
     "automaticPaidChecks": false,
     "health": "API/web200 providerexa automaticPaidChecksfalse",
-    "manual_grant_latest": "5 requests/USD0.25reserved; acknowledgedhistoricalunknown2 unchanged",
-    "sourceEquivalentHead": "2b17471229a29e28f2ec0bc05211b3eff3b62466"
+    "manual_grant_latest": "4 requests/USD0.20 reserved at read-only inspection; historical unknown2 unchanged",
+    "sourceEquivalentHead": "dc61d3bae93fd347495ecbb5973d7877513ec91d"
   },
-  "manual_allowance_checkpoint": "5manualrequests/USD0.25reservedready; acknowledgedhistoricalunknown2 unchanged;0agentpaidcalls",
-  "human_acceptance": "New manual sunglasses result shows source amount but unknown variant; varied watches request failed invalid native answer. Offline replay confirms invalid-response. Product acceptance not established.",
+  "manual_allowance_checkpoint": "4 manual requests/USD0.20 reserved ready; acknowledged historical unknown2 unchanged; root paidcalls0",
+  "human_acceptance": "Fresh watches answer validates and yields3 relevant exact-identity/request-fit candidates but no qualifying price or observation. Root private offline replay reproduces ready3/priceNULL/choiceNULL. No live usefulness pass.",
   "blockers": [
-    "Final metadata publication review and actual new-head hostedCI remain",
-    "Varied live Exa product acceptance pending one requested human watches result",
-    "Removing earlier shared metadata ancestry requires explicit guarded-ref authorization"
+    "Evaluator-only price support projection needs actual bound attribution and monetary-witness offsets; original failing report retained",
+    "Independent QA/security on final combined source and evaluator delta pending",
+    "Current shared push CI failed Issue65; new current-head workflows all required before merge",
+    "Varied real request-to-comparison-and-recommendation usefulness remains unverified; four bounded human requests remain"
   ],
-  "next": "Review exact metadata/archives and prepared identical-tree clean branch; push reviewed final notes and inspect actual CI. Continue requested manual result; ask only separately required guarded history authorization after all unblocked preparation. No paid automation, no repeated appearance approval, no ref rewrite without it.",
+  "next": "Finish evaluator-only bound-price projection fix, keep frozen failures and assertions. Independent QA/security review exact combined app/skill and final evaluator delta. Package private-safe proof and archive retired loose audit files, independently review publication, normal fast-forward push, separate Issue66 verification-skill PR, inspect every current CI gate, then update reviewed human preview for varied bounded manual proof. No new history rewrite or paid automation.",
   "historical_program_checkpoints": {
     "milestone": "Final V4 candidate passes package and class regressions; independent reviews and hostedCI pending",
     "completed": [
@@ -208,11 +227,11 @@
     }
   },
   "publication_boundary": {
-    "status": "Sanitized current tree independently passes; earlier shared metadata remains in Git history",
+    "status": "Exact user-authorized history correction complete; new local metadata/archive package still requires independent publication review",
     "scope": "Captured-response detail and private diagnostic paths appeared in earlier resume. No raw capture file was committed.",
     "safe_action": "Sanitized resume/state/decision tree passes targeted QA/security and public archive scan",
-    "history": "Removing earlier shared commits requires separate explicit authorization; do not force-push.",
-    "proposal": "Local323269b clean code branch tree equals2b exactly, excludes exposed7f ancestry. Existing remote proposal remainsd11 until final reviewed metadata is fast-forwarded; shared PR ref remains unchanged."
+    "history": "User explicitly approved one-time exact lease b4 to dc61; executed and remote confirmed. Authorization consumed, not general force-push permission. Other refs/caches/clones and preexisting transcript-provenance references remain.",
+    "proposal": "dc61 now actual shared PR53 head. Equal tree5e60995fc72ecc2e47156a87b93cc612fdaa2704; owned local ref synchronized with expected-old guard; main unchanged."
   },
   "verification_fix": {
     "issue": 56,
@@ -253,5 +272,54 @@
     "Issue56 original blank cause unproven after bounded four observed passes, no further repeats",
     "Issue62 signed-in revision conflict retains data but needs explicit browser refresh; no cross-refresh draft promise",
     "Original live malformed response remains rejected; Draft7 request correction has no claimed causal/live guarantee"
-  ]
+  ],
+  "current_shared_head": "dc61d3bae93fd347495ecbb5973d7877513ec91d",
+  "active_design": {
+    "price_grounding": "/tmp/fieldnote-price-architecture/grounding.md",
+    "price_candidates": [
+      "/tmp/fieldnote-price-architecture/a",
+      "/tmp/fieldnote-price-architecture/b"
+    ],
+    "price_judge": "/tmp/fieldnote-price-architecture/judge",
+    "session_grounding": "/tmp/fieldnote-session-architecture/grounding.md",
+    "root_native_proof": "/tmp/fieldnote-dc61-ci-notes/root-independent-native/proof.json",
+    "issues": [
+      64,
+      65
+    ]
+  },
+  "active_candidates": {
+    "app": "e169be934f74fb61507b5c7b62c4aeaefc2106a8",
+    "skill": "4c867e2dc77983019218f4390e834e727f97c5c4",
+    "session": "2ae29416925765f0aa8089e82266570c73544fc3",
+    "gate_cleanup": "aeb6f1784585daae76e903a30cc6ba3388dda63b",
+    "status": "App source immutable, evaluator-only projection repair in progress; shared head remains dc61"
+  },
+  "current_root_runtime": {
+    "head": "e169be934f74fb61507b5c7b62c4aeaefc2106a8",
+    "cases": 7,
+    "result": "passed",
+    "scope": "Real owned Hono/Exa SDK/local HTTP/Chromium. Five native session transport cases and desktop/mobile positive/adverse prices with free held replies. All six price screenshots inspected. Source clean and owned ports free.",
+    "paidCalls": 0,
+    "liveProductAcceptance": false
+  },
+  "current_owner_checks": {
+    "appHead": "e169be934f74fb61507b5c7b62c4aeaefc2106a8",
+    "unit_api": 582,
+    "e2e": 31,
+    "postgres": 28,
+    "build": "passed",
+    "eval_tests": 34,
+    "registry": 18,
+    "preservation": 389,
+    "skillHead": "4c867e2dc77983019218f4390e834e727f97c5c4",
+    "skill": "passed3viewports/sourceclean/cleanuptrue",
+    "evaluation": "First current V5 synthetic-composition report has14 legacy projection critical failures; raw V5 provenance checks pass. Repair actual bound quote offsets and separate monetary witness in test adapter, not frozen assertions or runtime."
+  },
+  "current_independent_reviews": {
+    "cleanup": "e169 PASS, no blockers; redundant comparison/assertion and extra EOF blank nonblocking. No edits.",
+    "qa": "Running in isolated worktree; no final verdict",
+    "security": "Running in isolated worktree; no final verdict",
+    "publication": "New archival/metadata package still pending review"
+  }
 }
