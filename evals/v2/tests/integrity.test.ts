@@ -1,6 +1,9 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { readFile } from "node:fs/promises";
+import { mkdtemp, readFile, rm } from "node:fs/promises";
+import { execFileSync } from "node:child_process";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
 import { randomUUID, createHash } from "node:crypto";
 import { historicalReportArchive } from "../../history-fieldnote-v2/archive";
 import { historicalReportDigest } from "../../history-fieldnote-v2/report";
@@ -72,6 +75,58 @@ test("same-contract comparison rejects changed grader and adapter implementation
 test("V2 bridge rejects incomplete or changed frozen inputs", async () => {
   const baseline = JSON.parse(await readFile("artifacts/product-evals/baseline-v1/report.json", "utf8"));
   await assert.rejects(crossContractScorecard(baseline, await report()), /unchanged sixty/);
+});
+test("scorecard CLI authenticates all sixty current scenarios without pairing changed historical material", async (t) => {
+  const output = await mkdtemp(join(tmpdir(), "fieldnote-scorecard-"));
+  t.after(() => rm(output, { recursive: true, force: true }));
+  const command = { encoding: "utf8" as const, timeout: 60_000, env: { PATH: process.env.PATH, EXA_RESEARCH_ENABLED: "false", NODE_ENV: "test", LC_ALL: "C" } };
+  execFileSync(process.execPath, ["--import", "tsx", "evals/v2/run.ts", "--out", output], command);
+  const candidate: RunReport = JSON.parse(await readFile(join(output, "report.json"), "utf8"));
+  const baselinePath = "artifacts/product-evals/baseline-v1/report.json";
+  const baseline = JSON.parse(await readFile(baselinePath, "utf8"));
+  assert.equal(candidate.summary.total, 60);
+  assert.equal(candidate.summary.executed, 60);
+  assert.equal(candidate.summary.infrastructureErrors, 0);
+  assert.equal(candidate.summary.observedTurns, 140);
+  assert(candidate.cases.every((row) => row.observation?.network.externalRequests === 0 && row.observation.network.denied.length === 0 && row.observation.cleanup));
+
+  await t.test("current authorized materials are admitted and different materials never enter paired results", async () => {
+    execFileSync(process.execPath, ["--import", "tsx", "evals/v2/scorecard-cli.ts", "--baseline", baselinePath, "--candidate", join(output, "report.json"), "--out", join(output, "scorecard")], command);
+    const scorecard: Awaited<ReturnType<typeof crossContractScorecard>> = JSON.parse(await readFile(join(output, "scorecard", "scorecard.json"), "utf8"));
+    const changed = ["FN-CU-001", "FN-RT-002", "FN-PQ-001"];
+    assert.deepEqual(scorecard.differentHistoricalMaterial, changed);
+    assert.equal(scorecard.unchangedInputs, 57);
+    assert.equal(scorecard.rows.length, 60);
+    for (const row of scorecard.rows) {
+      assert.equal(row.comparableNormativeInputs, !changed.includes(row.id));
+      assert.equal(row.material.equal, !changed.includes(row.id));
+    }
+    const transitions = Object.values(scorecard.requirementTransitions).flat();
+    assert(transitions.length > 0);
+    assert(transitions.every((row) => !changed.includes(row.scenarioId)));
+    const assessed = scorecard.rows.filter((row) => !changed.includes(row.id)).flatMap((row) => row.sharedNormativeRequirements).filter((row) => ["pass", "fail"].includes(row.before) && ["pass", "fail"].includes(row.after));
+    assert(assessed.length > 0);
+    assert.equal(scorecard.pairedAssessed.denominator, assessed.length);
+    assert.equal(scorecard.pairedAssessed.beforePassed, assessed.filter((row) => row.before === "pass").length);
+    assert.equal(scorecard.pairedAssessed.afterPassed, assessed.filter((row) => row.after === "pass").length);
+    assert.deepEqual(scorecard.candidate.summary, candidate.summary);
+    assert.deepEqual(scorecard.baseline.summary, baseline.summary);
+    assert.equal(scorecard.acceptance, candidate.summary.acceptance);
+  });
+  for (const id of ["FN-CU-001", "FN-CU-002"]) await t.test(`self-consistent forged material is rejected for ${id}`, async () => {
+    const forged = structuredClone(candidate);
+    const index = forged.cases.findIndex((row) => row.id === id);
+    const row = forged.cases[index]!;
+    assert(row.observation);
+    row.material.body = { ...row.material.body as Record<string, import("../../frozen-v4/contracts").Json>, requestId: "fixture-forged-material" };
+    row.material.provenance.push("Fixture forged material");
+    row.material.sha256 = materialPayloadHash(row.material);
+    row.observation.material = structuredClone(row.material);
+    forged.cases[index] = caseResult(row.contract, row.material, row.observation);
+    forged.summary = summarize(forged.cases);
+    validateReport(forged);
+    await assert.rejects(crossContractScorecard(baseline, forged), new RegExp(`Changed V2 research material for ${id}`));
+  });
 });
 test("frozen hard-requirement and bounded-dispatch assertions stay sensitive", () => {
   const observation = control();
