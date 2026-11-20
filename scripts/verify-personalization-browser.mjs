@@ -5,8 +5,13 @@ import { chromium, expect } from "@playwright/test";
 import { accountRuntime } from "./account-test-runtime.mjs";
 const runtime = await accountRuntime({ web: true });
 const browser = await chromium.launch();
+async function fixtureContext(viewport) {
+  const context = await browser.newContext({ viewport });
+  await context.route("https://**", (route) => route.abort());
+  return context;
+}
 const proof = [];
-await mkdir("artifacts/fieldnote-v2/accounts", { recursive: true });
+await mkdir("artifacts/issue-64-price-v5/accounts", { recursive: true });
 async function authenticate(page, email, register) {
   await page.getByRole("button", { name: "Account", exact: true }).click();
   if (register)
@@ -45,7 +50,7 @@ try {
     try {
       for (const endpoint of ["account", "session"]) {
         for (const outcome of ["success", "failure"]) {
-          const context = await browser.newContext({ viewport: size });
+          const context = await fixtureContext(size);
           const page = await context.newPage();
           let release;
           let entered;
@@ -103,7 +108,7 @@ try {
             await expect(page.getByText("hello", { exact: true })).toHaveCount(0);
             await page.getByRole("button", { name: "Account", exact: true }).click();
             await expect(page.getByText("Your saved conversation", { exact: true })).toBeVisible();
-            await page.screenshot({ path: `artifacts/fieldnote-v2/accounts/${size.name}-late-${endpoint}-${outcome}.png` });
+            await page.screenshot({ path: `artifacts/issue-64-price-v5/accounts/${size.name}-late-${endpoint}-${outcome}.png` });
             await page.getByRole("button", { name: "Close", exact: true }).click();
             await send(page, "hello");
             await expect(page.getByText("Hi. What are you looking to buy?", { exact: true })).toBeVisible();
@@ -121,7 +126,7 @@ try {
     for (const transition of ["new-chat", "sign-in"]) {
       for (const outcome of ["success", "failure"]) {
         const stopRuntime = await accountRuntime({ web: true });
-        const context = await browser.newContext({ viewport: size });
+        const context = await fixtureContext(size);
         let release = () => {};
         try {
           const page = await context.newPage();
@@ -165,7 +170,7 @@ try {
           assert.equal(current.state.intent.budget, null);
           assert.equal(current.state.messages.some((message) => message.text === "hello"), true);
           assert.equal(current.state.messages.some((message) => message.text === original), false);
-          await page.screenshot({ path: `artifacts/fieldnote-v2/accounts/${size.name}-late-stop-${transition}-${outcome}.png` });
+          await page.screenshot({ path: `artifacts/issue-64-price-v5/accounts/${size.name}-late-stop-${transition}-${outcome}.png` });
           await expect(page.getByText(original, { exact: true })).toHaveCount(0);
           await expect(page.getByText("Hi. What are you looking to buy?", { exact: true })).toBeVisible();
           await expect(page.getByRole("alert")).toHaveCount(0);
@@ -186,7 +191,7 @@ try {
     }
     {
       const conflictRuntime = await accountRuntime({ web: true });
-      const context = await browser.newContext({ viewport: size });
+      const context = await fixtureContext(size);
       let release = () => {};
       try {
         const page = await context.newPage();
@@ -222,7 +227,7 @@ try {
           error: typeof cancelled?.error === "string" ? cancelled.error.slice(0, 200) : null,
           submittedRevision: cancelCommand.revision,
         };
-        await writeFile(`artifacts/fieldnote-v2/accounts/${size.name}-stop-cancel-response.json`, JSON.stringify(cancellation, null, 2) + "\n");
+        await writeFile(`artifacts/issue-64-price-v5/accounts/${size.name}-stop-cancel-response.json`, JSON.stringify(cancellation, null, 2) + "\n");
         assert.ok(cancelStatus === 200 || cancelStatus === 409, `Unexpected cancellation response ${JSON.stringify(cancellation)}`);
         if (cancelStatus === 409)
           assert.deepEqual(cancelled, { error: "Saved conversation changed. Reload it before continuing." });
@@ -261,7 +266,7 @@ try {
         assert.equal(current.workspace.state.messages.some((message) => message.research), false);
         await expect(page.getByText(original, { exact: true })).toBeVisible();
         assert.equal((await stats()).calls, before.calls + 1);
-        await page.screenshot({ path: `artifacts/fieldnote-v2/accounts/${size.name}-stop-reset-conflict.png` });
+        await page.screenshot({ path: `artifacts/issue-64-price-v5/accounts/${size.name}-stop-reset-conflict.png` });
         const pendingResponse = page.waitForResponse((response) => response.url().endsWith("/api/workspace") && response.request().postDataJSON()?.phase === "cancel");
         release();
         const deliveredCancellation = await pendingResponse;
@@ -281,7 +286,7 @@ try {
         assert.equal(recovered.workspace.state.intent.budget, null);
         assert.equal((await stats()).calls, before.calls + 1);
         assert.equal((await stats()).closed, before.closed + 1);
-        await page.screenshot({ path: `artifacts/fieldnote-v2/accounts/${size.name}-stop-reset-conflict-recovered.png` });
+        await page.screenshot({ path: `artifacts/issue-64-price-v5/accounts/${size.name}-stop-reset-conflict-recovered.png` });
         proof.push(`${size.name} signed-in Stop returns ${cancelStatus}. New chat before cancellation confirmation reports a 409 conflict without constraint mutation or extra SDK calls. Explicit browser refresh then New chat recovers. The signed-in Account sheet has no reload control.`);
       } finally {
         release();
@@ -289,7 +294,7 @@ try {
         await conflictRuntime.close();
       }
     }
-    const context = await browser.newContext({ viewport: size });
+    const context = await fixtureContext(size);
     const page = await context.newPage();
     await page.goto(runtime.origin);
     await send(page, "Hello");
@@ -354,7 +359,7 @@ try {
       currency: "SGD",
     });
     await page.screenshot({
-      path: `artifacts/fieldnote-v2/accounts/${size.name}-saved-research.png`,
+      path: `artifacts/issue-64-price-v5/accounts/${size.name}-saved-research.png`,
     });
     await page.reload();
     await expect(
@@ -367,7 +372,7 @@ try {
       .click();
     await page.reload();
     await expect(page.locator("html")).toHaveClass("light");
-    const isolated = await browser.newContext({ viewport: size });
+    const isolated = await fixtureContext(size);
     const other = await isolated.newPage();
     await other.goto(runtime.origin);
     await authenticate(
@@ -452,7 +457,7 @@ try {
       .toBe(0);
     await page.getByRole("button", { name: "Close", exact: true }).click();
     await page.screenshot({
-      path: `artifacts/fieldnote-v2/accounts/${size.name}-deleted.png`,
+      path: `artifacts/issue-64-price-v5/accounts/${size.name}-deleted.png`,
     });
     proof.push(
       `${size.name} UI creates an account, keeps guest messages separate, saves both SGD30-40 bounds and fixture research, restores after refresh, isolates another account and deletes saved shopping data.`,
@@ -460,7 +465,7 @@ try {
     await context.close();
   }
   await writeFile(
-    "artifacts/fieldnote-v2/accounts/browser.json",
+    "artifacts/issue-64-price-v5/accounts/browser.json",
     JSON.stringify(
       {
         status: "passed",

@@ -73,6 +73,18 @@ describe("bounded native groups and a shared identified money inventory", () => 
     expect(workspaceBytes(workspace)).toBeLessThan(WORKSPACE_LIMIT);
     expect(boundWorkspace(workspace)).toBe(true);
   });
+  it("keeps multibyte source text, UTF-16 money offsets and actual UTF-8 workspace sizing consistent", () => {
+    const packet = rich();
+    for (const source of packet.citations) source.text = "Fixture notes 測試資料 🌙.\n\n".repeat(10) + source.text;
+    const snapshot = project(packet), workspace = emptyWorkspace();
+    expect(snapshot.products.every((product) => product.eligible)).toBe(true);
+    for (const source of snapshot.sources) for (const occurrence of source.moneyOccurrences) expect(source.text.slice(occurrence.literal.start, occurrence.literal.end)).toMatch(/^SGD \d+\.\d{2}$/);
+    expect(ResearchSnapshotSchema.safeParse(snapshot).success).toBe(true);
+    workspace.state.messages.push({ id: "fixture-multibyte", role: "assistant", text: snapshot.summary, research: snapshot });
+    expect(workspaceBytes(workspace)).toBeGreaterThan(JSON.stringify(workspace).length);
+    expect(workspaceBytes(workspace)).toBeLessThan(WORKSPACE_LIMIT);
+    expect(boundWorkspace(workspace)).toBe(true);
+  });
   it.each(["missing", "overlap", "partial", "wrong-role", "wrong-scope", "selected-multiple", "outside-support"])("does not authorize %s occurrence coverage", (mode) => {
     const packet = rich(), price = packet.answer.products[0]!.price!, review = price.sourceReviews[0]!;
     if (mode === "missing") review.moneyMentions.pop();

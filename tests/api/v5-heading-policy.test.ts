@@ -49,3 +49,16 @@ it("masks actual monetary occurrences before looking for a possible adjacent ide
   expect(result.research.sources[0]!.moneyOccurrences).toHaveLength(2);
   expect(result.research.products[0]!.priceEvidence.state).toBe("applicable");
 });
+it.each(["The item", "This watch", "The selected watch", "The model"])("does not turn an ordinary prose subject %s into a different-variant claim", (subject) => {
+  const result = projectExaAnswer(priceMaterial(intent, { text: `${identity}\n\n${subject} costs SGD 437.00 for one watch, tax included.` }), intent);
+  if (result.status !== "ready") throw new Error("Expected fixture comparison");
+  expect(result.research.products[0]!.priceEvidence.state).toBe("applicable");
+  expect(result.research.choice?.productId).toBe("fixture-q17");
+});
+it.each(["Model AX2", "AX2"])("keeps a different explicit or possible model subject %s unresolved", (subject) => {
+  const result = projectExaAnswer(priceMaterial(intent, { text: `${identity}\n\n${subject} costs SGD 437.00 for one watch, tax included.` }), intent);
+  if (result.status !== "ready") throw new Error("Expected fixture comparison");
+  expect(result.research.products[0]!.priceEvidence.state).toBe("observed");
+  expect(result.research.products[0]!.priceEvidence.alarms.length).toBeGreaterThan(0);
+  expect(result.research.choice).toBeNull();
+});

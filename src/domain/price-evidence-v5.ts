@@ -96,6 +96,11 @@ function sourceAlarms(context: Context, inventory: Occurrence[], selected: Occur
     }
     return [...text.join("").matchAll(/[\p{L}\p{N}][\p{L}\p{N}._-]*/gu)].some(([token]) => /\p{L}/u.test(token) && /\p{N}/u.test(token));
   };
+  const subjectAlarm = (subject: string, source: BaseSource, start: number, end: number) => {
+    if (matchesSubject(subject)) return;
+    if (explicitOtherScope(subject)) add("variant-contradiction", source.id, start, end);
+    else if (identifierAt(source, start, end)) add("uncertain-attribution", source.id, start, end);
+  };
   const policies: [Alarm["kind"], RegExp][] = [
     ["buyer-restriction", /\b(?:(?:membership(?: voucher)?|subscription|voucher|coupon)\s+(?:is\s+)?(?:required|needed)|(?:requires?|needs?)\s+(?:a\s+)?(?:membership|subscription|voucher|coupon)|(?:only\s+available\s+with|(?:only\s+)?with)\s+(?:a\s+)?(?:membership|subscription|voucher|coupon)|(?:only\s+to\s+members|members\s+only)|only\s+after\s+joining\s+(?:the\s+)?annual\s+club)\b/giu],
     ["incomplete-total", /\b(?:(?:not|without)\s+(?:tax|GST|VAT)\s+included|(?:excludes?|excluding)\s+(?:tax|GST|VAT)|(?:tax|GST|VAT)\s+(?:is\s+)?excluded|(?:delivery|shipping)\s+(?:is\s+)?charged\s+separately|mandatory\s+(?:delivery|shipping)(?:\s+charges?)?|(?:delivery|shipping)\s+(?:costs?|charges?)|(?:delivery|shipping)\s+in\s+addition|(?:delivery|shipping)\s+(?:[A-Z]{3}\s*|[$€£])\d[^.\n]*(?:mandatory|required))\b/giu],
@@ -119,7 +124,7 @@ function sourceAlarms(context: Context, inventory: Occurrence[], selected: Occur
       if (selected?.id === item.id) {
         if (/\b(?:was|previous(?:\s+item)?\s+price)\s*:?\s*$/iu.test(prefix)) add("competing-amount", source.id, start, end);
         const explicitSubject = /(?:^|[.!?\n]|\bwhile\s+)([^.!?\n]+?)\s+(?:costs?|is priced at|has a price of)\s*$/iu.exec(prefix)?.[1]?.trim();
-        if (explicitSubject && !selectedAssertion && !isSubject(explicitSubject)) add("variant-contradiction", source.id, start - explicitSubject.length, end);
+        if (explicitSubject && !selectedAssertion) subjectAlarm(explicitSubject, source, start - prefix.length + prefix.lastIndexOf(explicitSubject), start);
         const inlineVariant = /^\s+for\s+(.+?)\s+only(?:[.!?]|$)/iu.exec(source.text.slice(end))?.[1];
         if (inlineVariant && !singleUnit(inlineVariant) && !isSubject(inlineVariant)) add("variant-contradiction", source.id, start, end + inlineVariant.length + 10);
         const lineStart = source.text.lastIndexOf("\n", start) + 1;
@@ -127,12 +132,10 @@ function sourceAlarms(context: Context, inventory: Occurrence[], selected: Occur
         if (/^\s*(?:price\s*:?\s*)?$/iu.test(line)) {
           const previous = source.text.slice(0, lineStart).trimEnd();
           const heading = previous.slice(previous.lastIndexOf("\n") + 1).trim();
-          if (explicitOtherScope(heading)) add("variant-contradiction", source.id, previous.length - heading.length, end);
-          else if (heading && !matchesSubject(heading) && identifierAt(source, previous.length - heading.length, previous.length)) add("uncertain-attribution", source.id, previous.length - heading.length, end);
+          if (heading) subjectAlarm(heading, source, previous.length - heading.length, previous.length);
         }
         const cell = /^\s*\|\s*([^|]+?)\s*\|\s*$/u.exec(line)?.[1];
-        if (cell && explicitOtherScope(cell)) add("variant-contradiction", source.id, lineStart, end);
-        else if (cell && !matchesSubject(cell) && identifierAt(source, lineStart, start)) add("uncertain-attribution", source.id, lineStart, end);
+        if (cell) subjectAlarm(cell, source, lineStart, start);
       }
       const suffix = source.text.slice(end, end + 100);
       if (/^\s*(?:[-–—]|to)\s*(?:[A-Z]{3}\s*)?\d/u.test(suffix) || item.value.kind === "ambiguous" && item.value.reason === "range-endpoint") add("purchase-basis", source.id, start, end);

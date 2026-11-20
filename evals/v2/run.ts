@@ -2,7 +2,7 @@ import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { join, resolve } from "node:path";
 import { parseArgs } from "node:util";
 import { loadDataset } from "../dataset";
-import { scenarioMaterial } from "../inputs/materials";
+import { currentScenarioMaterial } from "./materials";
 import { offlineNetwork } from "../network";
 import { caseResult, compareReports, makeReport, summaryMarkdown, validateReport } from "./report";
 import type { CaseResult } from "./contracts";
@@ -27,7 +27,7 @@ if (values.compare) {
   try {
     const { observe } = await import("./adapter");
     for (const scenario of selected) {
-      const input = scenarioMaterial(scenario.provider, scenario.id);
+      const input = currentScenarioMaterial(scenario.provider, scenario.id);
       try {
         const observation = await observe({ id: scenario.id, actions: scenario.actions, provider: scenario.provider }, input, guard);
         cases.push(caseResult(scenario, input, observation));
